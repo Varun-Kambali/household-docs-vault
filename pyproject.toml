@@ -36,6 +36,19 @@ synth = [
     "faker",
     "pydantic",
 ]
+# OCR engines compared in the reading spike; never shipped. Tesseract also needs the binary.
+spikes = [
+    "ocrmac; sys_platform == 'darwin'",
+    "pytesseract",
+    "pypdfium2",
+    "pillow",
+    "paddleocr>=3.7.0",
+    "paddlepaddle>=3.3.1",
+]
+
+[tool.uv]
+# CI and `make setup` skip the spikes group (macOS-only wheels); `make spikes-setup` adds it.
+default-groups = ["dev", "synth"]
 
 [tool.hatch.version]
 path = "src/household_vault/__init__.py"
@@ -62,5 +75,5 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["synth"]
+pythonpath = ["synth", "."]
 addopts = "-ra --import-mode=importlib"
