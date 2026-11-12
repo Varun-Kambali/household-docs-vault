@@ -80,6 +80,13 @@ def test_strings_ignore_case_and_whitespace():
     assert s.exact["insurer"] is True
 
 
+def test_commas_are_ignored_in_text():
+    s = score_doc(
+        {"insurer": "Star Health, Chennai"}, '{"insurer": "Star Health Chennai"}', HealthPolicy
+    )
+    assert s.exact["insurer"] is True
+
+
 def test_semicolon_list_compares_as_a_set():
     s = score_doc(
         {"insured": "Asha Rao; Ravi Rao"}, '{"insured": ["Ravi Rao", "Asha Rao"]}', HealthPolicy

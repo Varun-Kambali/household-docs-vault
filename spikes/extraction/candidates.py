@@ -71,12 +71,14 @@ def _server_processes() -> list[Any]:
 class OllamaCandidate(Candidate):
     """kind="vision" sends the page image; kind="text" sends OCR text only."""
 
-    # Qwen3 and Qwen3-VL Instruct builds do not think; the flag is still sent so a build that does
-    # (the plain `qwen3:4b` tag may) answers straight away.
+    # `think: false` switches thinking off for qwen3:4b. The qwen3-vl tags are the thinking builds
+    # and ignore it (the reply spent 4,000+ tokens thinking, 140 s), so for them the assistant turn
+    # starts with an empty think block, which the model then continues from with the answer.
     def __init__(self, model: str, kind: Literal["vision", "text"], doc_type: str = "") -> None:
         super().__init__(name=model, runtime="ollama", kind=kind)
         self.model = model
         self.doc_type = doc_type
+        self.prefill_empty_think = "-vl" in model
 
     def _post(self, body: dict[str, Any]) -> dict[str, Any]:
         import httpx
@@ -112,10 +114,13 @@ class OllamaCandidate(Candidate):
             message["images"] = [base64.b64encode(f.read_bytes()).decode() for f in doc_files]
         import json
 
+        messages = [{"role": "system", "content": SYSTEM}, message]
+        if self.prefill_empty_think:
+            messages.append({"role": "assistant", "content": "<think>\n\n</think>\n\n"})
         resp = self._post(
             {
                 "model": self.model,
-                "messages": [{"role": "system", "content": SYSTEM}, message],
+                "messages": messages,
                 "stream": False,
                 "think": False,
                 "format": json.loads(schema_json),

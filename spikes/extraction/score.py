@@ -1,8 +1,9 @@
 """Score one extraction against the ground truth, field by field.
 
 A field is correct when the model's value, read through the schema, equals the truth read the
-same way: dates by value, amounts by number, lists as sets of items, other text with case and
-spacing ignored. Extra keys in the model's JSON are ignored. A missing or null field is wrong.
+same way: dates by value, amounts by number, lists as sets of items, other text with case,
+spacing and commas ignored. Extra keys in the model's JSON are ignored. A missing or null field
+is wrong.
 """
 
 from __future__ import annotations
@@ -22,7 +23,8 @@ class DocScore:
 
 
 def _norm(text: str) -> str:
-    return re.sub(r"\s+", " ", text.strip()).casefold()
+    # Commas go too: a wrapped address prints without them, while the ground truth has them.
+    return re.sub(r"\s+", " ", text.replace(",", " ").strip()).casefold()
 
 
 def _is_list_field(schema: type[BaseModel], key: str) -> bool:
