@@ -1,0 +1,389 @@
+{
+  "date": "2026-11-12",
+  "engine": "paddleocr",
+  "commit": "3fd1081",
+  "dataset": "spike-v0",
+  "machine": "Apple M5, 16 GB",
+  "dpi_clean": 200,
+  "status": "ok",
+  "engine_version": "paddleocr 3.7.0",
+  "documents": [
+    {
+      "doc_id": "aadhaar-1-clean",
+      "doc_type": "aadhaar",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 12,
+      "truth_lines": 12,
+      "seconds": 4.962735833018087
+    },
+    {
+      "doc_id": "aadhaar-2-clean",
+      "doc_type": "aadhaar",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 12,
+      "truth_lines": 12,
+      "seconds": 5.090793834067881
+    },
+    {
+      "doc_id": "card_front-1-clean",
+      "doc_type": "card_front",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 8,
+      "truth_lines": 8,
+      "seconds": 2.306258458062075
+    },
+    {
+      "doc_id": "card_front-2-clean",
+      "doc_type": "card_front",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 8,
+      "truth_lines": 8,
+      "seconds": 2.2931855000788346
+    },
+    {
+      "doc_id": "health_policy-1-clean",
+      "doc_type": "health_policy",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 41,
+      "truth_lines": 41,
+      "seconds": 13.148991249967366
+    },
+    {
+      "doc_id": "health_policy-2-clean",
+      "doc_type": "health_policy",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 41,
+      "truth_lines": 41,
+      "seconds": 12.784251041011885
+    },
+    {
+      "doc_id": "lab_report-1-clean",
+      "doc_type": "lab_report",
+      "variant": "clean",
+      "cer": 0.014767932489451477,
+      "line_recall": 0.9302325581395349,
+      "matched": 40,
+      "truth_lines": 43,
+      "seconds": 11.456136457971297
+    },
+    {
+      "doc_id": "lab_report-2-clean",
+      "doc_type": "lab_report",
+      "variant": "clean",
+      "cer": 0.002320185614849188,
+      "line_recall": 0.9722222222222222,
+      "matched": 35,
+      "truth_lines": 36,
+      "seconds": 11.08394749998115
+    },
+    {
+      "doc_id": "pan-1-clean",
+      "doc_type": "pan",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 15,
+      "truth_lines": 15,
+      "seconds": 5.046406999928877
+    },
+    {
+      "doc_id": "pan-2-clean",
+      "doc_type": "pan",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 15,
+      "truth_lines": 15,
+      "seconds": 4.742350416956469
+    },
+    {
+      "doc_id": "prescription-1-clean",
+      "doc_type": "prescription",
+      "variant": "clean",
+      "cer": 0.01984126984126984,
+      "line_recall": 1.0,
+      "matched": 20,
+      "truth_lines": 20,
+      "seconds": 10.667954540927894
+    },
+    {
+      "doc_id": "prescription-2-clean",
+      "doc_type": "prescription",
+      "variant": "clean",
+      "cer": 0.01762114537444934,
+      "line_recall": 1.0,
+      "matched": 19,
+      "truth_lines": 19,
+      "seconds": 10.051016665995121
+    },
+    {
+      "doc_id": "tax_invoice-1-clean",
+      "doc_type": "tax_invoice",
+      "variant": "clean",
+      "cer": 0.03740157480314961,
+      "line_recall": 0.9142857142857143,
+      "matched": 32,
+      "truth_lines": 35,
+      "seconds": 11.240157207939774
+    },
+    {
+      "doc_id": "tax_invoice-2-clean",
+      "doc_type": "tax_invoice",
+      "variant": "clean",
+      "cer": 0.03732809430255403,
+      "line_recall": 0.9142857142857143,
+      "matched": 32,
+      "truth_lines": 35,
+      "seconds": 11.722560584079474
+    },
+    {
+      "doc_id": "vehicle_policy-1-clean",
+      "doc_type": "vehicle_policy",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 38,
+      "truth_lines": 38,
+      "seconds": 12.839804791961797
+    },
+    {
+      "doc_id": "vehicle_policy-2-clean",
+      "doc_type": "vehicle_policy",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 38,
+      "truth_lines": 38,
+      "seconds": 12.364900375017896
+    },
+    {
+      "doc_id": "warranty_card-1-clean",
+      "doc_type": "warranty_card",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 28,
+      "truth_lines": 28,
+      "seconds": 11.36642979097087
+    },
+    {
+      "doc_id": "warranty_card-2-clean",
+      "doc_type": "warranty_card",
+      "variant": "clean",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 28,
+      "truth_lines": 28,
+      "seconds": 11.278961250092834
+    },
+    {
+      "doc_id": "aadhaar-1-photo",
+      "doc_type": "aadhaar",
+      "variant": "photo",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 12,
+      "truth_lines": 12,
+      "seconds": 5.134109999984503
+    },
+    {
+      "doc_id": "aadhaar-2-photo",
+      "doc_type": "aadhaar",
+      "variant": "photo",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 12,
+      "truth_lines": 12,
+      "seconds": 4.816526375012472
+    },
+    {
+      "doc_id": "card_front-1-photo",
+      "doc_type": "card_front",
+      "variant": "photo",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 8,
+      "truth_lines": 8,
+      "seconds": 2.266096292063594
+    },
+    {
+      "doc_id": "card_front-2-photo",
+      "doc_type": "card_front",
+      "variant": "photo",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 8,
+      "truth_lines": 8,
+      "seconds": 2.2699436669936404
+    },
+    {
+      "doc_id": "health_policy-1-photo",
+      "doc_type": "health_policy",
+      "variant": "photo",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 41,
+      "truth_lines": 41,
+      "seconds": 12.760176499956287
+    },
+    {
+      "doc_id": "health_policy-2-photo",
+      "doc_type": "health_policy",
+      "variant": "photo",
+      "cer": 0.005390835579514825,
+      "line_recall": 0.975609756097561,
+      "matched": 40,
+      "truth_lines": 41,
+      "seconds": 12.152669041068293
+    },
+    {
+      "doc_id": "lab_report-1-photo",
+      "doc_type": "lab_report",
+      "variant": "photo",
+      "cer": 0.029535864978902954,
+      "line_recall": 0.8604651162790697,
+      "matched": 37,
+      "truth_lines": 43,
+      "seconds": 11.038251708028838
+    },
+    {
+      "doc_id": "lab_report-2-photo",
+      "doc_type": "lab_report",
+      "variant": "photo",
+      "cer": 0.018561484918793503,
+      "line_recall": 0.8888888888888888,
+      "matched": 32,
+      "truth_lines": 36,
+      "seconds": 10.85905524995178
+    },
+    {
+      "doc_id": "pan-1-photo",
+      "doc_type": "pan",
+      "variant": "photo",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 15,
+      "truth_lines": 15,
+      "seconds": 4.414257875061594
+    },
+    {
+      "doc_id": "pan-2-photo",
+      "doc_type": "pan",
+      "variant": "photo",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 15,
+      "truth_lines": 15,
+      "seconds": 4.512666167109273
+    },
+    {
+      "doc_id": "prescription-1-photo",
+      "doc_type": "prescription",
+      "variant": "photo",
+      "cer": 0.021825396825396824,
+      "line_recall": 1.0,
+      "matched": 20,
+      "truth_lines": 20,
+      "seconds": 10.319655291968957
+    },
+    {
+      "doc_id": "prescription-2-photo",
+      "doc_type": "prescription",
+      "variant": "photo",
+      "cer": 0.022026431718061675,
+      "line_recall": 1.0,
+      "matched": 19,
+      "truth_lines": 19,
+      "seconds": 9.780722958035767
+    },
+    {
+      "doc_id": "tax_invoice-1-photo",
+      "doc_type": "tax_invoice",
+      "variant": "photo",
+      "cer": 0.08464566929133858,
+      "line_recall": 0.8285714285714286,
+      "matched": 29,
+      "truth_lines": 35,
+      "seconds": 10.743351584067568
+    },
+    {
+      "doc_id": "tax_invoice-2-photo",
+      "doc_type": "tax_invoice",
+      "variant": "photo",
+      "cer": 0.060903732809430254,
+      "line_recall": 0.8285714285714286,
+      "matched": 29,
+      "truth_lines": 35,
+      "seconds": 10.612646874971688
+    },
+    {
+      "doc_id": "vehicle_policy-1-photo",
+      "doc_type": "vehicle_policy",
+      "variant": "photo",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 38,
+      "truth_lines": 38,
+      "seconds": 11.987598459003493
+    },
+    {
+      "doc_id": "vehicle_policy-2-photo",
+      "doc_type": "vehicle_policy",
+      "variant": "photo",
+      "cer": 0.003968253968253968,
+      "line_recall": 0.9736842105263158,
+      "matched": 37,
+      "truth_lines": 38,
+      "seconds": 11.938782874960452
+    },
+    {
+      "doc_id": "warranty_card-1-photo",
+      "doc_type": "warranty_card",
+      "variant": "photo",
+      "cer": 0.00949367088607595,
+      "line_recall": 0.9642857142857143,
+      "matched": 27,
+      "truth_lines": 28,
+      "seconds": 10.819112500059418
+    },
+    {
+      "doc_id": "warranty_card-2-photo",
+      "doc_type": "warranty_card",
+      "variant": "photo",
+      "cer": 0.0,
+      "line_recall": 1.0,
+      "matched": 28,
+      "truth_lines": 28,
+      "seconds": 10.666307874955237
+    }
+  ],
+  "summary": {
+    "clean": {
+      "median_cer": 0.0,
+      "median_line_recall": 1.0,
+      "mean_line_recall": 0.9850570116073993,
+      "median_seconds_per_page": 11.162052353960462,
+      "documents": 18
+    },
+    "photo": {
+      "median_cer": 0.001984126984126984,
+      "median_line_recall": 1.0,
+      "mean_line_recall": 0.9622264746233559,
+      "median_seconds_per_page": 10.639477374963462,
+      "documents": 18
+    }
+  },
+  "peak_rss_mb": 6277.5
+}
