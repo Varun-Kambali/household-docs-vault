@@ -34,3 +34,19 @@ def test_number_words_are_not_converted_to_digits():
 def test_style_counts():
     c = style_counts("take 5 mg and ten mg then forty five")
     assert c == {"digit_tokens": 1, "number_words": 3, "mg_tokens": 2}
+
+
+def test_dose_with_unit_attached_still_matches():
+    s = score_visit(
+        "x",
+        "continue metformin 500mg twice a day, then timolol 0.5% drops",
+        [
+            "Metformin 500",
+            "Timolol 0.5",
+        ],
+    )
+    assert s.medicines_found == 2
+
+
+def test_wer_does_not_split_attached_units():
+    assert score_visit("metformin 500 mg", "metformin 500mg", []).wer > 0
