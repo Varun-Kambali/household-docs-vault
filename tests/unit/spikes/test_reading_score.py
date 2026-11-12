@@ -1,6 +1,7 @@
+import pytest
 from vault_synth.model import LineBox
 
-from spikes.reading.engines import OcrLine
+from spikes.reading.engines import OcrLine, vision_to_top_left
 from spikes.reading.score import cer, score_page
 
 BOX = (0.10, 0.10, 0.50, 0.15)
@@ -60,3 +61,19 @@ def test_missing_line_counts_against_recall_and_cer():
 def test_cer_is_edit_distance_over_length():
     assert cer("abcd", "abxd") == 0.25
     assert cer("abcd", "") == 1.0
+
+
+def test_one_ocr_line_cannot_match_two_truth_lines():
+    first = _line("Policy Number", (0.10, 0.10, 0.50, 0.15))
+    second = _line("Policy Number", (0.10, 0.11, 0.50, 0.16))
+    s = score_page([first, second], [OcrLine("Policy Number", (0.10, 0.10, 0.50, 0.15), None)])
+    assert s.matched == 1
+    assert s.line_recall == 0.5
+
+
+def test_vision_box_is_flipped_to_top_left_origin():
+    # Vision: 10% from the left, 20% up from the bottom, 30% wide, 5% tall
+    x0, y0, x1, y1 = vision_to_top_left(0.10, 0.20, 0.30, 0.05)
+    assert (x0, x1) == (0.10, 0.40)
+    assert y0 == pytest.approx(0.75)
+    assert y1 == pytest.approx(0.80)

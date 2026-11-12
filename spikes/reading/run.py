@@ -18,6 +18,7 @@ from pathlib import Path
 
 from vault_synth.model import SynthDoc
 
+from household_vault.safety import assert_safe_path
 from spikes.reading.engines import ENGINES, EngineUnavailable
 from spikes.reading.score import PageScore, score_page
 
@@ -46,6 +47,11 @@ def summarise(docs: list[dict]) -> dict:
             "median_cer": _median([d["cer"] for d in rows]),
             "median_line_recall": _median([d["line_recall"] for d in rows]),
             "mean_line_recall": statistics.fmean(d["line_recall"] for d in rows) if rows else None,
+            "median_cer_en": _median([d["cer_en"] for d in rows]),
+            "median_line_recall_en": _median([d["line_recall_en"] for d in rows]),
+            "mean_line_recall_en": (
+                statistics.fmean(d["line_recall_en"] for d in rows) if rows else None
+            ),
             "median_seconds_per_page": _median([d["seconds"] for d in rows]),
             "documents": len(rows),
         }
@@ -63,13 +69,12 @@ def worker(engine_name: str, dataset: Path) -> dict:
     docs = sorted(dataset.glob("*-clean.json")) + sorted(dataset.glob("*-photo.json"))
     records = [SynthDoc.model_validate_json(p.read_text()) for p in docs]
     results: list[dict] = []
-    with tempfile.TemporaryDirectory() as tmp:
+    with tempfile.TemporaryDirectory() as tmp_name:
+        tmp = assert_safe_path(Path(tmp_name))
         inputs = []
         for rec in records:
             src = dataset / rec.files[0]
-            image = (
-                _render_pdf(src, Path(tmp) / f"{rec.doc_id}.png") if src.suffix == ".pdf" else src
-            )
+            image = _render_pdf(src, tmp / f"{rec.doc_id}.png") if src.suffix == ".pdf" else src
             inputs.append((rec, image))
         engine.read(inputs[0][1])  # warm-up page, not timed or scored
         for rec, image in inputs:
@@ -78,6 +83,7 @@ def worker(engine_name: str, dataset: Path) -> dict:
             seconds = time.perf_counter() - start
             truth = [line for line in rec.lines if line.page == 0]
             s: PageScore = score_page(truth, got)
+            s_en: PageScore = score_page([t for t in truth if t.lang == "en"], got)
             results.append(
                 {
                     "doc_id": rec.doc_id,
@@ -85,6 +91,9 @@ def worker(engine_name: str, dataset: Path) -> dict:
                     "variant": rec.variant,
                     "cer": s.cer,
                     "line_recall": s.line_recall,
+                    "cer_en": s_en.cer,
+                    "line_recall_en": s_en.line_recall,
+                    "truth_lines_en": s_en.truth_lines,
                     "matched": s.matched,
                     "truth_lines": s.truth_lines,
                     "seconds": seconds,
@@ -100,7 +109,7 @@ def worker(engine_name: str, dataset: Path) -> dict:
 
 def run_engine(engine_name: str, dataset: Path) -> dict:
     with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as f:
-        out_path = Path(f.name)
+        out_path = assert_safe_path(Path(f.name))
     cmd = [
         sys.executable, "-m", "spikes.reading.run",
         "--worker", engine_name, "--set", str(dataset), "--out", str(out_path),
@@ -132,11 +141,12 @@ def main() -> None:
     ap.add_argument("--out", type=Path)
     args = ap.parse_args()
     if args.worker:
-        args.out.write_text(json.dumps(worker(args.worker, args.set)))
+        assert_safe_path(args.out).write_text(json.dumps(worker(args.worker, args.set)))
         return
     commit = _commit()
     today = datetime.date.today().isoformat()
-    RESULTS.mkdir(exist_ok=True)
+    results_dir = assert_safe_path(RESULTS)
+    results_dir.mkdir(exist_ok=True)
     for name in args.engine or list(ENGINES):
         body = run_engine(name, args.set)
         record = {
@@ -148,7 +158,7 @@ def main() -> None:
             "dpi_clean": DPI,
             **body,
         }
-        path = RESULTS / f"{today}_{name}_{commit}.json"
+        path = results_dir / f"{today}_{name}_{commit}.json"
         path.write_text(json.dumps(record, indent=2, ensure_ascii=False) + "\n")
         print(f"{name}: {body['status']} -> {path}")
         if body["status"] == "ok":

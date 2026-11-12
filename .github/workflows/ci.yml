@@ -22,7 +22,7 @@ jobs:
         run: uv lock --check
         env:
           UV_FROZEN: "0"
-      - run: uv sync --all-groups
+      - run: uv sync
       - run: make lint
       - run: make test
   # Builds the image and runs the stand-in command. The real app runs natively on a Mac.

@@ -39,6 +39,11 @@ def _version(dist: str) -> str:
         return "unknown"
 
 
+def vision_to_top_left(x: float, y: float, w: float, h: float) -> tuple[float, float, float, float]:
+    """Apple Vision box (x, y, w, h), origin bottom left -> (x0, y0, x1, y1), origin top left."""
+    return (x, 1 - (y + h), x + w, 1 - y)
+
+
 class AppleVision:
     """Apple's built-in Vision text recogniser through ocrmac, accurate mode."""
 
@@ -61,8 +66,7 @@ class AppleVision:
         results = self._ocrmac.text_from_image(rgb, recognition_level="accurate")
         lines = []
         for text, conf, (x, y, w, h) in results:
-            # Vision boxes are (x, y, w, h) with the origin at the bottom left.
-            lines.append(OcrLine(text, (x, 1 - (y + h), x + w, 1 - y), float(conf)))
+            lines.append(OcrLine(text, vision_to_top_left(x, y, w, h), float(conf)))
         return lines
 
 
