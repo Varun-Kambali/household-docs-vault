@@ -80,7 +80,8 @@ def prepare(docs: list[SynthDoc], dataset: Path, tmp: Path, with_ocr: bool) -> d
         image = _render_pdf(src, tmp / f"{rec.doc_id}.png") if src.suffix == ".pdf" else src
         text, secs = None, 0.0
         if engine is not None:
-            engine.read(image) if not out else None  # one untimed warm-up read
+            if not out:
+                engine.read(image)  # one untimed warm-up read
             start = time.perf_counter()
             text = ocr_to_text(engine.read(image))
             secs = time.perf_counter() - start
@@ -165,7 +166,10 @@ def run_candidate(
                     result.seconds.append(elapsed)
                     result.errors.append(error)
                     result.raw.append(got)
-            result.loaded_size_mb = c.loaded_size_mb()
+            try:
+                result.loaded_size_mb = c.loaded_size_mb()
+            except Exception:  # losing this figure must not discard the scored run
+                result.loaded_size_mb = None
         finally:
             c.unload()
     result.peak_rss_mb = sampler.peak
