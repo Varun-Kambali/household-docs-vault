@@ -15,7 +15,10 @@ def assert_safe_path(path: Path) -> Path:
     real_root = os.environ.get("VAULT_REAL_ROOT")
     if real_root:
         blocked.append(Path(real_root).expanduser().resolve())
+    # Case-fold both sides: the Mac's default APFS ignores case, so "library/cloudstorage" is the
+    # same folder as "Library/CloudStorage".
+    folded = Path(str(resolved).casefold())
     for root in blocked:
-        if resolved == root or resolved.is_relative_to(root):
+        if folded.is_relative_to(Path(str(root).casefold())):
             raise UnsafePathError(f"refusing to touch {resolved}: it is under {root}")
     return resolved
