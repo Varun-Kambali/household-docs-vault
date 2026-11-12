@@ -11,7 +11,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Varun Kambali" }]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = ["pydantic>=2.9"]
 
 [project.scripts]
 vault = "household_vault.cli:main"
@@ -44,6 +44,8 @@ spikes = [
     "pillow",
     "paddleocr>=3.7.0",
     "paddlepaddle>=3.3.1",
+    "httpx",
+    "psutil",
 ]
 
 [tool.uv]
@@ -67,6 +69,7 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 
 [tool.mypy]
 strict = true
+plugins = ["pydantic.mypy"]
 files = ["src", "synth"]
 
 [[tool.mypy.overrides]]

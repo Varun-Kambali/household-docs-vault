@@ -1041,6 +1041,9 @@ wheels = [
 [[package]]
 name = "household-docs-vault"
 source = { editable = "." }
+dependencies = [
+    { name = "pydantic" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -1051,10 +1054,12 @@ dev = [
     { name = "ruff" },
 ]
 spikes = [
+    { name = "httpx" },
     { name = "ocrmac", marker = "sys_platform == 'darwin'" },
     { name = "paddleocr" },
     { name = "paddlepaddle" },
     { name = "pillow" },
+    { name = "psutil" },
     { name = "pypdfium2" },
     { name = "pytesseract" },
 ]
@@ -1068,6 +1073,7 @@ synth = [
 ]
 
 [package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.9" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -1078,10 +1084,12 @@ dev = [
     { name = "ruff" },
 ]
 spikes = [
+    { name = "httpx" },
     { name = "ocrmac", marker = "sys_platform == 'darwin'" },
     { name = "paddleocr", specifier = ">=3.7.0" },
     { name = "paddlepaddle", specifier = ">=3.3.1" },
     { name = "pillow" },
+    { name = "psutil" },
     { name = "pypdfium2" },
     { name = "pytesseract" },
 ]

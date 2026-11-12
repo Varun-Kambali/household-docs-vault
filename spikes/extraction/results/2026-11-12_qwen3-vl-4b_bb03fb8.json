@@ -1,0 +1,950 @@
+{
+  "date": "2026-11-12",
+  "model": "qwen3-vl:4b",
+  "digest": "a1b29c246319cdcb1f3842f36d29f198f737c0cf516ba1bcba34b1b974e87980",
+  "runtime": "ollama",
+  "runtime_version": "0.40.16",
+  "commit": "bb03fb8",
+  "dataset": "spike-v0",
+  "machine": "Apple M5, 16 GB",
+  "prompt_version": "v1",
+  "kind": "vision",
+  "dpi_clean": 200,
+  "status": "ok",
+  "reason": null,
+  "peak_rss_mb": 6663.7,
+  "baseline_rss_mb": 28.3,
+  "loaded_size_mb": 4739.4,
+  "max_prompt_tokens": 4436,
+  "num_ctx": 12288,
+  "summary": {
+    "clean": {
+      "documents": 18,
+      "fields": 120,
+      "field_exact": 0.95,
+      "json_valid": 1.0,
+      "median_seconds": 40.19161479151808,
+      "mean_seconds": 30.292152923577103,
+      "max_seconds": 46.6423075000057,
+      "by_type": {
+        "aadhaar": {
+          "documents": 2,
+          "fields": 8,
+          "field_exact": 0.875,
+          "json_valid": 1.0
+        },
+        "card_front": {
+          "documents": 2,
+          "fields": 10,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        },
+        "health_policy": {
+          "documents": 2,
+          "fields": 20,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        },
+        "lab_report": {
+          "documents": 2,
+          "fields": 8,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        },
+        "pan": {
+          "documents": 2,
+          "fields": 8,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        },
+        "prescription": {
+          "documents": 2,
+          "fields": 12,
+          "field_exact": 0.8333333333333334,
+          "json_valid": 1.0
+        },
+        "tax_invoice": {
+          "documents": 2,
+          "fields": 18,
+          "field_exact": 0.8333333333333334,
+          "json_valid": 1.0
+        },
+        "vehicle_policy": {
+          "documents": 2,
+          "fields": 20,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        },
+        "warranty_card": {
+          "documents": 2,
+          "fields": 16,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        }
+      },
+      "by_field": {
+        "aadhaar": {
+          "address": 1.0,
+          "date_of_birth": 1.0,
+          "holder": 1.0,
+          "number": 0.5
+        },
+        "card_front": {
+          "bank": 1.0,
+          "expiry": 1.0,
+          "holder": 1.0,
+          "network": 1.0,
+          "number": 1.0
+        },
+        "health_policy": {
+          "claim_helpline": 1.0,
+          "end_date": 1.0,
+          "insured": 1.0,
+          "insurer": 1.0,
+          "nominee": 1.0,
+          "policy_number": 1.0,
+          "policyholder": 1.0,
+          "premium": 1.0,
+          "start_date": 1.0,
+          "sum_insured": 1.0
+        },
+        "lab_report": {
+          "date": 1.0,
+          "lab": 1.0,
+          "patient": 1.0,
+          "tests": 1.0
+        },
+        "pan": {
+          "date_of_birth": 1.0,
+          "father_name": 1.0,
+          "holder": 1.0,
+          "number": 1.0
+        },
+        "prescription": {
+          "date": 1.0,
+          "doctor": 1.0,
+          "hospital": 1.0,
+          "medicines": 0.0,
+          "next_visit": 1.0,
+          "patient": 1.0
+        },
+        "tax_invoice": {
+          "amount": 1.0,
+          "gstin": 1.0,
+          "invoice_date": 0.5,
+          "invoice_number": 1.0,
+          "model": 1.0,
+          "product": 1.0,
+          "seller": 1.0,
+          "seller_location": 0.0,
+          "serial_number": 1.0
+        },
+        "vehicle_policy": {
+          "claim_helpline": 1.0,
+          "end_date": 1.0,
+          "idv": 1.0,
+          "insurer": 1.0,
+          "ncb_percent": 1.0,
+          "policy_number": 1.0,
+          "policyholder": 1.0,
+          "premium": 1.0,
+          "registration_number": 1.0,
+          "start_date": 1.0
+        },
+        "warranty_card": {
+          "brand": 1.0,
+          "model": 1.0,
+          "product": 1.0,
+          "purchase_date": 1.0,
+          "seller": 1.0,
+          "seller_location": 1.0,
+          "serial_number": 1.0,
+          "warranty_parts": 1.0
+        }
+      }
+    },
+    "photo": {
+      "documents": 18,
+      "fields": 120,
+      "field_exact": 0.9416666666666667,
+      "json_valid": 1.0,
+      "median_seconds": 34.979947063024156,
+      "mean_seconds": 29.757201506989077,
+      "max_seconds": 46.81068641599268,
+      "by_type": {
+        "aadhaar": {
+          "documents": 2,
+          "fields": 8,
+          "field_exact": 0.875,
+          "json_valid": 1.0
+        },
+        "card_front": {
+          "documents": 2,
+          "fields": 10,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        },
+        "health_policy": {
+          "documents": 2,
+          "fields": 20,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        },
+        "lab_report": {
+          "documents": 2,
+          "fields": 8,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        },
+        "pan": {
+          "documents": 2,
+          "fields": 8,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        },
+        "prescription": {
+          "documents": 2,
+          "fields": 12,
+          "field_exact": 0.8333333333333334,
+          "json_valid": 1.0
+        },
+        "tax_invoice": {
+          "documents": 2,
+          "fields": 18,
+          "field_exact": 0.7777777777777778,
+          "json_valid": 1.0
+        },
+        "vehicle_policy": {
+          "documents": 2,
+          "fields": 20,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        },
+        "warranty_card": {
+          "documents": 2,
+          "fields": 16,
+          "field_exact": 1.0,
+          "json_valid": 1.0
+        }
+      },
+      "by_field": {
+        "aadhaar": {
+          "address": 1.0,
+          "date_of_birth": 1.0,
+          "holder": 1.0,
+          "number": 0.5
+        },
+        "card_front": {
+          "bank": 1.0,
+          "expiry": 1.0,
+          "holder": 1.0,
+          "network": 1.0,
+          "number": 1.0
+        },
+        "health_policy": {
+          "claim_helpline": 1.0,
+          "end_date": 1.0,
+          "insured": 1.0,
+          "insurer": 1.0,
+          "nominee": 1.0,
+          "policy_number": 1.0,
+          "policyholder": 1.0,
+          "premium": 1.0,
+          "start_date": 1.0,
+          "sum_insured": 1.0
+        },
+        "lab_report": {
+          "date": 1.0,
+          "lab": 1.0,
+          "patient": 1.0,
+          "tests": 1.0
+        },
+        "pan": {
+          "date_of_birth": 1.0,
+          "father_name": 1.0,
+          "holder": 1.0,
+          "number": 1.0
+        },
+        "prescription": {
+          "date": 1.0,
+          "doctor": 1.0,
+          "hospital": 1.0,
+          "medicines": 0.0,
+          "next_visit": 1.0,
+          "patient": 1.0
+        },
+        "tax_invoice": {
+          "amount": 1.0,
+          "gstin": 1.0,
+          "invoice_date": 0.5,
+          "invoice_number": 1.0,
+          "model": 0.5,
+          "product": 1.0,
+          "seller": 1.0,
+          "seller_location": 0.0,
+          "serial_number": 1.0
+        },
+        "vehicle_policy": {
+          "claim_helpline": 1.0,
+          "end_date": 1.0,
+          "idv": 1.0,
+          "insurer": 1.0,
+          "ncb_percent": 1.0,
+          "policy_number": 1.0,
+          "policyholder": 1.0,
+          "premium": 1.0,
+          "registration_number": 1.0,
+          "start_date": 1.0
+        },
+        "warranty_card": {
+          "brand": 1.0,
+          "model": 1.0,
+          "product": 1.0,
+          "purchase_date": 1.0,
+          "seller": 1.0,
+          "seller_location": 1.0,
+          "serial_number": 1.0,
+          "warranty_parts": 1.0
+        }
+      }
+    }
+  },
+  "documents": [
+    {
+      "doc_id": "aadhaar-1-clean",
+      "doc_type": "aadhaar",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "holder": true,
+        "date_of_birth": true,
+        "address": true,
+        "number": true
+      },
+      "seconds": 9.54,
+      "error": null,
+      "output": "{\n  \"holder\": \"Anil Naik\",\n  \"date_of_birth\": \"03/08/2003\",\n  \"address\": \"No. 199, 3rd Cross Station Road Hubballi, Karnataka - 580431\",\n  \"number\": \"4861 5782 1135\"\n}"
+    },
+    {
+      "doc_id": "aadhaar-2-clean",
+      "doc_type": "aadhaar",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "holder": true,
+        "date_of_birth": true,
+        "address": true,
+        "number": false
+      },
+      "seconds": 8.72,
+      "error": null,
+      "output": "{\n  \"holder\": \"Ramesh Gowda\",\n  \"date_of_birth\": \"1996-06-03\",\n  \"address\": \"No. 226, 10th Cross Market Street Bengaluru, Karnataka - 560088\",\n  \"number\": \"289458684231\"\n}"
+    },
+    {
+      "doc_id": "card_front-1-clean",
+      "doc_type": "card_front",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "bank": true,
+        "number": true,
+        "expiry": true,
+        "holder": true,
+        "network": true
+      },
+      "seconds": 5.44,
+      "error": null,
+      "output": "{\n  \"bank\": \"Nilgiri Bank\",\n  \"number\": \"5105 1051 0510 5100\",\n  \"expiry\": \"10/31\",\n  \"holder\": \"TRIYA NAGY\",\n  \"network\": \"Mastercard\"\n}"
+    },
+    {
+      "doc_id": "card_front-2-clean",
+      "doc_type": "card_front",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "bank": true,
+        "number": true,
+        "expiry": true,
+        "holder": true,
+        "network": true
+      },
+      "seconds": 5.37,
+      "error": null,
+      "output": "{\n  \"bank\": \"Nilgiri Bank\",\n  \"number\": \"5105 1051 0510 5100\",\n  \"expiry\": \"04/30\",\n  \"holder\": \"PAVANI NAGAR\",\n  \"network\": \"Mastercard\"\n}"
+    },
+    {
+      "doc_id": "health_policy-1-clean",
+      "doc_type": "health_policy",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "insurer": true,
+        "policy_number": true,
+        "policyholder": true,
+        "start_date": true,
+        "end_date": true,
+        "insured": true,
+        "nominee": true,
+        "sum_insured": true,
+        "premium": true,
+        "claim_helpline": true
+      },
+      "seconds": 34.24,
+      "error": null,
+      "output": "{\n  \"insurer\": \"Star Health and Allied Insurance Co. Ltd.\",\n  \"policy_number\": \"P/79/5309/6290115\",\n  \"policyholder\": \"Yashasvi Dalal\",\n  \"start_date\": \"03/02/2026\",\n  \"end_date\": \"02/02/2027\",\n  \"insured\": [\n    \"Yashasvi Dalal\",\n    \"Guneet Dalal\"\n  ],\n  \"nominee\": \"Balendra Vala\",\n  \"sum_insured\": 500000,\n  \"premium\": 28910,\n  \"claim_helpline\": \"1800 680 4785\"\n}"
+    },
+    {
+      "doc_id": "health_policy-2-clean",
+      "doc_type": "health_policy",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "insurer": true,
+        "policy_number": true,
+        "policyholder": true,
+        "start_date": true,
+        "end_date": true,
+        "insured": true,
+        "nominee": true,
+        "sum_insured": true,
+        "premium": true,
+        "claim_helpline": true
+      },
+      "seconds": 40.3,
+      "error": null,
+      "output": "{\n  \"insurer\": \"Star Health and Allied Insurance Co. Ltd.\",\n  \"policy_number\": \"P/58/9010/3905339\",\n  \"policyholder\": \"Liam Bhattacharyya\",\n  \"start_date\": \"14/05/2026\",\n  \"end_date\": \"13/05/2027\",\n  \"insured\": [\n    \"Liam Bhattacharyya\",\n    \"Nihal Bhattacharyya\"\n  ],\n  \"nominee\": \"Rachita Ramanathan\",\n  \"sum_insured\": 500000,\n  \"premium\": 28910,\n  \"claim_helpline\": \"1800 635 8750\"\n}"
+    },
+    {
+      "doc_id": "lab_report-1-clean",
+      "doc_type": "lab_report",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "lab": true,
+        "patient": true,
+        "date": true,
+        "tests": true
+      },
+      "seconds": 46.06,
+      "error": null,
+      "output": "{\n  \"lab\": \"Nirmala Path Labs\",\n  \"patient\": \"Rachana Gulati\",\n  \"date\": \"2026-08-26\",\n  \"tests\": [\n    {\n      \"name\": \"Total cholesterol\",\n      \"value\": \"128\",\n      \"unit\": \"mg/dL\"\n    },\n    {\n      \"name\": \"Haemoglobin\",\n      \"value\": \"12.2\",\n      \"unit\": \"g/dL\"\n    },\n    {\n      \"name\": \"Serum creatinine\",\n      \"value\": \"0.9\",\n      \"unit\": \"mg/dL\"\n    },\n    {\n      \"name\": \"Total WBC count\",\n      \"value\": \"9906\",\n      \"unit\": \"cells/cumm\"\n    },\n    {\n      \"name\": \"Platelet count\",\n      \"value\": \"4.9\",\n      \"unit\": \"lakh/cumm\"\n    },\n    {\n      \"name\": \"Fasting blood sugar\",\n      \"value\": \"83\",\n      \"unit\": \"mg/dL\"\n    },\n    {\n      \"name\": \"HbA1c\",\n      \"value\": \"4.2\",\n      \"unit\": \"%\"\n    }\n  ]\n}"
+    },
+    {
+      "doc_id": "lab_report-2-clean",
+      "doc_type": "lab_report",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "lab": true,
+        "patient": true,
+        "date": true,
+        "tests": true
+      },
+      "seconds": 43.01,
+      "error": null,
+      "output": "{\n  \"lab\": \"Clear Lane Diagnostics\",\n  \"patient\": \"Deepa Srinivasan\",\n  \"date\": \"2026-08-30\",\n  \"tests\": [\n    {\n      \"name\": \"Platelet count\",\n      \"value\": \"3.0\",\n      \"unit\": \"lakh/cumm\"\n    },\n    {\n      \"name\": \"Haemoglobin\",\n      \"value\": \"17.8\",\n      \"unit\": \"g/dL\"\n    },\n    {\n      \"name\": \"Fasting blood sugar\",\n      \"value\": \"126\",\n      \"unit\": \"mg/dL\"\n    },\n    {\n      \"name\": \"Total cholesterol\",\n      \"value\": \"140\",\n      \"unit\": \"mg/dL\"\n    },\n    {\n      \"name\": \"Serum creatinine\",\n      \"value\": \"0.8\",\n      \"unit\": \"mg/dL\"\n    }\n  ]\n}"
+    },
+    {
+      "doc_id": "pan-1-clean",
+      "doc_type": "pan",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "number": true,
+        "holder": true,
+        "father_name": true,
+        "date_of_birth": true
+      },
+      "seconds": 9.09,
+      "error": null,
+      "output": "{\n  \"number\": \"ZZMPD0760V\",\n  \"holder\": \"NITARA DATE\",\n  \"father_name\": \"NAVEEN DATE\",\n  \"date_of_birth\": \"1958-10-27\"\n}"
+    },
+    {
+      "doc_id": "pan-2-clean",
+      "doc_type": "pan",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "number": true,
+        "holder": true,
+        "father_name": true,
+        "date_of_birth": true
+      },
+      "seconds": 9.59,
+      "error": null,
+      "output": "{\n  \"number\": \"ZZYPA8436T\",\n  \"holder\": \"EKANI ACHARYA\",\n  \"father_name\": \"JAGRATI ACHARYA\",\n  \"date_of_birth\": \"1982-05-06\"\n}"
+    },
+    {
+      "doc_id": "prescription-1-clean",
+      "doc_type": "prescription",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "hospital": true,
+        "doctor": true,
+        "patient": true,
+        "date": true,
+        "medicines": false,
+        "next_visit": true
+      },
+      "seconds": 46.64,
+      "error": null,
+      "output": "{\n  \"hospital\": \"Cauvery Care Hospital\",\n  \"doctor\": \"Dr. Geetika Taneja\",\n  \"patient\": \"Anay Thakur\",\n  \"date\": \"09/11/2026\",\n  \"medicines\": [\n    {\n      \"name\": \"Tab Cetirizine\",\n      \"dose\": \"10 mg\",\n      \"timing\": \"1-1-1\",\n      \"duration\": \"5 days\"\n    },\n    {\n      \"name\": \"Tab Metformin\",\n      \"dose\": \"850 mg\",\n      \"timing\": \"1-1-1\",\n      \"duration\": \"7 days\"\n    },\n    {\n      \"name\": \"Tab Paracetamol\",\n      \"dose\": \"500 mg\",\n      \"timing\": \"0-0-1\",\n      \"duration\": \"15 days\"\n    },\n    {\n      \"name\": \"Tab Vitamin D3\",\n      \"dose\": \"60000 IU\",\n      \"timing\": \"1-1-1\",\n      \"duration\": \"3 months\"\n    },\n    {\n      \"name\": \"Tab Pantoprazole\",\n      \"dose\": \"40 mg\",\n      \"timing\": \"1-0-0\",\n      \"duration\": \"15 days\"\n    }\n  ],\n  \"next_visit\": \"29/12/2026\"\n}"
+    },
+    {
+      "doc_id": "prescription-2-clean",
+      "doc_type": "prescription",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "hospital": true,
+        "doctor": true,
+        "patient": true,
+        "date": true,
+        "medicines": false,
+        "next_visit": true
+      },
+      "seconds": 45.2,
+      "error": null,
+      "output": "{\n  \"hospital\": \"Greenfield Polyclinic\",\n  \"doctor\": \"Dr. Ira Srinivas\",\n  \"patient\": \"Dalaja Wali\",\n  \"date\": \"24/07/2026\",\n  \"medicines\": [\n    {\n      \"name\": \"Tab Paracetamol\",\n      \"dose\": \"650 mg\",\n      \"timing\": \"1-0-0\",\n      \"duration\": \"30 days\"\n    },\n    {\n      \"name\": \"Tab Pantoprazole\",\n      \"dose\": \"40 mg\",\n      \"timing\": \"1-1-1\",\n      \"duration\": \"7 days\"\n    },\n    {\n      \"name\": \"Tab Cetirizine\",\n      \"dose\": \"10 mg\",\n      \"timing\": \"1-0-0\",\n      \"duration\": \"5 days\"\n    },\n    {\n      \"name\": \"Tab Telmisartan\",\n      \"dose\": \"40 mg\",\n      \"timing\": \"1-1-1\",\n      \"duration\": \"5 days\"\n    }\n  ],\n  \"next_visit\": \"21/01/2027\"\n}"
+    },
+    {
+      "doc_id": "tax_invoice-1-clean",
+      "doc_type": "tax_invoice",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "seller": true,
+        "seller_location": false,
+        "gstin": true,
+        "invoice_number": true,
+        "invoice_date": false,
+        "product": true,
+        "model": true,
+        "serial_number": true,
+        "amount": true
+      },
+      "seconds": 40.43,
+      "error": null,
+      "output": "{\n  \"seller\": \"Reliance Digital\",\n  \"seller_location\": \"Hyderabad, Telangana - 500263\",\n  \"gstin\": \"36SSCCZ0209F1Z0\",\n  \"invoice_number\": \"INV/24-25/474076\",\n  \"invoice_date\": \"20032025\",\n  \"product\": \"LG Double Door Refrigerator 242 L\",\n  \"model\": \"GL-S672ZPZX\",\n  \"serial_number\": \"783ZHR554110\",\n  \"amount\": 31990\n}"
+    },
+    {
+      "doc_id": "tax_invoice-2-clean",
+      "doc_type": "tax_invoice",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "seller": true,
+        "seller_location": false,
+        "gstin": true,
+        "invoice_number": true,
+        "invoice_date": true,
+        "product": true,
+        "model": true,
+        "serial_number": true,
+        "amount": true
+      },
+      "seconds": 40.25,
+      "error": null,
+      "output": "{\n  \"seller\": \"Vijay Sales\",\n  \"seller_location\": \"4, Station Road Mangaluru, Karnataka - 575649\",\n  \"gstin\": \"29XUDWE1216T1Z3\",\n  \"invoice_number\": \"INV/24-25/518809\",\n  \"invoice_date\": \"05/01/2025\",\n  \"product\": \"Samsung Front Load Washing Machine 8 kg\",\n  \"model\": \"WW80576FN\",\n  \"serial_number\": \"710TUN952928\",\n  \"amount\": 36490\n}"
+    },
+    {
+      "doc_id": "vehicle_policy-1-clean",
+      "doc_type": "vehicle_policy",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "insurer": true,
+        "policy_number": true,
+        "policyholder": true,
+        "start_date": true,
+        "end_date": true,
+        "registration_number": true,
+        "idv": true,
+        "ncb_percent": true,
+        "premium": true,
+        "claim_helpline": true
+      },
+      "seconds": 40.13,
+      "error": null,
+      "output": "{\n  \"insurer\": \"ICICI Lombard General Insurance Company Limited\",\n  \"policy_number\": \"3001/94786640/00/000\",\n  \"policyholder\": \"Aarav Grewal\",\n  \"start_date\": \"2026-05-27\",\n  \"end_date\": \"2027-05-26\",\n  \"registration_number\": \"KA03DG4676\",\n  \"idv\": 385000,\n  \"ncb_percent\": 20,\n  \"premium\": 8892,\n  \"claim_helpline\": \"1800 460 1657\"\n}"
+    },
+    {
+      "doc_id": "vehicle_policy-2-clean",
+      "doc_type": "vehicle_policy",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "insurer": true,
+        "policy_number": true,
+        "policyholder": true,
+        "start_date": true,
+        "end_date": true,
+        "registration_number": true,
+        "idv": true,
+        "ncb_percent": true,
+        "premium": true,
+        "claim_helpline": true
+      },
+      "seconds": 41.08,
+      "error": null,
+      "output": "{\n  \"insurer\": \"Bajaj Allianz General Insurance Company Limited\",\n  \"policy_number\": \"3001/75901964/00/000\",\n  \"policyholder\": \"Ekaja Andra\",\n  \"start_date\": \"2026-01-07\",\n  \"end_date\": \"2027-01-06\",\n  \"registration_number\": \"KA37HR2633\",\n  \"idv\": 385000,\n  \"ncb_percent\": 20,\n  \"premium\": 8892,\n  \"claim_helpline\": \"1800 888 9572\"\n}"
+    },
+    {
+      "doc_id": "warranty_card-1-clean",
+      "doc_type": "warranty_card",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "brand": true,
+        "product": true,
+        "model": true,
+        "serial_number": true,
+        "purchase_date": true,
+        "seller": true,
+        "seller_location": true,
+        "warranty_parts": true
+      },
+      "seconds": 40.42,
+      "error": null,
+      "output": "{\n  \"brand\": \"Whirlpool\",\n  \"product\": \"Convection Microwave Oven 25 L\",\n  \"model\": \"MWO-670C\",\n  \"serial_number\": \"709VFA231204\",\n  \"purchase_date\": \"2025-08-05\",\n  \"seller\": \"City Electronics Mart\",\n  \"seller_location\": \"Mangaluru\",\n  \"warranty_parts\": [\n    {\n      \"part\": \"Magnetron\",\n      \"years\": 2\n    },\n    {\n      \"part\": \"Product\",\n      \"years\": 1\n    }\n  ]\n}"
+    },
+    {
+      "doc_id": "warranty_card-2-clean",
+      "doc_type": "warranty_card",
+      "variant": "clean",
+      "valid_json": true,
+      "exact": {
+        "brand": true,
+        "product": true,
+        "model": true,
+        "serial_number": true,
+        "purchase_date": true,
+        "seller": true,
+        "seller_location": true,
+        "warranty_parts": true
+      },
+      "seconds": 39.74,
+      "error": null,
+      "output": "{\n  \"brand\": \"Sony\",\n  \"product\": \"Bravia LED Television 43 inch\",\n  \"model\": \"KD-43X889\",\n  \"serial_number\": \"467KUW430342\",\n  \"purchase_date\": \"2026-06-07\",\n  \"seller\": \"Sri Lakshmi Home Needs\",\n  \"seller_location\": \"Pune\",\n  \"warranty_parts\": [\n    {\n      \"part\": \"Panel\",\n      \"years\": 2\n    },\n    {\n      \"part\": \"Product\",\n      \"years\": 1\n    }\n  ]\n}"
+    },
+    {
+      "doc_id": "aadhaar-1-photo",
+      "doc_type": "aadhaar",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "holder": true,
+        "date_of_birth": true,
+        "address": true,
+        "number": true
+      },
+      "seconds": 12.23,
+      "error": null,
+      "output": "{\n  \"holder\": \"Anil Naik\",\n  \"date_of_birth\": \"03/08/2003\",\n  \"address\": \"No. 199, 3rd Cross Station Road Hubballi, Karnataka - 580431\",\n  \"number\": \"4861 5782 1135\"\n}"
+    },
+    {
+      "doc_id": "aadhaar-2-photo",
+      "doc_type": "aadhaar",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "holder": true,
+        "date_of_birth": true,
+        "address": true,
+        "number": false
+      },
+      "seconds": 12.33,
+      "error": null,
+      "output": "{\n  \"holder\": \"Ramesh Gowda\",\n  \"date_of_birth\": \"1996-06-03\",\n  \"address\": \"No. 226, 10th Cross Market Street Bengaluru, Karnataka - 560088\",\n  \"number\": \"289458684231\"\n}"
+    },
+    {
+      "doc_id": "card_front-1-photo",
+      "doc_type": "card_front",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "bank": true,
+        "number": true,
+        "expiry": true,
+        "holder": true,
+        "network": true
+      },
+      "seconds": 7.13,
+      "error": null,
+      "output": "{\n  \"bank\": \"Nilgiri Bank\",\n  \"number\": \"5105 1051 0510 5100\",\n  \"expiry\": \"10/31\",\n  \"holder\": \"TRIYA NAGY\",\n  \"network\": \"Mastercard\"\n}"
+    },
+    {
+      "doc_id": "card_front-2-photo",
+      "doc_type": "card_front",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "bank": true,
+        "number": true,
+        "expiry": true,
+        "holder": true,
+        "network": true
+      },
+      "seconds": 7.21,
+      "error": null,
+      "output": "{\n  \"bank\": \"Nilgiri Bank\",\n  \"number\": \"5105 1051 0510 5100\",\n  \"expiry\": \"04/30\",\n  \"holder\": \"PAVANI NAGAR\",\n  \"network\": \"Mastercard\"\n}"
+    },
+    {
+      "doc_id": "health_policy-1-photo",
+      "doc_type": "health_policy",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "insurer": true,
+        "policy_number": true,
+        "policyholder": true,
+        "start_date": true,
+        "end_date": true,
+        "insured": true,
+        "nominee": true,
+        "sum_insured": true,
+        "premium": true,
+        "claim_helpline": true
+      },
+      "seconds": 41.3,
+      "error": null,
+      "output": "{\n  \"insurer\": \"Star Health and Allied Insurance Co. Ltd.\",\n  \"policy_number\": \"P/79/5309/6290115\",\n  \"policyholder\": \"Yashasvi Dalal\",\n  \"start_date\": \"03/02/2026\",\n  \"end_date\": \"02/02/2027\",\n  \"insured\": [\n    \"Yashasvi Dalal\",\n    \"Guneet Dalal\"\n  ],\n  \"nominee\": \"Balendra Vala\",\n  \"sum_insured\": 500000,\n  \"premium\": 28910,\n  \"claim_helpline\": \"1800 680 4785\"\n}"
+    },
+    {
+      "doc_id": "health_policy-2-photo",
+      "doc_type": "health_policy",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "insurer": true,
+        "policy_number": true,
+        "policyholder": true,
+        "start_date": true,
+        "end_date": true,
+        "insured": true,
+        "nominee": true,
+        "sum_insured": true,
+        "premium": true,
+        "claim_helpline": true
+      },
+      "seconds": 41.96,
+      "error": null,
+      "output": "{\n  \"insurer\": \"Star Health and Allied Insurance Co. Ltd.\",\n  \"policy_number\": \"P/58/9010/3905339\",\n  \"policyholder\": \"Liam Bhattacharyya\",\n  \"start_date\": \"14/05/2026\",\n  \"end_date\": \"13/05/2027\",\n  \"insured\": [\n    \"Liam Bhattacharyya\",\n    \"Nihal Bhattacharyya\"\n  ],\n  \"nominee\": \"Rachita Ramanathan\",\n  \"sum_insured\": 500000,\n  \"premium\": 28910,\n  \"claim_helpline\": \"1800 635 8750\"\n}"
+    },
+    {
+      "doc_id": "lab_report-1-photo",
+      "doc_type": "lab_report",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "lab": true,
+        "patient": true,
+        "date": true,
+        "tests": true
+      },
+      "seconds": 45.98,
+      "error": null,
+      "output": "{\n  \"lab\": \"Nirmala Path Labs\",\n  \"patient\": \"Rachana Gulati\",\n  \"date\": \"2026-08-26\",\n  \"tests\": [\n    {\n      \"name\": \"Total cholesterol\",\n      \"value\": \"128\",\n      \"unit\": \"mg/dL\"\n    },\n    {\n      \"name\": \"Haemoglobin\",\n      \"value\": \"12.2\",\n      \"unit\": \"g/dL\"\n    },\n    {\n      \"name\": \"Serum creatinine\",\n      \"value\": \"0.9\",\n      \"unit\": \"mg/dL\"\n    },\n    {\n      \"name\": \"Total WBC count\",\n      \"value\": \"9906\",\n      \"unit\": \"cells/cumm\"\n    },\n    {\n      \"name\": \"Platelet count\",\n      \"value\": \"4.9\",\n      \"unit\": \"lakh/cumm\"\n    },\n    {\n      \"name\": \"Fasting blood sugar\",\n      \"value\": \"83\",\n      \"unit\": \"mg/dL\"\n    },\n    {\n      \"name\": \"HbA1c\",\n      \"value\": \"4.2\",\n      \"unit\": \"%\"\n    }\n  ]\n}"
+    },
+    {
+      "doc_id": "lab_report-2-photo",
+      "doc_type": "lab_report",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "lab": true,
+        "patient": true,
+        "date": true,
+        "tests": true
+      },
+      "seconds": 42.94,
+      "error": null,
+      "output": "{\n  \"lab\": \"Clear Lane Diagnostics\",\n  \"patient\": \"Deepa Srinivasan\",\n  \"date\": \"2026-08-30\",\n  \"tests\": [\n    {\n      \"name\": \"Platelet count\",\n      \"value\": \"3.0\",\n      \"unit\": \"lakh/cumm\"\n    },\n    {\n      \"name\": \"Haemoglobin\",\n      \"value\": \"17.8\",\n      \"unit\": \"g/dL\"\n    },\n    {\n      \"name\": \"Fasting blood sugar\",\n      \"value\": \"126\",\n      \"unit\": \"mg/dL\"\n    },\n    {\n      \"name\": \"Total cholesterol\",\n      \"value\": \"140\",\n      \"unit\": \"mg/dL\"\n    },\n    {\n      \"name\": \"Serum creatinine\",\n      \"value\": \"0.8\",\n      \"unit\": \"mg/dL\"\n    }\n  ]\n}"
+    },
+    {
+      "doc_id": "pan-1-photo",
+      "doc_type": "pan",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "number": true,
+        "holder": true,
+        "father_name": true,
+        "date_of_birth": true
+      },
+      "seconds": 10.38,
+      "error": null,
+      "output": "{\n  \"number\": \"ZZMPD0760V\",\n  \"holder\": \"NITARA DATE\",\n  \"father_name\": \"NAVEEN DATE\",\n  \"date_of_birth\": \"27/10/1958\"\n}"
+    },
+    {
+      "doc_id": "pan-2-photo",
+      "doc_type": "pan",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "number": true,
+        "holder": true,
+        "father_name": true,
+        "date_of_birth": true
+      },
+      "seconds": 8.95,
+      "error": null,
+      "output": "{\n  \"number\": \"ZZYPA8436T\",\n  \"holder\": \"EKANI ACHARYA\",\n  \"father_name\": \"JAGRATI ACHARYA\",\n  \"date_of_birth\": \"06/05/1982\"\n}"
+    },
+    {
+      "doc_id": "prescription-1-photo",
+      "doc_type": "prescription",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "hospital": true,
+        "doctor": true,
+        "patient": true,
+        "date": true,
+        "medicines": false,
+        "next_visit": true
+      },
+      "seconds": 46.81,
+      "error": null,
+      "output": "{\n  \"hospital\": \"Cauvery Care Hospital\",\n  \"doctor\": \"Dr. Geetika Taneja\",\n  \"patient\": \"Anay Thakur\",\n  \"date\": \"09/11/2026\",\n  \"medicines\": [\n    {\n      \"name\": \"Tab Cetirizine\",\n      \"dose\": \"10 mg\",\n      \"timing\": \"1-1-1\",\n      \"duration\": \"5 days\"\n    },\n    {\n      \"name\": \"Tab Metformin\",\n      \"dose\": \"850 mg\",\n      \"timing\": \"1-1-1\",\n      \"duration\": \"7 days\"\n    },\n    {\n      \"name\": \"Tab Paracetamol\",\n      \"dose\": \"500 mg\",\n      \"timing\": \"0-0-1\",\n      \"duration\": \"15 days\"\n    },\n    {\n      \"name\": \"Tab Vitamin D3\",\n      \"dose\": \"60000 IU\",\n      \"timing\": \"1-1-1\",\n      \"duration\": \"3 months\"\n    },\n    {\n      \"name\": \"Tab Pantoprazole\",\n      \"dose\": \"40 mg\",\n      \"timing\": \"1-0-0\",\n      \"duration\": \"15 days\"\n    }\n  ],\n  \"next_visit\": \"29/12/2026\"\n}"
+    },
+    {
+      "doc_id": "prescription-2-photo",
+      "doc_type": "prescription",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "hospital": true,
+        "doctor": true,
+        "patient": true,
+        "date": true,
+        "medicines": false,
+        "next_visit": true
+      },
+      "seconds": 45.49,
+      "error": null,
+      "output": "{\n  \"hospital\": \"Greenfield Polyclinic\",\n  \"doctor\": \"Dr. Ira Srinivas\",\n  \"patient\": \"Dalaja Wali\",\n  \"date\": \"24/07/2026\",\n  \"medicines\": [\n    {\n      \"name\": \"Tab Paracetamol\",\n      \"dose\": \"650 mg\",\n      \"timing\": \"1-0-0\",\n      \"duration\": \"30 days\"\n    },\n    {\n      \"name\": \"Tab Pantoprazole\",\n      \"dose\": \"40 mg\",\n      \"timing\": \"1-1-1\",\n      \"duration\": \"7 days\"\n    },\n    {\n      \"name\": \"Tab Cetirizine\",\n      \"dose\": \"10 mg\",\n      \"timing\": \"1-0-0\",\n      \"duration\": \"5 days\"\n    },\n    {\n      \"name\": \"Tab Telmisartan\",\n      \"dose\": \"40 mg\",\n      \"timing\": \"1-1-1\",\n      \"duration\": \"5 days\"\n    }\n  ],\n  \"next_visit\": \"21/01/2027\"\n}"
+    },
+    {
+      "doc_id": "tax_invoice-1-photo",
+      "doc_type": "tax_invoice",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "seller": true,
+        "seller_location": false,
+        "gstin": true,
+        "invoice_number": true,
+        "invoice_date": false,
+        "product": true,
+        "model": true,
+        "serial_number": true,
+        "amount": true
+      },
+      "seconds": 40.26,
+      "error": null,
+      "output": "{\n  \"seller\": \"Reliance Digital\",\n  \"seller_location\": \"Hyderabad, Telangana - 500263\",\n  \"gstin\": \"36SSCCZ0209F1Z0\",\n  \"invoice_number\": \"INV/24-25/474076\",\n  \"invoice_date\": \"20032025\",\n  \"product\": \"LG Double Door Refrigerator 242 L\",\n  \"model\": \"GL-S672ZPZX\",\n  \"serial_number\": \"783ZHR554110\",\n  \"amount\": 31990\n}"
+    },
+    {
+      "doc_id": "tax_invoice-2-photo",
+      "doc_type": "tax_invoice",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "seller": true,
+        "seller_location": false,
+        "gstin": true,
+        "invoice_number": true,
+        "invoice_date": true,
+        "product": true,
+        "model": false,
+        "serial_number": true,
+        "amount": true
+      },
+      "seconds": 35.26,
+      "error": null,
+      "output": "{\n  \"seller\": \"Vijay Sales\",\n  \"seller_location\": \"Mangaluru, Karnataka - 575649\",\n  \"gstin\": \"29XUDWE1216T1Z3\",\n  \"invoice_number\": \"INV/24-25/518809\",\n  \"invoice_date\": \"05/01/2025\",\n  \"product\": \"Samsung Front Load Washing Machine 8 kg\",\n  \"model\": \"WW80576N\",\n  \"serial_number\": \"710TUN952928\",\n  \"amount\": 36490\n}"
+    },
+    {
+      "doc_id": "vehicle_policy-1-photo",
+      "doc_type": "vehicle_policy",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "insurer": true,
+        "policy_number": true,
+        "policyholder": true,
+        "start_date": true,
+        "end_date": true,
+        "registration_number": true,
+        "idv": true,
+        "ncb_percent": true,
+        "premium": true,
+        "claim_helpline": true
+      },
+      "seconds": 36.27,
+      "error": null,
+      "output": "{\n  \"insurer\": \"ICICI Lombard General Insurance Company Limited\",\n  \"policy_number\": \"3001/94786640/00/000\",\n  \"policyholder\": \"Aarav Grewal\",\n  \"start_date\": \"2026-05-27\",\n  \"end_date\": \"2027-05-26\",\n  \"registration_number\": \"KA03DG4676\",\n  \"idv\": 385000,\n  \"ncb_percent\": 20,\n  \"premium\": 8892,\n  \"claim_helpline\": \"1800 460 1657\"\n}"
+    },
+    {
+      "doc_id": "vehicle_policy-2-photo",
+      "doc_type": "vehicle_policy",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "insurer": true,
+        "policy_number": true,
+        "policyholder": true,
+        "start_date": true,
+        "end_date": true,
+        "registration_number": true,
+        "idv": true,
+        "ncb_percent": true,
+        "premium": true,
+        "claim_helpline": true
+      },
+      "seconds": 34.7,
+      "error": null,
+      "output": "{\n  \"insurer\": \"Bajaj Allianz General Insurance Company Limited\",\n  \"policy_number\": \"3001/75901964/00/000\",\n  \"policyholder\": \"Ekaja Andra\",\n  \"start_date\": \"2026-01-07\",\n  \"end_date\": \"2027-01-06\",\n  \"registration_number\": \"KA37HR2633\",\n  \"idv\": 385000,\n  \"ncb_percent\": 20,\n  \"premium\": 8892,\n  \"claim_helpline\": \"1800 888 9572\"\n}"
+    },
+    {
+      "doc_id": "warranty_card-1-photo",
+      "doc_type": "warranty_card",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "brand": true,
+        "product": true,
+        "model": true,
+        "serial_number": true,
+        "purchase_date": true,
+        "seller": true,
+        "seller_location": true,
+        "warranty_parts": true
+      },
+      "seconds": 33.42,
+      "error": null,
+      "output": "{\n  \"brand\": \"Whirlpool\",\n  \"product\": \"Convection Microwave Oven 25 L\",\n  \"model\": \"MWO-670C\",\n  \"serial_number\": \"709VFA231204\",\n  \"purchase_date\": \"2025-08-05\",\n  \"seller\": \"City Electronics Mart\",\n  \"seller_location\": \"Mangaluru\",\n  \"warranty_parts\": [\n    {\n      \"part\": \"Magnetron\",\n      \"years\": 2\n    },\n    {\n      \"part\": \"Product\",\n      \"years\": 1\n    }\n  ]\n}"
+    },
+    {
+      "doc_id": "warranty_card-2-photo",
+      "doc_type": "warranty_card",
+      "variant": "photo",
+      "valid_json": true,
+      "exact": {
+        "brand": true,
+        "product": true,
+        "model": true,
+        "serial_number": true,
+        "purchase_date": true,
+        "seller": true,
+        "seller_location": true,
+        "warranty_parts": true
+      },
+      "seconds": 33.01,
+      "error": null,
+      "output": "{\n  \"brand\": \"Sony\",\n  \"product\": \"Bravia LED Television 43 inch\",\n  \"model\": \"KD-43X889\",\n  \"serial_number\": \"467KUW430342\",\n  \"purchase_date\": \"2026-06-07\",\n  \"seller\": \"Sri Lakshmi Home Needs\",\n  \"seller_location\": \"Pune\",\n  \"warranty_parts\": [\n    {\n      \"part\": \"Panel\",\n      \"years\": 2\n    },\n    {\n      \"part\": \"Product\",\n      \"years\": 1\n    }\n  ]\n}"
+    }
+  ]
+}

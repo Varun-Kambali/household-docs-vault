@@ -83,7 +83,7 @@ def generate(set_name: str, per_type: int, seed: int, out: Path) -> list[SynthDo
                         base_id=base_id,
                         doc_type=doc_type,
                         person=truth.person,
-                        variant=variant,  # type: ignore[arg-type]
+                        variant=variant,
                         files=[fname],
                         fields=dict(truth.fields),
                         printed=dict(truth.printed),
