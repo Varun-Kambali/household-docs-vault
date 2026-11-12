@@ -17,9 +17,19 @@ ITEMS = [
 ]
 
 
-def _gstin(rng: random.Random) -> str:
+# GST state codes for the states in data.CITIES.
+STATE_CODES = {
+    "Karnataka": "29",
+    "Tamil Nadu": "33",
+    "Telangana": "36",
+    "Maharashtra": "27",
+    "Kerala": "32",
+}
+
+
+def _gstin(rng: random.Random, state: str) -> str:
     pan_part = f"{data.letters(rng, 5)}{data.digits(rng, 4)}{data.letters(rng, 1)}"
-    return f"29{pan_part}1Z{rng.choice('ABCDEFG0123456789')}"
+    return f"{STATE_CODES[state]}{pan_part}1Z{rng.choice('ABCDEFG0123456789')}"
 
 
 def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
@@ -40,19 +50,21 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
         106,
         10,
     )
-    g = _gstin(rng)
+    g = _gstin(rng, state)
     i = s.put(f"GSTIN: {g}", 40, 124, 10, font="Helvetica-Bold")
     t.add("gstin", g, g, [i])
     s.hline(40, 555, 148, "#555555", 0.8)
 
-    prefix = rng.choice(["BLR", "INV", "TX"])
-    inv = f"{prefix}/{rng.randint(24, 26)}-{rng.randint(25, 27)}/{data.digits(rng, 6)}"
-    row(s, t, "invoice_number", "Invoice No.", inv, inv, x=40, top=160, value_x=130)
     d = data.past_date(rng, 60, 700)
+    # Indian financial year runs April to March
+    fy_start = d.year if d.month >= 4 else d.year - 1
+    prefix = rng.choice(["BLR", "INV", "TX"])
+    inv = f"{prefix}/{fy_start % 100:02d}-{(fy_start + 1) % 100:02d}/{data.digits(rng, 6)}"
+    row(s, t, "invoice_number", "Invoice No.", inv, inv, x=40, top=160, value_x=130)
     row(s, t, "invoice_date", "Invoice Date", data.dmy(d), data.iso(d), x=330, top=160, value_x=420)
     s.put("Billed to", 40, 190, 9, color=GREY)
     s.put(buyer, 40, 204, 10, font="Helvetica-Bold")
-    s.put("Place of supply: Karnataka (29)", 330, 204, 9, color=GREY)
+    s.put(f"Place of supply: {state} ({STATE_CODES[state]})", 330, 204, 9, color=GREY)
 
     product, mtpl, price = rng.choice(ITEMS)
     model = mtpl.format(n=rng.randint(100, 999))
