@@ -1,5 +1,6 @@
 import random
 
+import numpy as np
 from PIL import Image, ImageDraw
 from vault_synth.model import LineBox
 from vault_synth.photo import to_photo
@@ -31,6 +32,18 @@ def test_photo_moves_boxes_with_the_warp() -> None:
     assert lines[0].bbox != clean_lines[0].bbox
     # still near where it was: the warp moves corners by at most 6% of the width
     assert all(abs(a - b) < 0.2 for a, b in zip(lines[0].bbox, clean_lines[0].bbox, strict=True))
+
+
+def test_photo_boxes_match_the_warped_pixels() -> None:
+    """Measure where the dark bar really ended up and compare it with the mapped box."""
+    clean_image, clean_lines = _clean()
+    img, lines = to_photo(clean_image, clean_lines[:1], random.Random(3))
+    # the desk is mid-grey and the shadow keeps white well above 40, so only the bar is darker
+    dark = np.asarray(img.convert("L")) < 40
+    ys, xs = np.nonzero(dark)
+    w, h = img.size
+    measured = (xs.min() / w, ys.min() / h, (xs.max() + 1) / w, (ys.max() + 1) / h)
+    assert all(abs(m - b) < 0.012 for m, b in zip(measured, lines[0].bbox, strict=True))
 
 
 def test_photo_is_deterministic_for_a_seed() -> None:

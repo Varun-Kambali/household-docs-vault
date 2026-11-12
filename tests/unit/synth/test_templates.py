@@ -68,13 +68,36 @@ def test_dates_and_amounts_are_normalised(spike_docs_all: list[SynthDoc]) -> Non
                 assert v.isdigit(), (d.doc_id, k, v)
 
 
-def test_boxes_are_normalised_and_files_exist(
-    spike_docs_all: list[SynthDoc], tmp_path: Path
-) -> None:
+def test_boxes_are_normalised(spike_docs_all: list[SynthDoc]) -> None:
     for d in spike_docs_all:
         for line in d.lines:
             x0, y0, x1, y1 = line.bbox
             assert 0 <= x0 < x1 <= 1 and 0 <= y0 < y1 <= 1, (d.doc_id, line)
+
+
+def test_invoice_state_and_financial_year_are_consistent(spike_docs) -> None:  # type: ignore[no-untyped-def]
+    codes = {
+        "Karnataka": "29",
+        "Tamil Nadu": "33",
+        "Telangana": "36",
+        "Maharashtra": "27",
+        "Kerala": "32",
+    }
+    for d in spike_docs(DocType.tax_invoice):
+        text = "\n".join(line.text for line in d.lines)
+        state = next(s for s in codes if f"Place of supply: {s} ({codes[s]})" in text)
+        assert f", {state} - " in text
+        assert d.fields["gstin"].startswith(codes[state])
+        year, month = int(d.fields["invoice_date"][:4]), int(d.fields["invoice_date"][5:7])
+        start = year if month >= 4 else year - 1
+        assert f"/{start % 100:02d}-{(start + 1) % 100:02d}/" in d.fields["invoice_number"]
+
+
+def test_ordinals() -> None:
+    from vault_synth.data import ordinal
+
+    got = [ordinal(n) for n in (1, 2, 3, 4, 11, 12, 13, 18, 21)]
+    assert got == ["1st", "2nd", "3rd", "4th", "11th", "12th", "13th", "18th", "21st"]
 
 
 def test_generation_is_deterministic(tmp_path: Path) -> None:
