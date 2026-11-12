@@ -1,7 +1,7 @@
 {
   "date": "2026-11-12",
   "engine": "apple-vision",
-  "commit": "3fd1081",
+  "commit": "1f94178",
   "dataset": "spike-v0",
   "machine": "Apple M5, 16 GB",
   "dpi_clean": 200,
@@ -14,9 +14,12 @@
       "variant": "clean",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 12,
       "matched": 12,
       "truth_lines": 12,
-      "seconds": 0.12884429190307856
+      "seconds": 0.132936458918266
     },
     {
       "doc_id": "aadhaar-2-clean",
@@ -24,9 +27,12 @@
       "variant": "clean",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 12,
       "matched": 12,
       "truth_lines": 12,
-      "seconds": 0.13004874996840954
+      "seconds": 0.13271516701206565
     },
     {
       "doc_id": "card_front-1-clean",
@@ -34,9 +40,12 @@
       "variant": "clean",
       "cer": 0.2235294117647059,
       "line_recall": 0.875,
+      "cer_en": 0.2235294117647059,
+      "line_recall_en": 0.875,
+      "truth_lines_en": 8,
       "matched": 7,
       "truth_lines": 8,
-      "seconds": 0.09284179098904133
+      "seconds": 0.09014820796437562
     },
     {
       "doc_id": "card_front-2-clean",
@@ -44,9 +53,12 @@
       "variant": "clean",
       "cer": 0.21839080459770116,
       "line_recall": 0.875,
+      "cer_en": 0.21839080459770116,
+      "line_recall_en": 0.875,
+      "truth_lines_en": 8,
       "matched": 7,
       "truth_lines": 8,
-      "seconds": 0.10476479202043265
+      "seconds": 0.10247933305799961
     },
     {
       "doc_id": "health_policy-1-clean",
@@ -54,9 +66,12 @@
       "variant": "clean",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 41,
       "matched": 41,
       "truth_lines": 41,
-      "seconds": 0.27901395806111395
+      "seconds": 0.2573767499998212
     },
     {
       "doc_id": "health_policy-2-clean",
@@ -64,9 +79,12 @@
       "variant": "clean",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 41,
       "matched": 41,
       "truth_lines": 41,
-      "seconds": 0.2700219169491902
+      "seconds": 0.25746954197529703
     },
     {
       "doc_id": "lab_report-1-clean",
@@ -74,9 +92,12 @@
       "variant": "clean",
       "cer": 0.006329113924050633,
       "line_recall": 0.9534883720930233,
+      "cer_en": 0.006329113924050633,
+      "line_recall_en": 0.9534883720930233,
+      "truth_lines_en": 43,
       "matched": 41,
       "truth_lines": 43,
-      "seconds": 0.23148883297108114
+      "seconds": 0.21640679193660617
     },
     {
       "doc_id": "lab_report-2-clean",
@@ -84,9 +105,12 @@
       "variant": "clean",
       "cer": 0.009280742459396751,
       "line_recall": 0.9722222222222222,
+      "cer_en": 0.009280742459396751,
+      "line_recall_en": 0.9722222222222222,
+      "truth_lines_en": 36,
       "matched": 35,
       "truth_lines": 36,
-      "seconds": 0.24893545894883573
+      "seconds": 0.20336970791686326
     },
     {
       "doc_id": "pan-1-clean",
@@ -94,9 +118,12 @@
       "variant": "clean",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 15,
       "matched": 15,
       "truth_lines": 15,
-      "seconds": 0.13525608298368752
+      "seconds": 0.13609812501817942
     },
     {
       "doc_id": "pan-2-clean",
@@ -104,9 +131,12 @@
       "variant": "clean",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 15,
       "matched": 15,
       "truth_lines": 15,
-      "seconds": 0.1336956670274958
+      "seconds": 0.13288995902985334
     },
     {
       "doc_id": "prescription-1-clean",
@@ -114,9 +144,12 @@
       "variant": "clean",
       "cer": 0.01984126984126984,
       "line_recall": 1.0,
+      "cer_en": 0.01984126984126984,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 20,
       "matched": 20,
       "truth_lines": 20,
-      "seconds": 0.22165191697422415
+      "seconds": 0.22120791696943343
     },
     {
       "doc_id": "prescription-2-clean",
@@ -124,9 +157,12 @@
       "variant": "clean",
       "cer": 0.01762114537444934,
       "line_recall": 1.0,
+      "cer_en": 0.01762114537444934,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 19,
       "matched": 19,
       "truth_lines": 19,
-      "seconds": 0.19904054107610136
+      "seconds": 0.20263374992646277
     },
     {
       "doc_id": "tax_invoice-1-clean",
@@ -134,9 +170,12 @@
       "variant": "clean",
       "cer": 0.07086614173228346,
       "line_recall": 0.8857142857142857,
+      "cer_en": 0.07086614173228346,
+      "line_recall_en": 0.8857142857142857,
+      "truth_lines_en": 35,
       "matched": 31,
       "truth_lines": 35,
-      "seconds": 0.22555437497794628
+      "seconds": 0.23075350001454353
     },
     {
       "doc_id": "tax_invoice-2-clean",
@@ -144,9 +183,12 @@
       "variant": "clean",
       "cer": 0.07072691552062868,
       "line_recall": 0.8857142857142857,
+      "cer_en": 0.07072691552062868,
+      "line_recall_en": 0.8857142857142857,
+      "truth_lines_en": 35,
       "matched": 31,
       "truth_lines": 35,
-      "seconds": 0.2258308749878779
+      "seconds": 0.20910487498622388
     },
     {
       "doc_id": "vehicle_policy-1-clean",
@@ -154,9 +196,12 @@
       "variant": "clean",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 38,
       "matched": 38,
       "truth_lines": 38,
-      "seconds": 0.2743279590504244
+      "seconds": 0.27052587491925806
     },
     {
       "doc_id": "vehicle_policy-2-clean",
@@ -164,9 +209,12 @@
       "variant": "clean",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 38,
       "matched": 38,
       "truth_lines": 38,
-      "seconds": 0.26684483396820724
+      "seconds": 0.2778720000060275
     },
     {
       "doc_id": "warranty_card-1-clean",
@@ -174,9 +222,12 @@
       "variant": "clean",
       "cer": 0.0015822784810126582,
       "line_recall": 1.0,
+      "cer_en": 0.0015822784810126582,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 28,
       "matched": 28,
       "truth_lines": 28,
-      "seconds": 0.23772354202810675
+      "seconds": 0.2333922500256449
     },
     {
       "doc_id": "warranty_card-2-clean",
@@ -184,9 +235,12 @@
       "variant": "clean",
       "cer": 0.0016207455429497568,
       "line_recall": 1.0,
+      "cer_en": 0.0016207455429497568,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 28,
       "matched": 28,
       "truth_lines": 28,
-      "seconds": 0.24223404203075916
+      "seconds": 0.21434212499298155
     },
     {
       "doc_id": "aadhaar-1-photo",
@@ -194,9 +248,12 @@
       "variant": "photo",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 12,
       "matched": 12,
       "truth_lines": 12,
-      "seconds": 0.1526337080867961
+      "seconds": 0.14334650000091642
     },
     {
       "doc_id": "aadhaar-2-photo",
@@ -204,9 +261,12 @@
       "variant": "photo",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 12,
       "matched": 12,
       "truth_lines": 12,
-      "seconds": 0.21040808397810906
+      "seconds": 0.20153900003060699
     },
     {
       "doc_id": "card_front-1-photo",
@@ -214,9 +274,12 @@
       "variant": "photo",
       "cer": 0.2235294117647059,
       "line_recall": 0.875,
+      "cer_en": 0.2235294117647059,
+      "line_recall_en": 0.875,
+      "truth_lines_en": 8,
       "matched": 7,
       "truth_lines": 8,
-      "seconds": 0.0933453340549022
+      "seconds": 0.10643395804800093
     },
     {
       "doc_id": "card_front-2-photo",
@@ -224,9 +287,12 @@
       "variant": "photo",
       "cer": 0.21839080459770116,
       "line_recall": 0.875,
+      "cer_en": 0.21839080459770116,
+      "line_recall_en": 0.875,
+      "truth_lines_en": 8,
       "matched": 7,
       "truth_lines": 8,
-      "seconds": 0.10691737500019372
+      "seconds": 0.09947541600558907
     },
     {
       "doc_id": "health_policy-1-photo",
@@ -234,9 +300,12 @@
       "variant": "photo",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 41,
       "matched": 41,
       "truth_lines": 41,
-      "seconds": 0.29072633292526007
+      "seconds": 0.2822837079875171
     },
     {
       "doc_id": "health_policy-2-photo",
@@ -244,9 +313,12 @@
       "variant": "photo",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 41,
       "matched": 41,
       "truth_lines": 41,
-      "seconds": 0.28137608303222805
+      "seconds": 0.26561541703995317
     },
     {
       "doc_id": "lab_report-1-photo",
@@ -254,9 +326,12 @@
       "variant": "photo",
       "cer": 0.002109704641350211,
       "line_recall": 1.0,
+      "cer_en": 0.002109704641350211,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 43,
       "matched": 43,
       "truth_lines": 43,
-      "seconds": 0.24087312491610646
+      "seconds": 0.2354815830476582
     },
     {
       "doc_id": "lab_report-2-photo",
@@ -264,9 +339,12 @@
       "variant": "photo",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 36,
       "matched": 36,
       "truth_lines": 36,
-      "seconds": 0.2290994169889018
+      "seconds": 0.2208959999261424
     },
     {
       "doc_id": "pan-1-photo",
@@ -274,9 +352,12 @@
       "variant": "photo",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 15,
       "matched": 15,
       "truth_lines": 15,
-      "seconds": 0.13708283298183233
+      "seconds": 0.13136379199568182
     },
     {
       "doc_id": "pan-2-photo",
@@ -284,9 +365,12 @@
       "variant": "photo",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 15,
       "matched": 15,
       "truth_lines": 15,
-      "seconds": 0.13907208293676376
+      "seconds": 0.13988525001332164
     },
     {
       "doc_id": "prescription-1-photo",
@@ -294,9 +378,12 @@
       "variant": "photo",
       "cer": 0.01984126984126984,
       "line_recall": 1.0,
+      "cer_en": 0.01984126984126984,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 20,
       "matched": 20,
       "truth_lines": 20,
-      "seconds": 0.21675437502563
+      "seconds": 0.21758487494662404
     },
     {
       "doc_id": "prescription-2-photo",
@@ -304,9 +391,12 @@
       "variant": "photo",
       "cer": 0.01762114537444934,
       "line_recall": 1.0,
+      "cer_en": 0.01762114537444934,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 19,
       "matched": 19,
       "truth_lines": 19,
-      "seconds": 0.20189825003035367
+      "seconds": 0.20878312492277473
     },
     {
       "doc_id": "tax_invoice-1-photo",
@@ -314,9 +404,12 @@
       "variant": "photo",
       "cer": 0.09645669291338582,
       "line_recall": 0.7428571428571429,
+      "cer_en": 0.09645669291338582,
+      "line_recall_en": 0.7428571428571429,
+      "truth_lines_en": 35,
       "matched": 26,
       "truth_lines": 35,
-      "seconds": 0.2393171659205109
+      "seconds": 0.22498541697859764
     },
     {
       "doc_id": "tax_invoice-2-photo",
@@ -324,9 +417,12 @@
       "variant": "photo",
       "cer": 0.0962671905697446,
       "line_recall": 0.8,
+      "cer_en": 0.0962671905697446,
+      "line_recall_en": 0.8,
+      "truth_lines_en": 35,
       "matched": 28,
       "truth_lines": 35,
-      "seconds": 0.23308137501589954
+      "seconds": 0.2261755830841139
     },
     {
       "doc_id": "vehicle_policy-1-photo",
@@ -334,9 +430,12 @@
       "variant": "photo",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 38,
       "matched": 38,
       "truth_lines": 38,
-      "seconds": 0.27285758301150054
+      "seconds": 0.27632983308285475
     },
     {
       "doc_id": "vehicle_policy-2-photo",
@@ -344,9 +443,12 @@
       "variant": "photo",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 38,
       "matched": 38,
       "truth_lines": 38,
-      "seconds": 0.2853977910708636
+      "seconds": 0.2781313330633566
     },
     {
       "doc_id": "warranty_card-1-photo",
@@ -354,9 +456,12 @@
       "variant": "photo",
       "cer": 0.0015822784810126582,
       "line_recall": 1.0,
+      "cer_en": 0.0015822784810126582,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 28,
       "matched": 28,
       "truth_lines": 28,
-      "seconds": 0.2635691249743104
+      "seconds": 0.258012417005375
     },
     {
       "doc_id": "warranty_card-2-photo",
@@ -364,9 +469,12 @@
       "variant": "photo",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 28,
       "matched": 28,
       "truth_lines": 28,
-      "seconds": 0.2596297920681536
+      "seconds": 0.23623429203871638
     }
   ],
   "summary": {
@@ -374,16 +482,22 @@
       "median_cer": 0.0016015120119812075,
       "median_line_recall": 1.0,
       "mean_line_recall": 0.9692855092079898,
-      "median_seconds_per_page": 0.2256926249829121,
+      "median_cer_en": 0.0016015120119812075,
+      "median_line_recall_en": 1.0,
+      "mean_line_recall_en": 0.9692855092079898,
+      "median_seconds_per_page": 0.21172349998960271,
       "documents": 18
     },
     "photo": {
       "median_cer": 0.0,
       "median_line_recall": 1.0,
       "mean_line_recall": 0.9607142857142859,
-      "median_seconds_per_page": 0.23109039600240067,
+      "median_cer_en": 0.0,
+      "median_line_recall_en": 1.0,
+      "mean_line_recall_en": 0.9607142857142859,
+      "median_seconds_per_page": 0.22294070845237002,
       "documents": 18
     }
   },
-  "peak_rss_mb": 311.0
+  "peak_rss_mb": 308.2
 }

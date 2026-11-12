@@ -16,12 +16,17 @@ and a box per line. This spike measures three local engines on the synthetic set
 - Page CER is the summed edit distance over all truth lines divided by their total length. A
   truth line with no overlapping OCR line costs its full length. Extra OCR lines are ignored.
 - Kannada lines are not scored: the generator draws them without shaping (see
-  `evals/datasets/spike-v0/LICENSE.md`). English and Hindi lines are scored.
+  `evals/datasets/spike-v0/LICENSE.md`). The remaining lines are scored. Tesseract and PaddleOCR run
+  with English models only, which would handicap them on Hindi lines. The set has no Hindi lines,
+  so every line scored is English; the results files also carry English-only figures
+  (`*_en` fields), and they equal the all-line figures.
 - Each engine runs in its own subprocess. Seconds per page is the wall time of one read,
   after one untimed warm-up page. Peak memory is the subprocess's maximum resident set size.
-- Machine: Apple M5, 16 GB. Commit 3fd1081. Raw per-document numbers are in
+- Machine: Apple M5, 16 GB. Commit 1f94178. Raw per-document numbers are in
   `spikes/reading/results/`.
-- Command: `uv run python -m spikes.reading.run --set evals/datasets/spike-v0`.
+- Matching is greedy: truth lines are taken in file order, and each takes the unused OCR line
+  with the best IoU of at least 0.5, so one OCR line can match only one truth line.
+- Command: `make spikes-setup`, then `uv run --group spikes python -m spikes.reading.run --set evals/datasets/spike-v0`.
 
 ## Results
 
@@ -30,9 +35,9 @@ documents.
 
 | Engine | Version | CER clean | CER photo | Recall clean (median / mean) | Recall photo (median / mean) | Seconds per page (clean / photo) | Peak memory |
 |---|---|---|---|---|---|---|---|
-| Apple Vision (ocrmac, accurate) | ocrmac 1.0.1 | 0.002 | 0.000 | 1.00 / 0.969 | 1.00 / 0.961 | 0.23 / 0.23 | 311 MB |
-| Tesseract | 5.5.4, English data | 0.299 | 0.380 | 0.43 / 0.480 | 0.52 / 0.564 | 0.27 / 0.30 | 171 MB |
-| PaddleOCR | 3.7.0, PP-OCRv6 medium detection and recognition, CPU | 0.000 | 0.002 | 1.00 / 0.985 | 1.00 / 0.962 | 11.2 / 10.6 | 6,278 MB |
+| Apple Vision (ocrmac, accurate) | ocrmac 1.0.1 | 0.002 | 0.000 | 1.00 / 0.969 | 1.00 / 0.961 | 0.21 / 0.22 | 308 MB |
+| Tesseract | 5.5.4, English data | 0.299 | 0.380 | 0.43 / 0.480 | 0.52 / 0.564 | 0.28 / 0.31 | 170 MB |
+| PaddleOCR | 3.7.0, PP-OCRv6 medium detection and recognition, CPU | 0.000 | 0.002 | 1.00 / 0.985 | 1.00 / 0.962 | 11.2 / 10.8 | 6,221 MB |
 
 Documents under 0.9 line recall on the photo variant:
 
@@ -46,9 +51,9 @@ Documents under 0.9 line recall on the photo variant:
   line on form-style pages ("Policy Number P/79/5309/6290115 Product"), so those lines fail
   the IoU test against the ground truth. It was run with its default page segmentation.
   Another segmentation mode or word-level boxes might change this; it was not tried.
-- PaddleOCR matches Apple Vision on accuracy but takes about 10.6 s per page on CPU and
-  6.3 GB of memory, which is 39% of the machine's RAM.
-- Apple Vision has the lowest cost: 0.23 s per page and 311 MB.
+- PaddleOCR matches Apple Vision on accuracy but takes about 10.8 s per page on CPU and
+  6.2 GB of memory, which is 38% of the machine's RAM.
+- Apple Vision has the lowest cost: 0.22 s per page and 308 MB.
 
 ## Pick
 

@@ -1,7 +1,7 @@
 {
   "date": "2026-11-12",
   "engine": "tesseract",
-  "commit": "3fd1081",
+  "commit": "1f94178",
   "dataset": "spike-v0",
   "machine": "Apple M5, 16 GB",
   "dpi_clean": 200,
@@ -14,9 +14,12 @@
       "variant": "clean",
       "cer": 0.04,
       "line_recall": 0.9166666666666666,
+      "cer_en": 0.04,
+      "line_recall_en": 0.9166666666666666,
+      "truth_lines_en": 12,
       "matched": 11,
       "truth_lines": 12,
-      "seconds": 0.15559737500734627
+      "seconds": 0.16035708296112716
     },
     {
       "doc_id": "aadhaar-2-clean",
@@ -24,9 +27,12 @@
       "variant": "clean",
       "cer": 0.038834951456310676,
       "line_recall": 0.9166666666666666,
+      "cer_en": 0.038834951456310676,
+      "line_recall_en": 0.9166666666666666,
+      "truth_lines_en": 12,
       "matched": 11,
       "truth_lines": 12,
-      "seconds": 0.1592006670543924
+      "seconds": 0.1596576670417562
     },
     {
       "doc_id": "card_front-1-clean",
@@ -34,9 +40,12 @@
       "variant": "clean",
       "cer": 0.6588235294117647,
       "line_recall": 0.25,
+      "cer_en": 0.6588235294117647,
+      "line_recall_en": 0.25,
+      "truth_lines_en": 8,
       "matched": 2,
       "truth_lines": 8,
-      "seconds": 0.11355433298740536
+      "seconds": 0.11555266694631428
     },
     {
       "doc_id": "card_front-2-clean",
@@ -44,9 +53,12 @@
       "variant": "clean",
       "cer": 0.6436781609195402,
       "line_recall": 0.25,
+      "cer_en": 0.6436781609195402,
+      "line_recall_en": 0.25,
+      "truth_lines_en": 8,
       "matched": 2,
       "truth_lines": 8,
-      "seconds": 0.11422354204114527
+      "seconds": 0.12186958303209394
     },
     {
       "doc_id": "health_policy-1-clean",
@@ -54,9 +66,12 @@
       "variant": "clean",
       "cer": 0.49728260869565216,
       "line_recall": 0.21951219512195122,
+      "cer_en": 0.49728260869565216,
+      "line_recall_en": 0.21951219512195122,
+      "truth_lines_en": 41,
       "matched": 9,
       "truth_lines": 41,
-      "seconds": 0.3604829580290243
+      "seconds": 0.3716824590228498
     },
     {
       "doc_id": "health_policy-2-clean",
@@ -64,9 +79,12 @@
       "variant": "clean",
       "cer": 0.5013477088948787,
       "line_recall": 0.21951219512195122,
+      "cer_en": 0.5013477088948787,
+      "line_recall_en": 0.21951219512195122,
+      "truth_lines_en": 41,
       "matched": 9,
       "truth_lines": 41,
-      "seconds": 0.3628072499996051
+      "seconds": 0.3701817919500172
     },
     {
       "doc_id": "lab_report-1-clean",
@@ -74,9 +92,12 @@
       "variant": "clean",
       "cer": 0.7257383966244726,
       "line_recall": 0.09302325581395349,
+      "cer_en": 0.7257383966244726,
+      "line_recall_en": 0.09302325581395349,
+      "truth_lines_en": 43,
       "matched": 4,
       "truth_lines": 43,
-      "seconds": 0.27015745895914733
+      "seconds": 0.2789701248984784
     },
     {
       "doc_id": "lab_report-2-clean",
@@ -84,9 +105,12 @@
       "variant": "clean",
       "cer": 0.6867749419953596,
       "line_recall": 0.1111111111111111,
+      "cer_en": 0.6867749419953596,
+      "line_recall_en": 0.1111111111111111,
+      "truth_lines_en": 36,
       "matched": 4,
       "truth_lines": 36,
-      "seconds": 0.256831125007011
+      "seconds": 0.26360579195898026
     },
     {
       "doc_id": "pan-1-clean",
@@ -94,9 +118,12 @@
       "variant": "clean",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 15,
       "matched": 15,
       "truth_lines": 15,
-      "seconds": 0.15102591703180224
+      "seconds": 0.1533530839951709
     },
     {
       "doc_id": "pan-2-clean",
@@ -104,9 +131,12 @@
       "variant": "clean",
       "cer": 0.0,
       "line_recall": 1.0,
+      "cer_en": 0.0,
+      "line_recall_en": 1.0,
+      "truth_lines_en": 15,
       "matched": 15,
       "truth_lines": 15,
-      "seconds": 0.151753457961604
+      "seconds": 0.1555792080471292
     },
     {
       "doc_id": "prescription-1-clean",
@@ -114,9 +144,12 @@
       "variant": "clean",
       "cer": 0.15079365079365079,
       "line_recall": 0.7,
+      "cer_en": 0.15079365079365079,
+      "line_recall_en": 0.7,
+      "truth_lines_en": 20,
       "matched": 14,
       "truth_lines": 20,
-      "seconds": 0.2784530830103904
+      "seconds": 0.2853682079585269
     },
     {
       "doc_id": "prescription-2-clean",
@@ -124,9 +157,12 @@
       "variant": "clean",
       "cer": 0.13656387665198239,
       "line_recall": 0.7894736842105263,
+      "cer_en": 0.13656387665198239,
+      "line_recall_en": 0.7894736842105263,
+      "truth_lines_en": 19,
       "matched": 15,
       "truth_lines": 19,
-      "seconds": 0.26113366696517915
+      "seconds": 0.26701916696038097
     },
     {
       "doc_id": "tax_invoice-1-clean",
@@ -134,9 +170,12 @@
       "variant": "clean",
       "cer": 0.2874015748031496,
       "line_recall": 0.42857142857142855,
+      "cer_en": 0.2874015748031496,
+      "line_recall_en": 0.42857142857142855,
+      "truth_lines_en": 35,
       "matched": 15,
       "truth_lines": 35,
-      "seconds": 0.2772388750454411
+      "seconds": 0.28377933404408395
     },
     {
       "doc_id": "tax_invoice-2-clean",
@@ -144,9 +183,12 @@
       "variant": "clean",
       "cer": 0.24361493123772102,
       "line_recall": 0.4857142857142857,
+      "cer_en": 0.24361493123772102,
+      "line_recall_en": 0.4857142857142857,
+      "truth_lines_en": 35,
       "matched": 17,
       "truth_lines": 35,
-      "seconds": 0.27688975003547966
+      "seconds": 0.2835214580409229
     },
     {
       "doc_id": "vehicle_policy-1-clean",
@@ -154,9 +196,12 @@
       "variant": "clean",
       "cer": 0.5915119363395226,
       "line_recall": 0.18421052631578946,
+      "cer_en": 0.5915119363395226,
+      "line_recall_en": 0.18421052631578946,
+      "truth_lines_en": 38,
       "matched": 7,
       "truth_lines": 38,
-      "seconds": 0.36934958305209875
+      "seconds": 0.3792168329237029
     },
     {
       "doc_id": "vehicle_policy-2-clean",
@@ -164,9 +209,12 @@
       "variant": "clean",
       "cer": 0.5925925925925926,
       "line_recall": 0.18421052631578946,
+      "cer_en": 0.5925925925925926,
+      "line_recall_en": 0.18421052631578946,
+      "truth_lines_en": 38,
       "matched": 7,
       "truth_lines": 38,
-      "seconds": 0.36989512492436916
+      "seconds": 0.3789292919682339
     },
     {
       "doc_id": "warranty_card-1-clean",
@@ -174,9 +222,12 @@
       "variant": "clean",
       "cer": 0.310126582278481,
       "line_recall": 0.42857142857142855,
+      "cer_en": 0.310126582278481,
+      "line_recall_en": 0.42857142857142855,
+      "truth_lines_en": 28,
       "matched": 12,
       "truth_lines": 28,
-      "seconds": 0.3097552909748629
+      "seconds": 0.31732045800890774
     },
     {
       "doc_id": "warranty_card-2-clean",
@@ -184,9 +235,12 @@
       "variant": "clean",
       "cer": 0.2787682333873582,
       "line_recall": 0.4642857142857143,
+      "cer_en": 0.2787682333873582,
+      "line_recall_en": 0.4642857142857143,
+      "truth_lines_en": 28,
       "matched": 13,
       "truth_lines": 28,
-      "seconds": 0.3028552910545841
+      "seconds": 0.3093292500125244
     },
     {
       "doc_id": "aadhaar-1-photo",
@@ -194,9 +248,12 @@
       "variant": "photo",
       "cer": 0.415,
       "line_recall": 0.6666666666666666,
+      "cer_en": 0.415,
+      "line_recall_en": 0.6666666666666666,
+      "truth_lines_en": 12,
       "matched": 8,
       "truth_lines": 12,
-      "seconds": 0.18659958301577717
+      "seconds": 0.19008962507359684
     },
     {
       "doc_id": "aadhaar-2-photo",
@@ -204,9 +261,12 @@
       "variant": "photo",
       "cer": 0.4174757281553398,
       "line_recall": 0.6666666666666666,
+      "cer_en": 0.4174757281553398,
+      "line_recall_en": 0.6666666666666666,
+      "truth_lines_en": 12,
       "matched": 8,
       "truth_lines": 12,
-      "seconds": 0.17491145804524422
+      "seconds": 0.1769462910015136
     },
     {
       "doc_id": "card_front-1-photo",
@@ -214,9 +274,12 @@
       "variant": "photo",
       "cer": 0.5176470588235295,
       "line_recall": 0.375,
+      "cer_en": 0.5176470588235295,
+      "line_recall_en": 0.375,
+      "truth_lines_en": 8,
       "matched": 3,
       "truth_lines": 8,
-      "seconds": 0.12323191703762859
+      "seconds": 0.12626441603060812
     },
     {
       "doc_id": "card_front-2-photo",
@@ -224,9 +287,12 @@
       "variant": "photo",
       "cer": 0.41379310344827586,
       "line_recall": 0.5,
+      "cer_en": 0.41379310344827586,
+      "line_recall_en": 0.5,
+      "truth_lines_en": 8,
       "matched": 4,
       "truth_lines": 8,
-      "seconds": 0.11855720798484981
+      "seconds": 0.12133362505119294
     },
     {
       "doc_id": "health_policy-1-photo",
@@ -234,9 +300,12 @@
       "variant": "photo",
       "cer": 0.25407608695652173,
       "line_recall": 0.6097560975609756,
+      "cer_en": 0.25407608695652173,
+      "line_recall_en": 0.6097560975609756,
+      "truth_lines_en": 41,
       "matched": 25,
       "truth_lines": 41,
-      "seconds": 0.3898301670560613
+      "seconds": 0.39973091694992036
     },
     {
       "doc_id": "health_policy-2-photo",
@@ -244,9 +313,12 @@
       "variant": "photo",
       "cer": 0.5566037735849056,
       "line_recall": 0.34146341463414637,
+      "cer_en": 0.5566037735849056,
+      "line_recall_en": 0.34146341463414637,
+      "truth_lines_en": 41,
       "matched": 14,
       "truth_lines": 41,
-      "seconds": 0.3708440000191331
+      "seconds": 0.3831514159683138
     },
     {
       "doc_id": "lab_report-1-photo",
@@ -254,9 +326,12 @@
       "variant": "photo",
       "cer": 0.3860759493670886,
       "line_recall": 0.3953488372093023,
+      "cer_en": 0.3860759493670886,
+      "line_recall_en": 0.3953488372093023,
+      "truth_lines_en": 43,
       "matched": 17,
       "truth_lines": 43,
-      "seconds": 0.3177400421118364
+      "seconds": 0.3237378749763593
     },
     {
       "doc_id": "lab_report-2-photo",
@@ -264,9 +339,12 @@
       "variant": "photo",
       "cer": 0.419953596287703,
       "line_recall": 0.3055555555555556,
+      "cer_en": 0.419953596287703,
+      "line_recall_en": 0.3055555555555556,
+      "truth_lines_en": 36,
       "matched": 11,
       "truth_lines": 36,
-      "seconds": 0.2848240409512073
+      "seconds": 0.2899577079806477
     },
     {
       "doc_id": "pan-1-photo",
@@ -274,9 +352,12 @@
       "variant": "photo",
       "cer": 0.3739495798319328,
       "line_recall": 0.5333333333333333,
+      "cer_en": 0.3739495798319328,
+      "line_recall_en": 0.5333333333333333,
+      "truth_lines_en": 15,
       "matched": 8,
       "truth_lines": 15,
-      "seconds": 0.14595754200126976
+      "seconds": 0.14870370796415955
     },
     {
       "doc_id": "pan-2-photo",
@@ -284,9 +365,12 @@
       "variant": "photo",
       "cer": 0.020491803278688523,
       "line_recall": 0.9333333333333333,
+      "cer_en": 0.020491803278688523,
+      "line_recall_en": 0.9333333333333333,
+      "truth_lines_en": 15,
       "matched": 14,
       "truth_lines": 15,
-      "seconds": 0.17418908409308642
+      "seconds": 0.17781183298211545
     },
     {
       "doc_id": "prescription-1-photo",
@@ -294,9 +378,12 @@
       "variant": "photo",
       "cer": 0.1527777777777778,
       "line_recall": 0.7,
+      "cer_en": 0.1527777777777778,
+      "line_recall_en": 0.7,
+      "truth_lines_en": 20,
       "matched": 14,
       "truth_lines": 20,
-      "seconds": 0.3203795419540256
+      "seconds": 0.32910691702272743
     },
     {
       "doc_id": "prescription-2-photo",
@@ -304,9 +391,12 @@
       "variant": "photo",
       "cer": 0.1696035242290749,
       "line_recall": 0.6842105263157895,
+      "cer_en": 0.1696035242290749,
+      "line_recall_en": 0.6842105263157895,
+      "truth_lines_en": 19,
       "matched": 13,
       "truth_lines": 19,
-      "seconds": 0.3035341249778867
+      "seconds": 0.31251725007314235
     },
     {
       "doc_id": "tax_invoice-1-photo",
@@ -314,9 +404,12 @@
       "variant": "photo",
       "cer": 0.37401574803149606,
       "line_recall": 0.37142857142857144,
+      "cer_en": 0.37401574803149606,
+      "line_recall_en": 0.37142857142857144,
+      "truth_lines_en": 35,
       "matched": 13,
       "truth_lines": 35,
-      "seconds": 0.30973504204303026
+      "seconds": 0.31230837502516806
     },
     {
       "doc_id": "tax_invoice-2-photo",
@@ -324,9 +417,12 @@
       "variant": "photo",
       "cer": 0.4066797642436149,
       "line_recall": 0.34285714285714286,
+      "cer_en": 0.4066797642436149,
+      "line_recall_en": 0.34285714285714286,
+      "truth_lines_en": 35,
       "matched": 12,
       "truth_lines": 35,
-      "seconds": 0.3033955419668928
+      "seconds": 0.30352079193107784
     },
     {
       "doc_id": "vehicle_policy-1-photo",
@@ -334,9 +430,12 @@
       "variant": "photo",
       "cer": 0.08620689655172414,
       "line_recall": 0.8947368421052632,
+      "cer_en": 0.08620689655172414,
+      "line_recall_en": 0.8947368421052632,
+      "truth_lines_en": 38,
       "matched": 34,
       "truth_lines": 38,
-      "seconds": 0.4224609170341864
+      "seconds": 0.42304308293387294
     },
     {
       "doc_id": "vehicle_policy-2-photo",
@@ -344,9 +443,12 @@
       "variant": "photo",
       "cer": 0.167989417989418,
       "line_recall": 0.868421052631579,
+      "cer_en": 0.167989417989418,
+      "line_recall_en": 0.868421052631579,
+      "truth_lines_en": 38,
       "matched": 33,
       "truth_lines": 38,
-      "seconds": 0.40849970804993063
+      "seconds": 0.41063291707541794
     },
     {
       "doc_id": "warranty_card-1-photo",
@@ -354,9 +456,12 @@
       "variant": "photo",
       "cer": 0.2911392405063291,
       "line_recall": 0.4642857142857143,
+      "cer_en": 0.2911392405063291,
+      "line_recall_en": 0.4642857142857143,
+      "truth_lines_en": 28,
       "matched": 13,
       "truth_lines": 28,
-      "seconds": 0.349758957978338
+      "seconds": 0.34821824997197837
     },
     {
       "doc_id": "warranty_card-2-photo",
@@ -364,9 +469,12 @@
       "variant": "photo",
       "cer": 0.6499189627228525,
       "line_recall": 0.5,
+      "cer_en": 0.6499189627228525,
+      "line_recall_en": 0.5,
+      "truth_lines_en": 28,
       "matched": 14,
       "truth_lines": 28,
-      "seconds": 0.24349329096730798
+      "seconds": 0.24354854109697044
     }
   ],
   "summary": {
@@ -374,16 +482,22 @@
       "median_cer": 0.2987640785408153,
       "median_line_recall": 0.42857142857142855,
       "mean_line_recall": 0.48008498247151454,
-      "median_seconds_per_page": 0.2735236044973135,
+      "median_cer_en": 0.2987640785408153,
+      "median_line_recall_en": 0.42857142857142855,
+      "mean_line_recall_en": 0.48008498247151454,
+      "median_seconds_per_page": 0.28124579146970063,
       "documents": 18
     },
     "photo": {
       "median_cer": 0.38004584869929237,
       "median_line_recall": 0.5166666666666666,
       "mean_line_recall": 0.5640590974768911,
-      "median_seconds_per_page": 0.30346483347238973,
+      "median_cer_en": 0.38004584869929237,
+      "median_line_recall_en": 0.5166666666666666,
+      "mean_line_recall_en": 0.5640590974768911,
+      "median_seconds_per_page": 0.30791458347812295,
       "documents": 18
     }
   },
-  "peak_rss_mb": 170.5
+  "peak_rss_mb": 169.5
 }
