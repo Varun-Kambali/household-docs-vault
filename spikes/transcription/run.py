@@ -185,7 +185,17 @@ def main() -> None:
         return
     dataset = assert_safe_path(args.set)
     commit = _git("rev-parse", "--short", "HEAD")
-    dirty = bool(_git("status", "--porcelain", "--", "spikes", "synth", "src"))
+    dirty = bool(
+        _git(
+            "status",
+            "--porcelain",
+            "--",
+            "spikes",
+            "synth",
+            "src",
+            ":(exclude,glob)spikes/*/results/**",
+        )
+    )
     manifest = json.loads((dataset / "manifest.json").read_text())
     today = datetime.date.today().isoformat()
     results_dir = assert_safe_path(RESULTS)

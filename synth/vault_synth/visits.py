@@ -54,8 +54,8 @@ class Visit(BaseModel):
         unknown = {line.speaker for line in self.lines} - set(self.speakers)
         if unknown:
             raise ValueError(f"lines use speakers with no voice: {sorted(unknown)}")
-        if len(self.medicines) < 4:
-            raise ValueError("a visit names at least four medicines")
+        if sum(any(c.isdigit() for c in m) for m in self.medicines) < 4:
+            raise ValueError("a visit names at least four medicines with a dose number")
         if not self.tests:
             raise ValueError("a visit names at least one test")
         spoken = _squash(truth_transcript(self))

@@ -34,7 +34,8 @@ def test_five_scripts_with_the_planned_topics():
 @pytest.mark.parametrize("path", SCRIPTS, ids=lambda p: p.stem)
 def test_script_meets_the_brief(path: Path):
     v = load_visit(path)
-    assert len(v.medicines) >= 4 and v.tests
+    dosed = [m for m in v.medicines if any(c.isdigit() for c in m)]
+    assert len(dosed) >= 4 and v.tests
     words = len(truth_transcript(v).split())
     assert 500 <= words <= 800  # about 3 to 5 minutes at 160 words per minute
     assert set(v.speakers.values()) <= {"Rishi", "Aman", "Tara"}
@@ -56,6 +57,17 @@ def test_unspoken_medicine_is_rejected():
             medicines=["A 1", "B 2", "C 3", "D 4"],
             tests=["x"],
             lines=[Line(speaker="d", text="A 1 and B 2 and C 3")],
+        )
+
+
+def test_four_medicines_without_four_doses_are_rejected():
+    with pytest.raises(ValueError, match="dose number"):
+        Visit(
+            title="t",
+            speakers={"d": "Rishi"},
+            medicines=["A 1", "B 2", "C 3", "ORS"],
+            tests=["x"],
+            lines=[Line(speaker="d", text="A 1 B 2 C 3 ORS")],
         )
 
 

@@ -13,9 +13,9 @@ The recordings are made with the macOS `say` command and three system voices (Ri
 Tara), then mixed with noise generated in code. They live in `audio/`, which is git-ignored,
 and `make visits` regenerates them on a Mac from the committed scripts.
 
-The reason is Apple's licence. The macOS Tahoe 26 Software License Agreement, section 2F
-("Voices; Live Captions"), allows the system voices for personal, non-commercial use and rules
-out redistribution of their output, naming a "public sharing" context. This is a public repo,
-so committing the audio could break that term. The scripts, the truth and the render settings
-are enough to rebuild it. Check the agreement for your own macOS version before sharing audio
-you render yourself.
+The reason is Apple's licence. The macOS Tahoe 26 Software License Agreement has a section on
+its system voices. It lets you use them to make your own content for personal, non-commercial
+use, and it rules out redistributing their output, naming a "public sharing" context. This is a
+public repo, so committing the audio could break that term. The scripts, the truth and the
+render settings are enough to rebuild it. Check the agreement for your own macOS version before
+sharing audio you render yourself.

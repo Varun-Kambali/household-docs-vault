@@ -50,3 +50,38 @@ def test_dose_with_unit_attached_still_matches():
 
 def test_wer_does_not_split_attached_units():
     assert score_visit("metformin 500 mg", "metformin 500mg", []).wer > 0
+
+
+def test_wrong_decimal_dose_is_not_found():
+    for got in ("telma 40.5", "Telma 40.5 mg daily"):
+        s = score_visit("x", got, ["Telma 40"])
+        assert s.medicines_found == 0
+        assert s.names_found == 1
+    assert score_visit("x", "glimepiride 1.5 mg", ["Glimepiride 1"]).medicines_found == 0
+    assert score_visit("x", "amlodipine 5.5", ["Amlodipine 5"]).medicines_found == 0
+
+
+def test_decimal_dose_matches_whole():
+    s = score_visit("x", "start latanoprost 0.005% at night.", ["Latanoprost 0.005"])
+    assert s.medicines_found == 1
+    assert score_visit("x", "Latanoprost 0.005", ["Latanoprost 0.005"]).medicines_found == 1
+
+
+def test_wrong_decimal_for_decimal_dose_is_not_found():
+    s = score_visit("x", "latanoprost 0.05 at night", ["Latanoprost 0.005"])
+    assert s.medicines_found == 0
+    assert s.names_found == 1
+
+
+def test_dose_ending_a_sentence_still_matches():
+    assert score_visit("x", "Take Telma 40. Then rest.", ["Telma 40"]).medicines_found == 1
+
+
+def test_dose_spoken_as_point_is_a_name_only_hit():
+    s = score_visit("x", "latanoprost 0 point 5 at night", ["Latanoprost 0.5"])
+    assert s.medicines_found == 0
+    assert s.names_found == 1
+
+
+def test_wer_treats_decimal_point_as_punctuation_as_before():
+    assert score_visit("telma 40.5", "telma 40 5", []).wer == 0
