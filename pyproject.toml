@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "household-docs-vault"
+dynamic = ["version"]
+description = "Private document vault that runs on the owner's Mac: files bills, policies and IDs from one inbox, finds them from a short prompt, and reminds before renewals"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Varun Kambali" }]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+vault = "household_vault.cli:main"
+
+[project.urls]
+Repository = "https://github.com/Varun-Kambali/household-docs-vault"
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "mypy",
+    "pre-commit",
+]
+
+[tool.hatch.version]
+path = "src/household_vault/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/household_vault"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.mypy]
+strict = true
+files = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --import-mode=importlib"
