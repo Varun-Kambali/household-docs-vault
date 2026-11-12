@@ -176,6 +176,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--set", type=Path, required=True)
     ap.add_argument("--candidate", action="append", choices=list(CANDIDATES))
+    ap.add_argument("--label", default="", help="suffix for a repeat run, for example r2")
     ap.add_argument("--worker", choices=list(CANDIDATES))
     ap.add_argument("--out", type=Path)
     args = ap.parse_args()
@@ -196,6 +197,7 @@ def main() -> None:
             "candidate": name,
             "commit": commit,
             "code_dirty": dirty,
+            "run_label": args.label or "r1",
             "dataset": dataset.name,
             "dataset_os": manifest["os"],
             "machine": MACHINE,
@@ -203,7 +205,8 @@ def main() -> None:
             "python": platform.python_version(),
             **body,
         }
-        path = results_dir / f"{today}_{name}_{commit}.json"
+        suffix = f"_{args.label}" if args.label else ""
+        path = results_dir / f"{today}_{name}_{commit}{suffix}.json"
         path.write_text(json.dumps(record, indent=2, ensure_ascii=False) + "\n")
         print(f"{name}: {body['status']} -> {path}")
         if body["status"] == "ok":
