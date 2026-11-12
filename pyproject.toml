@@ -36,6 +36,13 @@ synth = [
     "faker",
     "pydantic",
 ]
+# OCR engines compared in the reading spike; never shipped. Tesseract also needs the binary.
+spikes = [
+    "ocrmac",
+    "pytesseract",
+    "pypdfium2",
+    "pillow",
+]
 
 [tool.hatch.version]
 path = "src/household_vault/__init__.py"
@@ -62,5 +69,5 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["synth"]
+pythonpath = ["synth", "."]
 addopts = "-ra --import-mode=importlib"
