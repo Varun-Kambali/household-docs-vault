@@ -60,7 +60,7 @@ def worker(engine_name: str, dataset: Path) -> dict:
         return {"status": "unavailable", "reason": str(exc)}
     except Exception as exc:  # a model that fails to load is recorded, not fatal
         return {"status": "unavailable", "reason": f"failed to load: {exc}"}
-    docs = sorted(dataset.glob("*.json"))
+    docs = sorted(dataset.glob("*-clean.json")) + sorted(dataset.glob("*-photo.json"))
     records = [SynthDoc.model_validate_json(p.read_text()) for p in docs]
     results: list[dict] = []
     with tempfile.TemporaryDirectory() as tmp:
@@ -110,7 +110,7 @@ def run_engine(engine_name: str, dataset: Path) -> dict:
     proc.returncode = os.waitstatus_to_exitcode(status)
     if proc.returncode != 0:
         out_path.unlink(missing_ok=True)
-        return {"status": "unavailable", "reason": f"worker exited with {proc.returncode}"}
+        return {"status": "failed", "reason": f"worker exited with {proc.returncode}"}
     body = json.loads(out_path.read_text())
     out_path.unlink()
     if body["status"] == "ok":
