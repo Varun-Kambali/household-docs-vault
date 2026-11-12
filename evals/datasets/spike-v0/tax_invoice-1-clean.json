@@ -10,24 +10,24 @@
   "fields": {
     "seller": "Reliance Digital",
     "seller_location": "Hyderabad",
-    "gstin": "29SSCCZ0209F1Z0",
-    "invoice_number": "TX/25-26/740760",
-    "invoice_date": "2025-02-18",
-    "product": "Samsung Front Load Washing Machine 8 kg",
-    "model": "WW80560FN",
-    "serial_number": "421MZJ110530",
-    "amount": "36490"
+    "gstin": "36SSCCZ0209F1Z0",
+    "invoice_number": "INV/24-25/474076",
+    "invoice_date": "2025-03-20",
+    "product": "LG Double Door Refrigerator 242 L",
+    "model": "GL-S672ZPZX",
+    "serial_number": "783ZHR554110",
+    "amount": "31990"
   },
   "printed": {
     "seller": "Reliance Digital",
     "seller_location": "Hyderabad",
-    "gstin": "29SSCCZ0209F1Z0",
-    "invoice_number": "TX/25-26/740760",
-    "invoice_date": "18/02/2025",
-    "product": "Samsung Front Load Washing Machine 8 kg",
-    "model": "WW80560FN",
-    "serial_number": "421MZJ110530",
-    "amount": "Rs. 36,490"
+    "gstin": "36SSCCZ0209F1Z0",
+    "invoice_number": "INV/24-25/474076",
+    "invoice_date": "20/03/2025",
+    "product": "LG Double Door Refrigerator 242 L",
+    "model": "GL-S672ZPZX",
+    "serial_number": "783ZHR554110",
+    "amount": "Rs. 31,990"
   },
   "lines": [
     {
@@ -86,7 +86,7 @@
       "lang": "en"
     },
     {
-      "text": "GSTIN: 29SSCCZ0209F1Z0",
+      "text": "GSTIN: 36SSCCZ0209F1Z0",
       "page": 0,
       "bbox": [
         0.06722689075630252,
@@ -108,12 +108,12 @@
       "lang": "en"
     },
     {
-      "text": "TX/25-26/740760",
+      "text": "INV/24-25/474076",
       "page": 0,
       "bbox": [
         0.2184873949579832,
         0.19002375296912113,
-        0.3483529411764706,
+        0.354890756302521,
         0.20308788598574823
       ],
       "lang": "en"
@@ -130,7 +130,7 @@
       "lang": "en"
     },
     {
-      "text": "18/02/2025",
+      "text": "20/03/2025",
       "page": 0,
       "bbox": [
         0.7058823529411765,
@@ -163,12 +163,12 @@
       "lang": "en"
     },
     {
-      "text": "Place of supply: Karnataka (29)",
+      "text": "Place of supply: Telangana (36)",
       "page": 0,
       "bbox": [
         0.5546218487394958,
         0.24228028503562946,
-        0.7656453781512604,
+        0.7681714285714286,
         0.25403800475059385
       ],
       "lang": "en"
@@ -229,34 +229,34 @@
       "lang": "en"
     },
     {
-      "text": "Samsung Front Load Washing Machine 8 kg",
+      "text": "LG Double Door Refrigerator 242 L",
       "page": 0,
       "bbox": [
         0.0773109243697479,
         0.33729216152019004,
-        0.4303193277310925,
+        0.35467226890756304,
         0.3503562945368171
       ],
       "lang": "en"
     },
     {
-      "text": "Model: WW80560FN",
+      "text": "Model: GL-S672ZPZX",
       "page": 0,
       "bbox": [
         0.0773109243697479,
         0.35629453681710216,
-        0.21768067226890753,
+        0.2261058823529412,
         0.36805225653206647
       ],
       "lang": "en"
     },
     {
-      "text": "Serial No: 421MZJ110530",
+      "text": "Serial No: 783ZHR554110",
       "page": 0,
       "bbox": [
         0.0773109243697479,
         0.37292161520190026,
-        0.25301512605042015,
+        0.25469411764705885,
         0.38467933491686457
       ],
       "lang": "en"
@@ -273,7 +273,7 @@
       "lang": "en"
     },
     {
-      "text": "28,508",
+      "text": "24,992",
       "page": 0,
       "bbox": [
         0.620873949579832,
@@ -295,7 +295,7 @@
       "lang": "en"
     },
     {
-      "text": "36,490",
+      "text": "31,990",
       "page": 0,
       "bbox": [
         0.8729747899159663,
@@ -317,7 +317,7 @@
       "lang": "en"
     },
     {
-      "text": "3,991",
+      "text": "3,499",
       "page": 0,
       "bbox": [
         0.8823193277310925,
@@ -339,7 +339,7 @@
       "lang": "en"
     },
     {
-      "text": "3,991",
+      "text": "3,499",
       "page": 0,
       "bbox": [
         0.8823193277310925,
@@ -361,7 +361,7 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 36,490",
+      "text": "Rs. 31,990",
       "page": 0,
       "bbox": [
         0.8257075630252101,

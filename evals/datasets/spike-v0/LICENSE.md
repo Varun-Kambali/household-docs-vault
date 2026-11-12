@@ -9,3 +9,10 @@ Released under CC0 1.0 (public domain dedication): https://creativecommons.org/p
 
 The Kannada lines use Noto Sans Kannada, licensed under the SIL Open Font License
 (`synth/fonts/OFL.txt`). Fonts are not embedded in the JPEG photos; the PDFs embed a subset.
+
+## Known limit: Kannada lines
+
+The PDFs are drawn with reportlab, which cannot shape Kannada (no conjunct forms, no reph
+placement). The `lang: "kn"` line texts in the JSON files are correct Unicode, but the glyphs
+on the page are not what a Kannada reader would see. Do not use the Kannada lines to score OCR
+or reading accuracy; use them only to check that a pipeline keeps such lines and their boxes.

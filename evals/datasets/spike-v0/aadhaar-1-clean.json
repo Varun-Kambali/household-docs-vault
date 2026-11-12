@@ -10,13 +10,13 @@
   "fields": {
     "holder": "Anil Naik",
     "date_of_birth": "2003-08-03",
-    "address": "No. 199, 3th Cross, Station Road, Hubballi, Karnataka - 580431",
+    "address": "No. 199, 3rd Cross, Station Road, Hubballi, Karnataka - 580431",
     "number": "4861 5782 1135"
   },
   "printed": {
     "holder": "Anil Naik",
     "date_of_birth": "03/08/2003",
-    "address": "No. 199, 3th Cross\nStation Road\nHubballi, Karnataka - 580431",
+    "address": "No. 199, 3rd Cross\nStation Road\nHubballi, Karnataka - 580431",
     "number": "4861 5782 1135"
   },
   "lines": [
@@ -98,12 +98,12 @@
       "lang": "en"
     },
     {
-      "text": "No. 199, 3th Cross",
+      "text": "No. 199, 3rd Cross",
       "page": 0,
       "bbox": [
         0.275,
         0.5631578947368421,
-        0.41395,
+        0.41486666666666666,
         0.5921052631578947
       ],
       "lang": "en"

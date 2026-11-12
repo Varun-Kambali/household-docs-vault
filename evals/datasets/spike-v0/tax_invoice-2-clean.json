@@ -11,23 +11,23 @@
     "seller": "Vijay Sales",
     "seller_location": "Mangaluru",
     "gstin": "29XUDWE1216T1Z3",
-    "invoice_number": "TX/25-27/518809",
-    "invoice_date": "2026-04-21",
-    "product": "Voltas Split Air Conditioner 1.5 Ton",
-    "model": "183V-710",
-    "serial_number": "640UNW529283",
-    "amount": "34990"
+    "invoice_number": "INV/24-25/518809",
+    "invoice_date": "2025-01-05",
+    "product": "Samsung Front Load Washing Machine 8 kg",
+    "model": "WW80576FN",
+    "serial_number": "710TUN952928",
+    "amount": "36490"
   },
   "printed": {
     "seller": "Vijay Sales",
     "seller_location": "Mangaluru",
     "gstin": "29XUDWE1216T1Z3",
-    "invoice_number": "TX/25-27/518809",
-    "invoice_date": "21/04/2026",
-    "product": "Voltas Split Air Conditioner 1.5 Ton",
-    "model": "183V-710",
-    "serial_number": "640UNW529283",
-    "amount": "Rs. 34,990"
+    "invoice_number": "INV/24-25/518809",
+    "invoice_date": "05/01/2025",
+    "product": "Samsung Front Load Washing Machine 8 kg",
+    "model": "WW80576FN",
+    "serial_number": "710TUN952928",
+    "amount": "Rs. 36,490"
   },
   "lines": [
     {
@@ -108,12 +108,12 @@
       "lang": "en"
     },
     {
-      "text": "TX/25-27/518809",
+      "text": "INV/24-25/518809",
       "page": 0,
       "bbox": [
         0.2184873949579832,
         0.19002375296912113,
-        0.3483529411764706,
+        0.354890756302521,
         0.20308788598574823
       ],
       "lang": "en"
@@ -130,7 +130,7 @@
       "lang": "en"
     },
     {
-      "text": "21/04/2026",
+      "text": "05/01/2025",
       "page": 0,
       "bbox": [
         0.7058823529411765,
@@ -229,34 +229,34 @@
       "lang": "en"
     },
     {
-      "text": "Voltas Split Air Conditioner 1.5 Ton",
+      "text": "Samsung Front Load Washing Machine 8 kg",
       "page": 0,
       "bbox": [
         0.0773109243697479,
         0.33729216152019004,
-        0.35934453781512604,
+        0.4303193277310925,
         0.3503562945368171
       ],
       "lang": "en"
     },
     {
-      "text": "Model: 183V-710",
+      "text": "Model: WW80576FN",
       "page": 0,
       "bbox": [
         0.0773109243697479,
         0.35629453681710216,
-        0.19249579831932773,
+        0.21768067226890753,
         0.36805225653206647
       ],
       "lang": "en"
     },
     {
-      "text": "Serial No: 640UNW529283",
+      "text": "Serial No: 710TUN952928",
       "page": 0,
       "bbox": [
         0.0773109243697479,
         0.37292161520190026,
-        0.25973109243697484,
+        0.25469411764705885,
         0.38467933491686457
       ],
       "lang": "en"
@@ -273,7 +273,7 @@
       "lang": "en"
     },
     {
-      "text": "27,336",
+      "text": "28,508",
       "page": 0,
       "bbox": [
         0.620873949579832,
@@ -295,7 +295,7 @@
       "lang": "en"
     },
     {
-      "text": "34,990",
+      "text": "36,490",
       "page": 0,
       "bbox": [
         0.8729747899159663,
@@ -317,7 +317,7 @@
       "lang": "en"
     },
     {
-      "text": "3,827",
+      "text": "3,991",
       "page": 0,
       "bbox": [
         0.8823193277310925,
@@ -339,7 +339,7 @@
       "lang": "en"
     },
     {
-      "text": "3,827",
+      "text": "3,991",
       "page": 0,
       "bbox": [
         0.8823193277310925,
@@ -361,7 +361,7 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 34,990",
+      "text": "Rs. 36,490",
       "page": 0,
       "bbox": [
         0.8257075630252101,
