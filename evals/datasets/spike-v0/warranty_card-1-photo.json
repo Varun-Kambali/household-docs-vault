@@ -1,0 +1,367 @@
+{
+  "doc_id": "warranty_card-1-photo",
+  "base_id": "warranty_card-1",
+  "doc_type": "warranty_card",
+  "person": "Kritika Pillai",
+  "variant": "photo",
+  "files": [
+    "warranty_card-1-photo.jpg"
+  ],
+  "fields": {
+    "brand": "Whirlpool",
+    "product": "Convection Microwave Oven 25 L",
+    "model": "MWO-670C",
+    "serial_number": "709VFA231204",
+    "purchase_date": "2025-08-05",
+    "seller": "City Electronics Mart",
+    "seller_location": "Mangaluru",
+    "warranty_parts": "Magnetron:2;Product:1"
+  },
+  "printed": {
+    "brand": "Whirlpool",
+    "product": "Convection Microwave Oven 25 L",
+    "model": "MWO-670C",
+    "serial_number": "709VFA231204",
+    "purchase_date": "05/08/2025",
+    "seller": "City Electronics Mart",
+    "seller_location": "Mangaluru",
+    "warranty_parts": "Magnetron - 2 years\nProduct - 1 year"
+  },
+  "lines": [
+    {
+      "text": "Whirlpool",
+      "page": 0,
+      "bbox": [
+        0.08564221406472913,
+        0.04148361896632896,
+        0.3000898006147306,
+        0.08082853974744328
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty Card",
+      "page": 0,
+      "bbox": [
+        0.721054060178593,
+        0.06629097406477298,
+        0.8820170852055766,
+        0.08797186955777031
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product details",
+      "page": 0,
+      "bbox": [
+        0.0839334572664846,
+        0.14486489750432416,
+        0.21897522422482738,
+        0.16147176814672715
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.08336105023036039,
+        0.17589885662698762,
+        0.1318883743252164,
+        0.18760907120127415
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Convection Microwave Oven 25 L",
+      "page": 0,
+      "bbox": [
+        0.3170154726878583,
+        0.17933870511190103,
+        0.5644109547739989,
+        0.19519721412567767
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MWO-670C",
+      "page": 0,
+      "bbox": [
+        0.31683259079136444,
+        0.2037950320570348,
+        0.3991598016390816,
+        0.21725583158317832
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Model",
+      "page": 0,
+      "bbox": [
+        0.08284969286039187,
+        0.20036052470090407,
+        0.12129872760019444,
+        0.2119516396499197
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "709VFA231204",
+      "page": 0,
+      "bbox": [
+        0.3166491942514586,
+        0.22832013256215938,
+        0.42601742101152856,
+        0.24220749266775035
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Serial number",
+      "page": 0,
+      "bbox": [
+        0.0823368959938019,
+        0.22489101000837286,
+        0.17004026465315195,
+        0.2372322528538555
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase details",
+      "page": 0,
+      "bbox": [
+        0.08090041261525001,
+        0.2898943164815208,
+        0.23068443191597268,
+        0.3069252578106994
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of purchase",
+      "page": 0,
+      "bbox": [
+        0.08031839888194746,
+        0.3214487300662549,
+        0.18816177945493406,
+        0.33418883034942337
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "05/08/2025",
+      "page": 0,
+      "bbox": [
+        0.31592730119639634,
+        0.3248563780770501,
+        0.39452841426503255,
+        0.33841628693118536
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dealer",
+      "page": 0,
+      "bbox": [
+        0.07979844645678837,
+        0.3463212945628004,
+        0.12171316973534493,
+        0.3581378513276845
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "City Electronics Mart",
+      "page": 0,
+      "bbox": [
+        0.3157413464392422,
+        0.34972333889346524,
+        0.4721110540017668,
+        0.36443581059126895
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dealer location",
+      "page": 0,
+      "bbox": [
+        0.07927701806358495,
+        0.37126441874180865,
+        0.17402323753330917,
+        0.3838702774624146
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mangaluru",
+      "page": 0,
+      "bbox": [
+        0.3155548640041352,
+        0.37466081387678457,
+        0.3951971796555548,
+        0.388299299190488
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Customer",
+      "page": 0,
+      "bbox": [
+        0.07875410740874776,
+        0.39627840328039815,
+        0.1405008715302422,
+        0.4084392167174255
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kritika Pillai",
+      "page": 0,
+      "bbox": [
+        0.3153678516418215,
+        0.39966910338382944,
+        0.3968720445864647,
+        0.413366234175293
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty terms",
+      "page": 0,
+      "bbox": [
+        0.0773371936969443,
+        0.4602721859468623,
+        0.2169431438074055,
+        0.4774034516209958
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Part and warranty period",
+      "page": 0,
+      "bbox": [
+        0.07679191131470102,
+        0.49014172521246663,
+        0.23322740890233865,
+        0.5037534951477738
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Magnetron - 2 years",
+      "page": 0,
+      "bbox": [
+        0.07628361904937621,
+        0.5131869868665881,
+        0.22648976574692017,
+        0.5280043458556838
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product - 1 year",
+      "page": 0,
+      "bbox": [
+        0.07575215831133725,
+        0.5386060716884146,
+        0.19615546756256821,
+        0.5530336244811013
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Warranty starts on the date of purchase shown on the original invoice.",
+      "page": 0,
+      "bbox": [
+        0.07354001538979561,
+        0.6456975301663642,
+        0.5351278930521461,
+        0.6637027277775658
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Keep this card and the invoice. Service is refused without them.",
+      "page": 0,
+      "bbox": [
+        0.0731479091680863,
+        0.6644539770938674,
+        0.494404629897926,
+        0.6819098841493522
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Damage from misuse, power surges or unauthorised repair is not covered.",
+      "page": 0,
+      "bbox": [
+        0.07275497910036924,
+        0.6832498071915108,
+        0.5632974235793964,
+        0.70167271291331
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4. Consumables and accessories carry no warranty.",
+      "page": 0,
+      "bbox": [
+        0.072361222587466,
+        0.702085144629733,
+        0.4046577121045514,
+        0.7183360357177012
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Authorised signature and seal",
+      "page": 0,
+      "bbox": [
+        0.709794983162356,
+        0.8916511006144036,
+        0.9025504277539572,
+        0.9061447165580723
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06759851482431949,
+        0.9312366861142403,
+        0.29894608282380286,
+        0.9449714132317752
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      0
+    ],
+    "product": [
+      4
+    ],
+    "model": [
+      5
+    ],
+    "serial_number": [
+      7
+    ],
+    "purchase_date": [
+      11
+    ],
+    "seller": [
+      13
+    ],
+    "seller_location": [
+      15
+    ],
+    "warranty_parts": [
+      20,
+      21
+    ]
+  }
+}

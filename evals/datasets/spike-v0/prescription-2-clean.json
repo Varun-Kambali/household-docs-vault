@@ -1,0 +1,260 @@
+{
+  "doc_id": "prescription-2-clean",
+  "base_id": "prescription-2",
+  "doc_type": "prescription",
+  "person": "Dalaja Wali",
+  "variant": "clean",
+  "files": [
+    "prescription-2-clean.pdf"
+  ],
+  "fields": {
+    "hospital": "Greenfield Polyclinic",
+    "doctor": "Dr. Ira Srinivas",
+    "patient": "Dalaja Wali",
+    "date": "2026-07-24",
+    "medicines": "Paracetamol 650 mg 1-0-0 30 days;Pantoprazole 40 mg 1-1-1 7 days;Cetirizine 10 mg 1-0-0 5 days;Telmisartan 40 mg 1-1-1 5 days",
+    "next_visit": "2027-01-21"
+  },
+  "printed": {
+    "hospital": "Greenfield Polyclinic",
+    "doctor": "Dr. Ira Srinivas",
+    "patient": "Dalaja Wali",
+    "date": "24/07/2026",
+    "medicines": "1. Tab Paracetamol 650 mg  1-0-0  30 days\n2. Tab Pantoprazole 40 mg  1-1-1  7 days\n3. Tab Cetirizine 10 mg  1-0-0  5 days\n4. Tab Telmisartan 40 mg  1-1-1  5 days",
+    "next_visit": "21/01/2027"
+  },
+  "lines": [
+    {
+      "text": "Greenfield Polyclinic",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.021377672209026127,
+        0.3498840336134454,
+        0.043586698337292167
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Station Road, Kochi",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.05463182897862233,
+        0.21576470588235294,
+        0.06769596199524941
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Ira Srinivas",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1187648456057007,
+        0.22145714285714285,
+        0.13574821852731592
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MBBS, MD (General Medicine)",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.14014251781472684,
+        0.2748319327731092,
+        0.15190023752969123
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1828978622327791,
+        0.1143142857142857,
+        0.19465558194774346
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dalaja Wali",
+      "page": 0,
+      "bbox": [
+        0.16806722689075632,
+        0.1828978622327791,
+        0.2568067226890757,
+        0.19596199524940616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.6386554621848739,
+        0.1828978622327791,
+        0.6706016806722689,
+        0.19465558194774346
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "24/07/2026",
+      "page": 0,
+      "bbox": [
+        0.7058823529411765,
+        0.1828978622327791,
+        0.7899831932773109,
+        0.19596199524940616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Age/Sex: 34 / M",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.20902612826603326,
+        0.17484873949579832,
+        0.22078384798099762
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rx",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.26128266033254155,
+        0.11448067226890757,
+        0.29002375296912114
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicine, dose, timing, duration",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.2755344418052256,
+        0.3647949579831933,
+        0.28729216152019005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Paracetamol 650 mg  1-0-0  30 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.30403800475059384,
+        0.5078268907563025,
+        0.31840855106888366
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Pantoprazole 40 mg  1-1-1  7 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.334916864608076,
+        0.4924268907563026,
+        0.34928741092636584
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Tab Cetirizine 10 mg  1-0-0  5 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.3657957244655582,
+        0.4605361344537815,
+        0.380166270783848
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4. Tab Telmisartan 40 mg  1-1-1  5 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.39667458432304037,
+        0.48005882352941176,
+        0.4110451306413302
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.46318289786223277,
+        0.48104201680672276,
+        0.47624703087885983
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit: 21/01/2027",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.49643705463182897,
+        0.2532285714285714,
+        0.5108076009501188
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Signature",
+      "page": 0,
+      "bbox": [
+        0.8680336134453782,
+        0.8788598574821853,
+        0.9327731092436975,
+        0.8906175771971496
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "hospital": [
+      0
+    ],
+    "doctor": [
+      2
+    ],
+    "patient": [
+      5
+    ],
+    "date": [
+      7
+    ],
+    "medicines": [
+      11,
+      12,
+      13,
+      14
+    ],
+    "next_visit": [
+      16
+    ]
+  }
+}

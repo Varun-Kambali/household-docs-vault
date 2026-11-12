@@ -1,0 +1,259 @@
+{
+  "set": "spike-v0",
+  "seed": 7,
+  "per_type": 2,
+  "documents": [
+    {
+      "doc_id": "health_policy-1-clean",
+      "doc_type": "health_policy",
+      "files": [
+        "health_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-1-photo",
+      "doc_type": "health_policy",
+      "files": [
+        "health_policy-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "health_policy-2-clean",
+      "doc_type": "health_policy",
+      "files": [
+        "health_policy-2-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-2-photo",
+      "doc_type": "health_policy",
+      "files": [
+        "health_policy-2-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-1-clean",
+      "doc_type": "vehicle_policy",
+      "files": [
+        "vehicle_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-1-photo",
+      "doc_type": "vehicle_policy",
+      "files": [
+        "vehicle_policy-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-2-clean",
+      "doc_type": "vehicle_policy",
+      "files": [
+        "vehicle_policy-2-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-2-photo",
+      "doc_type": "vehicle_policy",
+      "files": [
+        "vehicle_policy-2-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-1-clean",
+      "doc_type": "warranty_card",
+      "files": [
+        "warranty_card-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-1-photo",
+      "doc_type": "warranty_card",
+      "files": [
+        "warranty_card-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-2-clean",
+      "doc_type": "warranty_card",
+      "files": [
+        "warranty_card-2-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-2-photo",
+      "doc_type": "warranty_card",
+      "files": [
+        "warranty_card-2-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-1-clean",
+      "doc_type": "tax_invoice",
+      "files": [
+        "tax_invoice-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-1-photo",
+      "doc_type": "tax_invoice",
+      "files": [
+        "tax_invoice-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-2-clean",
+      "doc_type": "tax_invoice",
+      "files": [
+        "tax_invoice-2-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-2-photo",
+      "doc_type": "tax_invoice",
+      "files": [
+        "tax_invoice-2-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-1-clean",
+      "doc_type": "aadhaar",
+      "files": [
+        "aadhaar-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-1-photo",
+      "doc_type": "aadhaar",
+      "files": [
+        "aadhaar-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-2-clean",
+      "doc_type": "aadhaar",
+      "files": [
+        "aadhaar-2-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-2-photo",
+      "doc_type": "aadhaar",
+      "files": [
+        "aadhaar-2-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "pan-1-clean",
+      "doc_type": "pan",
+      "files": [
+        "pan-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "pan-1-photo",
+      "doc_type": "pan",
+      "files": [
+        "pan-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "pan-2-clean",
+      "doc_type": "pan",
+      "files": [
+        "pan-2-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "pan-2-photo",
+      "doc_type": "pan",
+      "files": [
+        "pan-2-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "card_front-1-clean",
+      "doc_type": "card_front",
+      "files": [
+        "card_front-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_front-1-photo",
+      "doc_type": "card_front",
+      "files": [
+        "card_front-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "card_front-2-clean",
+      "doc_type": "card_front",
+      "files": [
+        "card_front-2-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_front-2-photo",
+      "doc_type": "card_front",
+      "files": [
+        "card_front-2-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "prescription-1-clean",
+      "doc_type": "prescription",
+      "files": [
+        "prescription-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "prescription-1-photo",
+      "doc_type": "prescription",
+      "files": [
+        "prescription-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "prescription-2-clean",
+      "doc_type": "prescription",
+      "files": [
+        "prescription-2-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "prescription-2-photo",
+      "doc_type": "prescription",
+      "files": [
+        "prescription-2-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "lab_report-1-clean",
+      "doc_type": "lab_report",
+      "files": [
+        "lab_report-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "lab_report-1-photo",
+      "doc_type": "lab_report",
+      "files": [
+        "lab_report-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "lab_report-2-clean",
+      "doc_type": "lab_report",
+      "files": [
+        "lab_report-2-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "lab_report-2-photo",
+      "doc_type": "lab_report",
+      "files": [
+        "lab_report-2-photo.jpg"
+      ]
+    }
+  ]
+}

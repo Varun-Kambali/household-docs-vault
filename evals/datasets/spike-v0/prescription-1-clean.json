@@ -1,0 +1,272 @@
+{
+  "doc_id": "prescription-1-clean",
+  "base_id": "prescription-1",
+  "doc_type": "prescription",
+  "person": "Anay Thakur",
+  "variant": "clean",
+  "files": [
+    "prescription-1-clean.pdf"
+  ],
+  "fields": {
+    "hospital": "Cauvery Care Hospital",
+    "doctor": "Dr. Geetika Taneja",
+    "patient": "Anay Thakur",
+    "date": "2026-11-09",
+    "medicines": "Cetirizine 10 mg 1-1-1 5 days;Metformin 850 mg 1-1-1 7 days;Paracetamol 500 mg 0-0-1 15 days;Vitamin D3 60000 IU 1-1-1 3 months;Pantoprazole 40 mg 1-0-0 15 days",
+    "next_visit": "2026-12-29"
+  },
+  "printed": {
+    "hospital": "Cauvery Care Hospital",
+    "doctor": "Dr. Geetika Taneja",
+    "patient": "Anay Thakur",
+    "date": "09/11/2026",
+    "medicines": "1. Tab Cetirizine 10 mg  1-1-1  5 days\n2. Tab Metformin 850 mg  1-1-1  7 days\n3. Tab Paracetamol 500 mg  0-0-1  15 days\n4. Tab Vitamin D3 60000 IU  1-1-1  3 months\n5. Tab Pantoprazole 40 mg  1-0-0  15 days",
+    "next_visit": "29/12/2026"
+  },
+  "lines": [
+    {
+      "text": "Cauvery Care Hospital",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.021377672209026127,
+        0.37208403361344533,
+        0.043586698337292167
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Market Street, Mangaluru",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.05463182897862233,
+        0.2568403361344538,
+        0.06769596199524941
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Geetika Taneja",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1187648456057007,
+        0.2578789915966387,
+        0.13574821852731592
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MBBS, MD (General Medicine)",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.14014251781472684,
+        0.2748319327731092,
+        0.15190023752969123
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1828978622327791,
+        0.1143142857142857,
+        0.19465558194774346
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Anay Thakur",
+      "page": 0,
+      "bbox": [
+        0.16806722689075632,
+        0.1828978622327791,
+        0.2698655462184874,
+        0.19596199524940616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.6386554621848739,
+        0.1828978622327791,
+        0.6706016806722689,
+        0.19465558194774346
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "09/11/2026",
+      "page": 0,
+      "bbox": [
+        0.7058823529411765,
+        0.1828978622327791,
+        0.7899831932773109,
+        0.19596199524940616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Age/Sex: 49 / F",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.20902612826603326,
+        0.17149075630252103,
+        0.22078384798099762
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rx",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.26128266033254155,
+        0.11448067226890757,
+        0.29002375296912114
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicine, dose, timing, duration",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.2755344418052256,
+        0.3647949579831933,
+        0.28729216152019005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Cetirizine 10 mg  1-1-1  5 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.30403800475059384,
+        0.4605361344537815,
+        0.31840855106888366
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Metformin 850 mg  1-1-1  7 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.334916864608076,
+        0.4759546218487395,
+        0.34928741092636584
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Tab Paracetamol 500 mg  0-0-1  15 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.3657957244655582,
+        0.5078268907563025,
+        0.380166270783848
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4. Tab Vitamin D3 60000 IU  1-1-1  3 months",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.39667458432304037,
+        0.5191226890756302,
+        0.4110451306413302
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "5. Tab Pantoprazole 40 mg  1-0-0  15 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.42755344418052255,
+        0.5027058823529412,
+        0.44192399049881237
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.49406175771971494,
+        0.48104201680672276,
+        0.5071258907363421
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit: 29/12/2026",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.5273159144893111,
+        0.2532285714285714,
+        0.541686460807601
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Signature",
+      "page": 0,
+      "bbox": [
+        0.8680336134453782,
+        0.8788598574821853,
+        0.9327731092436975,
+        0.8906175771971496
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "hospital": [
+      0
+    ],
+    "doctor": [
+      2
+    ],
+    "patient": [
+      5
+    ],
+    "date": [
+      7
+    ],
+    "medicines": [
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "next_visit": [
+      17
+    ]
+  }
+}

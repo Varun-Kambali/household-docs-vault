@@ -1,0 +1,272 @@
+{
+  "doc_id": "prescription-1-photo",
+  "base_id": "prescription-1",
+  "doc_type": "prescription",
+  "person": "Anay Thakur",
+  "variant": "photo",
+  "files": [
+    "prescription-1-photo.jpg"
+  ],
+  "fields": {
+    "hospital": "Cauvery Care Hospital",
+    "doctor": "Dr. Geetika Taneja",
+    "patient": "Anay Thakur",
+    "date": "2026-11-09",
+    "medicines": "Cetirizine 10 mg 1-1-1 5 days;Metformin 850 mg 1-1-1 7 days;Paracetamol 500 mg 0-0-1 15 days;Vitamin D3 60000 IU 1-1-1 3 months;Pantoprazole 40 mg 1-0-0 15 days",
+    "next_visit": "2026-12-29"
+  },
+  "printed": {
+    "hospital": "Cauvery Care Hospital",
+    "doctor": "Dr. Geetika Taneja",
+    "patient": "Anay Thakur",
+    "date": "09/11/2026",
+    "medicines": "1. Tab Cetirizine 10 mg  1-1-1  5 days\n2. Tab Metformin 850 mg  1-1-1  7 days\n3. Tab Paracetamol 500 mg  0-0-1  15 days\n4. Tab Vitamin D3 60000 IU  1-1-1  3 months\n5. Tab Pantoprazole 40 mg  1-0-0  15 days",
+    "next_visit": "29/12/2026"
+  },
+  "lines": [
+    {
+      "text": "Cauvery Care Hospital",
+      "page": 0,
+      "bbox": [
+        0.09255807909723783,
+        0.03019528594239995,
+        0.3703375013705079,
+        0.05667266044609256
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Market Street, Mangaluru",
+      "page": 0,
+      "bbox": [
+        0.09213170806742027,
+        0.0605741446095766,
+        0.26507805614940333,
+        0.07639891917034143
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Geetika Taneja",
+      "page": 0,
+      "bbox": [
+        0.090923653867058,
+        0.1193960294704861,
+        0.26534412098027743,
+        0.1389529411319919
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MBBS, MD (General Medicine)",
+      "page": 0,
+      "bbox": [
+        0.09063593358357319,
+        0.13907217152504078,
+        0.2806205239041122,
+        0.15419660676390615
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.08987247467410522,
+        0.17852827116354858,
+        0.13318512530717286,
+        0.19038136430613167
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Anay Thakur",
+      "page": 0,
+      "bbox": [
+        0.182216886456205,
+        0.18062003650595548,
+        0.27564131421701954,
+        0.19482455397397194
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.6138091055083938,
+        0.19039497666309113,
+        0.643188312954033,
+        0.2019559317346052
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "09/11/2026",
+      "page": 0,
+      "bbox": [
+        0.6755183021211179,
+        0.19179319689055685,
+        0.7528674396985905,
+        0.2056557698389441
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Age/Sex: 49 / F",
+      "page": 0,
+      "bbox": [
+        0.08940459238512123,
+        0.20270872762280484,
+        0.1851710483247875,
+        0.21578186178989914
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rx",
+      "page": 0,
+      "bbox": [
+        0.08815981875605344,
+        0.2512260775940387,
+        0.13207191131998733,
+        0.27899563679307543
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicine, dose, timing, duration",
+      "page": 0,
+      "bbox": [
+        0.16546925467211743,
+        0.26626151685818306,
+        0.36201155724741707,
+        0.28172405814321977
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Cetirizine 10 mg  1-1-1  5 days",
+      "page": 0,
+      "bbox": [
+        0.16500700978335775,
+        0.29285256543980065,
+        0.4500336186136947,
+        0.31283377694659975
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Metformin 850 mg  1-1-1  7 days",
+      "page": 0,
+      "bbox": [
+        0.1645471153766237,
+        0.3217303584009971,
+        0.46416653485931086,
+        0.342104243475787
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Tab Paracetamol 500 mg  0-0-1  15 days",
+      "page": 0,
+      "bbox": [
+        0.16408604285764158,
+        0.350682083581155,
+        0.4935420521032049,
+        0.37180398329136294
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4. Tab Vitamin D3 60000 IU  1-1-1  3 months",
+      "page": 0,
+      "bbox": [
+        0.16362378769364758,
+        0.3797080252633685,
+        0.5039551219950918,
+        0.4011422171831389
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "5. Tab Pantoprazole 40 mg  1-0-0  15 days",
+      "page": 0,
+      "bbox": [
+        0.163160345328595,
+        0.4088084691900976,
+        0.4887177354456992,
+        0.42995904488032577
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+      "page": 0,
+      "bbox": [
+        0.08421023010042085,
+        0.46991569531923705,
+        0.468491962775069,
+        0.49132671390628174
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit: 29/12/2026",
+      "page": 0,
+      "bbox": [
+        0.08357488735331428,
+        0.5015038649602247,
+        0.25660240064834855,
+        0.5192507083568491
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Signature",
+      "page": 0,
+      "bbox": [
+        0.8332995548165409,
+        0.8593175372504613,
+        0.8947337648799271,
+        0.8723714553125589
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.0757259787135978,
+        0.9109047672527815,
+        0.30205991826527484,
+        0.9267767628162829
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "hospital": [
+      0
+    ],
+    "doctor": [
+      2
+    ],
+    "patient": [
+      5
+    ],
+    "date": [
+      7
+    ],
+    "medicines": [
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "next_visit": [
+      17
+    ]
+  }
+}

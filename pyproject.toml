@@ -27,12 +27,23 @@ dev = [
     "mypy",
     "pre-commit",
 ]
+# Generates the synthetic documents; never shipped in the wheel.
+synth = [
+    "reportlab",
+    "pypdfium2",
+    "pillow",
+    "numpy",
+    "faker",
+    "pydantic",
+]
 
 [tool.hatch.version]
 path = "src/household_vault/__init__.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/household_vault"]
+# Editable installs also put synth/ on the path; a built wheel never contains it.
+dev-mode-dirs = ["src", "synth"]
 
 [tool.ruff]
 line-length = 100
@@ -43,8 +54,13 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 
 [tool.mypy]
 strict = true
-files = ["src"]
+files = ["src", "synth"]
+
+[[tool.mypy.overrides]]
+module = ["reportlab", "reportlab.*", "pypdfium2", "pypdfium2.*"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["synth"]
 addopts = "-ra --import-mode=importlib"
