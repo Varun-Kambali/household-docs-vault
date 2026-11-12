@@ -48,8 +48,25 @@ spikes = [
     "psutil",
 ]
 
+# LoRA fine-tune path spike: needs torch, so never in the default groups or CI.
+finetune = [
+    "torch",
+    "torchvision",
+    "transformers>=4.57",
+    "peft",
+    "accelerate",
+    "safetensors",
+    "pillow",
+    "pypdfium2",
+    "psutil",
+    # llama.cpp's converter script needs these
+    "sentencepiece",
+    "protobuf",
+    "numpy",
+]
+
 [tool.uv]
-# CI and `make setup` skip the spikes group (macOS-only wheels); `make spikes-setup` adds it.
+# CI and `make setup` skip the spikes group (macOS-only wheels); `make spikes-setup` adds it; `make finetune-setup` adds the finetune group.
 default-groups = ["dev", "synth"]
 
 [tool.hatch.version]
