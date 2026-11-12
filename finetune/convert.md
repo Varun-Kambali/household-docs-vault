@@ -27,6 +27,9 @@ local_dir='finetune/out/base')"
 
 ## 1. Prepare, train, merge
 
+Run `make finetune-setup` first: `finetune.stages` imports psutil, which is not in the default
+groups.
+
 ```sh
 uv run python -m finetune.stages run prepare -- uv run python -m finetune.prepare
 uv run --group finetune python -m finetune.train_lora train --model finetune/out/base \
@@ -47,21 +50,19 @@ projector as a second file. Qwen3-VL needs both. The text file is then quantised
 quantisation the Task 4 candidates ran at.
 
 ```sh
-cd finetune/out
-export PYTHONPATH=llama.cpp-src/gguf-py
-uv run --project ../.. --group finetune python llama.cpp-src/convert_hf_to_gguf.py \
-    merged --outfile vault-f16.gguf --outtype f16
-uv run --project ../.. --group finetune python llama.cpp-src/convert_hf_to_gguf.py \
-    merged --mmproj --outfile mmproj-vault-f16.gguf --outtype f16
-llama-quantize vault-f16.gguf vault-q4_k_m.gguf Q4_K_M
+sh finetune/convert-cmds.sh
 ```
 
+`finetune/convert-cmds.sh` (committed) holds the three commands: the f16 language model, the
+`--mmproj` projector, and `llama-quantize ... Q4_K_M`. It must run inside `uv run` so `python`
+is the project's, and it reads `finetune/out/merged`.
+
 The spike ran these three commands as one stage with
-`python -m finetune.stages run convert -- sh <script>` so they were timed together.
+`uv run --group finetune python -m finetune.stages run convert -- sh finetune/convert-cmds.sh` so they were timed together.
 
 ## 3. Import into Ollama and load
 
-`finetune/out/Modelfile`:
+Copy `finetune/Modelfile.example` to `finetune/out/Modelfile`. It contains:
 
 ```
 FROM ./vault-q4_k_m.gguf
@@ -75,7 +76,9 @@ chat template from the GGUF.
 
 ```sh
 ollama serve &                                   # plain process, never a service
-uv run python -m finetune.stages run import -- ollama create vault-spike-qwen3vl-2b -f finetune/out/Modelfile
+cp finetune/Modelfile.example finetune/out/Modelfile
+uv run python -m finetune.stages run import -- \
+    ollama create vault-spike-qwen3vl-2b -f finetune/out/Modelfile
 uv run --group spikes python -m finetune.extract_one --model vault-spike-qwen3vl-2b:latest
 ollama rm vault-spike-qwen3vl-2b:latest          # then stop the server
 ```
@@ -87,8 +90,9 @@ the Ollama server at the same time on a 16 GB Mac.
 ## 4. Record
 
 ```sh
+cp finetune/settings.example.json finetune/out/settings.json   # edit if your run differs
 uv run python -m finetune.stages collect --run mac-mps --settings finetune/out/settings.json
 ```
 
-where `settings.json` is the run settings written by hand (model, revision, pixels, rank, steps,
-library versions), writes `finetune/results/<date>_mac-mps_<commit>.json`.
+where `finetune/settings.example.json` is the settings block of the committed results file
+(model, revision, pixels, rank, steps, library versions), writes `finetune/results/<date>_mac-mps_<commit>.json`.

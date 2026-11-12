@@ -199,7 +199,7 @@ def main() -> None:
     t.add_argument("--steps", type=int, default=20)
     t.add_argument("--rank", type=int, default=8)
     t.add_argument("--lr", type=float, default=2e-4)
-    t.add_argument("--max-pixels", type=int, default=1_310_720)
+    t.add_argument("--max-pixels", type=int, default=786_432)
     t.add_argument("--seed", type=int, default=7)
     t.add_argument("--max-seconds", type=float, default=1800, help="stop and record after this")
     t.add_argument("--stage", default="train", help="name of the stage record to write")

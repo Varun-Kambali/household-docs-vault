@@ -38,7 +38,7 @@ in Ollama (the Task 4 runtime) and extract one held-out document.
 |---|---|---|---|
 | prepare | ok | 0.5 | not meaningful (sub-second) |
 | train, 786,432 px, 20 steps | ok | 400.4 | MPS peak 13.3 GiB, process resident 0.65 GiB |
-| train, 1,310,720 px, stopped at the 600 s cap | failed after 14 of 20 steps | 657.9 | MPS peak 17.6 GiB, process resident 0.50 GiB |
+| train, 1,310,720 px, stopped at the first step after a 600 s cap | failed after 14 of 20 steps | 657.9 | MPS peak 17.6 GiB, process resident 0.50 GiB |
 | merge | ok | 5.6 | resident peak 4.6 GiB |
 | convert (f16, projector, Q4_K_M) | ok | 30.1 | resident peak 2.3 GiB |
 | import into Ollama | ok | 1.6 | n/a |
@@ -48,7 +48,7 @@ in Ollama (the Task 4 runtime) and extract one held-out document.
 **Image size is the limit on this Mac.** The first attempt used a longer image side
 (1,310,720 pixels, about 1,280 image tokens). Its first seven steps took 8.2 to 21.9 s each, then
 steps 8 to 14 took 53 to 129 s each and the MPS allocation went past the 16 GB of RAM (17.6 GiB),
-so macOS was swapping. It was stopped at the 600 s cap and its record is kept. At 786,432
+so macOS was swapping. The 600 s cap is checked at the top of each step, so it stopped at the first step after it, 657.9 s in, after 14 steps; its record is kept. At 786,432
 pixels (about 768 image tokens) all 20 steps finished: steps 1 to 7 took 6.4 to 8.4 s, but steps
 8 to 20 took 9.0 to 53.0 s, so the run slowed here too, with a 13.3 GiB MPS peak. Training on
 page images at this size works for 20 steps and is not a pace to plan hundreds of steps on.
@@ -79,7 +79,7 @@ includes the first image encode after loading and is a single call, not a median
 
 Pending. `finetune/colab_train.ipynb` clones the repo at commit
 `a10f9ab1742cc2d63361053f1ebd3e8e5c2f2c7c`, builds the data itself, downloads the model, trains
-the same 20 steps in fp16 (a free T4 has no bf16) and offers `adapter.zip` for download. The
+the settings of the passing Mac run (same model, 786,432 px, rank 8, 20 steps) in fp16 instead of the Mac's bf16 (a free T4 has no bf16) and offers `adapter.zip` for download. The
 owner runs it; the merge and conversion then run on the Mac with the same commands. Until it
 runs, the fp16 path and the T4's time and memory are untested.
 

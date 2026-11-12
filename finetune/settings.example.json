@@ -1,0 +1,41 @@
+{
+ "model_id": "Qwen/Qwen3-VL-2B-Instruct",
+ "model_revision": "89644892e4d85e24eaac8bacfd4f463576704203",
+ "input": "page image",
+ "image_max_pixels_used": 786432,
+ "image_max_pixels_first_attempt": 1310720,
+ "lora_rank": 8,
+ "lora_alpha": 16,
+ "lora_dropout": 0.05,
+ "lora_targets": "language model q,k,v,o,gate,up,down projections",
+ "steps": 20,
+ "learning_rate": 0.0002,
+ "batch_size": 1,
+ "train_dtype_mps": "bfloat16",
+ "train_dtype_t4": "float16",
+ "seed": 7,
+ "split": {
+  "train": 0.7,
+  "val": 0.15,
+  "test": 0.15
+ },
+ "dataset": "spike-v0",
+ "libraries": {
+  "torch": "2.15.0",
+  "transformers": "5.22.2",
+  "peft": "0.21.2",
+  "torchvision": "0.29.2"
+ },
+ "llama_cpp_homebrew": "0.9.0 (build 12110, commit cd959bae9)",
+ "llama_cpp_converter_source_commit": "cd959bae99ff4bed22bef2604f45241c09bbb8c8",
+ "ollama_version": "0.40.16",
+ "gguf_quantisation": "Q4_K_M (text), F16 (projector)",
+ "gguf_sizes_bytes": {
+  "f16": 3447350400,
+  "q4_k_m": 1107410048,
+  "mmproj_f16": 819394784
+ },
+ "merged_safetensors_bytes": 4255121408,
+ "ollama_model_name": "vault-spike-qwen3vl-2b (removed after the run)",
+ "colab_t4_run": "pending (owner runs it)"
+}
