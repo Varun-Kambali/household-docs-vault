@@ -138,5 +138,12 @@ is relied on.
   other noise.
 - Whisper was run with the library defaults, not tuned, and its decoding has a random fallback.
   Its three runs here were identical, which does not show that every run would be.
+- The runs this spike replaced (results files at commit 85795a4, under
+  `spikes/transcription/results/`) showed Whisper repeating a phrase over and over in some
+  visits and scoring differently from one run to the next on the same audio. The new runs did
+  not. Visits 1, 2, 4 and 5 use the same scripts, voices and noise seed as before; nothing
+  records a hash of the audio, so it is not proven to be identical. Whether Whisper is
+  repeatable on this audio is therefore not settled, and a repeated phrase in a medical note
+  would matter.
 - The medicine check is a text match on the script's spelling and digit doses; a correct
   brand-to-generic swap or a dose spoken as words would count as a miss.
