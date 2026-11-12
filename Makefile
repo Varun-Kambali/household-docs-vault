@@ -1,6 +1,6 @@
 COV_MIN ?= 80
 
-.PHONY: setup spikes-setup lint test eval eval-smoke run docker
+.PHONY: setup spikes-setup finetune-setup lint test eval eval-smoke run docker
 
 setup:
 	uv sync
@@ -9,6 +9,10 @@ setup:
 # OCR engines for the reading spike. Needs macOS and `brew install tesseract`.
 spikes-setup:
 	uv sync --group spikes
+
+# torch, transformers and peft for the fine-tune path spike. Never part of `make setup` or CI.
+finetune-setup:
+	uv sync --group spikes --group finetune
 
 lint:
 	uv run ruff check .

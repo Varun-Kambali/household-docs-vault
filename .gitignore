@@ -17,3 +17,6 @@ node_modules/
 # Local vault folders, databases and model files. Never commit.
 var/
 *.kdbx
+# Fine-tune spike: regenerable training data, adapters, merged weights and GGUF files
+finetune/data/
+finetune/out/
