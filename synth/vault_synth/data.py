@@ -112,11 +112,16 @@ def helpline(rng: random.Random) -> str:
     return f"1800 {rng.randint(100, 999)} {rng.randint(1000, 9999)}"
 
 
+def ordinal(n: int) -> str:
+    suffix = "th" if 10 <= n % 100 <= 20 else {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suffix}"
+
+
 def address_lines(rng: random.Random) -> tuple[list[str], str]:
     """Return printed address lines and the city name."""
     city, state, pin = rng.choice(CITIES)
     lines = [
-        f"No. {rng.randint(1, 240)}, {rng.randint(1, 18)}th Cross",
+        f"No. {rng.randint(1, 240)}, {ordinal(rng.randint(1, 18))} Cross",
         rng.choice(LOCALITIES),
         f"{city}, {state} - {pin}{rng.randint(0, 999):03d}",
     ]
