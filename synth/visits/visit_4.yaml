@@ -1,0 +1,44 @@
+title: Post-surgery check
+speakers:
+  doctor: Rishi
+  patient: Aman
+medicines:
+  - Cefixime 200
+  - Pantoprazole 40
+  - Tramadol 50
+  - Dolo 650
+tests:
+  - ultrasound of the abdomen
+lines:
+  - {speaker: doctor, text: "Good morning, Mr. Prakash. It is ten days since your gallbladder surgery. How are you feeling?"}
+  - {speaker: patient, text: "Good morning, doctor. Much better. The pain has reduced a lot, but the right side of the belly still pulls when I bend."}
+  - {speaker: doctor, text: "That is normal at this stage. Let me see the wound. Please lie down and lift your shirt. The three small cuts are clean and dry, there is no redness and no discharge. The stitches are dissolving on their own."}
+  - {speaker: patient, text: "The one near the navel was a little wet for two days, but now it is dry."}
+  - {speaker: doctor, text: "Yes, it has healed. Any fever since you went home?"}
+  - {speaker: patient, text: "No fever. I checked every evening as the nurse told me."}
+  - {speaker: doctor, text: "Good. How is your appetite, and are your motions normal?"}
+  - {speaker: patient, text: "Appetite is better. I had some loose motions for two days after the surgery but it is regular now."}
+  - {speaker: doctor, text: "That can happen after the gallbladder is removed, and it usually settles. Are you still taking the antibiotic?"}
+  - {speaker: patient, text: "Yes, Cefixime 200 milligrams twice a day. Today is the last day, I think."}
+  - {speaker: doctor, text: "That is right. Finish Cefixime 200 milligrams today, and then stop. No further antibiotic is needed."}
+  - {speaker: patient, text: "And the pain tablet, Tramadol? I took it only at night."}
+  - {speaker: doctor, text: "Let us stop Tramadol 50 milligrams now. It makes you drowsy and constipated, and your pain is mild. If you need something, take Dolo 650 milligrams, one tablet up to three times a day after food."}
+  - {speaker: patient, text: "Okay. Can I take Dolo on an empty stomach?"}
+  - {speaker: doctor, text: "It is better after food. Also continue Pantoprazole 40 milligrams every morning thirty minutes before breakfast for two more weeks, to protect the stomach."}
+  - {speaker: patient, text: "Should I continue my diabetes tablets also?"}
+  - {speaker: doctor, text: "Yes, continue everything else as before. I have reviewed the list in your discharge summary and there is no clash with the new medicines."}
+  - {speaker: patient, text: "When can I start eating normally? My wife is asking about the ghee and fried food."}
+  - {speaker: doctor, text: "For the first month, keep the food light and low in oil. Small meals four or five times a day instead of two big meals. Fried items and sweets can come back slowly after that."}
+  - {speaker: patient, text: "What about lifting weights? I have to carry the water cans at home."}
+  - {speaker: doctor, text: "Please do not lift anything heavier than three or four kilograms for six weeks. Ask someone to help you with the cans. Walking is good, and you can climb stairs slowly."}
+  - {speaker: patient, text: "When can I go back to the office? It is a desk job."}
+  - {speaker: doctor, text: "Since it is a desk job, you can resume after two more weeks. Start with half days if you feel tired. Driving is fine once you can press the brake hard without any pain."}
+  - {speaker: patient, text: "Understood. Is there anything I should watch for?"}
+  - {speaker: doctor, text: "Come at once if you have fever above 101, yellow colour of the eyes or urine, severe pain, vomiting that will not stop, or pus from any of the wounds."}
+  - {speaker: patient, text: "I will remember that."}
+  - {speaker: doctor, text: "The pathology report on the gallbladder is normal, which is good news. Just one more thing, I want an ultrasound of the abdomen after a month to confirm that everything inside has healed well."}
+  - {speaker: patient, text: "Do I need to be fasting for the ultrasound?"}
+  - {speaker: doctor, text: "Yes, six hours of fasting, and come with a full bladder. The radiology desk will give you a slot."}
+  - {speaker: patient, text: "Thank you, doctor. So to summarise: finish Cefixime today, stop Tramadol, Dolo 650 if there is pain, and Pantoprazole 40 for two more weeks."}
+  - {speaker: doctor, text: "Perfect summary. See me again in a month with the ultrasound report. Take care."}
+  - {speaker: patient, text: "Thank you, doctor. Goodbye."}

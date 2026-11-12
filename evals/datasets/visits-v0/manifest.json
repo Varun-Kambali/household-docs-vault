@@ -1,0 +1,63 @@
+{
+  "os": "macOS 26.7.1",
+  "say_rate_wpm": 160,
+  "pause_seconds": 0.45,
+  "edge_silence_seconds": 0.5,
+  "noise": "low-passed Gaussian noise generated in code",
+  "noise_snr_db": 25.0,
+  "noise_seed": 20261112,
+  "sample_rate_hz": 16000,
+  "format": "FLAC, mono",
+  "visits": {
+    "visit_1": {
+      "title": "Blood pressure follow-up",
+      "voices": {
+        "doctor": "Rishi",
+        "patient": "Aman"
+      },
+      "words": 631,
+      "duration_seconds": 240.8,
+      "measured_snr_db": 25.0
+    },
+    "visit_2": {
+      "title": "Diabetes review",
+      "voices": {
+        "doctor": "Rishi",
+        "patient": "Tara"
+      },
+      "words": 644,
+      "duration_seconds": 247.7,
+      "measured_snr_db": 25.0
+    },
+    "visit_3": {
+      "title": "Child with fever",
+      "voices": {
+        "doctor": "Tara",
+        "parent": "Aman"
+      },
+      "words": 589,
+      "duration_seconds": 209.8,
+      "measured_snr_db": 25.0
+    },
+    "visit_4": {
+      "title": "Post-surgery check",
+      "voices": {
+        "doctor": "Rishi",
+        "patient": "Aman"
+      },
+      "words": 593,
+      "duration_seconds": 219.7,
+      "measured_snr_db": 25.0
+    },
+    "visit_5": {
+      "title": "Eye check",
+      "voices": {
+        "doctor": "Tara",
+        "patient": "Rishi"
+      },
+      "words": 645,
+      "duration_seconds": 232.4,
+      "measured_snr_db": 25.0
+    }
+  }
+}

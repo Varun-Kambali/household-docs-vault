@@ -26,6 +26,8 @@ dev = [
     "ruff",
     "mypy",
     "pre-commit",
+    "jiwer",
+    "types-pyyaml",
 ]
 # Generates the synthetic documents; never shipped in the wheel.
 synth = [
@@ -35,6 +37,7 @@ synth = [
     "numpy",
     "faker",
     "pydantic",
+    "pyyaml",
 ]
 # OCR engines compared in the reading spike; never shipped. Tesseract also needs the binary.
 spikes = [
@@ -46,6 +49,8 @@ spikes = [
     "paddlepaddle>=3.3.1",
     "httpx",
     "psutil",
+    "mlx-whisper; sys_platform == 'darwin'",
+    "parakeet-mlx; sys_platform == 'darwin'",
 ]
 
 # LoRA fine-tune path spike: needs torch, so never in the default groups or CI.

@@ -20,3 +20,5 @@ var/
 # Fine-tune spike: regenerable training data, adapters, merged weights and GGUF files
 finetune/data/
 finetune/out/
+# Doctor-visit audio: rendered by `make visits` from the committed scripts, never committed
+evals/datasets/visits-v0/audio/

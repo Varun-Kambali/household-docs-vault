@@ -1,0 +1,36 @@
+from spikes.transcription.score import score_visit, style_counts
+
+
+def test_wer_zero_for_identical():
+    assert score_visit("continue telma 40", "Continue Telma 40.", ["Telma 40"]).wer == 0
+
+
+def test_medicine_found_ignores_case_and_punctuation():
+    s = score_visit("x", "start amlodipine 5 at night", ["Amlodipine 5"])
+    assert s.medicines_found == 1
+
+
+def test_wer_counts_substitutions():
+    s = score_visit("take one tablet daily", "take two tablets daily", [])
+    assert s.wer == 0.5
+
+
+def test_dose_must_match_whole_number():
+    s = score_visit("x", "continue telma 400 daily", ["Telma 40"])
+    assert s.medicines_found == 0
+    assert s.medicines_total == 1
+
+
+def test_name_found_when_dose_is_written_differently():
+    s = score_visit("x", "continue telma forty daily", ["Telma 40"])
+    assert s.medicines_found == 0
+    assert s.names_found == 1
+
+
+def test_number_words_are_not_converted_to_digits():
+    assert score_visit("telma 40", "telma forty", []).wer == 0.5
+
+
+def test_style_counts():
+    c = style_counts("take 5 mg and ten mg then forty five")
+    assert c == {"digit_tokens": 1, "number_words": 3, "mg_tokens": 2}
