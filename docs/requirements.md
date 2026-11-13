@@ -66,6 +66,7 @@ One user: me, keeping papers for my family. Family members appear as people in t
 - [ ] A recording of a doctor visit dropped in `Inbox` is filed under `<Person>/Medical/Recordings/`.
 - [ ] The Mac transcribes it (English) with timestamps and writes a draft checkup: reason for visit, findings, medicines (name, dose, timing, duration, new or continued), tests before the next visit, next appointment, hospital, department, doctor. Every line links to its moment in the recording.
 - [ ] If a prescription or report from the same day and person is filed, the app flags disagreements between it and the recording.
+- [ ] Each medicine name in the draft is matched against that visit's prescription, when one is filed, and against a list of known medicine names. A name that matches neither is shown to me to confirm or correct before the checkup is saved, so no medicine is saved on the transcript's word alone (ADR 0011).
 - [ ] I confirm or edit the draft. Only then is `Checkups/<date> <hospital> - <doctor>.pdf` written.
 - [ ] `<Person> - Medical history.pdf` opens with allergies, ongoing conditions and medicines now, then every event oldest to newest with pictures of the report pages and the file path. It is rebuilt when a checkup is confirmed or a medical document is filed, and only from confirmed checkups and filed documents.
 - [ ] The app never suggests a diagnosis, a dose or a treatment.
@@ -113,21 +114,24 @@ The project fails, even if it works, if:
 
 ## Success metrics
 
-| Metric | Target |
-|---|---|
-| Secrets found in the database, index, logs, traces or Drive files | 0 |
-| Silent misfiles in the held-out set | At most 1 per 100 documents |
-| Document type accuracy | [set after M1 spikes] |
-| Person accuracy | [set after M1 spikes] |
-| Field exact match and F1, per field and type | [set after M1 spikes] |
-| Search top-1 and top-3 hit rate | [set after M1 spikes] |
-| Citation accuracy | [set after M1 spikes] |
-| Line-box accuracy for citations | [set after M1 spikes] |
-| Share of files sent to `Needs a look` | [set after M1 spikes] |
-| Duplicate detection | [set after M1 spikes] |
-| List-query reading accuracy | [set after M1 spikes] |
-| Medical checkup field accuracy | [set after M1 spikes] |
-| Disagreement flags caught | [set after M1 spikes] |
-| Transcript word error rate | [set after M1 spikes] |
-| Seconds per page on the Mac | [set after M1 spikes] |
-| Cost per 1,000 documents | [set after M1 spikes] |
+Targets are scored on the held-out synthetic set, and each milestone's "done when" checks against them. The M1 baselines come from the spike set (`docs/spikes/`), which is smaller.
+
+| Metric | Target | M1 baseline |
+|---|---|---|
+| Secrets found in the database, index, logs, traces or Drive files | 0 | not measured |
+| Silent misfiles in the held-out set | At most 1 per 100 documents | not measured |
+| Document type accuracy | 97% or more; a document the app is less sure of goes to `Needs a look` | not measured |
+| Person accuracy | 95% or more | not measured |
+| Field exact match and F1, per field and type | Exact match 92% or more overall on photos, and 85% or more for each core type | 94.2% on photos with the chosen model (ADR 0009) |
+| Search top-1 and top-3 hit rate | 85% or more top-1, 95% or more top-3 | not measured |
+| Citation accuracy | 95% or more of answers cite the page that holds the value | not measured |
+| Line-box accuracy for citations | 95% or more of the true lines found on photo pages | 96.1% mean (ADR 0008) |
+| Share of files sent to `Needs a look` | 15% or less | not measured |
+| Duplicate detection | 95% or more of duplicates caught, and no two different documents merged | not measured |
+| List-query reading accuracy | 90% or more | not measured |
+| Medical checkup field accuracy | 90% or more | not measured |
+| Disagreement flags caught | 90% or more | not measured |
+| Medicines saved wrong without my OK | 0 | 16 of 22 medicines right in the raw transcript (ADR 0011) |
+| Transcript word error rate | 6% or less | 4.18% (ADR 0011) |
+| Seconds a document on the Mac, filing in the background | 60 or less | 35.0 median, 46.8 at most on photos (ADR 0009) |
+| Cost per 1,000 documents | No API spend for the app; M6 reports the cloud model's cost beside the local ones | no API calls in M1 |

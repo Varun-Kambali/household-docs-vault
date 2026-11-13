@@ -5,6 +5,21 @@
   "status": "in-progress",
   "tagline": "A private vault that runs on my Mac: it files bills, policies and IDs from one inbox, finds any of them from a short prompt, and reminds me before renewals.",
   "summary": "I drop a paper or a PDF in one folder. The app reads it on the Mac with local models, files it under the right person, pulls out the fields that matter and shows the exact page and lines each answer came from. It reminds me before a policy or warranty runs out, turns a recorded doctor visit into a checkup document, and keeps card details and passwords in an encrypted file. A small open-weight model is fine-tuned for the field-reading step and measured against the base model and a cloud model.",
-  "measures": "[set after M1]",
-  "skills": ["finetune", "openweight", "multimodal", "structured", "citations", "hybrid", "embeddings", "evalsets", "ci-evals", "fastapi", "frontend", "python", "docker", "cicd"]
+  "measures": "Fields filled exactly right per document type for the base, fine-tuned and cloud models, search hits with the cited lines, and medicines saved wrong without a check",
+  "skills": [
+    "finetune",
+    "openweight",
+    "multimodal",
+    "structured",
+    "citations",
+    "hybrid",
+    "embeddings",
+    "evalsets",
+    "ci-evals",
+    "fastapi",
+    "frontend",
+    "python",
+    "docker",
+    "cicd"
+  ]
 }
