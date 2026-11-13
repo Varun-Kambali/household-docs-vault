@@ -1,0 +1,47 @@
+title: Diabetes review
+speakers:
+  doctor: Rishi
+  patient: Tara
+medicines:
+  - Metformin 500
+  - Glimepiride 1
+  - Januvia 50
+  - Rosuvastatin 10
+  - Becosules
+tests:
+  - HbA1c
+lines:
+  - {speaker: doctor, text: "Good afternoon, Mrs. Lakshmi. Please come in. Your reports came this morning, so let us go through them."}
+  - {speaker: patient, text: "Good afternoon, doctor. I was a bit nervous about the sugar levels this time."}
+  - {speaker: doctor, text: "Your HbA1c is 8.2 percent. Three months ago it was 7.4. So it has gone up, and we need to understand why."}
+  - {speaker: patient, text: "Doctor, there were many festivals. Sweets at home every day for two weeks, and I stopped my walks because of the rain."}
+  - {speaker: doctor, text: "That explains a part of it. Your fasting sugar today is 146 and the after meal reading is 228. Are you taking your tablets regularly?"}
+  - {speaker: patient, text: "Mostly yes. Metformin I take twice a day. The small one, Glimepiride, I sometimes skip if I am not eating on time."}
+  - {speaker: doctor, text: "Please do not skip it without telling me, but you are right to be careful. Have you had any episodes of sweating, shaking, or sudden hunger?"}
+  - {speaker: patient, text: "Twice last month, in the afternoon. I felt shaky and I ate a biscuit and it passed."}
+  - {speaker: doctor, text: "That is a low sugar episode, and Glimepiride can cause it if you delay meals. So I am going to change the plan a little."}
+  - {speaker: patient, text: "Will I have to take insulin?"}
+  - {speaker: doctor, text: "No, not at all. We are not there. We will first adjust the tablets. Continue Metformin 500 milligrams twice a day, after breakfast and after dinner."}
+  - {speaker: patient, text: "Okay. Same as now."}
+  - {speaker: doctor, text: "Yes. Now the Glimepiride 1 milligram, I want you to take only with the breakfast, never on an empty stomach, and only if you are going to eat within half an hour."}
+  - {speaker: patient, text: "Okay, I will remember that."}
+  - {speaker: doctor, text: "And I am adding Januvia 50 milligrams, one tablet once a day in the morning. It lowers the sugar without causing lows, so it is a safer partner for the Metformin."}
+  - {speaker: patient, text: "Is it expensive, doctor? My son pays for the medicines now."}
+  - {speaker: doctor, text: "It costs more than the older tablets, yes. A generic of the same salt, Sitagliptin, is available at a lower price. I will write the salt name so the pharmacist can give you the cheaper one."}
+  - {speaker: patient, text: "That will help. Thank you."}
+  - {speaker: doctor, text: "Your cholesterol was also on the higher side. LDL is 118. Are you still taking the Rosuvastatin?"}
+  - {speaker: patient, text: "Yes, one at night."}
+  - {speaker: doctor, text: "Continue Rosuvastatin 10 milligrams at night. For the tingling in your feet that you mentioned last time, I will give Becosules, one capsule daily after lunch for one month."}
+  - {speaker: patient, text: "The tingling is worse at night. Is it because of the sugar?"}
+  - {speaker: doctor, text: "It can be. Let me examine your feet. Please take off your sandals. I am checking the pulses and sensation with this small monofilament. Tell me when you feel it."}
+  - {speaker: patient, text: "Yes. Yes. I feel it on the left. On the right big toe it is less."}
+  - {speaker: doctor, text: "Slightly reduced sensation on the right. No wounds or cracks, which is good. Please check your feet every night, and never walk barefoot at home."}
+  - {speaker: patient, text: "I always walk barefoot in the puja room."}
+  - {speaker: doctor, text: "Wear soft chappals even there. Now about food. Reduce white rice to one small bowl, add more dal and vegetables, and no sweets except once a week."}
+  - {speaker: patient, text: "My daughter in law will help me plan the meals."}
+  - {speaker: doctor, text: "Good. Walk for thirty minutes after dinner, even inside the house if it rains. I will also send your urine for microalbumin, to check that the kidneys are not affected."}
+  - {speaker: patient, text: "When should I do the blood test again?"}
+  - {speaker: doctor, text: "Repeat the HbA1c after three months. Come to see me after one month with a log of fasting and after meal sugars, two days a week is enough."}
+  - {speaker: patient, text: "Okay doctor. So Metformin twice a day, Glimepiride with breakfast, Januvia in the morning, Rosuvastatin at night, and Becosules after lunch."}
+  - {speaker: doctor, text: "That is exactly right. Well done. If your sugar goes below 70 or you feel shaky, eat something sweet at once and call the clinic."}
+  - {speaker: patient, text: "I will. Thank you very much, doctor."}

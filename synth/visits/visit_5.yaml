@@ -1,0 +1,45 @@
+title: Eye check
+speakers:
+  doctor: Tara
+  patient: Rishi
+medicines:
+  - Timolol 0.5
+  - Latanoprost 0.005
+  - Carboxymethylcellulose 0.5
+  - Moxifloxacin 0.5
+tests:
+  - visual field test
+lines:
+  - {speaker: doctor, text: "Good evening, Mr. Srinivasan. Please sit here and keep your chin on the rest. What brings you in today?"}
+  - {speaker: patient, text: "Good evening, doctor. My eyes feel dry and gritty, especially in the evenings, and I have blurred vision while reading the newspaper."}
+  - {speaker: doctor, text: "How many hours do you spend on the computer or the phone in a day?"}
+  - {speaker: patient, text: "Nearly nine hours at work, and then another two at home. I rarely take breaks."}
+  - {speaker: doctor, text: "That explains the dryness. Do you remember your last eye pressure reading? You were told about glaucoma in the family."}
+  - {speaker: patient, text: "My father had glaucoma. My own pressure was borderline two years ago. I did not follow up, I am sorry."}
+  - {speaker: doctor, text: "Let us check it today then. Look straight ahead. I will use the air puff device. Right eye is 21 and left eye is 23. These are at the upper limit of normal."}
+  - {speaker: patient, text: "Is that dangerous?"}
+  - {speaker: doctor, text: "Not by itself, but with your family history I do not want to ignore it. I will dilate your eyes and look at the optic nerve. The drops will blur your vision for four to five hours, so please do not drive afterwards."}
+  - {speaker: patient, text: "My driver is waiting outside, so it is fine."}
+  - {speaker: doctor, text: "Good. Look up now. And down. The optic nerve cup looks slightly enlarged in the left eye. The retina is healthy and there is no diabetic change."}
+  - {speaker: patient, text: "What does that mean for me?"}
+  - {speaker: doctor, text: "It means you are a glaucoma suspect. We should confirm it with a visual field test and a scan of the nerve fibre layer, which I will book for this week."}
+  - {speaker: patient, text: "Will I need drops every day?"}
+  - {speaker: doctor, text: "Possibly. For now, I am starting Timolol 0.5 percent eye drops, one drop in both eyes twice a day, morning and evening. Press the corner of the eye for a minute after putting the drop."}
+  - {speaker: patient, text: "Why do I need to press the corner?"}
+  - {speaker: doctor, text: "So that less of the medicine drains into your nose and body. Timolol can slow the heart, so tell me if you feel breathless or your pulse becomes very slow. Do you have asthma?"}
+  - {speaker: patient, text: "No asthma. Pulse is usually around 70."}
+  - {speaker: doctor, text: "Good. If the field test confirms glaucoma, we will switch to Latanoprost 0.005 percent, one drop at bedtime, which is stronger. I will decide that at the next visit."}
+  - {speaker: patient, text: "Okay. And the dryness?"}
+  - {speaker: doctor, text: "For that, use Carboxymethylcellulose 0.5 percent lubricating drops, one drop in each eye four times a day. Wait five minutes between this and the Timolol."}
+  - {speaker: patient, text: "I used to take some red eye whitening drops from the shop. Should I stop them?"}
+  - {speaker: doctor, text: "Please stop those. They can raise the pressure in some people and make dryness worse. Also follow the twenty twenty twenty rule. Every twenty minutes look at something twenty feet away for twenty seconds."}
+  - {speaker: patient, text: "I will set a reminder on my phone."}
+  - {speaker: doctor, text: "Your left eyelid margin is also slightly inflamed, with some crusting. I am giving a short course of Moxifloxacin 0.5 percent drops, one drop in the left eye three times a day for five days, and a warm compress for ten minutes each morning."}
+  - {speaker: patient, text: "Is that an infection?"}
+  - {speaker: doctor, text: "It is mild blepharitis, which is common with dry eyes. The warm compress is as important as the drops."}
+  - {speaker: patient, text: "What about my reading glasses? I feel that the number has changed."}
+  - {speaker: doctor, text: "Your near vision needs plus 1.75 now, up from plus 1.25. I will give you a new prescription after the dilation wears off, and I suggest an anti glare coating."}
+  - {speaker: patient, text: "Fine. When should I come back?"}
+  - {speaker: doctor, text: "Come on Friday for the visual field test and the nerve scan, and then to see me again. Do not miss it this time. Glaucoma damage is silent and permanent."}
+  - {speaker: patient, text: "I will be there. Thank you, doctor."}
+  - {speaker: doctor, text: "Good. Timolol twice a day, lubricating drops four times a day, and Moxifloxacin in the left eye for five days. See you on Friday."}

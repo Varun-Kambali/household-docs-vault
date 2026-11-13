@@ -1,10 +1,15 @@
 COV_MIN ?= 80
 
-.PHONY: setup spikes-setup finetune-setup lint test eval eval-smoke run docker
+.PHONY: setup visits spikes-setup finetune-setup lint test eval eval-smoke run docker
 
 setup:
 	uv sync
 	uv run pre-commit install
+
+# Renders the doctor-visit audio for the transcription spike with macOS `say` and ffmpeg.
+# The audio is git-ignored (Apple's system-voice licence); scripts and truth are committed.
+visits:
+	uv run python -m vault_synth.visits --out evals/datasets/visits-v0
 
 # OCR engines for the reading spike. Needs macOS and `brew install tesseract`.
 spikes-setup:
