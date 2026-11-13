@@ -12,7 +12,7 @@ a real-time factor under 0.5.
 
 - Data: `evals/datasets/visits-v0`, five scripted visits (blood pressure follow-up, diabetes
   review, child with fever, post-surgery check, eye check). They run 219.7 to 247.7 seconds of
-  audio and 593 to 645 words, and each names at least four medicines with a dose and one test.
+  audio and 593 to 645 spoken words as the manifest counts them, and each names at least four medicines with a dose and one test.
   The set has 22 medicines; 20 have a dose, and the two without one are Becosules (visit 2) and
   ORS (visit 3). People are fictional; medicine names are real generic or common Indian brand
   names on purpose, since recognising them is the point.
