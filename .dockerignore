@@ -8,3 +8,13 @@ docs
 tests
 var
 *.kdbx
+finetune/out
+finetune/data
+evals/datasets/visits-v0/audio
+spikes
+synth
+evals
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
