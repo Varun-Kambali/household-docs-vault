@@ -41,8 +41,10 @@ See [docs/architecture.md](docs/architecture.md) for the diagram, the data flow 
 | Backend | Python, FastAPI, Pydantic | [set when M2 starts] |
 | Storage | Files in a Drive-synced folder, SQLite on the Mac | [ADR 0002](docs/decisions/0002-files-live-in-google-drive.md), [ADR 0006](docs/decisions/0006-database-on-the-mac.md) |
 | Secrets | KeePass file (KDBX4) | [ADR 0004](docs/decisions/0004-secrets-in-a-keepass-file.md) |
-| Models | [chosen by the M1 spikes] | Run locally on the Mac |
-| Fine-tune | PyTorch, Transformers, PEFT | [ADR 0007](docs/decisions/0007-fine-tune-in-pytorch.md) |
+| Reading | Apple Vision text recognition (`ocrmac`) | [ADR 0008](docs/decisions/0008-reading-engine.md) |
+| Field filling | qwen3-vl:4b through Ollama, on the page image | [ADR 0009](docs/decisions/0009-extraction-model-and-runtime.md) |
+| Visit transcripts | Parakeet TDT 0.6B v2 (`parakeet-mlx`), medicine names checked | [ADR 0011](docs/decisions/0011-transcription-model.md) |
+| Fine-tune | PyTorch, Transformers, PEFT; merged and converted to GGUF for Ollama | [ADR 0007](docs/decisions/0007-fine-tune-in-pytorch.md), [ADR 0010](docs/decisions/0010-fine-tune-path.md) |
 | Frontend | React, TypeScript, Vite | [set when M3 starts] |
 
 ## Quickstart
@@ -89,6 +91,10 @@ docs/                  requirements, architecture, case study, decisions
 - [0005](docs/decisions/0005-phone-over-tailscale.md) The phone reaches the app over Tailscale.
 - [0006](docs/decisions/0006-database-on-the-mac.md) The database stays on the Mac.
 - [0007](docs/decisions/0007-fine-tune-in-pytorch.md) The fine-tune uses PyTorch on a free GPU.
+- [0008](docs/decisions/0008-reading-engine.md) Pages are read with Apple's built-in text recognition.
+- [0009](docs/decisions/0009-extraction-model-and-runtime.md) Fields are filled by a small vision model reading the page image.
+- [0010](docs/decisions/0010-fine-tune-path.md) The fine-tune path: LoRA in PyTorch, merged and converted to GGUF for Ollama.
+- [0011](docs/decisions/0011-transcription-model.md) Visits are transcribed with Parakeet, and medicine names are checked before a note is saved.
 
 ## Limitations and next steps
 

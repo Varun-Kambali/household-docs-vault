@@ -28,7 +28,8 @@ flowchart LR
 
 - **Inbox watcher.** Notices a new file in `Inbox`, waits until Drive has finished syncing it, and checks that it opens, is not empty, is a supported type and is not a duplicate (SHA-256).
 - **Job queue.** Jobs are stored in SQLite. One worker runs one model-heavy job at a time so the models fit in 16 GB.
-- **Reader.** On the Mac only. A document model returns text with line positions. A small vision-language model, or a text model after the document model, fills each type's JSON schema. Every output is checked against its schema and by code: dates are real dates, totals add up, card numbers pass the Luhn check. The exact models and the runtime (Ollama or MLX) are chosen by spikes in M1.
+- **Reader.** On the Mac only. Apple Vision text recognition, through `ocrmac`, returns each page's text with line positions ([ADR 0008](decisions/0008-reading-engine.md)). qwen3-vl:4b, run through Ollama, reads the page image and fills the type's JSON schema ([ADR 0009](decisions/0009-extraction-model-and-runtime.md)); qwen3:4b on the OCR text is the fallback. Every output is checked against its schema and by code: dates are real dates, totals add up, card numbers pass the Luhn check.
+- **Transcriber.** On the Mac only. Parakeet TDT 0.6B v2, through `parakeet-mlx`, turns a visit recording into a timestamped transcript. Each medicine name in the draft checkup is matched against that visit's prescription and a list of known medicine names, and a name that matches neither waits for my confirmation ([ADR 0011](decisions/0011-transcription-model.md)).
 - **Secrets split.** Card numbers, CVV, PINs and passwords are taken out of the reader's output and written to `Secrets.kdbx`. The rest continues to the filer. A card photo is stored as a protected attachment in its KeePass entry and a masked copy is filed.
 - **Filer.** Copies the file to its folder, confirms the copy's fingerprint, writes the record JSON, updates the database and index, then clears `Inbox`. Undo moves the file back and removes the record.
 - **Index.** SQLite full-text search for keywords (policy numbers, serial numbers) and a vector index in the same database for meaning.
@@ -86,3 +87,7 @@ The reasoning behind the main choices is in `docs/decisions/`:
 - 0005 The phone reaches the app over Tailscale
 - 0006 The database stays on the Mac
 - 0007 The fine-tune uses PyTorch on a free GPU
+- 0008 Pages are read with Apple's built-in text recognition
+- 0009 Fields are filled by a small vision model reading the page image
+- 0010 The fine-tune path: LoRA in PyTorch, merged and converted to GGUF for Ollama
+- 0011 Visits are transcribed with Parakeet, and medicine names are checked before a note is saved

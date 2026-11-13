@@ -33,15 +33,22 @@ The decisions that matter, each with the alternative that lost:
 - **Database on the Mac.** Sync tools corrupt live database files. [ADR 0006](decisions/0006-database-on-the-mac.md).
 - **Fine-tune in PyTorch.** I train the fine-tune in PyTorch with LoRA on a free Colab or Kaggle GPU, because that is what the job listings ask for. [ADR 0007](decisions/0007-fine-tune-in-pytorch.md).
 
+The first milestone measured the models before any app code was written, each against a rule set before the run:
+
+- **Reading pages with Apple's built-in text recognition.** It found 96.1% of the true lines on phone photos at 0.22 s a page. PaddleOCR was as accurate but took 10.8 s a page and 6.2 GB of memory. [ADR 0008](decisions/0008-reading-engine.md).
+- **A vision model fills the fields.** qwen3-vl:4b reading the page image got 94.2% of fields exactly right on photos, against 86.7% for a text model reading the OCR output. The text model took 6.2 s a document against 35.0 s (medians), but filing runs in the background, so I took the accuracy. [ADR 0009](decisions/0009-extraction-model-and-runtime.md).
+- **The fine-tune path works before the fine-tune.** A 20-step LoRA run on the Mac went all the way to a converted model that Ollama loads and that reads a held-out page, so M6 starts from a path that works. [ADR 0010](decisions/0010-fine-tune-path.md).
+- **Medicine names are checked, not trusted.** Neither speech model got every medicine right in any of the five test visits, so a draft checkup's medicines are matched against the prescription and a list of known names, and I confirm the rest. [ADR 0011](decisions/0011-transcription-model.md).
+
 Models only fill fixed schemas and code checks every output. Text inside a document is data and never an instruction.
 
 ## Results
 [Table copied from `evals/results/summary.md` once M2 produces it.]
 
-The two targets set now: 0 secrets found anywhere the app writes, and at most 1 silent misfile per 100 documents in the held-out set. The other targets are set after the M1 spikes. Before v1.0.0 I will run the app on [20 to 30] of my own documents and publish counts only, never a value or a file name.
+The targets are in [docs/requirements.md](requirements.md): among them 0 secrets found anywhere the app writes, at most 1 silent misfile per 100 documents, 92% of fields exactly right on photos, and no medicine saved wrong without my OK. Before v1.0.0 I will run the app on [20 to 30] of my own documents and publish counts only, never a value or a file name.
 
 ## Limits, and what better inputs would change
-The app's tests and scores use synthetic documents, and real Indian layouts differ, so the real-document check at the end is what shows whether the scores hold. The local models have to fit a 16 GB Mac, which caps how large a model the reader can use. Documents are read in English only. Files in Drive are not encrypted, so someone who gets into my Google account can read them; only the secrets file is protected. Better inputs (more real layouts, a larger model) would help the reader, and the design lets the model be swapped without touching the rest.
+The app's tests and scores use synthetic documents, and real Indian layouts differ, so the real-document check at the end is what shows whether the scores hold. The local models have to fit a 16 GB Mac, which caps how large a model the reader can use. Documents are read in English only. Files in Drive are not encrypted, so someone who gets into my Google account can read them; only the secrets file is protected. The first measurements use two documents per type and five text-to-speech visits, too few to rank close models, so M2's full eval set measures the picks again; the voices are also cleaner than a real clinic. Filing a photo document takes a median of 35.0 s and at most 46.8 s on my Mac, because the vision model is slow on a full page. That is fine in the background but means a batch of papers takes minutes. Better inputs (more real layouts, a larger model) would help the reader, and the design lets the model be swapped without touching the rest.
 
 ## What I learned
 [Mine to write once there is something to learn.]
