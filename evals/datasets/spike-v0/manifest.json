@@ -2,6 +2,12 @@
   "set": "spike-v0",
   "seed": 7,
   "per_type": 2,
+  "libraries": {
+    "faker": "40.54.0",
+    "reportlab": "5.1.0",
+    "pillow": "13.0.0",
+    "pypdfium2": "5.15.2"
+  },
   "documents": [
     {
       "doc_id": "health_policy-1-clean",
