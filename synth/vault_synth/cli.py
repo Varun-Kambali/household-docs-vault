@@ -3,6 +3,7 @@
 import argparse
 import json
 import random
+from importlib import metadata
 from pathlib import Path
 from types import ModuleType
 
@@ -39,6 +40,7 @@ TEMPLATES: dict[DocType, ModuleType] = {
     DocType.lab_report: lab_report,
 }
 DPI = 200
+LIBRARIES = ("faker", "reportlab", "pillow", "pypdfium2")
 
 
 def _render(pdf_path: Path) -> Image.Image:
@@ -92,16 +94,18 @@ def generate(set_name: str, per_type: int, seed: int, out: Path) -> list[SynthDo
                     )
                 )
     for d in docs:
-        (out / f"{d.doc_id}.json").write_text(d.model_dump_json(indent=2) + "\n")
+        assert_safe_path(out / f"{d.doc_id}.json").write_text(d.model_dump_json(indent=2) + "\n")
     manifest = {
         "set": set_name,
         "seed": seed,
         "per_type": per_type,
+        # Drawing and fake data move with these; the truth files are what stays comparable.
+        "libraries": {name: metadata.version(name) for name in LIBRARIES},
         "documents": [
             {"doc_id": d.doc_id, "doc_type": d.doc_type.value, "files": d.files} for d in docs
         ],
     }
-    (out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    assert_safe_path(out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     return docs
 
 

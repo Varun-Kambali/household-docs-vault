@@ -59,3 +59,23 @@ TEST_CARD_NUMBERS: frozenset[str] = frozenset(
         "3056930009020004",  # Diners
     }
 )
+
+
+_GSTIN_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+
+def gstin_check_char(first14: str) -> str:
+    """The published GSTIN check character: mod-36 sum with weights 1, 2, 1, 2 and so on."""
+    total = 0
+    for i, ch in enumerate(first14):
+        product = _GSTIN_CHARS.index(ch) * (1 if i % 2 == 0 else 2)
+        total += product // 36 + product % 36
+    return _GSTIN_CHARS[(36 - total % 36) % 36]
+
+
+def gstin_valid(gstin: str) -> bool:
+    return (
+        len(gstin) == 15
+        and all(c in _GSTIN_CHARS for c in gstin)
+        and gstin[14] == gstin_check_char(gstin[:14])
+    )

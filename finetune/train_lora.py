@@ -208,6 +208,9 @@ def main() -> None:
     m.add_argument("--adapter", type=Path, default=Path("finetune/out/adapter"))
     m.add_argument("--out", type=Path, default=Path("finetune/out/merged"))
     args = ap.parse_args()
+    for name in ("model", "data", "set", "adapter"):
+        if hasattr(args, name):
+            setattr(args, name, assert_safe_path(getattr(args, name)))
     train(args) if args.cmd == "train" else merge(args)
 
 

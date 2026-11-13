@@ -19,8 +19,9 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
     s.put("GOVT. OF INDIA", 510, 18, 11, font="Helvetica-Bold", color="#1d3a6e", align="r")
     s.put("Permanent Account Number Card", 30, 40, 9, color=GREY)
 
-    # ZZ and a P in fourth place: the shape of a real personal PAN, but in a block of letters
-    # reserved here for specimens.
+    # ZZ and a P in fourth place: the shape of a real personal PAN, following a pattern only this
+    # project uses. The tax department does not reserve ZZ, so a real PAN could in principle look
+    # the same; the SPECIMEN line on the page is what marks it as synthetic.
     initial = holder.split()[-1][0]
     number = f"ZZ{data.letters(rng, 1)}P{initial}{data.digits(rng, 4)}{data.letters(rng, 1)}"
     s.put("Permanent Account Number", 30, 80, 8, color=GREY)

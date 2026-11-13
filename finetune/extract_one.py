@@ -37,6 +37,8 @@ def main() -> None:
     ap.add_argument("--data", type=Path, default=Path("finetune/data"))
     ap.add_argument("--set", type=Path, default=Path("evals/datasets/spike-v0"))
     args = ap.parse_args()
+    args.data = assert_safe_path(args.data)
+    args.set = assert_safe_path(args.set)
     doc = first_test_doc(args.data, args.set)
     schema = SCHEMAS[doc.doc_type]
     cand = OllamaCandidate(args.model, "vision", doc_type=doc.doc_type.value)

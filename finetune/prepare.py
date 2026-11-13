@@ -98,7 +98,7 @@ def prepare(
             for d in by_base[base]
         ]
         start += size
-        (out / f"{name}.jsonl").write_text(
+        assert_safe_path(out / f"{name}.jsonl").write_text(
             "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows)
         )
         counts[name] = len(rows)
@@ -111,6 +111,7 @@ def main() -> None:
     ap.add_argument("--out", type=Path, default=Path("finetune/data"))
     ap.add_argument("--seed", type=int, default=7)
     args = ap.parse_args()
+    args.set = assert_safe_path(args.set)
     print(json.dumps(prepare(args.set, args.out, DEFAULT_SPLIT, args.seed)))
 
 

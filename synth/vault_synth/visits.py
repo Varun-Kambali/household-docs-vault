@@ -190,10 +190,11 @@ def build(out_dir: Path, scripts_dir: Path = SCRIPTS) -> dict[str, Any]:
     for n, path in enumerate(script_paths(scripts_dir), 1):
         visit_id = f"visit_{n}"
         visit = load_visit(path)
-        (out_dir / f"{visit_id}.json").write_text(
+        assert_safe_path(out_dir / f"{visit_id}.json").write_text(
             json.dumps(truth_record(visit_id, visit), indent=2, ensure_ascii=False) + "\n"
         )
-        stats = render(visit.lines, visit.speakers, audio_dir / f"{visit_id}.flac", NOISE_SEED + n)
+        flac = assert_safe_path(audio_dir / f"{visit_id}.flac")
+        stats = render(visit.lines, visit.speakers, flac, NOISE_SEED + n)
         visits[visit_id] = {
             "title": visit.title,
             "voices": visit.speakers,
@@ -202,7 +203,7 @@ def build(out_dir: Path, scripts_dir: Path = SCRIPTS) -> dict[str, Any]:
         }
         print(f"{visit_id}: {stats['duration_seconds']} s")
     warm = [Line(speaker="doctor", text=WARMUP_TEXT)]
-    render(warm, {"doctor": "Rishi"}, audio_dir / "warmup.flac", NOISE_SEED)
+    render(warm, {"doctor": "Rishi"}, assert_safe_path(audio_dir / "warmup.flac"), NOISE_SEED)
     manifest = {
         "os": macos_version(),
         "say_rate_wpm": SAY_RATE_WPM,
@@ -215,7 +216,7 @@ def build(out_dir: Path, scripts_dir: Path = SCRIPTS) -> dict[str, Any]:
         "format": "FLAC, mono",
         "visits": visits,
     }
-    (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    assert_safe_path(out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     return manifest
 
 

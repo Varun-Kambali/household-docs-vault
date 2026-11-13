@@ -25,7 +25,7 @@ lint:
 	uv run mypy
 
 test:
-	uv run pytest --cov=src --cov-fail-under=$(COV_MIN)
+	uv run pytest --cov=src --cov=synth --cov-fail-under=$(COV_MIN)
 
 eval:
 	@echo "make eval: added in a later milestone" >&2; exit 1
@@ -39,3 +39,4 @@ run:
 docker:
 	docker build -t household-docs-vault .
 	docker run --rm household-docs-vault
+	docker run --rm --entrypoint python household-docs-vault -c "import importlib, pkgutil, household_vault; [importlib.import_module(m.name) for m in pkgutil.walk_packages(household_vault.__path__, 'household_vault.')]; print('imported ok', household_vault.__version__)"
