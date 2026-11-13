@@ -180,6 +180,7 @@ def main() -> None:
     ap.add_argument("--worker", choices=list(CANDIDATES))
     ap.add_argument("--out", type=Path)
     args = ap.parse_args()
+    args.set = assert_safe_path(args.set)
     if args.worker:
         assert_safe_path(args.out).write_text(json.dumps(worker(args.worker, args.set)))
         return

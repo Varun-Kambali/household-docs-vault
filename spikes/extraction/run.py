@@ -229,7 +229,7 @@ def main() -> None:
     ap.add_argument("--model", action="append", choices=list(CANDIDATES))
     ap.add_argument("--limit", type=int, help="first N documents only, for a smoke run")
     args = ap.parse_args()
-    dataset = args.set
+    dataset = assert_safe_path(args.set)
     paths = sorted(dataset.glob("*-clean.json")) + sorted(dataset.glob("*-photo.json"))
     docs = [SynthDoc.model_validate_json(p.read_text()) for p in paths]
     if args.limit:

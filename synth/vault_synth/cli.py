@@ -92,7 +92,7 @@ def generate(set_name: str, per_type: int, seed: int, out: Path) -> list[SynthDo
                     )
                 )
     for d in docs:
-        (out / f"{d.doc_id}.json").write_text(d.model_dump_json(indent=2) + "\n")
+        assert_safe_path(out / f"{d.doc_id}.json").write_text(d.model_dump_json(indent=2) + "\n")
     manifest = {
         "set": set_name,
         "seed": seed,
@@ -101,7 +101,7 @@ def generate(set_name: str, per_type: int, seed: int, out: Path) -> list[SynthDo
             {"doc_id": d.doc_id, "doc_type": d.doc_type.value, "files": d.files} for d in docs
         ],
     }
-    (out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    assert_safe_path(out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     return docs
 
 
