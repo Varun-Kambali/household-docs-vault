@@ -4,6 +4,7 @@ from faker import Faker
 from reportlab.pdfbase import pdfmetrics
 
 from vault_synth import data
+from vault_synth.checks import gstin_valid
 from vault_synth.sheet import Sheet, Truth
 from vault_synth.templates._kit import GREY, row
 
@@ -29,7 +30,13 @@ STATE_CODES = {
 
 def _gstin(rng: random.Random, state: str) -> str:
     pan_part = f"{data.letters(rng, 5)}{data.digits(rng, 4)}{data.letters(rng, 1)}"
-    return f"{STATE_CODES[state]}{pan_part}1Z{rng.choice('ABCDEFG0123456789')}"
+    body = f"{STATE_CODES[state]}{pan_part}1Z"
+    # Draw the check character as before, but never keep one that passes the public GSTIN
+    # checksum, so no generated number can be a valid GSTIN (about 1 draw in 17 would be).
+    while True:
+        gstin = body + rng.choice("ABCDEFG0123456789")
+        if not gstin_valid(gstin):
+            return gstin
 
 
 def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
