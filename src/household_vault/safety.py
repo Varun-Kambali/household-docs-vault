@@ -8,6 +8,7 @@ from pathlib import Path
 # macOS exposes the data volume under this prefix as well (an APFS firmlink), and resolve() does
 # not rewrite it, so "/System/Volumes/Data/Users/me" and "/Users/me" are the same folder.
 _FIRMLINK = "/System/Volumes/Data"
+_FIRMLINK_FOLDED = _FIRMLINK.casefold()
 
 _BLOCKED_UNDER_HOME = (
     "Library/CloudStorage",
@@ -20,10 +21,18 @@ class UnsafePathError(ValueError):
     """The path points at real documents or at a cloud-synced folder."""
 
 
+def _pwd_home() -> Path | None:
+    """The home folder the password database lists for this user (ignores $HOME)."""
+    with contextlib.suppress(KeyError):
+        return Path(pwd.getpwuid(os.getuid()).pw_dir)
+    return None
+
+
 def _homes() -> list[Path]:
     homes = [Path(os.path.expanduser("~"))]
-    with contextlib.suppress(KeyError):
-        homes.append(Path(pwd.getpwuid(os.getuid()).pw_dir))
+    pwd_home = _pwd_home()
+    if pwd_home is not None:
+        homes.append(pwd_home)
     seen: list[Path] = []
     for home in homes:
         if home not in seen:
@@ -40,11 +49,12 @@ def _blocked_roots() -> list[Path]:
 
 
 def _fold(path: Path) -> Path:
-    text = str(path)
-    if text == _FIRMLINK or text.startswith(_FIRMLINK + "/"):
-        text = text[len(_FIRMLINK) :] or "/"
-    # Case-fold: the Mac's default APFS ignores case, so "library/cloudstorage" is the same folder.
-    return Path(text.casefold())
+    # Case-fold first: the Mac's default APFS ignores case, so "library/cloudstorage" is the same
+    # folder, and so is "/system/volumes/data". Strip the firmlink prefix after folding.
+    text = str(path).casefold()
+    if text == _FIRMLINK_FOLDED or text.startswith(_FIRMLINK_FOLDED + "/"):
+        text = text[len(_FIRMLINK_FOLDED) :] or "/"
+    return Path(text)
 
 
 def _same_file(a: Path, b: Path) -> bool:

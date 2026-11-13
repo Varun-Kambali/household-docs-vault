@@ -7,7 +7,25 @@ import pytest
 from vault_synth.cli import generate
 from vault_synth.model import SynthDoc
 
+from household_vault import safety
 from household_vault.doctypes import DocType
+
+
+@pytest.fixture(autouse=True)
+def fake_homes(tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """Point $HOME and the password-database home at temp folders for every test.
+
+    The path guard stats folders under the home's Library; no test may look at the real one.
+    Returns the $HOME folder; the password-database home is a sibling called "pwd-home".
+    """
+    base = tmp_path_factory.mktemp("homes")
+    home, pwd_home = base / "home", base / "pwd-home"
+    home.mkdir()
+    pwd_home.mkdir()
+    monkeypatch.setenv("HOME", str(home))
+    monkeypatch.delenv("VAULT_REAL_ROOT", raising=False)
+    monkeypatch.setattr(safety, "_pwd_home", lambda: pwd_home)
+    return home
 
 
 @pytest.fixture(scope="session")
