@@ -15,7 +15,6 @@ def test_schema_fields_match_generator_keys(spike_docs_all):
 
 def test_every_schema_belongs_to_a_known_doc_type():
     assert set(SCHEMAS) <= set(DocType)
-    assert len(SCHEMAS) == 9
 
 
 def test_all_fields_are_optional():

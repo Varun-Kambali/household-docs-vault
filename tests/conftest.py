@@ -1,5 +1,7 @@
 """Shared fixtures. The spike set is generated once per session (seed 7, two per type)."""
 
+import random
+import string
 from collections.abc import Callable
 from pathlib import Path
 from typing import NoReturn
@@ -9,6 +11,7 @@ from vault_synth.cli import generate
 from vault_synth.model import SynthDoc
 
 from household_vault import safety
+from household_vault.checks import gstin_check_char, verhoeff_valid
 from household_vault.config import load_settings
 from household_vault.doctypes import DocType
 from household_vault.vaultroot import INBOX, NEEDS_A_LOOK, VaultRoot
@@ -71,3 +74,30 @@ class FakeClock:
 
     def __call__(self) -> float:
         return self.t
+
+
+def valid_aadhaar(rng: random.Random | None = None) -> str:
+    """A 12-digit number that passes Verhoeff, built at runtime so no valid one is committed."""
+    rng = rng or random.Random()
+    body = str(rng.randint(2, 9)) + "".join(rng.choice(string.digits) for _ in range(10))
+    return body + next(d for d in string.digits if verhoeff_valid(body + d))
+
+
+def valid_gstin(rng: random.Random | None = None) -> str:
+    """A 15-character GSTIN with its real check character, built at runtime."""
+    rng = rng or random.Random()
+    body = (
+        "29"
+        + "".join(rng.choice(string.ascii_uppercase) for _ in range(5))
+        + "".join(rng.choice(string.digits) for _ in range(4))
+        + rng.choice(string.ascii_uppercase)
+        + "1Z"
+    )
+    return body + gstin_check_char(body)
+
+
+def one_digit_changed(number: str) -> str:
+    """The same number with the digit in the middle moved by one."""
+    i = len(number) // 2
+    assert number[i].isdigit()
+    return number[:i] + str((int(number[i]) + 1) % 10) + number[i + 1 :]
