@@ -1,6 +1,13 @@
 from pydantic import BaseModel, Field
 
-from household_vault.schemas._coerce import Amount, FlexDate, Identifier, Name, Text
+from household_vault.schemas._coerce import (
+    Amount,
+    FlexDate,
+    Identifier,
+    Name,
+    NameItem,
+    Text,
+)
 
 
 class Policy(BaseModel):
@@ -8,7 +15,7 @@ class Policy(BaseModel):
     product: Text | None = None
     policy_number: Identifier | None = None
     policyholder: Name | None = None
-    insured: list[str] | None = None
+    insured: list[NameItem] | None = None
     nominee: Name | None = None
     sum_insured: Amount | None = None
     premium: Amount | None = None

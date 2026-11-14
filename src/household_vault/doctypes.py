@@ -1,13 +1,9 @@
 """Every document type the app reads in v1 (design 5.3). Values are stored in the database."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass
 from enum import StrEnum
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:  # the schemas package imports this module, so only the type is imported here
-    from household_vault.schemas._coerce import FieldKind
+from household_vault.fieldkinds import FieldKind
 
 
 class DocType(StrEnum):
@@ -179,30 +175,59 @@ class OwnerRule:
     linked_fields: tuple[str, ...]
 
 
-OWNER: dict[DocType, OwnerRule] = {}
-for _t in AREA:
-    if _t is _D.visit_recording:
-        OWNER[_t] = OwnerRule(False, ("patient",), ())
-    elif AREA[_t] is Area.insurance:
-        if _t is _D.home_policy:
-            OWNER[_t] = OwnerRule(True, (), ("policyholder", "insured"))
-        elif _t is _D.vehicle_policy:
-            OWNER[_t] = OwnerRule(False, ("policyholder",), ("policyholder",))
-        else:
-            OWNER[_t] = OwnerRule(False, ("policyholder",), ("policyholder", "insured"))
-    elif AREA[_t] is Area.purchases:
-        OWNER[_t] = OwnerRule(True, (), ("buyer",))
-    elif AREA[_t] is Area.identity:
-        field = ("parties",) if _t is _D.marriage_certificate else ("holder",)
-        OWNER[_t] = OwnerRule(False, field, field)
-    elif AREA[_t] is Area.cards:
-        OWNER[_t] = OwnerRule(False, ("holder",), ("holder",))
-    elif AREA[_t] is Area.medical:
-        OWNER[_t] = OwnerRule(False, ("patient",), ("patient",))
-    elif AREA[_t] in (Area.property, Area.rent, Area.utilities):
-        OWNER[_t] = OwnerRule(True, (), ("person_name",))
-    else:  # vehicle, work, education, tax
-        OWNER[_t] = OwnerRule(False, ("person_name",), ("person_name",))
+def _rule(types: tuple[DocType, ...], rule: OwnerRule) -> dict[DocType, OwnerRule]:
+    return dict.fromkeys(types, rule)
+
+
+# Every group is listed by name, so a new type without a rule is missing here and the golden
+# test fails, instead of quietly getting a default.
+OWNER: dict[DocType, OwnerRule] = {
+    **_rule(
+        (_D.life_policy, _D.health_policy, _D.travel_policy, _D.gadget_policy, _D.accident_policy),
+        OwnerRule(False, ("policyholder",), ("policyholder", "insured")),
+    ),
+    **_rule((_D.vehicle_policy,), OwnerRule(False, ("policyholder",), ("policyholder",))),
+    **_rule((_D.home_policy,), OwnerRule(True, (), ("policyholder", "insured"))),
+    **_rule(_AREA_TYPES[Area.purchases], OwnerRule(True, (), ("buyer",))),
+    **_rule(
+        (
+            _D.aadhaar,
+            _D.pan,
+            _D.passport,
+            _D.voter_id,
+            _D.driving_licence,
+            _D.birth_certificate,
+        ),
+        OwnerRule(False, ("holder",), ("holder",)),
+    ),
+    **_rule((_D.marriage_certificate,), OwnerRule(False, ("parties",), ("parties",))),
+    **_rule(_AREA_TYPES[Area.cards], OwnerRule(False, ("holder",), ("holder",))),
+    **_rule(
+        (
+            _D.prescription,
+            _D.lab_report,
+            _D.scan_photo,
+            _D.scan_report,
+            _D.discharge_summary,
+            _D.hospital_bill,
+        ),
+        OwnerRule(False, ("patient",), ("patient",)),
+    ),
+    **_rule((_D.visit_recording,), OwnerRule(False, ("patient",), ())),
+    **_rule(
+        (*_AREA_TYPES[Area.property], *_AREA_TYPES[Area.rent], *_AREA_TYPES[Area.utilities]),
+        OwnerRule(True, (), ("person_name",)),
+    ),
+    **_rule(
+        (
+            *_AREA_TYPES[Area.vehicle],
+            *_AREA_TYPES[Area.work],
+            *_AREA_TYPES[Area.education],
+            *_AREA_TYPES[Area.tax],
+        ),
+        OwnerRule(False, ("person_name",), ("person_name",)),
+    ),
+}
 
 # What each light type prints besides person_name, document_date and expiry_date.
 LIGHT_FIELDS: dict[DocType, tuple[tuple[str, FieldKind], ...]] = {
@@ -239,61 +264,80 @@ LIGHT_FIELDS: dict[DocType, tuple[tuple[str, FieldKind], ...]] = {
     _D.tax_proof: (("section", "text"), ("amount", "amount")),
 }
 
-DATE_FIELD: dict[DocType, str | None] = {}
-REQUIRED: dict[DocType, frozenset[str]] = {}
-COPY_KEY: dict[DocType, tuple[str, ...]] = {}
-for _t in AREA:
-    _area = AREA[_t]
-    if _area is Area.insurance:
-        DATE_FIELD[_t] = "start_date"
-        REQUIRED[_t] = frozenset({"policy_number", "end_date"})
-        COPY_KEY[_t] = ("policy_number", "start_date")
-        if _t is _D.vehicle_policy:
-            REQUIRED[_t] |= {"registration_number"}
-    elif _t is _D.tax_invoice:
-        DATE_FIELD[_t] = "invoice_date"
-        REQUIRED[_t] = frozenset({"seller", "invoice_date"})
-        COPY_KEY[_t] = ("invoice_number",)
-    elif _t is _D.warranty_card:
-        DATE_FIELD[_t] = "purchase_date"
-        REQUIRED[_t] = frozenset({"brand", "purchase_date"})
-        COPY_KEY[_t] = ("serial_number",)
-    elif _area is Area.purchases:
-        DATE_FIELD[_t] = "purchase_date"
-        REQUIRED[_t] = frozenset({"product", "purchase_date"})
-        COPY_KEY[_t] = ("serial_number", "purchase_date")
-    elif _area is Area.identity:
-        DATE_FIELD[_t] = None if _t in (_D.aadhaar, _D.pan) else "issue_date"
-        if _t is _D.marriage_certificate:
-            REQUIRED[_t] = frozenset({"number"})
-        else:
-            REQUIRED[_t] = frozenset({"holder", "number"})
-        COPY_KEY[_t] = ("number",)
-    elif _t is _D.card_front:
-        DATE_FIELD[_t] = None
-        REQUIRED[_t] = frozenset({"bank", "number"})
-        COPY_KEY[_t] = ("bank", "expiry", "last4")
-    elif _t is _D.card_statement:
-        DATE_FIELD[_t] = "statement_date"
-        REQUIRED[_t] = frozenset({"bank", "last4"})
-        COPY_KEY[_t] = ("last4", "statement_date")
-    elif _area is Area.cards:
-        DATE_FIELD[_t] = None
-        REQUIRED[_t] = frozenset({"bank", "last4"})
-        COPY_KEY[_t] = ("bank", "last4")
-    elif _t is _D.visit_recording:
-        DATE_FIELD[_t] = None
-        REQUIRED[_t] = frozenset()
-        COPY_KEY[_t] = ()
-    elif _area is Area.medical:
-        who = {_D.prescription: "doctor", _D.lab_report: "lab"}.get(_t, "hospital")
-        DATE_FIELD[_t] = "date"
-        REQUIRED[_t] = frozenset({"patient", "date"})
-        COPY_KEY[_t] = ("patient", "date", who)
-    else:
-        DATE_FIELD[_t] = "document_date"
-        REQUIRED[_t] = frozenset({"document_date"})
-        COPY_KEY[_t] = (LIGHT_FIELDS[_t][0][0], "document_date")
+_POLICIES = (
+    _D.life_policy,
+    _D.health_policy,
+    _D.home_policy,
+    _D.travel_policy,
+    _D.gadget_policy,
+    _D.accident_policy,
+)
+_IDENTITY_PLAIN = (_D.aadhaar, _D.pan)
+_IDENTITY_DATED = (_D.passport, _D.voter_id, _D.driving_licence, _D.birth_certificate)
+_SCANS_AND_STAYS = (_D.scan_photo, _D.scan_report, _D.discharge_summary, _D.hospital_bill)
+_LIGHT_TYPES = tuple(t for t in AREA if t in LIGHT)
+
+DATE_FIELD: dict[DocType, str | None] = {
+    **dict.fromkeys((*_POLICIES, _D.vehicle_policy), "start_date"),
+    _D.tax_invoice: "invoice_date",
+    **dict.fromkeys(
+        (_D.warranty_card, _D.extended_warranty, _D.amc, _D.appliance_service_record),
+        "purchase_date",
+    ),
+    **dict.fromkeys(_IDENTITY_PLAIN, None),
+    **dict.fromkeys((*_IDENTITY_DATED, _D.marriage_certificate), "issue_date"),
+    _D.card_front: None,
+    _D.card_statement: "statement_date",
+    _D.card_welcome_letter: None,
+    **dict.fromkeys(
+        (_D.prescription, _D.lab_report, *_SCANS_AND_STAYS),
+        "date",
+    ),
+    _D.visit_recording: None,
+    **dict.fromkeys(_LIGHT_TYPES, "document_date"),
+}
+
+_POLICY_REQUIRED = frozenset({"policy_number", "end_date"})
+_PURCHASE_REQUIRED = frozenset({"product", "purchase_date"})
+_MEDICAL_REQUIRED = frozenset({"patient", "date"})
+REQUIRED: dict[DocType, frozenset[str]] = {
+    **dict.fromkeys(_POLICIES, _POLICY_REQUIRED),
+    _D.vehicle_policy: _POLICY_REQUIRED | {"registration_number"},
+    _D.tax_invoice: frozenset({"seller", "invoice_date"}),
+    _D.warranty_card: frozenset({"brand", "purchase_date"}),
+    **dict.fromkeys(
+        (_D.extended_warranty, _D.amc, _D.appliance_service_record), _PURCHASE_REQUIRED
+    ),
+    **dict.fromkeys((*_IDENTITY_PLAIN, *_IDENTITY_DATED), frozenset({"holder", "number"})),
+    _D.marriage_certificate: frozenset({"number"}),
+    _D.card_front: frozenset({"bank", "number"}),
+    _D.card_statement: frozenset({"bank", "last4"}),
+    _D.card_welcome_letter: frozenset({"bank", "last4"}),
+    **dict.fromkeys((_D.prescription, _D.lab_report, *_SCANS_AND_STAYS), _MEDICAL_REQUIRED),
+    _D.visit_recording: frozenset(),
+    **dict.fromkeys(_LIGHT_TYPES, frozenset({"document_date"})),
+}
+
+_POLICY_KEY = ("policy_number", "start_date")
+_MEDICAL_KEY = ("patient", "date")
+COPY_KEY: dict[DocType, tuple[str, ...]] = {
+    **dict.fromkeys((*_POLICIES, _D.vehicle_policy), _POLICY_KEY),
+    _D.tax_invoice: ("invoice_number",),
+    _D.warranty_card: ("serial_number",),
+    **dict.fromkeys(
+        (_D.extended_warranty, _D.amc, _D.appliance_service_record),
+        ("serial_number", "purchase_date"),
+    ),
+    **dict.fromkeys((*_IDENTITY_PLAIN, *_IDENTITY_DATED, _D.marriage_certificate), ("number",)),
+    _D.card_front: ("bank", "expiry", "last4"),
+    _D.card_statement: ("last4", "statement_date"),
+    _D.card_welcome_letter: ("bank", "last4"),
+    _D.prescription: (*_MEDICAL_KEY, "doctor"),
+    _D.lab_report: (*_MEDICAL_KEY, "lab"),
+    **dict.fromkeys(_SCANS_AND_STAYS, (*_MEDICAL_KEY, "hospital")),
+    _D.visit_recording: (),
+    **{t: (LIGHT_FIELDS[t][0][0], "document_date") for t in _LIGHT_TYPES},
+}
 
 LABEL: dict[DocType, str] = {
     _D.life_policy: "Life policy",

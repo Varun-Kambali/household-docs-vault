@@ -11,3 +11,12 @@ def test_household_file_round_trips(tmp_path):
 def test_by_id():
     h = Household(people=[PersonEntry(id="p1", name="A")])
     assert h.by_id("p1").name == "A"
+
+
+def test_duplicate_person_ids_are_refused_by_id(tmp_path):
+    import pytest
+
+    p = tmp_path / "h.json"
+    p.write_text('{"people": [{"id": "p1", "name": "A"}, {"id": "p1", "name": "B"}]}')
+    with pytest.raises(ValueError, match="p1"):
+        load_household(p)

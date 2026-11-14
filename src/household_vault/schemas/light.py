@@ -6,9 +6,9 @@ from typing import Any
 from pydantic import BaseModel, Field, create_model
 
 from household_vault.doctypes import LIGHT_FIELDS, DocType
+from household_vault.fieldkinds import FieldKind
 from household_vault.schemas._coerce import (
     Amount,
-    FieldKind,
     FlexDate,
     Identifier,
     Name,

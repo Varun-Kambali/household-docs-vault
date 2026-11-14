@@ -1,3 +1,7 @@
+import json
+import typing
+from pathlib import Path
+
 from household_vault.doctypes import (
     AREA,
     AREA_FOLDER,
@@ -14,6 +18,7 @@ from household_vault.doctypes import (
 )
 from household_vault.reasons import PRIORITY, Reason
 from household_vault.schemas import SCHEMAS, light_schema
+from household_vault.schemas._coerce import Kind, field_kind
 
 
 def test_every_type_has_an_area_and_rules():
@@ -74,3 +79,47 @@ def test_purchases_belong_to_home_and_link_the_buyer():
         assert OWNER[t].home and OWNER[t].linked_fields == ("buyer",)
     assert not OWNER[DocType.vehicle_policy].home
     assert OWNER[DocType.registration_certificate].owner_fields == ("person_name",)
+
+
+def _table_rows():
+    return {
+        t.value: {
+            "area": AREA[t].value,
+            "tier": "core" if t in CORE else "light",
+            "home": OWNER[t].home,
+            "owner_fields": list(OWNER[t].owner_fields),
+            "linked_fields": list(OWNER[t].linked_fields),
+            "date_field": DATE_FIELD[t],
+            "required": sorted(REQUIRED[t]),
+            "copy_key": list(COPY_KEY[t]),
+            "subfolder": SUBFOLDER.get(t),
+            "label": LABEL[t],
+        }
+        for t in sorted(set(DocType) - {DocType.other})
+    }
+
+
+def test_tables_match_the_committed_golden_file():
+    golden = json.loads((Path(__file__).parent / "data" / "doctype_tables.json").read_text())
+    assert golden["types"] == _table_rows()
+    assert golden["area_folder"] == {a.value: f for a, f in AREA_FOLDER.items()}
+
+
+def test_date_fields_are_dates_and_people_fields_are_names():
+    for t, schema in SCHEMAS.items():
+        if DATE_FIELD[t] is not None:
+            assert field_kind(schema, DATE_FIELD[t]) == "date"
+        rule = OWNER[t]
+        for name in (*rule.owner_fields, *rule.linked_fields):
+            assert _is_name_kind(schema, name), (t, name)
+
+
+def _is_name_kind(schema, name):
+    if field_kind(schema, name) == "name":
+        return True
+    args = typing.get_args(schema.model_fields[name].annotation)
+    items = [a for a in args if typing.get_origin(a) is list]
+    return bool(items) and any(
+        isinstance(m, Kind) and m.kind == "name"
+        for m in typing.get_args(typing.get_args(items[0])[0])[1:]
+    )

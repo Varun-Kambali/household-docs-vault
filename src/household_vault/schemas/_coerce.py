@@ -9,15 +9,12 @@ import typing
 from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
-from typing import Annotated, Any, Literal, get_args, get_origin
+from typing import Annotated, Any, get_args, get_origin
 
 from pydantic import BaseModel, BeforeValidator
 
 from household_vault.checks import luhn_valid
-
-FieldKind = Literal[
-    "text", "name", "identifier", "aadhaar", "gstin", "address", "date", "amount", "list"
-]
+from household_vault.fieldkinds import FieldKind
 
 # Day first, always. %y follows Python: 69 to 99 are the 1900s.
 _DATE_FORMATS = (
@@ -116,6 +113,13 @@ def to_text(value: Any) -> Any:
     return value
 
 
+def to_text_item(value: Any) -> Any:
+    """A list item must already be text; unlike a single field, a number there is an issue."""
+    if not isinstance(value, str):
+        raise ValueError("not text")
+    return to_text(value)
+
+
 def _digits_only(value: Any) -> str:
     if isinstance(value, int) and not isinstance(value, bool):
         value = str(value)
@@ -153,6 +157,8 @@ class SecretField:
 
 Text = Annotated[str, BeforeValidator(to_text), Kind("text")]
 Name = Annotated[str, BeforeValidator(to_text), Kind("name")]
+NameItem = Annotated[str, BeforeValidator(to_text_item), Kind("name")]
+TextItem = Annotated[str, BeforeValidator(to_text_item), Kind("text")]
 Identifier = Annotated[str, BeforeValidator(to_text), Kind("identifier")]
 AadhaarNumber = Annotated[str, BeforeValidator(to_text), Kind("aadhaar")]
 Gstin = Annotated[str, BeforeValidator(to_text), Kind("gstin")]

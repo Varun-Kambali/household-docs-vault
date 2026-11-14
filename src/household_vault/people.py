@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class PersonEntry(BaseModel):
@@ -13,6 +13,15 @@ class PersonEntry(BaseModel):
 
 class Household(BaseModel):
     people: list[PersonEntry] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _ids_are_unique(self) -> "Household":
+        seen: set[str] = set()
+        for person in self.people:
+            if person.id in seen:
+                raise ValueError(f"two people share the id {person.id!r}")
+            seen.add(person.id)
+        return self
 
     def by_id(self, person_id: str) -> PersonEntry:
         for person in self.people:

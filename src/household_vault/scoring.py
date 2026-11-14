@@ -14,7 +14,8 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from household_vault.schemas._coerce import FieldKind, field_kind, parse_amount, parse_date
+from household_vault.fieldkinds import FieldKind
+from household_vault.schemas._coerce import field_kind, parse_amount, parse_date
 
 
 def normalise(kind: FieldKind, text: str) -> str:

@@ -1,0 +1,1090 @@
+{
+ "area_folder": {
+  "cards": "Cards",
+  "education": "Education",
+  "identity": "Identity",
+  "insurance": "Insurance",
+  "medical": "Medical",
+  "property": "Property",
+  "purchases": "Purchases",
+  "rent": "Rent",
+  "tax": "Tax",
+  "utilities": "Utilities",
+  "vehicle": "Vehicle",
+  "work": "Work"
+ },
+ "types": {
+  "aadhaar": {
+   "area": "identity",
+   "copy_key": [
+    "number"
+   ],
+   "date_field": null,
+   "home": false,
+   "label": "Aadhaar",
+   "linked_fields": [
+    "holder"
+   ],
+   "owner_fields": [
+    "holder"
+   ],
+   "required": [
+    "holder",
+    "number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "accident_policy": {
+   "area": "insurance",
+   "copy_key": [
+    "policy_number",
+    "start_date"
+   ],
+   "date_field": "start_date",
+   "home": false,
+   "label": "Accident policy",
+   "linked_fields": [
+    "policyholder",
+    "insured"
+   ],
+   "owner_fields": [
+    "policyholder"
+   ],
+   "required": [
+    "end_date",
+    "policy_number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "amc": {
+   "area": "purchases",
+   "copy_key": [
+    "serial_number",
+    "purchase_date"
+   ],
+   "date_field": "purchase_date",
+   "home": true,
+   "label": "Maintenance contract",
+   "linked_fields": [
+    "buyer"
+   ],
+   "owner_fields": [],
+   "required": [
+    "product",
+    "purchase_date"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "appliance_service_record": {
+   "area": "purchases",
+   "copy_key": [
+    "serial_number",
+    "purchase_date"
+   ],
+   "date_field": "purchase_date",
+   "home": true,
+   "label": "Service record",
+   "linked_fields": [
+    "buyer"
+   ],
+   "owner_fields": [],
+   "required": [
+    "product",
+    "purchase_date"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "appointment_letter": {
+   "area": "work",
+   "copy_key": [
+    "employer",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Appointment letter",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "appraisal_letter": {
+   "area": "work",
+   "copy_key": [
+    "employer",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Appraisal letter",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "birth_certificate": {
+   "area": "identity",
+   "copy_key": [
+    "number"
+   ],
+   "date_field": "issue_date",
+   "home": false,
+   "label": "Birth certificate",
+   "linked_fields": [
+    "holder"
+   ],
+   "owner_fields": [
+    "holder"
+   ],
+   "required": [
+    "holder",
+    "number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "card_front": {
+   "area": "cards",
+   "copy_key": [
+    "bank",
+    "expiry",
+    "last4"
+   ],
+   "date_field": null,
+   "home": false,
+   "label": "Card",
+   "linked_fields": [
+    "holder"
+   ],
+   "owner_fields": [
+    "holder"
+   ],
+   "required": [
+    "bank",
+    "number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "card_statement": {
+   "area": "cards",
+   "copy_key": [
+    "last4",
+    "statement_date"
+   ],
+   "date_field": "statement_date",
+   "home": false,
+   "label": "Card statement",
+   "linked_fields": [
+    "holder"
+   ],
+   "owner_fields": [
+    "holder"
+   ],
+   "required": [
+    "bank",
+    "last4"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "card_welcome_letter": {
+   "area": "cards",
+   "copy_key": [
+    "bank",
+    "last4"
+   ],
+   "date_field": null,
+   "home": false,
+   "label": "Card welcome letter",
+   "linked_fields": [
+    "holder"
+   ],
+   "owner_fields": [
+    "holder"
+   ],
+   "required": [
+    "bank",
+    "last4"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "certificate": {
+   "area": "education",
+   "copy_key": [
+    "issuer",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Certificate",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "degree": {
+   "area": "education",
+   "copy_key": [
+    "issuer",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Degree",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "discharge_summary": {
+   "area": "medical",
+   "copy_key": [
+    "patient",
+    "date",
+    "hospital"
+   ],
+   "date_field": "date",
+   "home": false,
+   "label": "Discharge summary",
+   "linked_fields": [
+    "patient"
+   ],
+   "owner_fields": [
+    "patient"
+   ],
+   "required": [
+    "date",
+    "patient"
+   ],
+   "subfolder": "Hospital stays",
+   "tier": "core"
+  },
+  "driving_licence": {
+   "area": "identity",
+   "copy_key": [
+    "number"
+   ],
+   "date_field": "issue_date",
+   "home": false,
+   "label": "Driving licence",
+   "linked_fields": [
+    "holder"
+   ],
+   "owner_fields": [
+    "holder"
+   ],
+   "required": [
+    "holder",
+    "number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "encumbrance_certificate": {
+   "area": "property",
+   "copy_key": [
+    "certificate_number",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": true,
+   "label": "Encumbrance certificate",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "experience_letter": {
+   "area": "work",
+   "copy_key": [
+    "employer",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Experience letter",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "extended_warranty": {
+   "area": "purchases",
+   "copy_key": [
+    "serial_number",
+    "purchase_date"
+   ],
+   "date_field": "purchase_date",
+   "home": true,
+   "label": "Extended warranty",
+   "linked_fields": [
+    "buyer"
+   ],
+   "owner_fields": [],
+   "required": [
+    "product",
+    "purchase_date"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "fastag": {
+   "area": "vehicle",
+   "copy_key": [
+    "registration_number",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "FASTag",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "form_16": {
+   "area": "tax",
+   "copy_key": [
+    "employer",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Form 16",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "gadget_policy": {
+   "area": "insurance",
+   "copy_key": [
+    "policy_number",
+    "start_date"
+   ],
+   "date_field": "start_date",
+   "home": false,
+   "label": "Gadget policy",
+   "linked_fields": [
+    "policyholder",
+    "insured"
+   ],
+   "owner_fields": [
+    "policyholder"
+   ],
+   "required": [
+    "end_date",
+    "policy_number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "health_policy": {
+   "area": "insurance",
+   "copy_key": [
+    "policy_number",
+    "start_date"
+   ],
+   "date_field": "start_date",
+   "home": false,
+   "label": "Health policy",
+   "linked_fields": [
+    "policyholder",
+    "insured"
+   ],
+   "owner_fields": [
+    "policyholder"
+   ],
+   "required": [
+    "end_date",
+    "policy_number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "home_policy": {
+   "area": "insurance",
+   "copy_key": [
+    "policy_number",
+    "start_date"
+   ],
+   "date_field": "start_date",
+   "home": true,
+   "label": "Home policy",
+   "linked_fields": [
+    "policyholder",
+    "insured"
+   ],
+   "owner_fields": [],
+   "required": [
+    "end_date",
+    "policy_number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "hospital_bill": {
+   "area": "medical",
+   "copy_key": [
+    "patient",
+    "date",
+    "hospital"
+   ],
+   "date_field": "date",
+   "home": false,
+   "label": "Hospital bill",
+   "linked_fields": [
+    "patient"
+   ],
+   "owner_fields": [
+    "patient"
+   ],
+   "required": [
+    "date",
+    "patient"
+   ],
+   "subfolder": "Hospital stays",
+   "tier": "core"
+  },
+  "itr_acknowledgement": {
+   "area": "tax",
+   "copy_key": [
+    "acknowledgement_number",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "ITR acknowledgement",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "khata": {
+   "area": "property",
+   "copy_key": [
+    "khata_number",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": true,
+   "label": "Khata",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "lab_report": {
+   "area": "medical",
+   "copy_key": [
+    "patient",
+    "date",
+    "lab"
+   ],
+   "date_field": "date",
+   "home": false,
+   "label": "Lab report",
+   "linked_fields": [
+    "patient"
+   ],
+   "owner_fields": [
+    "patient"
+   ],
+   "required": [
+    "date",
+    "patient"
+   ],
+   "subfolder": "Reports",
+   "tier": "core"
+  },
+  "life_policy": {
+   "area": "insurance",
+   "copy_key": [
+    "policy_number",
+    "start_date"
+   ],
+   "date_field": "start_date",
+   "home": false,
+   "label": "Life policy",
+   "linked_fields": [
+    "policyholder",
+    "insured"
+   ],
+   "owner_fields": [
+    "policyholder"
+   ],
+   "required": [
+    "end_date",
+    "policy_number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "marksheet": {
+   "area": "education",
+   "copy_key": [
+    "issuer",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Marksheet",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "marriage_certificate": {
+   "area": "identity",
+   "copy_key": [
+    "number"
+   ],
+   "date_field": "issue_date",
+   "home": false,
+   "label": "Marriage certificate",
+   "linked_fields": [
+    "parties"
+   ],
+   "owner_fields": [
+    "parties"
+   ],
+   "required": [
+    "number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "offer_letter": {
+   "area": "work",
+   "copy_key": [
+    "employer",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Offer letter",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "pan": {
+   "area": "identity",
+   "copy_key": [
+    "number"
+   ],
+   "date_field": null,
+   "home": false,
+   "label": "PAN card",
+   "linked_fields": [
+    "holder"
+   ],
+   "owner_fields": [
+    "holder"
+   ],
+   "required": [
+    "holder",
+    "number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "passport": {
+   "area": "identity",
+   "copy_key": [
+    "number"
+   ],
+   "date_field": "issue_date",
+   "home": false,
+   "label": "Passport",
+   "linked_fields": [
+    "holder"
+   ],
+   "owner_fields": [
+    "holder"
+   ],
+   "required": [
+    "holder",
+    "number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "payslip": {
+   "area": "work",
+   "copy_key": [
+    "employer",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Payslip",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "prescription": {
+   "area": "medical",
+   "copy_key": [
+    "patient",
+    "date",
+    "doctor"
+   ],
+   "date_field": "date",
+   "home": false,
+   "label": "Prescription",
+   "linked_fields": [
+    "patient"
+   ],
+   "owner_fields": [
+    "patient"
+   ],
+   "required": [
+    "date",
+    "patient"
+   ],
+   "subfolder": "Reports",
+   "tier": "core"
+  },
+  "property_tax_receipt": {
+   "area": "property",
+   "copy_key": [
+    "receipt_number",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": true,
+   "label": "Property tax receipt",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "puc_certificate": {
+   "area": "vehicle",
+   "copy_key": [
+    "registration_number",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "PUC certificate",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "registration_certificate": {
+   "area": "vehicle",
+   "copy_key": [
+    "registration_number",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "RC",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "relieving_letter": {
+   "area": "work",
+   "copy_key": [
+    "employer",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Relieving letter",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "rent_agreement": {
+   "area": "rent",
+   "copy_key": [
+    "rent_amount",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": true,
+   "label": "Rent agreement",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "sale_deed": {
+   "area": "property",
+   "copy_key": [
+    "registration_number",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": true,
+   "label": "Sale deed",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "scan_photo": {
+   "area": "medical",
+   "copy_key": [
+    "patient",
+    "date",
+    "hospital"
+   ],
+   "date_field": "date",
+   "home": false,
+   "label": "Scan",
+   "linked_fields": [
+    "patient"
+   ],
+   "owner_fields": [
+    "patient"
+   ],
+   "required": [
+    "date",
+    "patient"
+   ],
+   "subfolder": "Scans",
+   "tier": "core"
+  },
+  "scan_report": {
+   "area": "medical",
+   "copy_key": [
+    "patient",
+    "date",
+    "hospital"
+   ],
+   "date_field": "date",
+   "home": false,
+   "label": "Scan report",
+   "linked_fields": [
+    "patient"
+   ],
+   "owner_fields": [
+    "patient"
+   ],
+   "required": [
+    "date",
+    "patient"
+   ],
+   "subfolder": "Scans",
+   "tier": "core"
+  },
+  "tax_invoice": {
+   "area": "purchases",
+   "copy_key": [
+    "invoice_number"
+   ],
+   "date_field": "invoice_date",
+   "home": true,
+   "label": "Invoice",
+   "linked_fields": [
+    "buyer"
+   ],
+   "owner_fields": [],
+   "required": [
+    "invoice_date",
+    "seller"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "tax_proof": {
+   "area": "tax",
+   "copy_key": [
+    "section",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Tax proof",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "travel_policy": {
+   "area": "insurance",
+   "copy_key": [
+    "policy_number",
+    "start_date"
+   ],
+   "date_field": "start_date",
+   "home": false,
+   "label": "Travel policy",
+   "linked_fields": [
+    "policyholder",
+    "insured"
+   ],
+   "owner_fields": [
+    "policyholder"
+   ],
+   "required": [
+    "end_date",
+    "policy_number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "utility_bill": {
+   "area": "utilities",
+   "copy_key": [
+    "provider",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": true,
+   "label": "Utility bill",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "vehicle_policy": {
+   "area": "insurance",
+   "copy_key": [
+    "policy_number",
+    "start_date"
+   ],
+   "date_field": "start_date",
+   "home": false,
+   "label": "Vehicle policy",
+   "linked_fields": [
+    "policyholder"
+   ],
+   "owner_fields": [
+    "policyholder"
+   ],
+   "required": [
+    "end_date",
+    "policy_number",
+    "registration_number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "vehicle_service_record": {
+   "area": "vehicle",
+   "copy_key": [
+    "registration_number",
+    "document_date"
+   ],
+   "date_field": "document_date",
+   "home": false,
+   "label": "Vehicle service record",
+   "linked_fields": [
+    "person_name"
+   ],
+   "owner_fields": [
+    "person_name"
+   ],
+   "required": [
+    "document_date"
+   ],
+   "subfolder": null,
+   "tier": "light"
+  },
+  "visit_recording": {
+   "area": "medical",
+   "copy_key": [],
+   "date_field": null,
+   "home": false,
+   "label": "Visit recording",
+   "linked_fields": [],
+   "owner_fields": [
+    "patient"
+   ],
+   "required": [],
+   "subfolder": "Recordings",
+   "tier": "core"
+  },
+  "voter_id": {
+   "area": "identity",
+   "copy_key": [
+    "number"
+   ],
+   "date_field": "issue_date",
+   "home": false,
+   "label": "Voter ID",
+   "linked_fields": [
+    "holder"
+   ],
+   "owner_fields": [
+    "holder"
+   ],
+   "required": [
+    "holder",
+    "number"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  },
+  "warranty_card": {
+   "area": "purchases",
+   "copy_key": [
+    "serial_number"
+   ],
+   "date_field": "purchase_date",
+   "home": true,
+   "label": "Warranty card",
+   "linked_fields": [
+    "buyer"
+   ],
+   "owner_fields": [],
+   "required": [
+    "brand",
+    "purchase_date"
+   ],
+   "subfolder": null,
+   "tier": "core"
+  }
+ }
+}

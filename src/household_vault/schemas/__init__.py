@@ -42,9 +42,12 @@ def _schema_for(doc_type: DocType) -> type[BaseModel]:
             return Prescription
         case DocType.lab_report:
             return LabReport
-        case DocType.scan_photo | DocType.scan_report:
-            return MedicalDoc
-        case DocType.discharge_summary | DocType.hospital_bill:
+        case (
+            DocType.scan_photo
+            | DocType.scan_report
+            | DocType.discharge_summary
+            | DocType.hospital_bill
+        ):
             return MedicalDoc
     if doc_type in (
         DocType.life_policy,

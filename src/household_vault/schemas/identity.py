@@ -1,6 +1,13 @@
 from pydantic import BaseModel
 
-from household_vault.schemas._coerce import AadhaarNumber, Address, FlexDate, Identifier, Name
+from household_vault.schemas._coerce import (
+    AadhaarNumber,
+    Address,
+    FlexDate,
+    Identifier,
+    Name,
+    NameItem,
+)
 
 
 class IdentityDoc(BaseModel):
@@ -12,7 +19,7 @@ class IdentityDoc(BaseModel):
     issue_date: FlexDate | None = None
     expiry_date: FlexDate | None = None
     address: Address | None = None
-    parties: list[str] | None = None
+    parties: list[NameItem] | None = None
 
 
 class Aadhaar(BaseModel):
