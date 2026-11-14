@@ -42,9 +42,9 @@ def load_page(set_dir: Path, name: str, max_pixels: int) -> Any:
 
     src = set_dir / name
     if src.suffix == ".pdf":
-        import pypdfium2 as pdfium
+        from household_vault.reading.render import render_page
 
-        img = pdfium.PdfDocument(str(src))[0].render(scale=DPI / 72).to_pil().convert("RGB")
+        img = render_page(src.read_bytes(), 0, dpi=DPI)
     else:
         img = Image.open(src).convert("RGB")
     if img.width * img.height > max_pixels:

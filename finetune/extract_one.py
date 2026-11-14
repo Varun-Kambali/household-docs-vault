@@ -18,10 +18,10 @@ from pathlib import Path
 from vault_synth.model import SynthDoc
 
 from finetune.stages import PeakRss, write_stage
+from household_vault.reading.prompt import schema_json
 from household_vault.safety import assert_safe_path
 from household_vault.schemas import SCHEMAS
 from spikes.extraction.candidates import OllamaCandidate
-from spikes.extraction.prompt import schema_json
 from spikes.extraction.run import _render_pdf
 from spikes.extraction.score import score_doc
 
