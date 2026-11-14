@@ -47,6 +47,7 @@ _NOFOLLOW = getattr(os, "O_NOFOLLOW_ANY", os.O_NOFOLLOW)
 _RENAME_EXCL = 0x00000004
 _BIDI_CONTROLS = frozenset(
     {
+        0x061C,
         0x200E,
         0x200F,
         *range(0x202A, 0x202F),
@@ -249,12 +250,22 @@ class VaultRoot:
     def _create_exclusive(self, path: Path, rel: str) -> int:
         # A leftover from an earlier stop is ours to replace; a link planted there is removed
         # as a link and never followed.
-        with contextlib.suppress(FileNotFoundError):
+        try:
             os.unlink(path)
+        except (FileNotFoundError, NotADirectoryError):
+            pass
+        except (PermissionError, IsADirectoryError):
+            raise VaultPathError(
+                f"{path.name} is a reserved name for a temporary file but is not one: {rel}"
+            ) from None
         try:
             return os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | _NOFOLLOW, 0o600)
         except (FileNotFoundError, NotADirectoryError):
             raise _gone(rel) from None
+        except OSError as exc:
+            if exc.errno == errno.ELOOP:
+                raise _no_link(rel) from None
+            raise
 
     def write_atomic(self, rel: str, data: bytes) -> None:
         target = self.path(rel)
@@ -268,7 +279,7 @@ class VaultRoot:
             os.replace(tmp, target)
             _sync_dir(target.parent)
         finally:
-            with contextlib.suppress(FileNotFoundError):
+            with contextlib.suppress(OSError):
                 os.unlink(tmp)
 
     def append_text(self, rel: str, text: str) -> None:
@@ -328,7 +339,7 @@ class VaultRoot:
             self._place(partial, target, dst)
             _sync_dir(target.parent)
         finally:
-            with contextlib.suppress(FileNotFoundError):
+            with contextlib.suppress(OSError):
                 os.unlink(partial)
 
     def move(self, src: str, dst: str) -> None:
@@ -346,7 +357,7 @@ class VaultRoot:
         target = self._resolve(rel, final_link_ok=True)
         try:
             os.unlink(target)
-        except FileNotFoundError:
+        except (FileNotFoundError, NotADirectoryError):
             raise _gone(rel) from None
         _sync_dir(target.parent)
 
@@ -376,6 +387,12 @@ class VaultRoot:
         else:
             ext = "." + ext
         n = 2
-        while self.exists(f"{folder}/{stem} ({n}){ext}"):
+        while True:
+            suffix = f" ({n}){ext}"
+            room = MAX_NAME_BYTES - len(suffix.encode())
+            # Cut the stem on a character boundary so the result still fits the byte limit.
+            short = stem.encode()[:room].decode(errors="ignore")
+            candidate = f"{short}{suffix}"
+            if not self.exists(f"{folder}/{candidate}"):
+                return candidate
             n += 1
-        return f"{stem} ({n}){ext}"

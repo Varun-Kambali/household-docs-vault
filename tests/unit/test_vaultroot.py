@@ -133,7 +133,7 @@ def test_names_are_limited_to_246_utf8_bytes() -> None:
 
 
 @pytest.mark.parametrize(
-    "name", ["a\x85b", "a\x9fb", "a\u202eb", "a\u2069b", "a\u200fb", "a\u200eb"]
+    "name", ["a\x85b", "a\x9fb", "a\u202eb", "a\u2069b", "a\u200fb", "a\u200eb", "a\u061cb"]
 )
 def test_names_refuse_c1_and_bidi_controls(name: str) -> None:
     with pytest.raises(VaultPathError):
@@ -258,12 +258,20 @@ def test_only_regular_files_can_be_read(vault: VaultRoot) -> None:
     ):
         with pytest.raises(VaultPathError):
             call()
-    with pytest.raises(VaultGone):
-        vault.read_bytes("Home/f/inside")
+    vault.write_atomic("Inbox/s.pdf", b"S")
+    sha = vault.sha256("Inbox/s.pdf")
+    for through_a_file in (
+        lambda: vault.read_bytes("Home/f/inside"),
+        lambda: vault.write_atomic("Home/f/inside", b"x"),
+        lambda: vault.copy_verified("Inbox/s.pdf", "Home/f/inside", sha),
+        lambda: vault.unlink("Home/f/inside"),
+    ):
+        with pytest.raises(VaultGone):
+            through_a_file()
     with pytest.raises(VaultPathError):
         vault.mkdirs("Home/f/inside")
     assert not vault.exists("Inbox/copy")
-    assert {e.name for e in vault.list_dir("Inbox")} == {"pipe"}
+    assert {e.name for e in vault.list_dir("Inbox")} == {"pipe", "s.pdf"}
 
 
 def test_a_symlink_counts_as_a_taken_name(vault: VaultRoot, tmp_path: Path) -> None:
@@ -277,3 +285,72 @@ def test_from_settings_builds_the_root(tmp_path: Path) -> None:
 
     s = load_settings(env={"VAULT_ROOT": str(tmp_path / "v")})
     assert VaultRoot.from_settings(s).root == (tmp_path / "v").resolve()
+
+
+def test_a_folder_swapped_for_a_link_refuses_writes(
+    vault: VaultRoot, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    out = tmp_path / "out"
+    out.mkdir()
+    vault.mkdirs("Home/one")
+    vault.mkdirs("Home/two")
+    vault.write_atomic("Inbox/s.pdf", b"S")
+    sha = vault.sha256("Inbox/s.pdf")
+    real = VaultRoot.path
+
+    def racy(self: VaultRoot, r: str) -> Path:
+        p = real(self, r)
+        folder = p.parent
+        if folder.name in ("one", "two") and not folder.is_symlink():
+            folder.rename(folder.with_name(folder.name + ".real"))
+            folder.symlink_to(out, target_is_directory=True)
+        return p
+
+    monkeypatch.setattr(VaultRoot, "path", racy)
+    with pytest.raises(VaultPathError) as first:
+        vault.write_atomic("Home/one/x.pdf", b"x")
+    with pytest.raises(VaultPathError) as second:
+        vault.copy_verified("Inbox/s.pdf", "Home/two/y.pdf", sha)
+    assert not isinstance(first.value, VaultGone)
+    assert not isinstance(second.value, VaultGone)
+    assert list(out.iterdir()) == []
+
+
+@pytest.mark.skipif(sys.platform != "darwin", reason="renamex_np is macOS only")
+def test_rename_noreplace_is_atomic_without_the_exists_check(
+    vault: VaultRoot, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    vault.write_atomic("Inbox/a", b"A")
+    vault.write_atomic("Home/a", b"USER")
+    (vault.root / "Home" / "dl").symlink_to(tmp_path / "nowhere")
+    monkeypatch.setattr(os.path, "lexists", lambda p: False)
+    monkeypatch.setattr(os, "rename", raise_(AssertionError("fallback rename used")))
+    src = vault.root / "Inbox" / "a"
+    for taken in ("a", "dl"):
+        with pytest.raises(FileExistsError):
+            vr._rename_noreplace(src, vault.root / "Home" / taken)
+    vr._rename_noreplace(src, vault.root / "Home" / "free")
+    assert (vault.root / "Home" / "free").read_bytes() == b"A"
+    assert (vault.root / "Home" / "a").read_bytes() == b"USER"
+
+
+def test_a_folder_at_a_reserved_name_is_a_path_error(vault: VaultRoot) -> None:
+    (vault.root / "Home" / ".x.pdf.tmp").mkdir()
+    (vault.root / "Home" / ".y.pdf.partial").mkdir()
+    vault.write_atomic("Inbox/y.pdf", b"y")
+    with pytest.raises(VaultPathError, match="reserved"):
+        vault.write_atomic("Home/x.pdf", b"x")
+    with pytest.raises(VaultPathError, match="reserved"):
+        vault.copy_verified("Inbox/y.pdf", "Home/y.pdf", vault.sha256("Inbox/y.pdf"))
+
+
+def test_free_name_stays_within_the_name_limit(vault: VaultRoot) -> None:
+    for name in ("a" * 239 + ".pdf", "\u00e9" * 119 + "a.pdf"):
+        assert len(name.encode()) == 243
+        vault.write_atomic(f"Home/{name}", b"x")
+        free = vault.free_name("Home", name)
+        assert len(free.encode()) <= MAX_NAME_BYTES
+        assert free.endswith(" (2).pdf")
+        assert not vault.exists(f"Home/{free}")
+        vault.write_atomic(f"Home/{free}", b"y")
+        assert vault.free_name("Home", name).endswith(" (3).pdf")
