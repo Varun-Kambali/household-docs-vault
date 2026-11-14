@@ -287,6 +287,7 @@ def test_from_settings_builds_the_root(tmp_path: Path) -> None:
     assert VaultRoot.from_settings(s).root == (tmp_path / "v").resolve()
 
 
+@pytest.mark.skipif(sys.platform != "darwin", reason="needs O_NOFOLLOW_ANY, macOS only")
 def test_a_folder_swapped_for_a_link_refuses_writes(
     vault: VaultRoot, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
