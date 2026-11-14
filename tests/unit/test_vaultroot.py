@@ -1,11 +1,20 @@
 import errno
 import os
+import sys
+from collections.abc import Callable
 from pathlib import Path
 
 import pytest
 
-from household_vault.safety import UnsafePathError
-from household_vault.vaultroot import CopyMismatch, VaultGone, VaultPathError, VaultRoot
+from household_vault import vaultroot as vr
+from household_vault.vaultroot import (
+    MAX_NAME_BYTES,
+    CopyMismatch,
+    VaultGone,
+    VaultPathError,
+    VaultRoot,
+    check_component,
+)
 from tests.conftest import raise_
 
 
@@ -58,13 +67,6 @@ def test_copy_and_move_work_where_hard_links_do_not(
     assert vault.read_bytes("Home/a.pdf") == vault.read_bytes("Needs a look/a.pdf")
 
 
-def test_app_mode_allows_cloud_root_dev_mode_does_not(fake_homes: Path) -> None:
-    cloud = fake_homes / "Library/CloudStorage/GoogleDrive-x/My Drive/Family Vault"
-    with pytest.raises(UnsafePathError):
-        VaultRoot(cloud, mode="dev")
-    assert VaultRoot(cloud, mode="app").root == cloud.resolve()
-
-
 def test_append_unlink_mkdirs_and_listing(vault: VaultRoot, tmp_path: Path) -> None:
     vault.mkdirs("_system/log")
     vault.append_text("_system/log/a.csv", "a\n")
@@ -90,3 +92,188 @@ def test_move_of_a_missing_file_and_free_name_without_extension(vault: VaultRoot
     vault.write_atomic("Home/notes", b"x")
     assert vault.free_name("Home", "notes") == "notes (2)"
     assert vault.free_name("Home", "new.pdf") == "new.pdf"
+
+
+@pytest.fixture
+def plant(vault: VaultRoot, monkeypatch: pytest.MonkeyPatch) -> Callable[[str, bytes], None]:
+    """Make a file appear while a copy is between its fsync and its placement."""
+
+    def arm(rel: str, data: bytes) -> None:
+        real = vr._sync_file
+
+        def planting(fd: int) -> None:
+            real(fd)
+            if not vault.exists(rel):
+                (vault.root / rel).write_bytes(data)
+
+        monkeypatch.setattr(vr, "_sync_file", planting)
+
+    return arm
+
+
+def test_unlink_through_a_swapped_root_stays_inside(vault: VaultRoot, tmp_path: Path) -> None:
+    out = tmp_path / "out"
+    (out / "Home").mkdir(parents=True)
+    (out / "Home" / "keep.txt").write_text("outside")
+    vault.root.rename(tmp_path / "vault.real")
+    vault.root.symlink_to(out, target_is_directory=True)
+    for call in (lambda: vault.unlink("Home/keep.txt"), lambda: vault.read_bytes("Home/keep.txt")):
+        with pytest.raises(VaultPathError):
+            call()
+    assert (out / "Home" / "keep.txt").read_text() == "outside"
+
+
+def test_names_are_limited_to_246_utf8_bytes() -> None:
+    assert MAX_NAME_BYTES == 246
+    assert check_component("a" * 246) == "a" * 246
+    assert check_component("\u00e9" * 123) == "\u00e9" * 123
+    for bad in ("a" * 247, "\u00e9" * 124, "\U0001f600" * 62):
+        with pytest.raises(VaultPathError):
+            check_component(bad)
+
+
+@pytest.mark.parametrize(
+    "name", ["a\x85b", "a\x9fb", "a\u202eb", "a\u2069b", "a\u200fb", "a\u200eb"]
+)
+def test_names_refuse_c1_and_bidi_controls(name: str) -> None:
+    with pytest.raises(VaultPathError):
+        check_component(name)
+
+
+def test_a_destination_planted_mid_copy_is_not_replaced(
+    vault: VaultRoot, plant: Callable[[str, bytes], None]
+) -> None:
+    vault.write_atomic("Inbox/a.pdf", b"new")
+    plant("Home/a.pdf", b"user file")
+    with pytest.raises(FileExistsError):
+        vault.copy_verified("Inbox/a.pdf", "Home/a.pdf", vault.sha256("Inbox/a.pdf"))
+    assert vault.read_bytes("Home/a.pdf") == b"user file"
+    assert {e.name for e in vault.list_dir("Home")} == {"a.pdf"}
+
+
+@pytest.mark.skipif(sys.platform != "darwin", reason="renamex_np is macOS only")
+def test_a_destination_planted_before_the_rename_is_not_replaced(
+    vault: VaultRoot, plant: Callable[[str, bytes], None], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(os, "link", raise_(OSError(errno.ENOTSUP, "no hard links")))
+    vault.write_atomic("Inbox/a.pdf", b"new")
+    plant("Home/a.pdf", b"user file")
+    with pytest.raises(FileExistsError):
+        vault.copy_verified("Inbox/a.pdf", "Home/a.pdf", vault.sha256("Inbox/a.pdf"))
+    assert vault.read_bytes("Home/a.pdf") == b"user file"
+    assert {e.name for e in vault.list_dir("Home")} == {"a.pdf"}
+
+
+def test_move_onto_an_existing_name_with_real_hard_links(vault: VaultRoot) -> None:
+    vault.write_atomic("Inbox/a.pdf", b"one")
+    vault.write_atomic("Home/a.pdf", b"two")
+    with pytest.raises(FileExistsError):
+        vault.move("Inbox/a.pdf", "Home/a.pdf")
+    assert vault.read_bytes("Inbox/a.pdf") == b"one"
+    assert vault.read_bytes("Home/a.pdf") == b"two"
+    vault.move("Inbox/a.pdf", "Home/b.pdf")
+    assert not vault.exists("Inbox/a.pdf")
+    assert vault.read_bytes("Home/b.pdf") == b"one"
+
+
+def test_a_new_file_at_the_source_name_survives_a_rename_move(
+    vault: VaultRoot, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(os, "link", raise_(OSError(errno.ENOTSUP, "no hard links")))
+    real = vr._rename_noreplace
+
+    def rename_then_arrive(src: Path, dst: Path) -> None:
+        real(src, dst)
+        src.write_bytes(b"arrived later")
+
+    monkeypatch.setattr(vr, "_rename_noreplace", rename_then_arrive)
+    vault.write_atomic("Inbox/a.pdf", b"first")
+    vault.move("Inbox/a.pdf", "Home/a.pdf")
+    assert vault.read_bytes("Home/a.pdf") == b"first"
+    assert vault.read_bytes("Inbox/a.pdf") == b"arrived later"
+
+
+def test_any_link_failure_falls_back_to_a_rename(
+    vault: VaultRoot, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(os, "link", raise_(OSError(102, "operation not supported on socket")))
+    vault.write_atomic("Inbox/a.pdf", b"x")
+    vault.copy_verified("Inbox/a.pdf", "Home/a.pdf", vault.sha256("Inbox/a.pdf"))
+    vault.move("Inbox/a.pdf", "Home/b.pdf")
+    assert vault.read_bytes("Home/b.pdf") == b"x" == vault.read_bytes("Home/a.pdf")
+
+
+def test_planted_links_at_the_temp_names_are_replaced_not_followed(
+    vault: VaultRoot, tmp_path: Path
+) -> None:
+    victim = tmp_path / "victim.txt"
+    victim.write_text("original")
+    (vault.root / "Home" / ".x.pdf.tmp").symlink_to(victim)
+    (vault.root / "Home" / ".y.pdf.partial").symlink_to(victim)
+    vault.write_atomic("Home/x.pdf", b"data")
+    vault.write_atomic("Inbox/y.pdf", b"data")
+    vault.copy_verified("Inbox/y.pdf", "Home/y.pdf", vault.sha256("Inbox/y.pdf"))
+    assert victim.read_text() == "original"
+    assert vault.read_bytes("Home/x.pdf") == vault.read_bytes("Home/y.pdf") == b"data"
+
+
+def _swap_for_link(
+    monkeypatch: pytest.MonkeyPatch, vault: VaultRoot, rel: str, victim: Path
+) -> None:
+    real = VaultRoot.path
+
+    def racy(self: VaultRoot, r: str) -> Path:
+        p = real(self, r)
+        if r == rel and p.exists() and not p.is_symlink():
+            p.unlink()
+            p.symlink_to(victim)
+        return p
+
+    monkeypatch.setattr(VaultRoot, "path", racy)
+
+
+def test_a_link_swapped_in_after_the_check_is_refused(
+    vault: VaultRoot, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    victim = tmp_path / "victim.txt"
+    victim.write_text("original")
+    vault.write_atomic("Inbox/a.pdf", b"x")
+    vault.append_text("Home/log.csv", "a\n")
+    _swap_for_link(monkeypatch, vault, "Inbox/a.pdf", victim)
+    _swap_for_link(monkeypatch, vault, "Home/log.csv", victim)
+    with pytest.raises(VaultPathError):
+        vault.read_bytes("Inbox/a.pdf")
+    with pytest.raises(VaultPathError):
+        vault.append_text("Home/log.csv", "b\n")
+    assert victim.read_text() == "original"
+
+
+def test_only_regular_files_can_be_read(vault: VaultRoot) -> None:
+    os.mkfifo(vault.root / "Inbox" / "pipe")
+    vault.write_atomic("Home/f", b"x")
+    for call in (
+        lambda: vault.read_bytes("Inbox/pipe"),
+        lambda: vault.sha256("Home"),
+        lambda: vault.copy_verified("Home", "Inbox/copy", "0" * 64),
+    ):
+        with pytest.raises(VaultPathError):
+            call()
+    with pytest.raises(VaultGone):
+        vault.read_bytes("Home/f/inside")
+    with pytest.raises(VaultPathError):
+        vault.mkdirs("Home/f/inside")
+    assert not vault.exists("Inbox/copy")
+    assert {e.name for e in vault.list_dir("Inbox")} == {"pipe"}
+
+
+def test_a_symlink_counts_as_a_taken_name(vault: VaultRoot, tmp_path: Path) -> None:
+    (vault.root / "Home" / "ln").symlink_to(tmp_path)
+    assert vault.exists("Home/ln")
+    assert vault.free_name("Home", "ln") == "ln (2)"
+
+
+def test_from_settings_builds_the_root(tmp_path: Path) -> None:
+    from household_vault.config import load_settings
+
+    s = load_settings(env={"VAULT_ROOT": str(tmp_path / "v")})
+    assert VaultRoot.from_settings(s).root == (tmp_path / "v").resolve()

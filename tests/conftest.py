@@ -9,6 +9,7 @@ from vault_synth.cli import generate
 from vault_synth.model import SynthDoc
 
 from household_vault import safety
+from household_vault.config import load_settings
 from household_vault.doctypes import DocType
 from household_vault.vaultroot import INBOX, NEEDS_A_LOOK, VaultRoot
 
@@ -47,7 +48,7 @@ def spike_docs(spike_docs_all: list[SynthDoc]) -> Callable[[DocType], list[Synth
 @pytest.fixture
 def vault(tmp_path: Path) -> VaultRoot:
     """A development vault on a temp folder, with Inbox, Needs a look and Home made."""
-    root = VaultRoot(tmp_path / "vault", mode="dev")
+    root = VaultRoot.from_settings(load_settings(env={"VAULT_ROOT": str(tmp_path / "vault")}))
     for rel in (INBOX, NEEDS_A_LOOK, "Home"):
         root.mkdirs(rel)
     return root

@@ -1,20 +1,34 @@
 """The vault root: the only door through which `src` touches vault files.
 
-Every path is a `/`-separated string relative to the root. A path is checked part by part, no
-part may be a symlink, and every open uses O_NOFOLLOW, so a link dropped into the vault (or a
-path built from document text) cannot lead a read or a write outside it.
+Every path is a `/`-separated string relative to the root. Threat model: paths are checked
+component by component (no `..`, no control characters, no symlink on the way, the result stays
+under the root) and every open refuses symlinks, anywhere in the path on macOS. That covers
+names built from document text and links dropped into the vault by Drive or the phone. A
+process running as the owner can still race a folder swap between the check and the open; this
+app does not defend against that, because such a process already has the owner's access.
+
+Files are never replaced by a copy or a move: they land through a hard link, or where the
+folder refuses hard links (some cloud-sync folders), through a no-replace rename. The names
+`.<name>.tmp` and `.<name>.partial` beside a target are reserved for atomic writes and copies;
+a leftover from an earlier stop is replaced, and a link planted there is removed, not followed.
 """
 
 import contextlib
+import ctypes
 import errno
+import fcntl
 import hashlib
 import os
 import stat
+import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 from household_vault.safety import assert_safe_path
+
+if TYPE_CHECKING:
+    from household_vault.config import Settings
 
 INBOX = "Inbox"
 NEEDS_A_LOOK = "Needs a look"
@@ -23,13 +37,26 @@ LOGS = "_system/log"
 BACKUP = "_system/backup"
 SECRETS_FILE = "Secrets.kdbx"
 
+# A file name is at most 255 UTF-8 bytes; copies add ".<name>.partial" (a dot and ".partial").
+MAX_NAME_BYTES = 246
+
 _CHUNK = 1024 * 1024
-# Where a hard link is not possible (some cloud-sync folders): fall back to a checked rename.
-_NO_LINK = (errno.EPERM, errno.ENOTSUP, errno.EXDEV)
+# O_NOFOLLOW_ANY (macOS) refuses a link anywhere in the path; it replaces O_NOFOLLOW, and the two
+# flags cannot be combined.
+_NOFOLLOW = getattr(os, "O_NOFOLLOW_ANY", os.O_NOFOLLOW)
+_RENAME_EXCL = 0x00000004
+_BIDI_CONTROLS = frozenset(
+    {
+        0x200E,
+        0x200F,
+        *range(0x202A, 0x202F),
+        *range(0x2066, 0x206A),
+    }  # LRM, RLM, embeddings, isolates
+)
 
 
 class VaultPathError(ValueError):
-    """A path the vault refuses: an escape, a bad name or a symlink."""
+    """A path the vault refuses: an escape, a bad name, a symlink or not a regular file."""
 
 
 class CopyMismatch(VaultPathError):
@@ -54,8 +81,16 @@ def check_component(name: str) -> str:
         raise VaultPathError(f"not a usable name: {name!r}")
     if "/" in name or "\\" in name:
         raise VaultPathError(f"a name cannot contain a slash: {name!r}")
-    if any(ord(c) < 32 or ord(c) == 127 for c in name):
-        raise VaultPathError("a name cannot contain control characters")
+    for c in name:
+        n = ord(c)
+        if n < 32 or 0x7F <= n <= 0x9F or n in _BIDI_CONTROLS:
+            raise VaultPathError("a name cannot contain control characters")
+    try:
+        size = len(name.encode("utf-8"))
+    except UnicodeEncodeError:
+        raise VaultPathError("a name must be valid text") from None
+    if size > MAX_NAME_BYTES:
+        raise VaultPathError(f"a name is at most {MAX_NAME_BYTES} bytes in UTF-8, got {size}")
     return name
 
 
@@ -67,10 +102,56 @@ def _no_link(rel: str) -> VaultPathError:
     return VaultPathError(f"refusing a symbolic link in the vault: {rel}")
 
 
+def _sync_file(fd: int) -> None:
+    """Flush a file to the disk itself; on macOS plain fsync stops at the drive's cache."""
+    full = getattr(fcntl, "F_FULLFSYNC", None)
+    if full is not None:
+        try:
+            fcntl.fcntl(fd, full)
+        except OSError:
+            os.fsync(fd)
+        else:
+            return
+    else:
+        os.fsync(fd)
+
+
+def _sync_dir(folder: Path) -> None:
+    """Make a rename, link or unlink in folder durable. Best effort: some folders refuse it."""
+    with contextlib.suppress(OSError):
+        fd = os.open(folder, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+
+
+def _rename_noreplace(src: Path, dst: Path) -> None:
+    """Rename src to dst, raising FileExistsError instead of replacing dst."""
+    if sys.platform == "darwin":
+        libc = ctypes.CDLL(None, use_errno=True)
+        renamex = libc.renamex_np
+        renamex.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint]
+        if renamex(os.fsencode(src), os.fsencode(dst), _RENAME_EXCL) == 0:
+            return
+        err = ctypes.get_errno()
+        if err == errno.EEXIST:
+            raise FileExistsError(errno.EEXIST, "already exists", str(dst))
+        if err not in (errno.ENOTSUP, errno.EINVAL):
+            raise OSError(err, os.strerror(err), str(dst))
+    if os.path.lexists(dst):
+        raise FileExistsError(errno.EEXIST, "already exists", str(dst))
+    os.rename(src, dst)
+
+
 class VaultRoot:
     def __init__(self, root: Path, *, mode: Literal["dev", "app"]) -> None:
         self.mode = mode
         self.root: Path = assert_safe_path(root) if mode == "dev" else root.expanduser().resolve()
+
+    @classmethod
+    def from_settings(cls, settings: "Settings") -> "VaultRoot":
+        return cls(settings.vault_root, mode=settings.mode)
 
     # -- paths ---------------------------------------------------------------------------------
 
@@ -86,11 +167,14 @@ class VaultRoot:
             current = current / part
             try:
                 mode = os.lstat(current).st_mode
-            except FileNotFoundError:
+            except (FileNotFoundError, NotADirectoryError):
                 continue
             if stat.S_ISLNK(mode) and not (final_link_ok and i == len(parts) - 1):
                 raise _no_link(rel)
-        if not current.resolve().is_relative_to(self.root) and not final_link_ok:
+        # A final link is allowed here (to unlink or to name a taken slot), so only the folder
+        # holding it must be inside the root.
+        checked = current.parent if final_link_ok else current
+        if not checked.resolve().is_relative_to(self.root):
             raise VaultPathError(f"path leaves the vault: {rel}")
         return current
 
@@ -99,20 +183,27 @@ class VaultRoot:
         return self._resolve(rel)
 
     def exists(self, rel: str) -> bool:
-        return os.path.lexists(self.path(rel))
+        """True if the name is taken, including by a symlink or a broken one."""
+        return os.path.lexists(self._resolve(rel, final_link_ok=True))
 
     # -- reading -------------------------------------------------------------------------------
 
     def _open_read(self, rel: str) -> int:
         target = self.path(rel)
         try:
-            return os.open(target, os.O_RDONLY | os.O_NOFOLLOW)
+            fd = os.open(target, os.O_RDONLY | _NOFOLLOW | os.O_NONBLOCK)
         except FileNotFoundError:
+            raise _gone(rel) from None
+        except NotADirectoryError:
             raise _gone(rel) from None
         except OSError as exc:
             if exc.errno == errno.ELOOP:
                 raise _no_link(rel) from None
             raise
+        if not stat.S_ISREG(os.fstat(fd).st_mode):
+            os.close(fd)
+            raise VaultPathError(f"not a regular file: {rel}")
+        return fd
 
     def list_dir(self, rel: str) -> list[Entry]:
         folder = self.path(rel)
@@ -161,8 +252,8 @@ class VaultRoot:
         with contextlib.suppress(FileNotFoundError):
             os.unlink(path)
         try:
-            return os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
-        except FileNotFoundError:
+            return os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | _NOFOLLOW, 0o600)
+        except (FileNotFoundError, NotADirectoryError):
             raise _gone(rel) from None
 
     def write_atomic(self, rel: str, data: bytes) -> None:
@@ -173,8 +264,9 @@ class VaultRoot:
             with os.fdopen(fd, "wb") as fh:
                 fh.write(data)
                 fh.flush()
-                os.fsync(fh.fileno())
+                _sync_file(fh.fileno())
             os.replace(tmp, target)
+            _sync_dir(target.parent)
         finally:
             with contextlib.suppress(FileNotFoundError):
                 os.unlink(tmp)
@@ -182,8 +274,8 @@ class VaultRoot:
     def append_text(self, rel: str, text: str) -> None:
         target = self.path(rel)
         try:
-            fd = os.open(target, os.O_WRONLY | os.O_APPEND | os.O_CREAT | os.O_NOFOLLOW, 0o600)
-        except FileNotFoundError:
+            fd = os.open(target, os.O_WRONLY | os.O_APPEND | os.O_CREAT | _NOFOLLOW, 0o600)
+        except (FileNotFoundError, NotADirectoryError):
             raise _gone(rel) from None
         except OSError as exc:
             if exc.errno == errno.ELOOP:
@@ -192,25 +284,30 @@ class VaultRoot:
         with os.fdopen(fd, "a", encoding="utf-8") as fh:
             fh.write(text)
             fh.flush()
-            os.fsync(fh.fileno())
+            _sync_file(fh.fileno())
 
-    def _place(self, source: Path, dst: Path, dst_rel: str) -> None:
-        """Make dst appear as a new name for source without ever replacing a file."""
+    def _place(self, source: Path, dst: Path, dst_rel: str) -> Literal["linked", "renamed"]:
+        """Make dst appear as a new name for source without ever replacing a file.
+
+        Returns "linked" when source still exists afterwards, "renamed" when it is gone.
+        """
         try:
-            os.link(source, dst)
+            os.link(source, dst, follow_symlinks=False)
+            return "linked"
         except FileExistsError:
             raise
-        except FileNotFoundError:
+        except (FileNotFoundError, NotADirectoryError):
             raise _gone(dst_rel) from None
-        except OSError as exc:
-            if exc.errno not in _NO_LINK:
-                raise
-            if os.path.lexists(dst):
-                raise FileExistsError(errno.EEXIST, "already exists", str(dst)) from None
-            os.rename(source, dst)
+        except OSError:
+            # Drive's File Provider folders refuse hard links, with an errno we cannot list.
+            pass
+        try:
+            _rename_noreplace(source, dst)
+        except (FileNotFoundError, NotADirectoryError):
+            raise _gone(dst_rel) from None
+        return "renamed"
 
     def copy_verified(self, src: str, dst: str, sha256: str) -> None:
-        self.path(src)
         target = self.path(dst)
         if os.path.lexists(target):
             raise FileExistsError(errno.EEXIST, "already exists", dst)
@@ -225,10 +322,11 @@ class VaultRoot:
                         digest.update(chunk)
                         writer.write(chunk)
                     writer.flush()
-                    os.fsync(writer.fileno())
+                    _sync_file(writer.fileno())
             if digest.hexdigest() != sha256:
                 raise CopyMismatch(f"the copy of {src} does not match the expected SHA-256")
             self._place(partial, target, dst)
+            _sync_dir(target.parent)
         finally:
             with contextlib.suppress(FileNotFoundError):
                 os.unlink(partial)
@@ -238,10 +336,11 @@ class VaultRoot:
         target = self.path(dst)
         if not os.path.lexists(source):
             raise _gone(src)
-        self._place(source, target, dst)
-        # After a rename fallback the source name is already gone.
-        with contextlib.suppress(FileNotFoundError):
-            os.unlink(source)
+        if self._place(source, target, dst) == "linked":
+            with contextlib.suppress(FileNotFoundError):
+                os.unlink(source)
+        _sync_dir(target.parent)
+        _sync_dir(source.parent)
 
     def unlink(self, rel: str) -> None:
         target = self._resolve(rel, final_link_ok=True)
@@ -249,6 +348,7 @@ class VaultRoot:
             os.unlink(target)
         except FileNotFoundError:
             raise _gone(rel) from None
+        _sync_dir(target.parent)
 
     def mkdirs(self, rel: str) -> None:
         parts = self._parts(rel)
@@ -261,6 +361,7 @@ class VaultRoot:
                     os.mkdir(folder)
                 except FileNotFoundError:
                     raise _gone(rel) from None
+                _sync_dir(folder.parent)
             elif not folder.is_dir():
                 raise VaultPathError(f"not a folder: {'/'.join(parts[:i])}")
 

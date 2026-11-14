@@ -36,7 +36,7 @@ _ENV_NAMES = {
     "host": "VAULT_HOST",
     "port": "VAULT_PORT",
 }
-_PATH_FIELDS = ("vault_root", "db_path", "household_path", "log_dir")
+_PATH_FIELDS = ("vault_root", "db_path", "household_path", "log_dir", "recordings_dir")
 # In app mode these come from the app's own folder, never from the environment.
 _APP_IGNORED = ("vault_root", "db_path", "household_path", "log_dir", "reader")
 
@@ -153,21 +153,41 @@ def load_settings(
     if not app:
         settings = _resolve_dev_paths(settings, src)
 
-    if urlparse(settings.ollama_url).hostname not in _LOCAL_HOSTS:
-        raise ConfigError("OLLAMA_URL must point at this Mac (localhost, 127.0.0.1 or ::1)")
+    _check_ollama_url(settings.ollama_url)
     if settings.host not in _LOCAL_HOSTS and settings.reader != "stand-in":
         raise ConfigError("VAULT_HOST must be localhost, 127.0.0.1 or ::1 when real readers run")
     return settings
+
+
+def _check_ollama_url(url: str) -> None:
+    problem = "OLLAMA_URL must be an http or https URL on this Mac (localhost, 127.0.0.1 or ::1)"
+    if "\\" in url:
+        raise ConfigError(problem)
+    try:
+        parsed = urlparse(url)
+        hostname = parsed.hostname
+        parsed.port  # noqa: B018  (raises ValueError on a bad port)
+    except ValueError:
+        raise ConfigError(problem) from None
+    if parsed.scheme not in ("http", "https") or "@" in parsed.netloc:
+        raise ConfigError(problem)
+    if hostname not in _LOCAL_HOSTS:
+        raise ConfigError(problem)
 
 
 def _resolve_dev_paths(settings: Settings, src: Path | None) -> Settings:
     """Make dev paths absolute against the checkout and run each through the safety guard."""
     resolved: dict[str, Path] = {}
     for field in _PATH_FIELDS:
-        path = getattr(settings, field).expanduser()
+        value: Path | None = getattr(settings, field)
+        if value is None:
+            continue
+        path = value.expanduser()
         if not path.is_absolute():
             if src is None:
-                raise ConfigError("VAULT_ROOT must be an absolute path outside a source checkout")
+                raise ConfigError(
+                    f"{_ENV_NAMES[field]} must be an absolute path outside a source checkout"
+                )
             path = src / path
         resolved[field] = assert_safe_path(path)
     return settings.model_copy(update=resolved)
