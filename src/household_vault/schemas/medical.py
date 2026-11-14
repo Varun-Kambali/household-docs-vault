@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from household_vault.schemas._coerce import FlexDate, Name, Text
+from household_vault.schemas._coerce import Amount, FlexDate, Name, Text, TextItem
 
 
 class Medicine(BaseModel):
@@ -38,3 +38,20 @@ class LabReport(BaseModel):
     patient: Name | None = None
     date: FlexDate | None = None
     tests: list[LabTest] | None = None
+
+
+class MedicalDoc(BaseModel):
+    """Scans, discharge summaries and hospital bills."""
+
+    patient: Name | None = None
+    doctor: Name | None = None
+    date: FlexDate | None = None
+    hospital: Text | None = None
+    department: Text | None = None
+    diagnoses: list[TextItem] | None = None
+    procedures: list[TextItem] | None = None
+    allergies: list[TextItem] | None = None
+    medicines: list[Medicine] | None = None
+    tests: list[LabTest] | None = None
+    next_visit: FlexDate | None = None
+    amount: Amount | None = None

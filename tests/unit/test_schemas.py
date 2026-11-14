@@ -1,3 +1,4 @@
+import typing
 from datetime import date
 from decimal import Decimal
 
@@ -6,6 +7,7 @@ from pydantic import ValidationError
 
 from household_vault.doctypes import DocType
 from household_vault.schemas import SCHEMAS, HealthPolicy, Prescription, VehiclePolicy
+from household_vault.schemas._coerce import Kind, NameItem, TextItem
 
 
 def test_schema_fields_match_generator_keys(spike_docs_all):
@@ -15,7 +17,6 @@ def test_schema_fields_match_generator_keys(spike_docs_all):
 
 def test_every_schema_belongs_to_a_known_doc_type():
     assert set(SCHEMAS) <= set(DocType)
-    assert len(SCHEMAS) == 9
 
 
 def test_all_fields_are_optional():
@@ -51,3 +52,19 @@ def test_insured_is_a_list_and_medicines_are_objects():
 
 def test_vehicle_policy_percent_is_decimal():
     assert VehiclePolicy.model_validate({"ncb_percent": "20%"}).ncb_percent == Decimal(20)
+
+
+def test_list_of_names_is_read_like_a_name_field():
+    from household_vault.schemas import IdentityDoc, MedicalDoc
+    from household_vault.schemas._coerce import field_kind
+
+    assert HealthPolicy.model_fields["insured"].annotation == list[NameItem] | None
+    assert field_kind(HealthPolicy, "insured") == "list"
+    assert HealthPolicy.model_validate({"insured": ["A B"]}).insured == ["A B"]
+    assert IdentityDoc.model_fields["parties"].annotation == list[NameItem] | None
+    assert MedicalDoc.model_fields["allergies"].annotation == list[TextItem] | None
+    for bad in ([1], [None], [["x"]]):
+        with pytest.raises(ValidationError):
+            HealthPolicy.model_validate({"insured": bad})
+    assert typing.get_args(NameItem)[2] == Kind("name")
+    assert typing.get_args(TextItem)[2] == Kind("text")
