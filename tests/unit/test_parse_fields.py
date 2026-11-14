@@ -9,6 +9,7 @@ from household_vault.schemas import (
     Prescription,
     TaxInvoice,
     VehiclePolicy,
+    WarrantyCard,
 )
 from household_vault.schemas._coerce import field_kind, secret_fields
 from household_vault.schemas.parse import mask_card_numbers, parse_fields, parse_json_fields
@@ -119,3 +120,28 @@ def test_field_kinds():
     assert field_kind(TaxInvoice, "gstin") == "gstin"
     assert field_kind(Prescription, "medicines") == "list"
     assert field_kind(LabReport, "tests") == "list"
+
+
+def test_a_bad_list_item_keeps_the_good_ones():
+    p = parse_fields(
+        WarrantyCard,
+        {"warranty_parts": [{"part": "a", "years": 2}, {"part": "b", "years": "two years"}]},
+        mode="dev",
+    )
+    assert p.model.warranty_parts is not None and [x.part for x in p.model.warranty_parts] == ["a"]
+    assert (
+        set(p.issues) == {"warranty_parts[1]"} and "two years" not in p.issues["warranty_parts[1]"]
+    )
+    q = parse_fields(HealthPolicy, {"insured": ["A", 2]}, mode="dev")
+    assert q.model.insured == ["A"] and set(q.issues) == {"insured[1]"}
+
+
+def test_an_all_bad_list_is_none_with_an_issue_per_item():
+    p = parse_fields(HealthPolicy, {"insured": [1, None]}, mode="dev")
+    assert p.model.insured is None and set(p.issues) == {"insured[0]", "insured[1]"}
+
+
+def test_a_non_list_value_for_a_list_field_is_one_issue():
+    p = parse_fields(HealthPolicy, {"insured": "A; B"}, mode="dev")
+    assert p.model.insured is None and set(p.issues) == {"insured"}
+    assert parse_fields(HealthPolicy, {"insured": []}, mode="dev").model.insured == []

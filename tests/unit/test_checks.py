@@ -85,8 +85,10 @@ def test_any_long_run_counts_a_card_that_fails_luhn() -> None:
 
 
 def test_aadhaar_inside_a_card_is_not_reported_twice() -> None:
-    card = _card_like(random.Random(5))
-    kinds = {h.kind for h in find_numbers(card, allow_test_cards=False)}
+    card = _card_like(random.Random(0))
+    assert verhoeff_valid(card[:12])  # a window that would be an Aadhaar number on its own
+    spaced = " ".join(card[i : i + 4] for i in range(0, 16, 4))
+    kinds = {h.kind for h in find_numbers(spaced, allow_test_cards=False)}
     assert kinds == {"card"}
 
 

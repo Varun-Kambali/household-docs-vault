@@ -50,12 +50,25 @@ def parse_fields(schema: type[BaseModel], raw: Any, *, mode: Mode) -> ParsedFiel
     for name in schema.model_fields:
         if name not in raw:
             continue
+        value = raw[name]
+        if field_kind(schema, name) == "list" and isinstance(value, list):
+            kept = []
+            for i, item in enumerate(value):
+                try:
+                    schema.model_validate({name: [item]})
+                except ValidationError as err:
+                    issues[f"{name}[{i}]"] = _reason(err)
+                else:
+                    kept.append(item)
+            if kept or not value:
+                good[name] = kept
+            continue
         try:
-            schema.model_validate({name: raw[name]})
+            schema.model_validate({name: value})
         except ValidationError as err:
             issues[name] = _reason(err)
         else:
-            good[name] = raw[name]
+            good[name] = value
     model = schema.model_validate(good)
     drop: dict[str, str] = {}
     for end, start in _ORDERED_DATES:
