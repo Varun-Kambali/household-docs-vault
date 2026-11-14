@@ -10,6 +10,9 @@ from pathlib import Path
 _FIRMLINK = "/System/Volumes/Data"
 _FIRMLINK_FOLDED = _FIRMLINK.casefold()
 
+# /.vol/<volume id>/<file id> reaches any file by id, around every prefix test below.
+_VOL_PREFIX = "/.vol/"
+
 _BLOCKED_UNDER_HOME = (
     "Library/CloudStorage",
     "Library/Application Support/household-vault",
@@ -67,6 +70,8 @@ def _same_file(a: Path, b: Path) -> bool:
 def assert_safe_path(path: Path) -> Path:
     # resolve() first so "..", symlinks and relative paths cannot sneak past the prefix check
     resolved = path.expanduser().resolve()
+    if str(resolved).casefold().startswith(_VOL_PREFIX):
+        raise UnsafePathError(f"refusing to touch {resolved}: /.vol/ paths bypass the path guard")
     blocked = _blocked_roots()
     folded = _fold(resolved)
     for root in blocked:

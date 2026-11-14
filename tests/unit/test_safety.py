@@ -104,3 +104,8 @@ def test_mixed_case_firmlink_spelling_of_a_missing_root_is_refused(
     spelled = "/system/Volumes/data" + str(real.resolve()) + "/x"
     with pytest.raises(UnsafePathError):
         assert_safe_path(Path(spelled))
+
+
+def test_assert_safe_path_refuses_vol_paths() -> None:
+    with pytest.raises(UnsafePathError):
+        assert_safe_path(Path("/.vol/16777220/2/Family Vault"))
