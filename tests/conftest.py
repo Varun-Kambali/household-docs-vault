@@ -101,3 +101,29 @@ def one_digit_changed(number: str) -> str:
     i = len(number) // 2
     assert number[i].isdigit()
     return number[:i] + str((int(number[i]) + 1) % 10) + number[i + 1 :]
+
+
+def _pdf_bytes(encrypt: str | None = None) -> bytes:
+    import io
+
+    from reportlab.lib.pdfencrypt import StandardEncryption
+    from reportlab.pdfgen import canvas
+
+    buf = io.BytesIO()
+    kwargs = {"encrypt": StandardEncryption(encrypt)} if encrypt else {}
+    pdf = canvas.Canvas(buf, pagesize=(300, 400), **kwargs)
+    pdf.drawString(40, 350, "Synthetic page")
+    pdf.save()
+    return buf.getvalue()
+
+
+@pytest.fixture
+def clean_pdf_bytes() -> bytes:
+    """A one-page PDF with no password."""
+    return _pdf_bytes()
+
+
+@pytest.fixture
+def locked_pdf_bytes() -> bytes:
+    """A one-page PDF that opens only with the password "pw"."""
+    return _pdf_bytes("pw")

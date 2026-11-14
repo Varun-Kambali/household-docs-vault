@@ -11,7 +11,6 @@ runs through `run`, which times it and samples the peak memory of the process an
 from __future__ import annotations
 
 import argparse
-import datetime
 import json
 import subprocess
 import sys
@@ -20,11 +19,11 @@ import time
 from pathlib import Path
 from typing import Any
 
+from household_vault.results import run_meta
 from household_vault.safety import assert_safe_path
 
 OUT = Path("finetune/out")
 RESULTS = Path(__file__).parent / "results"
-MACHINE = "Apple M5, 16 GB"
 SAMPLE_EVERY_S = 0.25
 STAGES = ["prepare", "train", "merge", "convert", "import", "load", "extract"]
 
@@ -102,12 +101,6 @@ def run_command(name: str, cmd: list[str]) -> int:
     return proc.returncode
 
 
-def _commit() -> str:
-    return subprocess.run(
-        ["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, check=True
-    ).stdout.strip()
-
-
 def _order(p: Path) -> tuple[int, str]:
     base = p.stem.split("-")[0]
     return (STAGES.index(base) if base in STAGES else len(STAGES), p.stem)
@@ -117,13 +110,13 @@ def collect(run: str, settings: dict[str, Any]) -> Path:
     stages = {}
     for p in sorted(assert_safe_path(OUT / "stages").glob("*.json"), key=_order):
         stages[p.stem] = json.loads(p.read_text())
-    today = datetime.date.today().isoformat()
-    commit = _commit()
+    meta = run_meta()
+    today, commit = meta.date, meta.commit
     record = {
         "date": today,
         "commit": commit,
         "run": run,
-        "machine": MACHINE,
+        "machine": meta.machine,
         "settings": settings,
         "stages": stages,
     }

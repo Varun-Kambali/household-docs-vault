@@ -12,9 +12,7 @@ before the model loads to the end of the run; MLX runs in-process, so the weight
 from __future__ import annotations
 
 import argparse
-import datetime
 import json
-import platform
 import statistics
 import subprocess
 import sys
@@ -23,11 +21,11 @@ import threading
 import time
 from pathlib import Path
 
+from household_vault.results import run_meta
 from household_vault.safety import assert_safe_path
 from spikes.transcription.candidates import CANDIDATES, timed_load
 from spikes.transcription.score import normalise, score_visit, style_counts
 
-MACHINE = "Apple M5, 16 GB"
 RESULTS = Path(__file__).parent / "results"
 SAMPLE_SECONDS = 0.25
 
@@ -168,10 +166,6 @@ def run_candidate(name: str, dataset: Path) -> dict:
     return body
 
 
-def _git(*args: str) -> str:
-    return subprocess.run(["git", *args], capture_output=True, text=True, check=True).stdout.strip()
-
-
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--set", type=Path, required=True)
@@ -185,20 +179,10 @@ def main() -> None:
         assert_safe_path(args.out).write_text(json.dumps(worker(args.worker, args.set)))
         return
     dataset = assert_safe_path(args.set)
-    commit = _git("rev-parse", "--short", "HEAD")
-    dirty = bool(
-        _git(
-            "status",
-            "--porcelain",
-            "--",
-            "spikes",
-            "synth",
-            "src",
-            ":(exclude,glob)spikes/*/results/**",
-        )
-    )
+    meta = run_meta()
+    commit, dirty = meta.commit, meta.code_dirty
     manifest = json.loads((dataset / "manifest.json").read_text())
-    today = datetime.date.today().isoformat()
+    today = meta.date
     results_dir = assert_safe_path(RESULTS)
     results_dir.mkdir(exist_ok=True)
     for name in args.candidate or list(CANDIDATES):
@@ -211,9 +195,9 @@ def main() -> None:
             "run_label": args.label or "r1",
             "dataset": dataset.name,
             "dataset_os": manifest["os"],
-            "machine": MACHINE,
-            "os": f"macOS {platform.mac_ver()[0]}",
-            "python": platform.python_version(),
+            "machine": meta.machine,
+            "os": meta.os,
+            "python": meta.python,
             **body,
         }
         suffix = f"_{args.label}" if args.label else ""

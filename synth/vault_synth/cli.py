@@ -7,11 +7,11 @@ from importlib import metadata
 from pathlib import Path
 from types import ModuleType
 
-import pypdfium2 as pdfium
 from faker import Faker
 from PIL import Image
 
 from household_vault.doctypes import DocType
+from household_vault.reading.render import render_page
 from household_vault.safety import assert_safe_path
 from vault_synth.model import SynthDoc
 from vault_synth.photo import to_photo
@@ -44,12 +44,7 @@ LIBRARIES = ("faker", "reportlab", "pillow", "pypdfium2")
 
 
 def _render(pdf_path: Path) -> Image.Image:
-    pdf = pdfium.PdfDocument(str(pdf_path))
-    try:
-        image: Image.Image = pdf[0].render(scale=DPI / 72).to_pil().convert("RGB")
-        return image
-    finally:
-        pdf.close()
+    return render_page(pdf_path.read_bytes(), 0, dpi=DPI)
 
 
 def generate(set_name: str, per_type: int, seed: int, out: Path) -> list[SynthDoc]:
@@ -94,7 +89,9 @@ def generate(set_name: str, per_type: int, seed: int, out: Path) -> list[SynthDo
                     )
                 )
     for d in docs:
-        assert_safe_path(out / f"{d.doc_id}.json").write_text(d.model_dump_json(indent=2) + "\n")
+        # ground truth has no OCR confidence; leaving it out keeps the truth files as M1 wrote them
+        text = d.model_dump_json(indent=2, exclude={"lines": {"__all__": {"confidence"}}})
+        assert_safe_path(out / f"{d.doc_id}.json").write_text(text + "\n")
     manifest = {
         "set": set_name,
         "seed": seed,

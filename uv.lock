@@ -1172,8 +1172,10 @@ wheels = [
 name = "household-docs-vault"
 source = { editable = "." }
 dependencies = [
+    { name = "pillow" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "pypdfium2" },
     { name = "python-dotenv" },
 ]
 
@@ -1216,17 +1218,17 @@ spikes = [
 synth = [
     { name = "faker" },
     { name = "numpy" },
-    { name = "pillow" },
     { name = "pydantic" },
-    { name = "pypdfium2" },
     { name = "pyyaml" },
     { name = "reportlab" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "pillow" },
     { name = "pydantic", specifier = ">=2.9" },
     { name = "pydantic-settings", specifier = ">=2.16.3" },
+    { name = "pypdfium2" },
     { name = "python-dotenv", specifier = ">=1.2.4" },
 ]
 
@@ -1269,9 +1271,7 @@ spikes = [
 synth = [
     { name = "faker" },
     { name = "numpy" },
-    { name = "pillow" },
     { name = "pydantic" },
-    { name = "pypdfium2" },
     { name = "pyyaml" },
     { name = "reportlab" },
 ]

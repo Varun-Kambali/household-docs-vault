@@ -22,9 +22,11 @@ from typing import Any
 from pydantic import BaseModel
 from vault_synth.model import SynthDoc
 
+from household_vault.reading.prompt import PROMPT_V1, schema_json, user_prompt
 from household_vault.safety import assert_safe_path
 from household_vault.schemas import SCHEMAS
-from spikes.extraction.prompt import SYSTEM, schema_json, user_prompt
+
+SYSTEM = PROMPT_V1.system
 
 DEFAULT_SPLIT = {"train": 0.7, "val": 0.15, "test": 0.15}
 

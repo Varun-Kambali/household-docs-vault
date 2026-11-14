@@ -5,16 +5,13 @@ from typing import Literal
 from pydantic import BaseModel
 
 from household_vault.doctypes import DocType
+from household_vault.reading.lines import Line
 
+# the one line shape lives in src; synth keeps its old name for it
 Lang = Literal["en", "kn", "hi"]
 
 
-class LineBox(BaseModel):
-    text: str
-    page: int
-    # (x0, y0, x1, y1) as fractions of the page, origin top-left
-    bbox: tuple[float, float, float, float]
-    lang: Lang
+LineBox = Line
 
 
 class SynthDoc(BaseModel):

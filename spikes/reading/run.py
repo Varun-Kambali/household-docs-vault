@@ -6,7 +6,6 @@ uv run python -m spikes.reading.run --set evals/datasets/spike-v0 [--engine NAME
 from __future__ import annotations
 
 import argparse
-import datetime
 import json
 import os
 import statistics
@@ -18,20 +17,18 @@ from pathlib import Path
 
 from vault_synth.model import SynthDoc
 
+from household_vault.reading.render import render_page
+from household_vault.results import run_meta
 from household_vault.safety import assert_safe_path
 from spikes.reading.engines import ENGINES, EngineUnavailable
 from spikes.reading.score import PageScore, score_page
 
 DPI = 200
-MACHINE = "Apple M5, 16 GB"
 RESULTS = Path(__file__).parent / "results"
 
 
 def _render_pdf(pdf: Path, out: Path) -> Path:
-    import pypdfium2 as pdfium
-
-    page = pdfium.PdfDocument(str(pdf))[0]
-    page.render(scale=DPI / 72).to_pil().convert("RGB").save(out)
+    render_page(pdf.read_bytes(), 0, dpi=DPI).save(out)
     return out
 
 
@@ -127,12 +124,6 @@ def run_engine(engine_name: str, dataset: Path) -> dict:
     return body
 
 
-def _commit() -> str:
-    return subprocess.run(
-        ["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, check=True
-    ).stdout.strip()
-
-
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--set", type=Path, required=True)
@@ -144,8 +135,8 @@ def main() -> None:
     if args.worker:
         assert_safe_path(args.out).write_text(json.dumps(worker(args.worker, args.set)))
         return
-    commit = _commit()
-    today = datetime.date.today().isoformat()
+    meta = run_meta()
+    commit, today = meta.commit, meta.date
     results_dir = assert_safe_path(RESULTS)
     results_dir.mkdir(exist_ok=True)
     for name in args.engine or list(ENGINES):
@@ -155,7 +146,7 @@ def main() -> None:
             "engine": name,
             "commit": commit,
             "dataset": args.set.name,
-            "machine": MACHINE,
+            "machine": meta.machine,
             "dpi_clean": DPI,
             **body,
         }

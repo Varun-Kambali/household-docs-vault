@@ -7,11 +7,9 @@ uv run --group spikes python -m spikes.extraction.run --set evals/datasets/spike
 from __future__ import annotations
 
 import argparse
-import datetime
 import json
 import re
 import statistics
-import subprocess
 import tempfile
 import threading
 import time
@@ -21,6 +19,8 @@ from typing import Literal
 
 from vault_synth.model import SynthDoc
 
+from household_vault.reading.render import render_page
+from household_vault.results import run_meta
 from household_vault.safety import assert_safe_path
 from household_vault.schemas import SCHEMAS
 from spikes.extraction.candidates import (
@@ -33,7 +33,6 @@ from spikes.extraction.prompt import PROMPT_VERSION, ocr_to_text, schema_json
 from spikes.extraction.score import DocScore, score_doc
 
 DPI = 200
-MACHINE = "Apple M5, 16 GB"
 DATASET = "spike-v0"
 RESULTS = Path(__file__).parent / "results"
 SAMPLE_EVERY_S = 0.25
@@ -60,10 +59,7 @@ class Prepared:
 
 
 def _render_pdf(pdf: Path, out: Path) -> Path:
-    import pypdfium2 as pdfium
-
-    page = pdfium.PdfDocument(str(pdf))[0]
-    page.render(scale=DPI / 72).to_pil().convert("RGB").save(out)
+    render_page(pdf.read_bytes(), 0, dpi=DPI).save(out)
     return out
 
 
@@ -213,12 +209,6 @@ def summarise(docs: list[SynthDoc], res: CandidateResult) -> dict:
     return out
 
 
-def _commit() -> str:
-    return subprocess.run(
-        ["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, check=True
-    ).stdout.strip()
-
-
 def _file_safe(tag: str) -> str:
     return re.sub(r"[^A-Za-z0-9.-]+", "-", tag)
 
@@ -234,8 +224,8 @@ def main() -> None:
     docs = [SynthDoc.model_validate_json(p.read_text()) for p in paths]
     if args.limit:
         docs = docs[: args.limit]
-    commit = _commit()
-    today = datetime.date.today().isoformat()
+    meta = run_meta()
+    commit, today = meta.commit, meta.date
     results_dir = assert_safe_path(RESULTS)
     results_dir.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp_name:
@@ -253,7 +243,7 @@ def main() -> None:
                 "runtime_version": c.runtime_version,
                 "commit": commit,
                 "dataset": dataset.name,
-                "machine": MACHINE,
+                "machine": meta.machine,
                 "prompt_version": PROMPT_VERSION,
                 "kind": kind,
                 "dpi_clean": DPI,
