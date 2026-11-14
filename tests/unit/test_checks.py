@@ -58,14 +58,19 @@ def test_hit_positions_and_digits() -> None:
 
 def test_finder_ignores_longer_runs_and_floats() -> None:
     aadhaar = valid_aadhaar()
-    for text in (f"7{aadhaar}", f"{aadhaar}8", f"1.{aadhaar}", f"{aadhaar}.5"):
+    # a 13-digit run could pass Luhn by chance, so pick the extra digit that does not
+    before = next(d for d in "1234567" if not luhn_valid(d + aadhaar))
+    after = next(d for d in "1234567" if not luhn_valid(aadhaar + d))
+    for text in (f"{before}{aadhaar}", f"{aadhaar}{after}", f"1.{aadhaar}", f"{aadhaar}.5"):
         assert find_numbers(text, allow_test_cards=False) == []
 
 
 def test_finder_finds_a_number_next_to_other_groups() -> None:
     aadhaar = valid_aadhaar()
     spaced = f"{aadhaar[:4]} {aadhaar[4:8]} {aadhaar[8:]}"
-    hits = find_numbers(f"DOB 1990 {spaced}", allow_test_cards=False)
+    # 16 digits could pass Luhn by chance and then count as a card, so pick a year that does not
+    year = next(y for y in range(1990, 2000) if not luhn_valid(f"{y}{aadhaar}"))
+    hits = find_numbers(f"DOB {year} {spaced}", allow_test_cards=False)
     assert aadhaar in [h.digits for h in hits]
     card = _card_like(random.Random(3))
     dashed = "-".join(card[i : i + 4] for i in range(0, 16, 4))
