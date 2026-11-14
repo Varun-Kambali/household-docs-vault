@@ -2,13 +2,16 @@
 
 from collections.abc import Callable
 from pathlib import Path
+from typing import NoReturn
 
 import pytest
 from vault_synth.cli import generate
 from vault_synth.model import SynthDoc
 
 from household_vault import safety
+from household_vault.config import load_settings
 from household_vault.doctypes import DocType
+from household_vault.vaultroot import INBOX, NEEDS_A_LOOK, VaultRoot
 
 
 @pytest.fixture(autouse=True)
@@ -40,3 +43,31 @@ def spike_docs(spike_docs_all: list[SynthDoc]) -> Callable[[DocType], list[Synth
         return [d for d in spike_docs_all if d.doc_type == doc_type]
 
     return of_type
+
+
+@pytest.fixture
+def vault(tmp_path: Path) -> VaultRoot:
+    """A development vault on a temp folder, with Inbox, Needs a look and Home made."""
+    root = VaultRoot.from_settings(load_settings(env={"VAULT_ROOT": str(tmp_path / "vault")}))
+    for rel in (INBOX, NEEDS_A_LOOK, "Home"):
+        root.mkdirs(rel)
+    return root
+
+
+def raise_(exc: BaseException) -> Callable[..., NoReturn]:
+    """A function that raises exc whatever it is called with."""
+
+    def fail(*args: object, **kwargs: object) -> NoReturn:
+        raise exc
+
+    return fail
+
+
+class FakeClock:
+    """A callable that returns its .t, so a test sets the time by hand."""
+
+    def __init__(self, t: float = 0.0) -> None:
+        self.t = t
+
+    def __call__(self) -> float:
+        return self.t
