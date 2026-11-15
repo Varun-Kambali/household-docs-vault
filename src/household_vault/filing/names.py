@@ -51,15 +51,26 @@ _FALLBACK_FIELDS = (
     "provider",
 )
 _PLACEHOLDER = re.compile(r"\{(\w+)\}")
-_LONG_DIGITS = re.compile(r"\d{9,}")
+# Identifier shapes that must never reach a name, written as the model might have put them
+# into a text field: a GSTIN, a PAN, or nine or more digits with single spaces or hyphens.
+_IDENTIFIER_SHAPES = (
+    re.compile(r"\b\d{2}[A-Z]{5}\d{4}[A-Z][A-Z0-9]{3}\b", re.IGNORECASE),
+    re.compile(r"\b[A-Z]{5}\d{4}[A-Z]\b", re.IGNORECASE),
+    re.compile(r"\d(?:[ \-]?\d){8,}"),
+)
+
+
+def scrub_identifiers(text: str) -> str:
+    """The text with anything shaped like an identifier left out."""
+    for shape in _IDENTIFIER_SHAPES:
+        text = shape.sub(" ", text)
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def _text(value: JsonValue | None) -> str:
-    """A field value as plain text for a name, with any long digit run (an identifier that was
-    read into a text field) left out."""
-    if not isinstance(value, str):
-        return ""
-    return _LONG_DIGITS.sub("", value).strip()
+    """A field value as plain text for a name, without identifiers that were read into a
+    text field."""
+    return scrub_identifiers(value) if isinstance(value, str) else ""
 
 
 def _last4(value: object) -> str | None:
@@ -120,9 +131,9 @@ def clean_component(text: str, max_len: int = 80, max_bytes: int | None = None) 
     cleaned = re.sub(r" +", " ", spaced).lstrip(". ").rstrip(". ")
     if not cleaned:
         return DEFAULT_NAME
-    limit = min(max_len, MAX_NAME_BYTES)
-    cut = cleaned[:limit]
-    while max_bytes is not None and len(cut.encode()) > max_bytes and cut:
+    budget = MAX_NAME_BYTES if max_bytes is None else min(max_bytes, MAX_NAME_BYTES)
+    cut = cleaned[:max_len]
+    while len(cut.encode()) > budget and cut:
         cut = cut[:-1]
     if cut != cleaned and cleaned[len(cut) : len(cut) + 1] != " " and " " in cut:
         cut = cut.rsplit(" ", 1)[0]
@@ -136,13 +147,17 @@ def filed_name(doc_date: date, description: str, ext: str) -> str:
         raise ValueError(f"not a usable extension: {ext!r}")
     prefix, suffix = f"{doc_date.isoformat()} ", f".{ext}"
     room = MAX_NAME_BYTES - len(prefix.encode()) - len(suffix.encode())
-    text = clean_component(description, MAX_DESCRIPTION, max_bytes=room)
+    text = clean_component(scrub_identifiers(description), MAX_DESCRIPTION, max_bytes=room)
     return check_component(f"{prefix}{text}{suffix}")
 
 
 def folder_for(doc_type: DocType, owner: str, household: Household) -> str:
     """`Home` or the person's name, then the area folder, then the subfolder if the type has one."""
-    first = "Home" if owner == "home" else clean_component(household.by_id(owner).name)
+    first = (
+        "Home"
+        if owner == "home"
+        else clean_component(household.by_id(owner).name, max_bytes=MAX_NAME_BYTES)
+    )
     parts = [first, AREA_FOLDER[AREA[doc_type]]]
     if doc_type in SUBFOLDER:
         parts.append(SUBFOLDER[doc_type])

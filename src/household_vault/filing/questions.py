@@ -14,8 +14,24 @@ from household_vault.reasons import PRIORITY, Reason
 
 AnswerKind = Literal["person", "type", "field", "copy", "unlock", "retry", "discard"]
 
-_KEEP_CAPS = frozenset({"Aadhaar"})  # a name, so it keeps its capital mid-sentence
-_AN_ACRONYM = frozenset("FHLMNRSX")  # read out as "ef", "aitch", "el", "em", "en", "ar", "es", "ex"
+_KEEP_CAPS = frozenset({"Aadhaar", "Form 16"})  # a name, so it keeps its capital mid-sentence
+_AN = frozenset(
+    {
+        DocType.accident_policy,
+        DocType.tax_invoice,
+        DocType.extended_warranty,
+        DocType.aadhaar,
+        DocType.encumbrance_certificate,
+        DocType.registration_certificate,
+        DocType.offer_letter,
+        DocType.appointment_letter,
+        DocType.appraisal_letter,
+        DocType.experience_letter,
+        DocType.itr_acknowledgement,
+    }
+)
+# The article for each label, as it is read aloud: "an RC", "a FASTag", "an ITR acknowledgement".
+ARTICLE: dict[DocType, str] = {t: "an" if t in _AN else "a" for t in LABEL}
 
 
 @dataclass(frozen=True)
@@ -45,12 +61,8 @@ def _mid(label: str) -> str:
     return label[:1].lower() + label[1:]
 
 
-def _a(label: str) -> str:
-    """ "a" or "an" before the label, for the first sound."""
-    first = label[:1]
-    acronym = label[:2].isupper() and len(label) > 1
-    an = first in _AN_ACRONYM if acronym else first.lower() in "aeiou"
-    return f"an {label}" if an else f"a {label}"
+def _a(doc_type: DocType) -> str:
+    return f"{ARTICLE[doc_type]} {_mid(LABEL[doc_type])}"
 
 
 def _people(household: Household, first: Sequence[str] = ()) -> list[Option]:
@@ -119,7 +131,7 @@ def question_for(
                 and check.other is not None
             ):
                 pair = (reading.doc_type, check.other)
-                text = f"Is this {_a(_mid(LABEL[pair[0]]))} or {_a(_mid(LABEL[pair[1]]))}?"
+                text = f"Is this {_a(pair[0])} or {_a(pair[1])}?"
                 return Question(reason, text, "type", _types(pair))
             text = (
                 "This page has no English I can read. What kind of document is it?"

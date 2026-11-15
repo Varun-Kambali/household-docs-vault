@@ -140,3 +140,39 @@ def test_every_reason_has_a_question_with_no_emoji_or_dash():
         q = question_for([reason], reading_of(DocType.pan), HOUSEHOLD, {"printed": "K Rao"})
         assert q.reason is reason and q.text
         assert q.text.isascii() and "—" not in q.text
+
+
+_AN = {
+    DocType.accident_policy,
+    DocType.tax_invoice,
+    DocType.extended_warranty,
+    DocType.aadhaar,
+    DocType.encumbrance_certificate,
+    DocType.registration_certificate,
+    DocType.offer_letter,
+    DocType.appointment_letter,
+    DocType.appraisal_letter,
+    DocType.experience_letter,
+    DocType.itr_acknowledgement,
+}
+
+
+def test_every_label_gets_its_article():
+    from household_vault.doctypes import LABEL
+
+    for t in LABEL:
+        if t is DocType.pan:
+            continue
+        r = reading_of(t, type_check=CueCheck("conflicts", DocType.pan))
+        text = question_for([Reason.type_unsure], r, HOUSEHOLD, {}).text
+        article = "an" if t in _AN else "a"
+        assert text.startswith(f"Is this {article} "), text
+        assert text.endswith(" or a PAN card?"), text
+    r = reading_of(DocType.pan, type_check=CueCheck("conflicts", DocType.fastag))
+    assert question_for([Reason.type_unsure], r, HOUSEHOLD, {}).text == (
+        "Is this a PAN card or a FASTag?"
+    )
+    r = reading_of(DocType.utility_bill, type_check=CueCheck("conflicts", DocType.form_16))
+    assert question_for([Reason.type_unsure], r, HOUSEHOLD, {}).text == (
+        "Is this a utility bill or a Form 16?"
+    )

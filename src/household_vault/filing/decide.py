@@ -153,6 +153,12 @@ def decide(
     overrides: Overrides | None = None,
 ) -> Decision:
     ov = overrides or Overrides()
+    if (
+        ov.owner is not None
+        and ov.owner != "home"
+        and all(p.id != ov.owner for p in household.people)
+    ):
+        raise ValueError(f"the owner {ov.owner!r} is not in the household")
     doc_type = ov.doc_type or reading.doc_type
     fields: dict[str, JsonValue] = {**reading.fields, **ov.fields}
     overridden = {base_field(k) for k in ov.fields}
@@ -195,9 +201,7 @@ def decide(
             found.add(Reason.missing_required)
         if with_issue:
             found.add(Reason.field_issue)
-        if doc_type is DocType.card_front and not (
-            "number" in reading.secret_values or _present(fields.get("number"))
-        ):
+        if doc_type is DocType.card_front and last4 is None:
             found.add(Reason.card_unreadable)
         area = AREA[doc_type]
         if owner is not None:

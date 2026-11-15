@@ -111,3 +111,40 @@ def test_folder_for():
         "Ravi Kumar Rao/Vehicle"
     )
     assert folder_for(DocType.prescription, "p3", HOUSEHOLD) == "Kiran Rao/Medical/Reports"
+
+
+IDENTIFIERS = [
+    "1234 5678 9012",
+    "1234-5678-9012",
+    "4111 1111 1111 1111",
+    "4111-1111-1111-1111",
+    "ABCDE1234F",
+    "abcde1234f",
+    "29ABCDE1234F1Z5",
+    "123456789012",
+]
+
+
+@pytest.mark.parametrize("ident", IDENTIFIERS)
+def test_identifiers_in_text_fields_never_reach_a_name(ident):
+    digits = ident.replace(" ", "").replace("-", "")
+    for doc_type, field in (
+        (DocType.aadhaar, "holder"),
+        (DocType.tax_invoice, "seller"),
+        (DocType.tax_invoice, "product"),
+        (DocType.warranty_card, "product"),
+    ):
+        text = describe(doc_type, {field: f"Name {ident}", "seller": "Shop"})
+        assert ident.lower() not in text.lower() and digits[:8].lower() not in text.lower()
+        named = filed_name(date(2026, 1, 2), f"Aadhaar - {ident}", "pdf")
+        assert ident.lower() not in named.lower()
+
+
+def test_person_folders_share_the_byte_budget(vault):
+    from household_vault.people import Household, PersonEntry
+
+    h = Household(people=[PersonEntry(id="p9", name="ರವಿ " * 100)])
+    folder = folder_for(DocType.pan, "p9", h)
+    first = folder.split("/")[0]
+    assert len(first.encode()) <= MAX_NAME_BYTES and first
+    check_component(first)

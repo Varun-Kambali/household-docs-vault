@@ -1,6 +1,7 @@
 """The household file: who lives here, and the other ways their names are printed."""
 
 import re
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -45,7 +46,7 @@ _HONORIFICS = frozenset({"mr", "mrs", "ms", "miss", "dr", "shri", "smt", "sri", 
 
 def normalise_name(name: str) -> str:
     """Casefolded, honorifics dropped, punctuation turned into spaces, spaces collapsed."""
-    words = re.sub(r"[\W_]+", " ", name.casefold()).split()
+    words = re.sub(r"[\W_]+", " ", unicodedata.normalize("NFKC", name).casefold()).split()
     return " ".join(w for w in words if w not in _HONORIFICS)
 
 
@@ -64,7 +65,13 @@ def _is_subsequence(short: list[str], long: list[str]) -> bool:
     return all(token in it for token in short)
 
 
-def _score(printed: list[str], known: list[str]) -> float:
+def _fits_a_middle(token: str, middles: set[str]) -> bool:
+    return any(token == m or (len(token) == 1 and m.startswith(token)) for m in middles)
+
+
+def _score(printed: list[str], known: list[str], middles: set[str]) -> float:
+    """`middles` holds every middle name the person has under any of their names; a printed
+    middle name that is none of them is a different person's name, not a missing middle."""
     if not printed or not known:
         return 0.0
     if printed == known:
@@ -78,7 +85,8 @@ def _score(printed: list[str], known: list[str]) -> float:
         and printed[-1] == known[-1]
     ):
         short, long = sorted((printed[1:-1], known[1:-1]), key=len)
-        if _is_subsequence(short, long):
+        conflict = bool(middles) and not all(_fits_a_middle(t, middles) for t in printed[1:-1])
+        if _is_subsequence(short, long) and not conflict:
             return 0.9
     # earlier tokens line up left to right; the known name may have extra middle tokens
     earlier = zip(printed[:-1], known[:-1], strict=False)
@@ -98,10 +106,9 @@ def match_person(name: str, household: Household) -> PersonMatch:
     best = 0.0
     scores: dict[str, float] = {}
     for person in household.people:
-        top = max(
-            (_score(printed, normalise_name(n).split()) for n in (person.name, *person.aliases)),
-            default=0.0,
-        )
+        names = [normalise_name(n).split() for n in (person.name, *person.aliases)]
+        middles = {t for tokens in names for t in tokens[1:-1]}
+        top = max((_score(printed, tokens, middles) for tokens in names), default=0.0)
         scores[person.id] = top
         best = max(best, top)
     if best < PERSON_MIN:

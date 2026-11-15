@@ -263,3 +263,23 @@ def test_reasons_come_in_priority_order_without_repeats():
     r = reading_of(DocType.pan, holder="Anita Sharma", number=None)
     reasons = decide(r, HOUSEHOLD, TODAY, []).reasons
     assert reasons == [Reason.person_unknown, Reason.missing_required]
+
+
+def test_a_short_card_number_is_unreadable():
+    card = reading_of(
+        DocType.card_front,
+        holder="RAVI K RAO",
+        number=None,
+        secret_values={"number": "12"},
+    )
+    d = decide(card, HOUSEHOLD, TODAY, [])
+    assert d.last4 is None and Reason.card_unreadable in d.reasons
+
+
+def test_an_unknown_owner_override_is_a_value_error():
+    import pytest
+
+    with pytest.raises(ValueError):
+        decide(
+            reading_of(DocType.pan, holder="Ravi Rao"), HOUSEHOLD, TODAY, [], Overrides(owner="p9")
+        )
