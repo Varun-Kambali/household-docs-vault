@@ -144,13 +144,15 @@ def _pdf_bytes(encrypt: str | None = None) -> bytes:
     kwargs = {"encrypt": StandardEncryption(encrypt)} if encrypt else {}
     pdf = canvas.Canvas(buf, pagesize=(300, 400), **kwargs)
     pdf.drawString(40, 350, "Synthetic page")
+    pdf.drawString(40, 330, "Policy schedule for the reader tests")
     pdf.save()
     return buf.getvalue()
 
 
 @pytest.fixture
 def clean_pdf_bytes() -> bytes:
-    """A one-page PDF with no password."""
+    """A one-page PDF with no password. Its second line makes it read as a health policy page
+    with the stand-in models ("policy schedule")."""
     return _pdf_bytes()
 
 
@@ -243,3 +245,20 @@ def reopen(store: Store) -> sqlite3.Connection:
     conn.row_factory = sqlite3.Row
     conn.execute("pragma foreign_keys = on")
     return conn
+
+
+@pytest.fixture(scope="session")
+def photo() -> bytes:
+    """The JPEG bytes of one committed eval-v1 val photo (a health policy)."""
+    return (EVAL_V1 / "health_policy-1-photo.jpg").read_bytes()
+
+
+@pytest.fixture
+def five_page_scan_pdf() -> bytes:
+    """An image-only five-page PDF (no text layer), built with Pillow."""
+    from PIL import Image
+
+    pages = [Image.new("RGB", (300, 400), (255 - 20 * i, 255, 255)) for i in range(5)]
+    buf = io.BytesIO()
+    pages[0].save(buf, format="PDF", save_all=True, append_images=pages[1:])
+    return buf.getvalue()

@@ -17,6 +17,7 @@ dependencies = [
     "python-dotenv>=1.2.4",
     "pypdfium2",
     "pillow",
+    "httpx",
 ]
 
 [project.scripts]
@@ -34,6 +35,10 @@ dev = [
     "pre-commit",
     "jiwer",
     "types-pyyaml",
+]
+# Apple Vision for the reader; macOS only, so the Linux CI image and the Docker image skip it.
+mac = [
+    "ocrmac; sys_platform == 'darwin'",
 ]
 # Generates the synthetic documents; never shipped in the wheel.
 synth = [
@@ -76,7 +81,7 @@ finetune = [
 
 [tool.uv]
 # CI and `make setup` skip the spikes group (macOS-only wheels); `make spikes-setup` adds it; `make finetune-setup` adds the finetune group.
-default-groups = ["dev", "synth"]
+default-groups = ["dev", "synth", "mac"]
 
 [tool.hatch.version]
 path = "src/household_vault/__init__.py"
@@ -99,7 +104,7 @@ plugins = ["pydantic.mypy"]
 files = ["src", "synth"]
 
 [[tool.mypy.overrides]]
-module = ["reportlab", "reportlab.*", "pypdfium2", "pypdfium2.*"]
+module = ["reportlab", "reportlab.*", "pypdfium2", "pypdfium2.*", "ocrmac", "ocrmac.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

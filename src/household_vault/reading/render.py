@@ -7,6 +7,8 @@ import io
 import pypdfium2 as pdfium
 from PIL import Image
 
+from household_vault.reading.lines import Line, line_lang
+
 
 class LockedPdfError(Exception):
     """The PDF needs a password, or the one given is wrong."""
@@ -49,3 +51,35 @@ def png_bytes(image: Image.Image) -> bytes:
     buf = io.BytesIO()
     image.save(buf, format="PNG")
     return buf.getvalue()
+
+
+def text_layer(data: bytes, index: int, password: str | None = None) -> tuple[int, int, list[Line]]:
+    """The page's text layer as (width, height in points, lines), boxes as fractions of the page
+    with the origin top left. Empty when the page has no text layer."""
+    pdf = _open(data, password)
+    try:
+        page = pdf[index]
+        width, height = page.get_size()
+        textpage = page.get_textpage()
+        lines: list[Line] = []
+        for i in range(textpage.count_rects()):
+            left, bottom, right, top = textpage.get_rect(i)
+            text = textpage.get_text_bounded(left, bottom, right, top).strip()
+            if not text or width <= 0 or height <= 0:
+                continue
+            lines.append(
+                Line(
+                    text=text,
+                    page=index,
+                    bbox=(
+                        max(0.0, left / width),
+                        max(0.0, 1 - top / height),
+                        min(1.0, right / width),
+                        min(1.0, 1 - bottom / height),
+                    ),
+                    lang=line_lang(text),
+                )
+            )
+        return round(width), round(height), lines
+    finally:
+        pdf.close()
