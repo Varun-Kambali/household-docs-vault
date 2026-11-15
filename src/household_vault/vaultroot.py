@@ -229,18 +229,30 @@ class VaultRoot:
             raise _gone(rel) from None
         return sorted(entries, key=lambda e: e.name)
 
+    def head_and_size(self, rel: str, n: int) -> tuple[bytes, int]:
+        """The first n bytes of a file and its size, without reading the rest."""
+        fd = self._open_read(rel)
+        with os.fdopen(fd, "rb") as fh:
+            return fh.read(n), os.fstat(fh.fileno()).st_size
+
     def read_bytes(self, rel: str) -> bytes:
         fd = self._open_read(rel)
         with os.fdopen(fd, "rb") as fh:
             return fh.read()
 
     def sha256(self, rel: str) -> str:
+        return self.hash_and_size(rel)[0]
+
+    def hash_and_size(self, rel: str) -> tuple[str, int]:
+        """The SHA-256 and the byte count of one streamed read, so the two always agree."""
         digest = hashlib.sha256()
+        size = 0
         fd = self._open_read(rel)
         with os.fdopen(fd, "rb") as fh:
             while chunk := fh.read(_CHUNK):
                 digest.update(chunk)
-        return digest.hexdigest()
+                size += len(chunk)
+        return digest.hexdigest(), size
 
     # -- writing -------------------------------------------------------------------------------
 
