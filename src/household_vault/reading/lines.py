@@ -23,3 +23,12 @@ class PageText(BaseModel):
     width: int
     height: int
     lines: list[Line]
+
+
+def line_lang(text: str) -> Literal["en", "kn", "hi"]:
+    """The script of a line, by its letters: Kannada or Devanagari if either shows, else en."""
+    kannada = sum("ಀ" <= c <= "೿" for c in text)
+    hindi = sum("ऀ" <= c <= "ॿ" for c in text)
+    if kannada and kannada >= hindi:
+        return "kn"
+    return "hi" if hindi else "en"

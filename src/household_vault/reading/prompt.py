@@ -13,6 +13,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from household_vault.doctypes import LABEL, DocType
 from household_vault.reading.lines import Line
 
 
@@ -32,6 +33,22 @@ PROMPT_V1 = Prompt(
         "Write amounts and percentages as plain numbers, with no currency symbol or commas."
     ),
 )
+
+# The app's prompt: v1 plus two rules from the M1 error review. v1 stays as it was.
+PROMPT_V2 = Prompt(
+    "v2",
+    PROMPT_V1.system
+    + " Write medicine names without the form word printed before them (Tab, Cap, Syp, Inj)."
+    + " Give a list field one item per printed entry.",
+)
+
+CLASSIFY_SYSTEM = (
+    "You sort Indian household documents by type. Read the page text and answer with the one "
+    "type that fits best, or other if none fits."
+)
+
+# How much page text the type call is shown.
+OCR_TEXT_LIMIT = 6000
 
 
 def _flatten(node: Any, defs: dict[str, Any]) -> Any:
@@ -111,3 +128,24 @@ def ocr_to_text(lines: Sequence[Line]) -> str:
                 continue
         rows.append([ln])
     return "\n".join("  ".join(x.text for x in sorted(r, key=lambda x: x.bbox[0])) for r in rows)
+
+
+def classify_schema() -> dict[str, Any]:
+    """One required property, `doc_type`, one of every type the reader can name."""
+    values = [t.value for t in DocType if t is not DocType.visit_recording]
+    return {
+        "type": "object",
+        "properties": {"doc_type": {"type": "string", "enum": values}},
+        "required": ["doc_type"],
+        "additionalProperties": False,
+    }
+
+
+def classify_prompt(ocr_text: str) -> str:
+    types = "\n".join(
+        f"- {t.value}: {LABEL.get(t, 'Other')}" for t in DocType if t is not DocType.visit_recording
+    )
+    return (
+        f"Document types:\n{types}\n\n"
+        f"The text read from the page, top to bottom:\n{ocr_text[:OCR_TEXT_LIMIT]}"
+    )
