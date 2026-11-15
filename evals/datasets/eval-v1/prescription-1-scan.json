@@ -1,0 +1,294 @@
+{
+  "doc_id": "prescription-1-scan",
+  "base_id": "prescription-1",
+  "doc_type": "prescription",
+  "person": "Sathvik Khosla",
+  "variant": "scan",
+  "files": [
+    "prescription-1-scan.pdf"
+  ],
+  "fields": {
+    "hospital": "Hill Park Medical Centre",
+    "doctor": "Dr. Anay Thakur",
+    "patient": "Sathvik Khosla",
+    "date": "2026-09-22",
+    "medicines": [
+      {
+        "name": "Vitamin D3",
+        "dose": "60000 IU",
+        "timing": "1-0-0",
+        "duration": "30 days"
+      },
+      {
+        "name": "Telmisartan",
+        "dose": "40 mg",
+        "timing": "1-1-1",
+        "duration": "3 months"
+      },
+      {
+        "name": "Paracetamol",
+        "dose": "650 mg",
+        "timing": "1-0-0",
+        "duration": "15 days"
+      },
+      {
+        "name": "Metformin",
+        "dose": "500 mg",
+        "timing": "0-0-1",
+        "duration": "30 days"
+      }
+    ],
+    "next_visit": "2026-12-22"
+  },
+  "printed": {
+    "hospital": "Hill Park Medical Centre",
+    "doctor": "Dr. Anay Thakur",
+    "patient": "Sathvik Khosla",
+    "date": "22/09/2026",
+    "medicines": "1. Tab Vitamin D3 60000 IU  1-0-0  30 days\n2. Tab Telmisartan 40 mg  1-1-1  3 months\n3. Tab Paracetamol 650 mg  1-0-0  15 days\n4. Tab Metformin 500 mg  0-0-1  30 days",
+    "next_visit": "22/12/2026"
+  },
+  "lines": [
+    {
+      "text": "Hill Park Medical Centre",
+      "page": 0,
+      "bbox": [
+        0.06857693623124074,
+        0.02240407010227107,
+        0.39019814811536296,
+        0.04717231112872953
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Temple Road, Mysuru",
+      "page": 0,
+      "bbox": [
+        0.0686109115103463,
+        0.0555019220177678,
+        0.23209263205632616,
+        0.06983557961793066
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Anay Thakur",
+      "page": 0,
+      "bbox": [
+        0.06867643124363684,
+        0.11932957809834223,
+        0.23556197431915055,
+        0.13752533353300136
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MBBS, MD (General Medicine)",
+      "page": 0,
+      "bbox": [
+        0.0686982699784499,
+        0.1406043175528229,
+        0.273941104886957,
+        0.1538778625635722
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06874194568379288,
+        0.18315207774207928,
+        0.11534403175176858,
+        0.19519794819228675
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sathvik Khosla",
+      "page": 0,
+      "bbox": [
+        0.16848753046177867,
+        0.1838987616886736,
+        0.2875287068104338,
+        0.19777370814913273
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.6324603353018061,
+        0.18737200860783804,
+        0.6638754000667845,
+        0.19926734180303363
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "22/09/2026",
+      "page": 0,
+      "bbox": [
+        0.6985403302270587,
+        0.18786667583056818,
+        0.7811430607604474,
+        0.2014320041204477
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Age/Sex: 49 / M",
+      "page": 0,
+      "bbox": [
+        0.06876863523464176,
+        0.20915235867992293,
+        0.17522745866971912,
+        0.221626013301724
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rx",
+      "page": 0,
+      "bbox": [
+        0.0688220117011563,
+        0.2611503534272657,
+        0.11560319437466494,
+        0.29006915714173875
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicine, dose, timing, duration",
+      "page": 0,
+      "bbox": [
+        0.151960930801228,
+        0.2759092964893696,
+        0.36283819621354346,
+        0.2890553288492907
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Vitamin D3 60000 IU  1-0-0  30 days",
+      "page": 0,
+      "bbox": [
+        0.15198853786427297,
+        0.3042563416715197,
+        0.5038203782306788,
+        0.3209088899994053
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Telmisartan 40 mg  1-1-1  3 months",
+      "page": 0,
+      "bbox": [
+        0.15201844439795995,
+        0.33496449270826434,
+        0.49774485369930926,
+        0.35151452606503697
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Tab Paracetamol 650 mg  1-0-0  15 days",
+      "page": 0,
+      "bbox": [
+        0.15204834976905005,
+        0.3656714499858299,
+        0.5038664192547058,
+        0.3821986850333043
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4. Tab Metformin 500 mg  0-0-1  30 days",
+      "page": 0,
+      "bbox": [
+        0.1520782539776111,
+        0.3963772135738248,
+        0.4826254245446898,
+        0.4127103335221946
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+      "page": 0,
+      "bbox": [
+        0.06902820595158708,
+        0.462019542621488,
+        0.4775619061617074,
+        0.477388759550134
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit: 22/12/2026",
+      "page": 0,
+      "bbox": [
+        0.06906216232853447,
+        0.4950989805357161,
+        0.25293200355342393,
+        0.5104255274508809
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Signature",
+      "page": 0,
+      "bbox": [
+        0.8580817386402496,
+        0.8781820122189802,
+        0.9215305249458744,
+        0.8900375441912783
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06952528231869408,
+        0.9462586842066052,
+        0.3057770000116023,
+        0.9573681602618558
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "hospital": [
+      0
+    ],
+    "doctor": [
+      2
+    ],
+    "patient": [
+      5
+    ],
+    "date": [
+      7
+    ],
+    "medicines": [
+      11,
+      12,
+      13,
+      14
+    ],
+    "next_visit": [
+      16
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": null,
+  "linked_people": [],
+  "area": "medical",
+  "folder": null,
+  "expected_ask": [
+    "person_unknown"
+  ]
+}

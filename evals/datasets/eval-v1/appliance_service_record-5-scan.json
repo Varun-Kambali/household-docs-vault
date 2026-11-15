@@ -1,0 +1,253 @@
+{
+  "doc_id": "appliance_service_record-5-scan",
+  "base_id": "appliance_service_record-5",
+  "doc_type": "appliance_service_record",
+  "person": "Mrs Kavita Rao",
+  "variant": "scan",
+  "files": [
+    "appliance_service_record-5-scan.pdf"
+  ],
+  "fields": {
+    "brand": "Aurora",
+    "product": "Front-load washing machine",
+    "model": null,
+    "serial_number": "SNMT051063",
+    "seller": "Metro Home Appliances",
+    "seller_location": null,
+    "order_id": null,
+    "buyer": "Mrs Kavita Rao",
+    "purchase_date": "2025-07-26",
+    "amount": null,
+    "invoice_number": null,
+    "period_start": null,
+    "period_end": null,
+    "visits": null,
+    "service_helpline": null
+  },
+  "printed": {
+    "brand": "Aurora",
+    "product": "Front-load washing machine",
+    "serial_number": "SNMT051063",
+    "seller": "Metro Home Appliances",
+    "buyer": "Mrs Kavita Rao",
+    "purchase_date": "26/07/2025"
+  },
+  "lines": [
+    {
+      "text": "Brand",
+      "page": 0,
+      "bbox": [
+        0.0676247508435581,
+        0.13933610011724487,
+        0.10791064168901049,
+        0.15121250045941234
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Aurora",
+      "page": 0,
+      "bbox": [
+        0.33555198883480275,
+        0.13791416965354594,
+        0.39039974710000147,
+        0.15114597143108843
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.06771741391325539,
+        0.16756974673045746,
+        0.11973360873730302,
+        0.179510008461505
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Front-load washing machine",
+      "page": 0,
+      "bbox": [
+        0.33562691469760636,
+        0.1652885184673328,
+        0.5621893970634697,
+        0.17941065586273733
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Serial number",
+      "page": 0,
+      "bbox": [
+        0.06781006477491226,
+        0.19563767151978992,
+        0.16170520095005533,
+        0.20780378846563993
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SNMT051063",
+      "page": 0,
+      "bbox": [
+        0.33570183070060683,
+        0.19417486098381176,
+        0.43885654463562873,
+        0.20767162094025418
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Seller",
+      "page": 0,
+      "bbox": [
+        0.0679027034309411,
+        0.22421646135849477,
+        0.10649163915383797,
+        0.23609384120847499
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Metro Home Appliances",
+      "page": 0,
+      "bbox": [
+        0.3357767368457505,
+        0.2219502723152028,
+        0.5261374533051062,
+        0.23592886739773636
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Buyer",
+      "page": 0,
+      "bbox": [
+        0.06799532988375369,
+        0.25249496528406296,
+        0.10742612370708966,
+        0.2643801674264739
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mrs Kavita Rao",
+      "page": 0,
+      "bbox": [
+        0.33585163313498273,
+        0.2505665919759653,
+        0.4566164469199933,
+        0.2641823959690879
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase date",
+      "page": 0,
+      "bbox": [
+        0.06808794413576112,
+        0.28044790925618734,
+        0.16534021116834105,
+        0.29266276785590645
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "26/07/2025",
+      "page": 0,
+      "bbox": [
+        0.33592651957024877,
+        0.27901273831766077,
+        0.41959765789840237,
+        0.2924322073880199
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Aurora",
+      "page": 0,
+      "bbox": [
+        0.06726942927231427,
+        0.03064821230391007,
+        0.1497537901610774,
+        0.05049028921854685
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Service Report",
+      "page": 0,
+      "bbox": [
+        0.06737758962225926,
+        0.0634824483181779,
+        0.18933015544401283,
+        0.07832925290571091
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06824998972583668,
+        0.32783831595668805,
+        0.5200523372844669,
+        0.34214835564254387
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06830399662307542,
+        0.3441464250807633,
+        0.545953618973551,
+        0.3586410171478742
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07027625949781206,
+        0.9472730503771529,
+        0.30815109711813804,
+        0.9596397906861749
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      1
+    ],
+    "product": [
+      3
+    ],
+    "serial_number": [
+      5
+    ],
+    "seller": [
+      7
+    ],
+    "buyer": [
+      9
+    ],
+    "purchase_date": [
+      11
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "home",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "purchases",
+  "folder": "Home/Purchases",
+  "expected_ask": []
+}

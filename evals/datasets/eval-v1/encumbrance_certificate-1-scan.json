@@ -1,0 +1,164 @@
+{
+  "doc_id": "encumbrance_certificate-1-scan",
+  "base_id": "encumbrance_certificate-1",
+  "doc_type": "encumbrance_certificate",
+  "person": "Ravi Rao",
+  "variant": "scan",
+  "files": [
+    "encumbrance_certificate-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Ravi Rao",
+    "document_date": "2025-11-16",
+    "expiry_date": null,
+    "certificate_number": "CN-83217101"
+  },
+  "printed": {
+    "person_name": "Ravi Rao",
+    "document_date": "16/11/2025",
+    "certificate_number": "CN-83217101"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.06839896481608486,
+        0.13154669218983614,
+        0.10825932070686312,
+        0.1431144514581328
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi Rao",
+      "page": 0,
+      "bbox": [
+        0.33370298157586936,
+        0.13188942819444924,
+        0.4046911823682082,
+        0.1447682120636965
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06847774012632733,
+        0.15947365820708737,
+        0.10006215251957139,
+        0.17103730635282627
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "16/11/2025",
+      "page": 0,
+      "bbox": [
+        0.3338788616586737,
+        0.1597989583069506,
+        0.41690911437522715,
+        0.17269681249180635
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate number",
+      "page": 0,
+      "bbox": [
+        0.06855657318905972,
+        0.18742109830205086,
+        0.1906471711936191,
+        0.1990935748033574
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "CN-83217101",
+      "page": 0,
+      "bbox": [
+        0.3340548706032109,
+        0.18772893684292785,
+        0.4373580847916642,
+        0.2006535664704802
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Office of the Sub-Registrar",
+      "page": 0,
+      "bbox": [
+        0.06809752666456528,
+        0.024682587334144294,
+        0.38422393667500826,
+        0.04430038726038925
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Encumbrance Certificate",
+      "page": 0,
+      "bbox": [
+        0.06818917918544597,
+        0.057174707367084784,
+        0.26778964146693635,
+        0.07151085881115563
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.0686946702069193,
+        0.23637845198276314,
+        0.5171255969096993,
+        0.24838317786725042
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06874074195217784,
+        0.2527115398529443,
+        0.5429701559575311,
+        0.26472906757940856
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07068031852609502,
+        0.9401700803081791,
+        0.3091946212148869,
+        0.9507749342595296
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "certificate_number": [
+      5
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "home",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "property",
+  "folder": "Home/Property",
+  "expected_ask": []
+}

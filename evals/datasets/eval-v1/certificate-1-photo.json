@@ -1,0 +1,191 @@
+{
+  "doc_id": "certificate-1-photo",
+  "base_id": "certificate-1",
+  "doc_type": "certificate",
+  "person": "KIRAN RAO",
+  "variant": "photo",
+  "files": [
+    "certificate-1-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "KIRAN RAO",
+    "document_date": "2026-10-19",
+    "expiry_date": null,
+    "issuer": "Western Ghats University",
+    "credential_id": "CR-91909546"
+  },
+  "printed": {
+    "person_name": "KIRAN RAO",
+    "document_date": "19/10/2026",
+    "issuer": "Western Ghats University",
+    "credential_id": "CR-91909546"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.06787169481321476,
+        0.1489857396574788,
+        0.10550799992698967,
+        0.16102717984864287
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KIRAN RAO",
+      "page": 0,
+      "bbox": [
+        0.31842522818838664,
+        0.1460140723114361,
+        0.40872181839419935,
+        0.1600165543435225
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06890772083081165,
+        0.17737903376788186,
+        0.098741729587574,
+        0.18926804889593818
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "19/10/2026",
+      "page": 0,
+      "bbox": [
+        0.31905173972268236,
+        0.1748189951994668,
+        0.39866230436294947,
+        0.18857234825287594
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Issuer",
+      "page": 0,
+      "bbox": [
+        0.06994030865084835,
+        0.20554033502582286,
+        0.10823367711724029,
+        0.21741526076623438
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats University",
+      "page": 0,
+      "bbox": [
+        0.3196761488910654,
+        0.2025915564981149,
+        0.513532934042413,
+        0.21703239197608115
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credential id",
+      "page": 0,
+      "bbox": [
+        0.07096947536018317,
+        0.23343830217721556,
+        0.14946640958108343,
+        0.24546928059106596
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "CR-91909546",
+      "page": 0,
+      "bbox": [
+        0.3202984662580793,
+        0.23181584816110937,
+        0.4190204156762214,
+        0.2453971662957684
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats University",
+      "page": 0,
+      "bbox": [
+        0.06386809935398566,
+        0.03583737535905268,
+        0.35239222824871497,
+        0.0597701253754996
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Completion",
+      "page": 0,
+      "bbox": [
+        0.06509201862455868,
+        0.07098487207645972,
+        0.25435034264369244,
+        0.08787256032152825
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07276233604472214,
+        0.28122722282994594,
+        0.4958738191858787,
+        0.2943409599843062
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07335765516623127,
+        0.29770883333621945,
+        0.5207770412470079,
+        0.31056883646863015
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.09626544463575538,
+        0.9243936953590829,
+        0.30906773108800867,
+        0.9392096674641286
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "issuer": [
+      5
+    ],
+    "credential_id": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "education",
+  "folder": "Kiran Rao/Education",
+  "expected_ask": []
+}

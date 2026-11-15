@@ -1,0 +1,274 @@
+{
+  "doc_id": "card_welcome_letter-5-photo",
+  "base_id": "card_welcome_letter-5",
+  "doc_type": "card_welcome_letter",
+  "person": "Kavita R Rao",
+  "variant": "photo",
+  "files": [
+    "card_welcome_letter-5-photo.jpg"
+  ],
+  "fields": {
+    "bank": "Deccan Trust Bank",
+    "card_name": "Cashback Select",
+    "network": "American Express",
+    "holder": "Kavita R Rao",
+    "last4": "0005",
+    "statement_date": null,
+    "payment_due_date": null,
+    "total_due": null,
+    "credit_limit": "250000",
+    "annual_fee": "999"
+  },
+  "printed": {
+    "bank": "Deccan Trust Bank",
+    "card_name": "Cashback Select",
+    "network": "American Express",
+    "holder": "Kavita R Rao",
+    "last4": "XXXX XXXX XXXX 0005",
+    "credit_limit": "Rs. 2,50,000",
+    "annual_fee": "Rs. 999"
+  },
+  "lines": [
+    {
+      "text": "Bank",
+      "page": 0,
+      "bbox": [
+        0.10058710771747971,
+        0.14476506056775462,
+        0.13206599509765554,
+        0.1561533328811628
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Deccan Trust Bank",
+      "page": 0,
+      "bbox": [
+        0.34542503478482417,
+        0.14324740342680267,
+        0.4858067493926282,
+        0.15643418503817322
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Card name",
+      "page": 0,
+      "bbox": [
+        0.10122621253223985,
+        0.17194601936244042,
+        0.1693265851993165,
+        0.18345067431442172
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Cashback Select",
+      "page": 0,
+      "bbox": [
+        0.3461584608655058,
+        0.1708754143340734,
+        0.46937106271773155,
+        0.18390906628319306
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Network",
+      "page": 0,
+      "bbox": [
+        0.10186578527520967,
+        0.19935406003040113,
+        0.1524202368888627,
+        0.21076800484017877
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "American Express",
+      "page": 0,
+      "bbox": [
+        0.3468924274149495,
+        0.19841555833182808,
+        0.4822283676722693,
+        0.2114041974532535
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Card holder",
+      "page": 0,
+      "bbox": [
+        0.10250582646047628,
+        0.22667404155383547,
+        0.17448173119473287,
+        0.23810534642267
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita R Rao",
+      "page": 0,
+      "bbox": [
+        0.3476269350307904,
+        0.22610343067163796,
+        0.4433263572193509,
+        0.2389196009439363
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Card number",
+      "page": 0,
+      "bbox": [
+        0.10314633660287999,
+        0.25406324393329005,
+        0.18355841407438317,
+        0.26546272105832264
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "XXXX XXXX XXXX 0005",
+      "page": 0,
+      "bbox": [
+        0.348361984311545,
+        0.2535924065954473,
+        0.5201348468254423,
+        0.2664552991838603
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credit limit",
+      "page": 0,
+      "bbox": [
+        0.10378731621801589,
+        0.2815007583896007,
+        0.16891044406910916,
+        0.29284015077581416
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 2,50,000",
+      "page": 0,
+      "bbox": [
+        0.3490975758566133,
+        0.2813191707270649,
+        0.43801677820050466,
+        0.29401131463474217
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Annual fee",
+      "page": 0,
+      "bbox": [
+        0.10442876582223519,
+        0.3089337518553147,
+        0.1703891218948015,
+        0.32026058295557025
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 999",
+      "page": 0,
+      "bbox": [
+        0.3498337102662795,
+        0.3089459807677673,
+        0.4043197165865229,
+        0.3216083655806001
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Deccan Trust Bank",
+      "page": 0,
+      "bbox": [
+        0.09814153152531467,
+        0.039012125872096924,
+        0.30603887334102475,
+        0.05918207593629681
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Welcome to your new card",
+      "page": 0,
+      "bbox": [
+        0.09888511195897441,
+        0.0709899973368725,
+        0.2980487015863386,
+        0.0859545308761871
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.10555243509664479,
+        0.35691324614071573,
+        0.5223409892324395,
+        0.36890600824072156
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.10592731220690528,
+        0.37292010383371654,
+        0.5469917769473828,
+        0.38514377132990996
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.11909550125818755,
+        0.935187904265516,
+        0.33937144724438606,
+        0.9491203024177212
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "bank": [
+      1
+    ],
+    "card_name": [
+      3
+    ],
+    "network": [
+      5
+    ],
+    "holder": [
+      7
+    ],
+    "last4": [
+      9
+    ],
+    "credit_limit": [
+      11
+    ],
+    "annual_fee": [
+      13
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "cards",
+  "folder": "Kavita Rao/Cards",
+  "expected_ask": []
+}

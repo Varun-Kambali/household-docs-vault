@@ -1,0 +1,204 @@
+{
+  "doc_id": "birth_certificate-1-scan",
+  "base_id": "birth_certificate-1",
+  "doc_type": "birth_certificate",
+  "person": "KIRAN RAO",
+  "variant": "scan",
+  "files": [
+    "birth_certificate-1-scan.pdf"
+  ],
+  "fields": {
+    "holder": "KIRAN RAO",
+    "number": "ZZM8704787",
+    "date_of_birth": "1964-10-24",
+    "issue_date": "1964-11-30",
+    "expiry_date": null,
+    "address": null,
+    "parties": null
+  },
+  "printed": {
+    "holder": "KIRAN RAO",
+    "number": "ZZM8704787",
+    "date_of_birth": "24/10/1964",
+    "issue_date": "30/11/1964"
+  },
+  "lines": [
+    {
+      "text": "Holder",
+      "page": 0,
+      "bbox": [
+        0.06979890195588088,
+        0.13570119716827017,
+        0.11343215035651055,
+        0.14730970691751125
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KIRAN RAO",
+      "page": 0,
+      "bbox": [
+        0.33303351843990253,
+        0.13579908593953727,
+        0.4265881696970696,
+        0.1487416489033902
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Number",
+      "page": 0,
+      "bbox": [
+        0.07001893580433725,
+        0.1637964202393803,
+        0.12269231792993777,
+        0.17542039230000958
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ZZM8704787",
+      "page": 0,
+      "bbox": [
+        0.3332691954706654,
+        0.16394461550144013,
+        0.43146718711404825,
+        0.1769095499836987
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of birth",
+      "page": 0,
+      "bbox": [
+        0.07023899510192513,
+        0.19189489280611202,
+        0.1508947276230916,
+        0.20355356009295605
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "24/10/1964",
+      "page": 0,
+      "bbox": [
+        0.33350489980865694,
+        0.19209340620596854,
+        0.4161452405124446,
+        0.20506548736561966
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of issue",
+      "page": 0,
+      "bbox": [
+        0.07045907985305996,
+        0.2199966154322533,
+        0.15687690807365337,
+        0.23167792209597948
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "30/11/1964",
+      "page": 0,
+      "bbox": [
+        0.3337406314586234,
+        0.22024545861994443,
+        0.41638590125195674,
+        0.23323481426536882
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registrar of Births and Deaths",
+      "page": 0,
+      "bbox": [
+        0.06895567454855409,
+        0.027904394766449247,
+        0.4257931222624957,
+        0.04733949174432716
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Birth",
+      "page": 0,
+      "bbox": [
+        0.06921226941107222,
+        0.06077671969581545,
+        0.21300788693074096,
+        0.07495638610086372
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07084428942842773,
+        0.26918245217968917,
+        0.5160358139448963,
+        0.28138238827370393
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07097270994986755,
+        0.2855799438477764,
+        0.5417992015649196,
+        0.29786798605402515
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.3786361554429059,
+        0.873561125755637,
+        0.6208967306339712,
+        0.9111622061582003
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07611664652670237,
+        0.9423881876870457,
+        0.31065016279415786,
+        0.9541135103912713
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "holder": [
+      1
+    ],
+    "number": [
+      3
+    ],
+    "date_of_birth": [
+      5
+    ],
+    "issue_date": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "identity",
+  "folder": "Kiran Rao/Identity",
+  "expected_ask": []
+}

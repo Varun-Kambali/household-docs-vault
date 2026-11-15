@@ -1,0 +1,165 @@
+{
+  "doc_id": "vehicle_service_record-1-photo",
+  "base_id": "vehicle_service_record-1",
+  "doc_type": "vehicle_service_record",
+  "person": "SURESH N RAO",
+  "variant": "photo",
+  "files": [
+    "vehicle_service_record-1-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "SURESH N RAO",
+    "document_date": "2026-05-20",
+    "expiry_date": null,
+    "registration_number": "KA-08006794",
+    "odometer_km": null
+  },
+  "printed": {
+    "person_name": "SURESH N RAO",
+    "document_date": "20/05/2026",
+    "registration_number": "KA-08006794"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.09874984018315652,
+        0.13988659214120924,
+        0.13686755730916225,
+        0.15106922099555387
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SURESH N RAO",
+      "page": 0,
+      "bbox": [
+        0.3506162962393243,
+        0.13744840328488994,
+        0.47105167785634966,
+        0.150418550686636
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.09806377385800318,
+        0.1663966041124616,
+        0.128347965212532,
+        0.17755571773273873
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "20/05/2026",
+      "page": 0,
+      "bbox": [
+        0.3502431721483529,
+        0.16413672069611704,
+        0.4290316869467075,
+        0.17685022330436395
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.09737600471167934,
+        0.19215738016277203,
+        0.22560272979370877,
+        0.20410795413053998
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-08006794",
+      "page": 0,
+      "bbox": [
+        0.34986912385202784,
+        0.19043727618399986,
+        0.4479466992574753,
+        0.20334736554448343
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Greenfield Motors Service Centre",
+      "page": 0,
+      "bbox": [
+        0.10117737752513392,
+        0.036938202315192535,
+        0.47330815638704626,
+        0.057350935269596885
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Vehicle Service Invoice",
+      "page": 0,
+      "bbox": [
+        0.10050866745225982,
+        0.06872547429495295,
+        0.27928371178940675,
+        0.08316737096091831
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.09616829218228039,
+        0.23626097139288146,
+        0.5228570056812833,
+        0.2507332916476274
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.09576455223972888,
+        0.2515728888910756,
+        0.5471535641639707,
+        0.2663202054473557
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07841798805867498,
+        0.9223774718762819,
+        0.3108835282195768,
+        0.93600722948276
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "registration_number": [
+      5
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "vehicle",
+  "folder": "Suresh Rao/Vehicle",
+  "expected_ask": []
+}

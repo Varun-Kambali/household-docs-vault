@@ -1,0 +1,191 @@
+{
+  "doc_id": "itr_acknowledgement-5-scan",
+  "base_id": "itr_acknowledgement-5",
+  "doc_type": "itr_acknowledgement",
+  "person": "R K Rao",
+  "variant": "scan",
+  "files": [
+    "itr_acknowledgement-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "R K Rao",
+    "document_date": "2026-05-14",
+    "expiry_date": null,
+    "acknowledgement_number": "AK-156500520576598",
+    "assessment_year": "2025-26"
+  },
+  "printed": {
+    "person_name": "R K Rao",
+    "document_date": "14/05/2026",
+    "acknowledgement_number": "AK-156500520576598",
+    "assessment_year": "2025-26"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07818245707760348,
+        0.13669204551720293,
+        0.11807240662656278,
+        0.1483816854629431
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "R K Rao",
+      "page": 0,
+      "bbox": [
+        0.34393690883091294,
+        0.13693001635101643,
+        0.4084826135492618,
+        0.14992793710387212
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07817972351364058,
+        0.1649467174208959,
+        0.10976972065422294,
+        0.1766272832961687
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "14/05/2026",
+      "page": 0,
+      "bbox": [
+        0.3439364082135081,
+        0.16516735129852445,
+        0.42698490606808004,
+        0.17817608607830843
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Acknowledgement number",
+      "page": 0,
+      "bbox": [
+        0.07817698990374719,
+        0.19320186406962672,
+        0.255179352277315,
+        0.20498788728410108
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "AK-156500520576598",
+      "page": 0,
+      "bbox": [
+        0.34393590758769693,
+        0.19340516040860972,
+        0.5118104079161759,
+        0.2064710464709966
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Assessment year",
+      "page": 0,
+      "bbox": [
+        0.0781742562479222,
+        0.22145748547536084,
+        0.19285939261224141,
+        0.23319022813058132
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2025-26",
+      "page": 0,
+      "bbox": [
+        0.3439354069534792,
+        0.22164344369321562,
+        0.4048318208573486,
+        0.23462693811667423
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Income Tax Department",
+      "page": 0,
+      "bbox": [
+        0.07819218363689118,
+        0.028386867656140992,
+        0.3606036811437645,
+        0.04812150152817941
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Income Tax Return Acknowledgement",
+      "page": 0,
+      "bbox": [
+        0.07818949579340674,
+        0.06134857465877128,
+        0.3878567166618558,
+        0.0759139241924391
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07816947223970194,
+        0.27090596535542577,
+        0.5266678943029631,
+        0.2828124318529624
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07816787753903433,
+        0.287389115099858,
+        0.552372247775057,
+        0.29929200655412724
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07810420204021672,
+        0.9466170423955349,
+        0.3145128415950244,
+        0.9572125947654858
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "acknowledgement_number": [
+      5
+    ],
+    "assessment_year": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "tax",
+  "folder": "Ravi Kumar Rao/Tax",
+  "expected_ask": []
+}

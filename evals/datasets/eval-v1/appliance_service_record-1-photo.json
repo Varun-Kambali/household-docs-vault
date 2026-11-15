@@ -1,0 +1,305 @@
+{
+  "doc_id": "appliance_service_record-1-photo",
+  "base_id": "appliance_service_record-1",
+  "doc_type": "appliance_service_record",
+  "person": "S N Rao",
+  "variant": "photo",
+  "files": [
+    "appliance_service_record-1-photo.jpg"
+  ],
+  "fields": {
+    "brand": "Aurora",
+    "product": "Front-load washing machine",
+    "model": null,
+    "serial_number": "SNKD896240",
+    "seller": "Sapphire Electronics",
+    "seller_location": null,
+    "order_id": null,
+    "buyer": "S N Rao",
+    "purchase_date": "2025-05-16",
+    "amount": "18500",
+    "invoice_number": null,
+    "period_start": null,
+    "period_end": null,
+    "visits": null,
+    "service_helpline": "1800 299 8124"
+  },
+  "printed": {
+    "brand": "Aurora",
+    "product": "Front-load washing machine",
+    "serial_number": "SNKD896240",
+    "seller": "Sapphire Electronics",
+    "buyer": "S N Rao",
+    "purchase_date": "16/05/2025",
+    "amount": "Rs. 18,500",
+    "service_helpline": "1800 299 8124"
+  },
+  "lines": [
+    {
+      "text": "Brand",
+      "page": 0,
+      "bbox": [
+        0.09843531424141763,
+        0.14921305075091698,
+        0.13430187952512598,
+        0.16088855991426662
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Aurora",
+      "page": 0,
+      "bbox": [
+        0.3382366363227749,
+        0.1441183101179435,
+        0.38802333561548613,
+        0.15740675915838134
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.09800586764843369,
+        0.17563121294448178,
+        0.14433586277858548,
+        0.18748609140104516
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Front-load washing machine",
+      "page": 0,
+      "bbox": [
+        0.3380004933191363,
+        0.16800751437067882,
+        0.5450165583211114,
+        0.18425546185827757
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Serial number",
+      "page": 0,
+      "bbox": [
+        0.0975757201291687,
+        0.20163084309615004,
+        0.18130217036187424,
+        0.21412703436001887
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SNKD896240",
+      "page": 0,
+      "bbox": [
+        0.33776396120765406,
+        0.19713109330837,
+        0.4316787644124207,
+        0.21114840487294154
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Seller",
+      "page": 0,
+      "bbox": [
+        0.09714486996618353,
+        0.2292191651929158,
+        0.1315941639377846,
+        0.2408114951598064
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sapphire Electronics",
+      "page": 0,
+      "bbox": [
+        0.33752703902579856,
+        0.22316726862182656,
+        0.4893721933901846,
+        0.23808569763890575
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Buyer",
+      "page": 0,
+      "bbox": [
+        0.09671331543642359,
+        0.2559531498536677,
+        0.1319428640312715,
+        0.26753958051681587
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "S N Rao",
+      "page": 0,
+      "bbox": [
+        0.33728972580786293,
+        0.2517706137505417,
+        0.39571270135056036,
+        0.26506744995394926
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase date",
+      "page": 0,
+      "bbox": [
+        0.09628105481119598,
+        0.2819787506160985,
+        0.18323426078079236,
+        0.29431139749666707
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "16/05/2025",
+      "page": 0,
+      "bbox": [
+        0.33705202058494993,
+        0.2785733003796826,
+        0.41338615127830114,
+        0.2920937719785892
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Amount",
+      "page": 0,
+      "bbox": [
+        0.09584808635614618,
+        0.30942384538540385,
+        0.14236479630300156,
+        0.32112705351562093
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 18,500",
+      "page": 0,
+      "bbox": [
+        0.3368139223849587,
+        0.30572742391214175,
+        0.41149821763976907,
+        0.3191647742375799
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Service helpline",
+      "page": 0,
+      "bbox": [
+        0.09541440833123506,
+        0.33569588957721963,
+        0.19076125588010384,
+        0.34798665634201714
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 299 8124",
+      "page": 0,
+      "bbox": [
+        0.3365754302325714,
+        0.3325557529792246,
+        0.4385868285837962,
+        0.3462805676214197
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Aurora",
+      "page": 0,
+      "bbox": [
+        0.09995776950054441,
+        0.04668228027030914,
+        0.17321823298494032,
+        0.06659615579836918
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Service Report",
+      "page": 0,
+      "bbox": [
+        0.09953792498666182,
+        0.0767862214860188,
+        0.20795314435710374,
+        0.09259898795487272
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.09465375913105004,
+        0.37954689855874013,
+        0.5051454218860454,
+        0.39509703370405375
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.09439972368433412,
+        0.3952795700498,
+        0.5290448543617844,
+        0.4108305752041418
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.08586099025717124,
+        0.9294599690790735,
+        0.3040225380585916,
+        0.942120561577826
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      1
+    ],
+    "product": [
+      3
+    ],
+    "serial_number": [
+      5
+    ],
+    "seller": [
+      7
+    ],
+    "buyer": [
+      9
+    ],
+    "purchase_date": [
+      11
+    ],
+    "amount": [
+      13
+    ],
+    "service_helpline": [
+      15
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "home",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "purchases",
+  "folder": "Home/Purchases",
+  "expected_ask": []
+}

@@ -1,0 +1,217 @@
+{
+  "doc_id": "puc_certificate-5-scan",
+  "base_id": "puc_certificate-5",
+  "doc_type": "puc_certificate",
+  "person": "KAVITA RAO",
+  "variant": "scan",
+  "files": [
+    "puc_certificate-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "KAVITA RAO",
+    "document_date": "2026-03-23",
+    "expiry_date": "2027-03-23",
+    "registration_number": "KA-76572485",
+    "certificate_number": "CN-91610742"
+  },
+  "printed": {
+    "person_name": "KAVITA RAO",
+    "document_date": "23/03/2026",
+    "registration_number": "KA-76572485",
+    "certificate_number": "CN-91610742",
+    "expiry_date": "23/03/2027"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07052400445287117,
+        0.13746133072031716,
+        0.11051560755232367,
+        0.14913045431267682
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KAVITA RAO",
+      "page": 0,
+      "bbox": [
+        0.3371660158413781,
+        0.13794969294888706,
+        0.4410586253182581,
+        0.15104202613317605
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07045953341916683,
+        0.1655669399822307,
+        0.10213135272279322,
+        0.17722268388566234
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "23/03/2026",
+      "page": 0,
+      "bbox": [
+        0.33708466261844866,
+        0.16608662628046536,
+        0.4206344704781257,
+        0.17914880090573976
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.07039507050507232,
+        0.19366900947604354,
+        0.20536818810261742,
+        0.20554550360755783
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-76572485",
+      "page": 0,
+      "bbox": [
+        0.3370033196527051,
+        0.19422001194567723,
+        0.4409328390328028,
+        0.20733359357944314
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate number",
+      "page": 0,
+      "bbox": [
+        0.0703306157090538,
+        0.22176753987043904,
+        0.19278870117100977,
+        0.23363049671846375
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "CN-91610742",
+      "page": 0,
+      "bbox": [
+        0.33692198694220754,
+        0.2223498506154458,
+        0.4408449142114532,
+        0.2354740050929791
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Valid till",
+      "page": 0,
+      "bbox": [
+        0.07026616902957786,
+        0.24986253183393217,
+        0.12190554939182482,
+        0.2615719841296214
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "23/03/2027",
+      "page": 0,
+      "bbox": [
+        0.3368406644850167,
+        0.2504761429605248,
+        0.4203745749649567,
+        0.2635628557092431
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Authorised Testing Centre",
+      "page": 0,
+      "bbox": [
+        0.07075347975450981,
+        0.029690357814347233,
+        0.38484471361530764,
+        0.049481613538981936
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Pollution Under Control Certificate",
+      "page": 0,
+      "bbox": [
+        0.07069005474847133,
+        0.06249572873516652,
+        0.34789366132032556,
+        0.07710795740186939
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07015340686631472,
+        0.2990202554308527,
+        0.520548278782258,
+        0.3117569208806235
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07011582499985554,
+        0.31540375627144,
+        0.5463836659070499,
+        0.32823834122410606
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06868199377405992,
+        0.9417541014537598,
+        0.305380958800077,
+        0.9532628539233853
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "registration_number": [
+      5
+    ],
+    "certificate_number": [
+      7
+    ],
+    "expiry_date": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "vehicle",
+  "folder": "Kavita Rao/Vehicle",
+  "expected_ask": []
+}

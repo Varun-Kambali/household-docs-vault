@@ -1,0 +1,217 @@
+{
+  "doc_id": "utility_bill-5-photo",
+  "base_id": "utility_bill-5",
+  "doc_type": "utility_bill",
+  "person": "Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "utility_bill-5-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "Kiran Rao",
+    "document_date": "2026-04-13",
+    "expiry_date": "2026-04-28",
+    "provider": "Cauvery Electricity Board",
+    "consumer_number": "CS-56328186"
+  },
+  "printed": {
+    "person_name": "Kiran Rao",
+    "document_date": "13/04/2026",
+    "provider": "Cauvery Electricity Board",
+    "consumer_number": "CS-56328186",
+    "expiry_date": "28/04/2026"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07503498492059653,
+        0.1674143773891242,
+        0.11349838609177693,
+        0.17939477800676065
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3311514191799932,
+        0.16177773884193986,
+        0.40716437883042544,
+        0.17576095629417868
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07473435839518494,
+        0.19483457609772584,
+        0.10521490364727323,
+        0.20665184227360703
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "13/04/2026",
+      "page": 0,
+      "bbox": [
+        0.3308342559276246,
+        0.18904447369985306,
+        0.41135954628083793,
+        0.20309016793647053
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Provider",
+      "page": 0,
+      "bbox": [
+        0.07443376872921849,
+        0.22166660366017746,
+        0.12807911941255448,
+        0.23390556458563488
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Cauvery Electricity Board",
+      "page": 0,
+      "bbox": [
+        0.3305171316648547,
+        0.21424538428349474,
+        0.5263860025813324,
+        0.23041601993673236
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Consumer number",
+      "page": 0,
+      "bbox": [
+        0.07413321591591866,
+        0.2477298847279835,
+        0.19336219008835245,
+        0.26115594555743593
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "CS-56328186",
+      "page": 0,
+      "bbox": [
+        0.33020004638449424,
+        0.24339725681607977,
+        0.42946117073319695,
+        0.25773851291443867
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Due date",
+      "page": 0,
+      "bbox": [
+        0.07383269994850862,
+        0.2761099204805084,
+        0.13228931605146327,
+        0.28840298580345114
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "28/04/2026",
+      "page": 0,
+      "bbox": [
+        0.32988300007935584,
+        0.2710846183318049,
+        0.4103926176109979,
+        0.2850576474889116
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Cauvery Electricity Board",
+      "page": 0,
+      "bbox": [
+        0.07610501334012838,
+        0.05770024727985916,
+        0.3687543808666389,
+        0.0823779450489882
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Electricity Bill",
+      "page": 0,
+      "bbox": [
+        0.07580926792824288,
+        0.09337941946516293,
+        0.17951810521834533,
+        0.10919245081274649
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.0733068856455857,
+        0.3172282207392705,
+        0.5064917038485223,
+        0.3360772694601413
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07313163927606804,
+        0.3327547172412342,
+        0.5312626436385132,
+        0.35196642478312606
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.0664453487752264,
+        0.945701564061592,
+        0.2938512947801211,
+        0.9581958639143782
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "provider": [
+      5
+    ],
+    "consumer_number": [
+      7
+    ],
+    "expiry_date": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "home",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "utilities",
+  "folder": "Home/Utilities",
+  "expected_ask": []
+}

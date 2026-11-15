@@ -1,0 +1,3020 @@
+{
+  "set": "eval-v1",
+  "seed": 7,
+  "spec": {
+    "name": "eval-v1",
+    "seed": 7,
+    "per_type_hand": 10,
+    "per_type_form": 5,
+    "absent_rate": 0.15,
+    "missing_required_rate": 0.03,
+    "outsider_rate": 0.05,
+    "ambiguous_rate": 0.03
+  },
+  "libraries": {
+    "faker": "40.54.0",
+    "reportlab": "5.1.0",
+    "pillow": "13.0.0",
+    "pypdfium2": "5.15.2"
+  },
+  "documents": [
+    {
+      "doc_id": "health_policy-1-clean",
+      "doc_type": "health_policy",
+      "split": "val",
+      "files": [
+        "health_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-1-photo",
+      "doc_type": "health_policy",
+      "split": "val",
+      "files": [
+        "health_policy-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "health_policy-1-scan",
+      "doc_type": "health_policy",
+      "split": "val",
+      "files": [
+        "health_policy-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-1-locked",
+      "doc_type": "health_policy",
+      "split": "val",
+      "files": [
+        "health_policy-1-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-5-clean",
+      "doc_type": "health_policy",
+      "split": "test",
+      "files": [
+        "health_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-5-photo",
+      "doc_type": "health_policy",
+      "split": "test",
+      "files": [
+        "health_policy-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "health_policy-5-scan",
+      "doc_type": "health_policy",
+      "split": "test",
+      "files": [
+        "health_policy-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-5-locked",
+      "doc_type": "health_policy",
+      "split": "test",
+      "files": [
+        "health_policy-5-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-6-clean",
+      "doc_type": "health_policy",
+      "split": "val",
+      "files": [
+        "health_policy-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-6-photo",
+      "doc_type": "health_policy",
+      "split": "val",
+      "files": [
+        "health_policy-6-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "health_policy-6-scan",
+      "doc_type": "health_policy",
+      "split": "val",
+      "files": [
+        "health_policy-6-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-6-locked",
+      "doc_type": "health_policy",
+      "split": "val",
+      "files": [
+        "health_policy-6-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-10-clean",
+      "doc_type": "health_policy",
+      "split": "test",
+      "files": [
+        "health_policy-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-10-photo",
+      "doc_type": "health_policy",
+      "split": "test",
+      "files": [
+        "health_policy-10-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "health_policy-10-scan",
+      "doc_type": "health_policy",
+      "split": "test",
+      "files": [
+        "health_policy-10-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "health_policy-10-locked",
+      "doc_type": "health_policy",
+      "split": "test",
+      "files": [
+        "health_policy-10-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-1-clean",
+      "doc_type": "vehicle_policy",
+      "split": "val",
+      "files": [
+        "vehicle_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-1-photo",
+      "doc_type": "vehicle_policy",
+      "split": "val",
+      "files": [
+        "vehicle_policy-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-1-scan",
+      "doc_type": "vehicle_policy",
+      "split": "val",
+      "files": [
+        "vehicle_policy-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-1-locked",
+      "doc_type": "vehicle_policy",
+      "split": "val",
+      "files": [
+        "vehicle_policy-1-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-5-clean",
+      "doc_type": "vehicle_policy",
+      "split": "test",
+      "files": [
+        "vehicle_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-5-photo",
+      "doc_type": "vehicle_policy",
+      "split": "test",
+      "files": [
+        "vehicle_policy-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-5-scan",
+      "doc_type": "vehicle_policy",
+      "split": "test",
+      "files": [
+        "vehicle_policy-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-5-locked",
+      "doc_type": "vehicle_policy",
+      "split": "test",
+      "files": [
+        "vehicle_policy-5-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-6-clean",
+      "doc_type": "vehicle_policy",
+      "split": "val",
+      "files": [
+        "vehicle_policy-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-6-photo",
+      "doc_type": "vehicle_policy",
+      "split": "val",
+      "files": [
+        "vehicle_policy-6-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-6-scan",
+      "doc_type": "vehicle_policy",
+      "split": "val",
+      "files": [
+        "vehicle_policy-6-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-6-locked",
+      "doc_type": "vehicle_policy",
+      "split": "val",
+      "files": [
+        "vehicle_policy-6-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-10-clean",
+      "doc_type": "vehicle_policy",
+      "split": "test",
+      "files": [
+        "vehicle_policy-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-10-photo",
+      "doc_type": "vehicle_policy",
+      "split": "test",
+      "files": [
+        "vehicle_policy-10-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-10-scan",
+      "doc_type": "vehicle_policy",
+      "split": "test",
+      "files": [
+        "vehicle_policy-10-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_policy-10-locked",
+      "doc_type": "vehicle_policy",
+      "split": "test",
+      "files": [
+        "vehicle_policy-10-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-1-clean",
+      "doc_type": "warranty_card",
+      "split": "val",
+      "files": [
+        "warranty_card-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-1-photo",
+      "doc_type": "warranty_card",
+      "split": "val",
+      "files": [
+        "warranty_card-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-1-scan",
+      "doc_type": "warranty_card",
+      "split": "val",
+      "files": [
+        "warranty_card-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-5-clean",
+      "doc_type": "warranty_card",
+      "split": "test",
+      "files": [
+        "warranty_card-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-5-photo",
+      "doc_type": "warranty_card",
+      "split": "test",
+      "files": [
+        "warranty_card-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-5-scan",
+      "doc_type": "warranty_card",
+      "split": "test",
+      "files": [
+        "warranty_card-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-6-clean",
+      "doc_type": "warranty_card",
+      "split": "val",
+      "files": [
+        "warranty_card-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-6-photo",
+      "doc_type": "warranty_card",
+      "split": "val",
+      "files": [
+        "warranty_card-6-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-6-scan",
+      "doc_type": "warranty_card",
+      "split": "val",
+      "files": [
+        "warranty_card-6-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-10-clean",
+      "doc_type": "warranty_card",
+      "split": "test",
+      "files": [
+        "warranty_card-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-10-photo",
+      "doc_type": "warranty_card",
+      "split": "test",
+      "files": [
+        "warranty_card-10-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "warranty_card-10-scan",
+      "doc_type": "warranty_card",
+      "split": "test",
+      "files": [
+        "warranty_card-10-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-1-clean",
+      "doc_type": "tax_invoice",
+      "split": "val",
+      "files": [
+        "tax_invoice-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-1-photo",
+      "doc_type": "tax_invoice",
+      "split": "val",
+      "files": [
+        "tax_invoice-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-1-scan",
+      "doc_type": "tax_invoice",
+      "split": "val",
+      "files": [
+        "tax_invoice-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-5-clean",
+      "doc_type": "tax_invoice",
+      "split": "test",
+      "files": [
+        "tax_invoice-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-5-photo",
+      "doc_type": "tax_invoice",
+      "split": "test",
+      "files": [
+        "tax_invoice-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-5-scan",
+      "doc_type": "tax_invoice",
+      "split": "test",
+      "files": [
+        "tax_invoice-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-6-clean",
+      "doc_type": "tax_invoice",
+      "split": "val",
+      "files": [
+        "tax_invoice-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-6-photo",
+      "doc_type": "tax_invoice",
+      "split": "val",
+      "files": [
+        "tax_invoice-6-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-6-scan",
+      "doc_type": "tax_invoice",
+      "split": "val",
+      "files": [
+        "tax_invoice-6-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-10-clean",
+      "doc_type": "tax_invoice",
+      "split": "test",
+      "files": [
+        "tax_invoice-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-10-photo",
+      "doc_type": "tax_invoice",
+      "split": "test",
+      "files": [
+        "tax_invoice-10-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "tax_invoice-10-scan",
+      "doc_type": "tax_invoice",
+      "split": "test",
+      "files": [
+        "tax_invoice-10-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-1-clean",
+      "doc_type": "aadhaar",
+      "split": "val",
+      "files": [
+        "aadhaar-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-1-photo",
+      "doc_type": "aadhaar",
+      "split": "val",
+      "files": [
+        "aadhaar-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-1-scan",
+      "doc_type": "aadhaar",
+      "split": "val",
+      "files": [
+        "aadhaar-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-5-clean",
+      "doc_type": "aadhaar",
+      "split": "test",
+      "files": [
+        "aadhaar-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-5-photo",
+      "doc_type": "aadhaar",
+      "split": "test",
+      "files": [
+        "aadhaar-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-5-scan",
+      "doc_type": "aadhaar",
+      "split": "test",
+      "files": [
+        "aadhaar-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-6-clean",
+      "doc_type": "aadhaar",
+      "split": "val",
+      "files": [
+        "aadhaar-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-6-photo",
+      "doc_type": "aadhaar",
+      "split": "val",
+      "files": [
+        "aadhaar-6-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-6-scan",
+      "doc_type": "aadhaar",
+      "split": "val",
+      "files": [
+        "aadhaar-6-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-10-clean",
+      "doc_type": "aadhaar",
+      "split": "test",
+      "files": [
+        "aadhaar-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-10-photo",
+      "doc_type": "aadhaar",
+      "split": "test",
+      "files": [
+        "aadhaar-10-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "aadhaar-10-scan",
+      "doc_type": "aadhaar",
+      "split": "test",
+      "files": [
+        "aadhaar-10-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "pan-1-clean",
+      "doc_type": "pan",
+      "split": "val",
+      "files": [
+        "pan-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "pan-1-photo",
+      "doc_type": "pan",
+      "split": "val",
+      "files": [
+        "pan-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "pan-1-scan",
+      "doc_type": "pan",
+      "split": "val",
+      "files": [
+        "pan-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "pan-5-clean",
+      "doc_type": "pan",
+      "split": "test",
+      "files": [
+        "pan-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "pan-5-photo",
+      "doc_type": "pan",
+      "split": "test",
+      "files": [
+        "pan-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "pan-5-scan",
+      "doc_type": "pan",
+      "split": "test",
+      "files": [
+        "pan-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "pan-6-clean",
+      "doc_type": "pan",
+      "split": "val",
+      "files": [
+        "pan-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "pan-6-photo",
+      "doc_type": "pan",
+      "split": "val",
+      "files": [
+        "pan-6-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "pan-6-scan",
+      "doc_type": "pan",
+      "split": "val",
+      "files": [
+        "pan-6-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "pan-10-clean",
+      "doc_type": "pan",
+      "split": "test",
+      "files": [
+        "pan-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "pan-10-photo",
+      "doc_type": "pan",
+      "split": "test",
+      "files": [
+        "pan-10-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "pan-10-scan",
+      "doc_type": "pan",
+      "split": "test",
+      "files": [
+        "pan-10-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_front-1-clean",
+      "doc_type": "card_front",
+      "split": "val",
+      "files": [
+        "card_front-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_front-1-photo",
+      "doc_type": "card_front",
+      "split": "val",
+      "files": [
+        "card_front-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "card_front-1-scan",
+      "doc_type": "card_front",
+      "split": "val",
+      "files": [
+        "card_front-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_front-5-clean",
+      "doc_type": "card_front",
+      "split": "test",
+      "files": [
+        "card_front-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_front-5-photo",
+      "doc_type": "card_front",
+      "split": "test",
+      "files": [
+        "card_front-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "card_front-5-scan",
+      "doc_type": "card_front",
+      "split": "test",
+      "files": [
+        "card_front-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_front-6-clean",
+      "doc_type": "card_front",
+      "split": "val",
+      "files": [
+        "card_front-6-clean.pdf",
+        "card_front-6-clean-back.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_front-6-photo",
+      "doc_type": "card_front",
+      "split": "val",
+      "files": [
+        "card_front-6-photo.jpg",
+        "card_front-6-photo-back.jpg"
+      ]
+    },
+    {
+      "doc_id": "card_front-6-scan",
+      "doc_type": "card_front",
+      "split": "val",
+      "files": [
+        "card_front-6-scan.pdf",
+        "card_front-6-scan-back.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_front-10-clean",
+      "doc_type": "card_front",
+      "split": "test",
+      "files": [
+        "card_front-10-clean.pdf",
+        "card_front-10-clean-back.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_front-10-photo",
+      "doc_type": "card_front",
+      "split": "test",
+      "files": [
+        "card_front-10-photo.jpg",
+        "card_front-10-photo-back.jpg"
+      ]
+    },
+    {
+      "doc_id": "card_front-10-scan",
+      "doc_type": "card_front",
+      "split": "test",
+      "files": [
+        "card_front-10-scan.pdf",
+        "card_front-10-scan-back.pdf"
+      ]
+    },
+    {
+      "doc_id": "prescription-1-clean",
+      "doc_type": "prescription",
+      "split": "val",
+      "files": [
+        "prescription-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "prescription-1-photo",
+      "doc_type": "prescription",
+      "split": "val",
+      "files": [
+        "prescription-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "prescription-1-scan",
+      "doc_type": "prescription",
+      "split": "val",
+      "files": [
+        "prescription-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "prescription-5-clean",
+      "doc_type": "prescription",
+      "split": "test",
+      "files": [
+        "prescription-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "prescription-5-photo",
+      "doc_type": "prescription",
+      "split": "test",
+      "files": [
+        "prescription-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "prescription-5-scan",
+      "doc_type": "prescription",
+      "split": "test",
+      "files": [
+        "prescription-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "prescription-6-clean",
+      "doc_type": "prescription",
+      "split": "val",
+      "files": [
+        "prescription-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "prescription-6-photo",
+      "doc_type": "prescription",
+      "split": "val",
+      "files": [
+        "prescription-6-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "prescription-6-scan",
+      "doc_type": "prescription",
+      "split": "val",
+      "files": [
+        "prescription-6-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "prescription-10-clean",
+      "doc_type": "prescription",
+      "split": "test",
+      "files": [
+        "prescription-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "prescription-10-photo",
+      "doc_type": "prescription",
+      "split": "test",
+      "files": [
+        "prescription-10-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "prescription-10-scan",
+      "doc_type": "prescription",
+      "split": "test",
+      "files": [
+        "prescription-10-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "lab_report-1-clean",
+      "doc_type": "lab_report",
+      "split": "val",
+      "files": [
+        "lab_report-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "lab_report-1-photo",
+      "doc_type": "lab_report",
+      "split": "val",
+      "files": [
+        "lab_report-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "lab_report-1-scan",
+      "doc_type": "lab_report",
+      "split": "val",
+      "files": [
+        "lab_report-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "lab_report-5-clean",
+      "doc_type": "lab_report",
+      "split": "test",
+      "files": [
+        "lab_report-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "lab_report-5-photo",
+      "doc_type": "lab_report",
+      "split": "test",
+      "files": [
+        "lab_report-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "lab_report-5-scan",
+      "doc_type": "lab_report",
+      "split": "test",
+      "files": [
+        "lab_report-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "lab_report-6-clean",
+      "doc_type": "lab_report",
+      "split": "val",
+      "files": [
+        "lab_report-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "lab_report-6-photo",
+      "doc_type": "lab_report",
+      "split": "val",
+      "files": [
+        "lab_report-6-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "lab_report-6-scan",
+      "doc_type": "lab_report",
+      "split": "val",
+      "files": [
+        "lab_report-6-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "lab_report-10-clean",
+      "doc_type": "lab_report",
+      "split": "test",
+      "files": [
+        "lab_report-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "lab_report-10-photo",
+      "doc_type": "lab_report",
+      "split": "test",
+      "files": [
+        "lab_report-10-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "lab_report-10-scan",
+      "doc_type": "lab_report",
+      "split": "test",
+      "files": [
+        "lab_report-10-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "life_policy-1-clean",
+      "doc_type": "life_policy",
+      "split": "val",
+      "files": [
+        "life_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "life_policy-1-photo",
+      "doc_type": "life_policy",
+      "split": "val",
+      "files": [
+        "life_policy-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "life_policy-1-scan",
+      "doc_type": "life_policy",
+      "split": "val",
+      "files": [
+        "life_policy-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "life_policy-1-locked",
+      "doc_type": "life_policy",
+      "split": "val",
+      "files": [
+        "life_policy-1-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "life_policy-5-clean",
+      "doc_type": "life_policy",
+      "split": "test",
+      "files": [
+        "life_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "life_policy-5-photo",
+      "doc_type": "life_policy",
+      "split": "test",
+      "files": [
+        "life_policy-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "life_policy-5-scan",
+      "doc_type": "life_policy",
+      "split": "test",
+      "files": [
+        "life_policy-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "life_policy-5-locked",
+      "doc_type": "life_policy",
+      "split": "test",
+      "files": [
+        "life_policy-5-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "home_policy-1-clean",
+      "doc_type": "home_policy",
+      "split": "val",
+      "files": [
+        "home_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "home_policy-1-photo",
+      "doc_type": "home_policy",
+      "split": "val",
+      "files": [
+        "home_policy-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "home_policy-1-scan",
+      "doc_type": "home_policy",
+      "split": "val",
+      "files": [
+        "home_policy-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "home_policy-1-locked",
+      "doc_type": "home_policy",
+      "split": "val",
+      "files": [
+        "home_policy-1-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "home_policy-5-clean",
+      "doc_type": "home_policy",
+      "split": "test",
+      "files": [
+        "home_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "home_policy-5-photo",
+      "doc_type": "home_policy",
+      "split": "test",
+      "files": [
+        "home_policy-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "home_policy-5-scan",
+      "doc_type": "home_policy",
+      "split": "test",
+      "files": [
+        "home_policy-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "home_policy-5-locked",
+      "doc_type": "home_policy",
+      "split": "test",
+      "files": [
+        "home_policy-5-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "travel_policy-1-clean",
+      "doc_type": "travel_policy",
+      "split": "val",
+      "files": [
+        "travel_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "travel_policy-1-photo",
+      "doc_type": "travel_policy",
+      "split": "val",
+      "files": [
+        "travel_policy-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "travel_policy-1-scan",
+      "doc_type": "travel_policy",
+      "split": "val",
+      "files": [
+        "travel_policy-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "travel_policy-1-locked",
+      "doc_type": "travel_policy",
+      "split": "val",
+      "files": [
+        "travel_policy-1-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "travel_policy-5-clean",
+      "doc_type": "travel_policy",
+      "split": "test",
+      "files": [
+        "travel_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "travel_policy-5-photo",
+      "doc_type": "travel_policy",
+      "split": "test",
+      "files": [
+        "travel_policy-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "travel_policy-5-scan",
+      "doc_type": "travel_policy",
+      "split": "test",
+      "files": [
+        "travel_policy-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "travel_policy-5-locked",
+      "doc_type": "travel_policy",
+      "split": "test",
+      "files": [
+        "travel_policy-5-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "gadget_policy-1-clean",
+      "doc_type": "gadget_policy",
+      "split": "val",
+      "files": [
+        "gadget_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "gadget_policy-1-photo",
+      "doc_type": "gadget_policy",
+      "split": "val",
+      "files": [
+        "gadget_policy-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "gadget_policy-1-scan",
+      "doc_type": "gadget_policy",
+      "split": "val",
+      "files": [
+        "gadget_policy-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "gadget_policy-1-locked",
+      "doc_type": "gadget_policy",
+      "split": "val",
+      "files": [
+        "gadget_policy-1-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "gadget_policy-5-clean",
+      "doc_type": "gadget_policy",
+      "split": "test",
+      "files": [
+        "gadget_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "gadget_policy-5-photo",
+      "doc_type": "gadget_policy",
+      "split": "test",
+      "files": [
+        "gadget_policy-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "gadget_policy-5-scan",
+      "doc_type": "gadget_policy",
+      "split": "test",
+      "files": [
+        "gadget_policy-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "gadget_policy-5-locked",
+      "doc_type": "gadget_policy",
+      "split": "test",
+      "files": [
+        "gadget_policy-5-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "accident_policy-1-clean",
+      "doc_type": "accident_policy",
+      "split": "val",
+      "files": [
+        "accident_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "accident_policy-1-photo",
+      "doc_type": "accident_policy",
+      "split": "val",
+      "files": [
+        "accident_policy-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "accident_policy-1-scan",
+      "doc_type": "accident_policy",
+      "split": "val",
+      "files": [
+        "accident_policy-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "accident_policy-1-locked",
+      "doc_type": "accident_policy",
+      "split": "val",
+      "files": [
+        "accident_policy-1-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "accident_policy-5-clean",
+      "doc_type": "accident_policy",
+      "split": "test",
+      "files": [
+        "accident_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "accident_policy-5-photo",
+      "doc_type": "accident_policy",
+      "split": "test",
+      "files": [
+        "accident_policy-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "accident_policy-5-scan",
+      "doc_type": "accident_policy",
+      "split": "test",
+      "files": [
+        "accident_policy-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "accident_policy-5-locked",
+      "doc_type": "accident_policy",
+      "split": "test",
+      "files": [
+        "accident_policy-5-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "extended_warranty-1-clean",
+      "doc_type": "extended_warranty",
+      "split": "val",
+      "files": [
+        "extended_warranty-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "extended_warranty-1-photo",
+      "doc_type": "extended_warranty",
+      "split": "val",
+      "files": [
+        "extended_warranty-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "extended_warranty-1-scan",
+      "doc_type": "extended_warranty",
+      "split": "val",
+      "files": [
+        "extended_warranty-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "extended_warranty-5-clean",
+      "doc_type": "extended_warranty",
+      "split": "test",
+      "files": [
+        "extended_warranty-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "extended_warranty-5-photo",
+      "doc_type": "extended_warranty",
+      "split": "test",
+      "files": [
+        "extended_warranty-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "extended_warranty-5-scan",
+      "doc_type": "extended_warranty",
+      "split": "test",
+      "files": [
+        "extended_warranty-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "amc-1-clean",
+      "doc_type": "amc",
+      "split": "val",
+      "files": [
+        "amc-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "amc-1-photo",
+      "doc_type": "amc",
+      "split": "val",
+      "files": [
+        "amc-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "amc-1-scan",
+      "doc_type": "amc",
+      "split": "val",
+      "files": [
+        "amc-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "amc-5-clean",
+      "doc_type": "amc",
+      "split": "test",
+      "files": [
+        "amc-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "amc-5-photo",
+      "doc_type": "amc",
+      "split": "test",
+      "files": [
+        "amc-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "amc-5-scan",
+      "doc_type": "amc",
+      "split": "test",
+      "files": [
+        "amc-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "appliance_service_record-1-clean",
+      "doc_type": "appliance_service_record",
+      "split": "val",
+      "files": [
+        "appliance_service_record-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "appliance_service_record-1-photo",
+      "doc_type": "appliance_service_record",
+      "split": "val",
+      "files": [
+        "appliance_service_record-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "appliance_service_record-1-scan",
+      "doc_type": "appliance_service_record",
+      "split": "val",
+      "files": [
+        "appliance_service_record-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "appliance_service_record-5-clean",
+      "doc_type": "appliance_service_record",
+      "split": "test",
+      "files": [
+        "appliance_service_record-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "appliance_service_record-5-photo",
+      "doc_type": "appliance_service_record",
+      "split": "test",
+      "files": [
+        "appliance_service_record-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "appliance_service_record-5-scan",
+      "doc_type": "appliance_service_record",
+      "split": "test",
+      "files": [
+        "appliance_service_record-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "passport-1-clean",
+      "doc_type": "passport",
+      "split": "val",
+      "files": [
+        "passport-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "passport-1-photo",
+      "doc_type": "passport",
+      "split": "val",
+      "files": [
+        "passport-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "passport-1-scan",
+      "doc_type": "passport",
+      "split": "val",
+      "files": [
+        "passport-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "passport-5-clean",
+      "doc_type": "passport",
+      "split": "test",
+      "files": [
+        "passport-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "passport-5-photo",
+      "doc_type": "passport",
+      "split": "test",
+      "files": [
+        "passport-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "passport-5-scan",
+      "doc_type": "passport",
+      "split": "test",
+      "files": [
+        "passport-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "voter_id-1-clean",
+      "doc_type": "voter_id",
+      "split": "val",
+      "files": [
+        "voter_id-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "voter_id-1-photo",
+      "doc_type": "voter_id",
+      "split": "val",
+      "files": [
+        "voter_id-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "voter_id-1-scan",
+      "doc_type": "voter_id",
+      "split": "val",
+      "files": [
+        "voter_id-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "voter_id-5-clean",
+      "doc_type": "voter_id",
+      "split": "test",
+      "files": [
+        "voter_id-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "voter_id-5-photo",
+      "doc_type": "voter_id",
+      "split": "test",
+      "files": [
+        "voter_id-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "voter_id-5-scan",
+      "doc_type": "voter_id",
+      "split": "test",
+      "files": [
+        "voter_id-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "driving_licence-1-clean",
+      "doc_type": "driving_licence",
+      "split": "val",
+      "files": [
+        "driving_licence-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "driving_licence-1-photo",
+      "doc_type": "driving_licence",
+      "split": "val",
+      "files": [
+        "driving_licence-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "driving_licence-1-scan",
+      "doc_type": "driving_licence",
+      "split": "val",
+      "files": [
+        "driving_licence-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "driving_licence-5-clean",
+      "doc_type": "driving_licence",
+      "split": "test",
+      "files": [
+        "driving_licence-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "driving_licence-5-photo",
+      "doc_type": "driving_licence",
+      "split": "test",
+      "files": [
+        "driving_licence-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "driving_licence-5-scan",
+      "doc_type": "driving_licence",
+      "split": "test",
+      "files": [
+        "driving_licence-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "birth_certificate-1-clean",
+      "doc_type": "birth_certificate",
+      "split": "val",
+      "files": [
+        "birth_certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "birth_certificate-1-photo",
+      "doc_type": "birth_certificate",
+      "split": "val",
+      "files": [
+        "birth_certificate-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "birth_certificate-1-scan",
+      "doc_type": "birth_certificate",
+      "split": "val",
+      "files": [
+        "birth_certificate-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "birth_certificate-5-clean",
+      "doc_type": "birth_certificate",
+      "split": "test",
+      "files": [
+        "birth_certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "birth_certificate-5-photo",
+      "doc_type": "birth_certificate",
+      "split": "test",
+      "files": [
+        "birth_certificate-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "birth_certificate-5-scan",
+      "doc_type": "birth_certificate",
+      "split": "test",
+      "files": [
+        "birth_certificate-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "marriage_certificate-1-clean",
+      "doc_type": "marriage_certificate",
+      "split": "val",
+      "files": [
+        "marriage_certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "marriage_certificate-1-photo",
+      "doc_type": "marriage_certificate",
+      "split": "val",
+      "files": [
+        "marriage_certificate-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "marriage_certificate-1-scan",
+      "doc_type": "marriage_certificate",
+      "split": "val",
+      "files": [
+        "marriage_certificate-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "marriage_certificate-5-clean",
+      "doc_type": "marriage_certificate",
+      "split": "test",
+      "files": [
+        "marriage_certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "marriage_certificate-5-photo",
+      "doc_type": "marriage_certificate",
+      "split": "test",
+      "files": [
+        "marriage_certificate-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "marriage_certificate-5-scan",
+      "doc_type": "marriage_certificate",
+      "split": "test",
+      "files": [
+        "marriage_certificate-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_statement-1-clean",
+      "doc_type": "card_statement",
+      "split": "val",
+      "files": [
+        "card_statement-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_statement-1-photo",
+      "doc_type": "card_statement",
+      "split": "val",
+      "files": [
+        "card_statement-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "card_statement-1-scan",
+      "doc_type": "card_statement",
+      "split": "val",
+      "files": [
+        "card_statement-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_statement-1-locked",
+      "doc_type": "card_statement",
+      "split": "val",
+      "files": [
+        "card_statement-1-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_statement-5-clean",
+      "doc_type": "card_statement",
+      "split": "test",
+      "files": [
+        "card_statement-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_statement-5-photo",
+      "doc_type": "card_statement",
+      "split": "test",
+      "files": [
+        "card_statement-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "card_statement-5-scan",
+      "doc_type": "card_statement",
+      "split": "test",
+      "files": [
+        "card_statement-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_statement-5-locked",
+      "doc_type": "card_statement",
+      "split": "test",
+      "files": [
+        "card_statement-5-locked.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_welcome_letter-1-clean",
+      "doc_type": "card_welcome_letter",
+      "split": "val",
+      "files": [
+        "card_welcome_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_welcome_letter-1-photo",
+      "doc_type": "card_welcome_letter",
+      "split": "val",
+      "files": [
+        "card_welcome_letter-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "card_welcome_letter-1-scan",
+      "doc_type": "card_welcome_letter",
+      "split": "val",
+      "files": [
+        "card_welcome_letter-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_welcome_letter-5-clean",
+      "doc_type": "card_welcome_letter",
+      "split": "test",
+      "files": [
+        "card_welcome_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "card_welcome_letter-5-photo",
+      "doc_type": "card_welcome_letter",
+      "split": "test",
+      "files": [
+        "card_welcome_letter-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "card_welcome_letter-5-scan",
+      "doc_type": "card_welcome_letter",
+      "split": "test",
+      "files": [
+        "card_welcome_letter-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "scan_photo-1-clean",
+      "doc_type": "scan_photo",
+      "split": "val",
+      "files": [
+        "scan_photo-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "scan_photo-1-photo",
+      "doc_type": "scan_photo",
+      "split": "val",
+      "files": [
+        "scan_photo-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "scan_photo-1-scan",
+      "doc_type": "scan_photo",
+      "split": "val",
+      "files": [
+        "scan_photo-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "scan_photo-5-clean",
+      "doc_type": "scan_photo",
+      "split": "test",
+      "files": [
+        "scan_photo-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "scan_photo-5-photo",
+      "doc_type": "scan_photo",
+      "split": "test",
+      "files": [
+        "scan_photo-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "scan_photo-5-scan",
+      "doc_type": "scan_photo",
+      "split": "test",
+      "files": [
+        "scan_photo-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "scan_report-1-clean",
+      "doc_type": "scan_report",
+      "split": "val",
+      "files": [
+        "scan_report-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "scan_report-1-photo",
+      "doc_type": "scan_report",
+      "split": "val",
+      "files": [
+        "scan_report-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "scan_report-1-scan",
+      "doc_type": "scan_report",
+      "split": "val",
+      "files": [
+        "scan_report-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "scan_report-5-clean",
+      "doc_type": "scan_report",
+      "split": "test",
+      "files": [
+        "scan_report-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "scan_report-5-photo",
+      "doc_type": "scan_report",
+      "split": "test",
+      "files": [
+        "scan_report-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "scan_report-5-scan",
+      "doc_type": "scan_report",
+      "split": "test",
+      "files": [
+        "scan_report-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "discharge_summary-1-clean",
+      "doc_type": "discharge_summary",
+      "split": "val",
+      "files": [
+        "discharge_summary-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "discharge_summary-1-photo",
+      "doc_type": "discharge_summary",
+      "split": "val",
+      "files": [
+        "discharge_summary-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "discharge_summary-1-scan",
+      "doc_type": "discharge_summary",
+      "split": "val",
+      "files": [
+        "discharge_summary-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "discharge_summary-5-clean",
+      "doc_type": "discharge_summary",
+      "split": "test",
+      "files": [
+        "discharge_summary-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "discharge_summary-5-photo",
+      "doc_type": "discharge_summary",
+      "split": "test",
+      "files": [
+        "discharge_summary-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "discharge_summary-5-scan",
+      "doc_type": "discharge_summary",
+      "split": "test",
+      "files": [
+        "discharge_summary-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "hospital_bill-1-clean",
+      "doc_type": "hospital_bill",
+      "split": "val",
+      "files": [
+        "hospital_bill-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "hospital_bill-1-photo",
+      "doc_type": "hospital_bill",
+      "split": "val",
+      "files": [
+        "hospital_bill-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "hospital_bill-1-scan",
+      "doc_type": "hospital_bill",
+      "split": "val",
+      "files": [
+        "hospital_bill-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "hospital_bill-5-clean",
+      "doc_type": "hospital_bill",
+      "split": "test",
+      "files": [
+        "hospital_bill-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "hospital_bill-5-photo",
+      "doc_type": "hospital_bill",
+      "split": "test",
+      "files": [
+        "hospital_bill-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "hospital_bill-5-scan",
+      "doc_type": "hospital_bill",
+      "split": "test",
+      "files": [
+        "hospital_bill-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "sale_deed-1-clean",
+      "doc_type": "sale_deed",
+      "split": "val",
+      "files": [
+        "sale_deed-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "sale_deed-1-photo",
+      "doc_type": "sale_deed",
+      "split": "val",
+      "files": [
+        "sale_deed-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "sale_deed-1-scan",
+      "doc_type": "sale_deed",
+      "split": "val",
+      "files": [
+        "sale_deed-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "sale_deed-5-clean",
+      "doc_type": "sale_deed",
+      "split": "test",
+      "files": [
+        "sale_deed-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "sale_deed-5-photo",
+      "doc_type": "sale_deed",
+      "split": "test",
+      "files": [
+        "sale_deed-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "sale_deed-5-scan",
+      "doc_type": "sale_deed",
+      "split": "test",
+      "files": [
+        "sale_deed-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "rent_agreement-1-clean",
+      "doc_type": "rent_agreement",
+      "split": "val",
+      "files": [
+        "rent_agreement-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "rent_agreement-1-photo",
+      "doc_type": "rent_agreement",
+      "split": "val",
+      "files": [
+        "rent_agreement-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "rent_agreement-1-scan",
+      "doc_type": "rent_agreement",
+      "split": "val",
+      "files": [
+        "rent_agreement-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "rent_agreement-5-clean",
+      "doc_type": "rent_agreement",
+      "split": "test",
+      "files": [
+        "rent_agreement-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "rent_agreement-5-photo",
+      "doc_type": "rent_agreement",
+      "split": "test",
+      "files": [
+        "rent_agreement-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "rent_agreement-5-scan",
+      "doc_type": "rent_agreement",
+      "split": "test",
+      "files": [
+        "rent_agreement-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "khata-1-clean",
+      "doc_type": "khata",
+      "split": "val",
+      "files": [
+        "khata-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "khata-1-photo",
+      "doc_type": "khata",
+      "split": "val",
+      "files": [
+        "khata-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "khata-1-scan",
+      "doc_type": "khata",
+      "split": "val",
+      "files": [
+        "khata-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "khata-5-clean",
+      "doc_type": "khata",
+      "split": "test",
+      "files": [
+        "khata-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "khata-5-photo",
+      "doc_type": "khata",
+      "split": "test",
+      "files": [
+        "khata-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "khata-5-scan",
+      "doc_type": "khata",
+      "split": "test",
+      "files": [
+        "khata-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "property_tax_receipt-1-clean",
+      "doc_type": "property_tax_receipt",
+      "split": "val",
+      "files": [
+        "property_tax_receipt-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "property_tax_receipt-1-photo",
+      "doc_type": "property_tax_receipt",
+      "split": "val",
+      "files": [
+        "property_tax_receipt-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "property_tax_receipt-1-scan",
+      "doc_type": "property_tax_receipt",
+      "split": "val",
+      "files": [
+        "property_tax_receipt-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "property_tax_receipt-5-clean",
+      "doc_type": "property_tax_receipt",
+      "split": "test",
+      "files": [
+        "property_tax_receipt-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "property_tax_receipt-5-photo",
+      "doc_type": "property_tax_receipt",
+      "split": "test",
+      "files": [
+        "property_tax_receipt-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "property_tax_receipt-5-scan",
+      "doc_type": "property_tax_receipt",
+      "split": "test",
+      "files": [
+        "property_tax_receipt-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "encumbrance_certificate-1-clean",
+      "doc_type": "encumbrance_certificate",
+      "split": "val",
+      "files": [
+        "encumbrance_certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "encumbrance_certificate-1-photo",
+      "doc_type": "encumbrance_certificate",
+      "split": "val",
+      "files": [
+        "encumbrance_certificate-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "encumbrance_certificate-1-scan",
+      "doc_type": "encumbrance_certificate",
+      "split": "val",
+      "files": [
+        "encumbrance_certificate-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "encumbrance_certificate-5-clean",
+      "doc_type": "encumbrance_certificate",
+      "split": "test",
+      "files": [
+        "encumbrance_certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "encumbrance_certificate-5-photo",
+      "doc_type": "encumbrance_certificate",
+      "split": "test",
+      "files": [
+        "encumbrance_certificate-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "encumbrance_certificate-5-scan",
+      "doc_type": "encumbrance_certificate",
+      "split": "test",
+      "files": [
+        "encumbrance_certificate-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "utility_bill-1-clean",
+      "doc_type": "utility_bill",
+      "split": "val",
+      "files": [
+        "utility_bill-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "utility_bill-1-photo",
+      "doc_type": "utility_bill",
+      "split": "val",
+      "files": [
+        "utility_bill-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "utility_bill-1-scan",
+      "doc_type": "utility_bill",
+      "split": "val",
+      "files": [
+        "utility_bill-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "utility_bill-5-clean",
+      "doc_type": "utility_bill",
+      "split": "test",
+      "files": [
+        "utility_bill-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "utility_bill-5-photo",
+      "doc_type": "utility_bill",
+      "split": "test",
+      "files": [
+        "utility_bill-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "utility_bill-5-scan",
+      "doc_type": "utility_bill",
+      "split": "test",
+      "files": [
+        "utility_bill-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "registration_certificate-1-clean",
+      "doc_type": "registration_certificate",
+      "split": "val",
+      "files": [
+        "registration_certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "registration_certificate-1-photo",
+      "doc_type": "registration_certificate",
+      "split": "val",
+      "files": [
+        "registration_certificate-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "registration_certificate-1-scan",
+      "doc_type": "registration_certificate",
+      "split": "val",
+      "files": [
+        "registration_certificate-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "registration_certificate-5-clean",
+      "doc_type": "registration_certificate",
+      "split": "test",
+      "files": [
+        "registration_certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "registration_certificate-5-photo",
+      "doc_type": "registration_certificate",
+      "split": "test",
+      "files": [
+        "registration_certificate-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "registration_certificate-5-scan",
+      "doc_type": "registration_certificate",
+      "split": "test",
+      "files": [
+        "registration_certificate-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "puc_certificate-1-clean",
+      "doc_type": "puc_certificate",
+      "split": "val",
+      "files": [
+        "puc_certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "puc_certificate-1-photo",
+      "doc_type": "puc_certificate",
+      "split": "val",
+      "files": [
+        "puc_certificate-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "puc_certificate-1-scan",
+      "doc_type": "puc_certificate",
+      "split": "val",
+      "files": [
+        "puc_certificate-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "puc_certificate-5-clean",
+      "doc_type": "puc_certificate",
+      "split": "test",
+      "files": [
+        "puc_certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "puc_certificate-5-photo",
+      "doc_type": "puc_certificate",
+      "split": "test",
+      "files": [
+        "puc_certificate-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "puc_certificate-5-scan",
+      "doc_type": "puc_certificate",
+      "split": "test",
+      "files": [
+        "puc_certificate-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "fastag-1-clean",
+      "doc_type": "fastag",
+      "split": "val",
+      "files": [
+        "fastag-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "fastag-1-photo",
+      "doc_type": "fastag",
+      "split": "val",
+      "files": [
+        "fastag-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "fastag-1-scan",
+      "doc_type": "fastag",
+      "split": "val",
+      "files": [
+        "fastag-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "fastag-5-clean",
+      "doc_type": "fastag",
+      "split": "test",
+      "files": [
+        "fastag-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "fastag-5-photo",
+      "doc_type": "fastag",
+      "split": "test",
+      "files": [
+        "fastag-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "fastag-5-scan",
+      "doc_type": "fastag",
+      "split": "test",
+      "files": [
+        "fastag-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_service_record-1-clean",
+      "doc_type": "vehicle_service_record",
+      "split": "val",
+      "files": [
+        "vehicle_service_record-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_service_record-1-photo",
+      "doc_type": "vehicle_service_record",
+      "split": "val",
+      "files": [
+        "vehicle_service_record-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "vehicle_service_record-1-scan",
+      "doc_type": "vehicle_service_record",
+      "split": "val",
+      "files": [
+        "vehicle_service_record-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_service_record-5-clean",
+      "doc_type": "vehicle_service_record",
+      "split": "test",
+      "files": [
+        "vehicle_service_record-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "vehicle_service_record-5-photo",
+      "doc_type": "vehicle_service_record",
+      "split": "test",
+      "files": [
+        "vehicle_service_record-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "vehicle_service_record-5-scan",
+      "doc_type": "vehicle_service_record",
+      "split": "test",
+      "files": [
+        "vehicle_service_record-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "payslip-1-clean",
+      "doc_type": "payslip",
+      "split": "val",
+      "files": [
+        "payslip-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "payslip-1-photo",
+      "doc_type": "payslip",
+      "split": "val",
+      "files": [
+        "payslip-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "payslip-1-scan",
+      "doc_type": "payslip",
+      "split": "val",
+      "files": [
+        "payslip-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "payslip-5-clean",
+      "doc_type": "payslip",
+      "split": "test",
+      "files": [
+        "payslip-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "payslip-5-photo",
+      "doc_type": "payslip",
+      "split": "test",
+      "files": [
+        "payslip-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "payslip-5-scan",
+      "doc_type": "payslip",
+      "split": "test",
+      "files": [
+        "payslip-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "offer_letter-1-clean",
+      "doc_type": "offer_letter",
+      "split": "val",
+      "files": [
+        "offer_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "offer_letter-1-photo",
+      "doc_type": "offer_letter",
+      "split": "val",
+      "files": [
+        "offer_letter-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "offer_letter-1-scan",
+      "doc_type": "offer_letter",
+      "split": "val",
+      "files": [
+        "offer_letter-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "offer_letter-5-clean",
+      "doc_type": "offer_letter",
+      "split": "test",
+      "files": [
+        "offer_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "offer_letter-5-photo",
+      "doc_type": "offer_letter",
+      "split": "test",
+      "files": [
+        "offer_letter-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "offer_letter-5-scan",
+      "doc_type": "offer_letter",
+      "split": "test",
+      "files": [
+        "offer_letter-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "appointment_letter-1-clean",
+      "doc_type": "appointment_letter",
+      "split": "val",
+      "files": [
+        "appointment_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "appointment_letter-1-photo",
+      "doc_type": "appointment_letter",
+      "split": "val",
+      "files": [
+        "appointment_letter-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "appointment_letter-1-scan",
+      "doc_type": "appointment_letter",
+      "split": "val",
+      "files": [
+        "appointment_letter-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "appointment_letter-5-clean",
+      "doc_type": "appointment_letter",
+      "split": "test",
+      "files": [
+        "appointment_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "appointment_letter-5-photo",
+      "doc_type": "appointment_letter",
+      "split": "test",
+      "files": [
+        "appointment_letter-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "appointment_letter-5-scan",
+      "doc_type": "appointment_letter",
+      "split": "test",
+      "files": [
+        "appointment_letter-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "appraisal_letter-1-clean",
+      "doc_type": "appraisal_letter",
+      "split": "val",
+      "files": [
+        "appraisal_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "appraisal_letter-1-photo",
+      "doc_type": "appraisal_letter",
+      "split": "val",
+      "files": [
+        "appraisal_letter-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "appraisal_letter-1-scan",
+      "doc_type": "appraisal_letter",
+      "split": "val",
+      "files": [
+        "appraisal_letter-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "appraisal_letter-5-clean",
+      "doc_type": "appraisal_letter",
+      "split": "test",
+      "files": [
+        "appraisal_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "appraisal_letter-5-photo",
+      "doc_type": "appraisal_letter",
+      "split": "test",
+      "files": [
+        "appraisal_letter-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "appraisal_letter-5-scan",
+      "doc_type": "appraisal_letter",
+      "split": "test",
+      "files": [
+        "appraisal_letter-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "relieving_letter-1-clean",
+      "doc_type": "relieving_letter",
+      "split": "val",
+      "files": [
+        "relieving_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "relieving_letter-1-photo",
+      "doc_type": "relieving_letter",
+      "split": "val",
+      "files": [
+        "relieving_letter-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "relieving_letter-1-scan",
+      "doc_type": "relieving_letter",
+      "split": "val",
+      "files": [
+        "relieving_letter-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "relieving_letter-5-clean",
+      "doc_type": "relieving_letter",
+      "split": "test",
+      "files": [
+        "relieving_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "relieving_letter-5-photo",
+      "doc_type": "relieving_letter",
+      "split": "test",
+      "files": [
+        "relieving_letter-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "relieving_letter-5-scan",
+      "doc_type": "relieving_letter",
+      "split": "test",
+      "files": [
+        "relieving_letter-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "experience_letter-1-clean",
+      "doc_type": "experience_letter",
+      "split": "val",
+      "files": [
+        "experience_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "experience_letter-1-photo",
+      "doc_type": "experience_letter",
+      "split": "val",
+      "files": [
+        "experience_letter-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "experience_letter-1-scan",
+      "doc_type": "experience_letter",
+      "split": "val",
+      "files": [
+        "experience_letter-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "experience_letter-5-clean",
+      "doc_type": "experience_letter",
+      "split": "test",
+      "files": [
+        "experience_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "experience_letter-5-photo",
+      "doc_type": "experience_letter",
+      "split": "test",
+      "files": [
+        "experience_letter-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "experience_letter-5-scan",
+      "doc_type": "experience_letter",
+      "split": "test",
+      "files": [
+        "experience_letter-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "certificate-1-clean",
+      "doc_type": "certificate",
+      "split": "val",
+      "files": [
+        "certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "certificate-1-photo",
+      "doc_type": "certificate",
+      "split": "val",
+      "files": [
+        "certificate-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "certificate-1-scan",
+      "doc_type": "certificate",
+      "split": "val",
+      "files": [
+        "certificate-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "certificate-5-clean",
+      "doc_type": "certificate",
+      "split": "test",
+      "files": [
+        "certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "certificate-5-photo",
+      "doc_type": "certificate",
+      "split": "test",
+      "files": [
+        "certificate-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "certificate-5-scan",
+      "doc_type": "certificate",
+      "split": "test",
+      "files": [
+        "certificate-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "marksheet-1-clean",
+      "doc_type": "marksheet",
+      "split": "val",
+      "files": [
+        "marksheet-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "marksheet-1-photo",
+      "doc_type": "marksheet",
+      "split": "val",
+      "files": [
+        "marksheet-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "marksheet-1-scan",
+      "doc_type": "marksheet",
+      "split": "val",
+      "files": [
+        "marksheet-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "marksheet-5-clean",
+      "doc_type": "marksheet",
+      "split": "test",
+      "files": [
+        "marksheet-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "marksheet-5-photo",
+      "doc_type": "marksheet",
+      "split": "test",
+      "files": [
+        "marksheet-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "marksheet-5-scan",
+      "doc_type": "marksheet",
+      "split": "test",
+      "files": [
+        "marksheet-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "degree-1-clean",
+      "doc_type": "degree",
+      "split": "val",
+      "files": [
+        "degree-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "degree-1-photo",
+      "doc_type": "degree",
+      "split": "val",
+      "files": [
+        "degree-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "degree-1-scan",
+      "doc_type": "degree",
+      "split": "val",
+      "files": [
+        "degree-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "degree-5-clean",
+      "doc_type": "degree",
+      "split": "test",
+      "files": [
+        "degree-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "degree-5-photo",
+      "doc_type": "degree",
+      "split": "test",
+      "files": [
+        "degree-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "degree-5-scan",
+      "doc_type": "degree",
+      "split": "test",
+      "files": [
+        "degree-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "form_16-1-clean",
+      "doc_type": "form_16",
+      "split": "val",
+      "files": [
+        "form_16-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "form_16-1-photo",
+      "doc_type": "form_16",
+      "split": "val",
+      "files": [
+        "form_16-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "form_16-1-scan",
+      "doc_type": "form_16",
+      "split": "val",
+      "files": [
+        "form_16-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "form_16-5-clean",
+      "doc_type": "form_16",
+      "split": "test",
+      "files": [
+        "form_16-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "form_16-5-photo",
+      "doc_type": "form_16",
+      "split": "test",
+      "files": [
+        "form_16-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "form_16-5-scan",
+      "doc_type": "form_16",
+      "split": "test",
+      "files": [
+        "form_16-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "itr_acknowledgement-1-clean",
+      "doc_type": "itr_acknowledgement",
+      "split": "val",
+      "files": [
+        "itr_acknowledgement-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "itr_acknowledgement-1-photo",
+      "doc_type": "itr_acknowledgement",
+      "split": "val",
+      "files": [
+        "itr_acknowledgement-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "itr_acknowledgement-1-scan",
+      "doc_type": "itr_acknowledgement",
+      "split": "val",
+      "files": [
+        "itr_acknowledgement-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "itr_acknowledgement-5-clean",
+      "doc_type": "itr_acknowledgement",
+      "split": "test",
+      "files": [
+        "itr_acknowledgement-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "itr_acknowledgement-5-photo",
+      "doc_type": "itr_acknowledgement",
+      "split": "test",
+      "files": [
+        "itr_acknowledgement-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "itr_acknowledgement-5-scan",
+      "doc_type": "itr_acknowledgement",
+      "split": "test",
+      "files": [
+        "itr_acknowledgement-5-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_proof-1-clean",
+      "doc_type": "tax_proof",
+      "split": "val",
+      "files": [
+        "tax_proof-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_proof-1-photo",
+      "doc_type": "tax_proof",
+      "split": "val",
+      "files": [
+        "tax_proof-1-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "tax_proof-1-scan",
+      "doc_type": "tax_proof",
+      "split": "val",
+      "files": [
+        "tax_proof-1-scan.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_proof-5-clean",
+      "doc_type": "tax_proof",
+      "split": "test",
+      "files": [
+        "tax_proof-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "tax_proof-5-photo",
+      "doc_type": "tax_proof",
+      "split": "test",
+      "files": [
+        "tax_proof-5-photo.jpg"
+      ]
+    },
+    {
+      "doc_id": "tax_proof-5-scan",
+      "doc_type": "tax_proof",
+      "split": "test",
+      "files": [
+        "tax_proof-5-scan.pdf"
+      ]
+    }
+  ]
+}

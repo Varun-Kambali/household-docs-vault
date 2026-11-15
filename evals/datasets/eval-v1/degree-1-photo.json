@@ -1,0 +1,165 @@
+{
+  "doc_id": "degree-1-photo",
+  "base_id": "degree-1",
+  "doc_type": "degree",
+  "person": "K Rao",
+  "variant": "photo",
+  "files": [
+    "degree-1-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "K Rao",
+    "document_date": "2026-04-17",
+    "expiry_date": null,
+    "issuer": "Western Ghats University",
+    "roll_number": null
+  },
+  "printed": {
+    "person_name": "K Rao",
+    "document_date": "17/04/2026",
+    "issuer": "Western Ghats University"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.08638441300223916,
+        0.15612585877225896,
+        0.12370505536782438,
+        0.1680773749394334
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "K Rao",
+      "page": 0,
+      "bbox": [
+        0.33592429883111885,
+        0.14957339914004447,
+        0.3820264578980216,
+        0.1631248523925856
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.0857282603602029,
+        0.18305002780529953,
+        0.11531353565536402,
+        0.19475621229743365
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "17/04/2026",
+      "page": 0,
+      "bbox": [
+        0.3351508930768257,
+        0.17585732463652315,
+        0.4148390403227103,
+        0.19014264238421444
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Issuer",
+      "page": 0,
+      "bbox": [
+        0.08507267339212324,
+        0.2095627802393574,
+        0.12313709447036963,
+        0.22141204963604866
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats University",
+      "page": 0,
+      "bbox": [
+        0.33437816249464447,
+        0.2003718667794087,
+        0.5286866540032753,
+        0.2171368462333536
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats University",
+      "page": 0,
+      "bbox": [
+        0.08872382147367808,
+        0.045812341624680356,
+        0.3750065946192283,
+        0.07295819972776456
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Degree Certificate",
+      "page": 0,
+      "bbox": [
+        0.08807661489144912,
+        0.08179451632266219,
+        0.2260926008090658,
+        0.09927329478053959
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.08392675515236328,
+        0.248412668905527,
+        0.5085810817265385,
+        0.26800451057508773
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.08354516620481249,
+        0.26378356240824696,
+        0.5329780380130017,
+        0.2835197258117816
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06782583246208286,
+        0.9131092772795566,
+        0.2867956454964521,
+        0.9256015891992363
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "issuer": [
+      5
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": null,
+  "linked_people": [],
+  "area": "education",
+  "folder": null,
+  "expected_ask": [
+    "person_unsure"
+  ]
+}

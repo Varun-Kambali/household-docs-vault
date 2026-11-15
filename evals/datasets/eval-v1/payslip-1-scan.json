@@ -1,0 +1,154 @@
+{
+  "doc_id": "payslip-1-scan",
+  "base_id": "payslip-1",
+  "doc_type": "payslip",
+  "person": "KIRAN RAO",
+  "variant": "scan",
+  "files": [
+    "payslip-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "KIRAN RAO",
+    "document_date": "2025-11-30",
+    "expiry_date": null,
+    "employer": null,
+    "net_pay": "12500"
+  },
+  "printed": {
+    "person_name": "KIRAN RAO",
+    "document_date": "30/11/2025",
+    "net_pay": "Rs. 12,500"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.06790611458674478,
+        0.14032936594084855,
+        0.10802340461343653,
+        0.15210554326778186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KIRAN RAO",
+      "page": 0,
+      "bbox": [
+        0.3350354443129181,
+        0.14088500657945008,
+        0.429834130323295,
+        0.15409476157128424
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06813870807494163,
+        0.1686625100822981,
+        0.09991161375598438,
+        0.18041455305195175
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "30/11/2025",
+      "page": 0,
+      "bbox": [
+        0.3351449841271406,
+        0.16925575754316427,
+        0.41883023713476014,
+        0.18244151937673628
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Net pay",
+      "page": 0,
+      "bbox": [
+        0.06837108711812569,
+        0.196969531818062,
+        0.12013343047595457,
+        0.20876370903214908
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 12,500",
+      "page": 0,
+      "bbox": [
+        0.3352544228136655,
+        0.19760031648943088,
+        0.41702923177061035,
+        0.21078129041250912
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Payslip",
+      "page": 0,
+      "bbox": [
+        0.06728481462679543,
+        0.06464633002789925,
+        0.1265906361317255,
+        0.07907438295260026
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.0687772353266903,
+        0.2464440713903513,
+        0.5194142870149494,
+        0.25929700841971925
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06891247259684928,
+        0.26291786478162205,
+        0.5453321844606857,
+        0.27587262735665247
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07448978791273594,
+        0.9423129759361506,
+        0.3089601067976664,
+        0.9538754795490684
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "net_pay": [
+      5
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "work",
+  "folder": "Kiran Rao/Work",
+  "expected_ask": []
+}

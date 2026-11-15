@@ -1,0 +1,142 @@
+{
+  "doc_id": "card_front-1-photo",
+  "base_id": "card_front-1",
+  "doc_type": "card_front",
+  "person": "K Rao",
+  "variant": "photo",
+  "files": [
+    "card_front-1-photo.jpg"
+  ],
+  "fields": {
+    "bank": "Malnad Co-operative Bank",
+    "card_name": null,
+    "number": "4012888888881881",
+    "expiry": "11/28",
+    "holder": "K RAO",
+    "network": "VISA",
+    "cvv": null
+  },
+  "printed": {
+    "bank": "Malnad Co-operative Bank",
+    "number": "4012 8888 8888 1881",
+    "expiry": "11/28",
+    "holder": "K RAO",
+    "network": "VISA"
+  },
+  "lines": [
+    {
+      "text": "Malnad Co-operative Bank",
+      "page": 0,
+      "bbox": [
+        0.06501791011609337,
+        0.12534653473779456,
+        0.4975741634791991,
+        0.1911589326931781
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credit Card",
+      "page": 0,
+      "bbox": [
+        0.8141094282300335,
+        0.1571700988946947,
+        0.9302596079935338,
+        0.19641998774344452
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4012 8888 8888 1881",
+      "page": 0,
+      "bbox": [
+        0.0653595345268456,
+        0.4642990336812242,
+        0.5794282458357786,
+        0.5447995979823619
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "VALID THRU",
+      "page": 0,
+      "bbox": [
+        0.06549041449883637,
+        0.5941553676306622,
+        0.15941520887976646,
+        0.6204445625671993
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "11/28",
+      "page": 0,
+      "bbox": [
+        0.21411403433508291,
+        0.5837038182062553,
+        0.29528058783076383,
+        0.6273950524456181
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "K RAO",
+      "page": 0,
+      "bbox": [
+        0.06559390016179517,
+        0.6968316488351225,
+        0.15317122975589512,
+        0.743563483299992
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "VISA",
+      "page": 0,
+      "bbox": [
+        0.8308536990900515,
+        0.7956651082194015,
+        0.9037531454651809,
+        0.844422153179371
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.06570904953574719,
+        0.8110804168516488,
+        0.2519519613469666,
+        0.8685754632556419
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "bank": [
+      0
+    ],
+    "number": [
+      2
+    ],
+    "expiry": [
+      4
+    ],
+    "holder": [
+      5
+    ],
+    "network": [
+      6
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": null,
+  "linked_people": [],
+  "area": "cards",
+  "folder": null,
+  "expected_ask": [
+    "person_unsure"
+  ]
+}

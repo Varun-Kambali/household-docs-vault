@@ -1,0 +1,198 @@
+{
+  "doc_id": "hospital_bill-1-scan",
+  "base_id": "hospital_bill-1",
+  "doc_type": "hospital_bill",
+  "person": "Jeevika Deshmukh",
+  "variant": "scan",
+  "files": [
+    "hospital_bill-1-scan.pdf"
+  ],
+  "fields": {
+    "patient": "Jeevika Deshmukh",
+    "doctor": null,
+    "date": "2026-08-23",
+    "hospital": "Greenfield Polyclinic",
+    "department": null,
+    "diagnoses": null,
+    "procedures": null,
+    "allergies": null,
+    "medicines": null,
+    "tests": null,
+    "next_visit": null,
+    "amount": "143200"
+  },
+  "printed": {
+    "patient": "Jeevika Deshmukh",
+    "date": "23/08/2026",
+    "hospital": "Greenfield Polyclinic",
+    "amount": "Rs. 1,43,200"
+  },
+  "lines": [
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06894032494352628,
+        0.1366136252537968,
+        0.11589327197133424,
+        0.14841653722038767
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Jeevika Deshmukh",
+      "page": 0,
+      "bbox": [
+        0.3365227602183411,
+        0.1370826846070192,
+        0.4871322856578709,
+        0.15036728491968923
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06917899862264723,
+        0.16502351505987312,
+        0.10105685586999859,
+        0.17679307180717282
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "23/08/2026",
+      "page": 0,
+      "bbox": [
+        0.336685967392944,
+        0.16548908134395054,
+        0.4203997425891493,
+        0.17864841066667514
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hospital",
+      "page": 0,
+      "bbox": [
+        0.0694175377474671,
+        0.19341738855078433,
+        0.12385010099248468,
+        0.2052187976642982
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Greenfield Polyclinic",
+      "page": 0,
+      "bbox": [
+        0.3368490825690062,
+        0.19387946562889308,
+        0.5022270773003521,
+        0.20717104294870228
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Total amount",
+      "page": 0,
+      "bbox": [
+        0.06965594243173803,
+        0.221795259266713,
+        0.1575173554029875,
+        0.23364655657187827
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 1,43,200",
+      "page": 0,
+      "bbox": [
+        0.33701210582429403,
+        0.22225385099716288,
+        0.43273916548626484,
+        0.2354169555041142
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Greenfield Polyclinic",
+      "page": 0,
+      "bbox": [
+        0.06802416062448438,
+        0.027560429928271762,
+        0.3165855427115188,
+        0.04758150872042576
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Final Bill",
+      "page": 0,
+      "bbox": [
+        0.0683032031117148,
+        0.06077551398205952,
+        0.1379734473022258,
+        0.0752462157622692
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07007282747332853,
+        0.27141806701412946,
+        0.5212334517928934,
+        0.28386921836023726
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.0702116978420314,
+        0.2879481338682061,
+        0.5471673853249068,
+        0.30043550665894364
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.0757293435792516,
+        0.9447264931775834,
+        0.31184638988040864,
+        0.9553072012485367
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      1
+    ],
+    "date": [
+      3
+    ],
+    "hospital": [
+      5
+    ],
+    "amount": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": null,
+  "linked_people": [],
+  "area": "medical",
+  "folder": null,
+  "expected_ask": [
+    "person_unknown"
+  ]
+}

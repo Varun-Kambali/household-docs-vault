@@ -1,0 +1,362 @@
+{
+  "doc_id": "accident_policy-1-scan",
+  "base_id": "accident_policy-1",
+  "doc_type": "accident_policy",
+  "person": "Kavita R Rao",
+  "variant": "scan",
+  "files": [
+    "accident_policy-1-scan.pdf"
+  ],
+  "fields": {
+    "insurer": "Nilgiri General Insurance Company Limited",
+    "product": null,
+    "policy_number": null,
+    "policyholder": "Kavita R Rao",
+    "insured": [
+      "Kavita R Rao",
+      "Kiran Rao",
+      "Ravi Kumar Rao"
+    ],
+    "nominee": "Ekantika Naidu",
+    "sum_insured": "1000000",
+    "premium": "33000",
+    "premium_frequency": null,
+    "start_date": "2026-04-18",
+    "end_date": "2027-04-17",
+    "premium_due_date": null,
+    "agent": null,
+    "claim_helpline": "1800 446 6600"
+  },
+  "printed": {
+    "insurer": "Nilgiri General Insurance Company Limited",
+    "policyholder": "Kavita R Rao",
+    "insured": "Kavita R Rao\nKiran Rao\nRavi Kumar Rao",
+    "nominee": "Ekantika Naidu",
+    "sum_insured": "Rs. 10,00,000",
+    "premium": "Rs. 33,000",
+    "start_date": "18/04/2026",
+    "end_date": "17/04/2027",
+    "claim_helpline": "1800 446 6600"
+  },
+  "lines": [
+    {
+      "text": "Insurer",
+      "page": 0,
+      "bbox": [
+        0.07794931842202757,
+        0.14202996016706834,
+        0.12423300276006873,
+        0.153712892506388
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nilgiri General Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.3422885868806507,
+        0.14163330357091072,
+        0.6810580287259419,
+        0.1548172217410954
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policyholder",
+      "page": 0,
+      "bbox": [
+        0.07795538190460649,
+        0.17024117941045563,
+        0.1589245186515666,
+        0.18194242994390988
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita R Rao",
+      "page": 0,
+      "bbox": [
+        0.34220987938045816,
+        0.1700342133025213,
+        0.4441123036551495,
+        0.1830424594400389
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Insured persons",
+      "page": 0,
+      "bbox": [
+        0.07796144149845272,
+        0.19844008064960195,
+        0.18452690496810792,
+        0.21015386514314618
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita R Rao",
+      "page": 0,
+      "bbox": [
+        0.11098587386007236,
+        0.21604566919279466,
+        0.2128235308147839,
+        0.2290440198968817
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.11098285411105388,
+        0.23485754480923146,
+        0.18894733317415174,
+        0.2478332241711241
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi Kumar Rao",
+      "page": 0,
+      "bbox": [
+        0.1109798356521323,
+        0.2536056636579051,
+        0.23845149440287805,
+        0.2666144013231062
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nominee",
+      "page": 0,
+      "bbox": [
+        0.0779788412031355,
+        0.27950127259893376,
+        0.13739100397284248,
+        0.29116106368203704
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ekantika Naidu",
+      "page": 0,
+      "bbox": [
+        0.34190536402905136,
+        0.27925031911983383,
+        0.46019164529452056,
+        0.2922444815524579
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sum insured",
+      "page": 0,
+      "bbox": [
+        0.07798488576342254,
+        0.30763046520881177,
+        0.16130652837860285,
+        0.3193025169164785
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 10,00,000",
+      "page": 0,
+      "bbox": [
+        0.34182690208444266,
+        0.30740577925076557,
+        0.44544992711897946,
+        0.32038166074739827
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium",
+      "page": 0,
+      "bbox": [
+        0.07799092645316308,
+        0.33577948888188724,
+        0.13735020683281332,
+        0.34742595255919156
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 33,000",
+      "page": 0,
+      "bbox": [
+        0.341748490368159,
+        0.3355502699263381,
+        0.42242613590025657,
+        0.3485008276002412
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Start date",
+      "page": 0,
+      "bbox": [
+        0.07799696327607362,
+        0.36388749884357013,
+        0.14232167709996651,
+        0.3755313879083087
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "18/04/2026",
+      "page": 0,
+      "bbox": [
+        0.34167012883198494,
+        0.3636571268730613,
+        0.4241675386033136,
+        0.37660199940166744
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End date",
+      "page": 0,
+      "bbox": [
+        0.0780029962358659,
+        0.39198563094522787,
+        0.13736878153421722,
+        0.40361884023982597
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "17/04/2027",
+      "page": 0,
+      "bbox": [
+        0.3415918174277658,
+        0.39174748396097486,
+        0.4240628269885186,
+        0.4046851934202339
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Claims helpline",
+      "page": 0,
+      "bbox": [
+        0.07800902533624687,
+        0.4200270214363493,
+        0.1785096747548481,
+        0.43168832680763913
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 446 6600",
+      "page": 0,
+      "bbox": [
+        0.34151355610740913,
+        0.41979669211534565,
+        0.45142634118211794,
+        0.4327504269024098
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nilgiri General Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.077926038979841,
+        0.033316634932669634,
+        0.5867381903848755,
+        0.05311571657335956
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Personal Accident Insurance Schedule",
+      "page": 0,
+      "bbox": [
+        0.07793313009507577,
+        0.06646415756564418,
+        0.3903628340438457,
+        0.08093838999574929
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07801956698633811,
+        0.4688176194136025,
+        0.5226644827260412,
+        0.4807667500000875
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07802307824910173,
+        0.4851435264256965,
+        0.5480853915271974,
+        0.4971140253618571
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.0781216092323153,
+        0.9441489438004226,
+        0.31109114807545385,
+        0.9545711409482195
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "insurer": [
+      1
+    ],
+    "policyholder": [
+      3
+    ],
+    "insured": [
+      5,
+      6,
+      7
+    ],
+    "nominee": [
+      9
+    ],
+    "sum_insured": [
+      11
+    ],
+    "premium": [
+      13
+    ],
+    "start_date": [
+      15
+    ],
+    "end_date": [
+      17
+    ],
+    "claim_helpline": [
+      19
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2",
+    "p3",
+    "p1"
+  ],
+  "area": "insurance",
+  "folder": "Kavita Rao/Insurance",
+  "expected_ask": [
+    "missing_required"
+  ]
+}

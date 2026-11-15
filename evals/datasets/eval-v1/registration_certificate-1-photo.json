@@ -1,0 +1,190 @@
+{
+  "doc_id": "registration_certificate-1-photo",
+  "base_id": "registration_certificate-1",
+  "doc_type": "registration_certificate",
+  "person": "Suresh Rao",
+  "variant": "photo",
+  "files": [
+    "registration_certificate-1-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "Suresh Rao",
+    "document_date": "2026-07-02",
+    "expiry_date": "2041-06-28",
+    "registration_number": "KA-24565339"
+  },
+  "printed": {
+    "person_name": "Suresh Rao",
+    "document_date": "02/07/2026",
+    "registration_number": "KA-24565339",
+    "expiry_date": "28/06/2041"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.11313126546326417,
+        0.13826044877400012,
+        0.15054669231141002,
+        0.14959957745044927
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Suresh Rao",
+      "page": 0,
+      "bbox": [
+        0.3591843488560048,
+        0.13875702937494058,
+        0.44436748348255695,
+        0.1513759797103497
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.11223404156496145,
+        0.16560439800704052,
+        0.14197775090239725,
+        0.17693909325121265
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "02/07/2026",
+      "page": 0,
+      "bbox": [
+        0.35855810208564937,
+        0.16597480386079355,
+        0.43538933591879797,
+        0.17856645494974238
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.1113348603614393,
+        0.19300797158206992,
+        0.2368309707874814,
+        0.204426434324888
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-24565339",
+      "page": 0,
+      "bbox": [
+        0.35793049542299576,
+        0.19325165223531415,
+        0.4535100936580409,
+        0.20584500956715493
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Valid till",
+      "page": 0,
+      "bbox": [
+        0.11043371544087502,
+        0.2204713647310748,
+        0.15880757279712016,
+        0.23182988514455422
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "28/06/2041",
+      "page": 0,
+      "bbox": [
+        0.3573015244337287,
+        0.22058776702979377,
+        0.43430190028050975,
+        0.233154671445884
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Regional Transport Office",
+      "page": 0,
+      "bbox": [
+        0.11630810901435203,
+        0.03399083929123787,
+        0.39870698725909387,
+        0.053651421579100605
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Registration",
+      "page": 0,
+      "bbox": [
+        0.1154326526265763,
+        0.06563327200154395,
+        0.30536292197102605,
+        0.07992514138874243
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.10885196724997366,
+        0.2684956294680609,
+        0.5253415881508859,
+        0.2800664341529905
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.10832337105485494,
+        0.28446130762882604,
+        0.5487725909979763,
+        0.29619049852601675
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.08665517800212978,
+        0.9434932186751793,
+        0.31298611615428473,
+        0.957147468809951
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "registration_number": [
+      5
+    ],
+    "expiry_date": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "vehicle",
+  "folder": "Suresh Rao/Vehicle",
+  "expected_ask": []
+}

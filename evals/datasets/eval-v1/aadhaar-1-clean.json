@@ -1,0 +1,153 @@
+{
+  "doc_id": "aadhaar-1-clean",
+  "base_id": "aadhaar-1",
+  "doc_type": "aadhaar",
+  "person": "Kavita Rao",
+  "variant": "clean",
+  "files": [
+    "aadhaar-1-clean.pdf"
+  ],
+  "fields": {
+    "holder": "Kavita Rao",
+    "date_of_birth": "1967-10-30",
+    "address": null,
+    "number": "9734 2861 5782"
+  },
+  "printed": {
+    "holder": "Kavita Rao",
+    "date_of_birth": "30/10/1967",
+    "number": "9734 2861 5782"
+  },
+  "lines": [
+    {
+      "text": "Government of India",
+      "page": 0,
+      "bbox": [
+        0.36224333333333336,
+        0.09473684210526316,
+        0.6377566666666666,
+        0.14394736842105263
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ಭಾರತ ಸರ್ಕಾರ",
+      "page": 0,
+      "bbox": [
+        0.42811,
+        0.15789473684210525,
+        0.57189,
+        0.20763157894736844
+      ],
+      "lang": "kn"
+    },
+    {
+      "text": "PHOTO",
+      "page": 0,
+      "bbox": [
+        0.10907000000000001,
+        0.4473684210526316,
+        0.17426333333333335,
+        0.4792105263157895
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita Rao",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.2894736842105263,
+        0.40419999999999995,
+        0.33289473684210524
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ಕವಿತಾ ರಾವ್",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.3526315789473684,
+        0.39775666666666665,
+        0.4023684210526316
+      ],
+      "lang": "kn"
+    },
+    {
+      "text": "DOB: 30/10/1967",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.4368421052631579,
+        0.42954,
+        0.47157894736842104
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Female",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.48947368421052634,
+        0.34168000000000004,
+        0.5242105263157895
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "9734 2861 5782",
+      "page": 0,
+      "bbox": [
+        0.35544000000000003,
+        0.8210526315789474,
+        0.64456,
+        0.8905263157894736
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.686835,
+        0.3157894736842105,
+        0.913165,
+        0.3910526315789474
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only. Not a real Aadhaar.",
+      "page": 0,
+      "bbox": [
+        0.32176666666666665,
+        0.9263157894736842,
+        0.6782333333333334,
+        0.9494736842105264
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "holder": [
+      3
+    ],
+    "date_of_birth": [
+      5
+    ],
+    "number": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "identity",
+  "folder": "Kavita Rao/Identity",
+  "expected_ask": []
+}

@@ -1,0 +1,191 @@
+{
+  "doc_id": "appraisal_letter-5-clean",
+  "base_id": "appraisal_letter-5",
+  "doc_type": "appraisal_letter",
+  "person": "Master Kiran Rao",
+  "variant": "clean",
+  "files": [
+    "appraisal_letter-5-clean.pdf"
+  ],
+  "fields": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "2025-10-30",
+    "expiry_date": null,
+    "employer": "Northstar Software Private Limited",
+    "designation": "Project Lead"
+  },
+  "printed": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "30/10/2025",
+    "employer": "Northstar Software Private Limited",
+    "designation": "Project Lead"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.10756806722689076,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.4743529411764706,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.09917310924369749,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "30/10/2025",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.4202352941176471,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.13110420168067227,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Northstar Software Private Limited",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.6125714285714287,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.14709243697478994,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Project Lead",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.21852731591448932,
+        0.4370084033613445,
+        0.23159144893111638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Northstar Software Private Limited",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.48188235294117654,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Annual Appraisal Letter",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.2593848739495798,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2684085510688836,
+        0.5212201680672268,
+        0.280166270783848
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2850356294536817,
+        0.5472672268907564,
+        0.2967933491686461
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "employer": [
+      5
+    ],
+    "designation": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "work",
+  "folder": "Kiran Rao/Work",
+  "expected_ask": []
+}

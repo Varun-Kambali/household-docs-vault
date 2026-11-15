@@ -36,6 +36,7 @@ def fake_homes(tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.Mon
 
 
 SPIKE_DIR = Path(__file__).resolve().parents[1] / "evals" / "datasets" / "spike-v0"
+EVAL_V1 = Path(__file__).resolve().parents[1] / "evals" / "datasets" / "eval-v1"
 
 
 @pytest.fixture(scope="session")

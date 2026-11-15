@@ -1,0 +1,164 @@
+{
+  "doc_id": "sale_deed-1-scan",
+  "base_id": "sale_deed-1",
+  "doc_type": "sale_deed",
+  "person": "Mrs Kavita Rao",
+  "variant": "scan",
+  "files": [
+    "sale_deed-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Mrs Kavita Rao",
+    "document_date": "2026-09-11",
+    "expiry_date": null,
+    "registration_number": "KA-35248663"
+  },
+  "printed": {
+    "person_name": "Mrs Kavita Rao",
+    "document_date": "11/09/2026",
+    "registration_number": "KA-35248663"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07553612730434178,
+        0.1370595145097653,
+        0.11527367172067685,
+        0.14876275396032887
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mrs Kavita Rao",
+      "page": 0,
+      "bbox": [
+        0.3401140153239967,
+        0.1367794544469806,
+        0.4598288679120644,
+        0.14985674019644055
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07535183182461902,
+        0.1653622556587712,
+        0.10683397737113721,
+        0.17705491704759202
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "11/09/2026",
+      "page": 0,
+      "bbox": [
+        0.3399217598331565,
+        0.16513740021226533,
+        0.4228608474555242,
+        0.17817563657243907
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.07516754718075068,
+        0.1935940669558779,
+        0.20916620656463003,
+        0.20534541666616776
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-35248663",
+      "page": 0,
+      "bbox": [
+        0.3397295156568818,
+        0.19345144831157415,
+        0.4428889818453446,
+        0.2064928663327908
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Office of the Sub-Registrar",
+      "page": 0,
+      "bbox": [
+        0.07619199994653941,
+        0.028241170560650314,
+        0.39203561918977375,
+        0.04807631398119242
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sale Deed",
+      "page": 0,
+      "bbox": [
+        0.07601073804674284,
+        0.06154409049979929,
+        0.1609876070615178,
+        0.07590277634623291
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07484507512488142,
+        0.24298786036896639,
+        0.521866071928248,
+        0.25484978871839425
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07473759181245714,
+        0.2595053939927532,
+        0.5474363585046889,
+        0.2713501142219941
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07026571678667576,
+        0.9474942672894413,
+        0.30540564365272954,
+        0.958350834410668
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "registration_number": [
+      5
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "home",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "property",
+  "folder": "Home/Property",
+  "expected_ask": []
+}

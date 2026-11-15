@@ -1,0 +1,191 @@
+{
+  "doc_id": "appointment_letter-1-scan",
+  "base_id": "appointment_letter-1",
+  "doc_type": "appointment_letter",
+  "person": "Suresh Rao",
+  "variant": "scan",
+  "files": [
+    "appointment_letter-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Suresh Rao",
+    "document_date": "2026-07-10",
+    "expiry_date": null,
+    "employer": "Orchard Labs",
+    "designation": "Software Engineer"
+  },
+  "printed": {
+    "person_name": "Suresh Rao",
+    "document_date": "10/07/2026",
+    "employer": "Orchard Labs",
+    "designation": "Software Engineer"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07584363773608542,
+        0.13540607097465723,
+        0.11542494828758973,
+        0.14701355849841344
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Suresh Rao",
+      "page": 0,
+      "bbox": [
+        0.3395480429881983,
+        0.13443749069722816,
+        0.4314699734517912,
+        0.147509663271383
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07560682008175144,
+        0.16328927433636947,
+        0.10697869549846534,
+        0.17487115579451143
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "10/07/2026",
+      "page": 0,
+      "bbox": [
+        0.339388510838419,
+        0.16239592733793418,
+        0.422188288570728,
+        0.17542861858962447
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.07536986294686202,
+        0.19108225212829774,
+        0.13803565059354925,
+        0.2027451606221993
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Orchard Labs",
+      "page": 0,
+      "bbox": [
+        0.3392288845210786,
+        0.19027827757669796,
+        0.4468474041417203,
+        0.20336405372045185
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.0751327662081542,
+        0.21894311072825678,
+        0.15349218696504793,
+        0.23063558748127713
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Software Engineer",
+      "page": 0,
+      "bbox": [
+        0.3390691639527756,
+        0.21815786348446575,
+        0.48445459559223625,
+        0.23131598325956193
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Orchard Labs",
+      "page": 0,
+      "bbox": [
+        0.0766851845458646,
+        0.028284046659913083,
+        0.23726006162667085,
+        0.048019789648807286
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Letter of Appointment",
+      "page": 0,
+      "bbox": [
+        0.07645280205695071,
+        0.06070161407628787,
+        0.24962902325646164,
+        0.07535566464104147
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07471751062245682,
+        0.2670859459019877,
+        0.5212748783010801,
+        0.27948339367143143
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.0745789968872732,
+        0.28338869576933473,
+        0.5469323006402405,
+        0.29577719518540974
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.0690101516266028,
+        0.9404732370691525,
+        0.30551729733921085,
+        0.95172911626501
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "employer": [
+      5
+    ],
+    "designation": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "work",
+  "folder": "Suresh Rao/Work",
+  "expected_ask": []
+}

@@ -11,8 +11,7 @@ from collections.abc import Collection
 from dataclasses import asdict, dataclass, replace
 from importlib import metadata
 from pathlib import Path
-from types import ModuleType
-from typing import Literal
+from typing import Literal, Protocol
 
 from faker import Faker
 from PIL import Image
@@ -24,10 +23,11 @@ from household_vault.reading.render import render_page
 from household_vault.reasons import PRIORITY, Reason
 from household_vault.safety import assert_safe_path
 from household_vault.schemas import SCHEMAS
+from vault_synth.forms import FORM_SPECS
 from vault_synth.household import HOUSEHOLD, CastMember, draw_cast
 from vault_synth.model import SynthDoc
 from vault_synth.photo import to_photo
-from vault_synth.sets import LOCKABLE, SETS, SetSpec, lowest_base, split_of
+from vault_synth.sets import LOCKABLE, SETS, SetSpec, locked_password, lowest_base, split_of
 from vault_synth.sheet import Sheet, Truth
 from vault_synth.templates import (
     aadhaar,
@@ -41,8 +41,21 @@ from vault_synth.templates import (
     warranty_card,
 )
 from vault_synth.templates._kit import DrawOpts
+from vault_synth.templates.form import FormTemplate
 
-TEMPLATES: dict[DocType, ModuleType] = {
+
+class Template(Protocol):
+    """What a hand-drawn template module and a form template both offer."""
+
+    PAGE: tuple[float, float]
+    N_PEOPLE: tuple[int, int]
+
+    def draw(
+        self, s: Sheet, rng: random.Random, fake: Faker, cast: list[CastMember], opts: DrawOpts
+    ) -> Truth: ...
+
+
+TEMPLATES: dict[DocType, Template] = {
     DocType.health_policy: health_policy,
     DocType.vehicle_policy: vehicle_policy,
     DocType.warranty_card: warranty_card,
@@ -52,7 +65,9 @@ TEMPLATES: dict[DocType, ModuleType] = {
     DocType.card_front: card_front,
     DocType.prescription: prescription,
     DocType.lab_report: lab_report,
+    **{t: FormTemplate(t) for t in FORM_SPECS},
 }
+HAND_DRAWN = frozenset(t for t in TEMPLATES if t not in FORM_SPECS)
 DPI = 200
 LIBRARIES = ("faker", "reportlab", "pillow", "pypdfium2")
 ALL_SPLITS = ("train", "val", "test")
@@ -77,13 +92,17 @@ def _render(pdf_path: Path) -> Image.Image:
     return render_page(pdf_path.read_bytes(), 0, dpi=DPI)
 
 
+def bases_per_type(doc_type: DocType, spec: SetSpec) -> int:
+    return spec.per_type_form if doc_type in FORM_SPECS else spec.per_type_hand
+
+
 def _forced(doc_type: DocType, n: int, spec: SetSpec) -> tuple[bool, str | None]:
     """The two guarantees per val and test split: an outsider prescription, a pan with no number.
 
     Fixed per base number, so a base draws the same whichever subset is generated.
     """
     split = split_of(n)
-    if split == "train" or lowest_base(split, spec.per_type_hand) != n:
+    if split == "train" or lowest_base(split, bases_per_type(doc_type, spec)) != n:
         return False, None
     if doc_type is DocType.prescription:
         return True, None
@@ -118,7 +137,7 @@ def _build(
     back: _Back | None = None
     if doc_type is DocType.card_front and n % 2 == 0:
         back_sheet = Sheet(back_path, *module.PAGE)
-        cvv, line = module.draw_back(back_sheet, rng)
+        cvv, line = card_front.draw_back(back_sheet, rng)
         back = _Back(back_sheet, line)
         truth.add("cvv", cvv, cvv, [len(sheet.lines) + line])
     sheet.save()
@@ -211,13 +230,16 @@ def generate(
     for doc_type in TEMPLATES:
         if types is not None and doc_type not in types:
             continue
-        for n in range(1, spec.per_type_hand + 1):
+        for n in range(1, bases_per_type(doc_type, spec) + 1):
             if split_of(n) not in splits:
                 continue
             docs += _make_base(doc_type, n, spec, out)
     for d in docs:
-        # ground truth has no OCR confidence; leaving it out keeps the truth files small
-        text = d.model_dump_json(indent=2, exclude={"lines": {"__all__": {"confidence"}}})
+        # ground truth has no OCR confidence; leaving it out keeps the truth files small. The
+        # locked PDF's password is derived by `locked_password`, never written down.
+        text = d.model_dump_json(
+            indent=2, exclude={"password": True, "lines": {"__all__": {"confidence"}}}
+        )
         assert_safe_path(out / f"{d.doc_id}.json").write_text(text + "\n")
     assert_safe_path(out / "household.json").write_text(HOUSEHOLD.model_dump_json(indent=2) + "\n")
     manifest = {
@@ -285,7 +307,7 @@ def _make_base(doc_type: DocType, n: int, spec: SetSpec, out: Path) -> list[Synt
         files, lines = _treat(kind, base, base_id, out)
         made.append(doc(kind, files, lines))
     if doc_type in LOCKABLE:
-        password = f"pw-{base_id}"
+        password = locked_password(base_id)
         locked = assert_safe_path(out / f"{base_id}-locked.pdf")
         # the same page again from the same seed, now behind a password
         again = _build(doc_type, n, spec, locked, out / "unused-back.pdf", password)

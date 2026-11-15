@@ -1,0 +1,191 @@
+{
+  "doc_id": "certificate-5-scan",
+  "base_id": "certificate-5",
+  "doc_type": "certificate",
+  "person": "Ravi K Rao",
+  "variant": "scan",
+  "files": [
+    "certificate-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Ravi K Rao",
+    "document_date": "2026-03-26",
+    "expiry_date": null,
+    "issuer": "Cauvery Institute of Technology",
+    "credential_id": "CR-30661447"
+  },
+  "printed": {
+    "person_name": "Ravi K Rao",
+    "document_date": "26/03/2026",
+    "issuer": "Cauvery Institute of Technology",
+    "credential_id": "CR-30661447"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.0693205966316922,
+        0.13826253587765971,
+        0.10926161080964084,
+        0.14993143885514781
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi K Rao",
+      "page": 0,
+      "bbox": [
+        0.33503049004744756,
+        0.13798127772157337,
+        0.4229117352216874,
+        0.15099813727573122
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06959905195660272,
+        0.16647214660293722,
+        0.10124614847391236,
+        0.17812656149376715
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "26/03/2026",
+      "page": 0,
+      "bbox": [
+        0.33526549877480016,
+        0.16622007448489515,
+        0.4185593053393552,
+        0.17922005070819658
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Issuer",
+      "page": 0,
+      "bbox": [
+        0.06987741576092625,
+        0.19465874042999565,
+        0.11064143865906537,
+        0.20631241780119888
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Cauvery Institute of Technology",
+      "page": 0,
+      "bbox": [
+        0.3355004301868142,
+        0.19432778795065017,
+        0.5888218572862692,
+        0.20743268013524357
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credential id",
+      "page": 0,
+      "bbox": [
+        0.07015568808977582,
+        0.22281786464368553,
+        0.1540613221031881,
+        0.234489012344764
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "CR-30661447",
+      "page": 0,
+      "bbox": [
+        0.33573528432163724,
+        0.22264962086056456,
+        0.4393005716258602,
+        0.23563603013728007
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Cauvery Institute of Technology",
+      "page": 0,
+      "bbox": [
+        0.06825233590278001,
+        0.029626874139080408,
+        0.4480550923571747,
+        0.04952857516203076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Completion",
+      "page": 0,
+      "bbox": [
+        0.06857760132121515,
+        0.06282172926392751,
+        0.26873435632288406,
+        0.07728631478694396
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07064244468798903,
+        0.2719764117904612,
+        0.5192708156985584,
+        0.2837757804036267
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07080463470566124,
+        0.28841895667887363,
+        0.5451647096939888,
+        0.3001984072759577
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07726684796806023,
+        0.9430087186747739,
+        0.3125221871676604,
+        0.9537371675948441
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "issuer": [
+      5
+    ],
+    "credential_id": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "education",
+  "folder": "Ravi Kumar Rao/Education",
+  "expected_ask": []
+}

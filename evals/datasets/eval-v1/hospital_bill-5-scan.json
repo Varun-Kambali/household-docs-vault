@@ -1,0 +1,198 @@
+{
+  "doc_id": "hospital_bill-5-scan",
+  "base_id": "hospital_bill-5",
+  "doc_type": "hospital_bill",
+  "person": "Mrs Kavita Rao",
+  "variant": "scan",
+  "files": [
+    "hospital_bill-5-scan.pdf"
+  ],
+  "fields": {
+    "patient": "Mrs Kavita Rao",
+    "doctor": null,
+    "date": "2026-11-01",
+    "hospital": "Sunrise Family Hospital",
+    "department": null,
+    "diagnoses": null,
+    "procedures": null,
+    "allergies": null,
+    "medicines": null,
+    "tests": null,
+    "next_visit": null,
+    "amount": "48600"
+  },
+  "printed": {
+    "patient": "Mrs Kavita Rao",
+    "date": "01/11/2026",
+    "hospital": "Sunrise Family Hospital",
+    "amount": "Rs. 48,600"
+  },
+  "lines": [
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.07865504865970656,
+        0.13901236937980735,
+        0.12479455272248058,
+        0.15056052042252194
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mrs Kavita Rao",
+      "page": 0,
+      "bbox": [
+        0.34176806917011726,
+        0.1388586902976068,
+        0.4604272138866583,
+        0.15170582504624994
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07869503546186005,
+        0.16696414932514567,
+        0.11001432606723523,
+        0.17851590742025206
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "01/11/2026",
+      "page": 0,
+      "bbox": [
+        0.34188168679626946,
+        0.1667809033590456,
+        0.4241282703183687,
+        0.17962884660334316
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hospital",
+      "page": 0,
+      "bbox": [
+        0.07873504469136723,
+        0.19490904836915604,
+        0.1322960950604204,
+        0.20648697553911702
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sunrise Family Hospital",
+      "page": 0,
+      "bbox": [
+        0.3419953680716767,
+        0.1946283538909886,
+        0.5282312488305732,
+        0.2075675128080075
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Total amount",
+      "page": 0,
+      "bbox": [
+        0.07877507636710167,
+        0.22285508302427978,
+        0.16531630267654154,
+        0.23447373797692436
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 48,600",
+      "page": 0,
+      "bbox": [
+        0.3421091130498391,
+        0.2226403930885259,
+        0.4225616703397357,
+        0.23552183681194913
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sunrise Family Hospital",
+      "page": 0,
+      "bbox": [
+        0.07850197334331124,
+        0.032040933372508844,
+        0.3579108035522326,
+        0.05121291151188508
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Final Bill",
+      "page": 0,
+      "bbox": [
+        0.0785485266888338,
+        0.06457111844472553,
+        0.1469274072454809,
+        0.07864748366917897
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07884518586771487,
+        0.2714618154625155,
+        0.5233526310716473,
+        0.28348837644749797
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07886857100754227,
+        0.28774552937541253,
+        0.5489008248513546,
+        0.2998372913745255
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07981029769021603,
+        0.9455355673750492,
+        0.3157588492595059,
+        0.956911826304012
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      1
+    ],
+    "date": [
+      3
+    ],
+    "hospital": [
+      5
+    ],
+    "amount": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "medical",
+  "folder": "Kavita Rao/Medical/Hospital stays",
+  "expected_ask": []
+}

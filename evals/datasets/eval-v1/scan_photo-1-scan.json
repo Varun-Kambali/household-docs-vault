@@ -1,0 +1,161 @@
+{
+  "doc_id": "scan_photo-1-scan",
+  "base_id": "scan_photo-1",
+  "doc_type": "scan_photo",
+  "person": "Kavita Rao",
+  "variant": "scan",
+  "files": [
+    "scan_photo-1-scan.pdf"
+  ],
+  "fields": {
+    "patient": "Kavita Rao",
+    "doctor": null,
+    "date": "2026-09-27",
+    "hospital": null,
+    "department": "General Medicine",
+    "diagnoses": null,
+    "procedures": null,
+    "allergies": null,
+    "medicines": null,
+    "tests": null,
+    "next_visit": null,
+    "amount": null
+  },
+  "printed": {
+    "patient": "Kavita Rao",
+    "date": "27/09/2026",
+    "department": "General Medicine"
+  },
+  "lines": [
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06671185146202012,
+        0.14078194058095653,
+        0.11281128637477662,
+        0.15275986111983308
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita Rao",
+      "page": 0,
+      "bbox": [
+        0.3306296090987039,
+        0.1383953294011082,
+        0.41627315865220205,
+        0.15201985408895993
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06676393043688071,
+        0.16906512145080813,
+        0.09803337566063816,
+        0.18090938542384113
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "27/09/2026",
+      "page": 0,
+      "bbox": [
+        0.3306198512249445,
+        0.1667008240320966,
+        0.41352327740075406,
+        0.18026699495334897
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Department",
+      "page": 0,
+      "bbox": [
+        0.06681598502579618,
+        0.1968902622386148,
+        0.144157626050012,
+        0.20904573000478927
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "General Medicine",
+      "page": 0,
+      "bbox": [
+        0.3306100979356729,
+        0.19458430445920002,
+        0.4678674889351162,
+        0.20850086461968165
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ultrasound Images",
+      "page": 0,
+      "bbox": [
+        0.06657285484514883,
+        0.06465297672813512,
+        0.21872263135122547,
+        0.08021410720135588
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06751203417080033,
+        0.5727735540085506,
+        0.5125446764803957,
+        0.5852716374990166
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06754219830674961,
+        0.5891262947319463,
+        0.538201694909164,
+        0.6015758497562658
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06819517169340625,
+        0.9430577286237506,
+        0.3012458751889488,
+        0.9539035816209172
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      1
+    ],
+    "date": [
+      3
+    ],
+    "department": [
+      5
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "medical",
+  "folder": "Kavita Rao/Medical/Scans",
+  "expected_ask": []
+}

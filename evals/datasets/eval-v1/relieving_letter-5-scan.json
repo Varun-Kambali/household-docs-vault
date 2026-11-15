@@ -1,0 +1,191 @@
+{
+  "doc_id": "relieving_letter-5-scan",
+  "base_id": "relieving_letter-5",
+  "doc_type": "relieving_letter",
+  "person": "Mason Shan",
+  "variant": "scan",
+  "files": [
+    "relieving_letter-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Mason Shan",
+    "document_date": "2025-12-08",
+    "expiry_date": null,
+    "employer": "Kaveri Systems Limited",
+    "designation": "Software Engineer"
+  },
+  "printed": {
+    "person_name": "Mason Shan",
+    "document_date": "08/12/2025",
+    "employer": "Kaveri Systems Limited",
+    "designation": "Software Engineer"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07441734530662675,
+        0.13717790731500154,
+        0.11382687312448826,
+        0.14887713933546867
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mason Shan",
+      "page": 0,
+      "bbox": [
+        0.3374213316205131,
+        0.1372615440950519,
+        0.43461266646773744,
+        0.15032127186030197
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07454223321705067,
+        0.16549248160241398,
+        0.10574910005372466,
+        0.17719015829868004
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "08/12/2025",
+      "page": 0,
+      "bbox": [
+        0.33746512556359237,
+        0.16565437543143388,
+        0.4200013232683207,
+        0.17872394524239724
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.07466704402138281,
+        0.19378957440458697,
+        0.13701574097103006,
+        0.20552157548002314
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kaveri Systems Limited",
+      "page": 0,
+      "bbox": [
+        0.33750889239345583,
+        0.19402962851583247,
+        0.5237204092774727,
+        0.20722450636095796
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.07479177779100943,
+        0.22206920190619,
+        0.15272200913716902,
+        0.23383329863623462
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Software Engineer",
+      "page": 0,
+      "bbox": [
+        0.3375526321352746,
+        0.22238731966747205,
+        0.48236061578781886,
+        0.23557374536782194
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kaveri Systems Limited",
+      "page": 0,
+      "bbox": [
+        0.07393789272579669,
+        0.028246650578700964,
+        0.3525146380543407,
+        0.04799079668091376
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Relieving Letter",
+      "page": 0,
+      "bbox": [
+        0.0740839333718759,
+        0.06152692363349327,
+        0.19966173869283774,
+        0.07588778638858694
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07500987673749744,
+        0.2715165727636283,
+        0.5192309976034483,
+        0.2839873372727469
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07508252407439797,
+        0.2879871695609585,
+        0.5448313818151022,
+        0.30058237022369755
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07796713821082164,
+        0.9419865917552802,
+        0.3097554173087387,
+        0.9542488710463624
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "employer": [
+      5
+    ],
+    "designation": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": null,
+  "linked_people": [],
+  "area": "work",
+  "folder": null,
+  "expected_ask": [
+    "person_unknown"
+  ]
+}

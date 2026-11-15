@@ -1,0 +1,362 @@
+{
+  "doc_id": "warranty_card-5-photo",
+  "base_id": "warranty_card-5",
+  "doc_type": "warranty_card",
+  "person": "RAVI KUMAR RAO",
+  "variant": "photo",
+  "files": [
+    "warranty_card-5-photo.jpg"
+  ],
+  "fields": {
+    "brand": "Sony",
+    "product": "Bravia LED Television 43 inch",
+    "model": "KD-43X935",
+    "serial_number": "217DSW654773",
+    "purchase_date": "2026-05-15",
+    "seller": "Sri Lakshmi Home Needs",
+    "seller_location": "Kochi",
+    "buyer": null,
+    "warranty_parts": [
+      {
+        "part": "Panel",
+        "years": "2"
+      },
+      {
+        "part": "Product",
+        "years": "1"
+      }
+    ]
+  },
+  "printed": {
+    "brand": "Sony",
+    "product": "Bravia LED Television 43 inch",
+    "model": "KD-43X935",
+    "serial_number": "217DSW654773",
+    "purchase_date": "15/05/2026",
+    "seller": "Sri Lakshmi Home Needs",
+    "seller_location": "Kochi",
+    "warranty_parts": "Panel - 2 years\nProduct - 1 year"
+  },
+  "lines": [
+    {
+      "text": "Sony",
+      "page": 0,
+      "bbox": [
+        0.11011601403871102,
+        0.04699856363441209,
+        0.2274862028010067,
+        0.08696916571640291
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty Card",
+      "page": 0,
+      "bbox": [
+        0.7595104696662457,
+        0.049809854197007564,
+        0.9212627627435902,
+        0.07277484449834898
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product details",
+      "page": 0,
+      "bbox": [
+        0.10944869866572371,
+        0.15403509319292374,
+        0.2480779215723658,
+        0.1720692852964936
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.10922621511280817,
+        0.1880028523374779,
+        0.15897870826082638,
+        0.2004417426444458
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Bravia LED Television 43 inch",
+      "page": 0,
+      "bbox": [
+        0.34855765132457156,
+        0.1791190922343507,
+        0.5735235899648178,
+        0.19651711290050752
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Model",
+      "page": 0,
+      "bbox": [
+        0.10902790630117365,
+        0.21348782157729201,
+        0.14838243702472195,
+        0.2257312897866562
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KD-43X935",
+      "page": 0,
+      "bbox": [
+        0.34844256891519393,
+        0.2072831184476926,
+        0.4313401136256295,
+        0.2216864854966947
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Serial number",
+      "page": 0,
+      "bbox": [
+        0.1088294604205504,
+        0.23763655135657194,
+        0.1986101012601845,
+        0.2510383168009078
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "217DSW654773",
+      "page": 0,
+      "bbox": [
+        0.34832740733592327,
+        0.2316692653378171,
+        0.46469511817661624,
+        0.2468731731330487
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase details",
+      "page": 0,
+      "bbox": [
+        0.10827579378615285,
+        0.3028051979264475,
+        0.26105951147700923,
+        0.32164525724019755
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of purchase",
+      "page": 0,
+      "bbox": [
+        0.10805239956061377,
+        0.3360350405452378,
+        0.21798479053990436,
+        0.3501338491060991
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "15/05/2026",
+      "page": 0,
+      "bbox": [
+        0.34787646906883873,
+        0.33092948128256283,
+        0.4274258568601876,
+        0.3454967014682882
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dealer",
+      "page": 0,
+      "bbox": [
+        0.10785327873023356,
+        0.3630393256260026,
+        0.15049446882962203,
+        0.37552694982305884
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sri Lakshmi Home Needs",
+      "page": 0,
+      "bbox": [
+        0.34776091764989375,
+        0.35339546877847144,
+        0.5381567126632477,
+        0.3707686499195926
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dealer location",
+      "page": 0,
+      "bbox": [
+        0.10765401998796884,
+        0.3870570725542036,
+        0.20403404951882428,
+        0.40093763790326714
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kochi",
+      "page": 0,
+      "bbox": [
+        0.34764528657650307,
+        0.38228969315452294,
+        0.3918948796568458,
+        0.396058019386317
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty terms",
+      "page": 0,
+      "bbox": [
+        0.10691646948778546,
+        0.4758712805850804,
+        0.248294939596546,
+        0.4949945685580825
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Part and warranty period",
+      "page": 0,
+      "bbox": [
+        0.10671019827411349,
+        0.5054367245263129,
+        0.26495611593536145,
+        0.5212995296903795
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Panel - 2 years",
+      "page": 0,
+      "bbox": [
+        0.10651833354885944,
+        0.5298353043257885,
+        0.21916807019423418,
+        0.5457672876999518
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product - 1 year",
+      "page": 0,
+      "bbox": [
+        0.10631814898482396,
+        0.5550424855364994,
+        0.22789160126663924,
+        0.5712960422095985
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Warranty starts on the date of purchase shown on the original invoice.",
+      "page": 0,
+      "bbox": [
+        0.10548954730107693,
+        0.6512230264515749,
+        0.567048463325362,
+        0.6769643741940329
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Keep this card and the invoice. Service is refused without them.",
+      "page": 0,
+      "bbox": [
+        0.10534345241358176,
+        0.6709368129248388,
+        0.5265547127465904,
+        0.6955952838046152
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Damage from misuse, power surges or unauthorised repair is not covered.",
+      "page": 0,
+      "bbox": [
+        0.10519728362224161,
+        0.6872632735648974,
+        0.5946782997246545,
+        0.7142356180835031
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4. Consumables and accessories carry no warranty.",
+      "page": 0,
+      "bbox": [
+        0.10505104087096458,
+        0.710744788752815,
+        0.43730846109206684,
+        0.732885384183878
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Authorised signature and seal",
+      "page": 0,
+      "bbox": [
+        0.7366319770286047,
+        0.8698947191280331,
+        0.9239066278767022,
+        0.8879727346968763
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.10330045638415378,
+        0.9374749363622121,
+        0.3327967255648278,
+        0.9561305770763315
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      0
+    ],
+    "product": [
+      4
+    ],
+    "model": [
+      6
+    ],
+    "serial_number": [
+      8
+    ],
+    "purchase_date": [
+      11
+    ],
+    "seller": [
+      13
+    ],
+    "seller_location": [
+      15
+    ],
+    "warranty_parts": [
+      18,
+      19
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "home",
+  "linked_people": [],
+  "area": "purchases",
+  "folder": "Home/Purchases",
+  "expected_ask": []
+}

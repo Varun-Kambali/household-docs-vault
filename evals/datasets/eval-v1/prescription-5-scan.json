@@ -1,0 +1,261 @@
+{
+  "doc_id": "prescription-5-scan",
+  "base_id": "prescription-5",
+  "doc_type": "prescription",
+  "person": "Krisha Dhingra",
+  "variant": "scan",
+  "files": [
+    "prescription-5-scan.pdf"
+  ],
+  "fields": {
+    "hospital": "Hill Park Medical Centre",
+    "doctor": null,
+    "patient": "Krisha Dhingra",
+    "date": "2026-08-06",
+    "medicines": [
+      {
+        "name": "Paracetamol",
+        "dose": "650 mg",
+        "timing": "1-1-1",
+        "duration": "7 days"
+      },
+      {
+        "name": "Amoxicillin",
+        "dose": "500 mg",
+        "timing": "1-0-1",
+        "duration": "5 days"
+      },
+      {
+        "name": "Cetirizine",
+        "dose": "10 mg",
+        "timing": "0-0-1",
+        "duration": "15 days"
+      }
+    ],
+    "next_visit": "2027-01-13"
+  },
+  "printed": {
+    "hospital": "Hill Park Medical Centre",
+    "patient": "Krisha Dhingra",
+    "date": "06/08/2026",
+    "medicines": "1. Tab Paracetamol 650 mg  1-1-1  7 days\n2. Tab Amoxicillin 500 mg  1-0-1  5 days\n3. Tab Cetirizine 10 mg  0-0-1  15 days",
+    "next_visit": "13/01/2027"
+  },
+  "lines": [
+    {
+      "text": "Hill Park Medical Centre",
+      "page": 0,
+      "bbox": [
+        0.0741162491513275,
+        0.02266246022523235,
+        0.39343876127618393,
+        0.04562536383702894
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Temple Road, Chennai",
+      "page": 0,
+      "bbox": [
+        0.07430139394617301,
+        0.05543033204257054,
+        0.24393294935176224,
+        0.06886605581349813
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MBBS, MD (General Medicine)",
+      "page": 0,
+      "bbox": [
+        0.0747777397166226,
+        0.1397364404581445,
+        0.2786009939342991,
+        0.15194913579372607
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.07501605264924087,
+        0.1819142809692234,
+        0.1213301189545787,
+        0.19364915847553538
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Krisha Dhingra",
+      "page": 0,
+      "bbox": [
+        0.17403682746428184,
+        0.18220309442619176,
+        0.2923322529526504,
+        0.19542938502176485
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.6352555296391553,
+        0.18354832897967224,
+        0.6666106043128145,
+        0.19521811474287662
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "06/08/2026",
+      "page": 0,
+      "bbox": [
+        0.7010260828120202,
+        0.18374016166189533,
+        0.7833786321696148,
+        0.19684014392760174
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Age/Sex: 34 / F",
+      "page": 0,
+      "bbox": [
+        0.07516173432487669,
+        0.2076977683060031,
+        0.17762637009402107,
+        0.21958803230493698
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rx",
+      "page": 0,
+      "bbox": [
+        0.07545320241164649,
+        0.2592832796031932,
+        0.12204569386485309,
+        0.2877846218799609
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicine, dose, timing, duration",
+      "page": 0,
+      "bbox": [
+        0.15808955554861995,
+        0.27357153028020614,
+        0.36774481368514716,
+        0.2857179810048104
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Paracetamol 650 mg  1-1-1  7 days",
+      "page": 0,
+      "bbox": [
+        0.15825936379967462,
+        0.30171532696540254,
+        0.4981259331666683,
+        0.31674410395712727
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Amoxicillin 500 mg  1-0-1  5 days",
+      "page": 0,
+      "bbox": [
+        0.1584433728375343,
+        0.3322127434195175,
+        0.482210530829303,
+        0.3471723887350928
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Tab Cetirizine 10 mg  0-0-1  15 days",
+      "page": 0,
+      "bbox": [
+        0.15862743400015114,
+        0.3627187989624817,
+        0.47237982482677665,
+        0.3776263636154629
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+      "page": 0,
+      "bbox": [
+        0.0764080754631702,
+        0.42828159133143195,
+        0.4828924389711442,
+        0.44202998947546296
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit: 13/01/2027",
+      "page": 0,
+      "bbox": [
+        0.0765939193203545,
+        0.4611731867734556,
+        0.2595157062353448,
+        0.4757414212719248
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Signature",
+      "page": 0,
+      "bbox": [
+        0.8659300437906153,
+        0.8712644929681472,
+        0.9294831820491475,
+        0.8829437994599363
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07930838079471536,
+        0.9415924484609769,
+        0.31491901869956745,
+        0.9520497137725976
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "hospital": [
+      0
+    ],
+    "patient": [
+      4
+    ],
+    "date": [
+      6
+    ],
+    "medicines": [
+      10,
+      11,
+      12
+    ],
+    "next_visit": [
+      14
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": null,
+  "linked_people": [],
+  "area": "medical",
+  "folder": null,
+  "expected_ask": [
+    "person_unknown"
+  ]
+}

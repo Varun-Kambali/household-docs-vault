@@ -1,0 +1,191 @@
+{
+  "doc_id": "experience_letter-5-scan",
+  "base_id": "experience_letter-5",
+  "doc_type": "experience_letter",
+  "person": "Peter Shankar",
+  "variant": "scan",
+  "files": [
+    "experience_letter-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Peter Shankar",
+    "document_date": "2026-08-19",
+    "expiry_date": null,
+    "employer": "Kaveri Systems Limited",
+    "designation": "Associate Manager"
+  },
+  "printed": {
+    "person_name": "Peter Shankar",
+    "document_date": "19/08/2026",
+    "employer": "Kaveri Systems Limited",
+    "designation": "Associate Manager"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.08012964602079459,
+        0.13395718412084484,
+        0.11975827015914198,
+        0.14576541733367557
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Peter Shankar",
+      "page": 0,
+      "bbox": [
+        0.34339930247807454,
+        0.13483413322451557,
+        0.4536851862769812,
+        0.14813188659210041
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.08002055148838837,
+        0.16227560764657148,
+        0.11141610484707137,
+        0.17404972156679185
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "19/08/2026",
+      "page": 0,
+      "bbox": [
+        0.34330410501804426,
+        0.1630781550028629,
+        0.4254053041382249,
+        0.1762638089287033
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.07991144564574498,
+        0.1905969669861231,
+        0.1426264167748595,
+        0.20244638568448442
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kaveri Systems Limited",
+      "page": 0,
+      "bbox": [
+        0.34320889771446284,
+        0.19132509718353155,
+        0.528078448968659,
+        0.20475976756604652
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.07980232849110556,
+        0.21892126259606381,
+        0.15819521793784166,
+        0.2307912606324682
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Associate Manager",
+      "page": 0,
+      "bbox": [
+        0.34311368056580355,
+        0.2195749602194949,
+        0.49252721845429975,
+        0.23287526291066574
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kaveri Systems Limited",
+      "page": 0,
+      "bbox": [
+        0.08051774903194554,
+        0.025430416104070014,
+        0.35894975946198115,
+        0.04606609422564979
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Experience Certificate",
+      "page": 0,
+      "bbox": [
+        0.08041051239518288,
+        0.05845573744870777,
+        0.25762622263625506,
+        0.07342708685079577
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07961134624570411,
+        0.2684958466876811,
+        0.5234372329392482,
+        0.28101288476458613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07954767779596776,
+        0.28502270708057553,
+        0.5487298595779462,
+        0.2975104682078255
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07700279286556,
+        0.9457951704648391,
+        0.3115905502105185,
+        0.9573318214028017
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "employer": [
+      5
+    ],
+    "designation": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": null,
+  "linked_people": [],
+  "area": "work",
+  "folder": null,
+  "expected_ask": [
+    "person_unknown"
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "doc_id": "property_tax_receipt-1-scan",
+  "base_id": "property_tax_receipt-1",
+  "doc_type": "property_tax_receipt",
+  "person": "Ravi K Rao",
+  "variant": "scan",
+  "files": [
+    "property_tax_receipt-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Ravi K Rao",
+    "document_date": "2025-12-03",
+    "expiry_date": null,
+    "receipt_number": "RC-49562015",
+    "amount": "12500"
+  },
+  "printed": {
+    "person_name": "Ravi K Rao",
+    "document_date": "03/12/2025",
+    "receipt_number": "RC-49562015",
+    "amount": "Rs. 12,500"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07095305517938201,
+        0.1324355545235292,
+        0.11079005099231025,
+        0.14412798176566022
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi K Rao",
+      "page": 0,
+      "bbox": [
+        0.33655701641860153,
+        0.13247506689719807,
+        0.424243919616356,
+        0.14547861958773112
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07094673889005886,
+        0.1607640017332583,
+        0.10249212101847331,
+        0.1724549759501142
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "03/12/2025",
+      "page": 0,
+      "bbox": [
+        0.33653586804952484,
+        0.1608137584462359,
+        0.4196502236547141,
+        0.17381830553361083
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Receipt number",
+      "page": 0,
+      "bbox": [
+        0.07094042330577434,
+        0.18908928678430323,
+        0.17635916775314445,
+        0.2007980375185379
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "RC-49562015",
+      "page": 0,
+      "bbox": [
+        0.3365147220419252,
+        0.18914928554894792,
+        0.4399040908592271,
+        0.20216052670492687
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Amount",
+      "page": 0,
+      "bbox": [
+        0.07093410842641039,
+        0.21741141020609778,
+        0.12239846625310605,
+        0.2291077944457307
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 12,500",
+      "page": 0,
+      "bbox": [
+        0.33649357839540683,
+        0.2174816487353425,
+        0.41773859235551253,
+        0.23048917892610715
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Municipal Corporation",
+      "page": 0,
+      "bbox": [
+        0.07097553636188557,
+        0.0238138701258132,
+        0.3352857667961783,
+        0.04330558768042868
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Property Tax Receipt",
+      "page": 0,
+      "bbox": [
+        0.07096932287037852,
+        0.05687756516087854,
+        0.24248112484623724,
+        0.07117567427768634
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07092305908338366,
+        0.26696752011586955,
+        0.5193461666689149,
+        0.2788031866116671
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07091937644858944,
+        0.28348407260518327,
+        0.5450709810278208,
+        0.2953385933939237
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07077255597948783,
+        0.9432655998270096,
+        0.30659578804087567,
+        0.9539187040956957
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "receipt_number": [
+      5
+    ],
+    "amount": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "home",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "property",
+  "folder": "Home/Property",
+  "expected_ask": []
+}

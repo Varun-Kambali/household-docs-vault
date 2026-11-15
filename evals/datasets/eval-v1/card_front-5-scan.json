@@ -1,0 +1,127 @@
+{
+  "doc_id": "card_front-5-scan",
+  "base_id": "card_front-5",
+  "doc_type": "card_front",
+  "person": "RAVI KUMAR RAO",
+  "variant": "scan",
+  "files": [
+    "card_front-5-scan.pdf"
+  ],
+  "fields": {
+    "bank": "Nilgiri Bank",
+    "card_name": null,
+    "number": "378282246310005",
+    "expiry": "06/29",
+    "holder": "RAVI KUMAR RAO",
+    "network": null,
+    "cvv": null
+  },
+  "printed": {
+    "bank": "Nilgiri Bank",
+    "number": "3782 822463 10005",
+    "expiry": "06/29",
+    "holder": "RAVI KUMAR RAO"
+  },
+  "lines": [
+    {
+      "text": "Nilgiri Bank",
+      "page": 0,
+      "bbox": [
+        0.06613317620963939,
+        0.09659791732362745,
+        0.25667690155379547,
+        0.15725730444506658
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credit Card",
+      "page": 0,
+      "bbox": [
+        0.8159197454866487,
+        0.10427403991918004,
+        0.9325085417670941,
+        0.1446322925872859
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3782 822463 10005",
+      "page": 0,
+      "bbox": [
+        0.061240535298387216,
+        0.45932609828510285,
+        0.52951525271255,
+        0.5431342990830048
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "VALID THRU",
+      "page": 0,
+      "bbox": [
+        0.06006196888057322,
+        0.6073054523415572,
+        0.15593379796956985,
+        0.6360864849344837
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "06/29",
+      "page": 0,
+      "bbox": [
+        0.2115660689159194,
+        0.5915212388840078,
+        0.2946825279310635,
+        0.640089996494555
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "RAVI KUMAR RAO",
+      "page": 0,
+      "bbox": [
+        0.05828532192308962,
+        0.7218679506321246,
+        0.3100688064783965,
+        0.776208599130466
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.05646838533291692,
+        0.8534592009332221,
+        0.24985176374968576,
+        0.9195083105912252
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "bank": [
+      0
+    ],
+    "number": [
+      2
+    ],
+    "expiry": [
+      4
+    ],
+    "holder": [
+      5
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "cards",
+  "folder": "Ravi Kumar Rao/Cards",
+  "expected_ask": []
+}

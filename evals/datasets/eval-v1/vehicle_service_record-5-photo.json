@@ -1,0 +1,191 @@
+{
+  "doc_id": "vehicle_service_record-5-photo",
+  "base_id": "vehicle_service_record-5",
+  "doc_type": "vehicle_service_record",
+  "person": "Master Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "vehicle_service_record-5-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "2026-05-12",
+    "expiry_date": null,
+    "registration_number": "KA-58311571",
+    "odometer_km": "119185"
+  },
+  "printed": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "12/05/2026",
+    "registration_number": "KA-58311571",
+    "odometer_km": "1,19,185"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.10542637358543888,
+        0.1480201913885784,
+        0.14187252431032202,
+        0.15934190471268306
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3466636431942732,
+        0.14393569834428585,
+        0.4723636374306039,
+        0.15765321770125643
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.10426655162734219,
+        0.17451896653712004,
+        0.13325079716211363,
+        0.18574904072937687
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "12/05/2026",
+      "page": 0,
+      "bbox": [
+        0.34574484545669837,
+        0.17116621863257955,
+        0.42236373285876594,
+        0.18424421039261116
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.10310434796953795,
+        0.19996731330469625,
+        0.22554589436375444,
+        0.21221040392093027
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-58311571",
+      "page": 0,
+      "bbox": [
+        0.34482414768910197,
+        0.19764217906195766,
+        0.4401828605835486,
+        0.21089019199213335
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Odometer (km)",
+      "page": 0,
+      "bbox": [
+        0.10193975526823906,
+        0.22686482063161315,
+        0.19350501449228377,
+        0.23872616149264983
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1,19,185",
+      "page": 0,
+      "bbox": [
+        0.34390154399162604,
+        0.2247488928969694,
+        0.40368023876930764,
+        0.2375913332480426
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Greenfield Motors Service Centre",
+      "page": 0,
+      "bbox": [
+        0.10953420066191663,
+        0.04235734061276672,
+        0.468271789399427,
+        0.06581380103751264
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Vehicle Service Invoice",
+      "page": 0,
+      "bbox": [
+        0.10840200386482805,
+        0.07591488317560967,
+        0.27958386048134204,
+        0.09159196001240157
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.09989594720828869,
+        0.2706898342143878,
+        0.5114808865230176,
+        0.28526012910237936
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.09921304009502939,
+        0.28621003945409246,
+        0.534937426704842,
+        0.3008087405946122
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07126344410369118,
+        0.9269105836316741,
+        0.29233616581273414,
+        0.939478283001682
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "registration_number": [
+      5
+    ],
+    "odometer_km": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "vehicle",
+  "folder": "Kiran Rao/Vehicle",
+  "expected_ask": []
+}

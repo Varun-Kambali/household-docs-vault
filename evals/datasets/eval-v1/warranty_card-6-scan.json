@@ -1,0 +1,362 @@
+{
+  "doc_id": "warranty_card-6-scan",
+  "base_id": "warranty_card-6",
+  "doc_type": "warranty_card",
+  "person": "Kavita Rao",
+  "variant": "scan",
+  "files": [
+    "warranty_card-6-scan.pdf"
+  ],
+  "fields": {
+    "brand": "Sony",
+    "product": "Bravia LED Television 43 inch",
+    "model": "KD-43X202",
+    "serial_number": "513ZUS122118",
+    "purchase_date": "2026-05-26",
+    "seller": "Vijaya Digital World",
+    "seller_location": "Hyderabad",
+    "buyer": null,
+    "warranty_parts": [
+      {
+        "part": "Panel",
+        "years": "2"
+      },
+      {
+        "part": "Product",
+        "years": "1"
+      }
+    ]
+  },
+  "printed": {
+    "brand": "Sony",
+    "product": "Bravia LED Television 43 inch",
+    "model": "KD-43X202",
+    "serial_number": "513ZUS122118",
+    "purchase_date": "26/05/2026",
+    "seller": "Vijaya Digital World",
+    "seller_location": "Hyderabad",
+    "warranty_parts": "Panel - 2 years\nProduct - 1 year"
+  },
+  "lines": [
+    {
+      "text": "Sony",
+      "page": 0,
+      "bbox": [
+        0.0783527966173197,
+        0.03809783933807703,
+        0.19924102421857554,
+        0.07666958318259796
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty Card",
+      "page": 0,
+      "bbox": [
+        0.7559152000777731,
+        0.05396410864619983,
+        0.928218848836816,
+        0.07466789421887182
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product details",
+      "page": 0,
+      "bbox": [
+        0.07768369241931904,
+        0.14779842038824592,
+        0.22037251747573797,
+        0.16322677075946
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.07746089870813769,
+        0.18049391265081174,
+        0.12853803895500532,
+        0.1920490434493053
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Bravia LED Television 43 inch",
+      "page": 0,
+      "bbox": [
+        0.32429539115241335,
+        0.18047880852262738,
+        0.5590651718771651,
+        0.19334457117202444
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Model",
+      "page": 0,
+      "bbox": [
+        0.07726243390572911,
+        0.20616828797831635,
+        0.11764218117400962,
+        0.21772777900153273
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KD-43X202",
+      "page": 0,
+      "bbox": [
+        0.3241113911537293,
+        0.20619023504243278,
+        0.4103118428393994,
+        0.2190559748364049
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Serial number",
+      "page": 0,
+      "bbox": [
+        0.07706394548812326,
+        0.23184392918854374,
+        0.16927413202086924,
+        0.24342371994745146
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "513ZUS122118",
+      "page": 0,
+      "bbox": [
+        0.3239273692348354,
+        0.23189649036219673,
+        0.43949112143201213,
+        0.2447825131074263
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase details",
+      "page": 0,
+      "bbox": [
+        0.0765107599712261,
+        0.29954890233484577,
+        0.2335533573507222,
+        0.3150569961626932
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of purchase",
+      "page": 0,
+      "bbox": [
+        0.07628780955082856,
+        0.3322416649398981,
+        0.18912312408846768,
+        0.34388704897761546
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "26/05/2026",
+      "page": 0,
+      "bbox": [
+        0.32320780042524794,
+        0.33241396941828916,
+        0.4058043235475594,
+        0.3453369261438926
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dealer",
+      "page": 0,
+      "bbox": [
+        0.07608920514291578,
+        0.35793230977490925,
+        0.119769573964935,
+        0.36953235957989305
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Vijaya Digital World",
+      "page": 0,
+      "bbox": [
+        0.3230236708412167,
+        0.35813526416958885,
+        0.4771070341684541,
+        0.3711331828173462
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dealer location",
+      "page": 0,
+      "bbox": [
+        0.07589057709488323,
+        0.38362601251614753,
+        0.17472454227273454,
+        0.3952881042898191
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hyderabad",
+      "page": 0,
+      "bbox": [
+        0.3228395193138143,
+        0.3838596241268589,
+        0.40815116636736676,
+        0.396808860478938
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty terms",
+      "page": 0,
+      "bbox": [
+        0.07515635100261478,
+        0.47474651597687095,
+        0.2201455183750974,
+        0.49038231420277906
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Part and warranty period",
+      "page": 0,
+      "bbox": [
+        0.0749512879915875,
+        0.5051285647833421,
+        0.23725171381707694,
+        0.5169559480601605
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Panel - 2 years",
+      "page": 0,
+      "bbox": [
+        0.07476065616811213,
+        0.5285022807585181,
+        0.1901347901082674,
+        0.5415557748157971
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product - 1 year",
+      "page": 0,
+      "bbox": [
+        0.07456186994512373,
+        0.554216290718573,
+        0.19906674806865396,
+        0.5673023614656602
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Warranty starts on the date of purchase shown on the original invoice.",
+      "page": 0,
+      "bbox": [
+        0.0737402703941509,
+        0.6617807881232336,
+        0.5498555949501498,
+        0.6744753270661512
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Keep this card and the invoice. Service is refused without them.",
+      "page": 0,
+      "bbox": [
+        0.07359561256108325,
+        0.6804931263873818,
+        0.5075617487351342,
+        0.6931290277306916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Damage from misuse, power surges or unauthorised repair is not covered.",
+      "page": 0,
+      "bbox": [
+        0.07345094219610239,
+        0.6992070856844844,
+        0.5785045801567215,
+        0.7120627894418955
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4. Consumables and accessories carry no warranty.",
+      "page": 0,
+      "bbox": [
+        0.07330625929757974,
+        0.7179226662251933,
+        0.41472261000598926,
+        0.73039685259525
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Authorised signature and seal",
+      "page": 0,
+      "bbox": [
+        0.7258423081083033,
+        0.8980377123600485,
+        0.9233525182575377,
+        0.9103512465197443
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07157904400593479,
+        0.9426361664421944,
+        0.30619809987457725,
+        0.9538079442320898
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      0
+    ],
+    "product": [
+      4
+    ],
+    "model": [
+      6
+    ],
+    "serial_number": [
+      8
+    ],
+    "purchase_date": [
+      11
+    ],
+    "seller": [
+      13
+    ],
+    "seller_location": [
+      15
+    ],
+    "warranty_parts": [
+      18,
+      19
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "home",
+  "linked_people": [],
+  "area": "purchases",
+  "folder": "Home/Purchases",
+  "expected_ask": []
+}

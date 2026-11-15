@@ -1,0 +1,148 @@
+{
+  "doc_id": "scan_photo-5-clean",
+  "base_id": "scan_photo-5",
+  "doc_type": "scan_photo",
+  "person": "Master Kiran Rao",
+  "variant": "clean",
+  "files": [
+    "scan_photo-5-clean.pdf"
+  ],
+  "fields": {
+    "patient": "Master Kiran Rao",
+    "doctor": null,
+    "date": null,
+    "hospital": "Sunrise Family Hospital",
+    "department": null,
+    "diagnoses": null,
+    "procedures": null,
+    "allergies": null,
+    "medicines": null,
+    "tests": null,
+    "next_visit": null,
+    "amount": null
+  },
+  "printed": {
+    "patient": "Master Kiran Rao",
+    "hospital": "Sunrise Family Hospital"
+  },
+  "lines": [
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.1143142857142857,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.4743529411764706,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hospital",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.12186218487394959,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sunrise Family Hospital",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.526672268907563,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sunrise Family Hospital",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.35303361344537815,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ultrasound Images",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.2223731092436975,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.5439429928741093,
+        0.5212201680672268,
+        0.5557007125890736
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.5605700712589073,
+        0.5472672268907564,
+        0.5723277909738717
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      1
+    ],
+    "hospital": [
+      3
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "medical",
+  "folder": "Kiran Rao/Medical/Scans",
+  "expected_ask": [
+    "missing_required"
+  ]
+}

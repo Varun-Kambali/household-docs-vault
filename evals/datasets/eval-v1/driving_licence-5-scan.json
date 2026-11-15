@@ -1,0 +1,256 @@
+{
+  "doc_id": "driving_licence-5-scan",
+  "base_id": "driving_licence-5",
+  "doc_type": "driving_licence",
+  "person": "Master Kiran Rao",
+  "variant": "scan",
+  "files": [
+    "driving_licence-5-scan.pdf"
+  ],
+  "fields": {
+    "holder": "Master Kiran Rao",
+    "number": "ZZF2016115",
+    "date_of_birth": "1965-02-12",
+    "issue_date": "2020-11-07",
+    "expiry_date": "2030-11-05",
+    "address": "No. 187, 17th Cross, Hyderabad, Telangana - 500403",
+    "parties": null
+  },
+  "printed": {
+    "holder": "Master Kiran Rao",
+    "number": "ZZF2016115",
+    "date_of_birth": "12/02/1965",
+    "issue_date": "07/11/2020",
+    "expiry_date": "05/11/2030",
+    "address": "No. 187, 17th Cross, Hyderabad, Telangana - 500403"
+  },
+  "lines": [
+    {
+      "text": "Holder",
+      "page": 0,
+      "bbox": [
+        0.07459507221931685,
+        0.1340821968580137,
+        0.11850445917606289,
+        0.14576732642383794
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.33899870919422115,
+        0.13533369922348476,
+        0.47466686827786775,
+        0.1487094173688966
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Number",
+      "page": 0,
+      "bbox": [
+        0.07441129543592728,
+        0.161920510458665,
+        0.1274404936368915,
+        0.17365385692996585
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ZZF2016115",
+      "page": 0,
+      "bbox": [
+        0.33895309711681365,
+        0.16314021596720799,
+        0.43346268232071156,
+        0.17632508774787814
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of birth",
+      "page": 0,
+      "bbox": [
+        0.07422732655876009,
+        0.18978791595069755,
+        0.15544836422047795,
+        0.2016519121430645
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "12/02/1965",
+      "page": 0,
+      "bbox": [
+        0.338907437417586,
+        0.1909757574837632,
+        0.42156321929799445,
+        0.20410978779911682
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of issue",
+      "page": 0,
+      "bbox": [
+        0.07404316528647702,
+        0.21768445896082975,
+        0.1611025816884752,
+        0.22957570264252453
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "07/11/2020",
+      "page": 0,
+      "bbox": [
+        0.3388617300219188,
+        0.21884036924148503,
+        0.4215606848365036,
+        0.23197775749641272
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Valid until",
+      "page": 0,
+      "bbox": [
+        0.07385881131710925,
+        0.24561018521124262,
+        0.1385866693182868,
+        0.2574091346858464
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "05/11/2030",
+      "page": 0,
+      "bbox": [
+        0.3388159748550372,
+        0.24673409680372824,
+        0.421558147727714,
+        0.2598748428479547
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Address",
+      "page": 0,
+      "bbox": [
+        0.07367426434805566,
+        0.27356514051982933,
+        0.12848569165823248,
+        0.285327833916084
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "No. 187, 17th Cross, Hyderabad, Telangana - 500403",
+      "page": 0,
+      "bbox": [
+        0.3387701718420097,
+        0.27465698582911574,
+        0.7473385988951599,
+        0.28912475860709297
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Transport Department",
+      "page": 0,
+      "bbox": [
+        0.0752474578987995,
+        0.027637346484360874,
+        0.3351011471389113,
+        0.04802683686613389
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Driving Licence",
+      "page": 0,
+      "bbox": [
+        0.07506741537393614,
+        0.059988574984001064,
+        0.19928271010453058,
+        0.07460178141982489
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07335084183428539,
+        0.322556782885611,
+        0.5209627338693928,
+        0.33584239450108067
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07324290249471604,
+        0.338907296224115,
+        0.5466267725117719,
+        0.3522651402809206
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.37772072438069515,
+        0.8726756013540247,
+        0.6222155948562476,
+        0.9096764604156354
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06925822818675768,
+        0.9438134233502694,
+        0.308016683878108,
+        0.9545970274288704
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "holder": [
+      1
+    ],
+    "number": [
+      3
+    ],
+    "date_of_birth": [
+      5
+    ],
+    "issue_date": [
+      7
+    ],
+    "expiry_date": [
+      9
+    ],
+    "address": [
+      11
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "identity",
+  "folder": "Kiran Rao/Identity",
+  "expected_ask": []
+}

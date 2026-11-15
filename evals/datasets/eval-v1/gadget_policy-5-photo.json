@@ -1,0 +1,304 @@
+{
+  "doc_id": "gadget_policy-5-photo",
+  "base_id": "gadget_policy-5",
+  "doc_type": "gadget_policy",
+  "person": "SURESH N RAO",
+  "variant": "photo",
+  "files": [
+    "gadget_policy-5-photo.jpg"
+  ],
+  "fields": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "product": "Protect Plus",
+    "policy_number": "PL/EX126621",
+    "policyholder": "SURESH N RAO",
+    "insured": null,
+    "nominee": null,
+    "sum_insured": "1000000",
+    "premium": "33000",
+    "premium_frequency": null,
+    "start_date": null,
+    "end_date": "2027-09-05",
+    "premium_due_date": null,
+    "agent": null,
+    "claim_helpline": "1800 447 3468"
+  },
+  "printed": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "product": "Protect Plus",
+    "policy_number": "PL/EX126621",
+    "policyholder": "SURESH N RAO",
+    "sum_insured": "Rs. 10,00,000",
+    "premium": "Rs. 33,000",
+    "end_date": "05/09/2027",
+    "claim_helpline": "1800 447 3468"
+  },
+  "lines": [
+    {
+      "text": "Insurer",
+      "page": 0,
+      "bbox": [
+        0.08818198505361248,
+        0.16002870749182338,
+        0.1319442381851073,
+        0.17101901470920172
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.3380676577219729,
+        0.1590692404669328,
+        0.6250438761110452,
+        0.17174992122866342
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.08821673288090297,
+        0.18647683070228746,
+        0.13673192408308374,
+        0.19749988992179854
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Protect Plus",
+      "page": 0,
+      "bbox": [
+        0.3383973869907834,
+        0.18592002018755938,
+        0.42989068483691406,
+        0.19824473203949539
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policy number",
+      "page": 0,
+      "bbox": [
+        0.0882515628020196,
+        0.2129211597165924,
+        0.17753988060083134,
+        0.22404335829067962
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "PL/EX126621",
+      "page": 0,
+      "bbox": [
+        0.33872789560737776,
+        0.21244143709932667,
+        0.436458689055188,
+        0.2248021998984706
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policyholder",
+      "page": 0,
+      "bbox": [
+        0.08828647510823388,
+        0.23952813781276502,
+        0.16513602051185508,
+        0.2506496420067124
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SURESH N RAO",
+      "page": 0,
+      "bbox": [
+        0.3390591863381238,
+        0.23899643114605332,
+        0.4595220128199559,
+        0.2514225473333148
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sum insured",
+      "page": 0,
+      "bbox": [
+        0.08832147009219672,
+        0.26617071107335055,
+        0.1676213365434176,
+        0.2773189643136434
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 10,00,000",
+      "page": 0,
+      "bbox": [
+        0.33939126196249736,
+        0.26569459655734645,
+        0.43823415181084063,
+        0.27810599792675095
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium",
+      "page": 0,
+      "bbox": [
+        0.08835654804794697,
+        0.29291979978610494,
+        0.14493707288683136,
+        0.30405154951434216
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 33,000",
+      "page": 0,
+      "bbox": [
+        0.33972412527316026,
+        0.29245419316970306,
+        0.4168187382157247,
+        0.30485277632275987
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End date",
+      "page": 0,
+      "bbox": [
+        0.08839170927091923,
+        0.3196921319141901,
+        0.1450819282983449,
+        0.33084762297708903
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "05/09/2027",
+      "page": 0,
+      "bbox": [
+        0.3400577790760387,
+        0.31923589277545944,
+        0.4190081076287547,
+        0.33166310823288303
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Claims helpline",
+      "page": 0,
+      "bbox": [
+        0.08842695405795253,
+        0.3464644680647075,
+        0.18454142442435664,
+        0.3577074111419098
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 447 3468",
+      "page": 0,
+      "bbox": [
+        0.3403922261904015,
+        0.3460417337190863,
+        0.44573853576643935,
+        0.35853722044257313
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.088049540352438,
+        0.058368977888105154,
+        0.5162205641852926,
+        0.07729555346386317
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mobile and Gadget Protection Plan",
+      "page": 0,
+      "bbox": [
+        0.08808972332807734,
+        0.08932090742450566,
+        0.35385909518989095,
+        0.1031173161978446
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.08848883440916858,
+        0.39307713395440347,
+        0.515120003470115,
+        0.4048660388756053
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.08850951854373751,
+        0.40879928883205024,
+        0.5399504510188562,
+        0.42062930965569734
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.08921170305464923,
+        0.9439543773315622,
+        0.3193139896054789,
+        0.9544683384266032
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "insurer": [
+      1
+    ],
+    "product": [
+      3
+    ],
+    "policy_number": [
+      5
+    ],
+    "policyholder": [
+      7
+    ],
+    "sum_insured": [
+      9
+    ],
+    "premium": [
+      11
+    ],
+    "end_date": [
+      13
+    ],
+    "claim_helpline": [
+      15
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "insurance",
+  "folder": "Suresh Rao/Insurance",
+  "expected_ask": []
+}

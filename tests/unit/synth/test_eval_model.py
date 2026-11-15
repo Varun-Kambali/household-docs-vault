@@ -10,7 +10,7 @@ import pytest
 from vault_synth.cli import generate
 from vault_synth.household import AMBIGUOUS, HOUSEHOLD, draw_cast
 from vault_synth.model import SynthDoc
-from vault_synth.sets import SETS, split_of
+from vault_synth.sets import SETS, locked_password, split_of
 
 from household_vault.doctypes import DocType
 from household_vault.reading.render import LockedPdfError, page_count
@@ -82,8 +82,7 @@ def test_scan_and_locked_variants(eval_docs: list[SynthDoc], eval_dir: Path) -> 
     data = (eval_dir / locked.files[0]).read_bytes()
     with pytest.raises(LockedPdfError):
         page_count(data)
-    assert locked.password
-    assert page_count(data, password=locked.password) == 1
+    assert page_count(data, password=locked_password(locked.base_id)) == 1
 
 
 def test_variants_share_truth_and_split(eval_docs: list[SynthDoc]) -> None:
@@ -132,3 +131,13 @@ def test_every_split_member_variant_and_the_guarantees_hold_per_base(tmp_path: P
     # the lowest base of each split is the outsider one, whatever the random rates did
     assert by_split["val"][0].base_id == "prescription-1" and by_split["val"][0].owner is None
     assert by_split["test"][0].base_id == "prescription-5" and by_split["test"][0].owner is None
+
+
+def test_the_lowest_pan_base_of_each_split_prints_no_number(tmp_path: Path) -> None:
+    docs = generate("eval-v1", tmp_path, splits=("val", "test"), types=[DocType.pan])
+    for split, base in (("val", 1), ("test", 5)):
+        pan = next(d for d in docs if d.doc_id == f"pan-{base}-clean")
+        assert pan.split == split
+        assert pan.fields["number"] is None
+        assert "number" not in pan.printed
+        assert "missing_required" in pan.expected_ask

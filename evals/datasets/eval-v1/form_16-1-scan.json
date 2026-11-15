@@ -1,0 +1,154 @@
+{
+  "doc_id": "form_16-1-scan",
+  "base_id": "form_16-1",
+  "doc_type": "form_16",
+  "person": "KIRAN RAO",
+  "variant": "scan",
+  "files": [
+    "form_16-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "KIRAN RAO",
+    "document_date": "2025-11-29",
+    "expiry_date": null,
+    "employer": null,
+    "assessment_year": "2025-26"
+  },
+  "printed": {
+    "person_name": "KIRAN RAO",
+    "document_date": "29/11/2025",
+    "assessment_year": "2025-26"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07850532591550777,
+        0.13716690512448385,
+        0.11790989213995136,
+        0.14878378180522714
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KIRAN RAO",
+      "page": 0,
+      "bbox": [
+        0.3413013086952535,
+        0.13657212318733172,
+        0.43491234347410557,
+        0.14961889554066143
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07826560005007867,
+        0.16517881880598145,
+        0.1094898964808887,
+        0.17677059162961348
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "29/11/2025",
+      "page": 0,
+      "bbox": [
+        0.3410838671665952,
+        0.1647081075636412,
+        0.4237641809072076,
+        0.1777053808969999
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Assessment year",
+      "page": 0,
+      "bbox": [
+        0.07802583211801718,
+        0.19308848751920343,
+        0.19128082267272264,
+        0.20476231252539828
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2025-26",
+      "page": 0,
+      "bbox": [
+        0.34086638734591107,
+        0.19285320615400312,
+        0.4015024939090199,
+        0.20579681235736716
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Form No. 16",
+      "page": 0,
+      "bbox": [
+        0.07912242647185719,
+        0.06234957928030905,
+        0.1794004398049726,
+        0.07674034217821386
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07760613698076572,
+        0.2420057965733589,
+        0.5226114730206048,
+        0.25375964524730443
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07746620995520331,
+        0.2584326386625952,
+        0.548183094783986,
+        0.27009543382271645
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07162750545372501,
+        0.9414230067167471,
+        0.30589805500749395,
+        0.9538760173460036
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "assessment_year": [
+      5
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "tax",
+  "folder": "Kiran Rao/Tax",
+  "expected_ask": []
+}

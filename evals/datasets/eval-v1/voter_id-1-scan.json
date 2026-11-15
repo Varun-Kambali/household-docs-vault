@@ -1,0 +1,152 @@
+{
+  "doc_id": "voter_id-1-scan",
+  "base_id": "voter_id-1",
+  "doc_type": "voter_id",
+  "person": "KAVITA RAO",
+  "variant": "scan",
+  "files": [
+    "voter_id-1-scan.pdf"
+  ],
+  "fields": {
+    "holder": "KAVITA RAO",
+    "number": "ZZK0006470",
+    "date_of_birth": null,
+    "issue_date": null,
+    "expiry_date": null,
+    "address": null,
+    "parties": null
+  },
+  "printed": {
+    "holder": "KAVITA RAO",
+    "number": "ZZK0006470"
+  },
+  "lines": [
+    {
+      "text": "Holder",
+      "page": 0,
+      "bbox": [
+        0.07012151368335873,
+        0.13800074699117604,
+        0.1139864567370382,
+        0.1497193860919819
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KAVITA RAO",
+      "page": 0,
+      "bbox": [
+        0.33511277995112404,
+        0.13655502422113433,
+        0.4383888505955123,
+        0.14983864668629257
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Number",
+      "page": 0,
+      "bbox": [
+        0.07005187025749822,
+        0.16590876782983244,
+        0.1230298688385142,
+        0.1776661657975816
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ZZK0006470",
+      "page": 0,
+      "bbox": [
+        0.3351209278238255,
+        0.1645820602809002,
+        0.4320150833964896,
+        0.17782900970871915
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Election Commission",
+      "page": 0,
+      "bbox": [
+        0.0703689970858649,
+        0.029962740327705503,
+        0.32271825843022706,
+        0.0504083018772928
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Elector Photo Identity Card",
+      "page": 0,
+      "bbox": [
+        0.07030065752447931,
+        0.06270603733520888,
+        0.2877889207338442,
+        0.07783186187053415
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06992989583647524,
+        0.21327400345709027,
+        0.518155191706601,
+        0.22661252694981351
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06988920983128878,
+        0.22953808589619357,
+        0.5439830026273036,
+        0.24293916237875499
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.3752471710867451,
+        0.8746424319278348,
+        0.6202643779953855,
+        0.9111759998953146
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06811196899229156,
+        0.9456998749883344,
+        0.30572712574418476,
+        0.9561907576640489
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "holder": [
+      1
+    ],
+    "number": [
+      3
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "identity",
+  "folder": "Kavita Rao/Identity",
+  "expected_ask": []
+}

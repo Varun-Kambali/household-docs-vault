@@ -1,0 +1,410 @@
+{
+  "doc_id": "life_policy-5-photo",
+  "base_id": "life_policy-5",
+  "doc_type": "life_policy",
+  "person": "Suresh Rao",
+  "variant": "photo",
+  "files": [
+    "life_policy-5-photo.jpg"
+  ],
+  "fields": {
+    "insurer": "Nilgiri General Insurance Company Limited",
+    "product": "Shield Cover",
+    "policy_number": "PL/EN313356",
+    "policyholder": "Suresh Rao",
+    "insured": [
+      "Suresh Rao"
+    ],
+    "nominee": "Aadi Sandal",
+    "sum_insured": "500000",
+    "premium": "14160",
+    "premium_frequency": "Quarterly",
+    "start_date": null,
+    "end_date": "2027-07-17",
+    "premium_due_date": null,
+    "agent": "Anand Insurance Services",
+    "claim_helpline": "1800 149 8925"
+  },
+  "printed": {
+    "insurer": "Nilgiri General Insurance Company Limited",
+    "product": "Shield Cover",
+    "policy_number": "PL/EN313356",
+    "policyholder": "Suresh Rao",
+    "insured": "Suresh Rao",
+    "nominee": "Aadi Sandal",
+    "sum_insured": "Rs. 5,00,000",
+    "premium": "Rs. 14,160",
+    "premium_frequency": "Quarterly",
+    "end_date": "17/07/2027",
+    "agent": "Anand Insurance Services",
+    "claim_helpline": "1800 149 8925"
+  },
+  "lines": [
+    {
+      "text": "Insurer",
+      "page": 0,
+      "bbox": [
+        0.0754150111488266,
+        0.162754254079306,
+        0.12210430855609734,
+        0.17498527037172246
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nilgiri General Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.3393924680394613,
+        0.15531380439869932,
+        0.6788282277280239,
+        0.172767759789795
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.07676824382694258,
+        0.19082467489961585,
+        0.12832313639772677,
+        0.20307535861941423
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Shield Cover",
+      "page": 0,
+      "bbox": [
+        0.34030696586968556,
+        0.18668068770168428,
+        0.44150823147938,
+        0.20089403095964847
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policy number",
+      "page": 0,
+      "bbox": [
+        0.07811697426308262,
+        0.2183081687856058,
+        0.17228827528488408,
+        0.23107205446426843
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "PL/EN313356",
+      "page": 0,
+      "bbox": [
+        0.34121841739291325,
+        0.21473538250583937,
+        0.4450174091853396,
+        0.2289266814602052
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policyholder",
+      "page": 0,
+      "bbox": [
+        0.07946122488855441,
+        0.24643466900427952,
+        0.16035532487950688,
+        0.2589758228923031
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Suresh Rao",
+      "page": 0,
+      "bbox": [
+        0.34212683780528064,
+        0.2428876751627467,
+        0.4338510134228691,
+        0.2568661779512651
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Insured persons",
+      "page": 0,
+      "bbox": [
+        0.08080101798590156,
+        0.27397006674214697,
+        0.18696410726153395,
+        0.2867871258078614
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Suresh Rao",
+      "page": 0,
+      "bbox": [
+        0.11434609045005326,
+        0.2911086462393584,
+        0.20580114108302844,
+        0.3049774898364545
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nominee",
+      "page": 0,
+      "bbox": [
+        0.08285785030024274,
+        0.3173372974472099,
+        0.1421773438156153,
+        0.32948278624987637
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Aadi Sandal",
+      "page": 0,
+      "bbox": [
+        0.34442219965021303,
+        0.3135923733392464,
+        0.4384934306510125,
+        0.3274629415389146
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sum insured",
+      "page": 0,
+      "bbox": [
+        0.08418641313566344,
+        0.34466621440582423,
+        0.16705641204791255,
+        0.3570611308669667
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 5,00,000",
+      "page": 0,
+      "bbox": [
+        0.3453200056025333,
+        0.3412611995099848,
+        0.43926817919730093,
+        0.35507622494849
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium",
+      "page": 0,
+      "bbox": [
+        0.08551059618203634,
+        0.3724959271240216,
+        0.14461889384544963,
+        0.38454862147459307
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 14,160",
+      "page": 0,
+      "bbox": [
+        0.3462148482023207,
+        0.3690075513380061,
+        0.42640119200827115,
+        0.3825984351755218
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium frequency",
+      "page": 0,
+      "bbox": [
+        0.0868304210615813,
+        0.3991022710803846,
+        0.21412749138581633,
+        0.41194570629817234
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Quarterly",
+      "page": 0,
+      "bbox": [
+        0.3471067420969327,
+        0.39658149208505417,
+        0.4198969430216799,
+        0.4100300220398817
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End date",
+      "page": 0,
+      "bbox": [
+        0.08814590925442548,
+        0.42729126128346145,
+        0.14710279278620803,
+        0.4392528306195541
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "17/07/2027",
+      "page": 0,
+      "bbox": [
+        0.347995701837353,
+        0.42386488411012196,
+        0.42973883101948673,
+        0.43737143240403487
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Agent",
+      "page": 0,
+      "bbox": [
+        0.08945708209976849,
+        0.45479733616595575,
+        0.128062123995103,
+        0.46647043680114453
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Anand Insurance Services",
+      "page": 0,
+      "bbox": [
+        0.34888174187898285,
+        0.44970784697626004,
+        0.5523300003425496,
+        0.4646231101973042
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Claims helpline",
+      "page": 0,
+      "bbox": [
+        0.09076396079703636,
+        0.4812486461697575,
+        0.18992327641277673,
+        0.49359896430979294
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 149 8925",
+      "page": 0,
+      "bbox": [
+        0.3497648765824243,
+        0.4780638628229792,
+        0.4582766475884741,
+        0.4917854964398974
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nilgiri General Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.0701855022507853,
+        0.04757883889758491,
+        0.5818655919502937,
+        0.0742668935865332
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Life Insurance Policy Schedule",
+      "page": 0,
+      "bbox": [
+        0.07178420750371992,
+        0.0844828509525083,
+        0.3214949431461862,
+        0.10222013106297063
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.09304072899279509,
+        0.5246655285543315,
+        0.5296670791870949,
+        0.5408608534817998
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.09379676300640537,
+        0.5401276980367163,
+        0.5550582328351814,
+        0.5565548919156387
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.11249812856492972,
+        0.9320096526545785,
+        0.33685290106174287,
+        0.9435965857936597
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "insurer": [
+      1
+    ],
+    "product": [
+      3
+    ],
+    "policy_number": [
+      5
+    ],
+    "policyholder": [
+      7
+    ],
+    "insured": [
+      9
+    ],
+    "nominee": [
+      11
+    ],
+    "sum_insured": [
+      13
+    ],
+    "premium": [
+      15
+    ],
+    "premium_frequency": [
+      17
+    ],
+    "end_date": [
+      19
+    ],
+    "agent": [
+      21
+    ],
+    "claim_helpline": [
+      23
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "insurance",
+  "folder": "Suresh Rao/Insurance",
+  "expected_ask": []
+}

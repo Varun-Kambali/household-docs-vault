@@ -1,0 +1,330 @@
+{
+  "doc_id": "gadget_policy-1-photo",
+  "base_id": "gadget_policy-1",
+  "doc_type": "gadget_policy",
+  "person": "KAVITA RAO",
+  "variant": "photo",
+  "files": [
+    "gadget_policy-1-photo.jpg"
+  ],
+  "fields": {
+    "insurer": "Tungabhadra Insurance Company Limited",
+    "product": "Shield Cover",
+    "policy_number": "PL/HL821349",
+    "policyholder": "KAVITA RAO",
+    "insured": null,
+    "nominee": null,
+    "sum_insured": "1000000",
+    "premium": "21240",
+    "premium_frequency": null,
+    "start_date": "2026-05-19",
+    "end_date": "2027-05-18",
+    "premium_due_date": null,
+    "agent": null,
+    "claim_helpline": "1800 328 8817"
+  },
+  "printed": {
+    "insurer": "Tungabhadra Insurance Company Limited",
+    "product": "Shield Cover",
+    "policy_number": "PL/HL821349",
+    "policyholder": "KAVITA RAO",
+    "sum_insured": "Rs. 10,00,000",
+    "premium": "Rs. 21,240",
+    "start_date": "19/05/2026",
+    "end_date": "18/05/2027",
+    "claim_helpline": "1800 328 8817"
+  },
+  "lines": [
+    {
+      "text": "Insurer",
+      "page": 0,
+      "bbox": [
+        0.07211846813269165,
+        0.1376922337125757,
+        0.11856218318707833,
+        0.14976843717301005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Tungabhadra Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.33601033006883313,
+        0.14009575914754996,
+        0.6654092244832743,
+        0.1560231022954934
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.07269279365381524,
+        0.1659370992597957,
+        0.12405050533147405,
+        0.17803372241341286
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Shield Cover",
+      "page": 0,
+      "bbox": [
+        0.3363574196160243,
+        0.16831720568995961,
+        0.4371077865065692,
+        0.18214014276444668
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policy number",
+      "page": 0,
+      "bbox": [
+        0.0732661320692606,
+        0.19413341974652723,
+        0.1673890807756755,
+        0.20658709050863042
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "PL/HL821349",
+      "page": 0,
+      "bbox": [
+        0.3367039130635223,
+        0.19649018406108187,
+        0.4392084609680811,
+        0.21029845434590644
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policyholder",
+      "page": 0,
+      "bbox": [
+        0.07383848592168242,
+        0.22228132021847696,
+        0.15471941802290312,
+        0.23459053008876615
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KAVITA RAO",
+      "page": 0,
+      "bbox": [
+        0.337049811945643,
+        0.22461481901434327,
+        0.4394169699092898,
+        0.2383915106914475
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sum insured",
+      "page": 0,
+      "bbox": [
+        0.07440985774501019,
+        0.2503809252922514,
+        0.15769135614134583,
+        0.2626847703552085
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 10,00,000",
+      "page": 0,
+      "bbox": [
+        0.3373951177914408,
+        0.2526912348753959,
+        0.44065882957547764,
+        0.26644548598542833
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium",
+      "page": 0,
+      "bbox": [
+        0.07498025006448557,
+        0.27843235915719633,
+        0.1343497540297039,
+        0.2905023492733695
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 21,240",
+      "page": 0,
+      "bbox": [
+        0.3377398321247319,
+        0.28071955554394995,
+        0.4181258303805393,
+        0.2942452242377963
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Start date",
+      "page": 0,
+      "bbox": [
+        0.07554966539669954,
+        0.30643574557722597,
+        0.13983018015275656,
+        0.3185234028310312
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "19/05/2026",
+      "page": 0,
+      "bbox": [
+        0.33808395646411626,
+        0.30869990449559576,
+        0.42023577315874727,
+        0.3222123578461342
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End date",
+      "page": 0,
+      "bbox": [
+        0.07611810624962947,
+        0.3343912078926431,
+        0.1354297335264717,
+        0.34641171586602637
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "18/05/2027",
+      "page": 0,
+      "bbox": [
+        0.338427492323,
+        0.33663240478361683,
+        0.42050889460612134,
+        0.35011580558633054
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Claims helpline",
+      "page": 0,
+      "bbox": [
+        0.07668557512267594,
+        0.3622988690219503,
+        0.1768684269457158,
+        0.3746395653309958
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 328 8817",
+      "page": 0,
+      "bbox": [
+        0.3387704412096175,
+        0.3645171790407944,
+        0.4480577119588375,
+        0.3782014757296044
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Tungabhadra Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.06990769645960897,
+        0.028968267311673682,
+        0.5662175162507305,
+        0.053164160416684716
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mobile and Gadget Protection Plan",
+      "page": 0,
+      "bbox": [
+        0.0705820881284372,
+        0.06213430523203913,
+        0.35273921445278683,
+        0.07906284269354083
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07767631431115692,
+        0.41102262261078765,
+        0.5193386250633849,
+        0.42614644174404287
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07800590321396743,
+        0.42723153881483533,
+        0.5447279577133617,
+        0.4425300750795843
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.08819979360437555,
+        0.9285588399538885,
+        0.3173694193867814,
+        0.9399877369759673
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "insurer": [
+      1
+    ],
+    "product": [
+      3
+    ],
+    "policy_number": [
+      5
+    ],
+    "policyholder": [
+      7
+    ],
+    "sum_insured": [
+      9
+    ],
+    "premium": [
+      11
+    ],
+    "start_date": [
+      13
+    ],
+    "end_date": [
+      15
+    ],
+    "claim_helpline": [
+      17
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "insurance",
+  "folder": "Kavita Rao/Insurance",
+  "expected_ask": []
+}
