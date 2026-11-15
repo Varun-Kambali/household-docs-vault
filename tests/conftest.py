@@ -151,7 +151,8 @@ def _pdf_bytes(encrypt: str | None = None) -> bytes:
 
 @pytest.fixture
 def clean_pdf_bytes() -> bytes:
-    """A one-page PDF with no password."""
+    """A one-page PDF with no password. Its second line makes it read as a health policy page
+    with the stand-in models ("policy schedule")."""
     return _pdf_bytes()
 
 

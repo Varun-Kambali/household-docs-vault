@@ -21,7 +21,7 @@ from household_vault.reading.heic import heic_to_png
 from household_vault.reading.lines import Line, PageText
 from household_vault.reading.ollama import ModelError
 from household_vault.reading.prompt import OCR_TEXT_LIMIT, PROMPT_V2, ocr_to_text
-from household_vault.reading.render import png_bytes, render_page
+from household_vault.reading.render import page_count, png_bytes, render_page
 from household_vault.reading.source import DocumentSource
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import secret_fields
@@ -66,13 +66,24 @@ def _english_letters(pages: list[PageText]) -> int:
     )
 
 
-def _masked(pages: list[PageText]) -> list[PageText]:
-    """The pages as kept: every line with card numbers masked."""
+# Types whose pages carry a full card number, which may have a misread digit.
+_CARD_TYPES = frozenset({DocType.card_front})
+
+
+def _masked(pages: list[PageText], *, any_long_run: bool) -> list[PageText]:
+    """The pages as kept: every line with card numbers masked. Without a type, or for a card,
+    every 13 to 19 digit run goes (a misread digit fails Luhn); other types keep non-card
+    numbers readable for search."""
     return [
         p.model_copy(
             update={
                 "lines": [
-                    Line(**{**ln.model_dump(), "text": mask_card_numbers(ln.text)})
+                    Line(
+                        **{
+                            **ln.model_dump(),
+                            "text": mask_card_numbers(ln.text, any_long_run=any_long_run),
+                        }
+                    )
                     for ln in p.lines
                 ]
             }
@@ -86,24 +97,23 @@ def _fill_images(source: DocumentSource, password: str | None) -> list[bytes]:
     pages as PNG at 200 dpi."""
     if source.kind is FileKind.pdf:
         data = source.data or b""
-        from household_vault.reading.render import page_count
-
         count = min(page_count(data, password), MAX_VISION_PAGES)
         return [png_bytes(render_page(data, i, dpi=200, password=password)) for i in range(count)]
     files = source.images if source.images is not None else [source.data or b""]
-    files = files[:MAX_VISION_PAGES]
-    if source.kind is FileKind.heic:
-        return [heic_to_png(f) for f in files]
-    return list(files)
+    return list(files[:MAX_VISION_PAGES])
 
 
-def _classify(engines: Engines, text: str, sha256: str, raw: dict[str, str]) -> DocType:
-    """The model's answer, retried once when it is broken or names an unknown type."""
+def _classify(engines: Engines, text: str, sha256: str, raw: dict[str, str]) -> DocType | None:
+    """The model's answer, retried once when it is broken or names an unknown type (then
+    other). None when the model itself failed on the second try."""
+    failed = False
     for _ in range(2):
         try:
             answer = engines.models.classify(text, sha256)
         except ModelError:
+            failed = True
             continue
+        failed = False
         raw["classify"] = answer
         try:
             value = json.loads(answer)["doc_type"]
@@ -112,7 +122,7 @@ def _classify(engines: Engines, text: str, sha256: str, raw: dict[str, str]) -> 
             continue
         if doc_type is not DocType.visit_recording:
             return doc_type
-    return DocType.other
+    return None if failed else DocType.other
 
 
 def read_document(
@@ -126,12 +136,20 @@ def read_document(
 ) -> Reading:
     if forced_type is DocType.visit_recording:
         raise ValueError("a recording is not read as a page")
+    if source.kind is FileKind.heic:  # converted once; the page reader and the fill share it
+        files = source.images if source.images is not None else [source.data or b""]
+        converted = [heic_to_png(f) for f in files]
+        source = DocumentSource(
+            FileKind.png,
+            data=None if source.images is not None else converted[0],
+            images=converted if source.images is not None else None,
+        )
     started = time.perf_counter()
     pages = engines.pages.read_pages(source, sha256, password)
     read_seconds = round(time.perf_counter() - started, 3)
     letters = _english_letters(pages)
     reading = Reading(
-        pages=_masked(pages),
+        pages=_masked(pages, any_long_run=True),
         english_letters=letters,
         seconds={"read": read_seconds},
         engine=engines.models.name,
@@ -148,10 +166,16 @@ def read_document(
         text = mask_card_numbers(
             ocr_to_text([ln for p in pages for ln in p.lines]), any_long_run=True
         )
-        doc_type = _classify(engines, text, sha256, reading.raw)
+        classified = _classify(engines, text, sha256, reading.raw)
         reading.seconds["classify"] = round(time.perf_counter() - started, 3)
+        if classified is None:
+            reading.issues = {"_json": "the type could not be read"}
+            return reading
+        doc_type = classified
         reading.type_check = cue_check(text, doc_type)
     reading.doc_type = doc_type
+    if doc_type not in _CARD_TYPES:
+        reading.pages = _masked(pages, any_long_run=False)
     reading.engine = engines.models.name  # a fallback shows once the models have been asked
     if doc_type is DocType.other:
         return reading
