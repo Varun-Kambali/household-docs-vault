@@ -229,6 +229,12 @@ class VaultRoot:
             raise _gone(rel) from None
         return sorted(entries, key=lambda e: e.name)
 
+    def head_and_size(self, rel: str, n: int) -> tuple[bytes, int]:
+        """The first n bytes of a file and its size, without reading the rest."""
+        fd = self._open_read(rel)
+        with os.fdopen(fd, "rb") as fh:
+            return fh.read(n), os.fstat(fh.fileno()).st_size
+
     def read_bytes(self, rel: str) -> bytes:
         fd = self._open_read(rel)
         with os.fdopen(fd, "rb") as fh:

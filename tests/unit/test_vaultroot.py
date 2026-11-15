@@ -355,3 +355,10 @@ def test_free_name_stays_within_the_name_limit(vault: VaultRoot) -> None:
         assert not vault.exists(f"Home/{free}")
         vault.write_atomic(f"Home/{free}", b"y")
         assert vault.free_name("Home", name).endswith(" (3).pdf")
+
+
+def test_head_and_size_reads_only_the_start(vault: VaultRoot) -> None:
+    vault.write_atomic("Inbox/big.bin", b"abcdef" * 100)
+    assert vault.head_and_size("Inbox/big.bin", 4) == (b"abcd", 600)
+    with pytest.raises(VaultGone):
+        vault.head_and_size("Inbox/none.bin", 4)
