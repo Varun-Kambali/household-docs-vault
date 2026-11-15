@@ -241,12 +241,18 @@ class VaultRoot:
             return fh.read()
 
     def sha256(self, rel: str) -> str:
+        return self.hash_and_size(rel)[0]
+
+    def hash_and_size(self, rel: str) -> tuple[str, int]:
+        """The SHA-256 and the byte count of one streamed read, so the two always agree."""
         digest = hashlib.sha256()
+        size = 0
         fd = self._open_read(rel)
         with os.fdopen(fd, "rb") as fh:
             while chunk := fh.read(_CHUNK):
                 digest.update(chunk)
-        return digest.hexdigest()
+                size += len(chunk)
+        return digest.hexdigest(), size
 
     # -- writing -------------------------------------------------------------------------------
 

@@ -52,8 +52,12 @@ def _opens(kind: FileKind, data: bytes) -> tuple[Outcome, int | None]:
         except DamagedFileError:
             return "damaged", None
     try:
+        # verify() checks structure only; load() decodes every pixel, which catches a file cut
+        # short by a half-finished sync. LOAD_TRUNCATED_IMAGES stays False.
         with Image.open(io.BytesIO(data)) as image:
             image.verify()
+        with Image.open(io.BytesIO(data)) as image:
+            image.load()
     except Exception:  # Pillow raises several types for a bad image
         return "damaged", None
     return "ok", None
@@ -92,7 +96,7 @@ def check_file(
         size = len(data)
         sha = hashlib.sha256(data).hexdigest()
     else:
-        sha = vault.sha256(rel)
+        sha, size = vault.hash_and_size(rel)
     if kind is None:
         return result("unsupported", None, sha, size)
     if not skip_duplicate:

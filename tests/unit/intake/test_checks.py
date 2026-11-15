@@ -7,7 +7,6 @@ from PIL import Image
 from reportlab.lib.pdfencrypt import StandardEncryption
 
 from household_vault.db import Store
-from household_vault.intake import checks
 from household_vault.intake.checks import check_file
 from household_vault.intake.sniff import FileKind
 from household_vault.vaultroot import VaultRoot
@@ -136,4 +135,42 @@ def test_damaged_files_are_not_remembered_for_the_pass(vault: VaultRoot, store: 
     seen: dict[str, str] = {}
     check_file(vault, "Inbox/x.pdf", store, seen, item_id=None)
     assert seen == {}
-    assert checks.__name__
+
+
+def _photo(fmt: str, **kw: object) -> bytes:
+    import random
+
+    rng = random.Random(3)
+    img = Image.new("RGB", (96, 96))
+    img.putdata(
+        [(rng.randrange(256), rng.randrange(256), rng.randrange(256)) for _ in range(96 * 96)]
+    )
+    buf = io.BytesIO()
+    img.save(buf, format=fmt, **kw)
+    return buf.getvalue()
+
+
+_BASELINE = _photo("JPEG")
+_PROGRESSIVE = _photo("JPEG", progressive=True)
+
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        _BASELINE[: len(_BASELINE) // 2],
+        _BASELINE[: len(_BASELINE) * 9 // 10],
+        _PROGRESSIVE[: len(_PROGRESSIVE) * 9 // 10],
+        _BASELINE[:-2],
+        _photo("PNG")[:-20],
+    ],
+    ids=["jpeg50", "jpeg90", "progressive90", "no-eoi", "png-cut"],
+)
+def test_a_half_synced_image_is_damaged(vault: VaultRoot, store: Store, data: bytes) -> None:
+    vault.write_atomic("Inbox/p.dat", data)
+    assert check_file(vault, "Inbox/p.dat", store, {}, item_id=None).outcome == "damaged"
+
+
+@pytest.mark.parametrize("data", [_BASELINE, _PROGRESSIVE, _photo("PNG")])
+def test_whole_images_are_ok(vault: VaultRoot, store: Store, data: bytes) -> None:
+    vault.write_atomic("Inbox/p.dat", data)
+    assert check_file(vault, "Inbox/p.dat", store, {}, item_id=None).outcome == "ok"

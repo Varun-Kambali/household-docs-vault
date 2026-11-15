@@ -362,3 +362,29 @@ def test_head_and_size_reads_only_the_start(vault: VaultRoot) -> None:
     assert vault.head_and_size("Inbox/big.bin", 4) == (b"abcd", 600)
     with pytest.raises(VaultGone):
         vault.head_and_size("Inbox/none.bin", 4)
+
+
+def test_hash_and_size_come_from_one_pass(vault: VaultRoot) -> None:
+    import hashlib
+
+    vault.write_atomic("Inbox/h.bin", b"abc" * 10)
+    assert vault.hash_and_size("Inbox/h.bin") == (hashlib.sha256(b"abc" * 10).hexdigest(), 30)
+
+
+@pytest.mark.parametrize("what", ["file_link", "dir_link", "fifo", "folder"])
+def test_head_and_size_refuses_anything_but_a_regular_file(
+    vault: VaultRoot, tmp_path: Path, what: str
+) -> None:
+    (tmp_path / "real.txt").write_bytes(b"x")
+    (tmp_path / "realdir").mkdir()
+    target = vault.root / "Inbox" / "t"
+    if what == "file_link":
+        target.symlink_to(tmp_path / "real.txt")
+    elif what == "dir_link":
+        target.symlink_to(tmp_path / "realdir")
+    elif what == "fifo":
+        os.mkfifo(target)
+    else:
+        target.mkdir()
+    with pytest.raises(VaultPathError):
+        vault.head_and_size("Inbox/t", 4)
