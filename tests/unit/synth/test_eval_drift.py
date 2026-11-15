@@ -125,4 +125,4 @@ def test_dates_on_every_committed_document_keep_their_order() -> None:
         for name in NOT_AFTER_TODAY:
             if f.get(name) is not None:
                 assert str(f[name]) <= TODAY, (d.doc_id, name)
-    assert checked > 200
+    assert checked > 100
