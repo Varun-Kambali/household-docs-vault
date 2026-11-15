@@ -21,8 +21,10 @@ from household_vault.activity import Activity
 from household_vault.checks import gstin_check_char, verhoeff_valid
 from household_vault.config import load_settings
 from household_vault.db import DocumentRow, Store, connect, migrate
-from household_vault.doctypes import DocType
+from household_vault.doctypes import REQUIRED, DocType
+from household_vault.reading.cues import CueCheck
 from household_vault.reading.lines import Line
+from household_vault.reading.pipeline import Reading
 from household_vault.vaultroot import INBOX, NEEDS_A_LOOK, VaultRoot
 
 
@@ -221,6 +223,33 @@ def row(doc_id: str, **fields: Any) -> DocumentRow:
     }
     values.update(fields)
     return DocumentRow(**values)
+
+
+TODAY = date(2026, 11, 20)
+
+
+def reading_of(doc_type: DocType | None, **fields: Any) -> Reading:
+    """A Reading as the reader would return it. Every REQUIRED field of the type holds a
+    placeholder unless given (None leaves it out); `type_check` is "agrees" unless given;
+    `issues` and `secret_values` are passed through."""
+    issues = fields.pop("issues", {})
+    secret_values = fields.pop("secret_values", {})
+    type_check = fields.pop("type_check", CueCheck("agrees"))
+    values: dict[str, Any] = {}
+    if doc_type is not None:
+        for name in sorted(REQUIRED.get(doc_type, ())):
+            is_date = name == "date" or name.endswith("_date")
+            values[name] = "2026-05-01" if is_date else f"Placeholder {name.replace('_', ' ')}"
+    values.update(fields)
+    return Reading(
+        pages=[],
+        english_letters=200,
+        doc_type=doc_type,
+        type_check=type_check if doc_type is not None else None,
+        fields={k: v for k, v in values.items() if v is not None},
+        issues=issues,
+        secret_values=secret_values,
+    )
 
 
 def item_id(store: Store) -> int:
