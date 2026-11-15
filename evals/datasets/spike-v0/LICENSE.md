@@ -18,3 +18,7 @@ The PDFs are drawn with reportlab, which cannot shape Kannada (no conjunct forms
 placement). The `lang: "kn"` line texts in the JSON files are correct Unicode, but the glyphs
 on the page are not what a Kannada reader would see. Do not use the Kannada lines to score OCR
 or reading accuracy; use them only to check that a pipeline keeps such lines and their boxes.
+
+## Frozen
+
+This set is frozen at 5b7c3fd. The generator now builds eval-v1; to regenerate spike-v0, check out 5b7c3fd.

@@ -4,10 +4,12 @@ from faker import Faker
 
 from vault_synth import data
 from vault_synth.checks import verhoeff_valid
+from vault_synth.household import CastMember, is_male, kannada_name
 from vault_synth.sheet import Sheet, Truth
-from vault_synth.templates._kit import GREY
+from vault_synth.templates._kit import GREY, DrawOpts, Page
 
 PAGE = (600.0, 380.0)
+N_PEOPLE = (1, 1)
 
 
 def fake_aadhaar_number(rng: random.Random) -> str:
@@ -18,11 +20,12 @@ def fake_aadhaar_number(rng: random.Random) -> str:
             return n
 
 
-def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
-    first_en, first_kn = rng.choice(data.KN_FIRST)
-    last_en, last_kn = rng.choice(data.KN_LAST)
-    holder = f"{first_en} {last_en}"
+def draw(
+    s: Sheet, rng: random.Random, fake: Faker, cast: list[CastMember], opts: DrawOpts
+) -> Truth:
+    holder = cast[0].printed
     t = Truth(person=holder)
+    pg = Page(s, t, rng, opts)
 
     s.rect(0, 0, 600, 8, fill="#ff9933", stroke=None)
     s.rect(0, 8, 600, 8, fill="#ffffff", stroke=None)
@@ -35,31 +38,34 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
 
     s.put(holder, 165, 110, 15, font="Helvetica-Bold")
     i = len(s.lines) - 1
-    t.add("holder", holder, holder, [i])
-    s.put(f"{first_kn} {last_kn}", 165, 134, 14, lang="kn")
+    t.add("holder", holder, holder, [i], [cast[0].person_id])
+    kn = kannada_name(holder)
+    if kn:
+        s.put(kn, 165, 134, 14, lang="kn")
 
     dob = data.past_date(rng, 8000, 25000)
-    dline = s.put(f"DOB: {data.dmy(dob)}", 165, 166, 12)
-    t.add("date_of_birth", data.iso(dob), data.dmy(dob), [dline])
-    s.put(
-        "Male"
-        if first_en in {"Suresh", "Ramesh", "Mahesh", "Girish", "Anil", "Naveen", "Kiran", "Vinay"}
-        else "Female",
+    pg.line(
+        "date_of_birth",
+        data.iso(dob),
+        data.dmy(dob),
         165,
-        186,
+        166,
         12,
+        text=f"DOB: {data.dmy(dob)}",
+        optional=True,
     )
+    s.put("Male" if is_male(cast[0], rng) else "Female", 165, 186, 12)
 
     addr, _city = data.address_lines(rng)
-    idxs = [s.put(line, 165, 214 + n * 15, 10) for n, line in enumerate(addr)]
-    s.put("Address:", 165, 200, 9, color=GREY)
-    t.add("address", ", ".join(addr), "\n".join(addr), idxs)
+    if not pg.gone("address", optional=True):
+        idxs = [s.put(line, 165, 214 + n * 15, 10) for n, line in enumerate(addr)]
+        s.put("Address:", 165, 200, 9, color=GREY)
+        t.add("address", ", ".join(addr), "\n".join(addr), idxs)
 
     number = fake_aadhaar_number(rng)
     grouped = f"{number[:4]} {number[4:8]} {number[8:]}"
     s.rect(0, 300, 600, 80, fill="#f6f6f6", stroke=None)
-    i = s.put(grouped, 300, 312, 24, font="Helvetica-Bold", align="c")
-    t.add("number", grouped, grouped, [i])
+    pg.line("number", grouped, grouped, 300, 312, 24, font="Helvetica-Bold", align="c")
     s.put("SPECIMEN", 480, 120, 26, font="Helvetica-Bold", color="#cc1111", align="c")
     s.put(
         "Specimen data for software testing only. Not a real Aadhaar.",

@@ -5,10 +5,12 @@ from reportlab.pdfbase import pdfmetrics
 
 from vault_synth import data
 from vault_synth.checks import gstin_valid
+from vault_synth.household import CastMember
 from vault_synth.sheet import Sheet, Truth
-from vault_synth.templates._kit import GREY, row
+from vault_synth.templates._kit import GREY, DrawOpts, Page
 
 PAGE = (595.0, 842.0)
+N_PEOPLE = (1, 1)
 SELLERS = ["Croma", "Reliance Digital", "Vijay Sales", "Poorvika Mobiles", "Sangeetha Mobiles"]
 ITEMS = [
     ("LG Double Door Refrigerator 242 L", "GL-S{n}ZPZX", 31990),
@@ -39,27 +41,27 @@ def _gstin(rng: random.Random, state: str) -> str:
             return gstin
 
 
-def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
-    buyer = fake.name()
+def draw(
+    s: Sheet, rng: random.Random, fake: Faker, cast: list[CastMember], opts: DrawOpts
+) -> Truth:
+    buyer = cast[0].printed
     t = Truth(person=buyer)
+    pg = Page(s, t, rng, opts)
     seller = rng.choice(SELLERS)
     city_name, state, pin = rng.choice(data.CITIES)
 
     s.put("TAX INVOICE", 297.5, 30, 18, font="Helvetica-Bold", align="c")
-    i = s.put(seller, 40, 70, 15, font="Helvetica-Bold")
-    t.add("seller", seller, seller, [i])
+    pg.line("seller", seller, seller, 40, 70, 15, font="Helvetica-Bold")
     s.put(f"{rng.randint(1, 90)}, {rng.choice(data.LOCALITIES)}", 40, 92, 10)
-    i = s.put(city_name, 40, 106, 10)
-    t.add("seller_location", city_name, city_name, [i])
-    s.put(
-        f", {state} - {pin}{rng.randint(0, 999):03d}",
-        40 + pdfmetrics.stringWidth(city_name, "Helvetica", 10),
-        106,
-        10,
-    )
+    pin_tail = f"{state} - {pin}{rng.randint(0, 999):03d}"
+    if pg.gone("seller_location", optional=True):
+        s.put(f"{state} - {pin_tail.split(' - ')[1]}", 40, 106, 10)
+    else:
+        i = s.put(city_name, 40, 106, 10)
+        t.add("seller_location", city_name, city_name, [i])
+        s.put(f", {pin_tail}", 40 + pdfmetrics.stringWidth(city_name, "Helvetica", 10), 106, 10)
     g = _gstin(rng, state)
-    i = s.put(f"GSTIN: {g}", 40, 124, 10, font="Helvetica-Bold")
-    t.add("gstin", g, g, [i])
+    pg.line("gstin", g, g, 40, 124, 10, text=f"GSTIN: {g}", font="Helvetica-Bold", optional=True)
     s.hline(40, 555, 148, "#555555", 0.8)
 
     d = data.past_date(rng, 60, 700)
@@ -67,10 +69,11 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
     fy_start = d.year if d.month >= 4 else d.year - 1
     prefix = rng.choice(["BLR", "INV", "TX"])
     inv = f"{prefix}/{fy_start % 100:02d}-{(fy_start + 1) % 100:02d}/{data.digits(rng, 6)}"
-    row(s, t, "invoice_number", "Invoice No.", inv, inv, x=40, top=160, value_x=130)
-    row(s, t, "invoice_date", "Invoice Date", data.dmy(d), data.iso(d), x=330, top=160, value_x=420)
+    pg.row("invoice_number", "Invoice No.", inv, inv, top=160, value_x=130)
+    pg.row("invoice_date", "Invoice Date", data.dmy(d), data.iso(d), x=330, top=160, value_x=420)
     s.put("Billed to", 40, 190, 9, color=GREY)
-    s.put(buyer, 40, 204, 10, font="Helvetica-Bold")
+    i = s.put(buyer, 40, 204, 10, font="Helvetica-Bold")
+    t.add("buyer", buyer, buyer, [i], [cast[0].person_id])
     s.put(f"Place of supply: {state} ({STATE_CODES[state]})", 330, 204, 9, color=GREY)
 
     product, mtpl, price = rng.choice(ITEMS)
@@ -88,10 +91,10 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
         s.put(h, x, top + 6, 9, font="Helvetica-Bold", align=al)  # type: ignore[arg-type]
     pl = s.put(product, 46, top + 34, 10, font="Helvetica-Bold")
     t.add("product", product, product, [pl])
-    ml = s.put(f"Model: {model}", 46, top + 50, 9)
-    t.add("model", model, model, [ml])
-    sl = s.put(f"Serial No: {serial}", 46, top + 64, 9)
-    t.add("serial_number", serial, serial, [sl])
+    pg.line("model", model, model, 46, top + 50, 9, text=f"Model: {model}", optional=True)
+    pg.line(
+        "serial_number", serial, serial, 46, top + 64, 9, text=f"Serial No: {serial}", optional=True
+    )
     base = round(price / 1.28)
     s.put("1", 350, top + 34, 10)
     s.put(data.indian_grouping(base), 400, top + 34, 10, align="r")

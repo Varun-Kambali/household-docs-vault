@@ -13,9 +13,10 @@ def norm(s: str) -> str:
     return re.sub(r"[\W_]+", "", s.lower())
 
 
-def test_every_field_is_supported_by_a_line(spike_docs_all: list[SynthDoc]) -> None:
-    for d in spike_docs_all:
-        assert set(d.field_lines) == set(d.fields) == set(d.printed)
+def test_every_field_is_supported_by_a_line(eval_docs: list[SynthDoc]) -> None:
+    for d in eval_docs:
+        present = {k for k, v in d.fields.items() if v is not None}
+        assert set(d.field_lines) == set(d.printed) == present, d.doc_id
         for name, idx in d.field_lines.items():
             supporting = " ".join(d.lines[i].text for i in idx)
             assert idx and norm(d.printed[name]) in norm(supporting), (d.doc_id, name)
@@ -101,18 +102,23 @@ def test_ordinals() -> None:
 
 
 def test_generation_is_deterministic(tmp_path: Path) -> None:
-    a = generate("spike-v0", per_type=1, seed=7, out=tmp_path / "a")
-    b = generate("spike-v0", per_type=1, seed=7, out=tmp_path / "b")
+    kinds = [DocType.health_policy, DocType.card_front]
+    a = generate("eval-v1", tmp_path / "a", splits=("test",), types=kinds)
+    b = generate("eval-v1", tmp_path / "b", splits=("test",), types=kinds)
     assert [d.model_dump() for d in a] == [d.model_dump() for d in b]
 
 
 def test_generate_writes_files_and_manifest(tmp_path: Path) -> None:
-    docs = generate("spike-v0", per_type=1, seed=3, out=tmp_path / "o")
     out = tmp_path / "o"
+    docs = generate("eval-v1", out, splits=("val",), types=[DocType.health_policy, DocType.pan])
     manifest = json.loads((out / "manifest.json").read_text())
-    assert len(manifest["documents"]) == len(docs) == 18
+    assert manifest["set"] == "eval-v1" and manifest["seed"] == 7
+    assert len(manifest["documents"]) == len(docs)
+    assert (out / "household.json").exists()
+    # two bases (1 and 6) of each type; the insurance type also arrives locked
+    assert len(docs) == 2 * 4 + 2 * 3
     for d in docs:
         assert (out / f"{d.doc_id}.json").exists()
         for f in d.files:
             assert (out / f).stat().st_size > 1000
-        assert d.files[0].endswith(".pdf" if d.variant == "clean" else ".jpg")
+        assert d.files[0].endswith(".jpg" if d.variant == "photo" else ".pdf")

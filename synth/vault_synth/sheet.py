@@ -8,7 +8,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
+from pydantic import JsonValue
 from reportlab.lib.colors import Color, HexColor
+from reportlab.lib.pdfencrypt import StandardEncryption
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
@@ -32,23 +34,41 @@ class Truth:
     """What a template says about the document it drew."""
 
     person: str
-    fields: dict[str, str] = field(default_factory=dict)
+    fields: dict[str, JsonValue] = field(default_factory=dict)
     printed: dict[str, str] = field(default_factory=dict)
     field_lines: dict[str, list[int]] = field(default_factory=dict)
+    # for a field that prints names: the household person (or None) behind each printed name
+    people: dict[str, list[str | None]] = field(default_factory=dict)
 
-    def add(self, name: str, value: str, printed: str, idx: list[int]) -> None:
+    def add(
+        self,
+        name: str,
+        value: JsonValue,
+        printed: str,
+        idx: list[int],
+        people: list[str | None] | None = None,
+    ) -> None:
         self.fields[name] = value
         self.printed[name] = printed
         self.field_lines[name] = idx
+        if people is not None:
+            self.people[name] = people
 
 
 class Sheet:
-    def __init__(self, path: Path, width: float, height: float) -> None:
+    def __init__(
+        self, path: Path, width: float, height: float, *, password: str | None = None
+    ) -> None:
         _register_fonts()
         self.w = width
         self.h = height
         # invariant=1 keeps dates and ids out of the PDF so reruns give identical bytes
-        self.c = Canvas(str(path), pagesize=(width, height), invariant=1)
+        self.c = Canvas(
+            str(path),
+            pagesize=(width, height),
+            invariant=1,
+            encrypt=StandardEncryption(password, strength=128) if password else None,
+        )
         self.lines: list[LineBox] = []
 
     def put(
