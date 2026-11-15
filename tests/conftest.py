@@ -1,20 +1,28 @@
 """Shared fixtures. The spike set is generated once per session (seed 7, two per type)."""
 
+import csv
+import io
 import random
+import sqlite3
 import string
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
+from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import NoReturn
+from typing import Any, NoReturn
 
 import pytest
 from vault_synth.cli import generate
+from vault_synth.household import HOUSEHOLD
 from vault_synth.model import SynthDoc
 from vault_synth.sets import load_set
 
 from household_vault import safety
+from household_vault.activity import Activity
 from household_vault.checks import gstin_check_char, verhoeff_valid
 from household_vault.config import load_settings
+from household_vault.db import DocumentRow, Store, connect, migrate
 from household_vault.doctypes import DocType
+from household_vault.reading.lines import Line
 from household_vault.vaultroot import INBOX, NEEDS_A_LOOK, VaultRoot
 
 
@@ -150,3 +158,88 @@ def clean_pdf_bytes() -> bytes:
 def locked_pdf_bytes() -> bytes:
     """A one-page PDF that opens only with the password "pw"."""
     return _pdf_bytes("pw")
+
+
+class AwareClock:
+    """A callable that returns a settable, timezone-aware datetime."""
+
+    def __init__(self, t: datetime) -> None:
+        self.t = t
+
+    def __call__(self) -> datetime:
+        return self.t
+
+    def set(self, t: datetime) -> None:
+        self.t = t
+
+    def advance(self, seconds: float = 0.0) -> None:
+        self.t = self.t + timedelta(seconds=seconds)
+
+
+@pytest.fixture
+def now() -> datetime:
+    return datetime(2026, 11, 20, 9, 0).astimezone()
+
+
+@pytest.fixture
+def clock(now: datetime) -> AwareClock:
+    return AwareClock(now)
+
+
+@pytest.fixture
+def store(tmp_path: Path, clock: AwareClock) -> Iterator[Store]:
+    """A migrated database outside the vault, with the synthetic household loaded."""
+    conn = connect(tmp_path / "db" / "vault.db", tmp_path / "vault")
+    migrate(conn)
+    s = Store(conn, clock)
+    s.set_household(HOUSEHOLD)
+    yield s
+    conn.close()
+
+
+@pytest.fixture
+def activity(store: Store, vault: "VaultRoot", clock: AwareClock) -> Activity:
+    return Activity(store, vault, clock)
+
+
+def row(doc_id: str, **fields: Any) -> DocumentRow:
+    """A DocumentRow with plain defaults (item 1, owner p1); no database involved."""
+    values: dict[str, Any] = {
+        "id": doc_id,
+        "item_id": 1,
+        "doc_type": DocType.health_policy,
+        "owner": "p1",
+        "area": "insurance",
+        "rel_path": f"Ravi Kumar Rao/Insurance/{doc_id}.pdf",
+        "sha256": "c" * 64,
+        "doc_date": date(2026, 11, 1),
+        "date_source": "document",
+        "description": "Health policy",
+        "created_at": datetime(2026, 11, 20, 9, 0).astimezone(),
+    }
+    values.update(fields)
+    return DocumentRow(**values)
+
+
+def item_id(store: Store) -> int:
+    """Add a queued item (no job) and return its id."""
+    n = store.conn.execute("select count(*) from items").fetchone()[0]
+    when = datetime(2026, 11, 20, 8, 0).astimezone()
+    return store.add_item(f"{n:064x}", f"f{n}.pdf", f"Inbox/f{n}.pdf", when).id
+
+
+def line(text: str) -> Line:
+    return Line(text=text, bbox=(0.0, 0.0, 1.0, 0.1))
+
+
+def csv_rows(vault: "VaultRoot", rel: str) -> list[list[str]]:
+    return list(csv.reader(io.StringIO(vault.read_bytes(rel).decode("utf-8"))))
+
+
+def reopen(store: Store) -> sqlite3.Connection:
+    """A new connection to the same database file."""
+    path = store.conn.execute("pragma database_list").fetchone()[2]
+    conn = sqlite3.connect(path, isolation_level=None)
+    conn.row_factory = sqlite3.Row
+    conn.execute("pragma foreign_keys = on")
+    return conn
