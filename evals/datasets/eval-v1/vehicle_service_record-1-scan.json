@@ -9,40 +9,17 @@
   ],
   "fields": {
     "person_name": "SURESH N RAO",
-    "document_date": "2026-11-03",
+    "document_date": "2026-05-20",
     "expiry_date": null,
-    "registration_number": "KA-80067942",
-    "odometer_km": "23049"
+    "registration_number": "KA-08006794",
+    "odometer_km": null
   },
   "printed": {
     "person_name": "SURESH N RAO",
-    "document_date": "03/11/2026",
-    "registration_number": "KA-80067942",
-    "odometer_km": "23,049"
+    "document_date": "20/05/2026",
+    "registration_number": "KA-08006794"
   },
   "lines": [
-    {
-      "text": "Greenfield Motors Service Centre",
-      "page": 0,
-      "bbox": [
-        0.07731703473251254,
-        0.03069286464868685,
-        0.46934194505346205,
-        0.050421165257633155
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Vehicle Service Invoice",
-      "page": 0,
-      "bbox": [
-        0.07724160298405729,
-        0.0631881247663477,
-        0.2647602351894438,
-        0.07753626283448856
-      ],
-      "lang": "en"
-    },
     {
       "text": "Name",
       "page": 0,
@@ -77,7 +54,7 @@
       "lang": "en"
     },
     {
-      "text": "03/11/2026",
+      "text": "20/05/2026",
       "page": 0,
       "bbox": [
         0.34107830803981976,
@@ -99,7 +76,7 @@
       "lang": "en"
     },
     {
-      "text": "KA-80067942",
+      "text": "KA-08006794",
       "page": 0,
       "bbox": [
         0.34105412880559294,
@@ -110,24 +87,24 @@
       "lang": "en"
     },
     {
-      "text": "Odometer (km)",
+      "text": "Greenfield Motors Service Centre",
       "page": 0,
       "bbox": [
-        0.0768133835696956,
-        0.22123747619688797,
-        0.17668256303045557,
-        0.23298599621938187
+        0.07731703473251254,
+        0.03069286464868685,
+        0.46934194505346205,
+        0.050421165257633155
       ],
       "lang": "en"
     },
     {
-      "text": "23,049",
+      "text": "Vehicle Service Invoice",
       "page": 0,
       "bbox": [
-        0.34102993990874436,
-        0.22183116034158915,
-        0.3916063881740295,
-        0.2347618588345523
+        0.07724160298405729,
+        0.0631881247663477,
+        0.2647602351894438,
+        0.07753626283448856
       ],
       "lang": "en"
     },
@@ -135,10 +112,10 @@
       "text": "This document is computer generated and valid without a signature.",
       "page": 0,
       "bbox": [
-        0.07667876834563735,
-        0.27011910082278173,
-        0.523272410509592,
-        0.2827701000375907
+        0.07675570284648303,
+        0.24218256265569027,
+        0.5232601782870158,
+        0.2547730717117424
       ],
       "lang": "en"
     },
@@ -146,10 +123,10 @@
       "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
       "page": 0,
       "bbox": [
-        0.07663387569886992,
-        0.2864205662695015,
-        0.5489590545933887,
-        0.29917336812484013
+        0.07671082812057965,
+        0.25847752119501677,
+        0.5489416809565677,
+        0.27116659045291663
       ],
       "lang": "en"
     },
@@ -167,16 +144,13 @@
   ],
   "field_lines": {
     "person_name": [
-      3
+      1
     ],
     "document_date": [
-      5
+      3
     ],
     "registration_number": [
-      7
-    ],
-    "odometer_km": [
-      9
+      5
     ]
   },
   "set_name": "eval-v1",

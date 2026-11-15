@@ -10,47 +10,25 @@
   "fields": {
     "bank": "Deccan Trust Bank",
     "card_name": "Travel Plus",
-    "network": "American Express",
+    "network": "VISA",
     "holder": "Mrs Kavita Rao",
-    "last4": "1111",
+    "last4": "1881",
     "statement_date": null,
     "payment_due_date": null,
     "total_due": null,
-    "credit_limit": "500000",
-    "annual_fee": "999"
+    "credit_limit": "100000",
+    "annual_fee": "2500"
   },
   "printed": {
     "bank": "Deccan Trust Bank",
     "card_name": "Travel Plus",
-    "network": "American Express",
+    "network": "VISA",
     "holder": "Mrs Kavita Rao",
-    "last4": "XXXX XXXX XXXX 1111",
-    "credit_limit": "Rs. 5,00,000",
-    "annual_fee": "Rs. 999"
+    "last4": "XXXX XXXX XXXX 1881",
+    "credit_limit": "Rs. 1,00,000",
+    "annual_fee": "Rs. 2,500"
   },
   "lines": [
-    {
-      "text": "Tungabhadra Bank",
-      "page": 0,
-      "bbox": [
-        0.08482221157448197,
-        0.048407713005269394,
-        0.30013598248102835,
-        0.0701598906735001
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Welcome to your new card",
-      "page": 0,
-      "bbox": [
-        0.08491781993015908,
-        0.08137104557440104,
-        0.2911450954809942,
-        0.09786654021210843
-      ],
-      "lang": "en"
-    },
     {
       "text": "Bank",
       "page": 0,
@@ -107,12 +85,12 @@
       "lang": "en"
     },
     {
-      "text": "American Express",
+      "text": "VISA",
       "page": 0,
       "bbox": [
         0.33792132283360027,
-        0.21020843382869664,
-        0.4754901556888926,
+        0.21139135498177353,
+        0.3747584635477571,
         0.22464813787779664
       ],
       "lang": "en"
@@ -151,7 +129,7 @@
       "lang": "en"
     },
     {
-      "text": "XXXX XXXX XXXX 1111",
+      "text": "XXXX XXXX XXXX 1881",
       "page": 0,
       "bbox": [
         0.3377834932916663,
@@ -173,7 +151,7 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 5,00,000",
+      "text": "Rs. 1,00,000",
       "page": 0,
       "bbox": [
         0.3377147013185619,
@@ -195,13 +173,35 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 999",
+      "text": "Rs. 2,500",
       "page": 0,
       "bbox": [
         0.337645991016316,
-        0.32283566759327076,
-        0.3927656509038107,
+        0.3226747265343433,
+        0.40588064794248246,
         0.3362754109595197
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Deccan Trust Bank",
+      "page": 0,
+      "bbox": [
+        0.08482221157448197,
+        0.04840745251650106,
+        0.3001597314859245,
+        0.0701598906735001
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Welcome to your new card",
+      "page": 0,
+      "bbox": [
+        0.08491781993015908,
+        0.08137104557440104,
+        0.2911450954809942,
+        0.09786654021210843
       ],
       "lang": "en"
     },
@@ -241,25 +241,25 @@
   ],
   "field_lines": {
     "bank": [
-      3
+      1
     ],
     "card_name": [
-      5
+      3
     ],
     "network": [
-      7
+      5
     ],
     "holder": [
-      9
+      7
     ],
     "last4": [
-      11
+      9
     ],
     "credit_limit": [
-      13
+      11
     ],
     "annual_fee": [
-      15
+      13
     ]
   },
   "set_name": "eval-v1",

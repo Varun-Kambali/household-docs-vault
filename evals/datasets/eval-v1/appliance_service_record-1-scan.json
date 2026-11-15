@@ -8,55 +8,33 @@
     "appliance_service_record-1-scan.pdf"
   ],
   "fields": {
-    "brand": "Vistara Home",
-    "product": "Split air conditioner",
+    "brand": "Aurora",
+    "product": "Front-load washing machine",
     "model": null,
-    "serial_number": "SNTW624052",
+    "serial_number": "SNKD896240",
     "seller": "Sapphire Electronics",
     "seller_location": null,
     "order_id": null,
     "buyer": "S N Rao",
-    "purchase_date": "2026-02-26",
-    "amount": "62000",
+    "purchase_date": "2025-05-16",
+    "amount": "18500",
     "invoice_number": null,
     "period_start": null,
     "period_end": null,
     "visits": null,
-    "service_helpline": "1800 526 8943"
+    "service_helpline": "1800 299 8124"
   },
   "printed": {
-    "brand": "Vistara Home",
-    "product": "Split air conditioner",
-    "serial_number": "SNTW624052",
+    "brand": "Aurora",
+    "product": "Front-load washing machine",
+    "serial_number": "SNKD896240",
     "seller": "Sapphire Electronics",
     "buyer": "S N Rao",
-    "purchase_date": "26/02/2026",
-    "amount": "Rs. 62,000",
-    "service_helpline": "1800 526 8943"
+    "purchase_date": "16/05/2025",
+    "amount": "Rs. 18,500",
+    "service_helpline": "1800 299 8124"
   },
   "lines": [
-    {
-      "text": "Service desk",
-      "page": 0,
-      "bbox": [
-        0.07576830593636638,
-        0.026363485306195283,
-        0.22723076908697842,
-        0.046164403746488794
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Service Report",
-      "page": 0,
-      "bbox": [
-        0.07591781936640678,
-        0.05950515300685775,
-        0.19605051637760143,
-        0.07402269725392858
-      ],
-      "lang": "en"
-    },
     {
       "text": "Brand",
       "page": 0,
@@ -69,13 +47,13 @@
       "lang": "en"
     },
     {
-      "text": "Vistara Home",
+      "text": "Aurora",
       "page": 0,
       "bbox": [
         0.34013007486825747,
         0.13559291071245042,
-        0.4453662988625008,
-        0.14871961931065433
+        0.3941502197290087,
+        0.14865764901156486
       ],
       "lang": "en"
     },
@@ -91,13 +69,13 @@
       "lang": "en"
     },
     {
-      "text": "Split air conditioner",
+      "text": "Front-load washing machine",
       "page": 0,
       "bbox": [
         0.340254985426205,
         0.16395515782480438,
-        0.4948181396902648,
-        0.17711640494995004
+        0.5632892427159002,
+        0.17718824251167614
       ],
       "lang": "en"
     },
@@ -113,13 +91,13 @@
       "lang": "en"
     },
     {
-      "text": "SNTW624052",
+      "text": "SNKD896240",
       "page": 0,
       "bbox": [
         0.34037989310483047,
         0.19231675115698504,
-        0.4437878908777857,
-        0.20540740877655803
+        0.44196220148357784,
+        0.20540578691021352
       ],
       "lang": "en"
     },
@@ -179,7 +157,7 @@
       "lang": "en"
     },
     {
-      "text": "26/02/2026",
+      "text": "16/05/2025",
       "page": 0,
       "bbox": [
         0.3407545988657695,
@@ -201,7 +179,7 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 62,000",
+      "text": "Rs. 18,500",
       "page": 0,
       "bbox": [
         0.3408794950281019,
@@ -223,13 +201,35 @@
       "lang": "en"
     },
     {
-      "text": "1800 526 8943",
+      "text": "1800 299 8124",
       "page": 0,
       "bbox": [
         0.34100438831160984,
         0.3341149119064365,
         0.4508528447237527,
         0.34712152221705084
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Aurora",
+      "page": 0,
+      "bbox": [
+        0.07576830593636638,
+        0.026363485306195283,
+        0.15703425568655738,
+        0.046038780277780814
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Service Report",
+      "page": 0,
+      "bbox": [
+        0.07591781936640678,
+        0.05950515300685775,
+        0.19605051637760143,
+        0.07402269725392858
       ],
       "lang": "en"
     },
@@ -269,28 +269,28 @@
   ],
   "field_lines": {
     "brand": [
-      3
+      1
     ],
     "product": [
-      5
+      3
     ],
     "serial_number": [
-      7
+      5
     ],
     "seller": [
-      9
+      7
     ],
     "buyer": [
-      11
+      9
     ],
     "purchase_date": [
-      13
+      11
     ],
     "amount": [
-      15
+      13
     ],
     "service_helpline": [
-      17
+      15
     ]
   },
   "set_name": "eval-v1",

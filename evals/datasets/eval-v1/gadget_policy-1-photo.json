@@ -10,53 +10,31 @@
   "fields": {
     "insurer": "Tungabhadra Insurance Company Limited",
     "product": "Shield Cover",
-    "policy_number": "PL/XG358213",
+    "policy_number": "PL/HL821349",
     "policyholder": "KAVITA RAO",
     "insured": null,
     "nominee": null,
     "sum_insured": "1000000",
-    "premium": "14160",
+    "premium": "21240",
     "premium_frequency": null,
-    "start_date": "2026-01-01",
-    "end_date": "2027-05-04",
+    "start_date": "2026-05-19",
+    "end_date": "2027-05-18",
     "premium_due_date": null,
     "agent": null,
-    "claim_helpline": "1800 751 9357"
+    "claim_helpline": "1800 328 8817"
   },
   "printed": {
     "insurer": "Tungabhadra Insurance Company Limited",
     "product": "Shield Cover",
-    "policy_number": "PL/XG358213",
+    "policy_number": "PL/HL821349",
     "policyholder": "KAVITA RAO",
     "sum_insured": "Rs. 10,00,000",
-    "premium": "Rs. 14,160",
-    "start_date": "01/01/2026",
-    "end_date": "04/05/2027",
-    "claim_helpline": "1800 751 9357"
+    "premium": "Rs. 21,240",
+    "start_date": "19/05/2026",
+    "end_date": "18/05/2027",
+    "claim_helpline": "1800 328 8817"
   },
   "lines": [
-    {
-      "text": "Tungabhadra Insurance Company Limited",
-      "page": 0,
-      "bbox": [
-        0.06990769645960897,
-        0.028968267311673682,
-        0.5662175162507305,
-        0.053164160416684716
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Mobile and Gadget Protection Plan",
-      "page": 0,
-      "bbox": [
-        0.0705820881284372,
-        0.06213430523203913,
-        0.35273921445278683,
-        0.07906284269354083
-      ],
-      "lang": "en"
-    },
     {
       "text": "Insurer",
       "page": 0,
@@ -113,13 +91,13 @@
       "lang": "en"
     },
     {
-      "text": "PL/XG358213",
+      "text": "PL/HL821349",
       "page": 0,
       "bbox": [
         0.3367039130635223,
         0.19649018406108187,
-        0.4410493152728804,
-        0.21031485486212217
+        0.4392084609680811,
+        0.21029845434590644
       ],
       "lang": "en"
     },
@@ -179,7 +157,7 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 14,160",
+      "text": "Rs. 21,240",
       "page": 0,
       "bbox": [
         0.3377398321247319,
@@ -201,7 +179,7 @@
       "lang": "en"
     },
     {
-      "text": "01/01/2026",
+      "text": "19/05/2026",
       "page": 0,
       "bbox": [
         0.33808395646411626,
@@ -223,7 +201,7 @@
       "lang": "en"
     },
     {
-      "text": "04/05/2027",
+      "text": "18/05/2027",
       "page": 0,
       "bbox": [
         0.338427492323,
@@ -245,13 +223,35 @@
       "lang": "en"
     },
     {
-      "text": "1800 751 9357",
+      "text": "1800 328 8817",
       "page": 0,
       "bbox": [
         0.3387704412096175,
         0.3645171790407944,
         0.4480577119588375,
         0.3782014757296044
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Tungabhadra Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.06990769645960897,
+        0.028968267311673682,
+        0.5662175162507305,
+        0.053164160416684716
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mobile and Gadget Protection Plan",
+      "page": 0,
+      "bbox": [
+        0.0705820881284372,
+        0.06213430523203913,
+        0.35273921445278683,
+        0.07906284269354083
       ],
       "lang": "en"
     },
@@ -291,31 +291,31 @@
   ],
   "field_lines": {
     "insurer": [
-      3
+      1
     ],
     "product": [
-      5
+      3
     ],
     "policy_number": [
-      7
+      5
     ],
     "policyholder": [
-      9
+      7
     ],
     "sum_insured": [
-      11
+      9
     ],
     "premium": [
-      13
+      11
     ],
     "start_date": [
-      15
+      13
     ],
     "end_date": [
-      17
+      15
     ],
     "claim_helpline": [
-      19
+      17
     ]
   },
   "set_name": "eval-v1",

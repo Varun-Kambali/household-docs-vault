@@ -9,39 +9,18 @@
   ],
   "fields": {
     "person_name": "Master Kiran Rao",
-    "document_date": "2026-05-08",
+    "document_date": "2026-05-12",
     "expiry_date": null,
-    "registration_number": "KA-83115713",
-    "odometer_km": null
+    "registration_number": "KA-58311571",
+    "odometer_km": "119185"
   },
   "printed": {
     "person_name": "Master Kiran Rao",
-    "document_date": "08/05/2026",
-    "registration_number": "KA-83115713"
+    "document_date": "12/05/2026",
+    "registration_number": "KA-58311571",
+    "odometer_km": "1,19,185"
   },
   "lines": [
-    {
-      "text": "Greenfield Motors Service Centre",
-      "page": 0,
-      "bbox": [
-        0.07833314775653259,
-        0.030119718503822203,
-        0.46681490803339637,
-        0.049284995577837255
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Vehicle Service Invoice",
-      "page": 0,
-      "bbox": [
-        0.07822035954438133,
-        0.06248280419577196,
-        0.264194700200853,
-        0.07653801339931023
-      ],
-      "lang": "en"
-    },
     {
       "text": "Name",
       "page": 0,
@@ -76,7 +55,7 @@
       "lang": "en"
     },
     {
-      "text": "08/05/2026",
+      "text": "12/05/2026",
       "page": 0,
       "bbox": [
         0.3400299653737921,
@@ -98,7 +77,7 @@
       "lang": "en"
     },
     {
-      "text": "KA-83115713",
+      "text": "KA-58311571",
       "page": 0,
       "bbox": [
         0.34005930583650024,
@@ -109,13 +88,57 @@
       "lang": "en"
     },
     {
+      "text": "Odometer (km)",
+      "page": 0,
+      "bbox": [
+        0.07757859366675118,
+        0.22026750345573878,
+        0.1768513514679889,
+        0.23185070601947097
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1,19,185",
+      "page": 0,
+      "bbox": [
+        0.34008867868713555,
+        0.2204176063670832,
+        0.40400086633333043,
+        0.23326705318730817
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Greenfield Motors Service Centre",
+      "page": 0,
+      "bbox": [
+        0.07833314775653259,
+        0.030119718503822203,
+        0.46681490803339637,
+        0.049284995577837255
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Vehicle Service Invoice",
+      "page": 0,
+      "bbox": [
+        0.07822035954438133,
+        0.06248280419577196,
+        0.264194700200853,
+        0.07653801339931023
+      ],
+      "lang": "en"
+    },
+    {
       "text": "This document is computer generated and valid without a signature.",
       "page": 0,
       "bbox": [
-        0.07749195600544022,
-        0.2412247267073429,
-        0.5210367919133684,
-        0.25303892616820794
+        0.07737632746892768,
+        0.2691946936279506,
+        0.521166249962133,
+        0.2810447691041404
       ],
       "lang": "en"
     },
@@ -123,10 +146,10 @@
       "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
       "page": 0,
       "bbox": [
-        0.07742452154483177,
-        0.25753678762469834,
-        0.5465901887293814,
-        0.2693887779253074
+        0.0773088184844224,
+        0.2855247773976065,
+        0.5467338251999599,
+        0.29741401585627236
       ],
       "lang": "en"
     },
@@ -144,12 +167,15 @@
   ],
   "field_lines": {
     "person_name": [
-      3
+      1
     ],
     "document_date": [
-      5
+      3
     ],
     "registration_number": [
+      5
+    ],
+    "odometer_km": [
       7
     ]
   },

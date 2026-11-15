@@ -9,38 +9,16 @@
   ],
   "fields": {
     "person_name": "SURESH N RAO",
-    "document_date": "2026-01-07",
+    "document_date": "2026-04-13",
     "expiry_date": null,
-    "khata_number": "KH-22764377"
+    "khata_number": "KH-92276437"
   },
   "printed": {
     "person_name": "SURESH N RAO",
-    "document_date": "07/01/2026",
-    "khata_number": "KH-22764377"
+    "document_date": "13/04/2026",
+    "khata_number": "KH-92276437"
   },
   "lines": [
-    {
-      "text": "Municipal Corporation",
-      "page": 0,
-      "bbox": [
-        0.06974270300369038,
-        0.02616743427913453,
-        0.3325806602029639,
-        0.046803798779473715
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Khata Certificate",
-      "page": 0,
-      "bbox": [
-        0.06986714798941561,
-        0.05905484172293276,
-        0.20414830956558935,
-        0.07391032564144208
-      ],
-      "lang": "en"
-    },
     {
       "text": "Name",
       "page": 0,
@@ -75,7 +53,7 @@
       "lang": "en"
     },
     {
-      "text": "07/01/2026",
+      "text": "13/04/2026",
       "page": 0,
       "bbox": [
         0.33441929625986755,
@@ -97,13 +75,35 @@
       "lang": "en"
     },
     {
-      "text": "KH-22764377",
+      "text": "KH-92276437",
       "page": 0,
       "bbox": [
         0.3345362986662821,
         0.19190362306355555,
         0.4373766828324168,
         0.20532379978886167
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Municipal Corporation",
+      "page": 0,
+      "bbox": [
+        0.06974270300369038,
+        0.02616743427913453,
+        0.3325806602029639,
+        0.046803798779473715
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Khata Certificate",
+      "page": 0,
+      "bbox": [
+        0.06986714798941561,
+        0.05905484172293276,
+        0.20414830956558935,
+        0.07391032564144208
       ],
       "lang": "en"
     },
@@ -143,13 +143,13 @@
   ],
   "field_lines": {
     "person_name": [
-      3
+      1
     ],
     "document_date": [
-      5
+      3
     ],
     "khata_number": [
-      7
+      5
     ]
   },
   "set_name": "eval-v1",

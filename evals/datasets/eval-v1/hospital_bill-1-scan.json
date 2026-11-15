@@ -10,7 +10,7 @@
   "fields": {
     "patient": "Jeevika Deshmukh",
     "doctor": null,
-    "date": "2026-05-30",
+    "date": "2026-08-23",
     "hospital": "Greenfield Polyclinic",
     "department": null,
     "diagnoses": null,
@@ -23,33 +23,11 @@
   },
   "printed": {
     "patient": "Jeevika Deshmukh",
-    "date": "30/05/2026",
+    "date": "23/08/2026",
     "hospital": "Greenfield Polyclinic",
     "amount": "Rs. 1,43,200"
   },
   "lines": [
-    {
-      "text": "Lakeview Multispeciality Clinic",
-      "page": 0,
-      "bbox": [
-        0.06802416062448438,
-        0.027560429928271762,
-        0.4351781468139068,
-        0.047794088465656144
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Final Bill",
-      "page": 0,
-      "bbox": [
-        0.0683032031117148,
-        0.06077551398205952,
-        0.1379734473022258,
-        0.0752462157622692
-      ],
-      "lang": "en"
-    },
     {
       "text": "Patient",
       "page": 0,
@@ -84,7 +62,7 @@
       "lang": "en"
     },
     {
-      "text": "30/05/2026",
+      "text": "23/08/2026",
       "page": 0,
       "bbox": [
         0.336685967392944,
@@ -139,6 +117,28 @@
       "lang": "en"
     },
     {
+      "text": "Greenfield Polyclinic",
+      "page": 0,
+      "bbox": [
+        0.06802416062448438,
+        0.027560429928271762,
+        0.3165855427115188,
+        0.04758150872042576
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Final Bill",
+      "page": 0,
+      "bbox": [
+        0.0683032031117148,
+        0.06077551398205952,
+        0.1379734473022258,
+        0.0752462157622692
+      ],
+      "lang": "en"
+    },
+    {
       "text": "This document is computer generated and valid without a signature.",
       "page": 0,
       "bbox": [
@@ -174,16 +174,16 @@
   ],
   "field_lines": {
     "patient": [
-      3
+      1
     ],
     "date": [
-      5
+      3
     ],
     "hospital": [
-      7
+      5
     ],
     "amount": [
-      9
+      7
     ]
   },
   "set_name": "eval-v1",

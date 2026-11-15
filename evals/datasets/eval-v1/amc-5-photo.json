@@ -8,58 +8,36 @@
     "amc-5-photo.jpg"
   ],
   "fields": {
-    "brand": "Kestrel",
-    "product": "Television",
+    "brand": "Nimbus",
+    "product": "Split air conditioner",
     "model": null,
-    "serial_number": "SNMM133907",
-    "seller": "Metro Home Appliances",
+    "serial_number": "SNHH907656",
+    "seller": "Lakeview Digital Store",
     "seller_location": null,
     "order_id": null,
     "buyer": "Kavita R Rao",
-    "purchase_date": "2025-05-02",
-    "amount": "62000",
+    "purchase_date": "2025-07-20",
+    "amount": "45990",
     "invoice_number": null,
-    "period_start": "2026-06-17",
-    "period_end": "2028-07-17",
-    "visits": "1",
-    "service_helpline": "1800 476 2161"
+    "period_start": "2025-07-28",
+    "period_end": "2027-07-27",
+    "visits": "4",
+    "service_helpline": "1800 771 1058"
   },
   "printed": {
-    "brand": "Kestrel",
-    "product": "Television",
-    "serial_number": "SNMM133907",
-    "seller": "Metro Home Appliances",
+    "brand": "Nimbus",
+    "product": "Split air conditioner",
+    "serial_number": "SNHH907656",
+    "seller": "Lakeview Digital Store",
     "buyer": "Kavita R Rao",
-    "purchase_date": "02/05/2025",
-    "amount": "Rs. 62,000",
-    "period_start": "17/06/2026",
-    "period_end": "17/07/2028",
-    "visits": "1",
-    "service_helpline": "1800 476 2161"
+    "purchase_date": "20/07/2025",
+    "amount": "Rs. 45,990",
+    "period_start": "28/07/2025",
+    "period_end": "27/07/2027",
+    "visits": "4",
+    "service_helpline": "1800 771 1058"
   },
   "lines": [
-    {
-      "text": "Customer care",
-      "page": 0,
-      "bbox": [
-        0.1143183389097801,
-        0.035954600670793486,
-        0.2751088527788746,
-        0.05768979875288184
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Annual Maintenance Contract",
-      "page": 0,
-      "bbox": [
-        0.11402797521040262,
-        0.06645027667704742,
-        0.33585163348575,
-        0.08480568335407661
-      ],
-      "lang": "en"
-    },
     {
       "text": "Brand",
       "page": 0,
@@ -72,13 +50,13 @@
       "lang": "en"
     },
     {
-      "text": "Kestrel",
+      "text": "Nimbus",
       "page": 0,
       "bbox": [
         0.3586885226803705,
         0.14198577609780808,
-        0.41056249857030086,
-        0.15519500560290306
+        0.4147965579296419,
+        0.15529091513422283
       ],
       "lang": "en"
     },
@@ -94,13 +72,13 @@
       "lang": "en"
     },
     {
-      "text": "Television",
+      "text": "Split air conditioner",
       "page": 0,
       "bbox": [
         0.3586214421569386,
         0.1682569937327791,
-        0.4335063218384476,
-        0.18199252947650135
+        0.5023171002727304,
+        0.18353454857106208
       ],
       "lang": "en"
     },
@@ -116,13 +94,13 @@
       "lang": "en"
     },
     {
-      "text": "SNMM133907",
+      "text": "SNHH907656",
       "page": 0,
       "bbox": [
         0.3585542360326046,
         0.19457738023546725,
-        0.4564769295250109,
-        0.20882893991845722
+        0.45307829756034146,
+        0.20875357027928348
       ],
       "lang": "en"
     },
@@ -138,13 +116,13 @@
       "lang": "en"
     },
     {
-      "text": "Metro Home Appliances",
+      "text": "Lakeview Digital Store",
       "page": 0,
       "bbox": [
         0.35848690395427696,
         0.22094707377088213,
-        0.5330645002171199,
-        0.23688044438595665
+        0.52118870415441,
+        0.2366198545790614
       ],
       "lang": "en"
     },
@@ -182,7 +160,7 @@
       "lang": "en"
     },
     {
-      "text": "02/05/2025",
+      "text": "20/07/2025",
       "page": 0,
       "bbox": [
         0.3583518605166456,
@@ -204,7 +182,7 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 62,000",
+      "text": "Rs. 45,990",
       "page": 0,
       "bbox": [
         0.3582841484445105,
@@ -226,7 +204,7 @@
       "lang": "en"
     },
     {
-      "text": "17/06/2026",
+      "text": "28/07/2025",
       "page": 0,
       "bbox": [
         0.35821630899270673,
@@ -248,7 +226,7 @@
       "lang": "en"
     },
     {
-      "text": "17/07/2028",
+      "text": "27/07/2027",
       "page": 0,
       "bbox": [
         0.35814834180145655,
@@ -270,7 +248,7 @@
       "lang": "en"
     },
     {
-      "text": "1",
+      "text": "4",
       "page": 0,
       "bbox": [
         0.3580802465096265,
@@ -292,13 +270,35 @@
       "lang": "en"
     },
     {
-      "text": "1800 476 2161",
+      "text": "1800 771 1058",
       "page": 0,
       "bbox": [
         0.35801202275472,
         0.40692724072203285,
         0.46100747826848787,
         0.42128056740294134
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nimbus",
+      "page": 0,
+      "bbox": [
+        0.1143183389097801,
+        0.035954600670793486,
+        0.19867891062753823,
+        0.05589428857934824
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Annual Maintenance Contract",
+      "page": 0,
+      "bbox": [
+        0.11402797521040262,
+        0.06645027667704742,
+        0.33585163348575,
+        0.08480568335407661
       ],
       "lang": "en"
     },
@@ -338,37 +338,37 @@
   ],
   "field_lines": {
     "brand": [
-      3
+      1
     ],
     "product": [
-      5
+      3
     ],
     "serial_number": [
-      7
+      5
     ],
     "seller": [
-      9
+      7
     ],
     "buyer": [
-      11
+      9
     ],
     "purchase_date": [
-      13
+      11
     ],
     "amount": [
-      15
+      13
     ],
     "period_start": [
-      17
+      15
     ],
     "period_end": [
-      19
+      17
     ],
     "visits": [
-      21
+      19
     ],
     "service_helpline": [
-      23
+      21
     ]
   },
   "set_name": "eval-v1",

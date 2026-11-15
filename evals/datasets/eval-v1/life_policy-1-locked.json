@@ -8,9 +8,9 @@
     "life_policy-1-locked.pdf"
   ],
   "fields": {
-    "insurer": "Tungabhadra Insurance Company Limited",
-    "product": "Protect Plus",
-    "policy_number": "PL/FT630444",
+    "insurer": "Western Ghats Life Assurance Limited",
+    "product": "Shield Cover",
+    "policy_number": "PL/NY304449",
     "policyholder": "Mrs Kavita Rao",
     "insured": [
       "Mrs Kavita Rao",
@@ -19,52 +19,31 @@
     ],
     "nominee": "Edhitha Pandey",
     "sum_insured": "1000000",
-    "premium": null,
-    "premium_frequency": "Annual",
-    "start_date": "2026-05-21",
-    "end_date": "2027-06-07",
-    "premium_due_date": "2027-09-01",
+    "premium": "14160",
+    "premium_frequency": "Monthly",
+    "start_date": "2026-01-13",
+    "end_date": "2027-01-12",
+    "premium_due_date": "2026-12-16",
     "agent": "Anand Insurance Services",
     "claim_helpline": "1800 723 5037"
   },
   "printed": {
-    "insurer": "Tungabhadra Insurance Company Limited",
-    "product": "Protect Plus",
-    "policy_number": "PL/FT630444",
+    "insurer": "Western Ghats Life Assurance Limited",
+    "product": "Shield Cover",
+    "policy_number": "PL/NY304449",
     "policyholder": "Mrs Kavita Rao",
     "insured": "Mrs Kavita Rao\nR K Rao\nS N Rao",
     "nominee": "Edhitha Pandey",
     "sum_insured": "Rs. 10,00,000",
-    "premium_frequency": "Annual",
-    "start_date": "21/05/2026",
-    "end_date": "07/06/2027",
-    "premium_due_date": "01/09/2027",
+    "premium": "Rs. 14,160",
+    "premium_frequency": "Monthly",
+    "start_date": "13/01/2026",
+    "end_date": "12/01/2027",
+    "premium_due_date": "16/12/2026",
     "agent": "Anand Insurance Services",
     "claim_helpline": "1800 723 5037"
   },
   "lines": [
-    {
-      "text": "Tungabhadra Insurance Company Limited",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.023752969121140142,
-        0.5715294117647058,
-        0.04334916864608076
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Life Insurance Policy Schedule",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.057007125890736345,
-        0.3200050420168067,
-        0.07137767220902613
-      ],
-      "lang": "en"
-    },
     {
       "text": "Insurer",
       "page": 0,
@@ -77,12 +56,12 @@
       "lang": "en"
     },
     {
-      "text": "Tungabhadra Insurance Company Limited",
+      "text": "Western Ghats Life Assurance Limited",
       "page": 0,
       "bbox": [
         0.33613445378151263,
         0.1330166270783848,
-        0.6723361344537816,
+        0.6443361344537815,
         0.14608076009501186
       ],
       "lang": "en"
@@ -99,12 +78,12 @@
       "lang": "en"
     },
     {
-      "text": "Protect Plus",
+      "text": "Shield Cover",
       "page": 0,
       "bbox": [
         0.33613445378151263,
         0.16152019002375298,
-        0.43420168067226894,
+        0.43887394957983195,
         0.17458432304038005
       ],
       "lang": "en"
@@ -121,12 +100,12 @@
       "lang": "en"
     },
     {
-      "text": "PL/FT630444",
+      "text": "PL/NY304449",
       "page": 0,
       "bbox": [
         0.33613445378151263,
         0.19002375296912113,
-        0.438890756302521,
+        0.4416974789915966,
         0.20308788598574823
       ],
       "lang": "en"
@@ -242,24 +221,46 @@
       "lang": "en"
     },
     {
-      "text": "Premium frequency",
+      "text": "Premium",
       "page": 0,
       "bbox": [
         0.06722689075630252,
         0.3859857482185273,
-        0.1983546218487395,
+        0.12773109243697478,
         0.39774346793349163
       ],
       "lang": "en"
     },
     {
-      "text": "Annual",
+      "text": "Rs. 14,160",
       "page": 0,
       "bbox": [
         0.33613445378151263,
         0.3859857482185273,
-        0.3930924369747899,
+        0.4183529411764706,
         0.3990498812351544
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium frequency",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.4144893111638955,
+        0.1983546218487395,
+        0.42624703087885984
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Monthly",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.4144893111638955,
+        0.40055462184873947,
+        0.42755344418052255
       ],
       "lang": "en"
     },
@@ -268,36 +269,14 @@
       "page": 0,
       "bbox": [
         0.06722689075630252,
-        0.4144893111638955,
-        0.13281344537815126,
-        0.42624703087885984
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "21/05/2026",
-      "page": 0,
-      "bbox": [
-        0.33613445378151263,
-        0.4144893111638955,
-        0.4202352941176471,
-        0.42755344418052255
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "End date",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
         0.44299287410926363,
-        0.1277764705882353,
+        0.13281344537815126,
         0.454750593824228
       ],
       "lang": "en"
     },
     {
-      "text": "07/06/2027",
+      "text": "13/01/2026",
       "page": 0,
       "bbox": [
         0.33613445378151263,
@@ -308,18 +287,18 @@
       "lang": "en"
     },
     {
-      "text": "Next premium due",
+      "text": "End date",
       "page": 0,
       "bbox": [
         0.06722689075630252,
         0.47149643705463185,
-        0.19079159663865547,
+        0.1277764705882353,
         0.48325415676959615
       ],
       "lang": "en"
     },
     {
-      "text": "01/09/2027",
+      "text": "12/01/2027",
       "page": 0,
       "bbox": [
         0.33613445378151263,
@@ -330,13 +309,35 @@
       "lang": "en"
     },
     {
-      "text": "Agent",
+      "text": "Next premium due",
       "page": 0,
       "bbox": [
         0.06722689075630252,
         0.5,
-        0.10675126050420167,
+        0.19079159663865547,
         0.5117577197149643
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "16/12/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.5,
+        0.4202352941176471,
+        0.5130641330166271
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Agent",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.5285035629453682,
+        0.10675126050420167,
+        0.5402612826603325
       ],
       "lang": "en"
     },
@@ -345,9 +346,9 @@
       "page": 0,
       "bbox": [
         0.33613445378151263,
-        0.5,
+        0.5285035629453682,
         0.5463025210084034,
-        0.5130641330166271
+        0.5415676959619953
       ],
       "lang": "en"
     },
@@ -356,9 +357,9 @@
       "page": 0,
       "bbox": [
         0.06722689075630252,
-        0.5285035629453682,
+        0.5570071258907363,
         0.16976638655462184,
-        0.5402612826603325
+        0.5687648456057007
       ],
       "lang": "en"
     },
@@ -367,9 +368,31 @@
       "page": 0,
       "bbox": [
         0.33613445378151263,
-        0.5285035629453682,
+        0.5570071258907363,
         0.44826890756302523,
-        0.5415676959619953
+        0.5700712589073634
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.5295294117647059,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Life Insurance Policy Schedule",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.3200050420168067,
+        0.07137767220902613
       ],
       "lang": "en"
     },
@@ -378,9 +401,9 @@
       "page": 0,
       "bbox": [
         0.06722689075630252,
-        0.5783847980997625,
+        0.6068883610451307,
         0.5212201680672268,
-        0.5901425178147268
+        0.618646080760095
       ],
       "lang": "en"
     },
@@ -389,9 +412,9 @@
       "page": 0,
       "bbox": [
         0.06722689075630252,
-        0.5950118764845606,
+        0.6235154394299287,
         0.5472672268907564,
-        0.6067695961995249
+        0.6352731591448931
       ],
       "lang": "en"
     },
@@ -409,26 +432,29 @@
   ],
   "field_lines": {
     "insurer": [
-      3
+      1
     ],
     "product": [
-      5
+      3
     ],
     "policy_number": [
-      7
+      5
     ],
     "policyholder": [
-      9
+      7
     ],
     "insured": [
-      11,
-      12,
-      13
+      9,
+      10,
+      11
     ],
     "nominee": [
-      15
+      13
     ],
     "sum_insured": [
+      15
+    ],
+    "premium": [
       17
     ],
     "premium_frequency": [

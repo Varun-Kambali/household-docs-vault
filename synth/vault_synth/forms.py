@@ -17,6 +17,7 @@ from household_vault.checks import TEST_CARD_NUMBERS, luhn_valid, verhoeff_valid
 from household_vault.doctypes import LIGHT_FIELDS, REQUIRED, DocType
 from vault_synth import data
 from vault_synth.household import CastMember
+from vault_synth.templates.card_front import _network as network_of
 
 Make = Callable[[random.Random, Faker, list[CastMember]], tuple[JsonValue, str]]
 
@@ -32,6 +33,15 @@ class FormField:
     make: Make
 
 
+# Values that depend on each other, drawn together before the fields: a name to (truth, printed).
+Joint = Callable[[random.Random], dict[str, tuple[JsonValue, str]]]
+
+# The band at the top of a page names the document's own organisation. When the type prints
+# one of these fields, the first of them in this order gives the band; otherwise (or when that
+# field is left off the page) the band uses one of `FormSpec.issuers`.
+ORG_PRIORITY = ("insurer", "bank", "employer", "hospital", "issuer", "brand", "seller", "provider")
+
+
 @dataclass(frozen=True)
 class FormSpec:
     title: str
@@ -41,6 +51,7 @@ class FormSpec:
     image_box: bool = False
     # filled from REQUIRED so the layout knows which rows may never roll "absent"
     required: frozenset[str] = frozenset()
+    joint: Joint | None = None
 
 
 def safe_digits(rng: random.Random, n: int) -> str:
@@ -369,6 +380,13 @@ _LIGHT_EXPIRY = {
     DocType.registration_certificate: ("Valid till", future(200, 3000)),
     DocType.puc_certificate: ("Valid till", future(30, 330)),
 }
+# days after the document date, for the expiry that goes with it
+_LIGHT_EXPIRY_DAYS: dict[DocType, Callable[[random.Random], int]] = {
+    DocType.rent_agreement: lambda rng: 365 * rng.randint(1, 3) - 1,
+    DocType.utility_bill: lambda rng: rng.randint(10, 20),
+    DocType.registration_certificate: lambda rng: 5475,
+    DocType.puc_certificate: lambda rng: 365,
+}
 _LIGHT_ISSUERS = {
     "sale_deed": "Office of the Sub-Registrar",
     "rent_agreement": "Rental Agreement",
@@ -623,7 +641,84 @@ _SPECS: dict[DocType, FormSpec] = {
     **{t: _light(t) for t in _LIGHT_TITLES},
 }
 
-FORM_SPECS: dict[DocType, FormSpec] = {
-    t: FormSpec(s.title, s.issuers, s.fields, s.person_label, s.image_box, frozenset(REQUIRED[t]))
-    for t, s in _SPECS.items()
-}
+
+def _entry(d: dt.date) -> tuple[JsonValue, str]:
+    return data.iso(d), data.dmy(d)
+
+
+def _joint(
+    doc_type: DocType, names: frozenset[str], rng: random.Random
+) -> dict[str, tuple[JsonValue, str]]:
+    """Dates in the order a real page keeps them, and a card's network with its own last four."""
+    ref = data.REFERENCE_DATE
+    out: dict[str, tuple[JsonValue, str]] = {}
+
+    def day(n: int) -> dt.timedelta:
+        return dt.timedelta(days=n)
+
+    if "start_date" in names:
+        start = data.past_date(rng, 30, 330)
+        end = data.plus_year(start)
+        lo = max(start + day(1), ref)
+        out["start_date"], out["end_date"] = _entry(start), _entry(end)
+        if "premium_due_date" in names:
+            out["premium_due_date"] = _entry(lo + day(rng.randint(0, (end - lo).days)))
+    if "purchase_date" in names:
+        bought = data.past_date(rng, 30, 700)
+        out["purchase_date"] = _entry(bought)
+        if "period_start" in names:
+            begin = bought + day(rng.randint(0, 30))
+            out["period_start"] = _entry(begin)
+            out["period_end"] = _entry(data.plus_year(begin, rng.randint(1, 3)))
+    if "document_date" in names:
+        doc = data.past_date(rng, 5, 400)
+        out["document_date"] = _entry(doc)
+        if "expiry_date" in names:
+            out["expiry_date"] = _entry(doc + day(_LIGHT_EXPIRY_DAYS[doc_type](rng)))
+    elif "issue_date" in names or "date_of_birth" in names:
+        born = data.past_date(rng, 8000, 25000)
+        if "date_of_birth" in names:
+            out["date_of_birth"] = _entry(born)
+        if "issue_date" in names:
+            # a birth certificate is issued soon after the birth; the others later in life
+            birth = "date_of_birth" in names and "expiry_date" not in names
+            issued = born + day(rng.randint(5, 60)) if birth else data.past_date(rng, 60, 3000)
+            out["issue_date"] = _entry(issued)
+            if "expiry_date" in names:
+                out["expiry_date"] = _entry(issued + day(3650))
+    if "statement_date" in names:
+        stated = data.past_date(rng, 3, 30)
+        out["statement_date"] = _entry(stated)
+        out["payment_due_date"] = _entry(stated + day(rng.randint(15, 25)))
+    if "last4" in names:
+        number = rng.choice(sorted(TEST_CARD_NUMBERS))
+        out["last4"] = (number[-4:], f"XXXX XXXX XXXX {number[-4:]}")
+        if "network" in names:
+            out["network"] = (network_of(number), network_of(number))
+    if "next_visit" in names and "date" in names:
+        seen = data.past_date(rng, 3, 200)
+        out["date"] = _entry(seen)
+        out["next_visit"] = _entry(max(seen, ref) + day(rng.randint(10, 60)))
+    elif "date" in names:
+        out["date"] = _entry(data.past_date(rng, 3, 200))
+    return out
+
+
+def _with_joint(doc_type: DocType, spec: FormSpec) -> FormSpec:
+    names = frozenset(f.name for f in spec.fields)
+
+    def joint(rng: random.Random) -> dict[str, tuple[JsonValue, str]]:
+        return _joint(doc_type, names, rng)
+
+    return FormSpec(
+        spec.title,
+        spec.issuers,
+        spec.fields,
+        spec.person_label,
+        spec.image_box,
+        frozenset(REQUIRED[doc_type]),
+        joint,
+    )
+
+
+FORM_SPECS: dict[DocType, FormSpec] = {t: _with_joint(t, s) for t, s in _SPECS.items()}

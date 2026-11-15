@@ -10,7 +10,7 @@
   "fields": {
     "patient": "Kavita R Rao",
     "doctor": "Dr. Yashodhara Magar",
-    "date": "2026-05-28",
+    "date": "2026-10-07",
     "hospital": "Hill Park Medical Centre",
     "department": "Cardiology",
     "diagnoses": [
@@ -38,12 +38,12 @@
       }
     ],
     "tests": null,
-    "next_visit": "2026-12-19",
+    "next_visit": "2027-01-02",
     "amount": null
   },
   "printed": {
     "patient": "Kavita R Rao",
-    "date": "28/05/2026",
+    "date": "07/10/2026",
     "hospital": "Hill Park Medical Centre",
     "doctor": "Dr. Yashodhara Magar",
     "department": "Cardiology",
@@ -51,31 +51,9 @@
     "procedures": "Endoscopy",
     "allergies": "Penicillin\nSulfa drugs",
     "medicines": "1. Tab Pantoprazole 40 mg  1-0-1  10 days\n2. Tab Metformin 500 mg  0-0-1  5 days",
-    "next_visit": "19/12/2026"
+    "next_visit": "02/01/2027"
   },
   "lines": [
-    {
-      "text": "Cauvery Care Hospital",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.023752969121140142,
-        0.336218487394958,
-        0.04334916864608076
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Discharge Summary",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.057007125890736345,
-        0.2346672268907563,
-        0.07137767220902613
-      ],
-      "lang": "en"
-    },
     {
       "text": "Patient",
       "page": 0,
@@ -110,7 +88,7 @@
       "lang": "en"
     },
     {
-      "text": "28/05/2026",
+      "text": "07/10/2026",
       "page": 0,
       "bbox": [
         0.33613445378151263,
@@ -308,13 +286,35 @@
       "lang": "en"
     },
     {
-      "text": "19/12/2026",
+      "text": "02/01/2027",
       "page": 0,
       "bbox": [
         0.33613445378151263,
         0.48931116389548696,
         0.4202352941176471,
         0.502375296912114
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hill Park Medical Centre",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.35444537815126054,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Discharge Summary",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.2346672268907563,
+        0.07137767220902613
       ],
       "lang": "en"
     },
@@ -354,36 +354,36 @@
   ],
   "field_lines": {
     "patient": [
-      3
+      1
     ],
     "date": [
-      5
+      3
     ],
     "hospital": [
-      7
+      5
     ],
     "doctor": [
-      9
+      7
     ],
     "department": [
-      11
+      9
     ],
     "diagnoses": [
-      13
+      11
     ],
     "procedures": [
-      15
+      13
     ],
     "allergies": [
-      17,
-      18
+      15,
+      16
     ],
     "medicines": [
-      20,
-      21
+      18,
+      19
     ],
     "next_visit": [
-      23
+      21
     ]
   },
   "set_name": "eval-v1",

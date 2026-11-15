@@ -8,7 +8,7 @@
     "accident_policy-1-scan.pdf"
   ],
   "fields": {
-    "insurer": "Tungabhadra Insurance Company Limited",
+    "insurer": "Nilgiri General Insurance Company Limited",
     "product": null,
     "policy_number": null,
     "policyholder": "Kavita R Rao",
@@ -19,48 +19,26 @@
     ],
     "nominee": "Ekantika Naidu",
     "sum_insured": "1000000",
-    "premium": "14160",
+    "premium": "33000",
     "premium_frequency": null,
-    "start_date": "2026-02-24",
-    "end_date": "2027-06-05",
+    "start_date": "2026-04-18",
+    "end_date": "2027-04-17",
     "premium_due_date": null,
     "agent": null,
-    "claim_helpline": "1800 799 6341"
+    "claim_helpline": "1800 446 6600"
   },
   "printed": {
-    "insurer": "Tungabhadra Insurance Company Limited",
+    "insurer": "Nilgiri General Insurance Company Limited",
     "policyholder": "Kavita R Rao",
     "insured": "Kavita R Rao\nKiran Rao\nRavi Kumar Rao",
     "nominee": "Ekantika Naidu",
     "sum_insured": "Rs. 10,00,000",
-    "premium": "Rs. 14,160",
-    "start_date": "24/02/2026",
-    "end_date": "05/06/2027",
-    "claim_helpline": "1800 799 6341"
+    "premium": "Rs. 33,000",
+    "start_date": "18/04/2026",
+    "end_date": "17/04/2027",
+    "claim_helpline": "1800 446 6600"
   },
   "lines": [
-    {
-      "text": "Tungabhadra Insurance Company Limited",
-      "page": 0,
-      "bbox": [
-        0.077926038979841,
-        0.03332486698897582,
-        0.5742850696341509,
-        0.05311571657335956
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Personal Accident Insurance Schedule",
-      "page": 0,
-      "bbox": [
-        0.07793313009507577,
-        0.06646415756564418,
-        0.3903628340438457,
-        0.08093838999574929
-      ],
-      "lang": "en"
-    },
     {
       "text": "Insurer",
       "page": 0,
@@ -73,12 +51,12 @@
       "lang": "en"
     },
     {
-      "text": "Tungabhadra Insurance Company Limited",
+      "text": "Nilgiri General Insurance Company Limited",
       "page": 0,
       "bbox": [
         0.3422885868806507,
-        0.14163920977867495,
-        0.6727669166568921,
+        0.14163330357091072,
+        0.6810580287259419,
         0.1548172217410954
       ],
       "lang": "en"
@@ -205,7 +183,7 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 14,160",
+      "text": "Rs. 33,000",
       "page": 0,
       "bbox": [
         0.341748490368159,
@@ -227,7 +205,7 @@
       "lang": "en"
     },
     {
-      "text": "24/02/2026",
+      "text": "18/04/2026",
       "page": 0,
       "bbox": [
         0.34167012883198494,
@@ -249,7 +227,7 @@
       "lang": "en"
     },
     {
-      "text": "05/06/2027",
+      "text": "17/04/2027",
       "page": 0,
       "bbox": [
         0.3415918174277658,
@@ -271,13 +249,35 @@
       "lang": "en"
     },
     {
-      "text": "1800 799 6341",
+      "text": "1800 446 6600",
       "page": 0,
       "bbox": [
         0.34151355610740913,
         0.41979669211534565,
         0.45142634118211794,
         0.4327504269024098
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nilgiri General Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.077926038979841,
+        0.033316634932669634,
+        0.5867381903848755,
+        0.05311571657335956
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Personal Accident Insurance Schedule",
+      "page": 0,
+      "bbox": [
+        0.07793313009507577,
+        0.06646415756564418,
+        0.3903628340438457,
+        0.08093838999574929
       ],
       "lang": "en"
     },
@@ -317,33 +317,33 @@
   ],
   "field_lines": {
     "insurer": [
-      3
+      1
     ],
     "policyholder": [
-      5
+      3
     ],
     "insured": [
-      7,
-      8,
-      9
+      5,
+      6,
+      7
     ],
     "nominee": [
-      11
+      9
     ],
     "sum_insured": [
-      13
+      11
     ],
     "premium": [
-      15
+      13
     ],
     "start_date": [
-      17
+      15
     ],
     "end_date": [
-      19
+      17
     ],
     "claim_helpline": [
-      21
+      19
     ]
   },
   "set_name": "eval-v1",

@@ -10,8 +10,8 @@
   "fields": {
     "patient": "Mrs Kavita Rao",
     "doctor": null,
-    "date": "2026-08-08",
-    "hospital": "Greenfield Polyclinic",
+    "date": "2026-11-01",
+    "hospital": "Sunrise Family Hospital",
     "department": null,
     "diagnoses": null,
     "procedures": null,
@@ -19,37 +19,15 @@
     "medicines": null,
     "tests": null,
     "next_visit": null,
-    "amount": "143200"
+    "amount": "48600"
   },
   "printed": {
     "patient": "Mrs Kavita Rao",
-    "date": "08/08/2026",
-    "hospital": "Greenfield Polyclinic",
-    "amount": "Rs. 1,43,200"
+    "date": "01/11/2026",
+    "hospital": "Sunrise Family Hospital",
+    "amount": "Rs. 48,600"
   },
   "lines": [
-    {
-      "text": "Cauvery Care Hospital",
-      "page": 0,
-      "bbox": [
-        0.10446226909243038,
-        0.029357393987490224,
-        0.36257257647594116,
-        0.05293022116580136
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Final Bill",
-      "page": 0,
-      "bbox": [
-        0.10433900233603045,
-        0.06222819016059801,
-        0.17157991117582322,
-        0.07749127512678214
-      ],
-      "lang": "en"
-    },
     {
       "text": "Patient",
       "page": 0,
@@ -84,7 +62,7 @@
       "lang": "en"
     },
     {
-      "text": "08/08/2026",
+      "text": "01/11/2026",
       "page": 0,
       "bbox": [
         0.36147317345446545,
@@ -106,13 +84,13 @@
       "lang": "en"
     },
     {
-      "text": "Greenfield Polyclinic",
+      "text": "Sunrise Family Hospital",
       "page": 0,
       "bbox": [
         0.36128090228936094,
         0.19711907812508542,
-        0.5195810702647109,
-        0.212128616821454
+        0.5426082939309637,
+        0.21244672543004928
       ],
       "lang": "en"
     },
@@ -128,13 +106,35 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 1,43,200",
+      "text": "Rs. 48,600",
       "page": 0,
       "bbox": [
         0.36108873219970905,
         0.22509456827477012,
-        0.4528209360630123,
-        0.2391375371579778
+        0.43948924456189803,
+        0.23895921938441328
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sunrise Family Hospital",
+      "page": 0,
+      "bbox": [
+        0.10446226909243038,
+        0.029357393987490224,
+        0.37863299534416006,
+        0.053191650796301185
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Final Bill",
+      "page": 0,
+      "bbox": [
+        0.10433900233603045,
+        0.06222819016059801,
+        0.17157991117582322,
+        0.07749127512678214
       ],
       "lang": "en"
     },
@@ -174,16 +174,16 @@
   ],
   "field_lines": {
     "patient": [
-      3
+      1
     ],
     "date": [
-      5
+      3
     ],
     "hospital": [
-      7
+      5
     ],
     "amount": [
-      9
+      7
     ]
   },
   "set_name": "eval-v1",

@@ -9,38 +9,16 @@
   ],
   "fields": {
     "person_name": "Mrs Kavita Rao",
-    "document_date": "2025-12-02",
+    "document_date": "2026-09-11",
     "expiry_date": null,
     "registration_number": "KA-35248663"
   },
   "printed": {
     "person_name": "Mrs Kavita Rao",
-    "document_date": "02/12/2025",
+    "document_date": "11/09/2026",
     "registration_number": "KA-35248663"
   },
   "lines": [
-    {
-      "text": "Office of the Sub-Registrar",
-      "page": 0,
-      "bbox": [
-        0.07619199994653941,
-        0.028241170560650314,
-        0.39203561918977375,
-        0.04807631398119242
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Sale Deed",
-      "page": 0,
-      "bbox": [
-        0.07601073804674284,
-        0.06154409049979929,
-        0.1609876070615178,
-        0.07590277634623291
-      ],
-      "lang": "en"
-    },
     {
       "text": "Name",
       "page": 0,
@@ -75,7 +53,7 @@
       "lang": "en"
     },
     {
-      "text": "02/12/2025",
+      "text": "11/09/2026",
       "page": 0,
       "bbox": [
         0.3399217598331565,
@@ -104,6 +82,28 @@
         0.19345144831157415,
         0.4428889818453446,
         0.2064928663327908
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Office of the Sub-Registrar",
+      "page": 0,
+      "bbox": [
+        0.07619199994653941,
+        0.028241170560650314,
+        0.39203561918977375,
+        0.04807631398119242
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sale Deed",
+      "page": 0,
+      "bbox": [
+        0.07601073804674284,
+        0.06154409049979929,
+        0.1609876070615178,
+        0.07590277634623291
       ],
       "lang": "en"
     },
@@ -143,13 +143,13 @@
   ],
   "field_lines": {
     "person_name": [
-      3
+      1
     ],
     "document_date": [
-      5
+      3
     ],
     "registration_number": [
-      7
+      5
     ]
   },
   "set_name": "eval-v1",

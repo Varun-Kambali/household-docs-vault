@@ -17,11 +17,11 @@
     "sum_insured": "1000000",
     "premium": "33000",
     "premium_frequency": null,
-    "start_date": "2026-09-11",
-    "end_date": "2027-02-27",
+    "start_date": null,
+    "end_date": "2027-09-05",
     "premium_due_date": null,
     "agent": null,
-    "claim_helpline": null
+    "claim_helpline": "1800 447 3468"
   },
   "printed": {
     "insurer": "Western Ghats Life Assurance Limited",
@@ -30,32 +30,10 @@
     "policyholder": "SURESH N RAO",
     "sum_insured": "Rs. 10,00,000",
     "premium": "Rs. 33,000",
-    "start_date": "11/09/2026",
-    "end_date": "27/02/2027"
+    "end_date": "05/09/2027",
+    "claim_helpline": "1800 447 3468"
   },
   "lines": [
-    {
-      "text": "Nilgiri General Insurance Company Limited",
-      "page": 0,
-      "bbox": [
-        0.088049540352438,
-        0.058261467381948824,
-        0.5668806061993981,
-        0.07729555346386317
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Mobile and Gadget Protection Plan",
-      "page": 0,
-      "bbox": [
-        0.08808972332807734,
-        0.08932090742450566,
-        0.35385909518989095,
-        0.1031173161978446
-      ],
-      "lang": "en"
-    },
     {
       "text": "Insurer",
       "page": 0,
@@ -189,18 +167,18 @@
       "lang": "en"
     },
     {
-      "text": "Start date",
+      "text": "End date",
       "page": 0,
       "bbox": [
         0.08839170927091923,
-        0.31968427788550735,
-        0.1497971517317022,
+        0.3196921319141901,
+        0.1450819282983449,
         0.33084762297708903
       ],
       "lang": "en"
     },
     {
-      "text": "11/09/2026",
+      "text": "05/09/2027",
       "page": 0,
       "bbox": [
         0.3400577790760387,
@@ -211,24 +189,46 @@
       "lang": "en"
     },
     {
-      "text": "End date",
+      "text": "Claims helpline",
       "page": 0,
       "bbox": [
         0.08842695405795253,
-        0.3465281702643907,
-        0.14518459854036175,
+        0.3464644680647075,
+        0.18454142442435664,
         0.3577074111419098
       ],
       "lang": "en"
     },
     {
-      "text": "27/02/2027",
+      "text": "1800 447 3468",
       "page": 0,
       "bbox": [
         0.3403922261904015,
-        0.3460843030120027,
-        0.41943670564764424,
+        0.3460417337190863,
+        0.44573853576643935,
         0.35853722044257313
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.088049540352438,
+        0.058368977888105154,
+        0.5162205641852926,
+        0.07729555346386317
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mobile and Gadget Protection Plan",
+      "page": 0,
+      "bbox": [
+        0.08808972332807734,
+        0.08932090742450566,
+        0.35385909518989095,
+        0.1031173161978446
       ],
       "lang": "en"
     },
@@ -268,28 +268,28 @@
   ],
   "field_lines": {
     "insurer": [
-      3
+      1
     ],
     "product": [
-      5
+      3
     ],
     "policy_number": [
-      7
+      5
     ],
     "policyholder": [
-      9
+      7
     ],
     "sum_insured": [
-      11
+      9
     ],
     "premium": [
-      13
-    ],
-    "start_date": [
-      15
+      11
     ],
     "end_date": [
-      17
+      13
+    ],
+    "claim_helpline": [
+      15
     ]
   },
   "set_name": "eval-v1",

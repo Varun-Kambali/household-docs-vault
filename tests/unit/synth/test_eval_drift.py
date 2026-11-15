@@ -46,9 +46,14 @@ def test_committed_eval_set_shape() -> None:
 
 
 def test_committed_truth_matches_the_generator(tmp_path: Path) -> None:
-    types = [DocType.health_policy, DocType.aadhaar, DocType.utility_bill, DocType.passport]
-    fresh_docs = generate("eval-v1", tmp_path, splits=("test",), types=types)
-    assert fresh_docs
+    fresh_docs = generate("eval-v1", tmp_path, splits=("val", "test"))
+    committed_ids = [
+        r["doc_id"] for r in json.loads((EVAL_V1 / "manifest.json").read_text())["documents"]
+    ]
+    fresh_ids = [d.doc_id for d in fresh_docs]
+    assert set(fresh_ids) - set(committed_ids) == set(), "generated but not committed"
+    assert set(committed_ids) - set(fresh_ids) == set(), "committed but not generated"
+    assert len(fresh_ids) == len(set(fresh_ids))
     for d in fresh_docs:
         committed = json.loads((EVAL_V1 / f"{d.doc_id}.json").read_text())
         fresh = json.loads(d.model_dump_json())
@@ -80,3 +85,44 @@ def test_locked_pdfs_open_with_the_derived_password_and_truth_stores_none() -> N
         assert page_count(data, password=locked_password(d.base_id)) == 1, d.doc_id
     for f in EVAL_V1.glob("*.json"):
         assert '"password"' not in f.read_text(), f.name
+
+
+TODAY = "2026-11-12"
+# (earlier, later, strict): the order every pair of dates on a page must keep
+DATE_ORDER = (
+    ("start_date", "premium_due_date", True),
+    ("premium_due_date", "end_date", False),
+    ("start_date", "end_date", True),
+    ("purchase_date", "period_start", False),
+    ("period_start", "period_end", True),
+    ("date_of_birth", "issue_date", True),
+    ("issue_date", "expiry_date", True),
+    ("statement_date", "payment_due_date", True),
+    ("date", "next_visit", False),
+    ("document_date", "expiry_date", True),
+)
+NOT_AFTER_TODAY = (
+    "purchase_date",
+    "issue_date",
+    "document_date",
+    "date",
+    "statement_date",
+    "date_of_birth",
+    "invoice_date",
+    "start_date",
+)
+
+
+def test_dates_on_every_committed_document_keep_their_order() -> None:
+    checked = 0
+    for d in load_set(EVAL_V1):
+        f = d.fields
+        for a, b, strict in DATE_ORDER:
+            if f.get(a) is not None and f.get(b) is not None:
+                checked += 1
+                x, y = str(f[a]), str(f[b])
+                assert x < y or (x == y and not strict), (d.doc_id, a, b, x, y)
+        for name in NOT_AFTER_TODAY:
+            if f.get(name) is not None:
+                assert str(f[name]) <= TODAY, (d.doc_id, name)
+    assert checked > 200

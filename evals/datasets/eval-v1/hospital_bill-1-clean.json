@@ -10,7 +10,7 @@
   "fields": {
     "patient": "Jeevika Deshmukh",
     "doctor": null,
-    "date": "2026-05-30",
+    "date": "2026-08-23",
     "hospital": "Greenfield Polyclinic",
     "department": null,
     "diagnoses": null,
@@ -23,33 +23,11 @@
   },
   "printed": {
     "patient": "Jeevika Deshmukh",
-    "date": "30/05/2026",
+    "date": "23/08/2026",
     "hospital": "Greenfield Polyclinic",
     "amount": "Rs. 1,43,200"
   },
   "lines": [
-    {
-      "text": "Lakeview Multispeciality Clinic",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.023752969121140142,
-        0.4357226890756302,
-        0.04334916864608076
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Final Bill",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.057007125890736345,
-        0.13707226890756302,
-        0.07137767220902613
-      ],
-      "lang": "en"
-    },
     {
       "text": "Patient",
       "page": 0,
@@ -84,7 +62,7 @@
       "lang": "en"
     },
     {
-      "text": "30/05/2026",
+      "text": "23/08/2026",
       "page": 0,
       "bbox": [
         0.33613445378151263,
@@ -139,6 +117,28 @@
       "lang": "en"
     },
     {
+      "text": "Greenfield Polyclinic",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.31663025210084034,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Final Bill",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.13707226890756302,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
       "text": "This document is computer generated and valid without a signature.",
       "page": 0,
       "bbox": [
@@ -174,16 +174,16 @@
   ],
   "field_lines": {
     "patient": [
-      3
+      1
     ],
     "date": [
-      5
+      3
     ],
     "hospital": [
-      7
+      5
     ],
     "amount": [
-      9
+      7
     ]
   },
   "set_name": "eval-v1",

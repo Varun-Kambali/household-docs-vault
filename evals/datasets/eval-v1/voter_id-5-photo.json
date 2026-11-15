@@ -10,7 +10,7 @@
   "fields": {
     "holder": "Ravi Rao",
     "number": "ZZM3770381",
-    "date_of_birth": "1988-09-10",
+    "date_of_birth": "1989-04-05",
     "issue_date": null,
     "expiry_date": null,
     "address": "No. 174, 5th Cross, Chennai, Tamil Nadu - 600214",
@@ -19,32 +19,10 @@
   "printed": {
     "holder": "Ravi Rao",
     "number": "ZZM3770381",
-    "date_of_birth": "10/09/1988",
+    "date_of_birth": "05/04/1989",
     "address": "No. 174, 5th Cross, Chennai, Tamil Nadu - 600214"
   },
   "lines": [
-    {
-      "text": "Election Commission",
-      "page": 0,
-      "bbox": [
-        0.07385764375338676,
-        0.029274309786044603,
-        0.31909490858939754,
-        0.04899217931320556
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Elector Photo Identity Card",
-      "page": 0,
-      "bbox": [
-        0.07522503378416193,
-        0.06177251949898996,
-        0.28645005228411324,
-        0.07620795063131462
-      ],
-      "lang": "en"
-    },
     {
       "text": "Holder",
       "page": 0,
@@ -101,7 +79,7 @@
       "lang": "en"
     },
     {
-      "text": "10/09/1988",
+      "text": "05/04/1989",
       "page": 0,
       "bbox": [
         0.3363370061923787,
@@ -130,6 +108,28 @@
         0.219008635231539,
         0.7081180593927755,
         0.2316831019067488
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Election Commission",
+      "page": 0,
+      "bbox": [
+        0.07385764375338676,
+        0.029274309786044603,
+        0.31909490858939754,
+        0.04899217931320556
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Elector Photo Identity Card",
+      "page": 0,
+      "bbox": [
+        0.07522503378416193,
+        0.06177251949898996,
+        0.28645005228411324,
+        0.07620795063131462
       ],
       "lang": "en"
     },
@@ -180,16 +180,16 @@
   ],
   "field_lines": {
     "holder": [
-      3
+      1
     ],
     "number": [
-      5
+      3
     ],
     "date_of_birth": [
-      7
+      5
     ],
     "address": [
-      9
+      7
     ]
   },
   "set_name": "eval-v1",

@@ -6,7 +6,7 @@ import random
 from faker import Faker
 
 from household_vault.doctypes import AREA, Area, DocType
-from vault_synth.forms import FORM_SPECS, PERSON_FIELDS, PERSON_LIST_FIELDS, FormSpec
+from vault_synth.forms import FORM_SPECS, ORG_PRIORITY, PERSON_FIELDS, PERSON_LIST_FIELDS, FormSpec
 from vault_synth.household import CastMember
 from vault_synth.sheet import Sheet, Truth
 from vault_synth.templates._kit import GREY, DrawOpts, Page, band
@@ -32,14 +32,12 @@ def draw_form(
 ) -> Truth:
     t = Truth(person=cast[0].printed)
     pg = Page(s, t, rng, opts)
-    band(s, 0, 78, rng.choice(BANDS))
-    s.put(rng.choice(spec.issuers), 40, 20, 15, font="Helvetica-Bold", color="#ffffff")
-    s.put(spec.title, 40, 48, 11, color="#f0f0f0")
-    s.hline(40, 555, 96, "#888888")
+    band_color = rng.choice(BANDS)
+    planned = spec.joint(rng) if spec.joint else {}
 
     y = 112.0
     for f in spec.fields:
-        value, printed = f.make(rng, fake, cast)
+        value, printed = planned[f.name] if f.name in planned else f.make(rng, fake, cast)
         label = spec.person_label if f.name in PERSON_FIELDS else f.label
         optional = f.name not in spec.required and not (
             f.name in PERSON_FIELDS or f.name in PERSON_LIST_FIELDS
@@ -68,6 +66,16 @@ def draw_form(
                 is not None
             ):
                 y += 24
+
+    # the band is drawn last, so it can name the organisation the page printed (priority order
+    # in `ORG_PRIORITY`); a page without one, or that left it off, names an issuer of the type
+    names = {f.name for f in spec.fields}
+    org = next((n for n in ORG_PRIORITY if n in names), None)
+    heading = t.printed[org] if org is not None and org in t.printed else rng.choice(spec.issuers)
+    band(s, 0, 78, band_color)
+    s.put(heading, 40, 20, 15, font="Helvetica-Bold", color="#ffffff")
+    s.put(spec.title, 40, 48, 11, color="#f0f0f0")
+    s.hline(40, 555, 96, "#888888")
 
     if spec.image_box:
         s.rect(40, y + 8, 515, 260, fill="#161616", stroke="#444444")

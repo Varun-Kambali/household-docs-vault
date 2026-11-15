@@ -12,45 +12,22 @@
     "card_name": "Everyday Rewards",
     "network": null,
     "holder": "KIRAN RAO",
-    "last4": "0004",
-    "statement_date": "2026-10-20",
-    "payment_due_date": "2026-11-20",
-    "total_due": null,
-    "credit_limit": "250000",
+    "last4": "5100",
+    "statement_date": null,
+    "payment_due_date": "2026-11-23",
+    "total_due": "3420",
+    "credit_limit": null,
     "annual_fee": null
   },
   "printed": {
     "bank": "Nilgiri Bank",
     "card_name": "Everyday Rewards",
     "holder": "KIRAN RAO",
-    "last4": "XXXX XXXX XXXX 0004",
-    "statement_date": "20/10/2026",
-    "payment_due_date": "20/11/2026",
-    "credit_limit": "Rs. 2,50,000"
+    "last4": "XXXX XXXX XXXX 5100",
+    "payment_due_date": "23/11/2026",
+    "total_due": "Rs. 3,420"
   },
   "lines": [
-    {
-      "text": "Tungabhadra Bank",
-      "page": 0,
-      "bbox": [
-        0.07325016515687537,
-        0.02865383924399916,
-        0.30238970375677704,
-        0.05812785102266453
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Credit Card Statement",
-      "page": 0,
-      "bbox": [
-        0.07456447518422568,
-        0.06370274357067968,
-        0.25881845223245,
-        0.08569133203762769
-      ],
-      "lang": "en"
-    },
     {
       "text": "Bank",
       "page": 0,
@@ -129,7 +106,7 @@
       "lang": "en"
     },
     {
-      "text": "XXXX XXXX XXXX 0004",
+      "text": "XXXX XXXX XXXX 5100",
       "page": 0,
       "bbox": [
         0.34499340084533414,
@@ -140,18 +117,18 @@
       "lang": "en"
     },
     {
-      "text": "Statement date",
+      "text": "Payment due date",
       "page": 0,
       "bbox": [
         0.08191690194468779,
         0.2597710202587033,
-        0.18324534570658327,
-        0.274887595132205
+        0.2030170290061906,
+        0.2755177206413382
       ],
       "lang": "en"
     },
     {
-      "text": "20/10/2026",
+      "text": "23/11/2026",
       "page": 0,
       "bbox": [
         0.34536740241490665,
@@ -162,46 +139,46 @@
       "lang": "en"
     },
     {
-      "text": "Payment due date",
+      "text": "Total amount due",
       "page": 0,
       "bbox": [
         0.08299713073399241,
         0.2885776447988755,
-        0.2037695172055088,
-        0.304147139013834
+        0.19883468277306865,
+        0.3039940991941359
       ],
       "lang": "en"
     },
     {
-      "text": "20/11/2026",
+      "text": "Rs. 3,420",
       "page": 0,
       "bbox": [
         0.3457394172665969,
         0.29681868889185287,
-        0.42713793364612923,
-        0.31237297473487174
+        0.4163174546666427,
+        0.3120378327459763
       ],
       "lang": "en"
     },
     {
-      "text": "Credit limit",
+      "text": "Nilgiri Bank",
       "page": 0,
       "bbox": [
-        0.0840715913150241,
-        0.3172304476564255,
-        0.15443848756156514,
-        0.3311140636402137
+        0.07325016515687537,
+        0.02865383924399916,
+        0.2145107844703672,
+        0.05474409160973438
       ],
       "lang": "en"
     },
     {
-      "text": "Rs. 2,50,000",
+      "text": "Credit Card Statement",
       "page": 0,
       "bbox": [
-        0.34610946118881014,
-        0.32522527905299536,
-        0.4389481428295711,
-        0.34098591631595165
+        0.07456447518422568,
+        0.06370274357067968,
+        0.25881845223245,
+        0.08569133203762769
       ],
       "lang": "en"
     },
@@ -209,10 +186,10 @@
       "text": "This document is computer generated and valid without a signature.",
       "page": 0,
       "bbox": [
-        0.08593815590026427,
-        0.36700640782279764,
-        0.5239176570855545,
-        0.3912177192597564
+        0.08487367910174937,
+        0.3386198440039587,
+        0.524018859525941,
+        0.36329765999036573
       ],
       "lang": "en"
     },
@@ -220,10 +197,10 @@
       "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
       "page": 0,
       "bbox": [
-        0.08655649200397113,
-        0.3834956702415334,
-        0.5486018453324023,
-        0.40813358849515674
+        0.08549531222606187,
+        0.35519702856995367,
+        0.5487675781758478,
+        0.3803214978379029
       ],
       "lang": "en"
     },
@@ -241,25 +218,22 @@
   ],
   "field_lines": {
     "bank": [
-      3
+      1
     ],
     "card_name": [
-      5
+      3
     ],
     "holder": [
-      7
+      5
     ],
     "last4": [
-      9
-    ],
-    "statement_date": [
-      11
+      7
     ],
     "payment_due_date": [
-      13
+      9
     ],
-    "credit_limit": [
-      15
+    "total_due": [
+      11
     ]
   },
   "set_name": "eval-v1",

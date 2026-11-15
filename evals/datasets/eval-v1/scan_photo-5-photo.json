@@ -11,8 +11,8 @@
     "patient": "Master Kiran Rao",
     "doctor": null,
     "date": null,
-    "hospital": "Lakeview Multispeciality Clinic",
-    "department": "General Medicine",
+    "hospital": "Sunrise Family Hospital",
+    "department": null,
     "diagnoses": null,
     "procedures": null,
     "allergies": null,
@@ -23,32 +23,9 @@
   },
   "printed": {
     "patient": "Master Kiran Rao",
-    "hospital": "Lakeview Multispeciality Clinic",
-    "department": "General Medicine"
+    "hospital": "Sunrise Family Hospital"
   },
   "lines": [
-    {
-      "text": "Sunrise Family Hospital",
-      "page": 0,
-      "bbox": [
-        0.08946827176959911,
-        0.028393856131974756,
-        0.3708147654131285,
-        0.05054365871112915
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Ultrasound Images",
-      "page": 0,
-      "bbox": [
-        0.09001375863131977,
-        0.062229364576678575,
-        0.24298380425581328,
-        0.07794135122984254
-      ],
-      "lang": "en"
-    },
     {
       "text": "Patient",
       "page": 0,
@@ -83,35 +60,35 @@
       "lang": "en"
     },
     {
-      "text": "Lakeview Multispeciality Clinic",
+      "text": "Sunrise Family Hospital",
       "page": 0,
       "bbox": [
         0.3549792206426248,
         0.1694902678492877,
-        0.5933129719278113,
-        0.18388297633189565
+        0.5400107063663567,
+        0.18359317318441448
       ],
       "lang": "en"
     },
     {
-      "text": "Department",
+      "text": "Sunrise Family Hospital",
       "page": 0,
       "bbox": [
-        0.09218151556872878,
-        0.19669118814911601,
-        0.16986785038245292,
-        0.2088927898669936
+        0.08946827176959911,
+        0.028393856131974756,
+        0.3708147654131285,
+        0.05054365871112915
       ],
       "lang": "en"
     },
     {
-      "text": "General Medicine",
+      "text": "Ultrasound Images",
       "page": 0,
       "bbox": [
-        0.35514752901476354,
-        0.19804813818959266,
-        0.49028211664336857,
-        0.21178100010947795
+        0.09001375863131977,
+        0.062229364576678575,
+        0.24298380425581328,
+        0.07794135122984254
       ],
       "lang": "en"
     },
@@ -119,10 +96,10 @@
       "text": "This document is computer generated and valid without a signature.",
       "page": 0,
       "bbox": [
-        0.09829001819033226,
-        0.5748666685196995,
-        0.5342922760364511,
-        0.5870624286279549
+        0.09784094278790192,
+        0.5472294195889553,
+        0.5343224245607354,
+        0.5592323791678592
       ],
       "lang": "en"
     },
@@ -130,10 +107,10 @@
       "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
       "page": 0,
       "bbox": [
-        0.09855152351943058,
-        0.5909122307880174,
-        0.5590663590699366,
-        0.6032684197354468
+        0.09810302339266352,
+        0.5633224827271152,
+        0.5591234750215855,
+        0.5754740050527682
       ],
       "lang": "en"
     },
@@ -151,13 +128,10 @@
   ],
   "field_lines": {
     "patient": [
-      3
+      1
     ],
     "hospital": [
-      5
-    ],
-    "department": [
-      7
+      3
     ]
   },
   "set_name": "eval-v1",

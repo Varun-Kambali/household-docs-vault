@@ -9,40 +9,19 @@
   ],
   "fields": {
     "person_name": "KAVITA RAO",
-    "document_date": "2026-03-03",
-    "expiry_date": null,
-    "registration_number": "KA-65724853",
-    "certificate_number": "CN-16107422"
+    "document_date": "2026-03-23",
+    "expiry_date": "2027-03-23",
+    "registration_number": "KA-76572485",
+    "certificate_number": "CN-91610742"
   },
   "printed": {
     "person_name": "KAVITA RAO",
-    "document_date": "03/03/2026",
-    "registration_number": "KA-65724853",
-    "certificate_number": "CN-16107422"
+    "document_date": "23/03/2026",
+    "registration_number": "KA-76572485",
+    "certificate_number": "CN-91610742",
+    "expiry_date": "23/03/2027"
   },
   "lines": [
-    {
-      "text": "Authorised Testing Centre",
-      "page": 0,
-      "bbox": [
-        0.11629061359370976,
-        0.029799339642395554,
-        0.4117496628227499,
-        0.04908422725570538
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Pollution Under Control Certificate",
-      "page": 0,
-      "bbox": [
-        0.11607162241710733,
-        0.0623320571933759,
-        0.37648117268941594,
-        0.07660274881439574
-      ],
-      "lang": "en"
-    },
     {
       "text": "Name",
       "page": 0,
@@ -77,7 +56,7 @@
       "lang": "en"
     },
     {
-      "text": "03/03/2026",
+      "text": "23/03/2026",
       "page": 0,
       "bbox": [
         0.36493999256256293,
@@ -99,7 +78,7 @@
       "lang": "en"
     },
     {
-      "text": "KA-65724853",
+      "text": "KA-76572485",
       "page": 0,
       "bbox": [
         0.3645366510196461,
@@ -121,7 +100,7 @@
       "lang": "en"
     },
     {
-      "text": "CN-16107422",
+      "text": "CN-91610742",
       "page": 0,
       "bbox": [
         0.36413389411288183,
@@ -132,13 +111,57 @@
       "lang": "en"
     },
     {
+      "text": "Valid till",
+      "page": 0,
+      "bbox": [
+        0.1146153289088338,
+        0.2471832633369992,
+        0.16281613957787752,
+        0.2587701494682055
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "23/03/2027",
+      "page": 0,
+      "bbox": [
+        0.36373172057206155,
+        0.24820538768390862,
+        0.44233793910229696,
+        0.2612479391541395
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Authorised Testing Centre",
+      "page": 0,
+      "bbox": [
+        0.11629061359370976,
+        0.029799339642395554,
+        0.4117496628227499,
+        0.04908422725570538
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Pollution Under Control Certificate",
+      "page": 0,
+      "bbox": [
+        0.11607162241710733,
+        0.0623320571933759,
+        0.37648117268941594,
+        0.07660274881439574
+      ],
+      "lang": "en"
+    },
+    {
       "text": "This document is computer generated and valid without a signature.",
       "page": 0,
       "bbox": [
-        0.11445008844400195,
-        0.26786787018794406,
-        0.5364128599439749,
-        0.28121961229301085
+        0.11423004540681701,
+        0.2954125882050106,
+        0.5358847051720179,
+        0.3089653441869525
       ],
       "lang": "en"
     },
@@ -146,10 +169,10 @@
       "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
       "page": 0,
       "bbox": [
-        0.11432169148952573,
-        0.283940445197811,
-        0.5605020797038972,
-        0.2975316870649227
+        0.11410183322438111,
+        0.311462026807935,
+        0.5599564210682098,
+        0.3252664899549954
       ],
       "lang": "en"
     },
@@ -167,15 +190,18 @@
   ],
   "field_lines": {
     "person_name": [
-      3
+      1
     ],
     "document_date": [
-      5
+      3
     ],
     "registration_number": [
-      7
+      5
     ],
     "certificate_number": [
+      7
+    ],
+    "expiry_date": [
       9
     ]
   },

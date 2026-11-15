@@ -9,39 +9,17 @@
   ],
   "fields": {
     "person_name": "Master Kiran Rao",
-    "document_date": "2026-08-20",
+    "document_date": "2026-09-02",
     "expiry_date": null,
-    "employer": null,
-    "designation": "Software Engineer"
+    "employer": "Northstar Software Private Limited",
+    "designation": null
   },
   "printed": {
     "person_name": "Master Kiran Rao",
-    "document_date": "20/08/2026",
-    "designation": "Software Engineer"
+    "document_date": "02/09/2026",
+    "employer": "Northstar Software Private Limited"
   },
   "lines": [
-    {
-      "text": "Issuing authority",
-      "page": 0,
-      "bbox": [
-        0.06948745550435252,
-        0.029389261660725755,
-        0.2725925767502021,
-        0.049655101719548726
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Letter of Appointment",
-      "page": 0,
-      "bbox": [
-        0.06961929664969677,
-        0.06294471440221973,
-        0.24629947134452448,
-        0.07782922037708785
-      ],
-      "lang": "en"
-    },
     {
       "text": "Name",
       "page": 0,
@@ -76,7 +54,7 @@
       "lang": "en"
     },
     {
-      "text": "20/08/2026",
+      "text": "02/09/2026",
       "page": 0,
       "bbox": [
         0.3381802242264698,
@@ -87,24 +65,46 @@
       "lang": "en"
     },
     {
-      "text": "Designation",
+      "text": "Employer",
       "page": 0,
       "bbox": [
         0.07014519373389368,
         0.1967930263960434,
-        0.14986646522717834,
-        0.2087136230062752
+        0.13392226246682826,
+        0.20869000482874883
       ],
       "lang": "en"
     },
     {
-      "text": "Software Engineer",
+      "text": "Northstar Software Private Limited",
       "page": 0,
       "bbox": [
         0.33816483092462996,
         0.19720831266538738,
-        0.4848994517038692,
-        0.21051781515201226
+        0.6128402962263813,
+        0.210706324970612
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Northstar Software Private Limited",
+      "page": 0,
+      "bbox": [
+        0.06948745550435252,
+        0.029389261660725755,
+        0.48358951896200897,
+        0.05016166029566653
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Letter of Appointment",
+      "page": 0,
+      "bbox": [
+        0.06961929664969677,
+        0.06294471440221973,
+        0.24629947134452448,
+        0.07782922037708785
       ],
       "lang": "en"
     },
@@ -144,13 +144,13 @@
   ],
   "field_lines": {
     "person_name": [
-      3
+      1
     ],
     "document_date": [
-      5
+      3
     ],
-    "designation": [
-      7
+    "employer": [
+      5
     ]
   },
   "set_name": "eval-v1",

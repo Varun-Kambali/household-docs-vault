@@ -9,54 +9,32 @@
   ],
   "fields": {
     "insurer": "Nilgiri General Insurance Company Limited",
-    "product": "Secure Plan",
-    "policy_number": "PL/SJ801138",
+    "product": "Protect Plus",
+    "policy_number": "PL/JT011385",
     "policyholder": "Kiran Rao",
     "insured": null,
     "nominee": null,
-    "sum_insured": "1000000",
+    "sum_insured": "2500000",
     "premium": "14160",
     "premium_frequency": null,
-    "start_date": "2026-07-03",
-    "end_date": "2027-05-11",
+    "start_date": "2026-10-07",
+    "end_date": "2027-10-06",
     "premium_due_date": null,
     "agent": null,
-    "claim_helpline": "1800 768 1590"
+    "claim_helpline": "1800 850 5805"
   },
   "printed": {
     "insurer": "Nilgiri General Insurance Company Limited",
-    "product": "Secure Plan",
-    "policy_number": "PL/SJ801138",
+    "product": "Protect Plus",
+    "policy_number": "PL/JT011385",
     "policyholder": "Kiran Rao",
-    "sum_insured": "Rs. 10,00,000",
+    "sum_insured": "Rs. 25,00,000",
     "premium": "Rs. 14,160",
-    "start_date": "03/07/2026",
-    "end_date": "11/05/2027",
-    "claim_helpline": "1800 768 1590"
+    "start_date": "07/10/2026",
+    "end_date": "06/10/2027",
+    "claim_helpline": "1800 850 5805"
   },
   "lines": [
-    {
-      "text": "Tungabhadra Insurance Company Limited",
-      "page": 0,
-      "bbox": [
-        0.07925231412467838,
-        0.028944295390487648,
-        0.5730651014751328,
-        0.05021842983791229
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Home Insurance Policy Schedule",
-      "page": 0,
-      "bbox": [
-        0.07916730063433204,
-        0.06140804446977479,
-        0.3466066005247411,
-        0.07652628908434779
-      ],
-      "lang": "en"
-    },
     {
       "text": "Insurer",
       "page": 0,
@@ -91,13 +69,13 @@
       "lang": "en"
     },
     {
-      "text": "Secure Plan",
+      "text": "Protect Plus",
       "page": 0,
       "bbox": [
         0.34340649374645077,
         0.16445787818961347,
-        0.4376949906672734,
-        0.1774945955849312
+        0.4395043390237698,
+        0.17749978160498522
       ],
       "lang": "en"
     },
@@ -113,13 +91,13 @@
       "lang": "en"
     },
     {
-      "text": "PL/SJ801138",
+      "text": "PL/JT011385",
       "page": 0,
       "bbox": [
         0.34343961255575767,
         0.1923189008306685,
-        0.44418819958834715,
-        0.20535315098622944
+        0.443266769377598,
+        0.2053508075562311
       ],
       "lang": "en"
     },
@@ -157,7 +135,7 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 10,00,000",
+      "text": "Rs. 25,00,000",
       "page": 0,
       "bbox": [
         0.34350594012959834,
@@ -201,7 +179,7 @@
       "lang": "en"
     },
     {
-      "text": "03/07/2026",
+      "text": "07/10/2026",
       "page": 0,
       "bbox": [
         0.34357238791546624,
@@ -223,7 +201,7 @@
       "lang": "en"
     },
     {
-      "text": "11/05/2027",
+      "text": "06/10/2027",
       "page": 0,
       "bbox": [
         0.3436056569900844,
@@ -245,13 +223,35 @@
       "lang": "en"
     },
     {
-      "text": "1800 768 1590",
+      "text": "1800 850 5805",
       "page": 0,
       "bbox": [
         0.3436389562404662,
         0.3600157181155565,
         0.45384995661582317,
         0.3729294480010779
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nilgiri General Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.07925231412467838,
+        0.028944295390487648,
+        0.5853848652737763,
+        0.05027201517671455
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Home Insurance Policy Schedule",
+      "page": 0,
+      "bbox": [
+        0.07916730063433204,
+        0.06140804446977479,
+        0.3466066005247411,
+        0.07652628908434779
       ],
       "lang": "en"
     },
@@ -291,31 +291,31 @@
   ],
   "field_lines": {
     "insurer": [
-      3
+      1
     ],
     "product": [
-      5
+      3
     ],
     "policy_number": [
-      7
+      5
     ],
     "policyholder": [
-      9
+      7
     ],
     "sum_insured": [
-      11
+      9
     ],
     "premium": [
-      13
+      11
     ],
     "start_date": [
-      15
+      13
     ],
     "end_date": [
-      17
+      15
     ],
     "claim_helpline": [
-      19
+      17
     ]
   },
   "set_name": "eval-v1",

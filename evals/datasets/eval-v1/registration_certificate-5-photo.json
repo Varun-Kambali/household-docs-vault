@@ -9,39 +9,17 @@
   ],
   "fields": {
     "person_name": "KIRAN RAO",
-    "document_date": "2026-06-26",
-    "expiry_date": "2032-11-23",
-    "registration_number": "KA-75598115"
+    "document_date": "2026-03-22",
+    "expiry_date": "2041-03-18",
+    "registration_number": "KA-47559811"
   },
   "printed": {
     "person_name": "KIRAN RAO",
-    "document_date": "26/06/2026",
-    "registration_number": "KA-75598115",
-    "expiry_date": "23/11/2032"
+    "document_date": "22/03/2026",
+    "registration_number": "KA-47559811",
+    "expiry_date": "18/03/2041"
   },
   "lines": [
-    {
-      "text": "Regional Transport Office",
-      "page": 0,
-      "bbox": [
-        0.11106465572905493,
-        0.029771820379323737,
-        0.4065888985380986,
-        0.05618207000339117
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Certificate of Registration",
-      "page": 0,
-      "bbox": [
-        0.11070344951626443,
-        0.06302025730423542,
-        0.30902089628316004,
-        0.08183288714458707
-      ],
-      "lang": "en"
-    },
     {
       "text": "Name",
       "page": 0,
@@ -76,7 +54,7 @@
       "lang": "en"
     },
     {
-      "text": "26/06/2026",
+      "text": "22/03/2026",
       "page": 0,
       "bbox": [
         0.3649690551093274,
@@ -98,7 +76,7 @@
       "lang": "en"
     },
     {
-      "text": "KA-75598115",
+      "text": "KA-47559811",
       "page": 0,
       "bbox": [
         0.36440157412907365,
@@ -120,13 +98,35 @@
       "lang": "en"
     },
     {
-      "text": "23/11/2032",
+      "text": "18/03/2041",
       "page": 0,
       "bbox": [
         0.3638350012185557,
         0.22866350813999375,
         0.4434211103628504,
         0.2430700724799962
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Regional Transport Office",
+      "page": 0,
+      "bbox": [
+        0.11106465572905493,
+        0.029771820379323737,
+        0.4065888985380986,
+        0.05618207000339117
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Registration",
+      "page": 0,
+      "bbox": [
+        0.11070344951626443,
+        0.06302025730423542,
+        0.30902089628316004,
+        0.08183288714458707
       ],
       "lang": "en"
     },
@@ -166,16 +166,16 @@
   ],
   "field_lines": {
     "person_name": [
-      3
+      1
     ],
     "document_date": [
-      5
+      3
     ],
     "registration_number": [
-      7
+      5
     ],
     "expiry_date": [
-      9
+      7
     ]
   },
   "set_name": "eval-v1",

@@ -8,50 +8,28 @@
     "card_statement-1-scan.pdf"
   ],
   "fields": {
-    "bank": "Tungabhadra Bank",
+    "bank": "Nilgiri Bank",
     "card_name": "Everyday Rewards",
     "network": null,
     "holder": "Kiran Rao",
-    "last4": "1117",
-    "statement_date": "2026-11-05",
-    "payment_due_date": "2026-11-23",
+    "last4": "0005",
+    "statement_date": "2026-11-07",
+    "payment_due_date": "2026-11-25",
     "total_due": "3420",
-    "credit_limit": "500000",
+    "credit_limit": "100000",
     "annual_fee": null
   },
   "printed": {
-    "bank": "Tungabhadra Bank",
+    "bank": "Nilgiri Bank",
     "card_name": "Everyday Rewards",
     "holder": "Kiran Rao",
-    "last4": "XXXX XXXX XXXX 1117",
-    "statement_date": "05/11/2026",
-    "payment_due_date": "23/11/2026",
+    "last4": "XXXX XXXX XXXX 0005",
+    "statement_date": "07/11/2026",
+    "payment_due_date": "25/11/2026",
     "total_due": "Rs. 3,420",
-    "credit_limit": "Rs. 5,00,000"
+    "credit_limit": "Rs. 1,00,000"
   },
   "lines": [
-    {
-      "text": "Nilgiri Bank",
-      "page": 0,
-      "bbox": [
-        0.06702695859910471,
-        0.026895788145977494,
-        0.2062204429278119,
-        0.04632567990876603
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Credit Card Statement",
-      "page": 0,
-      "bbox": [
-        0.0671757620078695,
-        0.05962294120254495,
-        0.24983538407670636,
-        0.07391866817464988
-      ],
-      "lang": "en"
-    },
     {
       "text": "Bank",
       "page": 0,
@@ -64,13 +42,13 @@
       "lang": "en"
     },
     {
-      "text": "Tungabhadra Bank",
+      "text": "Nilgiri Bank",
       "page": 0,
       "bbox": [
         0.33445471596566956,
         0.13457396150198622,
-        0.4850865402060198,
-        0.1474426131072586
+        0.4269624370738668,
+        0.14743583677686173
       ],
       "lang": "en"
     },
@@ -130,7 +108,7 @@
       "lang": "en"
     },
     {
-      "text": "XXXX XXXX XXXX 1117",
+      "text": "XXXX XXXX XXXX 0005",
       "page": 0,
       "bbox": [
         0.3350690255113452,
@@ -152,7 +130,7 @@
       "lang": "en"
     },
     {
-      "text": "05/11/2026",
+      "text": "07/11/2026",
       "page": 0,
       "bbox": [
         0.3352740322795421,
@@ -174,7 +152,7 @@
       "lang": "en"
     },
     {
-      "text": "23/11/2026",
+      "text": "25/11/2026",
       "page": 0,
       "bbox": [
         0.33547915767893105,
@@ -218,13 +196,35 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 5,00,000",
+      "text": "Rs. 1,00,000",
       "page": 0,
       "bbox": [
         0.3358897647834129,
         0.3310649743921011,
         0.4313974255363949,
         0.34412027453253863
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nilgiri Bank",
+      "page": 0,
+      "bbox": [
+        0.06702695859910471,
+        0.026895788145977494,
+        0.2062204429278119,
+        0.04632567990876603
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credit Card Statement",
+      "page": 0,
+      "bbox": [
+        0.0671757620078695,
+        0.05962294120254495,
+        0.24983538407670636,
+        0.07391866817464988
       ],
       "lang": "en"
     },
@@ -264,28 +264,28 @@
   ],
   "field_lines": {
     "bank": [
-      3
+      1
     ],
     "card_name": [
-      5
+      3
     ],
     "holder": [
-      7
+      5
     ],
     "last4": [
-      9
+      7
     ],
     "statement_date": [
-      11
+      9
     ],
     "payment_due_date": [
-      13
+      11
     ],
     "total_due": [
-      15
+      13
     ],
     "credit_limit": [
-      17
+      15
     ]
   },
   "set_name": "eval-v1",

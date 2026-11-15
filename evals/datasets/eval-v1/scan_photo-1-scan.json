@@ -10,9 +10,9 @@
   "fields": {
     "patient": "Kavita Rao",
     "doctor": null,
-    "date": "2026-11-02",
-    "hospital": "Cauvery Care Hospital",
-    "department": null,
+    "date": "2026-09-27",
+    "hospital": null,
+    "department": "General Medicine",
     "diagnoses": null,
     "procedures": null,
     "allergies": null,
@@ -23,32 +23,10 @@
   },
   "printed": {
     "patient": "Kavita Rao",
-    "date": "02/11/2026",
-    "hospital": "Cauvery Care Hospital"
+    "date": "27/09/2026",
+    "department": "General Medicine"
   },
   "lines": [
-    {
-      "text": "Cauvery Care Hospital",
-      "page": 0,
-      "bbox": [
-        0.06651198917408359,
-        0.030640853995832603,
-        0.33075437572487554,
-        0.052487443194018296
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Ultrasound Images",
-      "page": 0,
-      "bbox": [
-        0.06657285484514883,
-        0.06465297672813512,
-        0.21872263135122547,
-        0.08021410720135588
-      ],
-      "lang": "en"
-    },
     {
       "text": "Patient",
       "page": 0,
@@ -83,7 +61,7 @@
       "lang": "en"
     },
     {
-      "text": "02/11/2026",
+      "text": "27/09/2026",
       "page": 0,
       "bbox": [
         0.3306198512249445,
@@ -94,24 +72,46 @@
       "lang": "en"
     },
     {
-      "text": "Hospital",
+      "text": "Department",
       "page": 0,
       "bbox": [
         0.06681598502579618,
-        0.19706035216207712,
-        0.12028170825836353,
+        0.1968902622386148,
+        0.144157626050012,
         0.20904573000478927
       ],
       "lang": "en"
     },
     {
-      "text": "Cauvery Care Hospital",
+      "text": "General Medicine",
       "page": 0,
       "bbox": [
         0.3306100979356729,
-        0.19430159633329183,
-        0.507555713454521,
+        0.19458430445920002,
+        0.4678674889351162,
         0.20850086461968165
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Lakeview Multispeciality Clinic",
+      "page": 0,
+      "bbox": [
+        0.06651198917408359,
+        0.029728814442697725,
+        0.42896806636352797,
+        0.052487443194018296
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ultrasound Images",
+      "page": 0,
+      "bbox": [
+        0.06657285484514883,
+        0.06465297672813512,
+        0.21872263135122547,
+        0.08021410720135588
       ],
       "lang": "en"
     },
@@ -151,13 +151,13 @@
   ],
   "field_lines": {
     "patient": [
-      3
+      1
     ],
     "date": [
-      5
+      3
     ],
-    "hospital": [
-      7
+    "department": [
+      5
     ]
   },
   "set_name": "eval-v1",

@@ -10,7 +10,7 @@
   "fields": {
     "patient": "Kavita R Rao",
     "doctor": "Dr. Abhimanyu Rout",
-    "date": "2026-07-10",
+    "date": "2026-09-09",
     "hospital": "Lakeview Multispeciality Clinic",
     "department": null,
     "diagnoses": [
@@ -38,43 +38,21 @@
       }
     ],
     "tests": null,
-    "next_visit": "2026-12-08",
+    "next_visit": "2026-12-22",
     "amount": null
   },
   "printed": {
     "patient": "Kavita R Rao",
-    "date": "10/07/2026",
+    "date": "09/09/2026",
     "hospital": "Lakeview Multispeciality Clinic",
     "doctor": "Dr. Abhimanyu Rout",
     "diagnoses": "Viral fever\nAcute gastritis",
     "procedures": "Endoscopy",
     "allergies": "Sulfa drugs",
     "medicines": "1. Tab Amlodipine 5 mg  0-0-1  5 days\n2. Tab Metformin 500 mg  1-0-0  1 month",
-    "next_visit": "08/12/2026"
+    "next_visit": "22/12/2026"
   },
   "lines": [
-    {
-      "text": "Cauvery Care Hospital",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.023752969121140142,
-        0.336218487394958,
-        0.04334916864608076
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Discharge Summary",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.057007125890736345,
-        0.2346672268907563,
-        0.07137767220902613
-      ],
-      "lang": "en"
-    },
     {
       "text": "Patient",
       "page": 0,
@@ -109,7 +87,7 @@
       "lang": "en"
     },
     {
-      "text": "10/07/2026",
+      "text": "09/09/2026",
       "page": 0,
       "bbox": [
         0.33613445378151263,
@@ -285,13 +263,35 @@
       "lang": "en"
     },
     {
-      "text": "08/12/2026",
+      "text": "22/12/2026",
       "page": 0,
       "bbox": [
         0.33613445378151263,
         0.46080760095011875,
         0.4202352941176471,
         0.47387173396674587
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Lakeview Multispeciality Clinic",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.4357226890756302,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Discharge Summary",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.2346672268907563,
+        0.07137767220902613
       ],
       "lang": "en"
     },
@@ -331,33 +331,33 @@
   ],
   "field_lines": {
     "patient": [
-      3
+      1
     ],
     "date": [
-      5
+      3
     ],
     "hospital": [
-      7
+      5
     ],
     "doctor": [
-      9
+      7
     ],
     "diagnoses": [
-      11,
-      12
+      9,
+      10
     ],
     "procedures": [
-      14
+      12
     ],
     "allergies": [
-      16
+      14
     ],
     "medicines": [
-      18,
-      19
+      16,
+      17
     ],
     "next_visit": [
-      21
+      19
     ]
   },
   "set_name": "eval-v1",

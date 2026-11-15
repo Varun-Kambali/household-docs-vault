@@ -9,38 +9,16 @@
   ],
   "fields": {
     "person_name": "Ravi Rao",
-    "document_date": "2026-05-30",
+    "document_date": "2026-09-01",
     "expiry_date": null,
-    "registration_number": "KA-77250717"
+    "registration_number": "KA-57725071"
   },
   "printed": {
     "person_name": "Ravi Rao",
-    "document_date": "30/05/2026",
-    "registration_number": "KA-77250717"
+    "document_date": "01/09/2026",
+    "registration_number": "KA-57725071"
   },
   "lines": [
-    {
-      "text": "Office of the Sub-Registrar",
-      "page": 0,
-      "bbox": [
-        0.09023457762603941,
-        0.045703454894628626,
-        0.4058762106738215,
-        0.07086337305205531
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Sale Deed",
-      "page": 0,
-      "bbox": [
-        0.09068901519418898,
-        0.07832987047588227,
-        0.17641903825843036,
-        0.0939447226307674
-      ],
-      "lang": "en"
-    },
     {
       "text": "Name",
       "page": 0,
@@ -75,7 +53,7 @@
       "lang": "en"
     },
     {
-      "text": "30/05/2026",
+      "text": "01/09/2026",
       "page": 0,
       "bbox": [
         0.3565446309225768,
@@ -97,13 +75,35 @@
       "lang": "en"
     },
     {
-      "text": "KA-77250717",
+      "text": "KA-57725071",
       "page": 0,
       "bbox": [
         0.35682869471214945,
         0.21216245982600052,
         0.45844023829788044,
         0.22614862832889218
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Office of the Sub-Registrar",
+      "page": 0,
+      "bbox": [
+        0.09023457762603941,
+        0.045703454894628626,
+        0.4058762106738215,
+        0.07086337305205531
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sale Deed",
+      "page": 0,
+      "bbox": [
+        0.09068901519418898,
+        0.07832987047588227,
+        0.17641903825843036,
+        0.0939447226307674
       ],
       "lang": "en"
     },
@@ -143,13 +143,13 @@
   ],
   "field_lines": {
     "person_name": [
-      3
+      1
     ],
     "document_date": [
-      5
+      3
     ],
     "registration_number": [
-      7
+      5
     ]
   },
   "set_name": "eval-v1",

@@ -8,7 +8,7 @@
     "extended_warranty-5-scan.pdf"
   ],
   "fields": {
-    "brand": "Kestrel",
+    "brand": "Vistara Home",
     "product": "Split air conditioner",
     "model": "MDRY776693",
     "serial_number": null,
@@ -16,50 +16,28 @@
     "seller_location": "Mangaluru",
     "order_id": null,
     "buyer": "Kavita Rao",
-    "purchase_date": "2025-06-05",
-    "amount": "45990",
+    "purchase_date": "2026-02-26",
+    "amount": "62000",
     "invoice_number": null,
-    "period_start": "2026-04-26",
-    "period_end": "2027-10-05",
+    "period_start": "2026-03-19",
+    "period_end": "2028-03-18",
     "visits": null,
-    "service_helpline": "1800 561 5406"
+    "service_helpline": "1800 440 5753"
   },
   "printed": {
-    "brand": "Kestrel",
+    "brand": "Vistara Home",
     "product": "Split air conditioner",
     "model": "MDRY776693",
     "seller": "Lakeview Digital Store",
     "seller_location": "Mangaluru",
     "buyer": "Kavita Rao",
-    "purchase_date": "05/06/2025",
-    "amount": "Rs. 45,990",
-    "period_start": "26/04/2026",
-    "period_end": "05/10/2027",
-    "service_helpline": "1800 561 5406"
+    "purchase_date": "26/02/2026",
+    "amount": "Rs. 62,000",
+    "period_start": "19/03/2026",
+    "period_end": "18/03/2028",
+    "service_helpline": "1800 440 5753"
   },
   "lines": [
-    {
-      "text": "Service desk",
-      "page": 0,
-      "bbox": [
-        0.06806939274666193,
-        0.02402851142686601,
-        0.22075225291050676,
-        0.04343114287272582
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Extended Warranty Certificate",
-      "page": 0,
-      "bbox": [
-        0.06816970318716266,
-        0.0569502567880116,
-        0.3123793568508652,
-        0.07118899683764075
-      ],
-      "lang": "en"
-    },
     {
       "text": "Brand",
       "page": 0,
@@ -72,13 +50,13 @@
       "lang": "en"
     },
     {
-      "text": "Kestrel",
+      "text": "Vistara Home",
       "page": 0,
       "bbox": [
         0.3347308078241422,
         0.13224949768786712,
-        0.39122559902070025,
-        0.14519906552949377
+        0.4411951899445268,
+        0.14520331691839983
       ],
       "lang": "en"
     },
@@ -204,7 +182,7 @@
       "lang": "en"
     },
     {
-      "text": "05/06/2025",
+      "text": "26/02/2026",
       "page": 0,
       "bbox": [
         0.3354084156945986,
@@ -226,7 +204,7 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 45,990",
+      "text": "Rs. 62,000",
       "page": 0,
       "bbox": [
         0.33552142999099666,
@@ -248,7 +226,7 @@
       "lang": "en"
     },
     {
-      "text": "26/04/2026",
+      "text": "19/03/2026",
       "page": 0,
       "bbox": [
         0.3356344670632606,
@@ -270,7 +248,7 @@
       "lang": "en"
     },
     {
-      "text": "05/10/2027",
+      "text": "18/03/2028",
       "page": 0,
       "bbox": [
         0.33574752691827625,
@@ -292,13 +270,35 @@
       "lang": "en"
     },
     {
-      "text": "1800 561 5406",
+      "text": "1800 440 5753",
       "page": 0,
       "bbox": [
         0.3358606095629321,
         0.4149523530999767,
         0.44711623794548716,
         0.4279523885923811
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Vistara Home",
+      "page": 0,
+      "bbox": [
+        0.06806939274666193,
+        0.02402851142686601,
+        0.22764160151996018,
+        0.04343128969872851
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Extended Warranty Certificate",
+      "page": 0,
+      "bbox": [
+        0.06816970318716266,
+        0.0569502567880116,
+        0.3123793568508652,
+        0.07118899683764075
       ],
       "lang": "en"
     },
@@ -338,37 +338,37 @@
   ],
   "field_lines": {
     "brand": [
-      3
+      1
     ],
     "product": [
-      5
+      3
     ],
     "model": [
-      7
+      5
     ],
     "seller": [
-      9
+      7
     ],
     "seller_location": [
-      11
+      9
     ],
     "buyer": [
-      13
+      11
     ],
     "purchase_date": [
-      15
+      13
     ],
     "amount": [
-      17
+      15
     ],
     "period_start": [
-      19
+      17
     ],
     "period_end": [
-      21
+      19
     ],
     "service_helpline": [
-      23
+      21
     ]
   },
   "set_name": "eval-v1",

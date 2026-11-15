@@ -11,8 +11,8 @@
     "patient": "Master Kiran Rao",
     "doctor": null,
     "date": null,
-    "hospital": "Lakeview Multispeciality Clinic",
-    "department": "General Medicine",
+    "hospital": "Sunrise Family Hospital",
+    "department": null,
     "diagnoses": null,
     "procedures": null,
     "allergies": null,
@@ -23,32 +23,9 @@
   },
   "printed": {
     "patient": "Master Kiran Rao",
-    "hospital": "Lakeview Multispeciality Clinic",
-    "department": "General Medicine"
+    "hospital": "Sunrise Family Hospital"
   },
   "lines": [
-    {
-      "text": "Sunrise Family Hospital",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.023752969121140142,
-        0.35303361344537815,
-        0.04334916864608076
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Ultrasound Images",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.057007125890736345,
-        0.2223731092436975,
-        0.07137767220902613
-      ],
-      "lang": "en"
-    },
     {
       "text": "Patient",
       "page": 0,
@@ -83,35 +60,35 @@
       "lang": "en"
     },
     {
-      "text": "Lakeview Multispeciality Clinic",
+      "text": "Sunrise Family Hospital",
       "page": 0,
       "bbox": [
         0.33613445378151263,
         0.16152019002375298,
-        0.5817983193277311,
+        0.526672268907563,
         0.17458432304038005
       ],
       "lang": "en"
     },
     {
-      "text": "Department",
+      "text": "Sunrise Family Hospital",
       "page": 0,
       "bbox": [
         0.06722689075630252,
-        0.19002375296912113,
-        0.1462453781512605,
-        0.20178147268408553
+        0.023752969121140142,
+        0.35303361344537815,
+        0.04334916864608076
       ],
       "lang": "en"
     },
     {
-      "text": "General Medicine",
+      "text": "Ultrasound Images",
       "page": 0,
       "bbox": [
-        0.33613445378151263,
-        0.19002375296912113,
-        0.4753109243697479,
-        0.20308788598574823
+        0.06722689075630252,
+        0.057007125890736345,
+        0.2223731092436975,
+        0.07137767220902613
       ],
       "lang": "en"
     },
@@ -120,9 +97,9 @@
       "page": 0,
       "bbox": [
         0.06722689075630252,
-        0.5724465558194775,
+        0.5439429928741093,
         0.5212201680672268,
-        0.5842042755344418
+        0.5557007125890736
       ],
       "lang": "en"
     },
@@ -131,9 +108,9 @@
       "page": 0,
       "bbox": [
         0.06722689075630252,
-        0.5890736342042755,
+        0.5605700712589073,
         0.5472672268907564,
-        0.6008313539192399
+        0.5723277909738717
       ],
       "lang": "en"
     },
@@ -151,13 +128,10 @@
   ],
   "field_lines": {
     "patient": [
-      3
+      1
     ],
     "hospital": [
-      5
-    ],
-    "department": [
-      7
+      3
     ]
   },
   "set_name": "eval-v1",

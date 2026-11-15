@@ -142,3 +142,38 @@ def test_form_makers_return_a_value_and_its_printed_text() -> None:
             assert isinstance(printed, str) and printed, (t, f.name)
             assert value is not None, (t, f.name)
             assert not re.search(r"[—]", printed)
+
+
+ORG_PRIORITY = ("insurer", "bank", "employer", "hospital", "issuer", "brand", "seller", "provider")
+
+
+def test_the_band_names_the_documents_own_organisation(form_docs: list[SynthDoc]) -> None:
+    named = 0
+    for d in form_docs:
+        if d.variant != "clean":
+            continue
+        spec = FORM_SPECS[d.doc_type]
+        # the band's heading is the one line printed in the top 4% of the page
+        band = next(ln.text for ln in d.lines if ln.bbox[1] < 0.04)
+        org = next((n for n in ORG_PRIORITY if n in {f.name for f in spec.fields}), None)
+        if org is not None and org in d.printed:
+            assert band == d.printed[org], (d.doc_id, band, d.printed[org])
+            named += 1
+        else:
+            assert band in spec.issuers, d.doc_id
+    assert named >= 20
+
+
+def test_card_digits_match_the_network(form_docs: list[SynthDoc]) -> None:
+    from vault_synth.templates.card_front import _network
+
+    by_network: dict[str, set[str]] = {}
+    for n in TEST_CARD_NUMBERS:
+        by_network.setdefault(_network(n), set()).add(n[-4:])
+    seen = 0
+    for d in form_docs:
+        tail, network = d.fields.get("last4"), d.fields.get("network")
+        if tail is not None and network is not None:
+            seen += 1
+            assert tail in by_network[str(network)], (d.doc_id, network, tail)
+    assert seen

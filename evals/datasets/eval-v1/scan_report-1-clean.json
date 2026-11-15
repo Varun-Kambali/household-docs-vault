@@ -10,7 +10,7 @@
   "fields": {
     "patient": "Master Kiran Rao",
     "doctor": "Dr. Naksh Salvi",
-    "date": "2026-04-28",
+    "date": "2026-07-29",
     "hospital": "Sunrise Family Hospital",
     "department": "Orthopaedics",
     "diagnoses": [
@@ -26,35 +26,13 @@
   },
   "printed": {
     "patient": "Master Kiran Rao",
-    "date": "28/04/2026",
+    "date": "29/07/2026",
     "hospital": "Sunrise Family Hospital",
     "doctor": "Dr. Naksh Salvi",
     "department": "Orthopaedics",
     "diagnoses": "Hypertension\nAcute gastritis"
   },
   "lines": [
-    {
-      "text": "Lakeview Multispeciality Clinic",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.023752969121140142,
-        0.4357226890756302,
-        0.04334916864608076
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Radiology Report",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.057007125890736345,
-        0.21004201680672271,
-        0.07137767220902613
-      ],
-      "lang": "en"
-    },
     {
       "text": "Patient",
       "page": 0,
@@ -89,7 +67,7 @@
       "lang": "en"
     },
     {
-      "text": "28/04/2026",
+      "text": "29/07/2026",
       "page": 0,
       "bbox": [
         0.33613445378151263,
@@ -199,6 +177,28 @@
       "lang": "en"
     },
     {
+      "text": "Sunrise Family Hospital",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.35303361344537815,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Radiology Report",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.21004201680672271,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
       "text": "This document is computer generated and valid without a signature.",
       "page": 0,
       "bbox": [
@@ -234,23 +234,23 @@
   ],
   "field_lines": {
     "patient": [
-      3
+      1
     ],
     "date": [
-      5
+      3
     ],
     "hospital": [
-      7
+      5
     ],
     "doctor": [
-      9
+      7
     ],
     "department": [
-      11
+      9
     ],
     "diagnoses": [
-      13,
-      14
+      11,
+      12
     ]
   },
   "set_name": "eval-v1",

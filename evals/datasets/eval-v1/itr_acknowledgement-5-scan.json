@@ -9,39 +9,18 @@
   ],
   "fields": {
     "person_name": "R K Rao",
-    "document_date": "2026-10-03",
+    "document_date": "2026-05-14",
     "expiry_date": null,
-    "acknowledgement_number": "AK-565005205765987",
-    "assessment_year": null
+    "acknowledgement_number": "AK-156500520576598",
+    "assessment_year": "2025-26"
   },
   "printed": {
     "person_name": "R K Rao",
-    "document_date": "03/10/2026",
-    "acknowledgement_number": "AK-565005205765987"
+    "document_date": "14/05/2026",
+    "acknowledgement_number": "AK-156500520576598",
+    "assessment_year": "2025-26"
   },
   "lines": [
-    {
-      "text": "Income Tax Department",
-      "page": 0,
-      "bbox": [
-        0.07819218363689118,
-        0.028386867656140992,
-        0.3606036811437645,
-        0.04812150152817941
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Income Tax Return Acknowledgement",
-      "page": 0,
-      "bbox": [
-        0.07818949579340674,
-        0.06134857465877128,
-        0.3878567166618558,
-        0.0759139241924391
-      ],
-      "lang": "en"
-    },
     {
       "text": "Name",
       "page": 0,
@@ -76,7 +55,7 @@
       "lang": "en"
     },
     {
-      "text": "03/10/2026",
+      "text": "14/05/2026",
       "page": 0,
       "bbox": [
         0.3439364082135081,
@@ -98,7 +77,7 @@
       "lang": "en"
     },
     {
-      "text": "AK-565005205765987",
+      "text": "AK-156500520576598",
       "page": 0,
       "bbox": [
         0.34393590758769693,
@@ -109,13 +88,57 @@
       "lang": "en"
     },
     {
+      "text": "Assessment year",
+      "page": 0,
+      "bbox": [
+        0.0781742562479222,
+        0.22145748547536084,
+        0.19285939261224141,
+        0.23319022813058132
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2025-26",
+      "page": 0,
+      "bbox": [
+        0.3439354069534792,
+        0.22164344369321562,
+        0.4048318208573486,
+        0.23462693811667423
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Income Tax Department",
+      "page": 0,
+      "bbox": [
+        0.07819218363689118,
+        0.028386867656140992,
+        0.3606036811437645,
+        0.04812150152817941
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Income Tax Return Acknowledgement",
+      "page": 0,
+      "bbox": [
+        0.07818949579340674,
+        0.06134857465877128,
+        0.3878567166618558,
+        0.0759139241924391
+      ],
+      "lang": "en"
+    },
+    {
       "text": "This document is computer generated and valid without a signature.",
       "page": 0,
       "bbox": [
-        0.07817220597591011,
-        0.242649513096143,
-        0.5266668611268868,
-        0.2545850452453031
+        0.07816947223970194,
+        0.27090596535542577,
+        0.5266678943029631,
+        0.2828124318529624
       ],
       "lang": "en"
     },
@@ -123,10 +146,10 @@
       "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
       "page": 0,
       "bbox": [
-        0.07817061130203765,
-        0.2591323858812487,
-        0.5523709989399522,
-        0.2710660205789939
+        0.07816787753903433,
+        0.287389115099858,
+        0.552372247775057,
+        0.29929200655412724
       ],
       "lang": "en"
     },
@@ -144,12 +167,15 @@
   ],
   "field_lines": {
     "person_name": [
-      3
+      1
     ],
     "document_date": [
-      5
+      3
     ],
     "acknowledgement_number": [
+      5
+    ],
+    "assessment_year": [
       7
     ]
   },

@@ -17,11 +17,11 @@
     "sum_insured": "2500000",
     "premium": "8200",
     "premium_frequency": null,
-    "start_date": "2026-01-23",
-    "end_date": "2027-08-07",
+    "start_date": "2026-03-07",
+    "end_date": "2027-03-06",
     "premium_due_date": null,
     "agent": null,
-    "claim_helpline": "1800 175 8085"
+    "claim_helpline": null
   },
   "printed": {
     "insurer": "Tungabhadra Insurance Company Limited",
@@ -30,33 +30,10 @@
     "policyholder": "SURESH N RAO",
     "sum_insured": "Rs. 25,00,000",
     "premium": "Rs. 8,200",
-    "start_date": "23/01/2026",
-    "end_date": "07/08/2027",
-    "claim_helpline": "1800 175 8085"
+    "start_date": "07/03/2026",
+    "end_date": "06/03/2027"
   },
   "lines": [
-    {
-      "text": "Western Ghats Life Assurance Limited",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.023752969121140142,
-        0.5295294117647059,
-        0.04334916864608076
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Home Insurance Policy Schedule",
-      "page": 0,
-      "bbox": [
-        0.06722689075630252,
-        0.057007125890736345,
-        0.33950924369747904,
-        0.07137767220902613
-      ],
-      "lang": "en"
-    },
     {
       "text": "Insurer",
       "page": 0,
@@ -201,7 +178,7 @@
       "lang": "en"
     },
     {
-      "text": "23/01/2026",
+      "text": "07/03/2026",
       "page": 0,
       "bbox": [
         0.33613445378151263,
@@ -223,7 +200,7 @@
       "lang": "en"
     },
     {
-      "text": "07/08/2027",
+      "text": "06/03/2027",
       "page": 0,
       "bbox": [
         0.33613445378151263,
@@ -234,24 +211,24 @@
       "lang": "en"
     },
     {
-      "text": "Claims helpline",
+      "text": "Tungabhadra Insurance Company Limited",
       "page": 0,
       "bbox": [
         0.06722689075630252,
-        0.36104513064133015,
-        0.16976638655462184,
-        0.3728028503562945
+        0.023752969121140142,
+        0.5715294117647058,
+        0.04334916864608076
       ],
       "lang": "en"
     },
     {
-      "text": "1800 175 8085",
+      "text": "Home Insurance Policy Schedule",
       "page": 0,
       "bbox": [
-        0.33613445378151263,
-        0.36104513064133015,
-        0.44826890756302523,
-        0.37410926365795727
+        0.06722689075630252,
+        0.057007125890736345,
+        0.33950924369747904,
+        0.07137767220902613
       ],
       "lang": "en"
     },
@@ -260,9 +237,9 @@
       "page": 0,
       "bbox": [
         0.06722689075630252,
-        0.41092636579572445,
+        0.3824228028503563,
         0.5212201680672268,
-        0.4226840855106888
+        0.39418052256532066
       ],
       "lang": "en"
     },
@@ -271,9 +248,9 @@
       "page": 0,
       "bbox": [
         0.06722689075630252,
-        0.42755344418052255,
+        0.3990498812351544,
         0.5472672268907564,
-        0.4393111638954869
+        0.41080760095011876
       ],
       "lang": "en"
     },
@@ -291,31 +268,28 @@
   ],
   "field_lines": {
     "insurer": [
-      3
+      1
     ],
     "product": [
-      5
+      3
     ],
     "policy_number": [
-      7
+      5
     ],
     "policyholder": [
-      9
+      7
     ],
     "sum_insured": [
-      11
+      9
     ],
     "premium": [
-      13
+      11
     ],
     "start_date": [
-      15
+      13
     ],
     "end_date": [
-      17
-    ],
-    "claim_helpline": [
-      19
+      15
     ]
   },
   "set_name": "eval-v1",

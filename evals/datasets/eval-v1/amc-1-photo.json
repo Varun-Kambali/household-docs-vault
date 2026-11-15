@@ -8,57 +8,35 @@
     "amc-1-photo.jpg"
   ],
   "fields": {
-    "brand": "Kestrel",
-    "product": "Refrigerator",
+    "brand": "Nimbus",
+    "product": "Television",
     "model": null,
-    "serial_number": "SNEP010832",
-    "seller": "Metro Home Appliances",
+    "serial_number": "SNBC083234",
+    "seller": "Lakeview Digital Store",
     "seller_location": null,
     "order_id": null,
     "buyer": "Ravi Kumar Rao",
-    "purchase_date": "2025-02-18",
-    "amount": "62000",
+    "purchase_date": "2026-03-07",
+    "amount": "18500",
     "invoice_number": null,
-    "period_start": "2026-09-16",
+    "period_start": "2026-03-16",
     "period_end": null,
     "visits": "1",
     "service_helpline": "1800 220 9856"
   },
   "printed": {
-    "brand": "Kestrel",
-    "product": "Refrigerator",
-    "serial_number": "SNEP010832",
-    "seller": "Metro Home Appliances",
+    "brand": "Nimbus",
+    "product": "Television",
+    "serial_number": "SNBC083234",
+    "seller": "Lakeview Digital Store",
     "buyer": "Ravi Kumar Rao",
-    "purchase_date": "18/02/2025",
-    "amount": "Rs. 62,000",
-    "period_start": "16/09/2026",
+    "purchase_date": "07/03/2026",
+    "amount": "Rs. 18,500",
+    "period_start": "16/03/2026",
     "visits": "1",
     "service_helpline": "1800 220 9856"
   },
   "lines": [
-    {
-      "text": "Service desk",
-      "page": 0,
-      "bbox": [
-        0.09395550425096684,
-        0.05491218115965843,
-        0.23976092706100063,
-        0.0796042714662091
-      ],
-      "lang": "en"
-    },
-    {
-      "text": "Annual Maintenance Contract",
-      "page": 0,
-      "bbox": [
-        0.09455008233300616,
-        0.08513039181209626,
-        0.3246564115624592,
-        0.10740765979554624
-      ],
-      "lang": "en"
-    },
     {
       "text": "Brand",
       "page": 0,
@@ -71,12 +49,12 @@
       "lang": "en"
     },
     {
-      "text": "Kestrel",
+      "text": "Nimbus",
       "page": 0,
       "bbox": [
         0.3489082824526563,
-        0.15804121907233332,
-        0.4028977856041749,
+        0.15789468014516603,
+        0.4073152854417236,
         0.17274703672499636
       ],
       "lang": "en"
@@ -93,12 +71,12 @@
       "lang": "en"
     },
     {
-      "text": "Refrigerator",
+      "text": "Television",
       "page": 0,
       "bbox": [
         0.34898316040070493,
-        0.18502248252023162,
-        0.44005111690721066,
+        0.1854538038172178,
+        0.42678795310655526,
         0.20085491971785002
       ],
       "lang": "en"
@@ -115,12 +93,12 @@
       "lang": "en"
     },
     {
-      "text": "SNEP010832",
+      "text": "SNBC083234",
       "page": 0,
       "bbox": [
         0.3490577835198957,
-        0.21297217157073794,
-        0.44532004227778516,
+        0.21291634778415727,
+        0.44707163292378366,
         0.2288672189243645
       ],
       "lang": "en"
@@ -137,12 +115,12 @@
       "lang": "en"
     },
     {
-      "text": "Metro Home Appliances",
+      "text": "Lakeview Digital Store",
       "page": 0,
       "bbox": [
         0.3491321531088908,
-        0.23834885286641205,
-        0.530153253781124,
+        0.2387353905775846,
+        0.5177732100192961,
         0.25678442108088584
       ],
       "lang": "en"
@@ -181,7 +159,7 @@
       "lang": "en"
     },
     {
-      "text": "18/02/2025",
+      "text": "07/03/2026",
       "page": 0,
       "bbox": [
         0.34928013684696996,
@@ -203,7 +181,7 @@
       "lang": "en"
     },
     {
-      "text": "Rs. 62,000",
+      "text": "Rs. 18,500",
       "page": 0,
       "bbox": [
         0.3493537535496289,
@@ -225,7 +203,7 @@
       "lang": "en"
     },
     {
-      "text": "16/09/2026",
+      "text": "16/03/2026",
       "page": 0,
       "bbox": [
         0.3494271218293887,
@@ -280,6 +258,28 @@
       "lang": "en"
     },
     {
+      "text": "Nimbus",
+      "page": 0,
+      "bbox": [
+        0.09395550425096684,
+        0.05699722480890435,
+        0.18141326791452447,
+        0.0796042714662091
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Annual Maintenance Contract",
+      "page": 0,
+      "bbox": [
+        0.09455008233300616,
+        0.08513039181209626,
+        0.3246564115624592,
+        0.10740765979554624
+      ],
+      "lang": "en"
+    },
+    {
       "text": "This document is computer generated and valid without a signature.",
       "page": 0,
       "bbox": [
@@ -315,34 +315,34 @@
   ],
   "field_lines": {
     "brand": [
-      3
+      1
     ],
     "product": [
-      5
+      3
     ],
     "serial_number": [
-      7
+      5
     ],
     "seller": [
-      9
+      7
     ],
     "buyer": [
-      11
+      9
     ],
     "purchase_date": [
-      13
+      11
     ],
     "amount": [
-      15
+      13
     ],
     "period_start": [
-      17
+      15
     ],
     "visits": [
-      19
+      17
     ],
     "service_helpline": [
-      21
+      19
     ]
   },
   "set_name": "eval-v1",
