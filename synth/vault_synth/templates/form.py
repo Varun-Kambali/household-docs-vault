@@ -68,12 +68,16 @@ def draw_form(
                 y += 24
 
     # the band is drawn last, so it can name the organisation the page printed (priority order
-    # in `ORG_PRIORITY`); a page without one, or that left it off, names an issuer of the type
+    # in `ORG_PRIORITY`). A type with an organisation field whose value is left off the page
+    # names no organisation at all, or a reader would be scored wrong for reading the band; a
+    # type with no such field names an issuer from `spec.issuers`.
     names = {f.name for f in spec.fields}
     org = next((n for n in ORG_PRIORITY if n in names), None)
-    heading = t.printed[org] if org is not None and org in t.printed else rng.choice(spec.issuers)
     band(s, 0, 78, band_color)
-    s.put(heading, 40, 20, 15, font="Helvetica-Bold", color="#ffffff")
+    if org is None:
+        s.put(rng.choice(spec.issuers), 40, 20, 15, font="Helvetica-Bold", color="#ffffff")
+    elif org in t.printed:
+        s.put(t.printed[org], 40, 20, 15, font="Helvetica-Bold", color="#ffffff")
     s.put(spec.title, 40, 48, 11, color="#f0f0f0")
     s.hline(40, 555, 96, "#888888")
 

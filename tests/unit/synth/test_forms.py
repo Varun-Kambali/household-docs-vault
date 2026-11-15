@@ -154,13 +154,15 @@ def test_the_band_names_the_documents_own_organisation(form_docs: list[SynthDoc]
             continue
         spec = FORM_SPECS[d.doc_type]
         # the band's heading is the one line printed in the top 4% of the page
-        band = next(ln.text for ln in d.lines if ln.bbox[1] < 0.04)
+        band = next((ln.text for ln in d.lines if ln.bbox[1] < 0.04), None)
         org = next((n for n in ORG_PRIORITY if n in {f.name for f in spec.fields}), None)
-        if org is not None and org in d.printed:
+        if org is None:
+            assert band in spec.issuers, d.doc_id
+        elif org in d.printed:
             assert band == d.printed[org], (d.doc_id, band, d.printed[org])
             named += 1
         else:
-            assert band in spec.issuers, d.doc_id
+            assert band is None, (d.doc_id, band)
     assert named >= 20
 
 
@@ -177,3 +179,34 @@ def test_card_digits_match_the_network(form_docs: list[SynthDoc]) -> None:
             seen += 1
             assert tail in by_network[str(network)], (d.doc_id, network, tail)
     assert seen
+
+
+def test_an_absent_organisation_is_named_nowhere_on_the_page() -> None:
+    """If the truth says bank (or insurer, hospital...) is None, no organisation name of that
+    type is printed, in the lines or in the PDF's text layer."""
+    import pypdfium2 as pdfium
+    from vault_synth.sets import load_set
+
+    from tests.conftest import EVAL_V1
+
+    docs = load_set(EVAL_V1)
+    checked = 0
+    for t, spec in FORM_SPECS.items():
+        org = next((n for n in ORG_PRIORITY if n in {f.name for f in spec.fields}), None)
+        mine = [d for d in docs if d.doc_type is t]
+        if org is None:
+            continue
+        # every value the set uses for this field, and the type's fallback issuer names
+        names = {str(d.fields[org]) for d in mine if d.fields.get(org) is not None}
+        names |= set(spec.issuers)
+        for d in mine:
+            if d.fields.get(org) is not None:
+                continue
+            checked += 1
+            blob = "\n".join(ln.text for ln in d.lines)
+            if d.variant == "clean":
+                pdf = pdfium.PdfDocument(str(EVAL_V1 / d.files[0]))
+                blob += "\n" + pdf[0].get_textpage().get_text_range()
+                pdf.close()
+            assert not [n for n in names if n in blob], d.doc_id
+    assert checked
