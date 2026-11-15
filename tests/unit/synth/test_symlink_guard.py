@@ -4,6 +4,7 @@ import pytest
 from vault_synth import visits
 from vault_synth.cli import generate
 
+from household_vault.doctypes import DocType
 from household_vault.safety import UnsafePathError
 
 
@@ -24,7 +25,7 @@ def test_generate_refuses_a_planted_manifest_symlink(
 ) -> None:
     _, out, target = _planted(tmp_path, monkeypatch, "manifest.json")
     with pytest.raises(UnsafePathError):
-        generate("spike-v0", 1, 7, out)
+        generate("eval-v1", out, splits=("test",), types=[DocType.pan])
     assert target.read_text() == "original"
 
 
@@ -33,7 +34,7 @@ def test_generate_refuses_a_planted_truth_symlink(
 ) -> None:
     _, out, target = _planted(tmp_path, monkeypatch, "health_policy-1-clean.json")
     with pytest.raises(UnsafePathError):
-        generate("spike-v0", 1, 7, out)
+        generate("eval-v1", out, splits=("val",), types=[DocType.health_policy])
     assert target.read_text() == "original"
 
 

@@ -51,3 +51,22 @@ def test_photo_is_deterministic_for_a_seed() -> None:
     _, a = to_photo(clean_image, clean_lines, random.Random(5))
     _, b = to_photo(clean_image, clean_lines, random.Random(5))
     assert a == b
+
+
+def test_scan_profile_is_gray_flat_and_barely_moves_the_sheet() -> None:
+    clean_image, clean_lines = _clean()
+    img, lines = to_photo(clean_image, clean_lines, random.Random(2), "scan")
+    assert img.mode == "L" and img.size == clean_image.size
+    assert all(0 <= v <= 1 for line in lines for v in line.bbox)
+    # corners move at most 1.5% of the width, so a box moves less than that plus the rounding
+    assert all(abs(a - b) < 0.02 for a, b in zip(lines[0].bbox, clean_lines[0].bbox, strict=True))
+    # no shadow: the white margin stays one flat value from corner to corner
+    arr = np.asarray(img)
+    assert abs(int(arr[5, 400]) - int(arr[990, 400])) <= 3
+
+
+def test_scan_is_deterministic_for_a_seed() -> None:
+    clean_image, clean_lines = _clean()
+    _, a = to_photo(clean_image, clean_lines, random.Random(5), "scan")
+    _, b = to_photo(clean_image, clean_lines, random.Random(5), "scan")
+    assert a == b

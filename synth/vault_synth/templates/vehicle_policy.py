@@ -3,10 +3,12 @@ import random
 from faker import Faker
 
 from vault_synth import data
+from vault_synth.household import CastMember
 from vault_synth.sheet import Sheet, Truth
-from vault_synth.templates._kit import GREY, band, row
+from vault_synth.templates._kit import GREY, DrawOpts, Page, band
 
 PAGE = (595.0, 842.0)
+N_PEOPLE = (1, 1)
 INSURERS = [
     ("ICICI Lombard General Insurance Company Limited", "#a8491f"),
     ("Bajaj Allianz General Insurance Company Limited", "#1f4f8f"),
@@ -20,10 +22,13 @@ VEHICLES = [
 ]
 
 
-def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
+def draw(
+    s: Sheet, rng: random.Random, fake: Faker, cast: list[CastMember], opts: DrawOpts
+) -> Truth:
     insurer, color = rng.choice(INSURERS)
-    holder = fake.name()
+    holder = cast[0].printed
     t = Truth(person=holder)
+    pg = Page(s, t, rng, opts)
     start = data.past_date(rng, 30, 330)
     end = data.plus_year(start)
 
@@ -38,23 +43,11 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
     y = 100
     s.put("Policy details", 40, y, 12, font="Helvetica-Bold")
     s.hline(40, 555, y + 18)
-    row(s, t, "policy_number", "Policy Number", pol, pol, x=40, top=y + 28, value_x=190)
-    row(s, t, "policyholder", "Insured Name", holder, holder, x=40, top=y + 50, value_x=190)
+    pg.row("policy_number", "Policy Number", pol, pol, top=y + 28)
+    pg.row("policyholder", "Insured Name", holder, holder, top=y + 50, people=[cast[0].person_id])
     sd, ed = data.dmy(start), data.dmy(end)
-    row(
-        s,
-        t,
-        "start_date",
-        "Period of Insurance From",
-        sd,
-        data.iso(start),
-        x=40,
-        top=y + 72,
-        value_x=190,
-    )
-    row(
-        s, t, "end_date", "Period of Insurance To", ed, data.iso(end), x=40, top=y + 94, value_x=190
-    )
+    pg.row("start_date", "Period of Insurance From", sd, data.iso(start), top=y + 72)
+    pg.row("end_date", "Period of Insurance To", ed, data.iso(end), top=y + 94)
     s.put("(midnight to midnight)", 290, y + 96, 8, color=GREY)
 
     y = 240
@@ -62,7 +55,7 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
     s.put("Vehicle details", 40, y, 12, font="Helvetica-Bold")
     s.hline(40, 555, y + 18)
     reg = f"KA{rng.randint(1, 60):02d}{data.letters(rng, 2)}{rng.randint(1000, 9999)}"
-    row(s, t, "registration_number", "Registration No.", reg, reg, x=40, top=y + 28, value_x=190)
+    pg.row("registration_number", "Registration No.", reg, reg, top=y + 28)
     s.put("Make / Model", 40, y + 50, 9, color=GREY)
     s.put(f"{make} / {model}", 190, y + 50, 10, font="Helvetica-Bold")
     s.put("Chassis No. (last 5)", 40, y + 72, 9, color=GREY)
@@ -75,9 +68,19 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
     s.hline(40, 555, y + 18)
     idv = rng.choice([385000, 512000, 640000, 785000, 42000])
     idvp = f"Rs. {data.indian_grouping(idv)}"
-    row(s, t, "idv", "Insured Declared Value (IDV)", idvp, str(idv), x=40, top=y + 28, value_x=230)
+    pg.row(
+        "idv",
+        "Insured Declared Value (IDV)",
+        idvp,
+        str(idv),
+        top=y + 28,
+        value_x=230,
+        optional=True,
+    )
     ncb = rng.choice([20, 25, 35, 45, 50])
-    row(s, t, "ncb_percent", "No Claim Bonus", f"{ncb}%", str(ncb), x=40, top=y + 50, value_x=230)
+    pg.row(
+        "ncb_percent", "No Claim Bonus", f"{ncb}%", str(ncb), top=y + 50, value_x=230, optional=True
+    )
     own = rng.choice([4120, 6350, 8890, 11240])
     s.put("Own damage premium", 40, y + 84, 10)
     s.put(f"Rs. {data.indian_grouping(own)}", 555, y + 84, 10, align="r")
@@ -102,9 +105,10 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
         color=GREY,
     )
     hl = data.helpline(rng)
-    s.put("24x7 claims helpline", 40, y + 34, 9, color=GREY)
-    i = s.put(hl, 150, y + 32, 11, font="Helvetica-Bold")
-    t.add("claim_helpline", hl, hl, [i])
+    if not pg.gone("claim_helpline", optional=True):
+        s.put("24x7 claims helpline", 40, y + 34, 9, color=GREY)
+        i = s.put(hl, 150, y + 32, 11, font="Helvetica-Bold")
+        t.add("claim_helpline", hl, hl, [i])
     s.put(
         "This is a computer generated schedule. Specimen data for software testing only.",
         40,

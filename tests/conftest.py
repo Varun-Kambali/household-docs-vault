@@ -9,6 +9,7 @@ from typing import NoReturn
 import pytest
 from vault_synth.cli import generate
 from vault_synth.model import SynthDoc
+from vault_synth.sets import load_set
 
 from household_vault import safety
 from household_vault.checks import gstin_check_char, verhoeff_valid
@@ -34,10 +35,31 @@ def fake_homes(tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.Mon
     return home
 
 
+SPIKE_DIR = Path(__file__).resolve().parents[1] / "evals" / "datasets" / "spike-v0"
+
+
 @pytest.fixture(scope="session")
-def spike_docs_all(tmp_path_factory: pytest.TempPathFactory) -> list[SynthDoc]:
-    out: Path = tmp_path_factory.mktemp("spike-v0")
-    return generate("spike-v0", per_type=2, seed=7, out=out)
+def spike_docs_all() -> list[SynthDoc]:
+    """The committed, frozen spike-v0 set."""
+    return load_set(SPIKE_DIR)
+
+
+@pytest.fixture(scope="session")
+def eval_dir(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    return tmp_path_factory.mktemp("eval-v1")
+
+
+@pytest.fixture(scope="session")
+def eval_docs(eval_dir: Path) -> list[SynthDoc]:
+    """The test split of the nine hand-drawn types, generated once into `eval_dir`."""
+    return generate("eval-v1", eval_dir, splits=("test",))
+
+
+def group_by_base(docs: list[SynthDoc]) -> dict[str, list[SynthDoc]]:
+    groups: dict[str, list[SynthDoc]] = {}
+    for d in docs:
+        groups.setdefault(d.base_id, []).append(d)
+    return groups
 
 
 @pytest.fixture(scope="session")

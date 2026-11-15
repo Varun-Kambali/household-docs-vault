@@ -1,12 +1,15 @@
 import random
 
 from faker import Faker
+from pydantic import JsonValue
 
 from vault_synth import data
+from vault_synth.household import CastMember
 from vault_synth.sheet import Sheet, Truth
-from vault_synth.templates._kit import GREY, band, row
+from vault_synth.templates._kit import GREY, DrawOpts, Page, band
 
 PAGE = (595.0, 842.0)
+N_PEOPLE = (1, 4)  # the policyholder and up to three more insured members
 INSURERS = [
     ("Star Health and Allied Insurance Co. Ltd.", "#7a1f3d"),
     ("Care Health Insurance Limited", "#1f5f7a"),
@@ -24,15 +27,16 @@ AGE_DAYS = {
 RELATIONS = ["Self", "Spouse", "Son", "Daughter", "Father", "Mother"]
 
 
-def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
+def draw(
+    s: Sheet, rng: random.Random, fake: Faker, cast: list[CastMember], opts: DrawOpts
+) -> Truth:
     insurer, color = rng.choice(INSURERS)
-    holder = fake.name()
+    holder = cast[0].printed
     t = Truth(person=holder)
+    pg = Page(s, t, rng, opts)
     start = data.past_date(rng, 30, 330)
     end = data.plus_year(start)
-    members = [holder]
-    for _ in range(rng.randint(1, 3)):
-        members.append(fake.name().split()[0] + " " + holder.split()[-1])
+    members = [c.printed for c in cast]
 
     band(s, 0, 78, color)
     i = s.put(insurer, 40, 22, 17, font="Helvetica-Bold", color="#ffffff")
@@ -43,19 +47,16 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
 
     pol = f"P/{rng.randint(10, 99)}/{rng.randint(1000, 9999)}/{data.digits(rng, 7)}"
     y = 128
-    row(s, t, "policy_number", "Policy Number", pol, pol, x=40, top=y, value_x=190)
-    row(s, t, "policyholder", "Policyholder", holder, holder, x=40, top=y + 22, value_x=190)
+    pg.row("policy_number", "Policy Number", pol, pol, top=y)
+    pg.row("policyholder", "Policyholder", holder, holder, top=y + 22, people=[cast[0].person_id])
     sd, ed = data.dmy(start), data.dmy(end)
-    row(s, t, "start_date", "Start Date", sd, data.iso(start), x=40, top=y + 44, value_x=190)
-    row(s, t, "end_date", "End Date", ed, data.iso(end), x=40, top=y + 66, value_x=190)
-    s.put("Product", 330, y, 9, color=GREY)
-    s.put(
-        rng.choice(["Family Health Optima", "Comprehensive Health Plan", "Health Shield"]),
-        330,
-        y + 14,
-        10,
-        font="Helvetica-Bold",
-    )
+    pg.row("start_date", "Start Date", sd, data.iso(start), top=y + 44)
+    pg.row("end_date", "End Date", ed, data.iso(end), top=y + 66)
+    product = rng.choice(["Family Health Optima", "Comprehensive Health Plan", "Health Shield"])
+    if not pg.gone("product", optional=True):
+        s.put("Product", 330, y, 9, color=GREY)
+        i = s.put(product, 330, y + 14, 10, font="Helvetica-Bold")
+        t.add("product", product, product, [i])
     s.put("Plan type", 330, y + 44, 9, color=GREY)
     s.put("Family Floater", 330, y + 58, 10, font="Helvetica-Bold")
 
@@ -73,14 +74,15 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
         # ages that fit the relation: parents older than the holder, children younger
         lo, hi = AGE_DAYS[rel]
         s.put(data.dmy(data.past_date(rng, lo, hi)), 430, top, 10)
-    t.add("insured", "; ".join(members), "\n".join(members), idxs)
+    insured: list[JsonValue] = [*members]
+    t.add("insured", insured, "\n".join(members), idxs, [c.person_id for c in cast])
 
     y = y + 44 + len(members) * 22 + 14
     nominee = fake.name()
-    row(s, t, "nominee", "Nominee", nominee, nominee, x=40, top=y, value_x=190)
+    pg.row("nominee", "Nominee", nominee, nominee, top=y, optional=True)
     si = rng.choice([300000, 500000, 1000000, 1500000])
     sip = f"Rs. {data.indian_grouping(si)}"
-    row(s, t, "sum_insured", "Sum Insured", sip, str(si), x=40, top=y + 22, value_x=190)
+    pg.row("sum_insured", "Sum Insured", sip, str(si), top=y + 22, optional=True)
 
     y += 70
     s.put("Premium", 40, y, 12, font="Helvetica-Bold")
@@ -96,6 +98,15 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
     tp = f"Rs. {data.indian_grouping(total)}"
     i = s.put(tp, 555, y + 74, 11, font="Helvetica-Bold", align="r")
     t.add("premium", str(total), tp, [i])
+    pg.line(
+        "premium_frequency",
+        "Annual",
+        "Annual",
+        40,
+        y + 96,
+        text="Premium payment: Annual",
+        optional=True,
+    )
 
     y += 124
     s.put(
@@ -113,9 +124,10 @@ def draw(s: Sheet, rng: random.Random, fake: Faker) -> Truth:
         color=GREY,
     )
     hl = data.helpline(rng)
-    s.put("Claims helpline", 40, y + 40, 9, color=GREY)
-    i = s.put(hl, 130, y + 38, 11, font="Helvetica-Bold")
-    t.add("claim_helpline", hl, hl, [i])
+    if not pg.gone("claim_helpline", optional=True):
+        s.put("Claims helpline", 40, y + 40, 9, color=GREY)
+        i = s.put(hl, 130, y + 38, 11, font="Helvetica-Bold")
+        t.add("claim_helpline", hl, hl, [i])
     s.put(
         "This is a computer generated schedule. Specimen data for software testing only.",
         40,
