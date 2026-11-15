@@ -7,16 +7,21 @@ value or a secret; `outcome` is a short code and `detail` the sentence a person 
 
 import csv
 import io
+import logging
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
 from enum import StrEnum
 
 from household_vault.db import Store
-from household_vault.vaultroot import LOGS, VaultRoot
+from household_vault.schemas.parse import mask_card_numbers
+from household_vault.vaultroot import LOGS, VaultPathError, VaultRoot
+
+log = logging.getLogger(__name__)
 
 CSV_HEADER = ("time", "step", "outcome", "file", "detail")
-_FORMULA_STARTS = ("=", "+", "-", "@", "\t", "\r")
+_FORMULA_STARTS = ("=", "+", "-", "@", "\t", "\r", "\uff1d", "\uff0b", "\uff0d", "\uff20")
+_BLANKS = " \t\r\n\u3000\u00a0"
 
 
 class Step(StrEnum):
@@ -49,10 +54,12 @@ class ActivityEntry:
 
 
 def csv_cell(text: str) -> str:
-    """One line of plain text that a spreadsheet will not run as a formula."""
-    flat = text.replace("\r", " ").replace("\n", " ") if text else text
-    # A leading CR was turned into a space above, so test the original start too.
-    if text.startswith(_FORMULA_STARTS) or flat.startswith(_FORMULA_STARTS):
+    """One line of plain text that a spreadsheet will not run as a formula.
+
+    A formula can hide behind leading blanks, and the fullwidth signs count in some sheets.
+    """
+    flat = text.replace("\r", " ").replace("\n", " ")
+    if text.lstrip(_BLANKS).startswith(_FORMULA_STARTS) or text.startswith(("\t", "\r")):
         return "'" + flat
     return flat
 
@@ -72,22 +79,58 @@ class Activity:
         file: str | None = None,
     ) -> ActivityEntry:
         when = self.clock().astimezone()
-        cur = self.store.conn.execute(
-            "insert into activity (time, item_id, step, outcome, file, detail)"
-            " values (?, ?, ?, ?, ?, ?)",
-            (when.isoformat(timespec="seconds"), item_id, step.value, outcome, file, detail),
-        )
-        assert cur.lastrowid is not None
-        self._append_csv(when, step, outcome, file, detail)
+        stamp = when.isoformat(timespec="seconds")
+        detail = mask_card_numbers(detail)
+        file = None if file is None else mask_card_numbers(file)
+        with self.store.lock:
+            cur = self.store.conn.execute(
+                "insert into activity (time, item_id, step, outcome, file, detail, csv_pending)"
+                " values (?, ?, ?, ?, ?, ?, 1)",
+                (stamp, item_id, step.value, outcome, file, detail),
+            )
+            assert cur.lastrowid is not None
+            self.backfill_csv()
         return ActivityEntry(
             id=cur.lastrowid,
-            time=datetime.fromisoformat(when.isoformat(timespec="seconds")),
+            time=datetime.fromisoformat(stamp),
             item_id=item_id,
             step=step,
             outcome=outcome,
             file=file,
             detail=detail,
         )
+
+    def backfill_csv(self) -> int:
+        """Write every row not yet in the CSV, oldest first. Returns how many were written.
+
+        A write that fails leaves the row pending for the next call; the warning names no text.
+        """
+        written = 0
+        with self.store.lock:
+            pending = self.store.conn.execute(
+                "select * from activity where csv_pending = 1 order by id"
+            ).fetchall()
+            for r in pending:
+                try:
+                    self._append_csv(
+                        datetime.fromisoformat(r["time"]),
+                        Step(r["step"]),
+                        r["outcome"],
+                        r["file"],
+                        r["detail"],
+                    )
+                except (OSError, VaultPathError) as exc:
+                    log.warning(
+                        "activity log row %s not written to the CSV: %s",
+                        r["id"],
+                        type(exc).__name__,
+                    )
+                    break
+                self.store.conn.execute(
+                    "update activity set csv_pending = 0 where id = ?", (r["id"],)
+                )
+                written += 1
+        return written
 
     def _append_csv(
         self, when: datetime, step: Step, outcome: str, file: str | None, detail: str

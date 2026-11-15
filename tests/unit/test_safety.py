@@ -111,3 +111,23 @@ def test_assert_safe_path_refuses_vol_paths() -> None:
         assert_safe_path(Path("/.vol/16777220/2/Family Vault"))
     with pytest.raises(UnsafePathError):
         assert_safe_path(Path("/.vol"))
+
+
+def test_is_within_spellings(tmp_path):
+    import os
+    import sys
+
+    from household_vault.safety import is_within
+
+    root = tmp_path / "vault"
+    root.mkdir()
+    assert is_within(root / "y.db", root) and is_within(root, root)
+    assert not is_within(tmp_path / "db" / "y.db", root)
+    assert not is_within(tmp_path / "vault2" / "y.db", root)
+    # a different case is the same folder on the Mac's default volume
+    assert is_within(Path(str(root).upper()) / "y.db", root)
+    link = tmp_path / "alias"
+    os.symlink(root, link)
+    assert is_within(link / "y.db", root)
+    if sys.platform == "darwin" and Path("/System/Volumes/Data").exists():
+        assert is_within(Path("/System/Volumes/Data" + str(root)) / "y.db", root)

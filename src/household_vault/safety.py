@@ -89,3 +89,21 @@ def assert_safe_path(path: Path) -> Path:
                 if _same_file(candidate, root):
                     raise UnsafePathError(f"refusing to touch {resolved}: it is under {root}")
     return resolved
+
+
+def is_within(path: Path, root: Path) -> bool:
+    """True when `path` is `root` or lies under it, whatever the spelling.
+
+    The test folds case and the data-volume firmlink prefix, and also asks the filesystem
+    whether `path` or an existing ancestor of it is the same folder as `root`.
+    """
+    resolved = path.expanduser().resolve()
+    resolved_root = root.expanduser().resolve()
+    if _fold(resolved).is_relative_to(_fold(resolved_root)):
+        return True
+    if not resolved_root.exists():
+        return False
+    return any(
+        candidate.exists() and _same_file(candidate, resolved_root)
+        for candidate in (resolved, *resolved.parents)
+    )

@@ -97,3 +97,75 @@ def test_household_round_trips_and_filed_with_sha(store, now):
     store.add_document(row("d3", item_id=item_id(store), sha256="e" * 64), [("p1", "owner")], [])
     assert [d.id for d in store.filed_with_sha("e" * 64)] == ["d3"]
     assert isinstance(now, datetime)
+
+
+def test_database_refuses_the_firmlink_and_symlink_spellings(tmp_path):
+    import os
+    import sys
+    from pathlib import Path
+
+    vault = tmp_path / "vault"
+    vault.mkdir()
+    os.symlink(vault, tmp_path / "alias")
+    with pytest.raises(ConfigError):
+        connect(tmp_path / "alias" / "y.db", vault)
+    if sys.platform == "darwin" and Path("/System/Volumes/Data").exists():
+        with pytest.raises(ConfigError):
+            connect(Path("/System/Volumes/Data" + str(vault)) / "y.db", vault)
+    assert not (vault / "y.db").exists()
+
+
+def test_two_threads_share_one_store(store, now):
+    import threading
+
+    errors: list[BaseException] = []
+    claimed: list[int] = []
+
+    def adder(tag: str) -> None:
+        try:
+            for n in range(40):
+                it = store.add_item(
+                    f"{tag}{n:03}".ljust(64, "0"), f"{tag}{n}.pdf", None, now, origin="upload"
+                )
+                store.enqueue(it.id, "process")
+        except BaseException as exc:
+            errors.append(exc)
+
+    def claimer() -> None:
+        try:
+            for _ in range(400):
+                job = store.claim_next(now)
+                if job:
+                    claimed.append(job.id)
+        except BaseException as exc:
+            errors.append(exc)
+
+    threads = [threading.Thread(target=adder, args=(t,)) for t in "ab"]
+    threads += [threading.Thread(target=claimer) for _ in range(2)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    while job := store.claim_next(now):
+        claimed.append(job.id)
+    assert not errors and len(claimed) == len(set(claimed)) == 80
+
+
+def test_defer_and_finish_need_a_running_job(store, now):
+    job = store.enqueue(item_id(store), "process")
+    with pytest.raises(KeyError):
+        store.defer(job, now)
+    with pytest.raises(KeyError):
+        store.finish(job, "done")
+    with pytest.raises(KeyError):
+        store.finish(999, "done")
+    store.claim_next(now)
+    store.finish(job, "done")
+    with pytest.raises(KeyError):
+        store.finish(job, "failed")
+
+
+def test_migrate_writes_the_version_with_the_tables(tmp_path):
+    conn = connect(tmp_path / "v.db", tmp_path / "vault")
+    migrate(conn)
+    assert conn.execute("select value from meta where key = 'schema_version'").fetchone()[0] == "1"

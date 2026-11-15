@@ -5,20 +5,23 @@ database. It holds fields and line text, never a secret. Times are stored as ISO
 offset; job times are normalised to UTC so they compare as text.
 """
 
+import functools
 import json
 import sqlite3
+import threading
 from collections.abc import Callable, Collection, Iterator, Sequence
 from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass, field
 from datetime import UTC, date, datetime
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 from household_vault.config import ConfigError
 from household_vault.doctypes import DocType
 from household_vault.people import Household
 from household_vault.reading.lines import PageText
 from household_vault.reasons import Reason
+from household_vault.safety import is_within
 
 SCHEMA_VERSION = 1
 
@@ -112,6 +115,7 @@ create table jobs (
 create index jobs_state on jobs (state, id);
 create table activity (
     id integer primary key autoincrement,
+    csv_pending integer not null default 0,
     time text not null,
     item_id integer,
     step text not null,
@@ -125,11 +129,12 @@ create table meta (key text primary key, value text not null);
 
 def connect(path: Path, vault_root: Path) -> sqlite3.Connection:
     """Open (and create) the database. A path inside the vault is refused."""
-    resolved = path.expanduser().resolve()
-    if resolved.is_relative_to(vault_root.expanduser().resolve()):
+    if is_within(path, vault_root):
         raise ConfigError(f"the database must live outside the vault, not at {path}")
+    resolved = path.expanduser().resolve()
     resolved.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(resolved, isolation_level=None)
+    # The worker thread and the API threads share one Store; the Store's lock serialises them.
+    conn = sqlite3.connect(resolved, isolation_level=None, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.execute("pragma journal_mode = wal")
     conn.execute("pragma foreign_keys = on")
@@ -141,8 +146,8 @@ def migrate(conn: sqlite3.Connection) -> int:
     """Create the tables on a new database and return the schema version."""
     has_meta = conn.execute("select 1 from sqlite_master where name = 'meta'").fetchone()
     if has_meta is None:
-        conn.executescript("begin;" + _SCHEMA + "commit;")
-        conn.execute("insert into meta values ('schema_version', ?)", (str(SCHEMA_VERSION),))
+        version_row = f"insert into meta values ('schema_version', '{SCHEMA_VERSION}');"
+        conn.executescript("begin;" + _SCHEMA + version_row + "commit;")
     # An owner of "home" is a household-wide document, so it needs a people row for the key.
     conn.execute("insert or ignore into people (id, name) values ('home', 'Home')")
     version = int(conn.execute("select value from meta where key = 'schema_version'").fetchone()[0])
@@ -297,6 +302,17 @@ def _marks(values: Collection[Any]) -> str:
     return ",".join("?" * len(values))
 
 
+def _locked[F: Callable[..., Any]](fn: F) -> F:
+    """Run a Store method while holding the Store's lock."""
+
+    @functools.wraps(fn)
+    def wrapper(self: "Store", *args: Any, **kwargs: Any) -> Any:
+        with self.lock:
+            return fn(self, *args, **kwargs)
+
+    return cast(F, wrapper)
+
+
 class Store:
     """Every read and write the app makes. One Store per thread: a connection is not shared."""
 
@@ -305,6 +321,7 @@ class Store:
     ) -> None:
         self.conn = conn
         self._clock = clock or _now
+        self.lock = threading.RLock()
         self._depth = 0
 
     def transaction(self) -> AbstractContextManager[None]:
@@ -313,6 +330,10 @@ class Store:
     @contextmanager
     def _transaction(self) -> Iterator[None]:
         """All or nothing. A transaction inside another one joins it."""
+        with self.lock:
+            yield from self._transaction_locked()
+
+    def _transaction_locked(self) -> Iterator[None]:
         if self._depth:
             self._depth += 1
             try:
@@ -334,6 +355,7 @@ class Store:
 
     # -- items ---------------------------------------------------------------------------------
 
+    @_locked
     def add_item(
         self,
         sha256: str,
@@ -351,12 +373,14 @@ class Store:
         assert cur.lastrowid is not None
         return self.item(cur.lastrowid)
 
+    @_locked
     def item(self, item_id: int) -> Item:
         r = self.conn.execute("select * from items where id = ?", (item_id,)).fetchone()
         if r is None:
             raise KeyError(item_id)
         return _item(r)
 
+    @_locked
     def update_item(self, item_id: int, **changes: Any) -> Item:
         unknown = set(changes) - _ITEM_COLUMNS
         if unknown:
@@ -377,6 +401,7 @@ class Store:
             raise KeyError(item_id)
         return self.item(item_id)
 
+    @_locked
     def items(self, states: Collection[ItemState]) -> list[Item]:
         if not states:
             return []
@@ -387,6 +412,7 @@ class Store:
         ).fetchall()
         return [_item(r) for r in rows]
 
+    @_locked
     def item_at(self, rel_path: str) -> Item | None:
         """The newest live item at a path. Uploads have no path, so they never match."""
         r = self.conn.execute(
@@ -396,6 +422,7 @@ class Store:
         ).fetchone()
         return None if r is None else _item(r)
 
+    @_locked
     def items_with_sha(self, sha256: str, states: Collection[ItemState]) -> list[Item]:
         if not states:
             return []
@@ -408,12 +435,14 @@ class Store:
 
     # -- documents -----------------------------------------------------------------------------
 
+    @_locked
     def filed_with_sha(self, sha256: str) -> list[DocumentRow]:
         rows = self.conn.execute(
             "select * from documents where sha256 = ? order by created_at, id", (sha256,)
         ).fetchall()
         return [_document(r) for r in rows]
 
+    @_locked
     def add_document(
         self,
         row: DocumentRow,
@@ -465,10 +494,12 @@ class Store:
                     ],
                 )
 
+    @_locked
     def document(self, doc_id: str) -> DocumentRow | None:
         r = self.conn.execute("select * from documents where id = ?", (doc_id,)).fetchone()
         return None if r is None else _document(r)
 
+    @_locked
     def documents_of_type(self, doc_type: DocType) -> list[DocumentRow]:
         rows = self.conn.execute(
             "select * from documents where doc_type = ? order by created_at, id",
@@ -476,6 +507,7 @@ class Store:
         ).fetchall()
         return [_document(r) for r in rows]
 
+    @_locked
     def people_of(self, doc_id: str) -> list[tuple[str, str]]:
         rows = self.conn.execute(
             "select person_id, role from document_people where document_id = ?"
@@ -484,11 +516,13 @@ class Store:
         ).fetchall()
         return [(r[0], r[1]) for r in rows]
 
+    @_locked
     def remove_document(self, doc_id: str) -> None:
         self.conn.execute("delete from documents where id = ?", (doc_id,))
 
     # -- household -----------------------------------------------------------------------------
 
+    @_locked
     def set_household(self, h: Household) -> None:
         with self.transaction():
             for person in h.people:
@@ -503,12 +537,14 @@ class Store:
                 (h.model_dump_json(),),
             )
 
+    @_locked
     def household(self) -> Household:
         r = self.conn.execute("select value from meta where key = 'household'").fetchone()
         return Household() if r is None else Household.model_validate_json(r[0])
 
     # -- jobs ----------------------------------------------------------------------------------
 
+    @_locked
     def enqueue(self, item_id: int, kind: JobKind, not_before: datetime | None = None) -> int:
         cur = self.conn.execute(
             "insert into jobs (item_id, kind, state, not_before, created_at)"
@@ -518,6 +554,7 @@ class Store:
         assert cur.lastrowid is not None
         return cur.lastrowid
 
+    @_locked
     def requeue(
         self, item_id: int, kind: JobKind = "process", not_before: datetime | None = None
     ) -> int:
@@ -526,6 +563,7 @@ class Store:
             self.update_item(item_id, state="queued")
             return self.enqueue(item_id, kind, not_before)
 
+    @_locked
     def claim_next(self, now: datetime) -> Job | None:
         with self.transaction():
             r = self.conn.execute(
@@ -538,16 +576,25 @@ class Store:
             self.conn.execute("update jobs set state = 'running' where id = ?", (r["id"],))
             return _job(self.conn.execute("select * from jobs where id = ?", (r["id"],)).fetchone())
 
+    @_locked
     def defer(self, job_id: int, not_before: datetime) -> None:
-        self.conn.execute(
+        cur = self.conn.execute(
             "update jobs set state = 'queued', attempts = attempts + 1, not_before = ?"
-            " where id = ?",
+            " where id = ? and state = 'running'",
             (_utc(not_before), job_id),
         )
+        if cur.rowcount == 0:
+            raise KeyError(f"job {job_id} is not running")
 
+    @_locked
     def finish(self, job_id: int, state: Literal["done", "failed"]) -> None:
-        self.conn.execute("update jobs set state = ? where id = ?", (state, job_id))
+        cur = self.conn.execute(
+            "update jobs set state = ? where id = ? and state = 'running'", (state, job_id)
+        )
+        if cur.rowcount == 0:
+            raise KeyError(f"job {job_id} is not running")
 
+    @_locked
     def running_jobs(self) -> list[Job]:
         rows = self.conn.execute("select * from jobs where state = 'running' order by id")
         return [_job(r) for r in rows.fetchall()]

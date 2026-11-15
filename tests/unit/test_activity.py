@@ -41,3 +41,51 @@ def test_a_second_entry_in_a_month_adds_no_second_header(activity, vault, clock)
     activity.record(None, Step.noticed, "ok")
     activity.record(None, Step.checked, "ok")
     assert len(csv_rows(vault, f"_system/log/{clock():%Y-%m}.csv")) == 3
+
+
+def test_csv_cell_neutralises_hidden_and_fullwidth_formulas():
+    fullwidth = [chr(c) + "x" for c in (0xFF1D, 0xFF0B, 0xFF0D, 0xFF20)]
+    for text in (" =1+1", "  \t-2", "\u3000+3", *fullwidth):
+        assert csv_cell(text).startswith("'"), text
+    assert csv_cell("  plain") == "  plain"
+
+
+def test_a_failed_csv_write_leaves_the_row_pending_then_backfills(
+    activity, vault, clock, monkeypatch
+):
+    from household_vault.vaultroot import VaultRoot
+
+    real = VaultRoot.append_text
+    calls = {"n": 0}
+
+    def flaky(self, rel, text):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise OSError("disk went away")
+        real(self, rel, text)
+
+    monkeypatch.setattr(VaultRoot, "append_text", flaky)
+    first = activity.record(None, Step.noticed, "ok", "first")
+    assert first.detail == "first"
+    assert (
+        activity.store.conn.execute(
+            "select csv_pending from activity where id = ?", (first.id,)
+        ).fetchone()[0]
+        == 1
+    )
+    activity.record(None, Step.checked, "ok", "second")
+    rows = csv_rows(vault, f"_system/log/{clock():%Y-%m}.csv")
+    assert [r[4] for r in rows[1:]] == ["first", "second"]
+    assert activity.backfill_csv() == 0
+
+
+def test_a_card_number_in_detail_or_file_is_masked(activity, vault, clock):
+    e = activity.record(
+        None, Step.read, "ok", "card 4111 1111 1111 1111 seen", "4111111111111111.pdf"
+    )
+    assert "4111 1111 1111 1111" not in e.detail and "1111" in e.detail
+    assert "4111111111111111" not in (e.file or "")
+    rows = csv_rows(vault, f"_system/log/{clock():%Y-%m}.csv")
+    assert "4111 1111 1111 1111" not in rows[1][4] and "4111111111111111" not in rows[1][3]
+    stored = activity.entries()[0]
+    assert "4111 1111" not in stored.detail
