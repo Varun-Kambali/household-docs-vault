@@ -8,6 +8,7 @@ value or a secret; `outcome` is a short code and `detail` the sentence a person 
 import csv
 import io
 import logging
+import threading
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
@@ -65,10 +66,18 @@ def csv_cell(text: str) -> str:
 
 
 class Activity:
+    """Records steps to the database and to the monthly CSV.
+
+    CSV lines are at least once: a crash between an append and the clearing of its flag can
+    repeat a line after a restart. The database never repeats. The CSV write happens outside the
+    Store lock, so a slow Drive write cannot stall the worker or the API.
+    """
+
     def __init__(self, store: Store, vault: VaultRoot, clock: Callable[[], datetime]) -> None:
         self.store = store
         self.vault = vault
         self.clock = clock
+        self._csv_lock = threading.Lock()
 
     def record(
         self,
@@ -89,6 +98,9 @@ class Activity:
                 (stamp, item_id, step.value, outcome, file, detail),
             )
             assert cur.lastrowid is not None
+            inside = self.store.in_transaction
+        # Inside an open transaction the row may still roll back, so leave it for a later call.
+        if not inside:
             self.backfill_csv()
         return ActivityEntry(
             id=cur.lastrowid,
@@ -106,10 +118,11 @@ class Activity:
         A write that fails leaves the row pending for the next call; the warning names no text.
         """
         written = 0
-        with self.store.lock:
-            pending = self.store.conn.execute(
-                "select * from activity where csv_pending = 1 order by id"
-            ).fetchall()
+        with self._csv_lock:
+            with self.store.lock:
+                pending = self.store.conn.execute(
+                    "select * from activity where csv_pending = 1 order by id"
+                ).fetchall()
             for r in pending:
                 try:
                     self._append_csv(
@@ -126,9 +139,10 @@ class Activity:
                         type(exc).__name__,
                     )
                     break
-                self.store.conn.execute(
-                    "update activity set csv_pending = 0 where id = ?", (r["id"],)
-                )
+                with self.store.lock:
+                    self.store.conn.execute(
+                        "update activity set csv_pending = 0 where id = ?", (r["id"],)
+                    )
                 written += 1
         return written
 
@@ -154,10 +168,11 @@ class Activity:
 
     def entries(self, limit: int = 100, before_id: int | None = None) -> list[ActivityEntry]:
         """Newest first. Pass the last id of a page as `before_id` to get the next page."""
-        rows = self.store.conn.execute(
-            "select * from activity where (? is null or id < ?) order by id desc limit ?",
-            (before_id, before_id, limit),
-        ).fetchall()
+        with self.store.lock:
+            rows = self.store.conn.execute(
+                "select * from activity where (? is null or id < ?) order by id desc limit ?",
+                (before_id, before_id, limit),
+            ).fetchall()
         return [
             ActivityEntry(
                 id=r["id"],

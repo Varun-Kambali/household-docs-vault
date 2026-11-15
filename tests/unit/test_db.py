@@ -169,3 +169,18 @@ def test_migrate_writes_the_version_with_the_tables(tmp_path):
     conn = connect(tmp_path / "v.db", tmp_path / "vault")
     migrate(conn)
     assert conn.execute("select value from meta where key = 'schema_version'").fetchone()[0] == "1"
+
+
+def test_a_crash_inside_migrate_leaves_nothing_behind(tmp_path, monkeypatch):
+    from household_vault import db
+
+    path = tmp_path / "v.db"
+    conn = connect(path, tmp_path / "vault")
+    monkeypatch.setattr(db, "_SCHEMA", db._SCHEMA + "select * from no_such_table;")
+    with pytest.raises(Exception):  # noqa: B017 - sqlite's error type is not the point
+        migrate(conn)
+    conn.close()
+    monkeypatch.undo()
+    fresh = connect(path, tmp_path / "vault")
+    assert migrate(fresh) == SCHEMA_VERSION
+    assert fresh.execute("select count(*) from meta").fetchone()[0] == 1

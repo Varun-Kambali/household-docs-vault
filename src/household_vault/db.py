@@ -147,7 +147,12 @@ def migrate(conn: sqlite3.Connection) -> int:
     has_meta = conn.execute("select 1 from sqlite_master where name = 'meta'").fetchone()
     if has_meta is None:
         version_row = f"insert into meta values ('schema_version', '{SCHEMA_VERSION}');"
-        conn.executescript("begin;" + _SCHEMA + version_row + "commit;")
+        try:
+            conn.executescript("begin;" + _SCHEMA + version_row + "commit;")
+        except BaseException:
+            if conn.in_transaction:
+                conn.execute("rollback")
+            raise
     # An owner of "home" is a household-wide document, so it needs a people row for the key.
     conn.execute("insert or ignore into people (id, name) values ('home', 'Home')")
     version = int(conn.execute("select value from meta where key = 'schema_version'").fetchone()[0])
@@ -323,6 +328,12 @@ class Store:
         self._clock = clock or _now
         self.lock = threading.RLock()
         self._depth = 0
+
+    @property
+    def in_transaction(self) -> bool:
+        """True while the calling thread is inside `transaction()`."""
+        with self.lock:
+            return self._depth > 0
 
     def transaction(self) -> AbstractContextManager[None]:
         return self._transaction()

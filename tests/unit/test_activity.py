@@ -89,3 +89,57 @@ def test_a_card_number_in_detail_or_file_is_masked(activity, vault, clock):
     assert "4111 1111 1111 1111" not in rows[1][4] and "4111111111111111" not in rows[1][3]
     stored = activity.entries()[0]
     assert "4111 1111" not in stored.detail
+
+
+def test_a_stalled_csv_write_does_not_block_the_store(activity, store, vault, clock, monkeypatch):
+    import threading
+
+    from household_vault.vaultroot import VaultRoot
+
+    real = VaultRoot.append_text
+    started, release = threading.Event(), threading.Event()
+
+    def slow(self, rel, text):
+        started.set()
+        release.wait(10)
+        real(self, rel, text)
+
+    monkeypatch.setattr(VaultRoot, "append_text", slow)
+    t = threading.Thread(target=lambda: activity.record(None, Step.noticed, "ok", "first"))
+    t.start()
+    assert started.wait(5)
+    done = threading.Event()
+
+    def other() -> None:
+        store.add_item("f" * 64, "f.pdf", None, clock(), origin="upload")
+        activity.entries()
+        done.set()
+
+    o = threading.Thread(target=other)
+    o.start()
+    assert done.wait(3), "a Store call was blocked by the CSV write"
+    release.set()
+    t.join()
+    o.join()
+    rows = csv_rows(vault, f"_system/log/{clock():%Y-%m}.csv")
+    assert [r[4] for r in rows[1:]] == ["first"]
+
+
+def test_a_rolled_back_transaction_never_reaches_the_csv(activity, store, vault, clock):
+    import pytest
+
+    with pytest.raises(RuntimeError), store.transaction():
+        activity.record(None, Step.noticed, "ok", "rolled back")
+        raise RuntimeError
+    assert not vault.exists(f"_system/log/{clock():%Y-%m}.csv")
+    activity.record(None, Step.checked, "ok", "kept")
+    rows = csv_rows(vault, f"_system/log/{clock():%Y-%m}.csv")
+    assert [r[4] for r in rows[1:]] == ["kept"]
+
+
+def test_a_committed_transaction_is_written_by_the_next_record(activity, store, vault, clock):
+    with store.transaction():
+        activity.record(None, Step.noticed, "ok", "inside")
+    assert not vault.exists(f"_system/log/{clock():%Y-%m}.csv")
+    assert activity.backfill_csv() == 1
+    assert len(csv_rows(vault, f"_system/log/{clock():%Y-%m}.csv")) == 2
