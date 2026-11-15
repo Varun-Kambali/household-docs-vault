@@ -66,8 +66,8 @@ def _english_letters(pages: list[PageText]) -> int:
     )
 
 
-# Types whose pages carry a full card number, which may have a misread digit.
-_CARD_TYPES = frozenset({DocType.card_front})
+# Types masked like an unknown type: a card, or a page the router could not place.
+_CARD_TYPES = frozenset({DocType.card_front, DocType.other})
 
 
 def _masked(pages: list[PageText], *, any_long_run: bool) -> list[PageText]:

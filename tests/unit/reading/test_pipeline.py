@@ -250,3 +250,23 @@ def test_text_layer_lines_have_positions(clean_pdf_bytes):
     assert (width, height) == (300, 400)
     first = next(ln for ln in lines if "Synthetic" in ln.text)
     assert 0.1 < first.bbox[0] < 0.2 and 0.1 < first.bbox[1] < 0.2 and first.bbox[3] > first.bbox[1]
+
+
+@pytest.mark.parametrize("answer", ["other", "recipe"])
+def test_an_other_page_masks_a_misread_card_number(photo, answer):
+    r = read(
+        DocumentSource(FileKind.jpeg, data=photo),
+        FakeOcr(text="4111 1111 1111 1112"),
+        FakeModels(type_=answer),
+    )
+    assert r.doc_type is DocType.other
+    assert "1111 1111 1112" not in r.model_dump_json() + repr(r)
+
+
+def test_a_forced_other_masks_a_misread_card_number(photo):
+    r = read(
+        DocumentSource(FileKind.jpeg, data=photo),
+        FakeOcr(text="4111 1111 1111 1112"),
+        forced_type=DocType.other,
+    )
+    assert "1111 1111 1112" not in r.model_dump_json() + repr(r)
