@@ -1,0 +1,191 @@
+{
+  "doc_id": "experience_letter-5-photo",
+  "base_id": "experience_letter-5",
+  "doc_type": "experience_letter",
+  "person": "Peter Shankar",
+  "variant": "photo",
+  "files": [
+    "experience_letter-5-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "Peter Shankar",
+    "document_date": "2026-04-05",
+    "expiry_date": null,
+    "employer": "Orchard Labs",
+    "designation": "Project Lead"
+  },
+  "printed": {
+    "person_name": "Peter Shankar",
+    "document_date": "05/04/2026",
+    "employer": "Orchard Labs",
+    "designation": "Project Lead"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.1080800207653089,
+        0.032118169299396454,
+        0.2976947807970069,
+        0.054443121352540265
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Experience Certificate",
+      "page": 0,
+      "bbox": [
+        0.10724569774881415,
+        0.06337298385713483,
+        0.2761459264322187,
+        0.08032133801228158
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.10505547254604618,
+        0.13500378629763918,
+        0.14313099014631478,
+        0.14683929159835812
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Peter Shankar",
+      "page": 0,
+      "bbox": [
+        0.35582578724293434,
+        0.1399009343306149,
+        0.46100525844513135,
+        0.15422969208049983
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.10420277421426634,
+        0.1619341609209483,
+        0.1344528641326922,
+        0.17362243188439708
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "05/04/2026",
+      "page": 0,
+      "bbox": [
+        0.3551506800375025,
+        0.16674208363590828,
+        0.4335769730654946,
+        0.18054090872559875
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.1033488830215143,
+        0.18890219825050814,
+        0.16350148538289314,
+        0.20115248283904635
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Orchard Labs",
+      "page": 0,
+      "bbox": [
+        0.3544746316295309,
+        0.1936206416503994,
+        0.4563253380229162,
+        0.20784406934715594
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.10249379646295359,
+        0.21590797734975775,
+        0.17765244157650517,
+        0.2284258973216064
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Project Lead",
+      "page": 0,
+      "bbox": [
+        0.3537976400493767,
+        0.2205366866338178,
+        0.4479165845989399,
+        0.23459849776292313
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.1009945110773368,
+        0.26325914550615964,
+        0.5250708971272298,
+        0.281905177730756
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.10049393172517736,
+        0.2790686812454283,
+        0.5489167438805601,
+        0.29805568958879086
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.0801700927815634,
+        0.922227004927955,
+        0.30817240619094954,
+        0.9344619468576758
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "employer": [
+      7
+    ],
+    "designation": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": null,
+  "linked_people": [],
+  "area": "work",
+  "folder": null,
+  "expected_ask": [
+    "person_unknown"
+  ]
+}

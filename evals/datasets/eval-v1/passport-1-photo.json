@@ -1,0 +1,204 @@
+{
+  "doc_id": "passport-1-photo",
+  "base_id": "passport-1",
+  "doc_type": "passport",
+  "person": "Master Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "passport-1-photo.jpg"
+  ],
+  "fields": {
+    "holder": "Master Kiran Rao",
+    "number": "ZZW3055891",
+    "date_of_birth": "1994-10-20",
+    "issue_date": "2024-09-01",
+    "expiry_date": null,
+    "address": null,
+    "parties": null
+  },
+  "printed": {
+    "holder": "Master Kiran Rao",
+    "number": "ZZW3055891",
+    "date_of_birth": "20/10/1994",
+    "issue_date": "01/09/2024"
+  },
+  "lines": [
+    {
+      "text": "Republic of India",
+      "page": 0,
+      "bbox": [
+        0.0840033848849565,
+        0.026852338384060905,
+        0.27865426087614303,
+        0.04957714324399041
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Passport (Specimen)",
+      "page": 0,
+      "bbox": [
+        0.08365652993715889,
+        0.058264229390392414,
+        0.2491421972643561,
+        0.07545656264964089
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Holder",
+      "page": 0,
+      "bbox": [
+        0.08274611187942815,
+        0.13024403740356874,
+        0.12561350990022294,
+        0.14234230062112868
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.34089021584274937,
+        0.13591910051305675,
+        0.47380741234958146,
+        0.15125626272549794
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Number",
+      "page": 0,
+      "bbox": [
+        0.08239171853711241,
+        0.15730166801842357,
+        0.1341582196314484,
+        0.16961552284236417
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ZZW3055891",
+      "page": 0,
+      "bbox": [
+        0.34070576400451263,
+        0.1630045027075459,
+        0.43869089625920415,
+        0.17759730146587802
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of birth",
+      "page": 0,
+      "bbox": [
+        0.0820368578133492,
+        0.18439497310603079,
+        0.16131354500057565,
+        0.1973396545020638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "20/10/1994",
+      "page": 0,
+      "bbox": [
+        0.3405210686836821,
+        0.19012564772607424,
+        0.4215216874185484,
+        0.20436650029030448
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of issue",
+      "page": 0,
+      "bbox": [
+        0.08168152878293963,
+        0.2115240232661166,
+        0.16666702115088233,
+        0.22461824009926046
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "01/09/2024",
+      "page": 0,
+      "bbox": [
+        0.34033612939783175,
+        0.21728260636653685,
+        0.4213902484253731,
+        0.23154864703551947
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.08105857332529799,
+        0.25908608564380914,
+        0.5185565619744709,
+        0.28014361731408877
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.08085060130404755,
+        0.27496454689762206,
+        0.5436590422313579,
+        0.296624935090813
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.37508922300215325,
+        0.8575731295992245,
+        0.6158053764581992,
+        0.8994950977865693
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07241503839290901,
+        0.9202961711883991,
+        0.30644986672835106,
+        0.9363871065009602
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "holder": [
+      3
+    ],
+    "number": [
+      5
+    ],
+    "date_of_birth": [
+      7
+    ],
+    "issue_date": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "identity",
+  "folder": "Kiran Rao/Identity",
+  "expected_ask": []
+}

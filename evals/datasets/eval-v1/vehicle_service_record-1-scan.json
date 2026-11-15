@@ -1,0 +1,191 @@
+{
+  "doc_id": "vehicle_service_record-1-scan",
+  "base_id": "vehicle_service_record-1",
+  "doc_type": "vehicle_service_record",
+  "person": "SURESH N RAO",
+  "variant": "scan",
+  "files": [
+    "vehicle_service_record-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "SURESH N RAO",
+    "document_date": "2026-11-03",
+    "expiry_date": null,
+    "registration_number": "KA-80067942",
+    "odometer_km": "23049"
+  },
+  "printed": {
+    "person_name": "SURESH N RAO",
+    "document_date": "03/11/2026",
+    "registration_number": "KA-80067942",
+    "odometer_km": "23,049"
+  },
+  "lines": [
+    {
+      "text": "Greenfield Motors Service Centre",
+      "page": 0,
+      "bbox": [
+        0.07731703473251254,
+        0.03069286464868685,
+        0.46934194505346205,
+        0.050421165257633155
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Vehicle Service Invoice",
+      "page": 0,
+      "bbox": [
+        0.07724160298405729,
+        0.0631881247663477,
+        0.2647602351894438,
+        0.07753626283448856
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07704393389115467,
+        0.13751978951616542,
+        0.11664663049948326,
+        0.149101208667993
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SURESH N RAO",
+      "page": 0,
+      "bbox": [
+        0.3411024776172132,
+        0.13801449242073485,
+        0.46785836192919916,
+        0.1510580377469067
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.076967114446529,
+        0.1654145517818849,
+        0.10834022457067298,
+        0.17698862064431325
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "03/11/2026",
+      "page": 0,
+      "bbox": [
+        0.34107830803981976,
+        0.16594222213605717,
+        0.4238115221870543,
+        0.17891618002576276
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.07689026434549423,
+        0.19332044512082133,
+        0.2106112918132927,
+        0.20512552839484008
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-80067942",
+      "page": 0,
+      "bbox": [
+        0.34105412880559294,
+        0.19388110921383334,
+        0.4440017589528153,
+        0.20691455028246006
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Odometer (km)",
+      "page": 0,
+      "bbox": [
+        0.0768133835696956,
+        0.22123747619688797,
+        0.17668256303045557,
+        0.23298599621938187
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "23,049",
+      "page": 0,
+      "bbox": [
+        0.34102993990874436,
+        0.22183116034158915,
+        0.3916063881740295,
+        0.2347618588345523
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07667876834563735,
+        0.27011910082278173,
+        0.523272410509592,
+        0.2827701000375907
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07663387569886992,
+        0.2864205662695015,
+        0.5489590545933887,
+        0.29917336812484013
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07483311523573585,
+        0.9416073408745135,
+        0.31098901804738555,
+        0.9532526399993687
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "registration_number": [
+      7
+    ],
+    "odometer_km": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "vehicle",
+  "folder": "Suresh Rao/Vehicle",
+  "expected_ask": []
+}

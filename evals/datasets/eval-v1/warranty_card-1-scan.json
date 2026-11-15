@@ -1,0 +1,338 @@
+{
+  "doc_id": "warranty_card-1-scan",
+  "base_id": "warranty_card-1",
+  "doc_type": "warranty_card",
+  "person": "Kavita Rao",
+  "variant": "scan",
+  "files": [
+    "warranty_card-1-scan.pdf"
+  ],
+  "fields": {
+    "brand": "LG",
+    "product": "Double Door Refrigerator 242 L",
+    "model": null,
+    "serial_number": "504UEH646982",
+    "purchase_date": "2025-01-09",
+    "seller": null,
+    "seller_location": "Pune",
+    "buyer": "Kavita Rao",
+    "warranty_parts": [
+      {
+        "part": "Compressor",
+        "years": "10"
+      },
+      {
+        "part": "Product",
+        "years": "1"
+      }
+    ]
+  },
+  "printed": {
+    "brand": "LG",
+    "product": "Double Door Refrigerator 242 L",
+    "serial_number": "504UEH646982",
+    "purchase_date": "09/01/2025",
+    "seller_location": "Pune",
+    "buyer": "Kavita Rao",
+    "warranty_parts": "Compressor - 10 years\nProduct - 1 year"
+  },
+  "lines": [
+    {
+      "text": "LG",
+      "page": 0,
+      "bbox": [
+        0.07650483706737696,
+        0.03320316011020194,
+        0.14586451953297697,
+        0.0720744198899021
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty Card",
+      "page": 0,
+      "bbox": [
+        0.7580501961440018,
+        0.051041443933617925,
+        0.9304960892859236,
+        0.07204801327115756
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product details",
+      "page": 0,
+      "bbox": [
+        0.07592828122597986,
+        0.14357331312844118,
+        0.21988860271485258,
+        0.15937553912831237
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.0757362097549421,
+        0.17648020824706667,
+        0.12729371126138705,
+        0.1882218918190184
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Double Door Refrigerator 242 L",
+      "page": 0,
+      "bbox": [
+        0.3247135178847928,
+        0.17698137950037152,
+        0.5709667393035435,
+        0.19040576171525664
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Serial number",
+      "page": 0,
+      "bbox": [
+        0.07539387827668324,
+        0.22821953159336159,
+        0.16848214884362606,
+        0.2400503045373061
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "504UEH646982",
+      "page": 0,
+      "bbox": [
+        0.3244550421554033,
+        0.2287151371326981,
+        0.4426325009224007,
+        0.24188840261021063
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase details",
+      "page": 0,
+      "bbox": [
+        0.07491656380868818,
+        0.296474619335077,
+        0.23345127302608795,
+        0.3123264046894893
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of purchase",
+      "page": 0,
+      "bbox": [
+        0.07472410979454978,
+        0.3294470483510011,
+        0.18867344369323086,
+        0.34132944134001186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "09/01/2025",
+      "page": 0,
+      "bbox": [
+        0.3239493367491197,
+        0.3299317534591345,
+        0.40713915169324305,
+        0.3430488876534735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dealer location",
+      "page": 0,
+      "bbox": [
+        0.07438109632528689,
+        0.3812894386919,
+        0.17421856141647862,
+        0.393150015368037
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Pune",
+      "page": 0,
+      "bbox": [
+        0.3236903461385287,
+        0.381768555561792,
+        0.3643852481335317,
+        0.39481107315859587
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Customer",
+      "page": 0,
+      "bbox": [
+        0.07420950287174832,
+        0.4072237393957627,
+        0.13913012423665339,
+        0.4190205717308818
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita Rao",
+      "page": 0,
+      "bbox": [
+        0.3235607853632689,
+        0.4077000592797914,
+        0.4095182983624385,
+        0.4208326903275467
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty terms",
+      "page": 0,
+      "bbox": [
+        0.07374669230726844,
+        0.47327778477749727,
+        0.22023131140732022,
+        0.4891302721780042
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Part and warranty period",
+      "page": 0,
+      "bbox": [
+        0.07356941737007232,
+        0.5039650108767324,
+        0.23755663515951145,
+        0.515958214126139
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Compressor - 10 years",
+      "page": 0,
+      "bbox": [
+        0.0734045822463627,
+        0.5275788940904923,
+        0.25286108233922533,
+        0.5409016576511922
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product - 1 year",
+      "page": 0,
+      "bbox": [
+        0.07323265943745663,
+        0.5535625308551795,
+        0.19907858381189927,
+        0.56678898221489
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Warranty starts on the date of purchase shown on the original invoice.",
+      "page": 0,
+      "bbox": [
+        0.07252169022269328,
+        0.6623164239237631,
+        0.5531380537395505,
+        0.6748894363281006
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Keep this card and the invoice. Service is refused without them.",
+      "page": 0,
+      "bbox": [
+        0.07239644445603985,
+        0.6812458202315048,
+        0.5105964182781634,
+        0.6937420185992788
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Damage from misuse, power surges or unauthorised repair is not covered.",
+      "page": 0,
+      "bbox": [
+        0.07227116792646082,
+        0.7001798656334152,
+        0.5821043066579246,
+        0.7128023889886527
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4. Consumables and accessories carry no warranty.",
+      "page": 0,
+      "bbox": [
+        0.07214586062262081,
+        0.7191185618424437,
+        0.4171138580851707,
+        0.7314484408023053
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Authorised signature and seal",
+      "page": 0,
+      "bbox": [
+        0.7311416085721638,
+        0.9003849909370747,
+        0.9296001543499758,
+        0.9124642773806868
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07064840976705529,
+        0.9467463039699107,
+        0.3080677822229123,
+        0.9575906997450188
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      0
+    ],
+    "product": [
+      4
+    ],
+    "serial_number": [
+      6
+    ],
+    "purchase_date": [
+      9
+    ],
+    "seller_location": [
+      11
+    ],
+    "buyer": [
+      13
+    ],
+    "warranty_parts": [
+      16,
+      17
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "home",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "purchases",
+  "folder": "Home/Purchases",
+  "expected_ask": []
+}

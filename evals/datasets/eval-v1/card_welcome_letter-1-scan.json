@@ -1,0 +1,274 @@
+{
+  "doc_id": "card_welcome_letter-1-scan",
+  "base_id": "card_welcome_letter-1",
+  "doc_type": "card_welcome_letter",
+  "person": "Mrs Kavita Rao",
+  "variant": "scan",
+  "files": [
+    "card_welcome_letter-1-scan.pdf"
+  ],
+  "fields": {
+    "bank": "Deccan Trust Bank",
+    "card_name": "Travel Plus",
+    "network": "American Express",
+    "holder": "Mrs Kavita Rao",
+    "last4": "1111",
+    "statement_date": null,
+    "payment_due_date": null,
+    "total_due": null,
+    "credit_limit": "500000",
+    "annual_fee": "999"
+  },
+  "printed": {
+    "bank": "Deccan Trust Bank",
+    "card_name": "Travel Plus",
+    "network": "American Express",
+    "holder": "Mrs Kavita Rao",
+    "last4": "XXXX XXXX XXXX 1111",
+    "credit_limit": "Rs. 5,00,000",
+    "annual_fee": "Rs. 999"
+  },
+  "lines": [
+    {
+      "text": "Tungabhadra Bank",
+      "page": 0,
+      "bbox": [
+        0.07165902541732044,
+        0.030868026734623088,
+        0.29506100775806277,
+        0.05163648869493978
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Welcome to your new card",
+      "page": 0,
+      "bbox": [
+        0.0718078939924951,
+        0.06369591001788495,
+        0.28587000719801325,
+        0.07921114371739497
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Bank",
+      "page": 0,
+      "bbox": [
+        0.07214804483511812,
+        0.1396344119644181,
+        0.10586260946033683,
+        0.15139567658889194
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Deccan Trust Bank",
+      "page": 0,
+      "bbox": [
+        0.3351448312498372,
+        0.1373845867283046,
+        0.48448314605963727,
+        0.15114000199826683
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Card name",
+      "page": 0,
+      "bbox": [
+        0.07227555830997877,
+        0.16743959674326286,
+        0.14539549262701454,
+        0.17941927194833637
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Travel Plus",
+      "page": 0,
+      "bbox": [
+        0.33524829470453216,
+        0.16584062012885642,
+        0.4231980078474683,
+        0.17921249433224942
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Network",
+      "page": 0,
+      "bbox": [
+        0.0724030482906953,
+        0.19557907221774232,
+        0.12661653440437115,
+        0.2074377042034873
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "American Express",
+      "page": 0,
+      "bbox": [
+        0.33535173906293386,
+        0.19361542350915412,
+        0.47918653151104296,
+        0.2072798055337202
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Card holder",
+      "page": 0,
+      "bbox": [
+        0.07253051478376023,
+        0.22348073628539092,
+        0.14974534136517803,
+        0.23545097478109905
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mrs Kavita Rao",
+      "page": 0,
+      "bbox": [
+        0.33545516433032885,
+        0.22184011358988426,
+        0.45450947161792304,
+        0.23534193703691184
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Card number",
+      "page": 0,
+      "bbox": [
+        0.07265795779566372,
+        0.25145845569080005,
+        0.1588949874052699,
+        0.2634590851074001
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "XXXX XXXX XXXX 1111",
+      "page": 0,
+      "bbox": [
+        0.33555857051200166,
+        0.24959269619205404,
+        0.5178991922264228,
+        0.2633988902755276
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credit limit",
+      "page": 0,
+      "bbox": [
+        0.07278537733289354,
+        0.27956202804120367,
+        0.14256910985710472,
+        0.2914620366080941
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 5,00,000",
+      "page": 0,
+      "bbox": [
+        0.3356619576132348,
+        0.2781217330143593,
+        0.43000572791028213,
+        0.291450666682742
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Annual fee",
+      "page": 0,
+      "bbox": [
+        0.07291277340193503,
+        0.3075707561132395,
+        0.14356173091096544,
+        0.31945983070835887
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 999",
+      "page": 0,
+      "bbox": [
+        0.33576532563930866,
+        0.3063650606630065,
+        0.393464717422921,
+        0.3194972676912002
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.0731356600719277,
+        0.3549002691313964,
+        0.5174053580656877,
+        0.3684435646738336
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07320993966760059,
+        0.3711619930594185,
+        0.5430203261860957,
+        0.38476796838678506
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07579413721289224,
+        0.9410526223628247,
+        0.3090593027216642,
+        0.9514185235457322
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "bank": [
+      3
+    ],
+    "card_name": [
+      5
+    ],
+    "network": [
+      7
+    ],
+    "holder": [
+      9
+    ],
+    "last4": [
+      11
+    ],
+    "credit_limit": [
+      13
+    ],
+    "annual_fee": [
+      15
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "cards",
+  "folder": "Kavita Rao/Cards",
+  "expected_ask": []
+}

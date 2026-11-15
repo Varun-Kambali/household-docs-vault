@@ -1,0 +1,191 @@
+{
+  "doc_id": "appraisal_letter-5-scan",
+  "base_id": "appraisal_letter-5",
+  "doc_type": "appraisal_letter",
+  "person": "Master Kiran Rao",
+  "variant": "scan",
+  "files": [
+    "appraisal_letter-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "2025-12-15",
+    "expiry_date": null,
+    "employer": "Kaveri Systems Limited",
+    "designation": "Project Lead"
+  },
+  "printed": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "15/12/2025",
+    "employer": "Kaveri Systems Limited",
+    "designation": "Project Lead"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.0713709473998495,
+        0.03164457699674573,
+        0.2721411803448152,
+        0.051310414774303904
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Annual Appraisal Letter",
+      "page": 0,
+      "bbox": [
+        0.07143077496718664,
+        0.06436788440071889,
+        0.26135570787998375,
+        0.07889286970926569
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07156753370644708,
+        0.1391694928261892,
+        0.11143318567386368,
+        0.15083325369492198
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.33740749169260664,
+        0.13977211473144768,
+        0.4743012248929014,
+        0.15296083798964907
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07161882182595045,
+        0.16722206082084862,
+        0.1031924154631281,
+        0.17887069261958002
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "15/12/2025",
+      "page": 0,
+      "bbox": [
+        0.33746391952962407,
+        0.1678551768737257,
+        0.4207522173198689,
+        0.18092960655741952
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.07167011190505429,
+        0.19527570063929467,
+        0.13479055624677172,
+        0.20700863178185697
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kaveri Systems Limited",
+      "page": 0,
+      "bbox": [
+        0.33752034952496146,
+        0.1959393131708602,
+        0.5253531305254218,
+        0.20929024019317038
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.07172140394387097,
+        0.22333041234295642,
+        0.1506419655833842,
+        0.23511302074331877
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Project Lead",
+      "page": 0,
+      "bbox": [
+        0.3375767816787427,
+        0.2240245236844807,
+        0.43748161817187203,
+        0.2371632904833919
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07181116972769692,
+        0.27242873723294864,
+        0.5210273924425096,
+        0.2852865742138827
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07184109298951286,
+        0.28879557510577236,
+        0.5468844867177667,
+        0.30175928465655977
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07303857061875678,
+        0.9437683629900682,
+        0.30957318177028426,
+        0.9553893903912912
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "employer": [
+      7
+    ],
+    "designation": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "work",
+  "folder": "Kiran Rao/Work",
+  "expected_ask": []
+}

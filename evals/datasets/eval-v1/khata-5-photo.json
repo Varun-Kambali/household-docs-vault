@@ -1,0 +1,138 @@
+{
+  "doc_id": "khata-5-photo",
+  "base_id": "khata-5",
+  "doc_type": "khata",
+  "person": "Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "khata-5-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "Kiran Rao",
+    "document_date": "2026-07-17",
+    "expiry_date": null,
+    "khata_number": null
+  },
+  "printed": {
+    "person_name": "Kiran Rao",
+    "document_date": "17/07/2026"
+  },
+  "lines": [
+    {
+      "text": "Municipal Corporation",
+      "page": 0,
+      "bbox": [
+        0.08323783406538593,
+        0.031044774834949877,
+        0.32631067421269816,
+        0.050937820163298474
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Khata Certificate",
+      "page": 0,
+      "bbox": [
+        0.08324478369749955,
+        0.06296205509119648,
+        0.20702822771179627,
+        0.0770796952997649
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.08326072200332106,
+        0.13460575861671525,
+        0.11977918975925025,
+        0.14574978806206584
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3282719448447585,
+        0.13365991530263965,
+        0.401495572406773,
+        0.14625170793491443
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.08326671811533908,
+        0.1613893869096217,
+        0.1122043520916805,
+        0.172501547738448
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "17/07/2026",
+      "page": 0,
+      "bbox": [
+        0.3284949346920709,
+        0.1606644320373226,
+        0.40614971862020294,
+        0.17322386895943762
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.08327723669386157,
+        0.2079788718907309,
+        0.500442605024592,
+        0.21943041270847038
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.08328075008664847,
+        0.2238510832022619,
+        0.5249625609717434,
+        0.2351055020787209
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.08343689122649947,
+        0.9201413203566571,
+        0.30686553823050605,
+        0.9356284835543064
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "home",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "property",
+  "folder": "Home/Property",
+  "expected_ask": []
+}

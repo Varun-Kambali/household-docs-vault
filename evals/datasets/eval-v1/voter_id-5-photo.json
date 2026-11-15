@@ -1,0 +1,204 @@
+{
+  "doc_id": "voter_id-5-photo",
+  "base_id": "voter_id-5",
+  "doc_type": "voter_id",
+  "person": "Ravi Rao",
+  "variant": "photo",
+  "files": [
+    "voter_id-5-photo.jpg"
+  ],
+  "fields": {
+    "holder": "Ravi Rao",
+    "number": "ZZM3770381",
+    "date_of_birth": "1988-09-10",
+    "issue_date": null,
+    "expiry_date": null,
+    "address": "No. 174, 5th Cross, Chennai, Tamil Nadu - 600214",
+    "parties": null
+  },
+  "printed": {
+    "holder": "Ravi Rao",
+    "number": "ZZM3770381",
+    "date_of_birth": "10/09/1988",
+    "address": "No. 174, 5th Cross, Chennai, Tamil Nadu - 600214"
+  },
+  "lines": [
+    {
+      "text": "Election Commission",
+      "page": 0,
+      "bbox": [
+        0.07385764375338676,
+        0.029274309786044603,
+        0.31909490858939754,
+        0.04899217931320556
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Elector Photo Identity Card",
+      "page": 0,
+      "bbox": [
+        0.07522503378416193,
+        0.06177251949898996,
+        0.28645005228411324,
+        0.07620795063131462
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Holder",
+      "page": 0,
+      "bbox": [
+        0.07834438164130841,
+        0.13590880727907964,
+        0.1213406153002478,
+        0.1473973930696819
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi Rao",
+      "page": 0,
+      "bbox": [
+        0.33427150383012977,
+        0.13618269358451274,
+        0.4028612962161914,
+        0.14891938211979927
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Number",
+      "page": 0,
+      "bbox": [
+        0.07951194904692535,
+        0.1636579129093358,
+        0.13129480638894073,
+        0.1751227851993205
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ZZM3770381",
+      "page": 0,
+      "bbox": [
+        0.33530477996197117,
+        0.16383177606990504,
+        0.4303615736619686,
+        0.17654225431607576
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of birth",
+      "page": 0,
+      "bbox": [
+        0.08067832581553801,
+        0.19137872114807503,
+        0.15967026432179124,
+        0.20281543471361424
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "10/09/1988",
+      "page": 0,
+      "bbox": [
+        0.3363370061923787,
+        0.19145276460204158,
+        0.4163707701331154,
+        0.20411183498012925
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Address",
+      "page": 0,
+      "bbox": [
+        0.08184351376746192,
+        0.21906598374927957,
+        0.13518436885422738,
+        0.23048623272378863
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "No. 174, 5th Cross, Chennai, Tamil Nadu - 600214",
+      "page": 0,
+      "bbox": [
+        0.3373681841207311,
+        0.219008635231539,
+        0.7081180593927755,
+        0.2316831019067488
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.08387973755509714,
+        0.26712954794011995,
+        0.514207125674984,
+        0.2788600145717865
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.08455767267674255,
+        0.28311970502158484,
+        0.5392504998652484,
+        0.29496546136350754
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.39848992695191837,
+        0.848124877109878,
+        0.62855205344734,
+        0.8847247448823866
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.1113488272043939,
+        0.9180752914253341,
+        0.3360318194560501,
+        0.9301987719762552
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "holder": [
+      3
+    ],
+    "number": [
+      5
+    ],
+    "date_of_birth": [
+      7
+    ],
+    "address": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "identity",
+  "folder": "Ravi Kumar Rao/Identity",
+  "expected_ask": []
+}

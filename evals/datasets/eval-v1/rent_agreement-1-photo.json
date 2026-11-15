@@ -1,0 +1,191 @@
+{
+  "doc_id": "rent_agreement-1-photo",
+  "base_id": "rent_agreement-1",
+  "doc_type": "rent_agreement",
+  "person": "Master Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "rent_agreement-1-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "2026-02-01",
+    "expiry_date": "2028-03-25",
+    "rent_amount": "1500",
+    "deposit": null
+  },
+  "printed": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "01/02/2026",
+    "rent_amount": "Rs. 1,500",
+    "expiry_date": "25/03/2028"
+  },
+  "lines": [
+    {
+      "text": "Rental Agreement",
+      "page": 0,
+      "bbox": [
+        0.10981496281553076,
+        0.036998613942061845,
+        0.3020098589965098,
+        0.05431322349318836
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rental Agreement",
+      "page": 0,
+      "bbox": [
+        0.10881381813773625,
+        0.06616727425283336,
+        0.24175067653780993,
+        0.07901002362730408
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.10616944856468455,
+        0.13346054033906007,
+        0.14258970439091637,
+        0.14406049032314686
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3476161793293264,
+        0.13414677023485688,
+        0.47300573026457615,
+        0.14627054431370803
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.10513354245138486,
+        0.1589212702832077,
+        0.1341286750207475,
+        0.169568466062989
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "01/02/2026",
+      "page": 0,
+      "bbox": [
+        0.34716707084477444,
+        0.15977103500149908,
+        0.423632158609472,
+        0.1718493855633717
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rent amount",
+      "page": 0,
+      "bbox": [
+        0.10409256394309377,
+        0.18450654489512666,
+        0.18224725718741747,
+        0.1954443821305324
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 1,500",
+      "page": 0,
+      "bbox": [
+        0.34671574898763097,
+        0.18552144314642297,
+        0.41314633707606874,
+        0.19766422252436838
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End of term",
+      "page": 0,
+      "bbox": [
+        0.10304647569230786,
+        0.2102172802564847,
+        0.17381131353416376,
+        0.2212217923347993
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "25/03/2028",
+      "page": 0,
+      "bbox": [
+        0.34626219735499875,
+        0.21139892843777297,
+        0.4231046063509172,
+        0.22369911472568552
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.10120341228603448,
+        0.25551574469712235,
+        0.5154658716548263,
+        0.2688749857550981
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.10058551933289506,
+        0.2707021125816283,
+        0.5395045291894498,
+        0.28442425628213347
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07437622528440271,
+        0.916169665723269,
+        0.305169327355076,
+        0.9324124009940699
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "rent_amount": [
+      7
+    ],
+    "expiry_date": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "home",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "rent",
+  "folder": "Home/Rent",
+  "expected_ask": []
+}

@@ -1,0 +1,190 @@
+{
+  "doc_id": "registration_certificate-5-scan",
+  "base_id": "registration_certificate-5",
+  "doc_type": "registration_certificate",
+  "person": "KIRAN RAO",
+  "variant": "scan",
+  "files": [
+    "registration_certificate-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "KIRAN RAO",
+    "document_date": "2026-06-26",
+    "expiry_date": "2032-11-23",
+    "registration_number": "KA-75598115"
+  },
+  "printed": {
+    "person_name": "KIRAN RAO",
+    "document_date": "26/06/2026",
+    "registration_number": "KA-75598115",
+    "expiry_date": "23/11/2032"
+  },
+  "lines": [
+    {
+      "text": "Regional Transport Office",
+      "page": 0,
+      "bbox": [
+        0.07012722538507717,
+        0.023887069267824093,
+        0.37613325339230325,
+        0.04381406183554627
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Registration",
+      "page": 0,
+      "bbox": [
+        0.07005101070913249,
+        0.05692282746765434,
+        0.27508027581716815,
+        0.07153901416290366
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.06985143398389362,
+        0.132432160314325,
+        0.1096914942521403,
+        0.14419483920007442
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KIRAN RAO",
+      "page": 0,
+      "bbox": [
+        0.3355401874714537,
+        0.13296491964705057,
+        0.42985603889202,
+        0.14615839871884584
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06977392938959948,
+        0.16074781162516796,
+        0.10132837087587752,
+        0.17249829556609755
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "26/06/2026",
+      "page": 0,
+      "bbox": [
+        0.3354616733451877,
+        0.16132308714645333,
+        0.4187566295653004,
+        0.17450689548919854
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.06969642531561648,
+        0.18906327284444752,
+        0.20417952508035933,
+        0.20106484928597795
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-75598115",
+      "page": 0,
+      "bbox": [
+        0.33538315974680155,
+        0.1896810639830049,
+        0.43900518497212254,
+        0.20292686445126668
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Valid till",
+      "page": 0,
+      "bbox": [
+        0.0696189217619394,
+        0.21737854397407796,
+        0.12107432926648551,
+        0.22918973247066105
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "23/11/2032",
+      "page": 0,
+      "bbox": [
+        0.33530464667628995,
+        0.21803885015862817,
+        0.41859896859266077,
+        0.2312491293473005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06948329179497484,
+        0.26692981105347047,
+        0.5185370095395601,
+        0.27988098418637497
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06943808216007531,
+        0.2834467707164437,
+        0.5443217083326874,
+        0.2965153563828178
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06763339355077415,
+        0.9440721227731965,
+        0.3038773902686331,
+        0.95602360762436
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "registration_number": [
+      7
+    ],
+    "expiry_date": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "vehicle",
+  "folder": "Kiran Rao/Vehicle",
+  "expected_ask": []
+}

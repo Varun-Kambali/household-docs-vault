@@ -27,7 +27,7 @@ from vault_synth.forms import FORM_SPECS
 from vault_synth.household import HOUSEHOLD, CastMember, draw_cast
 from vault_synth.model import SynthDoc
 from vault_synth.photo import to_photo
-from vault_synth.sets import LOCKABLE, SETS, SetSpec, lowest_base, split_of
+from vault_synth.sets import LOCKABLE, SETS, SetSpec, locked_password, lowest_base, split_of
 from vault_synth.sheet import Sheet, Truth
 from vault_synth.templates import (
     aadhaar,
@@ -235,8 +235,11 @@ def generate(
                 continue
             docs += _make_base(doc_type, n, spec, out)
     for d in docs:
-        # ground truth has no OCR confidence; leaving it out keeps the truth files small
-        text = d.model_dump_json(indent=2, exclude={"lines": {"__all__": {"confidence"}}})
+        # ground truth has no OCR confidence; leaving it out keeps the truth files small. The
+        # locked PDF's password is derived by `locked_password`, never written down.
+        text = d.model_dump_json(
+            indent=2, exclude={"password": True, "lines": {"__all__": {"confidence"}}}
+        )
         assert_safe_path(out / f"{d.doc_id}.json").write_text(text + "\n")
     assert_safe_path(out / "household.json").write_text(HOUSEHOLD.model_dump_json(indent=2) + "\n")
     manifest = {
@@ -304,7 +307,7 @@ def _make_base(doc_type: DocType, n: int, spec: SetSpec, out: Path) -> list[Synt
         files, lines = _treat(kind, base, base_id, out)
         made.append(doc(kind, files, lines))
     if doc_type in LOCKABLE:
-        password = f"pw-{base_id}"
+        password = locked_password(base_id)
         locked = assert_safe_path(out / f"{base_id}-locked.pdf")
         # the same page again from the same seed, now behind a password
         again = _build(doc_type, n, spec, locked, out / "unused-back.pdf", password)

@@ -1,0 +1,191 @@
+{
+  "doc_id": "relieving_letter-5-photo",
+  "base_id": "relieving_letter-5",
+  "doc_type": "relieving_letter",
+  "person": "Mason Shan",
+  "variant": "photo",
+  "files": [
+    "relieving_letter-5-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "Mason Shan",
+    "document_date": "2025-12-18",
+    "expiry_date": null,
+    "employer": "Northstar Software Private Limited",
+    "designation": "Software Engineer"
+  },
+  "printed": {
+    "person_name": "Mason Shan",
+    "document_date": "18/12/2025",
+    "employer": "Northstar Software Private Limited",
+    "designation": "Software Engineer"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.11848594524240207,
+        0.05218851517721377,
+        0.3115579220179843,
+        0.07145396865315674
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Relieving Letter",
+      "page": 0,
+      "bbox": [
+        0.11847910566424665,
+        0.0843347778261949,
+        0.24069842104395914,
+        0.09850450218113882
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.11846121956812827,
+        0.15776336188356752,
+        0.15688538076453093,
+        0.16924401735879038
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mason Shan",
+      "page": 0,
+      "bbox": [
+        0.37329192198824424,
+        0.1564907720748863,
+        0.4664388806994806,
+        0.16938291324974739
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.11845428298558726,
+        0.18522050545000562,
+        0.14887682326436794,
+        0.19667820325907062
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "18/12/2025",
+      "page": 0,
+      "bbox": [
+        0.3731883521709946,
+        0.18378770493036622,
+        0.4523258527911508,
+        0.19666106023134952
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.11844735169405214,
+        0.21246205655017497,
+        0.17921089547478378,
+        0.22409146322946413
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Northstar Software Private Limited",
+      "page": 0,
+      "bbox": [
+        0.37308486090451864,
+        0.21004806813022814,
+        0.631953802715979,
+        0.22391851856438383
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.11844042568747157,
+        0.23973594850195867,
+        0.19435752674648588,
+        0.25148382120329993
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Software Engineer",
+      "page": 0,
+      "bbox": [
+        0.37298144809948697,
+        0.237851533741545,
+        0.5115107133731138,
+        0.2511553117763612
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.11842831787470873,
+        0.2850901961921276,
+        0.5462926766524291,
+        0.2993702240849886
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.1184242855241276,
+        0.30071308618775205,
+        0.5704900146283712,
+        0.3153181717672754
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.11826475912851846,
+        0.9315880756998726,
+        0.34262846323965696,
+        0.9462451112598023
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "employer": [
+      7
+    ],
+    "designation": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": null,
+  "linked_people": [],
+  "area": "work",
+  "folder": null,
+  "expected_ask": [
+    "person_unknown"
+  ]
+}

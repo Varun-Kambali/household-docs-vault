@@ -1,0 +1,191 @@
+{
+  "doc_id": "itr_acknowledgement-1-photo",
+  "base_id": "itr_acknowledgement-1",
+  "doc_type": "itr_acknowledgement",
+  "person": "KIRAN RAO",
+  "variant": "photo",
+  "files": [
+    "itr_acknowledgement-1-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "KIRAN RAO",
+    "document_date": "2026-08-06",
+    "expiry_date": null,
+    "acknowledgement_number": "AK-640352248921045",
+    "assessment_year": "2026-27"
+  },
+  "printed": {
+    "person_name": "KIRAN RAO",
+    "document_date": "06/08/2026",
+    "acknowledgement_number": "AK-640352248921045",
+    "assessment_year": "2026-27"
+  },
+  "lines": [
+    {
+      "text": "Income Tax Department",
+      "page": 0,
+      "bbox": [
+        0.09255214138795309,
+        0.036883647029461085,
+        0.35951023098192325,
+        0.06086866356873778
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Income Tax Return Acknowledgement",
+      "page": 0,
+      "bbox": [
+        0.09269490303009348,
+        0.06981739424042292,
+        0.38532519594888504,
+        0.0885341009923383
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.09301942079134648,
+        0.14866780085893957,
+        0.13008717559051794,
+        0.1606104171017557
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KIRAN RAO",
+      "page": 0,
+      "bbox": [
+        0.3425091228967795,
+        0.14513784020263334,
+        0.4325551657020472,
+        0.1591421564778886
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.09314047570679813,
+        0.17668092053154863,
+        0.12245125652212392,
+        0.18845794757885134
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "06/08/2026",
+      "page": 0,
+      "bbox": [
+        0.3422698808425439,
+        0.1736190514773262,
+        0.42164864409472735,
+        0.18734742937310286
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Acknowledgement number",
+      "page": 0,
+      "bbox": [
+        0.09326118427090332,
+        0.2033291077357583,
+        0.258279683156214,
+        0.21622585021573523
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "AK-640352248921045",
+      "page": 0,
+      "bbox": [
+        0.3420313316055335,
+        0.20117712761167147,
+        0.5028318728337902,
+        0.21547102307120988
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Assessment year",
+      "page": 0,
+      "bbox": [
+        0.09338154796796226,
+        0.23171798965106555,
+        0.19981366452175223,
+        0.24391446605920142
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2026-27",
+      "page": 0,
+      "bbox": [
+        0.34179347218062217,
+        0.23024396076578263,
+        0.3997912697479982,
+        0.24351329185943635
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.09359135903576422,
+        0.2787639021311141,
+        0.5158236779485283,
+        0.29217977880432844
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.09366106371923283,
+        0.29506819337078366,
+        0.5402980859101659,
+        0.30821480004875074
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.09635736116753062,
+        0.9178698822038261,
+        0.3091954056446951,
+        0.9333582050081756
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "acknowledgement_number": [
+      7
+    ],
+    "assessment_year": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "tax",
+  "folder": "Kiran Rao/Tax",
+  "expected_ask": []
+}

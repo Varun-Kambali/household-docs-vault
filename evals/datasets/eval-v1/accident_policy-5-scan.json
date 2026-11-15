@@ -1,0 +1,386 @@
+{
+  "doc_id": "accident_policy-5-scan",
+  "base_id": "accident_policy-5",
+  "doc_type": "accident_policy",
+  "person": "Kavita R Rao",
+  "variant": "scan",
+  "files": [
+    "accident_policy-5-scan.pdf"
+  ],
+  "fields": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "product": null,
+    "policy_number": "PL/ZE617232",
+    "policyholder": "Kavita R Rao",
+    "insured": [
+      "Kavita R Rao",
+      "SURESH N RAO",
+      "Master Kiran Rao"
+    ],
+    "nominee": "Arin Acharya",
+    "sum_insured": "2500000",
+    "premium": "8200",
+    "premium_frequency": null,
+    "start_date": "2026-09-22",
+    "end_date": "2027-04-13",
+    "premium_due_date": null,
+    "agent": null,
+    "claim_helpline": "1800 903 9069"
+  },
+  "printed": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "policy_number": "PL/ZE617232",
+    "policyholder": "Kavita R Rao",
+    "insured": "Kavita R Rao\nSURESH N RAO\nMaster Kiran Rao",
+    "nominee": "Arin Acharya",
+    "sum_insured": "Rs. 25,00,000",
+    "premium": "Rs. 8,200",
+    "start_date": "22/09/2026",
+    "end_date": "13/04/2027",
+    "claim_helpline": "1800 903 9069"
+  },
+  "lines": [
+    {
+      "text": "Tungabhadra Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.07858095141696449,
+        0.026967215481757758,
+        0.5705225149883771,
+        0.04779991243978282
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Personal Accident Insurance Schedule",
+      "page": 0,
+      "bbox": [
+        0.07857400335260445,
+        0.060519896036138845,
+        0.3878247727072835,
+        0.07556711948800685
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Insurer",
+      "page": 0,
+      "bbox": [
+        0.0785558202546845,
+        0.13650343425048247,
+        0.12429218498072213,
+        0.14823395424369556
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.34021819337404136,
+        0.13543877335647173,
+        0.6414357243159646,
+        0.14901354948784484
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policy number",
+      "page": 0,
+      "bbox": [
+        0.07854876330552445,
+        0.16463211128269076,
+        0.17166659260297595,
+        0.1764363079210982
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "PL/ZE617232",
+      "page": 0,
+      "bbox": [
+        0.3401649271536871,
+        0.16413414356365988,
+        0.4413588824963691,
+        0.17727107167062486
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policyholder",
+      "page": 0,
+      "bbox": [
+        0.07854170884280103,
+        0.1928697781686503,
+        0.15857059515848063,
+        0.20462872481666278
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita R Rao",
+      "page": 0,
+      "bbox": [
+        0.3401116797378839,
+        0.19240781565695697,
+        0.441254899943371,
+        0.20551861811239683
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Insured persons",
+      "page": 0,
+      "bbox": [
+        0.07853465686520032,
+        0.2210373104454183,
+        0.1838982851462178,
+        0.23281121018113418
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita R Rao",
+      "page": 0,
+      "bbox": [
+        0.111160639154777,
+        0.23862672345516783,
+        0.21190878179240838,
+        0.25167249211757486
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SURESH N RAO",
+      "page": 0,
+      "bbox": [
+        0.11115210745496862,
+        0.2573988658188903,
+        0.2363918410129482,
+        0.2704554791765126
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.11114357775862424,
+        0.2761890205259514,
+        0.24547482531257295,
+        0.28923405550374615
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nominee",
+      "page": 0,
+      "bbox": [
+        0.07851439626062795,
+        0.3021205440152635,
+        0.13726026909533104,
+        0.31378058135150905
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Arin Acharya",
+      "page": 0,
+      "bbox": [
+        0.33990552343244274,
+        0.30187302185886694,
+        0.44189752119391434,
+        0.31488373422880944
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sum insured",
+      "page": 0,
+      "bbox": [
+        0.07850735390048501,
+        0.33026691164747435,
+        0.16092088513606365,
+        0.3419246315595466
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 25,00,000",
+      "page": 0,
+      "bbox": [
+        0.3398523675463815,
+        0.33009761511158997,
+        0.4427770961976108,
+        0.34308272449935134
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium",
+      "page": 0,
+      "bbox": [
+        0.0785003140190729,
+        0.35843181240433114,
+        0.13721080853469492,
+        0.37005877578096436
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 8,200",
+      "page": 0,
+      "bbox": [
+        0.3397992304064799,
+        0.35832541803441786,
+        0.41081853644200034,
+        0.3712717700053444
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Start date",
+      "page": 0,
+      "bbox": [
+        0.07849327661508321,
+        0.3865716966866699,
+        0.142126362336043,
+        0.3981830192448236
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "22/09/2026",
+      "page": 0,
+      "bbox": [
+        0.339746112002823,
+        0.3865221737240996,
+        0.4216950675468076,
+        0.39945087600659973
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End date",
+      "page": 0,
+      "bbox": [
+        0.07848624168720839,
+        0.41470139737997525,
+        0.13722009566254734,
+        0.42630451905586475
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "13/04/2027",
+      "page": 0,
+      "bbox": [
+        0.3396930123255029,
+        0.4147104101950652,
+        0.4216274757246299,
+        0.42763081639109973
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Claims helpline",
+      "page": 0,
+      "bbox": [
+        0.07847920923414183,
+        0.4428099341217663,
+        0.17795477666653164,
+        0.4544349785774285
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 903 9069",
+      "page": 0,
+      "bbox": [
+        0.3396399313646187,
+        0.44287420308963515,
+        0.4488808545567356,
+        0.45581675022035056
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07846690839235602,
+        0.49197608537579446,
+        0.5198814389150453,
+        0.5038712784875264
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07846280979390824,
+        0.5083580784721557,
+        0.5452434693387058,
+        0.5203262779351886
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07835482270425982,
+        0.9412596908854998,
+        0.3098501504809878,
+        0.9524427300660806
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "insurer": [
+      3
+    ],
+    "policy_number": [
+      5
+    ],
+    "policyholder": [
+      7
+    ],
+    "insured": [
+      9,
+      10,
+      11
+    ],
+    "nominee": [
+      13
+    ],
+    "sum_insured": [
+      15
+    ],
+    "premium": [
+      17
+    ],
+    "start_date": [
+      19
+    ],
+    "end_date": [
+      21
+    ],
+    "claim_helpline": [
+      23
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p2",
+  "linked_people": [
+    "p2",
+    "p4",
+    "p3"
+  ],
+  "area": "insurance",
+  "folder": "Kavita Rao/Insurance",
+  "expected_ask": []
+}

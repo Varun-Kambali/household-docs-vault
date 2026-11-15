@@ -1,0 +1,191 @@
+{
+  "doc_id": "degree-5-photo",
+  "base_id": "degree-5",
+  "doc_type": "degree",
+  "person": "Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "degree-5-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "Kiran Rao",
+    "document_date": "2026-08-31",
+    "expiry_date": null,
+    "issuer": "Hill Park College",
+    "roll_number": "RN-09362334"
+  },
+  "printed": {
+    "person_name": "Kiran Rao",
+    "document_date": "31/08/2026",
+    "issuer": "Hill Park College",
+    "roll_number": "RN-09362334"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.1011650294264569,
+        0.0470472530658981,
+        0.301162927026406,
+        0.06780231127359392
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Degree Certificate",
+      "page": 0,
+      "bbox": [
+        0.10044473115604079,
+        0.07836054212967755,
+        0.24745822452822996,
+        0.09349447062663965
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.09855427299982117,
+        0.15010759866514206,
+        0.1387572977477,
+        0.1615820275677205
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3628892452736498,
+        0.15253687812855213,
+        0.44041546572400136,
+        0.1654855879537058
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.09781845016730376,
+        0.17707528596667946,
+        0.12974678558005465,
+        0.18846638232564386
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "31/08/2026",
+      "page": 0,
+      "bbox": [
+        0.362325240949218,
+        0.17930612695403672,
+        0.44449098987395474,
+        0.19224932539567055
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Issuer",
+      "page": 0,
+      "bbox": [
+        0.09708169354083199,
+        0.2040771875827853,
+        0.1381756291537472,
+        0.21552597485868433
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hill Park College",
+      "page": 0,
+      "bbox": [
+        0.36176052616817084,
+        0.2061090863391313,
+        0.4911090839273096,
+        0.21935166558509567
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Roll number",
+      "page": 0,
+      "bbox": [
+        0.09634400134173428,
+        0.23111336866712145,
+        0.17735177280971795,
+        0.242809142937463
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "RN-09362334",
+      "page": 0,
+      "bbox": [
+        0.3611950995872562,
+        0.23294582000160152,
+        0.4634209547401669,
+        0.2459276342963886
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.0950507834056187,
+        0.27850936709666535,
+        0.5406560539232785,
+        0.29204721900400876
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.09461907118066291,
+        0.2943314674678197,
+        0.5656137292084359,
+        0.3078026546500656
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07711897195276943,
+        0.9338993283122488,
+        0.31709071293404245,
+        0.9472359256468906
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "issuer": [
+      7
+    ],
+    "roll_number": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "education",
+  "folder": "Kiran Rao/Education",
+  "expected_ask": []
+}

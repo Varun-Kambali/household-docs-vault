@@ -1,0 +1,372 @@
+{
+  "doc_id": "discharge_summary-1-scan",
+  "base_id": "discharge_summary-1",
+  "doc_type": "discharge_summary",
+  "person": "Kavita R Rao",
+  "variant": "scan",
+  "files": [
+    "discharge_summary-1-scan.pdf"
+  ],
+  "fields": {
+    "patient": "Kavita R Rao",
+    "doctor": "Dr. Abhimanyu Rout",
+    "date": "2026-07-10",
+    "hospital": "Lakeview Multispeciality Clinic",
+    "department": null,
+    "diagnoses": [
+      "Viral fever",
+      "Acute gastritis"
+    ],
+    "procedures": [
+      "Endoscopy"
+    ],
+    "allergies": [
+      "Sulfa drugs"
+    ],
+    "medicines": [
+      {
+        "name": "Amlodipine",
+        "dose": "5 mg",
+        "timing": "0-0-1",
+        "duration": "5 days"
+      },
+      {
+        "name": "Metformin",
+        "dose": "500 mg",
+        "timing": "1-0-0",
+        "duration": "1 month"
+      }
+    ],
+    "tests": null,
+    "next_visit": "2026-12-08",
+    "amount": null
+  },
+  "printed": {
+    "patient": "Kavita R Rao",
+    "date": "10/07/2026",
+    "hospital": "Lakeview Multispeciality Clinic",
+    "doctor": "Dr. Abhimanyu Rout",
+    "diagnoses": "Viral fever\nAcute gastritis",
+    "procedures": "Endoscopy",
+    "allergies": "Sulfa drugs",
+    "medicines": "1. Tab Amlodipine 5 mg  0-0-1  5 days\n2. Tab Metformin 500 mg  1-0-0  1 month",
+    "next_visit": "08/12/2026"
+  },
+  "lines": [
+    {
+      "text": "Cauvery Care Hospital",
+      "page": 0,
+      "bbox": [
+        0.07080603786687191,
+        0.026321739847964758,
+        0.33723362890856257,
+        0.04635363306665298
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Discharge Summary",
+      "page": 0,
+      "bbox": [
+        0.07106540487891863,
+        0.05990364647359376,
+        0.23685457799052825,
+        0.0745443827484155
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.07165735700433974,
+        0.13641253157673774,
+        0.1182907988118486,
+        0.14826343906032055
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita R Rao",
+      "page": 0,
+      "bbox": [
+        0.3375221766264778,
+        0.13605641786300632,
+        0.4400677468404703,
+        0.14928185747009354
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07187902157433783,
+        0.16502760841905303,
+        0.10353404711910716,
+        0.17685228419672086
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "10/07/2026",
+      "page": 0,
+      "bbox": [
+        0.33764015568341804,
+        0.1646810252247912,
+        0.4208106718581653,
+        0.17787360262732355
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hospital",
+      "page": 0,
+      "bbox": [
+        0.0721005132901318,
+        0.1935796621616385,
+        0.12615239305993842,
+        0.20541883931443636
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Lakeview Multispeciality Clinic",
+      "page": 0,
+      "bbox": [
+        0.3377580427279453,
+        0.19308982464599267,
+        0.5805252804815763,
+        0.20644305293475915
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Doctor",
+      "page": 0,
+      "bbox": [
+        0.07232183235383063,
+        0.22214452466098047,
+        0.11639180252480141,
+        0.2339631304717767
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Abhimanyu Rout",
+      "page": 0,
+      "bbox": [
+        0.3378758378676587,
+        0.22173819250067328,
+        0.49837981165142775,
+        0.2349902344593616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Diagnoses",
+      "page": 0,
+      "bbox": [
+        0.07254297896722832,
+        0.2506485252346089,
+        0.14315278039727689,
+        0.2624851836864491
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Viral fever",
+      "page": 0,
+      "bbox": [
+        0.10585049060412696,
+        0.2684253077386413,
+        0.1861396360248038,
+        0.2815719942619602
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Acute gastritis",
+      "page": 0,
+      "bbox": [
+        0.10598914577686423,
+        0.2873895670635552,
+        0.22123981361677875,
+        0.30056475347820033
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Procedures",
+      "page": 0,
+      "bbox": [
+        0.0730307344947283,
+        0.313572669820794,
+        0.14938190663777706,
+        0.3253927348814882
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Endoscopy",
+      "page": 0,
+      "bbox": [
+        0.10630951029779931,
+        0.3313168618486685,
+        0.19570891961335019,
+        0.3444477693138917
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Allergies",
+      "page": 0,
+      "bbox": [
+        0.07337074631761606,
+        0.35745999395744255,
+        0.13061075565623823,
+        0.3692452695289055
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sulfa drugs",
+      "page": 0,
+      "bbox": [
+        0.10662949062734958,
+        0.37516309602645637,
+        0.19781334469706432,
+        0.38827816861244174
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicines on discharge",
+      "page": 0,
+      "bbox": [
+        0.0737103505395352,
+        0.4011785323838803,
+        0.23028638464264128,
+        0.41304524285873145
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Amlodipine 5 mg  0-0-1  5 days",
+      "page": 0,
+      "bbox": [
+        0.10694908745620292,
+        0.41876244249802913,
+        0.40137557340094393,
+        0.43205604594943425
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Metformin 500 mg  1-0-0  1 month",
+      "page": 0,
+      "bbox": [
+        0.10708717288742617,
+        0.4376666005684793,
+        0.42255350330045865,
+        0.4509707767883703
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit",
+      "page": 0,
+      "bbox": [
+        0.07419610199986312,
+        0.46394324615370536,
+        0.1346570148987946,
+        0.4756943638262859
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "08/12/2026",
+      "page": 0,
+      "bbox": [
+        0.33887340103557584,
+        0.4636727101894516,
+        0.42170451041312207,
+        0.4767458424440759
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07458044562208652,
+        0.5131764881668638,
+        0.5211880810460423,
+        0.5252645617183042
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07470844414366438,
+        0.52967070644855,
+        0.5468333602378884,
+        0.5417729999964553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.077943900414805,
+        0.9473585810321461,
+        0.31180544205673477,
+        0.9577800268285596
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      3
+    ],
+    "date": [
+      5
+    ],
+    "hospital": [
+      7
+    ],
+    "doctor": [
+      9
+    ],
+    "diagnoses": [
+      11,
+      12
+    ],
+    "procedures": [
+      14
+    ],
+    "allergies": [
+      16
+    ],
+    "medicines": [
+      18,
+      19
+    ],
+    "next_visit": [
+      21
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "medical",
+  "folder": "Kavita Rao/Medical/Hospital stays",
+  "expected_ask": []
+}

@@ -1,0 +1,276 @@
+{
+  "doc_id": "prescription-10-photo",
+  "base_id": "prescription-10",
+  "doc_type": "prescription",
+  "person": "Kavita R Rao",
+  "variant": "photo",
+  "files": [
+    "prescription-10-photo.jpg"
+  ],
+  "fields": {
+    "hospital": "Lakeview Multispeciality Clinic",
+    "doctor": "Dr. Andrew Ratti",
+    "patient": "Kavita R Rao",
+    "date": "2026-10-07",
+    "medicines": [
+      {
+        "name": "Telmisartan",
+        "dose": "40 mg",
+        "timing": "1-0-0",
+        "duration": "7 days"
+      },
+      {
+        "name": "Cetirizine",
+        "dose": "10 mg",
+        "timing": "1-0-1",
+        "duration": "15 days"
+      },
+      {
+        "name": "Atorvastatin",
+        "dose": "20 mg",
+        "timing": "1-0-1",
+        "duration": "7 days"
+      }
+    ],
+    "next_visit": "2027-01-08"
+  },
+  "printed": {
+    "hospital": "Lakeview Multispeciality Clinic",
+    "doctor": "Dr. Andrew Ratti",
+    "patient": "Kavita R Rao",
+    "date": "07/10/2026",
+    "medicines": "1. Tab Telmisartan 40 mg  1-0-0  7 days\n2. Tab Cetirizine 10 mg  1-0-1  15 days\n3. Tab Atorvastatin 20 mg  1-0-1  7 days",
+    "next_visit": "08/01/2027"
+  },
+  "lines": [
+    {
+      "text": "Lakeview Multispeciality Clinic",
+      "page": 0,
+      "bbox": [
+        0.07935650149731323,
+        0.05031936714047688,
+        0.47362834927630665,
+        0.07133191682242268
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Lakeview Layout, Bengaluru",
+      "page": 0,
+      "bbox": [
+        0.08026241432196556,
+        0.0817289152956002,
+        0.28024259156671827,
+        0.09415070651300453
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Andrew Ratti",
+      "page": 0,
+      "bbox": [
+        0.0820108811493364,
+        0.14232383250517608,
+        0.24448583333487783,
+        0.15860747228089922
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MBBS, MD (General Medicine)",
+      "page": 0,
+      "bbox": [
+        0.0825940986957251,
+        0.16248139909820924,
+        0.27934364607543755,
+        0.17391632926481804
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.08376112729776869,
+        0.2032139162337884,
+        0.12874948836775213,
+        0.21445871517044818
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita R Rao",
+      "page": 0,
+      "bbox": [
+        0.17933801789509746,
+        0.20290423186070095,
+        0.2776850817284007,
+        0.21548157438804055
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.6218084150947899,
+        0.20212562413276647,
+        0.6520062800276406,
+        0.2132505638676635
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "07/10/2026",
+      "page": 0,
+      "bbox": [
+        0.6845447303895625,
+        0.2018942687680591,
+        0.763285395327241,
+        0.21433787767384685
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Age/Sex: 35 / F",
+      "page": 0,
+      "bbox": [
+        0.08447470128927873,
+        0.22784976522060885,
+        0.18364103500463805,
+        0.23924816211304148
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rx",
+      "page": 0,
+      "bbox": [
+        0.08590273736086773,
+        0.277549420923736,
+        0.131545872432283,
+        0.3049899439464191
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicine, dose, timing, duration",
+      "page": 0,
+      "bbox": [
+        0.16601415209444845,
+        0.2902746312748361,
+        0.36809358879770876,
+        0.30211210491736806
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Telmisartan 40 mg  1-0-0  7 days",
+      "page": 0,
+      "bbox": [
+        0.16681086044013693,
+        0.3168295532827305,
+        0.47743791795033086,
+        0.33164370478073524
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Cetirizine 10 mg  1-0-1  15 days",
+      "page": 0,
+      "bbox": [
+        0.16767436779283726,
+        0.346044898437894,
+        0.46968877836982237,
+        0.36096428918500495
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Tab Atorvastatin 20 mg  1-0-1  7 days",
+      "page": 0,
+      "bbox": [
+        0.16853829835914078,
+        0.3751966054870075,
+        0.480299278949539,
+        0.3902992455404361
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+      "page": 0,
+      "bbox": [
+        0.09058460541402868,
+        0.4381215596138207,
+        0.4822109844673709,
+        0.4527494462157743
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit: 08/01/2027",
+      "page": 0,
+      "bbox": [
+        0.09149644738502494,
+        0.470910990160101,
+        0.2683668579118045,
+        0.48567219280002305
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Signature",
+      "page": 0,
+      "bbox": [
+        0.8584033025701028,
+        0.8572907032790394,
+        0.9191406882865477,
+        0.8691586931740362
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.10483820784759806,
+        0.9324429136633601,
+        0.33267288428180913,
+        0.9454191156139253
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "hospital": [
+      0
+    ],
+    "doctor": [
+      2
+    ],
+    "patient": [
+      5
+    ],
+    "date": [
+      7
+    ],
+    "medicines": [
+      11,
+      12,
+      13
+    ],
+    "next_visit": [
+      15
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "medical",
+  "folder": "Kavita Rao/Medical/Reports",
+  "expected_ask": []
+}

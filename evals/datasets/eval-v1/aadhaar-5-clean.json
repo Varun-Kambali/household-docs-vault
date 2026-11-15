@@ -1,0 +1,190 @@
+{
+  "doc_id": "aadhaar-5-clean",
+  "base_id": "aadhaar-5",
+  "doc_type": "aadhaar",
+  "person": "KIRAN RAO",
+  "variant": "clean",
+  "files": [
+    "aadhaar-5-clean.pdf"
+  ],
+  "fields": {
+    "holder": "KIRAN RAO",
+    "date_of_birth": "1996-01-04",
+    "address": "No. 135, 16th Cross, Rose Garden Extension, Kochi, Kerala - 682715",
+    "number": null
+  },
+  "printed": {
+    "holder": "KIRAN RAO",
+    "date_of_birth": "04/01/1996",
+    "address": "No. 135, 16th Cross\nRose Garden Extension\nKochi, Kerala - 682715"
+  },
+  "lines": [
+    {
+      "text": "Government of India",
+      "page": 0,
+      "bbox": [
+        0.36224333333333336,
+        0.09473684210526316,
+        0.6377566666666666,
+        0.14394736842105263
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ಭಾರತ ಸರ್ಕಾರ",
+      "page": 0,
+      "bbox": [
+        0.42811,
+        0.15789473684210525,
+        0.57189,
+        0.20763157894736844
+      ],
+      "lang": "kn"
+    },
+    {
+      "text": "PHOTO",
+      "page": 0,
+      "bbox": [
+        0.10907000000000001,
+        0.4473684210526316,
+        0.17426333333333335,
+        0.4792105263157895
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KIRAN RAO",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.2894736842105263,
+        0.41665,
+        0.33289473684210524
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ಕಿರಣ್ ರಾವ್",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.3526315789473684,
+        0.3968933333333333,
+        0.4023684210526316
+      ],
+      "lang": "kn"
+    },
+    {
+      "text": "DOB: 04/01/1996",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.4368421052631579,
+        0.42954,
+        0.47157894736842104
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Male",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.48947368421052634,
+        0.31834,
+        0.5242105263157895
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "No. 135, 16th Cross",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.5631578947368421,
+        0.4232166666666667,
+        0.5921052631578947
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rose Garden Extension",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.6026315789473684,
+        0.4519333333333333,
+        0.631578947368421
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kochi, Kerala - 682715",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.6421052631578947,
+        0.4445333333333334,
+        0.6710526315789473
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Address:",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.5263157894736842,
+        0.33419000000000004,
+        0.5523684210526316
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.686835,
+        0.3157894736842105,
+        0.913165,
+        0.3910526315789474
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only. Not a real Aadhaar.",
+      "page": 0,
+      "bbox": [
+        0.32176666666666665,
+        0.9263157894736842,
+        0.6782333333333334,
+        0.9494736842105264
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "holder": [
+      3
+    ],
+    "date_of_birth": [
+      5
+    ],
+    "address": [
+      7,
+      8,
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "identity",
+  "folder": "Kiran Rao/Identity",
+  "expected_ask": [
+    "missing_required"
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "doc_id": "offer_letter-5-scan",
+  "base_id": "offer_letter-5",
+  "doc_type": "offer_letter",
+  "person": "R K Rao",
+  "variant": "scan",
+  "files": [
+    "offer_letter-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "R K Rao",
+    "document_date": "2025-10-09",
+    "expiry_date": null,
+    "employer": "Northstar Software Private Limited",
+    "designation": "Senior Analyst"
+  },
+  "printed": {
+    "person_name": "R K Rao",
+    "document_date": "09/10/2025",
+    "employer": "Northstar Software Private Limited",
+    "designation": "Senior Analyst"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.07358506428560811,
+        0.026244158166309862,
+        0.27410736862207413,
+        0.04592971968149976
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Offer Letter",
+      "page": 0,
+      "bbox": [
+        0.07345711905039091,
+        0.059447723786496605,
+        0.16572276172152606,
+        0.07381038666272197
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07312225005118277,
+        0.13508364284330343,
+        0.11292469211283374,
+        0.14678200638274047
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "R K Rao",
+      "page": 0,
+      "bbox": [
+        0.33840116888253974,
+        0.13499293847252708,
+        0.4030861727759286,
+        0.14801724725429052
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07299227169452199,
+        0.16341847711756133,
+        0.10451689332571454,
+        0.17510571277691434
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "09/10/2025",
+      "page": 0,
+      "bbox": [
+        0.3382322154669233,
+        0.1633710596628637,
+        0.42143718180560763,
+        0.1763838080052515
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.07286233127426388,
+        0.19174203502997664,
+        0.13584520140195702,
+        0.20342621849892492
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Northstar Software Private Limited",
+      "page": 0,
+      "bbox": [
+        0.3380633114381592,
+        0.19174556604783424,
+        0.6116368990736377,
+        0.20476613612164912
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.07273242877380229,
+        0.22005261963453493,
+        0.15146181354399524,
+        0.23174747549948738
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Senior Analyst",
+      "page": 0,
+      "bbox": [
+        0.33789445677459645,
+        0.22009934505919104,
+        0.45427851796755153,
+        0.23312122987780606
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.0725051905925912,
+        0.2695762668032825,
+        0.5206240307730253,
+        0.2814827037208124
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07242947031205821,
+        0.28607853046261306,
+        0.5462846998709361,
+        0.2980415543267648
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06941709809643115,
+        0.9438739932237411,
+        0.30436881818956124,
+        0.9552087073985188
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "employer": [
+      7
+    ],
+    "designation": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "work",
+  "folder": "Ravi Kumar Rao/Work",
+  "expected_ask": []
+}

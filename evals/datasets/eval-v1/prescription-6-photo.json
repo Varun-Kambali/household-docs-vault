@@ -1,0 +1,276 @@
+{
+  "doc_id": "prescription-6-photo",
+  "base_id": "prescription-6",
+  "doc_type": "prescription",
+  "person": "KAVITA RAO",
+  "variant": "photo",
+  "files": [
+    "prescription-6-photo.jpg"
+  ],
+  "fields": {
+    "hospital": "Cauvery Care Hospital",
+    "doctor": "Dr. Bakhshi More",
+    "patient": "KAVITA RAO",
+    "date": "2026-10-21",
+    "medicines": [
+      {
+        "name": "Vitamin D3",
+        "dose": "60000 IU",
+        "timing": "1-0-1",
+        "duration": "7 days"
+      },
+      {
+        "name": "Metformin",
+        "dose": "850 mg",
+        "timing": "1-1-1",
+        "duration": "3 months"
+      },
+      {
+        "name": "Paracetamol",
+        "dose": "650 mg",
+        "timing": "1-1-1",
+        "duration": "15 days"
+      }
+    ],
+    "next_visit": "2027-01-23"
+  },
+  "printed": {
+    "hospital": "Cauvery Care Hospital",
+    "doctor": "Dr. Bakhshi More",
+    "patient": "KAVITA RAO",
+    "date": "21/10/2026",
+    "medicines": "1. Tab Vitamin D3 60000 IU  1-0-1  7 days\n2. Tab Metformin 850 mg  1-1-1  3 months\n3. Tab Paracetamol 650 mg  1-1-1  15 days",
+    "next_visit": "23/01/2027"
+  },
+  "lines": [
+    {
+      "text": "Cauvery Care Hospital",
+      "page": 0,
+      "bbox": [
+        0.11193666043898332,
+        0.03456253604014368,
+        0.3984498585003661,
+        0.06201755662292302
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Green Park Colony, Hyderabad",
+      "page": 0,
+      "bbox": [
+        0.11190488629888266,
+        0.06927848138448695,
+        0.3318348370280392,
+        0.08628072931237389
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Bakhshi More",
+      "page": 0,
+      "bbox": [
+        0.11181562841296258,
+        0.1345456380183277,
+        0.27979836946605735,
+        0.15443928507864624
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MBBS, MD (General Medicine)",
+      "page": 0,
+      "bbox": [
+        0.11179453595586425,
+        0.15545140749814876,
+        0.3056637934038815,
+        0.17054577694281783
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.11173887344310446,
+        0.20062106264560306,
+        0.15561239089743056,
+        0.21305044127496334
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KAVITA RAO",
+      "page": 0,
+      "bbox": [
+        0.20560757651261843,
+        0.1980667936939596,
+        0.30313383557519724,
+        0.21272326111019724
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.644158799630284,
+        0.19163995337887624,
+        0.6743150956317734,
+        0.20384385483370865
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "21/10/2026",
+      "page": 0,
+      "bbox": [
+        0.7068265793862057,
+        0.1897102196994045,
+        0.7857665933512475,
+        0.20405745745983786
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Age/Sex: 39 / M",
+      "page": 0,
+      "bbox": [
+        0.11170497874000977,
+        0.22556601309902194,
+        0.21183682898349535,
+        0.23893290518554716
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rx",
+      "page": 0,
+      "bbox": [
+        0.11161559955760715,
+        0.2781602640106996,
+        0.15548763251994696,
+        0.3071840846228974
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicine, dose, timing, duration",
+      "page": 0,
+      "bbox": [
+        0.189473505712652,
+        0.288212830002718,
+        0.3875944285357036,
+        0.30316826677273706
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Vitamin D3 60000 IU  1-0-1  7 days",
+      "page": 0,
+      "bbox": [
+        0.18930875389436735,
+        0.31412995031835933,
+        0.5101791679664052,
+        0.3336971495080937
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Metformin 850 mg  1-1-1  3 months",
+      "page": 0,
+      "bbox": [
+        0.1891457809497634,
+        0.3444016811844199,
+        0.5094886562053679,
+        0.3638964029466978
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Tab Paracetamol 650 mg  1-1-1  15 days",
+      "page": 0,
+      "bbox": [
+        0.18898332475845336,
+        0.3744155687161724,
+        0.5183325851022006,
+        0.3939999008368831
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+      "page": 0,
+      "bbox": [
+        0.11141737547943656,
+        0.4395013888660179,
+        0.49219675081148206,
+        0.45855073135599766
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit: 23/01/2027",
+      "page": 0,
+      "bbox": [
+        0.1113737028996312,
+        0.47518168700115393,
+        0.28217685803796333,
+        0.4918997171115863
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Signature",
+      "page": 0,
+      "bbox": [
+        0.8312898581535565,
+        0.8560079198986194,
+        0.8900920272789452,
+        0.8678363669135347
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.11078193753154134,
+        0.9307782164739604,
+        0.3250813255519328,
+        0.9437799339208197
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "hospital": [
+      0
+    ],
+    "doctor": [
+      2
+    ],
+    "patient": [
+      5
+    ],
+    "date": [
+      7
+    ],
+    "medicines": [
+      11,
+      12,
+      13
+    ],
+    "next_visit": [
+      15
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "medical",
+  "folder": "Kavita Rao/Medical/Reports",
+  "expected_ask": []
+}

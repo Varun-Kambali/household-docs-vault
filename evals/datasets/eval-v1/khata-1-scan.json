@@ -1,0 +1,164 @@
+{
+  "doc_id": "khata-1-scan",
+  "base_id": "khata-1",
+  "doc_type": "khata",
+  "person": "SURESH N RAO",
+  "variant": "scan",
+  "files": [
+    "khata-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "SURESH N RAO",
+    "document_date": "2026-01-07",
+    "expiry_date": null,
+    "khata_number": "KH-22764377"
+  },
+  "printed": {
+    "person_name": "SURESH N RAO",
+    "document_date": "07/01/2026",
+    "khata_number": "KH-22764377"
+  },
+  "lines": [
+    {
+      "text": "Municipal Corporation",
+      "page": 0,
+      "bbox": [
+        0.06974270300369038,
+        0.02616743427913453,
+        0.3325806602029639,
+        0.046803798779473715
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Khata Certificate",
+      "page": 0,
+      "bbox": [
+        0.06986714798941561,
+        0.05905484172293276,
+        0.20414830956558935,
+        0.07391032564144208
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07015163614605743,
+        0.13423728371439497,
+        0.10982247248285648,
+        0.1460585843743195
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SURESH N RAO",
+      "page": 0,
+      "bbox": [
+        0.33430230296935587,
+        0.13550415490761897,
+        0.4609434739550048,
+        0.14903562396785222
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07025833444325894,
+        0.1624347265697733,
+        0.10168405546905555,
+        0.17421751083094345
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "07/01/2026",
+      "page": 0,
+      "bbox": [
+        0.33441929625986755,
+        0.1637027903925694,
+        0.4170951353893743,
+        0.1770246783310149
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Khata number",
+      "page": 0,
+      "bbox": [
+        0.07036504105385928,
+        0.19063436642917805,
+        0.16374146956712432,
+        0.20271595637679082
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KH-22764377",
+      "page": 0,
+      "bbox": [
+        0.3345362986662821,
+        0.19190362306355555,
+        0.4373766828324168,
+        0.20532379978886167
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07055179762944842,
+        0.23998902349644172,
+        0.5166428977034588,
+        0.25377088734998066
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.0706140554806027,
+        0.25644207144814724,
+        0.5423088942434879,
+        0.2703489125175128
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.0732136208187464,
+        0.9434361190916448,
+        0.30842706208690374,
+        0.954955538113503
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "khata_number": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "home",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "property",
+  "folder": "Home/Property",
+  "expected_ask": []
+}

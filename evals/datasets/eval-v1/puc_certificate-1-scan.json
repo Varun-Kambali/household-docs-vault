@@ -1,0 +1,217 @@
+{
+  "doc_id": "puc_certificate-1-scan",
+  "base_id": "puc_certificate-1",
+  "doc_type": "puc_certificate",
+  "person": "SURESH N RAO",
+  "variant": "scan",
+  "files": [
+    "puc_certificate-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "SURESH N RAO",
+    "document_date": "2026-03-09",
+    "expiry_date": "2027-08-30",
+    "registration_number": "KA-37417055",
+    "certificate_number": "CN-17118576"
+  },
+  "printed": {
+    "person_name": "SURESH N RAO",
+    "document_date": "09/03/2026",
+    "registration_number": "KA-37417055",
+    "certificate_number": "CN-17118576",
+    "expiry_date": "30/08/2027"
+  },
+  "lines": [
+    {
+      "text": "Authorised Testing Centre",
+      "page": 0,
+      "bbox": [
+        0.07576846984493688,
+        0.029850171690858403,
+        0.38734819145165955,
+        0.05005383827204824
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Pollution Under Control Certificate",
+      "page": 0,
+      "bbox": [
+        0.07588014410161116,
+        0.06298690703285308,
+        0.3508669193117966,
+        0.07790809429749591
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07613516418772148,
+        0.1390233102642342,
+        0.11584416247570604,
+        0.15078605305779283
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SURESH N RAO",
+      "page": 0,
+      "bbox": [
+        0.34056014707355436,
+        0.13818895289178232,
+        0.4672432442984692,
+        0.151452850780866
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07623071239634685,
+        0.1673258516167067,
+        0.10767707719629244,
+        0.17906384396082822
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "09/03/2026",
+      "page": 0,
+      "bbox": [
+        0.3405921027661706,
+        0.1665717182495997,
+        0.4232611812665478,
+        0.17972613731483472
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.07632621466184923,
+        0.19534882999408845,
+        0.2102071167944223,
+        0.20732803920137582
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-37417055",
+      "page": 0,
+      "bbox": [
+        0.34062404309549543,
+        0.19478794023176552,
+        0.4434353604697881,
+        0.2079858324397123
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate number",
+      "page": 0,
+      "bbox": [
+        0.07642167101735739,
+        0.22363307679651642,
+        0.1978756599965334,
+        0.23557864858205504
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "CN-17118576",
+      "page": 0,
+      "bbox": [
+        0.34065596807260534,
+        0.2230387700433233,
+        0.4434425759682155,
+        0.23623194595354666
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Valid till",
+      "page": 0,
+      "bbox": [
+        0.07651708149596827,
+        0.2520448775618002,
+        0.12774857916082347,
+        0.2638156818960638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "30/08/2027",
+      "page": 0,
+      "bbox": [
+        0.3406878777085663,
+        0.2513251044380634,
+        0.4232973622225534,
+        0.26446448764497016
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.076683939541689,
+        0.30046412985888293,
+        0.5224489959213092,
+        0.3131978522076515
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07673952772158092,
+        0.31685192472024054,
+        0.5480070299489319,
+        0.3296493520879714
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07885610989518957,
+        0.9438937184194267,
+        0.31241654918084805,
+        0.9547802669993999
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "registration_number": [
+      7
+    ],
+    "certificate_number": [
+      9
+    ],
+    "expiry_date": [
+      11
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "vehicle",
+  "folder": "Suresh Rao/Vehicle",
+  "expected_ask": []
+}

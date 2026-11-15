@@ -1,0 +1,165 @@
+{
+  "doc_id": "vehicle_service_record-5-scan",
+  "base_id": "vehicle_service_record-5",
+  "doc_type": "vehicle_service_record",
+  "person": "Master Kiran Rao",
+  "variant": "scan",
+  "files": [
+    "vehicle_service_record-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "2026-05-08",
+    "expiry_date": null,
+    "registration_number": "KA-83115713",
+    "odometer_km": null
+  },
+  "printed": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "08/05/2026",
+    "registration_number": "KA-83115713"
+  },
+  "lines": [
+    {
+      "text": "Greenfield Motors Service Centre",
+      "page": 0,
+      "bbox": [
+        0.07833314775653259,
+        0.030119718503822203,
+        0.46681490803339637,
+        0.049284995577837255
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Vehicle Service Invoice",
+      "page": 0,
+      "bbox": [
+        0.07822035954438133,
+        0.06248280419577196,
+        0.264194700200853,
+        0.07653801339931023
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07792442840956282,
+        0.13661174437664278,
+        0.11726492648508237,
+        0.1481152439882942
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3400006572454721,
+        0.13672103973600694,
+        0.47482981916815925,
+        0.14954951937540817
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07780927724059049,
+        0.16446626468139908,
+        0.10898965692358291,
+        0.17598045613017263
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "08/05/2026",
+      "page": 0,
+      "bbox": [
+        0.3400299653737921,
+        0.1645891326507146,
+        0.42211103560708235,
+        0.17741268209337238
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.07769399906306872,
+        0.19235150076294885,
+        0.21055237070487376,
+        0.20393506083122115
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-83115713",
+      "page": 0,
+      "bbox": [
+        0.34005930583650024,
+        0.19248797122486883,
+        0.44222541612411936,
+        0.20534079056983287
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07749195600544022,
+        0.2412247267073429,
+        0.5210367919133684,
+        0.25303892616820794
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07742452154483177,
+        0.25753678762469834,
+        0.5465901887293814,
+        0.2693887779253074
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07457775587979763,
+        0.947470266969687,
+        0.31137402185504215,
+        0.9584689180646019
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "registration_number": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "vehicle",
+  "folder": "Kiran Rao/Vehicle",
+  "expected_ask": []
+}

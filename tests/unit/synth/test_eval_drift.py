@@ -5,9 +5,10 @@ only truth."""
 import json
 from pathlib import Path
 
+import pytest
 from vault_synth.cli import generate
 from vault_synth.model import SynthDoc
-from vault_synth.sets import LOCKABLE, load_set
+from vault_synth.sets import LOCKABLE, load_set, locked_password
 
 from household_vault.doctypes import DocType
 from tests.conftest import EVAL_V1, group_by_base
@@ -65,3 +66,17 @@ def test_the_split_guarantees_hold_in_the_committed_set() -> None:
         pan = next(d for d in clean if d.doc_id == f"pan-{base}-clean")
         assert pan.split == split and pan.fields["number"] is None
         assert "missing_required" in pan.expected_ask
+
+
+def test_locked_pdfs_open_with_the_derived_password_and_truth_stores_none() -> None:
+    from household_vault.reading.render import LockedPdfError, page_count
+
+    locked = [d for d in load_set(EVAL_V1) if d.variant == "locked"]
+    assert locked
+    for d in locked:
+        data = (EVAL_V1 / d.files[0]).read_bytes()
+        with pytest.raises(LockedPdfError):
+            page_count(data)
+        assert page_count(data, password=locked_password(d.base_id)) == 1, d.doc_id
+    for f in EVAL_V1.glob("*.json"):
+        assert '"password"' not in f.read_text(), f.name

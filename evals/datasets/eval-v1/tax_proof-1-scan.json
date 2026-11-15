@@ -1,0 +1,191 @@
+{
+  "doc_id": "tax_proof-1-scan",
+  "base_id": "tax_proof-1",
+  "doc_type": "tax_proof",
+  "person": "Mrs Kavita Rao",
+  "variant": "scan",
+  "files": [
+    "tax_proof-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Mrs Kavita Rao",
+    "document_date": "2025-12-29",
+    "expiry_date": null,
+    "section": "24(b)",
+    "amount": "12500"
+  },
+  "printed": {
+    "person_name": "Mrs Kavita Rao",
+    "document_date": "29/12/2025",
+    "section": "24(b)",
+    "amount": "Rs. 12,500"
+  },
+  "lines": [
+    {
+      "text": "Investment Declaration",
+      "page": 0,
+      "bbox": [
+        0.07764956118735043,
+        0.030595207004375798,
+        0.34940321581019784,
+        0.05042785446563195
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Investment Proof",
+      "page": 0,
+      "bbox": [
+        0.07765036650394398,
+        0.06369734665100088,
+        0.21462110347428412,
+        0.07815462936164663
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07765220690518458,
+        0.13904025672350287,
+        0.11720188552766325,
+        0.15074937949111084
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mrs Kavita Rao",
+      "page": 0,
+      "bbox": [
+        0.341056009936323,
+        0.13833842105867977,
+        0.4598189811028882,
+        0.1514889613728759
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07765289694003123,
+        0.1672423816661477,
+        0.10897186858540635,
+        0.17893691069034348
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "29/12/2025",
+      "page": 0,
+      "bbox": [
+        0.34104467679838996,
+        0.16656504068857741,
+        0.42331990042887935,
+        0.17964840405252017
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Section",
+      "page": 0,
+      "bbox": [
+        0.07765358691182665,
+        0.19538407778304734,
+        0.12710285631166895,
+        0.20712186633102367
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "24(b)",
+      "page": 0,
+      "bbox": [
+        0.34103334469496066,
+        0.19481154484824315,
+        0.38032032060789467,
+        0.20780527630087944
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Amount",
+      "page": 0,
+      "bbox": [
+        0.07765427682057946,
+        0.223558375335295,
+        0.12874673292760092,
+        0.2353042467661372
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 12,500",
+      "page": 0,
+      "bbox": [
+        0.34102201362589374,
+        0.22286545904725633,
+        0.42144908736755154,
+        0.23595957846988647
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07765548400922666,
+        0.27185971508639356,
+        0.5219655095185206,
+        0.2846172170006759
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07765588636255229,
+        0.28820218570467176,
+        0.5473997606959123,
+        0.3010531217420924
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07767196293122942,
+        0.9449828259959705,
+        0.31164114149200445,
+        0.9564832188659635
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "section": [
+      7
+    ],
+    "amount": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "tax",
+  "folder": "Kavita Rao/Tax",
+  "expected_ask": []
+}

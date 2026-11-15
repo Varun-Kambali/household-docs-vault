@@ -40,6 +40,11 @@ def split_of(n: int) -> Split:
     return "train"
 
 
+def locked_password(base_id: str) -> str:
+    """The password of a base's locked PDF. Derived, never stored in the truth files."""
+    return f"pw-{base_id}"
+
+
 def lowest_base(split: str, count: int) -> int | None:
     """The lowest base number in the split among 1..count (None when the split is empty)."""
     return next((n for n in range(1, count + 1) if split_of(n) == split), None)

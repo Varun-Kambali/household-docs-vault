@@ -1,0 +1,191 @@
+{
+  "doc_id": "form_16-1-photo",
+  "base_id": "form_16-1",
+  "doc_type": "form_16",
+  "person": "KIRAN RAO",
+  "variant": "photo",
+  "files": [
+    "form_16-1-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "KIRAN RAO",
+    "document_date": "2025-12-07",
+    "expiry_date": null,
+    "employer": "Northstar Software Private Limited",
+    "assessment_year": "2026-27"
+  },
+  "printed": {
+    "person_name": "KIRAN RAO",
+    "document_date": "07/12/2025",
+    "employer": "Northstar Software Private Limited",
+    "assessment_year": "2026-27"
+  },
+  "lines": [
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.10745399904234601,
+        0.05306019993758069,
+        0.21437495918976524,
+        0.07045420855424558
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Form No. 16",
+      "page": 0,
+      "bbox": [
+        0.10636852105245083,
+        0.08255770231558025,
+        0.2020374201940592,
+        0.09537590557322033
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.10351081673241035,
+        0.15041198610204876,
+        0.14148354850157252,
+        0.16098648625458625
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KIRAN RAO",
+      "page": 0,
+      "bbox": [
+        0.35332613342314295,
+        0.15017272894229278,
+        0.44188091109559513,
+        0.16193977889061642
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.10239504797718968,
+        0.17599827676673024,
+        0.1326092217997034,
+        0.18660363475479025
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "07/12/2025",
+      "page": 0,
+      "bbox": [
+        0.35258816166978185,
+        0.1757081660938618,
+        0.4309599300566261,
+        0.18751605179960598
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.10127591028359015,
+        0.20162132024603147,
+        0.16130889990423916,
+        0.21229813135632475
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Northstar Software Private Limited",
+      "page": 0,
+      "bbox": [
+        0.3518479653793982,
+        0.2011072876877277,
+        0.6087520876427271,
+        0.21316942165129654
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Assessment year",
+      "page": 0,
+      "bbox": [
+        0.10015338837034539,
+        0.22728626308116956,
+        0.20892608991950348,
+        0.23807032690470972
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2026-27",
+      "page": 0,
+      "bbox": [
+        0.35110553447836534,
+        0.22702121532434003,
+        0.40884248085130764,
+        0.23890023757263879
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.09818078544948353,
+        0.2719685653734795,
+        0.522740417139325,
+        0.2833596950817747
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.09752092318473886,
+        0.28701249651256977,
+        0.546735398751888,
+        0.29850959916947534
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07018920160360873,
+        0.9143812995244696,
+        0.30277542998220897,
+        0.9260238284701339
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "employer": [
+      7
+    ],
+    "assessment_year": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "tax",
+  "folder": "Kiran Rao/Tax",
+  "expected_ask": []
+}

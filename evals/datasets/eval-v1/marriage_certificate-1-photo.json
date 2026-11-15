@@ -1,0 +1,194 @@
+{
+  "doc_id": "marriage_certificate-1-photo",
+  "base_id": "marriage_certificate-1",
+  "doc_type": "marriage_certificate",
+  "person": "Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "marriage_certificate-1-photo.jpg"
+  ],
+  "fields": {
+    "holder": null,
+    "number": "ZZP4204421",
+    "date_of_birth": null,
+    "issue_date": "2025-10-09",
+    "expiry_date": null,
+    "address": null,
+    "parties": [
+      "Kiran Rao",
+      "S N Rao"
+    ]
+  },
+  "printed": {
+    "parties": "Kiran Rao\nS N Rao",
+    "number": "ZZP4204421",
+    "issue_date": "09/10/2025"
+  },
+  "lines": [
+    {
+      "text": "Office of the Registrar of Marriages",
+      "page": 0,
+      "bbox": [
+        0.07571474148930295,
+        0.028754053369419368,
+        0.48220235002626044,
+        0.0576546694375085
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Registration of Marriage",
+      "page": 0,
+      "bbox": [
+        0.07627570423507903,
+        0.06099958858021391,
+        0.37304787661436667,
+        0.0817894744499779
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Parties",
+      "page": 0,
+      "bbox": [
+        0.07755915827526183,
+        0.13477572212165864,
+        0.12392059062472621,
+        0.1471083890932382
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.11084631322604847,
+        0.15272367768546877,
+        0.18857032085080283,
+        0.1668608793440132
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "S N Rao",
+      "page": 0,
+      "bbox": [
+        0.11117265428994937,
+        0.17116070462641303,
+        0.17436214415164916,
+        0.18497320430767525
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Number",
+      "page": 0,
+      "bbox": [
+        0.07862334079946542,
+        0.1959475830220561,
+        0.13158184571274462,
+        0.20827143367662704
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ZZP4204421",
+      "page": 0,
+      "bbox": [
+        0.3397688158793495,
+        0.20049223492576787,
+        0.43280958081851834,
+        0.21460056098934094
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of issue",
+      "page": 0,
+      "bbox": [
+        0.07910562938513345,
+        0.2236707316411468,
+        0.16577441103173912,
+        0.23645605961330687
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "09/10/2025",
+      "page": 0,
+      "bbox": [
+        0.3403110063473608,
+        0.22787555821337432,
+        0.42094596296610204,
+        0.24167680478981043
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07995022707814907,
+        0.272220309762263,
+        0.5176524126035931,
+        0.28947755767903066
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.0802319274084836,
+        0.28841314607642426,
+        0.5425502075501192,
+        0.30564818045250663
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.39146630653011977,
+        0.856542670609319,
+        0.6257833613624505,
+        0.895333966383217
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.09146735143272916,
+        0.9301889360296969,
+        0.3256413269282023,
+        0.9445554465563263
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "parties": [
+      3,
+      4
+    ],
+    "number": [
+      6
+    ],
+    "issue_date": [
+      8
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3",
+    "p4"
+  ],
+  "area": "identity",
+  "folder": "Kiran Rao/Identity",
+  "expected_ask": []
+}

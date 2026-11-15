@@ -1,0 +1,265 @@
+{
+  "doc_id": "scan_report-1-photo",
+  "base_id": "scan_report-1",
+  "doc_type": "scan_report",
+  "person": "Master Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "scan_report-1-photo.jpg"
+  ],
+  "fields": {
+    "patient": "Master Kiran Rao",
+    "doctor": "Dr. Naksh Salvi",
+    "date": "2026-04-28",
+    "hospital": "Sunrise Family Hospital",
+    "department": "Orthopaedics",
+    "diagnoses": [
+      "Hypertension",
+      "Acute gastritis"
+    ],
+    "procedures": null,
+    "allergies": null,
+    "medicines": null,
+    "tests": null,
+    "next_visit": null,
+    "amount": null
+  },
+  "printed": {
+    "patient": "Master Kiran Rao",
+    "date": "28/04/2026",
+    "hospital": "Sunrise Family Hospital",
+    "doctor": "Dr. Naksh Salvi",
+    "department": "Orthopaedics",
+    "diagnoses": "Hypertension\nAcute gastritis"
+  },
+  "lines": [
+    {
+      "text": "Lakeview Multispeciality Clinic",
+      "page": 0,
+      "bbox": [
+        0.10779341612942252,
+        0.034099469957834805,
+        0.4606606943335308,
+        0.05393780034125583
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Radiology Report",
+      "page": 0,
+      "bbox": [
+        0.10692771085740496,
+        0.06717473436984141,
+        0.2441474653313743,
+        0.08154450487602945
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.1046650977027954,
+        0.1426166207744796,
+        0.15010682239842016,
+        0.15426943952854677
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3613813085397741,
+        0.14260127255730382,
+        0.49326497969926586,
+        0.15551418710998327
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.10378811024673222,
+        0.1708428071510562,
+        0.13472270220653607,
+        0.18249225360619925
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "28/04/2026",
+      "page": 0,
+      "bbox": [
+        0.3603686191895151,
+        0.17073035921418514,
+        0.44080137242061745,
+        0.18365287073726816
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hospital",
+      "page": 0,
+      "bbox": [
+        0.10291206996323782,
+        0.1990229061133301,
+        0.15551934843623466,
+        0.21068458620418584
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sunrise Family Hospital",
+      "page": 0,
+      "bbox": [
+        0.359357020341285,
+        0.1987572591160814,
+        0.5406916441083364,
+        0.2117612535703625
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Doctor",
+      "page": 0,
+      "bbox": [
+        0.10203697531867857,
+        0.2271903115782122,
+        0.14497813097524878,
+        0.23884648667721298
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Naksh Salvi",
+      "page": 0,
+      "bbox": [
+        0.35834651023459096,
+        0.2268564554688703,
+        0.4749960628464953,
+        0.23983938452648268
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Department",
+      "page": 0,
+      "bbox": [
+        0.10116282478272993,
+        0.25527682285863856,
+        0.17698614336654592,
+        0.2669780042734929
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Orthopaedics",
+      "page": 0,
+      "bbox": [
+        0.35733708711272794,
+        0.25489867133636795,
+        0.4606232518451895,
+        0.26788731241760666
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Diagnoses",
+      "page": 0,
+      "bbox": [
+        0.10028961682836762,
+        0.2833782718813911,
+        0.16885937937393516,
+        0.29507918813503103
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hypertension",
+      "page": 0,
+      "bbox": [
+        0.13178582150842663,
+        0.30079736133774704,
+        0.23456098545036985,
+        0.31384919420300755
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Acute gastritis",
+      "page": 0,
+      "bbox": [
+        0.13119332073616308,
+        0.3194633197959506,
+        0.24282481064819103,
+        0.3325461285161366
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.09771188074823378,
+        0.365362025626764,
+        0.5289698508250388,
+        0.37803472601404775
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.09720456346232419,
+        0.38154690822743187,
+        0.5529160783617915,
+        0.3943609816972016
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07993406490358251,
+        0.9380491377827811,
+        0.30529463094378917,
+        0.9501523632977631
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      3
+    ],
+    "date": [
+      5
+    ],
+    "hospital": [
+      7
+    ],
+    "doctor": [
+      9
+    ],
+    "department": [
+      11
+    ],
+    "diagnoses": [
+      13,
+      14
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "medical",
+  "folder": "Kiran Rao/Medical/Scans",
+  "expected_ask": []
+}

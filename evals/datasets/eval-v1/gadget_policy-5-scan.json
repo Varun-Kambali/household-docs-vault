@@ -1,0 +1,304 @@
+{
+  "doc_id": "gadget_policy-5-scan",
+  "base_id": "gadget_policy-5",
+  "doc_type": "gadget_policy",
+  "person": "SURESH N RAO",
+  "variant": "scan",
+  "files": [
+    "gadget_policy-5-scan.pdf"
+  ],
+  "fields": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "product": "Protect Plus",
+    "policy_number": "PL/EX126621",
+    "policyholder": "SURESH N RAO",
+    "insured": null,
+    "nominee": null,
+    "sum_insured": "1000000",
+    "premium": "33000",
+    "premium_frequency": null,
+    "start_date": "2026-09-11",
+    "end_date": "2027-02-27",
+    "premium_due_date": null,
+    "agent": null,
+    "claim_helpline": null
+  },
+  "printed": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "product": "Protect Plus",
+    "policy_number": "PL/EX126621",
+    "policyholder": "SURESH N RAO",
+    "sum_insured": "Rs. 10,00,000",
+    "premium": "Rs. 33,000",
+    "start_date": "11/09/2026",
+    "end_date": "27/02/2027"
+  },
+  "lines": [
+    {
+      "text": "Nilgiri General Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.07139853121069019,
+        0.03141520210186916,
+        0.5789683731576184,
+        0.05129461589853943
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mobile and Gadget Protection Plan",
+      "page": 0,
+      "bbox": [
+        0.07154943580451535,
+        0.06425992720115538,
+        0.3528428071500214,
+        0.07867188458570117
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Insurer",
+      "page": 0,
+      "bbox": [
+        0.07189458165984125,
+        0.13886322268750811,
+        0.11809620040149665,
+        0.15040586191897906
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.33574413687978977,
+        0.13833140503761882,
+        0.6389662594342941,
+        0.15142784549286545
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.0720240907163271,
+        0.1667347571715488,
+        0.12318828158052411,
+        0.17828037255399787
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Protect Plus",
+      "page": 0,
+      "bbox": [
+        0.33591795903793853,
+        0.16645497002392165,
+        0.43238836503689204,
+        0.1793333979335987
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policy number",
+      "page": 0,
+      "bbox": [
+        0.0721536430942751,
+        0.19458686153093607,
+        0.16619979178154334,
+        0.20616420800311494
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "PL/EX126621",
+      "page": 0,
+      "bbox": [
+        0.33609183940446946,
+        0.1943716721572934,
+        0.4390414286713217,
+        0.20724829591315172
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policyholder",
+      "page": 0,
+      "bbox": [
+        0.07228323881542582,
+        0.22249596526193918,
+        0.15314839401243108,
+        0.23405737294623494
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SURESH N RAO",
+      "page": 0,
+      "bbox": [
+        0.3362657780086261,
+        0.22228755486706359,
+        0.46305837671198896,
+        0.2351725441270267
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sum insured",
+      "page": 0,
+      "bbox": [
+        0.07241287790153429,
+        0.2504026215247204,
+        0.15577096387900288,
+        0.26195987206639504
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 10,00,000",
+      "page": 0,
+      "bbox": [
+        0.3364397748796718,
+        0.2502443288711796,
+        0.4403500225448257,
+        0.263106147273872
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium",
+      "page": 0,
+      "bbox": [
+        0.07254256037437018,
+        0.278330824877718,
+        0.13196558450267068,
+        0.289871710049767
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 33,000",
+      "page": 0,
+      "bbox": [
+        0.3366138300468891,
+        0.278205181007511,
+        0.41755571002540226,
+        0.29104911005548484
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Start date",
+      "page": 0,
+      "bbox": [
+        0.07267228625571764,
+        0.30625344036100355,
+        0.13709451495430008,
+        0.3177928915856598
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "11/09/2026",
+      "page": 0,
+      "bbox": [
+        0.33678794353958025,
+        0.30616201852342345,
+        0.41959571089723413,
+        0.31900143717681356
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End date",
+      "page": 0,
+      "bbox": [
+        0.07280205556737554,
+        0.3341886268201203,
+        0.1322896152222672,
+        0.34572342136652295
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "27/02/2027",
+      "page": 0,
+      "bbox": [
+        0.33696211538706744,
+        0.3341290441471753,
+        0.4197838386322411,
+        0.3469631333459605
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07302925643258007,
+        0.3830935585327656,
+        0.5195615697184968,
+        0.39464424035726103
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07310501964612154,
+        0.3993995550610331,
+        0.5453500341180015,
+        0.4109841545188743
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.0756244309433839,
+        0.9415830243728787,
+        0.31143449078496227,
+        0.952457861074081
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "insurer": [
+      3
+    ],
+    "product": [
+      5
+    ],
+    "policy_number": [
+      7
+    ],
+    "policyholder": [
+      9
+    ],
+    "sum_insured": [
+      11
+    ],
+    "premium": [
+      13
+    ],
+    "start_date": [
+      15
+    ],
+    "end_date": [
+      17
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "insurance",
+  "folder": "Suresh Rao/Insurance",
+  "expected_ask": []
+}

@@ -1,0 +1,357 @@
+{
+  "doc_id": "extended_warranty-1-scan",
+  "base_id": "extended_warranty-1",
+  "doc_type": "extended_warranty",
+  "person": "Master Kiran Rao",
+  "variant": "scan",
+  "files": [
+    "extended_warranty-1-scan.pdf"
+  ],
+  "fields": {
+    "brand": "Aurora",
+    "product": "Split air conditioner",
+    "model": "MDDS078769",
+    "serial_number": null,
+    "seller": "Lakeview Digital Store",
+    "seller_location": "Mangaluru",
+    "order_id": null,
+    "buyer": "Master Kiran Rao",
+    "purchase_date": "2026-03-27",
+    "amount": "62000",
+    "invoice_number": null,
+    "period_start": "2026-06-11",
+    "period_end": "2027-07-08",
+    "visits": null,
+    "service_helpline": null
+  },
+  "printed": {
+    "brand": "Aurora",
+    "product": "Split air conditioner",
+    "model": "MDDS078769",
+    "seller": "Lakeview Digital Store",
+    "seller_location": "Mangaluru",
+    "buyer": "Master Kiran Rao",
+    "purchase_date": "27/03/2026",
+    "amount": "Rs. 62,000",
+    "period_start": "11/06/2026",
+    "period_end": "08/07/2027"
+  },
+  "lines": [
+    {
+      "text": "Service desk",
+      "page": 0,
+      "bbox": [
+        0.07649134022071502,
+        0.024898278387725247,
+        0.22767601644270113,
+        0.04491408830587161
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Extended Warranty Certificate",
+      "page": 0,
+      "bbox": [
+        0.07635506028572048,
+        0.05770916777331527,
+        0.31817952815127415,
+        0.0729928651852292
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Brand",
+      "page": 0,
+      "bbox": [
+        0.07599794407220559,
+        0.13276152982675962,
+        0.11563208078273954,
+        0.14456162839507222
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Aurora",
+      "page": 0,
+      "bbox": [
+        0.3397989252604291,
+        0.1339806479229823,
+        0.393901884321411,
+        0.1471429539385459
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.07585916148410374,
+        0.16092628708628628,
+        0.12704476599788112,
+        0.1727861612720519
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Split air conditioner",
+      "page": 0,
+      "bbox": [
+        0.33971155516622337,
+        0.16215439155810454,
+        0.49468271747603637,
+        0.1757946266195926
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Model",
+      "page": 0,
+      "bbox": [
+        0.075720324761061,
+        0.1891020296922817,
+        0.11618615295690685,
+        0.20091772861320184
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MDDS078769",
+      "page": 0,
+      "bbox": [
+        0.33962415098066057,
+        0.19033912745877632,
+        0.4432845263420918,
+        0.20374819725440976
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Seller",
+      "page": 0,
+      "bbox": [
+        0.07558143387139657,
+        0.21728876407306563,
+        0.11357633357406734,
+        0.22909863973020922
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Lakeview Digital Store",
+      "page": 0,
+      "bbox": [
+        0.33953671268378327,
+        0.2185348620593651,
+        0.5147737309396552,
+        0.2322914599139572
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Seller location",
+      "page": 0,
+      "bbox": [
+        0.0754424887834049,
+        0.24548649666197417,
+        0.168735368688112,
+        0.25756585666134446
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mangaluru",
+      "page": 0,
+      "bbox": [
+        0.3394492402556188,
+        0.24674160179926097,
+        0.4229441501007504,
+        0.2600714518222133
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Buyer",
+      "page": 0,
+      "bbox": [
+        0.07530348946535573,
+        0.2736952338973652,
+        0.11414477377577348,
+        0.285520773416684
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.33936173367617856,
+        0.2749593531228819,
+        0.4751828105106707,
+        0.28854835992640326
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase date",
+      "page": 0,
+      "bbox": [
+        0.07516443588549396,
+        0.3019149822226227,
+        0.17098918175785285,
+        0.31402186437589386
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "27/03/2026",
+      "page": 0,
+      "bbox": [
+        0.3392741929254584,
+        0.30318812247967847,
+        0.4219429708253399,
+        0.3165296239748135
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Amount",
+      "page": 0,
+      "bbox": [
+        0.07502532801203976,
+        0.33014574808616187,
+        0.12627090459982657,
+        0.34204334229411454
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 62,000",
+      "page": 0,
+      "bbox": [
+        0.3391866179834388,
+        0.3314279163241388,
+        0.42002160040718156,
+        0.3447682898589373
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Cover starts",
+      "page": 0,
+      "bbox": [
+        0.07488616581318844,
+        0.35838753794143413,
+        0.15502702000147467,
+        0.3704330115159842
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "11/06/2026",
+      "page": 0,
+      "bbox": [
+        0.33909900883008437,
+        0.35967874111579345,
+        0.4218000803521303,
+        0.3730360092140504
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Cover ends",
+      "page": 0,
+      "bbox": [
+        0.07474694925711048,
+        0.38664035824693216,
+        0.15078667650857416,
+        0.3986728104123093
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "08/07/2027",
+      "page": 0,
+      "bbox": [
+        0.3390113654453439,
+        0.3879406033192205,
+        0.42172859324167394,
+        0.4013057624330326
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07450318939107133,
+        0.4361093552463695,
+        0.5209338842293758,
+        0.4500035473801392
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07442189905806534,
+        0.4526065381387385,
+        0.5465304877315421,
+        0.46664076873701854
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07200436139036408,
+        0.9445303115498944,
+        0.30794817516540196,
+        0.956291164226615
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      3
+    ],
+    "product": [
+      5
+    ],
+    "model": [
+      7
+    ],
+    "seller": [
+      9
+    ],
+    "seller_location": [
+      11
+    ],
+    "buyer": [
+      13
+    ],
+    "purchase_date": [
+      15
+    ],
+    "amount": [
+      17
+    ],
+    "period_start": [
+      19
+    ],
+    "period_end": [
+      21
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "home",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "purchases",
+  "folder": "Home/Purchases",
+  "expected_ask": []
+}

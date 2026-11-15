@@ -1,0 +1,165 @@
+{
+  "doc_id": "marksheet-5-photo",
+  "base_id": "marksheet-5",
+  "doc_type": "marksheet",
+  "person": "R K Rao",
+  "variant": "photo",
+  "files": [
+    "marksheet-5-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "R K Rao",
+    "document_date": "2026-09-08",
+    "expiry_date": null,
+    "issuer": "Western Ghats University",
+    "roll_number": null
+  },
+  "printed": {
+    "person_name": "R K Rao",
+    "document_date": "08/09/2026",
+    "issuer": "Western Ghats University"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.0810466872264046,
+        0.028054257386962326,
+        0.2775799413606621,
+        0.05524823447525651
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Statement of Marks",
+      "page": 0,
+      "bbox": [
+        0.08230168778324017,
+        0.06203308561391702,
+        0.23749452782244934,
+        0.08215962435765865
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.08516096862286815,
+        0.13944740385717855,
+        0.12463422456678847,
+        0.15264242468601294
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "R K Rao",
+      "page": 0,
+      "bbox": [
+        0.3429349893350861,
+        0.14784510629371023,
+        0.4050726762939092,
+        0.1629380731671063
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.08622987958827674,
+        0.16838790263680173,
+        0.11756336221138627,
+        0.1812627058271071
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "08/09/2026",
+      "page": 0,
+      "bbox": [
+        0.34377663969054373,
+        0.1764514221570478,
+        0.42348690549370516,
+        0.19198420053448176
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Issuer",
+      "page": 0,
+      "bbox": [
+        0.08729698712707086,
+        0.19727957408896307,
+        0.12751607384284502,
+        0.21035748926253175
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats University",
+      "page": 0,
+      "bbox": [
+        0.3446168860847428,
+        0.20501001967872062,
+        0.5367902474875169,
+        0.22373398355043037
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.08916009953212276,
+        0.24772287949943123,
+        0.5198633551975796,
+        0.27134180263647456
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.08977991697884856,
+        0.2645042828539196,
+        0.5444448938405553,
+        0.2884318684271027
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.11510365803607783,
+        0.9494645140348674,
+        0.3392630665918443,
+        0.9602592790740382
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "issuer": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "education",
+  "folder": "Ravi Kumar Rao/Education",
+  "expected_ask": []
+}

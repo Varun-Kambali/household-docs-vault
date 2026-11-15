@@ -1,0 +1,165 @@
+{
+  "doc_id": "itr_acknowledgement-5-photo",
+  "base_id": "itr_acknowledgement-5",
+  "doc_type": "itr_acknowledgement",
+  "person": "R K Rao",
+  "variant": "photo",
+  "files": [
+    "itr_acknowledgement-5-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "R K Rao",
+    "document_date": "2026-10-03",
+    "expiry_date": null,
+    "acknowledgement_number": "AK-565005205765987",
+    "assessment_year": null
+  },
+  "printed": {
+    "person_name": "R K Rao",
+    "document_date": "03/10/2026",
+    "acknowledgement_number": "AK-565005205765987"
+  },
+  "lines": [
+    {
+      "text": "Income Tax Department",
+      "page": 0,
+      "bbox": [
+        0.07337920934719902,
+        0.03648400807510109,
+        0.35737632319663504,
+        0.05976226491384332
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Income Tax Return Acknowledgement",
+      "page": 0,
+      "bbox": [
+        0.0741171877198965,
+        0.07059522566350676,
+        0.3846369012033706,
+        0.08853570668506289
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07579263358135713,
+        0.14803854982079054,
+        0.11606044747736106,
+        0.16029979834838212
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "R K Rao",
+      "page": 0,
+      "bbox": [
+        0.34124033091372147,
+        0.15041343620404463,
+        0.4052709001025251,
+        0.1641165591178059
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07641688488552476,
+        0.17689301609528746,
+        0.10830810946873973,
+        0.18901807727067246
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "03/10/2026",
+      "page": 0,
+      "bbox": [
+        0.3413979607498742,
+        0.17907998845118372,
+        0.4235857296117582,
+        0.19283715210120492
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Acknowledgement number",
+      "page": 0,
+      "bbox": [
+        0.07703895007626851,
+        0.20564643470574262,
+        0.25367989264823665,
+        0.21876163233085127
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "AK-565005205765987",
+      "page": 0,
+      "bbox": [
+        0.341555042079726,
+        0.2076467893763639,
+        0.5070830067625284,
+        0.22190524163229933
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07812233825957353,
+        0.25572336300154414,
+        0.5214004242993943,
+        0.2701741996055983
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.0784819982131676,
+        0.27234775117980403,
+        0.546430833887834,
+        0.2867379181750822
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.09285959534509272,
+        0.9346636368887357,
+        0.31779895342546777,
+        0.9465169952481669
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "acknowledgement_number": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "tax",
+  "folder": "Ravi Kumar Rao/Tax",
+  "expected_ask": []
+}

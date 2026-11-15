@@ -1,0 +1,191 @@
+{
+  "doc_id": "form_16-5-scan",
+  "base_id": "form_16-5",
+  "doc_type": "form_16",
+  "person": "Ravi Rao",
+  "variant": "scan",
+  "files": [
+    "form_16-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Ravi Rao",
+    "document_date": "2025-10-25",
+    "expiry_date": null,
+    "employer": "Kaveri Systems Limited",
+    "assessment_year": "2025-26"
+  },
+  "printed": {
+    "person_name": "Ravi Rao",
+    "document_date": "25/10/2025",
+    "employer": "Kaveri Systems Limited",
+    "assessment_year": "2025-26"
+  },
+  "lines": [
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.07907300201484767,
+        0.02528836208194088,
+        0.19283764491791416,
+        0.04520541270270517
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Form No. 16",
+      "page": 0,
+      "bbox": [
+        0.0787355380753351,
+        0.058055989660284926,
+        0.18046160154052732,
+        0.0727582199318535
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07785116867437071,
+        0.13301472595477756,
+        0.11790027916539358,
+        0.14481993044370312
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi Rao",
+      "page": 0,
+      "bbox": [
+        0.3436990785978228,
+        0.13437202733404216,
+        0.41485430083544667,
+        0.1476140672054371
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07750746201013685,
+        0.16114626346202374,
+        0.10925950859216164,
+        0.17291170371445616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "25/10/2025",
+      "page": 0,
+      "bbox": [
+        0.34341237538605895,
+        0.1624816574925794,
+        0.42661619712495835,
+        0.1757833206660845
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.07716360849668968,
+        0.1892898191538992,
+        0.1405186347819358,
+        0.20121258179398216
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kaveri Systems Limited",
+      "page": 0,
+      "bbox": [
+        0.3431255497753815,
+        0.19060328699912177,
+        0.5305339027993763,
+        0.20441421168305732
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Assessment year",
+      "page": 0,
+      "bbox": [
+        0.07681960803989676,
+        0.21744540073355328,
+        0.19176418205625267,
+        0.22961656322082047
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2025-26",
+      "page": 0,
+      "bbox": [
+        0.34283860168739244,
+        0.21873692353867383,
+        0.4039100513919363,
+        0.2319290911141015
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07621725337466327,
+        0.266746628983566,
+        0.5253828794371946,
+        0.2804720966308734
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07601636833166389,
+        0.28318856841421447,
+        0.550967065969447,
+        0.29701430155258457
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06795562109372641,
+        0.9442453152258278,
+        0.305975151014595,
+        0.9553208384415772
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "employer": [
+      7
+    ],
+    "assessment_year": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "tax",
+  "folder": "Ravi Kumar Rao/Tax",
+  "expected_ask": []
+}

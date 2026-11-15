@@ -1,0 +1,165 @@
+{
+  "doc_id": "certificate-5-photo",
+  "base_id": "certificate-5",
+  "doc_type": "certificate",
+  "person": "Ravi K Rao",
+  "variant": "photo",
+  "files": [
+    "certificate-5-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "Ravi K Rao",
+    "document_date": "2026-08-03",
+    "expiry_date": null,
+    "issuer": null,
+    "credential_id": "CR-06614478"
+  },
+  "printed": {
+    "person_name": "Ravi K Rao",
+    "document_date": "03/08/2026",
+    "credential_id": "CR-06614478"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.08942958786264546,
+        0.03795255741364626,
+        0.2832551508179604,
+        0.06301465762714728
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Completion",
+      "page": 0,
+      "bbox": [
+        0.09052025762244692,
+        0.07128655453957279,
+        0.2831902130637115,
+        0.09101743930487942
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.09299812513516764,
+        0.1470172950365816,
+        0.13154540998410294,
+        0.1597336708384095
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi K Rao",
+      "page": 0,
+      "bbox": [
+        0.34744395064642847,
+        0.1540823747191112,
+        0.4315084089051813,
+        0.16934669886443726
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.09392195329567585,
+        0.17525213419893024,
+        0.12447862999211892,
+        0.18770819892561494
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "03/08/2026",
+      "page": 0,
+      "bbox": [
+        0.34796626962154525,
+        0.18228949165134511,
+        0.4275388743315265,
+        0.19738334592140908
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credential id",
+      "page": 0,
+      "bbox": [
+        0.09484287271656158,
+        0.2033980739328817,
+        0.17528537251758744,
+        0.21719298546763688
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "CR-06614478",
+      "page": 0,
+      "bbox": [
+        0.34848694500238625,
+        0.2104078485382176,
+        0.44725695383512604,
+        0.22598600343652167
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.09644752375489044,
+        0.2524408136064432,
+        0.5234229364862338,
+        0.27569155600516365
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.09698044981880671,
+        0.26872856315049487,
+        0.5479924167287595,
+        0.2926022375260331
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.11837419529620101,
+        0.9225828062406202,
+        0.33504914282503306,
+        0.9376831279387092
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "credential_id": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "education",
+  "folder": "Ravi Kumar Rao/Education",
+  "expected_ask": []
+}

@@ -1,0 +1,330 @@
+{
+  "doc_id": "home_policy-5-photo",
+  "base_id": "home_policy-5",
+  "doc_type": "home_policy",
+  "person": "Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "home_policy-5-photo.jpg"
+  ],
+  "fields": {
+    "insurer": "Nilgiri General Insurance Company Limited",
+    "product": "Secure Plan",
+    "policy_number": "PL/SJ801138",
+    "policyholder": "Kiran Rao",
+    "insured": null,
+    "nominee": null,
+    "sum_insured": "1000000",
+    "premium": "14160",
+    "premium_frequency": null,
+    "start_date": "2026-07-03",
+    "end_date": "2027-05-11",
+    "premium_due_date": null,
+    "agent": null,
+    "claim_helpline": "1800 768 1590"
+  },
+  "printed": {
+    "insurer": "Nilgiri General Insurance Company Limited",
+    "product": "Secure Plan",
+    "policy_number": "PL/SJ801138",
+    "policyholder": "Kiran Rao",
+    "sum_insured": "Rs. 10,00,000",
+    "premium": "Rs. 14,160",
+    "start_date": "03/07/2026",
+    "end_date": "11/05/2027",
+    "claim_helpline": "1800 768 1590"
+  },
+  "lines": [
+    {
+      "text": "Tungabhadra Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.06518959270787991,
+        0.03849353554995404,
+        0.5433951774740611,
+        0.0685297928217697
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Home Insurance Policy Schedule",
+      "page": 0,
+      "bbox": [
+        0.06694743135107932,
+        0.07552118045863739,
+        0.32475782088616073,
+        0.09525618753975995
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Insurer",
+      "page": 0,
+      "bbox": [
+        0.07096247745337483,
+        0.15298735504625616,
+        0.11591270201677847,
+        0.1651966878851381
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nilgiri General Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.32472505614046077,
+        0.14076813672795035,
+        0.652398150446511,
+        0.16069149247731082
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.07246709092704348,
+        0.1800392796698913,
+        0.12216859281778694,
+        0.1923399530967045
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Secure Plan",
+      "page": 0,
+      "bbox": [
+        0.3261859047893677,
+        0.17338022818445106,
+        0.4179302710026662,
+        0.1879010235429996
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policy number",
+      "page": 0,
+      "bbox": [
+        0.07397114371700075,
+        0.20627289129417045,
+        0.16484001017147812,
+        0.21947310433723938
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "PL/SJ801138",
+      "page": 0,
+      "bbox": [
+        0.32764620774656705,
+        0.20046998358326554,
+        0.4255834656243306,
+        0.2151003915130511
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policyholder",
+      "page": 0,
+      "bbox": [
+        0.07547463613659064,
+        0.23370262329481709,
+        0.15365583356045484,
+        0.2465961472586061
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3291059653177618,
+        0.2281768394983805,
+        0.4048723405461094,
+        0.2422896020804646
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sum insured",
+      "page": 0,
+      "bbox": [
+        0.07697756849892361,
+        0.2607883549284774,
+        0.1575249840535437,
+        0.27370908750845824
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 10,00,000",
+      "page": 0,
+      "bbox": [
+        0.3305651778084264,
+        0.25484086918729304,
+        0.431126270562875,
+        0.2694686609339881
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium",
+      "page": 0,
+      "bbox": [
+        0.07847994111687692,
+        0.28840998891822645,
+        0.13603617276302862,
+        0.3008119307302424
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 14,160",
+      "page": 0,
+      "bbox": [
+        0.3320238455238078,
+        0.282515789887383,
+        0.4104519721363564,
+        0.29663757375812244
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Start date",
+      "page": 0,
+      "bbox": [
+        0.07998175430309482,
+        0.3154202806325908,
+        0.14231263559095933,
+        0.32790468256320304
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "03/07/2026",
+      "page": 0,
+      "bbox": [
+        0.3334819687689244,
+        0.30966179890160445,
+        0.4136777127983363,
+        0.323796346233125
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End date",
+      "page": 0,
+      "bbox": [
+        0.08148300836998873,
+        0.34262269268252116,
+        0.1390619119213023,
+        0.3549873486423858
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "11/05/2027",
+      "page": 0,
+      "bbox": [
+        0.3349395478485674,
+        0.3368359322700865,
+        0.4151212950136789,
+        0.35094498403501395
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Claims helpline",
+      "page": 0,
+      "bbox": [
+        0.08298370362973759,
+        0.3688957502466122,
+        0.18008259687925435,
+        0.3820599345986415
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 768 1590",
+      "page": 0,
+      "bbox": [
+        0.3363965830673002,
+        0.3634505824917314,
+        0.4430911032941212,
+        0.3780834928355722
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.08560857664275087,
+        0.40957614694639694,
+        0.5146135922610446,
+        0.4294127216478738
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.08648315451544483,
+        0.42492512154191053,
+        0.5401265137538457,
+        0.44519013295056475
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.11387348738659994,
+        0.9247770111850564,
+        0.33890607479947105,
+        0.9380815818373701
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "insurer": [
+      3
+    ],
+    "product": [
+      5
+    ],
+    "policy_number": [
+      7
+    ],
+    "policyholder": [
+      9
+    ],
+    "sum_insured": [
+      11
+    ],
+    "premium": [
+      13
+    ],
+    "start_date": [
+      15
+    ],
+    "end_date": [
+      17
+    ],
+    "claim_helpline": [
+      19
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "home",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "insurance",
+  "folder": "Home/Insurance",
+  "expected_ask": []
+}

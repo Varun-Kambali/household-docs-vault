@@ -1,0 +1,191 @@
+{
+  "doc_id": "appraisal_letter-1-photo",
+  "base_id": "appraisal_letter-1",
+  "doc_type": "appraisal_letter",
+  "person": "KIRAN RAO",
+  "variant": "photo",
+  "files": [
+    "appraisal_letter-1-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "KIRAN RAO",
+    "document_date": "2025-12-18",
+    "expiry_date": null,
+    "employer": "Kaveri Systems Limited",
+    "designation": "Associate Manager"
+  },
+  "printed": {
+    "person_name": "KIRAN RAO",
+    "document_date": "18/12/2025",
+    "employer": "Kaveri Systems Limited",
+    "designation": "Associate Manager"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.10791616347062574,
+        0.03638932693560839,
+        0.2944296879596309,
+        0.05811449221316304
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Annual Appraisal Letter",
+      "page": 0,
+      "bbox": [
+        0.10722938971255713,
+        0.06865097444816061,
+        0.28348698370463016,
+        0.08500934028409365
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.10543176811121095,
+        0.14368549820283033,
+        0.1424623407553879,
+        0.15540626400055912
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KIRAN RAO",
+      "page": 0,
+      "bbox": [
+        0.3520325477473226,
+        0.14006035596907854,
+        0.440699223925102,
+        0.1537649945715384
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.10473397241962268,
+        0.17113461762513185,
+        0.13410657150779254,
+        0.18273274362988287
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "18/12/2025",
+      "page": 0,
+      "bbox": [
+        0.3512980981482412,
+        0.16781460450684274,
+        0.42960587940931916,
+        0.1813184357919985
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.10403634993573513,
+        0.19818348374042147,
+        0.16252826425409744,
+        0.21005244024698302
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kaveri Systems Limited",
+      "page": 0,
+      "bbox": [
+        0.3505638323677311,
+        0.19442127384764893,
+        0.5272435358429679,
+        0.20886498091747352
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.10333890059506558,
+        0.22541560570533617,
+        0.17642396329395793,
+        0.2373653563770775
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Associate Manager",
+      "page": 0,
+      "bbox": [
+        0.3498297503367914,
+        0.22244636206660617,
+        0.4924400514977044,
+        0.23640463253657887
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.10211878068092446,
+        0.27062683356395456,
+        0.52091881341897,
+        0.2851466516487918
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.1017121917729284,
+        0.2865989233980795,
+        0.5448431196444814,
+        0.30106913962886855
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.0855285115210219,
+        0.9248900477972203,
+        0.30399713664061606,
+        0.9380001249459898
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "employer": [
+      7
+    ],
+    "designation": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "work",
+  "folder": "Kiran Rao/Work",
+  "expected_ask": []
+}

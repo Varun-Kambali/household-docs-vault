@@ -1,0 +1,174 @@
+{
+  "doc_id": "scan_photo-5-photo",
+  "base_id": "scan_photo-5",
+  "doc_type": "scan_photo",
+  "person": "Master Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "scan_photo-5-photo.jpg"
+  ],
+  "fields": {
+    "patient": "Master Kiran Rao",
+    "doctor": null,
+    "date": null,
+    "hospital": "Lakeview Multispeciality Clinic",
+    "department": "General Medicine",
+    "diagnoses": null,
+    "procedures": null,
+    "allergies": null,
+    "medicines": null,
+    "tests": null,
+    "next_visit": null,
+    "amount": null
+  },
+  "printed": {
+    "patient": "Master Kiran Rao",
+    "hospital": "Lakeview Multispeciality Clinic",
+    "department": "General Medicine"
+  },
+  "lines": [
+    {
+      "text": "Sunrise Family Hospital",
+      "page": 0,
+      "bbox": [
+        0.08946827176959911,
+        0.028393856131974756,
+        0.3708147654131285,
+        0.05054365871112915
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ultrasound Images",
+      "page": 0,
+      "bbox": [
+        0.09001375863131977,
+        0.062229364576678575,
+        0.24298380425581328,
+        0.07794135122984254
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.09125524515424181,
+        0.139236403019018,
+        0.13775658953050846,
+        0.1513844172141938
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3548105379209189,
+        0.14086887941851237,
+        0.4893163636360338,
+        0.15479566664778022
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hospital",
+      "page": 0,
+      "bbox": [
+        0.09171889728843083,
+        0.16799585957544486,
+        0.1455755895406467,
+        0.1801336383208032
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Lakeview Multispeciality Clinic",
+      "page": 0,
+      "bbox": [
+        0.3549792206426248,
+        0.1694902678492877,
+        0.5933129719278113,
+        0.18388297633189565
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Department",
+      "page": 0,
+      "bbox": [
+        0.09218151556872878,
+        0.19669118814911601,
+        0.16986785038245292,
+        0.2088927898669936
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "General Medicine",
+      "page": 0,
+      "bbox": [
+        0.35514752901476354,
+        0.19804813818959266,
+        0.49028211664336857,
+        0.21178100010947795
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.09829001819033226,
+        0.5748666685196995,
+        0.5342922760364511,
+        0.5870624286279549
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.09855152351943058,
+        0.5909122307880174,
+        0.5590663590699366,
+        0.6032684197354468
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.10414846292618982,
+        0.937114988012587,
+        0.33141918861199005,
+        0.9488859097785411
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      3
+    ],
+    "hospital": [
+      5
+    ],
+    "department": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "medical",
+  "folder": "Kiran Rao/Medical/Scans",
+  "expected_ask": [
+    "missing_required"
+  ]
+}

@@ -1,0 +1,280 @@
+{
+  "doc_id": "travel_policy-1-clean",
+  "base_id": "travel_policy-1",
+  "doc_type": "travel_policy",
+  "person": "R K Rao",
+  "variant": "clean",
+  "files": [
+    "travel_policy-1-clean.pdf"
+  ],
+  "fields": {
+    "insurer": "Tungabhadra Insurance Company Limited",
+    "product": null,
+    "policy_number": "PL/ZN325379",
+    "policyholder": "R K Rao",
+    "insured": [
+      "R K Rao"
+    ],
+    "nominee": null,
+    "sum_insured": "500000",
+    "premium": null,
+    "premium_frequency": null,
+    "start_date": null,
+    "end_date": "2026-12-18",
+    "premium_due_date": null,
+    "agent": null,
+    "claim_helpline": "1800 489 2933"
+  },
+  "printed": {
+    "insurer": "Tungabhadra Insurance Company Limited",
+    "policy_number": "PL/ZN325379",
+    "policyholder": "R K Rao",
+    "insured": "R K Rao",
+    "sum_insured": "Rs. 5,00,000",
+    "end_date": "18/12/2026",
+    "claim_helpline": "1800 489 2933"
+  },
+  "lines": [
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.5295294117647059,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Travel Insurance Certificate",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.29325378151260506,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Insurer",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.11429915966386556,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Tungabhadra Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.6723361344537816,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policy number",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.16305042016806723,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "PL/ZN325379",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.4407563025210084,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policyholder",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.1496033613445378,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "R K Rao",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.4014957983193277,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Insured persons",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.17568067226890757,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "R K Rao",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.23634204275534443,
+        0.1662016806722689,
+        0.2494061757719715
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sum insured",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.26247030878859856,
+        0.15212941176470587,
+        0.2742280285035629
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 5,00,000",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.26247030878859856,
+        0.43236974789915966,
+        0.2755344418052256
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.29097387173396677,
+        0.1277764705882353,
+        0.30273159144893114
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "18/12/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.29097387173396677,
+        0.4202352941176471,
+        0.30403800475059384
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Claims helpline",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.3194774346793349,
+        0.16976638655462184,
+        0.33123515439429924
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 489 2933",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.3194774346793349,
+        0.44826890756302523,
+        0.332541567695962
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.3693586698337292,
+        0.5212201680672268,
+        0.38111638954869353
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.3859857482185273,
+        0.5472672268907564,
+        0.39774346793349163
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "insurer": [
+      3
+    ],
+    "policy_number": [
+      5
+    ],
+    "policyholder": [
+      7
+    ],
+    "insured": [
+      9
+    ],
+    "sum_insured": [
+      11
+    ],
+    "end_date": [
+      13
+    ],
+    "claim_helpline": [
+      15
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "insurance",
+  "folder": "Ravi Kumar Rao/Insurance",
+  "expected_ask": []
+}

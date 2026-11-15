@@ -1,0 +1,191 @@
+{
+  "doc_id": "payslip-5-scan",
+  "base_id": "payslip-5",
+  "doc_type": "payslip",
+  "person": "Kavita R Rao",
+  "variant": "scan",
+  "files": [
+    "payslip-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Kavita R Rao",
+    "document_date": "2026-04-01",
+    "expiry_date": null,
+    "employer": "Orchard Labs",
+    "net_pay": "120000"
+  },
+  "printed": {
+    "person_name": "Kavita R Rao",
+    "document_date": "01/04/2026",
+    "employer": "Orchard Labs",
+    "net_pay": "Rs. 1,20,000"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.07473187076226297,
+        0.031428757346187115,
+        0.2754862580051307,
+        0.051010011924864034
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Payslip",
+      "page": 0,
+      "bbox": [
+        0.0746025084590325,
+        0.06409432421070888,
+        0.13359512590299055,
+        0.07830495941930934
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07426348496888453,
+        0.13882250031803328,
+        0.11424114213434514,
+        0.15043459477875526
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita R Rao",
+      "page": 0,
+      "bbox": [
+        0.3400774051732335,
+        0.13913636690785544,
+        0.4423668347285748,
+        0.15208411496137306
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07413172004005401,
+        0.16686855606294224,
+        0.10580993417851554,
+        0.17847168941229433
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "01/04/2026",
+      "page": 0,
+      "bbox": [
+        0.34000522391580934,
+        0.16714162281580597,
+        0.4230246118919297,
+        0.18006094488375293
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.07399989613004951,
+        0.19492716474286528,
+        0.1372902505433697,
+        0.20655621766760698
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Orchard Labs",
+      "page": 0,
+      "bbox": [
+        0.3399330103950739,
+        0.19515939512729544,
+        0.4478046530000346,
+        0.20809164330689756
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Net pay",
+      "page": 0,
+      "bbox": [
+        0.07386801319926005,
+        0.22299833478740763,
+        0.1255383290117229,
+        0.23461521575309258
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 1,20,000",
+      "page": 0,
+      "bbox": [
+        0.339860764589391,
+        0.22318969223514348,
+        0.4348900843286512,
+        0.23610275105285977
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07363707593234557,
+        0.2721531335306123,
+        0.5224536086968025,
+        0.2839186899971969
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07356005661270461,
+        0.2885466287173477,
+        0.5481185956451019,
+        0.30028251382091947
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07046880993624582,
+        0.9470431288301905,
+        0.30845398076880043,
+        0.958232502521976
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "employer": [
+      7
+    ],
+    "net_pay": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "work",
+  "folder": "Kavita Rao/Work",
+  "expected_ask": []
+}

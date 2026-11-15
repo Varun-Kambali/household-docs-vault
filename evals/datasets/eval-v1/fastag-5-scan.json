@@ -1,0 +1,191 @@
+{
+  "doc_id": "fastag-5-scan",
+  "base_id": "fastag-5",
+  "doc_type": "fastag",
+  "person": "Kavita R Rao",
+  "variant": "scan",
+  "files": [
+    "fastag-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Kavita R Rao",
+    "document_date": "2026-03-14",
+    "expiry_date": null,
+    "registration_number": "KA-81705131",
+    "tag_id": "TG-68714712"
+  },
+  "printed": {
+    "person_name": "Kavita R Rao",
+    "document_date": "14/03/2026",
+    "registration_number": "KA-81705131",
+    "tag_id": "TG-68714712"
+  },
+  "lines": [
+    {
+      "text": "Nilgiri Bank",
+      "page": 0,
+      "bbox": [
+        0.07631846340098197,
+        0.02970041571183992,
+        0.21420641714818395,
+        0.04921419555082923
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "FASTag Issuance Details",
+      "page": 0,
+      "bbox": [
+        0.07613271131735497,
+        0.06251963362814575,
+        0.2813063487717094,
+        0.0769418242127967
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07564599211240129,
+        0.13758492865695424,
+        0.11543719208116385,
+        0.1492353326468533
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita R Rao",
+      "page": 0,
+      "bbox": [
+        0.34010994214740453,
+        0.1378154863729356,
+        0.44195205475781807,
+        0.15079163320971203
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07545685756280511,
+        0.16575234251771495,
+        0.10699047651623497,
+        0.1773959960581295
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "14/03/2026",
+      "page": 0,
+      "bbox": [
+        0.33996691860327555,
+        0.1659491226130944,
+        0.42262377274048124,
+        0.17890357792919206
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.07526765729241051,
+        0.19392954333845028,
+        0.2093950587211739,
+        0.20563100703384934
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-81705131",
+      "page": 0,
+      "bbox": [
+        0.3398238454203666,
+        0.19409252233885468,
+        0.44264187045627285,
+        0.20705212778055465
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Tag id",
+      "page": 0,
+      "bbox": [
+        0.07507839126695638,
+        0.22211653622086555,
+        0.11655877862122277,
+        0.23376455007584115
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "TG-68714712",
+      "page": 0,
+      "bbox": [
+        0.3396807225728312,
+        0.2222456906335727,
+        0.4416090709089378,
+        0.23519624308390524
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07474701739616357,
+        0.27146735127115107,
+        0.5212960899341392,
+        0.2831987611205669
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.0746365146341435,
+        0.2879242952039959,
+        0.5467941956018915,
+        0.2996282046078772
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07020670581181264,
+        0.9482854378571034,
+        0.30666611578387537,
+        0.9593804465696292
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "registration_number": [
+      7
+    ],
+    "tag_id": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "vehicle",
+  "folder": "Kavita Rao/Vehicle",
+  "expected_ask": []
+}

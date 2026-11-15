@@ -1,0 +1,191 @@
+{
+  "doc_id": "tax_proof-5-photo",
+  "base_id": "tax_proof-5",
+  "doc_type": "tax_proof",
+  "person": "Master Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "tax_proof-5-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "2026-09-21",
+    "expiry_date": null,
+    "section": "24(b)",
+    "amount": "120000"
+  },
+  "printed": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "21/09/2026",
+    "section": "24(b)",
+    "amount": "Rs. 1,20,000"
+  },
+  "lines": [
+    {
+      "text": "Investment Declaration",
+      "page": 0,
+      "bbox": [
+        0.08117142609422802,
+        0.036601915802538125,
+        0.3533528665832079,
+        0.05957795620473488
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Investment Proof",
+      "page": 0,
+      "bbox": [
+        0.08175993115827583,
+        0.07065600822110459,
+        0.21908858642686932,
+        0.08674065098578594
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.08309876657706217,
+        0.14812828139239692,
+        0.12281040440305037,
+        0.16042355572967718
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.345640118005637,
+        0.15054683357781332,
+        0.4797477012634043,
+        0.16496169443271103
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.08359857666532897,
+        0.1770500018284106,
+        0.11505425095870944,
+        0.18922732707521103
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "21/09/2026",
+      "page": 0,
+      "bbox": [
+        0.3458178479459628,
+        0.17934585097955416,
+        0.4274174560934174,
+        0.19321865010739572
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Section",
+      "page": 0,
+      "bbox": [
+        0.08409716475015216,
+        0.20590101052251206,
+        0.13357354042891087,
+        0.21818121666134976
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "24(b)",
+      "page": 0,
+      "bbox": [
+        0.3459951451451282,
+        0.20807474783667762,
+        0.3849734094555207,
+        0.22153353206250023
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Amount",
+      "page": 0,
+      "bbox": [
+        0.0845945353076394,
+        0.23468156648654317,
+        0.1356465209585047,
+        0.24692248961916743
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 1,20,000",
+      "page": 0,
+      "bbox": [
+        0.34617201118168434,
+        0.23673377993458639,
+        0.4392887994513448,
+        0.2505564635440657
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.08546201749346635,
+        0.28487878709229864,
+        0.5248895932790667,
+        0.2996956992971865
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.0857503567602147,
+        0.30156365972570026,
+        0.549874844820988,
+        0.3164112326237867
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.09695736209028182,
+        0.9492828772898716,
+        0.32266710093594847,
+        0.9599666041871746
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "section": [
+      7
+    ],
+    "amount": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "tax",
+  "folder": "Kiran Rao/Tax",
+  "expected_ask": []
+}

@@ -1,0 +1,172 @@
+{
+  "doc_id": "scan_photo-1-photo",
+  "base_id": "scan_photo-1",
+  "doc_type": "scan_photo",
+  "person": "Kavita Rao",
+  "variant": "photo",
+  "files": [
+    "scan_photo-1-photo.jpg"
+  ],
+  "fields": {
+    "patient": "Kavita Rao",
+    "doctor": null,
+    "date": "2026-11-02",
+    "hospital": "Cauvery Care Hospital",
+    "department": null,
+    "diagnoses": null,
+    "procedures": null,
+    "allergies": null,
+    "medicines": null,
+    "tests": null,
+    "next_visit": null,
+    "amount": null
+  },
+  "printed": {
+    "patient": "Kavita Rao",
+    "date": "02/11/2026",
+    "hospital": "Cauvery Care Hospital"
+  },
+  "lines": [
+    {
+      "text": "Cauvery Care Hospital",
+      "page": 0,
+      "bbox": [
+        0.11068884300633375,
+        0.036915212320761726,
+        0.3614335025355707,
+        0.06236055962806078
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ultrasound Images",
+      "page": 0,
+      "bbox": [
+        0.11067231884380933,
+        0.06723134860621943,
+        0.25613393555370345,
+        0.08460550123252299
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.11062884983219301,
+        0.1368669673901561,
+        0.1551152241360098,
+        0.1488519776351452
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita Rao",
+      "page": 0,
+      "bbox": [
+        0.3623067554553196,
+        0.14360528149756888,
+        0.4426314237814966,
+        0.15760272778310794
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.1106118909118556,
+        0.16310361491959913,
+        0.14085076222390377,
+        0.17470773368308182
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "02/11/2026",
+      "page": 0,
+      "bbox": [
+        0.36261057626637627,
+        0.16956855540418972,
+        0.4404971474367678,
+        0.1834451904972539
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hospital",
+      "page": 0,
+      "bbox": [
+        0.11059488823787374,
+        0.18940791642714103,
+        0.1623294492335365,
+        0.2015234606463998
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Cauvery Care Hospital",
+      "page": 0,
+      "bbox": [
+        0.3629151720815583,
+        0.1955980579681447,
+        0.5284149543469233,
+        0.2115221342002084
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.11036245189941965,
+        0.5489992416767803,
+        0.5407477875927847,
+        0.5640077770582116
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.1103521601033965,
+        0.564921039430726,
+        0.5652931890764076,
+        0.5798516588373369
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.1101255620708849,
+        0.9152595302754706,
+        0.34281231043514365,
+        0.9271303770203928
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      3
+    ],
+    "date": [
+      5
+    ],
+    "hospital": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "medical",
+  "folder": "Kavita Rao/Medical/Scans",
+  "expected_ask": []
+}

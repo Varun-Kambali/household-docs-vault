@@ -1,0 +1,191 @@
+{
+  "doc_id": "puc_certificate-5-photo",
+  "base_id": "puc_certificate-5",
+  "doc_type": "puc_certificate",
+  "person": "KAVITA RAO",
+  "variant": "photo",
+  "files": [
+    "puc_certificate-5-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "KAVITA RAO",
+    "document_date": "2026-03-03",
+    "expiry_date": null,
+    "registration_number": "KA-65724853",
+    "certificate_number": "CN-16107422"
+  },
+  "printed": {
+    "person_name": "KAVITA RAO",
+    "document_date": "03/03/2026",
+    "registration_number": "KA-65724853",
+    "certificate_number": "CN-16107422"
+  },
+  "lines": [
+    {
+      "text": "Authorised Testing Centre",
+      "page": 0,
+      "bbox": [
+        0.11629061359370976,
+        0.029799339642395554,
+        0.4117496628227499,
+        0.04908422725570538
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Pollution Under Control Certificate",
+      "page": 0,
+      "bbox": [
+        0.11607162241710733,
+        0.0623320571933759,
+        0.37648117268941594,
+        0.07660274881439574
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.11549963766962139,
+        0.13648642074940867,
+        0.1529368902929634,
+        0.14801487458687929
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KAVITA RAO",
+      "page": 0,
+      "bbox": [
+        0.36534392001553095,
+        0.13698968868661945,
+        0.4633614586010959,
+        0.1499863177286736
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.11527808135099528,
+        0.16422062606840832,
+        0.14491774765564483,
+        0.17573061118430855
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "03/03/2026",
+      "page": 0,
+      "bbox": [
+        0.36493999256256293,
+        0.16485417324938229,
+        0.4437198615108581,
+        0.17782999681986697
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.11505684491249492,
+        0.19191477717578853,
+        0.24124373632759535,
+        0.2037397126462511
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-65724853",
+      "page": 0,
+      "bbox": [
+        0.3645366510196461,
+        0.19267822602104423,
+        0.46245714241606833,
+        0.20573966949125688
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate number",
+      "page": 0,
+      "bbox": [
+        0.11483592766186188,
+        0.21956896077939864,
+        0.22923331761272162,
+        0.23139841377200773
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "CN-16107422",
+      "page": 0,
+      "bbox": [
+        0.36413389411288183,
+        0.22046193493852254,
+        0.4619823923019645,
+        0.23355557108074845
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.11445008844400195,
+        0.26786787018794406,
+        0.5364128599439749,
+        0.28121961229301085
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.11432169148952573,
+        0.283940445197811,
+        0.5605020797038972,
+        0.2975316870649227
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.10928256483185138,
+        0.9159500018260378,
+        0.3269587659098979,
+        0.9293915313376986
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "registration_number": [
+      7
+    ],
+    "certificate_number": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "vehicle",
+  "folder": "Kavita Rao/Vehicle",
+  "expected_ask": []
+}

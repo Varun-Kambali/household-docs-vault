@@ -1,0 +1,165 @@
+{
+  "doc_id": "appointment_letter-1-scan",
+  "base_id": "appointment_letter-1",
+  "doc_type": "appointment_letter",
+  "person": "Suresh Rao",
+  "variant": "scan",
+  "files": [
+    "appointment_letter-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Suresh Rao",
+    "document_date": "2025-12-23",
+    "expiry_date": null,
+    "employer": null,
+    "designation": "Associate Manager"
+  },
+  "printed": {
+    "person_name": "Suresh Rao",
+    "document_date": "23/12/2025",
+    "designation": "Associate Manager"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.0766851845458646,
+        0.028132367106767326,
+        0.2756870088084759,
+        0.048019789648807286
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Letter of Appointment",
+      "page": 0,
+      "bbox": [
+        0.07645280205695071,
+        0.06070161407628787,
+        0.24962902325646164,
+        0.07535566464104147
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07584363773608542,
+        0.13540607097465723,
+        0.11542494828758973,
+        0.14701355849841344
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Suresh Rao",
+      "page": 0,
+      "bbox": [
+        0.3395480429881983,
+        0.13443749069722816,
+        0.4314699734517912,
+        0.147509663271383
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07560682008175144,
+        0.16328927433636947,
+        0.10697869549846534,
+        0.17487115579451143
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "23/12/2025",
+      "page": 0,
+      "bbox": [
+        0.339388510838419,
+        0.16239592733793418,
+        0.422188288570728,
+        0.17542861858962447
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.07536986294686202,
+        0.19104145439471873,
+        0.15370632029603262,
+        0.2027451606221993
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Associate Manager",
+      "page": 0,
+      "bbox": [
+        0.3392288845210786,
+        0.1901656597955508,
+        0.4901046122306554,
+        0.20336405372045185
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07495485196488527,
+        0.2390706580341386,
+        0.5213810233444227,
+        0.2515641933158588
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07481641984839615,
+        0.25535781005482105,
+        0.5470308968474715,
+        0.2678483937689293
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.0690101516266028,
+        0.9404732370691525,
+        0.30551729733921085,
+        0.95172911626501
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "designation": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "work",
+  "folder": "Suresh Rao/Work",
+  "expected_ask": []
+}

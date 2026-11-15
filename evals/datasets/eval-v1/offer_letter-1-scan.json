@@ -1,0 +1,165 @@
+{
+  "doc_id": "offer_letter-1-scan",
+  "base_id": "offer_letter-1",
+  "doc_type": "offer_letter",
+  "person": "KAVITA RAO",
+  "variant": "scan",
+  "files": [
+    "offer_letter-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "KAVITA RAO",
+    "document_date": "2026-09-21",
+    "expiry_date": null,
+    "employer": "Kaveri Systems Limited",
+    "designation": null
+  },
+  "printed": {
+    "person_name": "KAVITA RAO",
+    "document_date": "21/09/2026",
+    "employer": "Kaveri Systems Limited"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.06953842797550447,
+        0.029931060811680402,
+        0.26864581872996013,
+        0.04943341293854561
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Offer Letter",
+      "page": 0,
+      "bbox": [
+        0.06981896819439827,
+        0.06288535511759956,
+        0.16147278845773344,
+        0.07713310789632725
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07046025509338694,
+        0.13805035572730723,
+        0.11003838456929113,
+        0.1496742218750675
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KAVITA RAO",
+      "page": 0,
+      "bbox": [
+        0.33395594188928096,
+        0.1380282647418309,
+        0.4367521608208181,
+        0.15096785026194337
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07070075637511021,
+        0.1662259740872751,
+        0.10206259822757167,
+        0.17785268852553404
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "21/09/2026",
+      "page": 0,
+      "bbox": [
+        0.334202401702905,
+        0.16625075547745818,
+        0.4168900202141621,
+        0.17919716638772482
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.07094126785489833,
+        0.1944001175863445,
+        0.13356356671107622,
+        0.2060424578543141
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kaveri Systems Limited",
+      "page": 0,
+      "bbox": [
+        0.33444887198305806,
+        0.19446750121948317,
+        0.520849149354557,
+        0.20746201802955164
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07136218748557213,
+        0.2437077435118367,
+        0.5168232911669435,
+        0.2556003901132612
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07150250097052213,
+        0.260144431953146,
+        0.5425907324680789,
+        0.2720973029939431
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07735867155646045,
+        0.9461515638730377,
+        0.3118883531403101,
+        0.9575792256240406
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "employer": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "work",
+  "folder": "Kavita Rao/Work",
+  "expected_ask": []
+}

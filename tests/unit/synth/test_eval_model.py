@@ -10,7 +10,7 @@ import pytest
 from vault_synth.cli import generate
 from vault_synth.household import AMBIGUOUS, HOUSEHOLD, draw_cast
 from vault_synth.model import SynthDoc
-from vault_synth.sets import SETS, split_of
+from vault_synth.sets import SETS, locked_password, split_of
 
 from household_vault.doctypes import DocType
 from household_vault.reading.render import LockedPdfError, page_count
@@ -82,8 +82,7 @@ def test_scan_and_locked_variants(eval_docs: list[SynthDoc], eval_dir: Path) -> 
     data = (eval_dir / locked.files[0]).read_bytes()
     with pytest.raises(LockedPdfError):
         page_count(data)
-    assert locked.password
-    assert page_count(data, password=locked.password) == 1
+    assert page_count(data, password=locked_password(locked.base_id)) == 1
 
 
 def test_variants_share_truth_and_split(eval_docs: list[SynthDoc]) -> None:

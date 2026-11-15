@@ -1,0 +1,274 @@
+{
+  "doc_id": "card_statement-5-scan",
+  "base_id": "card_statement-5",
+  "doc_type": "card_statement",
+  "person": "KIRAN RAO",
+  "variant": "scan",
+  "files": [
+    "card_statement-5-scan.pdf"
+  ],
+  "fields": {
+    "bank": "Nilgiri Bank",
+    "card_name": "Everyday Rewards",
+    "network": null,
+    "holder": "KIRAN RAO",
+    "last4": "0004",
+    "statement_date": "2026-10-20",
+    "payment_due_date": "2026-11-20",
+    "total_due": null,
+    "credit_limit": "250000",
+    "annual_fee": null
+  },
+  "printed": {
+    "bank": "Nilgiri Bank",
+    "card_name": "Everyday Rewards",
+    "holder": "KIRAN RAO",
+    "last4": "XXXX XXXX XXXX 0004",
+    "statement_date": "20/10/2026",
+    "payment_due_date": "20/11/2026",
+    "credit_limit": "Rs. 2,50,000"
+  },
+  "lines": [
+    {
+      "text": "Tungabhadra Bank",
+      "page": 0,
+      "bbox": [
+        0.07673056415265876,
+        0.029623704210879485,
+        0.30334198727151307,
+        0.05016135196721766
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credit Card Statement",
+      "page": 0,
+      "bbox": [
+        0.07651977797518227,
+        0.0627354918324728,
+        0.25904813276610944,
+        0.0778469375273294
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Bank",
+      "page": 0,
+      "bbox": [
+        0.07596801706950856,
+        0.13838810377177976,
+        0.11025915471342289,
+        0.15022777488971134
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nilgiri Bank",
+      "page": 0,
+      "bbox": [
+        0.34250536683684807,
+        0.1394998814511872,
+        0.43506509310429864,
+        0.15286534148148317
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Card name",
+      "page": 0,
+      "bbox": [
+        0.0757538240807736,
+        0.16674654956210774,
+        0.15005101488501146,
+        0.1787403709002546
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Everyday Rewards",
+      "page": 0,
+      "bbox": [
+        0.3422625200567402,
+        0.16782834287963738,
+        0.49027286440927254,
+        0.18140283558725842
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Card holder",
+      "page": 0,
+      "bbox": [
+        0.07553967755352632,
+        0.1950988437293755,
+        0.15399818439852386,
+        0.20709804673580945
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KIRAN RAO",
+      "page": 0,
+      "bbox": [
+        0.3420197258978063,
+        0.19615066565998943,
+        0.43637185676927204,
+        0.20949676872847406
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Card number",
+      "page": 0,
+      "bbox": [
+        0.07532557747265112,
+        0.2234449882750166,
+        0.1629376696809159,
+        0.2354675562469691
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "XXXX XXXX XXXX 0004",
+      "page": 0,
+      "bbox": [
+        0.3417769843429451,
+        0.22446685178735268,
+        0.5257940948272175,
+        0.23813881384298338
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Statement date",
+      "page": 0,
+      "bbox": [
+        0.07511152382303898,
+        0.25178498519959636,
+        0.17691174981915633,
+        0.2638473803522638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "20/10/2026",
+      "page": 0,
+      "bbox": [
+        0.34153429537506236,
+        0.2527769032559721,
+        0.4248612912933154,
+        0.2660558024456687
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Payment due date",
+      "page": 0,
+      "bbox": [
+        0.07489751658958743,
+        0.28011883650281233,
+        0.19668146210742088,
+        0.29223854378142594
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "20/11/2026",
+      "page": 0,
+      "bbox": [
+        0.3412916589770715,
+        0.2810808220592282,
+        0.4246097003204164,
+        0.2943475645512991
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credit limit",
+      "page": 0,
+      "bbox": [
+        0.07468355575720051,
+        0.3084465441834954,
+        0.14558264309371652,
+        0.3203744144670279
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 2,50,000",
+      "page": 0,
+      "bbox": [
+        0.3410490751318933,
+        0.30937861018963864,
+        0.4363578189259633,
+        0.3226745689885509
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07430923590770284,
+        0.3580052555419822,
+        0.5237277309339067,
+        0.3711475899807696
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07418449417879995,
+        0.3745206481278572,
+        0.549304371710675,
+        0.3877142160689035
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06985594699709397,
+        0.948897791473909,
+        0.30628512113681294,
+        0.9594514534851735
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "bank": [
+      3
+    ],
+    "card_name": [
+      5
+    ],
+    "holder": [
+      7
+    ],
+    "last4": [
+      9
+    ],
+    "statement_date": [
+      11
+    ],
+    "payment_due_date": [
+      13
+    ],
+    "credit_limit": [
+      15
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "cards",
+  "folder": "Kiran Rao/Cards",
+  "expected_ask": []
+}

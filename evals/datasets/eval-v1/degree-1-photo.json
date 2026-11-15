@@ -1,0 +1,191 @@
+{
+  "doc_id": "degree-1-photo",
+  "base_id": "degree-1",
+  "doc_type": "degree",
+  "person": "K Rao",
+  "variant": "photo",
+  "files": [
+    "degree-1-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "K Rao",
+    "document_date": "2026-04-08",
+    "expiry_date": null,
+    "issuer": "Western Ghats University",
+    "roll_number": "RN-60776411"
+  },
+  "printed": {
+    "person_name": "K Rao",
+    "document_date": "08/04/2026",
+    "issuer": "Western Ghats University",
+    "roll_number": "RN-60776411"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.08872382147367808,
+        0.048792376559578896,
+        0.27748502365905686,
+        0.07295819972776456
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Degree Certificate",
+      "page": 0,
+      "bbox": [
+        0.08807661489144912,
+        0.08179451632266219,
+        0.2260926008090658,
+        0.09927329478053959
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.08638441300223916,
+        0.15612585877225896,
+        0.12370505536782438,
+        0.1680773749394334
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "K Rao",
+      "page": 0,
+      "bbox": [
+        0.33592429883111885,
+        0.14957339914004447,
+        0.3820264578980216,
+        0.1631248523925856
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.0857282603602029,
+        0.18305002780529953,
+        0.11531353565536402,
+        0.19475621229743365
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "08/04/2026",
+      "page": 0,
+      "bbox": [
+        0.3351508930768257,
+        0.17585732463652315,
+        0.4148390403227103,
+        0.19014264238421444
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Issuer",
+      "page": 0,
+      "bbox": [
+        0.08507267339212324,
+        0.2095627802393574,
+        0.12313709447036963,
+        0.22141204963604866
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats University",
+      "page": 0,
+      "bbox": [
+        0.33437816249464447,
+        0.2003718667794087,
+        0.5286866540032753,
+        0.2171368462333536
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Roll number",
+      "page": 0,
+      "bbox": [
+        0.08441765136680797,
+        0.23546493292392767,
+        0.15960436317924007,
+        0.24804491668518877
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "RN-60776411",
+      "page": 0,
+      "bbox": [
+        0.33360610620083725,
+        0.22964541180050416,
+        0.43265288750777714,
+        0.244107494812073
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.08327272002124156,
+        0.27559066888077893,
+        0.5077260677645675,
+        0.2945972510012559
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.08289145954282603,
+        0.290981375599523,
+        0.5321114456027405,
+        0.31009911084763986
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06782583246208286,
+        0.9131092772795566,
+        0.2867956454964521,
+        0.9256015891992363
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "issuer": [
+      7
+    ],
+    "roll_number": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": null,
+  "linked_people": [],
+  "area": "education",
+  "folder": null,
+  "expected_ask": [
+    "person_unsure"
+  ]
+}

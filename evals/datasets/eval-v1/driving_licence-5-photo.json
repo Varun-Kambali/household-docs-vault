@@ -1,0 +1,256 @@
+{
+  "doc_id": "driving_licence-5-photo",
+  "base_id": "driving_licence-5",
+  "doc_type": "driving_licence",
+  "person": "Master Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "driving_licence-5-photo.jpg"
+  ],
+  "fields": {
+    "holder": "Master Kiran Rao",
+    "number": "ZZT2201611",
+    "date_of_birth": "1972-11-05",
+    "issue_date": "2020-10-19",
+    "expiry_date": "2031-07-13",
+    "address": "No. 101, 7th Cross, Mangaluru, Karnataka - 575389",
+    "parties": null
+  },
+  "printed": {
+    "holder": "Master Kiran Rao",
+    "number": "ZZT2201611",
+    "date_of_birth": "05/11/1972",
+    "issue_date": "19/10/2020",
+    "expiry_date": "13/07/2031",
+    "address": "No. 101, 7th Cross, Mangaluru, Karnataka - 575389"
+  },
+  "lines": [
+    {
+      "text": "Transport Department",
+      "page": 0,
+      "bbox": [
+        0.11298262199996228,
+        0.03782389518995279,
+        0.3585022493665935,
+        0.05696501840340734
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Driving Licence",
+      "page": 0,
+      "bbox": [
+        0.11262783220193182,
+        0.07024366486145064,
+        0.23008929104289977,
+        0.08425856911861576
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Holder",
+      "page": 0,
+      "bbox": [
+        0.11169807496285722,
+        0.14436904566827224,
+        0.15325225703850548,
+        0.1558845621647618
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3610380184134077,
+        0.14407507448403145,
+        0.4887656555428011,
+        0.15690411171005245
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Number",
+      "page": 0,
+      "bbox": [
+        0.11133673509357155,
+        0.17217694298193464,
+        0.16148687863164088,
+        0.183721212289165
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ZZT2201611",
+      "page": 0,
+      "bbox": [
+        0.36072956631547676,
+        0.17182962556476497,
+        0.4497476065647065,
+        0.18465924586852095
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of birth",
+      "page": 0,
+      "bbox": [
+        0.11097524453699513,
+        0.1999632025156528,
+        0.18770711720398406,
+        0.21156947095651416
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "05/11/1972",
+      "page": 0,
+      "bbox": [
+        0.3604209859634487,
+        0.1995789109432599,
+        0.4382727812937411,
+        0.2124259205861207
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of issue",
+      "page": 0,
+      "bbox": [
+        0.11061360319884804,
+        0.22778288225815915,
+        0.1928268736930524,
+        0.23942934542987995
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "19/10/2020",
+      "page": 0,
+      "bbox": [
+        0.3601122772773147,
+        0.22732624577063087,
+        0.4379805584862603,
+        0.24020414306217916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Valid until",
+      "page": 0,
+      "bbox": [
+        0.1102518109847717,
+        0.2556687763476857,
+        0.17138670109174697,
+        0.26730084297839357
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "13/07/2031",
+      "page": 0,
+      "bbox": [
+        0.35980344017699994,
+        0.25508511098571374,
+        0.4376882142457738,
+        0.26799392050201326
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Address",
+      "page": 0,
+      "bbox": [
+        0.1098898678003288,
+        0.2835506411578274,
+        0.16165803275813487,
+        0.29518397087725273
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "No. 101, 7th Cross, Mangaluru, Karnataka - 575389",
+      "page": 0,
+      "bbox": [
+        0.35949447458236256,
+        0.2821164545510344,
+        0.7305600065604156,
+        0.2957952601169356
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.10925610367077775,
+        0.3311927712378731,
+        0.5300996471556098,
+        0.3440074521349
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.10904474606524234,
+        0.34731234465001964,
+        0.5539531150865092,
+        0.36028987269383805
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.3899674211756399,
+        0.8716030668336343,
+        0.6180288016512572,
+        0.9097597208489413
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.10129633282290147,
+        0.9445698705152835,
+        0.32459089541819486,
+        0.9572067556072253
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "holder": [
+      3
+    ],
+    "number": [
+      5
+    ],
+    "date_of_birth": [
+      7
+    ],
+    "issue_date": [
+      9
+    ],
+    "expiry_date": [
+      11
+    ],
+    "address": [
+      13
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "identity",
+  "folder": "Kiran Rao/Identity",
+  "expected_ask": []
+}

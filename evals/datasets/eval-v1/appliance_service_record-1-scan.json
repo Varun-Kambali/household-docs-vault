@@ -1,0 +1,305 @@
+{
+  "doc_id": "appliance_service_record-1-scan",
+  "base_id": "appliance_service_record-1",
+  "doc_type": "appliance_service_record",
+  "person": "S N Rao",
+  "variant": "scan",
+  "files": [
+    "appliance_service_record-1-scan.pdf"
+  ],
+  "fields": {
+    "brand": "Vistara Home",
+    "product": "Split air conditioner",
+    "model": null,
+    "serial_number": "SNTW624052",
+    "seller": "Sapphire Electronics",
+    "seller_location": null,
+    "order_id": null,
+    "buyer": "S N Rao",
+    "purchase_date": "2026-02-26",
+    "amount": "62000",
+    "invoice_number": null,
+    "period_start": null,
+    "period_end": null,
+    "visits": null,
+    "service_helpline": "1800 526 8943"
+  },
+  "printed": {
+    "brand": "Vistara Home",
+    "product": "Split air conditioner",
+    "serial_number": "SNTW624052",
+    "seller": "Sapphire Electronics",
+    "buyer": "S N Rao",
+    "purchase_date": "26/02/2026",
+    "amount": "Rs. 62,000",
+    "service_helpline": "1800 526 8943"
+  },
+  "lines": [
+    {
+      "text": "Service desk",
+      "page": 0,
+      "bbox": [
+        0.07576830593636638,
+        0.026363485306195283,
+        0.22723076908697842,
+        0.046164403746488794
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Service Report",
+      "page": 0,
+      "bbox": [
+        0.07591781936640678,
+        0.05950515300685775,
+        0.19605051637760143,
+        0.07402269725392858
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Brand",
+      "page": 0,
+      "bbox": [
+        0.07625954922770771,
+        0.13525418440537496,
+        0.11596292211350796,
+        0.14701946470361454
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Vistara Home",
+      "page": 0,
+      "bbox": [
+        0.34013007486825747,
+        0.13559291071245042,
+        0.4453662988625008,
+        0.14871961931065433
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.07638769250192859,
+        0.1636588689287414,
+        0.12764934008215878,
+        0.1754297142167987
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Split air conditioner",
+      "page": 0,
+      "bbox": [
+        0.340254985426205,
+        0.16395515782480438,
+        0.4948181396902648,
+        0.17711640494995004
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Serial number",
+      "page": 0,
+      "bbox": [
+        0.0765158328178905,
+        0.1920628977141169,
+        0.1690368044743863,
+        0.2038621948926033
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SNTW624052",
+      "page": 0,
+      "bbox": [
+        0.34037989310483047,
+        0.19231675115698504,
+        0.4437878908777857,
+        0.20540740877655803
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Seller",
+      "page": 0,
+      "bbox": [
+        0.07664397017569585,
+        0.2204662707842083,
+        0.1146818102766679,
+        0.23221038723295603
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sapphire Electronics",
+      "page": 0,
+      "bbox": [
+        0.3405047979042333,
+        0.22067769073159765,
+        0.5042195156165381,
+        0.2337953058661401
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Buyer",
+      "page": 0,
+      "bbox": [
+        0.07677210457544711,
+        0.24886898816172145,
+        0.11564150633811383,
+        0.2606072035393024
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "S N Rao",
+      "page": 0,
+      "bbox": [
+        0.3406296998245132,
+        0.24903797657124654,
+        0.4037964264185091,
+        0.26207198993661274
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase date",
+      "page": 0,
+      "bbox": [
+        0.07690023601724667,
+        0.2772710498693611,
+        0.17274377671779978,
+        0.289026302052172
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "26/02/2026",
+      "page": 0,
+      "bbox": [
+        0.3407545988657695,
+        0.2773976086985347,
+        0.4231700854109911,
+        0.29042898875947865
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Amount",
+      "page": 0,
+      "bbox": [
+        0.07702836450119697,
+        0.305672455929831,
+        0.1282868657980983,
+        0.31740077596542754
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 62,000",
+      "page": 0,
+      "bbox": [
+        0.3408794950281019,
+        0.3057565871360644,
+        0.4214514873136041,
+        0.3187739729398131
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Service helpline",
+      "page": 0,
+      "bbox": [
+        0.07715649002740044,
+        0.33407320636583365,
+        0.1820541623286999,
+        0.34579794348338044
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 526 8943",
+      "page": 0,
+      "bbox": [
+        0.34100438831160984,
+        0.3341149119064365,
+        0.4508528447237527,
+        0.34712152221705084
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.0773807025814862,
+        0.38371807064812985,
+        0.5224153606337184,
+        0.3954875874142627
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07745543808676833,
+        0.40023694079731253,
+        0.5479487814274253,
+        0.41205356209827426
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07993181700232031,
+        0.9484817731072561,
+        0.3145941792294845,
+        0.959670088703501
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      3
+    ],
+    "product": [
+      5
+    ],
+    "serial_number": [
+      7
+    ],
+    "seller": [
+      9
+    ],
+    "buyer": [
+      11
+    ],
+    "purchase_date": [
+      13
+    ],
+    "amount": [
+      15
+    ],
+    "service_helpline": [
+      17
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "home",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "purchases",
+  "folder": "Home/Purchases",
+  "expected_ask": []
+}

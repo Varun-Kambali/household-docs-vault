@@ -1,0 +1,165 @@
+{
+  "doc_id": "experience_letter-1-scan",
+  "base_id": "experience_letter-1",
+  "doc_type": "experience_letter",
+  "person": "Master Kiran Rao",
+  "variant": "scan",
+  "files": [
+    "experience_letter-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "2026-04-26",
+    "expiry_date": null,
+    "employer": null,
+    "designation": "Senior Analyst"
+  },
+  "printed": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "26/04/2026",
+    "designation": "Senior Analyst"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.07989924338784515,
+        0.03001906973632742,
+        0.27931456602275107,
+        0.04939781879613438
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Experience Certificate",
+      "page": 0,
+      "bbox": [
+        0.0798435302536005,
+        0.06286134699698394,
+        0.2573583894196495,
+        0.07705635205512183
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.0796976180653133,
+        0.1378888066992535,
+        0.11929881730128306,
+        0.1495047476457274
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3437613308419497,
+        0.13794930790410162,
+        0.4797330914513076,
+        0.15089605129750955
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07964094559856769,
+        0.16602273242625834,
+        0.11100614313357796,
+        0.17764087204973925
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "26/04/2026",
+      "page": 0,
+      "bbox": [
+        0.3437144351861426,
+        0.16611368090362189,
+        0.42644168797271587,
+        0.17905590889241924
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.07958426891333863,
+        0.1941587523038267,
+        0.15798019537799177,
+        0.20580522740071358
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Senior Analyst",
+      "page": 0,
+      "bbox": [
+        0.3436675360358172,
+        0.19428015258876427,
+        0.4594375316374497,
+        0.20724981552586563
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07948507456204511,
+        0.24340182684268954,
+        0.5257150270872967,
+        0.25532645487393446
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07945200690661129,
+        0.25981761058387715,
+        0.5513419732479444,
+        0.2717926821090874
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07807393576478078,
+        0.9452259495907216,
+        0.31314625189698964,
+        0.9564049994513761
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "designation": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "work",
+  "folder": "Kiran Rao/Work",
+  "expected_ask": []
+}

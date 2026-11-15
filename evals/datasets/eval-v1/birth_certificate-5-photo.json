@@ -1,0 +1,204 @@
+{
+  "doc_id": "birth_certificate-5-photo",
+  "base_id": "birth_certificate-5",
+  "doc_type": "birth_certificate",
+  "person": "SURESH N RAO",
+  "variant": "photo",
+  "files": [
+    "birth_certificate-5-photo.jpg"
+  ],
+  "fields": {
+    "holder": "SURESH N RAO",
+    "number": "ZZJ3697870",
+    "date_of_birth": "1976-07-23",
+    "issue_date": "2024-08-06",
+    "expiry_date": null,
+    "address": null,
+    "parties": null
+  },
+  "printed": {
+    "holder": "SURESH N RAO",
+    "number": "ZZJ3697870",
+    "date_of_birth": "23/07/1976",
+    "issue_date": "06/08/2024"
+  },
+  "lines": [
+    {
+      "text": "Registrar of Births and Deaths",
+      "page": 0,
+      "bbox": [
+        0.0748983007471316,
+        0.052487536391379166,
+        0.43265459486540053,
+        0.07446503479261835
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Birth",
+      "page": 0,
+      "bbox": [
+        0.07476886613802193,
+        0.08631063592311367,
+        0.21889992793064608,
+        0.10134038007048703
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Holder",
+      "page": 0,
+      "bbox": [
+        0.0744296330858152,
+        0.16013588903378898,
+        0.11815619853584095,
+        0.17177753339782492
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SURESH N RAO",
+      "page": 0,
+      "bbox": [
+        0.33856600215643873,
+        0.15733447326727562,
+        0.4655678403259178,
+        0.17092958668760297
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Number",
+      "page": 0,
+      "bbox": [
+        0.07429777886833377,
+        0.1874469865467951,
+        0.12710164230679796,
+        0.1991552776157915
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ZZJ3697870",
+      "page": 0,
+      "bbox": [
+        0.33849749808515894,
+        0.18505429127383907,
+        0.4324246271904753,
+        0.19836743761547304
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of birth",
+      "page": 0,
+      "bbox": [
+        0.07416586123776285,
+        0.21463070701069872,
+        0.15505888294149497,
+        0.2265461887037831
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "23/07/1976",
+      "page": 0,
+      "bbox": [
+        0.33842896099539255,
+        0.21260446645165776,
+        0.4213394516925041,
+        0.22581851339695205
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of issue",
+      "page": 0,
+      "bbox": [
+        0.07403388014834526,
+        0.24200493044986487,
+        0.16072495326304864,
+        0.2539502761626645
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "06/08/2024",
+      "page": 0,
+      "bbox": [
+        0.3383603908632618,
+        0.24008140039030354,
+        0.42129083954795876,
+        0.2532828235957765
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07380276040622821,
+        0.2875013880178341,
+        0.520940001668682,
+        0.30193916346764355
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07372567723127262,
+        0.30338595522832484,
+        0.5466804625925502,
+        0.31794444177996
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.376482669658945,
+        0.8799433644182897,
+        0.6206777979734471,
+        0.9161188082773041
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.0706306290024805,
+        0.9500574926785564,
+        0.3071234209949965,
+        0.9605893292070299
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "holder": [
+      3
+    ],
+    "number": [
+      5
+    ],
+    "date_of_birth": [
+      7
+    ],
+    "issue_date": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "identity",
+  "folder": "Suresh Rao/Identity",
+  "expected_ask": []
+}

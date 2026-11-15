@@ -1,0 +1,336 @@
+{
+  "doc_id": "warranty_card-10-photo",
+  "base_id": "warranty_card-10",
+  "doc_type": "warranty_card",
+  "person": "Kiran Rao",
+  "variant": "photo",
+  "files": [
+    "warranty_card-10-photo.jpg"
+  ],
+  "fields": {
+    "brand": "Samsung",
+    "product": "Front Load Washing Machine 8 kg",
+    "model": "WW80445FN",
+    "serial_number": "632SJK302147",
+    "purchase_date": "2025-01-15",
+    "seller": null,
+    "seller_location": "Hubballi",
+    "buyer": null,
+    "warranty_parts": [
+      {
+        "part": "Digital Inverter Motor",
+        "years": "10"
+      },
+      {
+        "part": "Product",
+        "years": "2"
+      }
+    ]
+  },
+  "printed": {
+    "brand": "Samsung",
+    "product": "Front Load Washing Machine 8 kg",
+    "model": "WW80445FN",
+    "serial_number": "632SJK302147",
+    "purchase_date": "15/01/2025",
+    "seller_location": "Hubballi",
+    "warranty_parts": "Digital Inverter Motor - 10 years\nProduct - 2 years"
+  },
+  "lines": [
+    {
+      "text": "Samsung",
+      "page": 0,
+      "bbox": [
+        0.10263674073286112,
+        0.04773392489835478,
+        0.3100159485991195,
+        0.08644778503125107
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty Card",
+      "page": 0,
+      "bbox": [
+        0.7367675475569136,
+        0.05532891724774549,
+        0.8999091551685973,
+        0.07689252868390241
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product details",
+      "page": 0,
+      "bbox": [
+        0.0998349280472573,
+        0.15176828674278423,
+        0.23315624044284575,
+        0.16777860735426373
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.0988971013364213,
+        0.18357804084637977,
+        0.14678106390495027,
+        0.1950017754056785
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Front Load Washing Machine 8 kg",
+      "page": 0,
+      "bbox": [
+        0.32964304035457404,
+        0.1789671805352172,
+        0.5819106991907623,
+        0.19382860954441117
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Model",
+      "page": 0,
+      "bbox": [
+        0.09805961040926975,
+        0.20798601976404738,
+        0.1360146747387782,
+        0.2193124033585312
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "WW80445FN",
+      "page": 0,
+      "bbox": [
+        0.3290865033486804,
+        0.20509628858121987,
+        0.42237454036554806,
+        0.21825621326057276
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Serial number",
+      "page": 0,
+      "bbox": [
+        0.09722005792268153,
+        0.23188365668029567,
+        0.18368145710697514,
+        0.24368287411426423
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "632SJK302147",
+      "page": 0,
+      "bbox": [
+        0.32852858969495985,
+        0.22945877722882668,
+        0.4366753907879019,
+        0.24274424100463185
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase details",
+      "page": 0,
+      "bbox": [
+        0.09486982020057215,
+        0.29596147643877224,
+        0.24260453276564756,
+        0.3119054100374772
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of purchase",
+      "page": 0,
+      "bbox": [
+        0.09391824562315115,
+        0.32764338499209295,
+        0.2001672025130414,
+        0.33952765019684894
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "15/01/2025",
+      "page": 0,
+      "bbox": [
+        0.326334348505389,
+        0.32609109629032657,
+        0.404617512378851,
+        0.3390541964413726
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dealer location",
+      "page": 0,
+      "bbox": [
+        0.09221657022605148,
+        0.3771782323987938,
+        0.18551718362165004,
+        0.38892376439251564
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hubballi",
+      "page": 0,
+      "bbox": [
+        0.32520344846208754,
+        0.3758546364855973,
+        0.38711136026974824,
+        0.38869182665789165
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty terms",
+      "page": 0,
+      "bbox": [
+        0.08905003364849881,
+        0.46521204958655527,
+        0.22654562547018708,
+        0.4808417662958993
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Part and warranty period",
+      "page": 0,
+      "bbox": [
+        0.08816068371168087,
+        0.4947580089319944,
+        0.24217715911363372,
+        0.5066577539477416
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Digital Inverter Motor - 10 years",
+      "page": 0,
+      "bbox": [
+        0.08733196424537468,
+        0.5173139447783506,
+        0.3214718923940648,
+        0.5307137645497653
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product - 2 years",
+      "page": 0,
+      "bbox": [
+        0.08646578027377842,
+        0.5428821540364736,
+        0.21362539493231114,
+        0.5558572921863223
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Warranty starts on the date of purchase shown on the original invoice.",
+      "page": 0,
+      "bbox": [
+        0.08286378521559765,
+        0.6485555333598492,
+        0.5394947644273853,
+        0.6604157523540969
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Keep this card and the invoice. Service is refused without them.",
+      "page": 0,
+      "bbox": [
+        0.08222589568484581,
+        0.6672484844966151,
+        0.4985560958283981,
+        0.6789323649577358
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Damage from misuse, power surges or unauthorised repair is not covered.",
+      "page": 0,
+      "bbox": [
+        0.08158683803371487,
+        0.6859281403199131,
+        0.567006461005912,
+        0.6975262608135523
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4. Consumables and accessories carry no warranty.",
+      "page": 0,
+      "bbox": [
+        0.08094660905062434,
+        0.7045642192086496,
+        0.4086647398697593,
+        0.7162234129083217
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Authorised signature and seal",
+      "page": 0,
+      "bbox": [
+        0.710469947720507,
+        0.8851343439926374,
+        0.9049220407913309,
+        0.8978113359384251
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07321635053802303,
+        0.9300078217349815,
+        0.3004840418642498,
+        0.9416298484014748
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      0
+    ],
+    "product": [
+      4
+    ],
+    "model": [
+      6
+    ],
+    "serial_number": [
+      8
+    ],
+    "purchase_date": [
+      11
+    ],
+    "seller_location": [
+      13
+    ],
+    "warranty_parts": [
+      16,
+      17
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "home",
+  "linked_people": [],
+  "area": "purchases",
+  "folder": "Home/Purchases",
+  "expected_ask": []
+}

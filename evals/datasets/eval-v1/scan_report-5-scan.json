@@ -1,0 +1,252 @@
+{
+  "doc_id": "scan_report-5-scan",
+  "base_id": "scan_report-5",
+  "doc_type": "scan_report",
+  "person": "RAVI KUMAR RAO",
+  "variant": "scan",
+  "files": [
+    "scan_report-5-scan.pdf"
+  ],
+  "fields": {
+    "patient": "RAVI KUMAR RAO",
+    "doctor": "Dr. Tarak Purohit",
+    "date": "2026-07-31",
+    "hospital": null,
+    "department": "Radiology",
+    "diagnoses": [
+      "Acute gastritis",
+      "Hypertension",
+      "Type 2 diabetes mellitus"
+    ],
+    "procedures": null,
+    "allergies": null,
+    "medicines": null,
+    "tests": null,
+    "next_visit": null,
+    "amount": null
+  },
+  "printed": {
+    "patient": "RAVI KUMAR RAO",
+    "date": "31/07/2026",
+    "doctor": "Dr. Tarak Purohit",
+    "department": "Radiology",
+    "diagnoses": "Acute gastritis\nHypertension\nType 2 diabetes mellitus"
+  },
+  "lines": [
+    {
+      "text": "Lakeview Multispeciality Clinic",
+      "page": 0,
+      "bbox": [
+        0.07453597767166632,
+        0.03204842610904318,
+        0.43771616618479525,
+        0.052275480316580705
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Radiology Report",
+      "page": 0,
+      "bbox": [
+        0.07450847858256267,
+        0.06544878184404196,
+        0.2150170855636759,
+        0.07993832859826053
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.0744365126534273,
+        0.14066359602319112,
+        0.12071756199489751,
+        0.15233282034371853
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "RAVI KUMAR RAO",
+      "page": 0,
+      "bbox": [
+        0.3390654566734816,
+        0.1400595845147772,
+        0.4865484202920493,
+        0.1532083778121803
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.0744085820285757,
+        0.16879548170055167,
+        0.10580264016893813,
+        0.1804297742017189
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "31/07/2026",
+      "page": 0,
+      "bbox": [
+        0.3389915428298568,
+        0.16833727546027516,
+        0.42198738117457274,
+        0.1813583669254723
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Doctor",
+      "page": 0,
+      "bbox": [
+        0.07438066107929181,
+        0.1968776158424556,
+        0.11814869230556048,
+        0.2085169948732402
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Tarak Purohit",
+      "page": 0,
+      "bbox": [
+        0.3389176546395052,
+        0.19643438897449716,
+        0.47348428468147624,
+        0.20949858602372584
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Department",
+      "page": 0,
+      "bbox": [
+        0.07435274980054893,
+        0.22493253813226244,
+        0.1519873493047654,
+        0.236594487414979
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Radiology",
+      "page": 0,
+      "bbox": [
+        0.33884379208907395,
+        0.2246533606632721,
+        0.4189916220395126,
+        0.23762904019237618
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Diagnoses",
+      "page": 0,
+      "bbox": [
+        0.07432484818732372,
+        0.25302625642872706,
+        0.14451405432151637,
+        0.26466225688012956
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Acute gastritis",
+      "page": 0,
+      "bbox": [
+        0.1073034958934143,
+        0.27051935177165165,
+        0.22204948407788588,
+        0.2834649661066265
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hypertension",
+      "page": 0,
+      "bbox": [
+        0.10728109114333968,
+        0.28924964797610336,
+        0.21282417166883524,
+        0.302171504255502
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Type 2 diabetes mellitus",
+      "page": 0,
+      "bbox": [
+        0.10725869156512167,
+        0.3079306247774017,
+        0.2982767931077242,
+        0.3208737242337964
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.0742237857847406,
+        0.3547135779161142,
+        0.5210353670580102,
+        0.36632649379725135
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07420753471090602,
+        0.37111442022509916,
+        0.546692590581927,
+        0.3827155145429866
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07364092176091466,
+        0.9424583119076702,
+        0.3077895809258726,
+        0.9536406983044039
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      3
+    ],
+    "date": [
+      5
+    ],
+    "doctor": [
+      7
+    ],
+    "department": [
+      9
+    ],
+    "diagnoses": [
+      11,
+      12,
+      13
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "medical",
+  "folder": "Ravi Kumar Rao/Medical/Scans",
+  "expected_ask": []
+}

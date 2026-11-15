@@ -1,0 +1,165 @@
+{
+  "doc_id": "appointment_letter-5-scan",
+  "base_id": "appointment_letter-5",
+  "doc_type": "appointment_letter",
+  "person": "Master Kiran Rao",
+  "variant": "scan",
+  "files": [
+    "appointment_letter-5-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "2026-08-20",
+    "expiry_date": null,
+    "employer": null,
+    "designation": "Software Engineer"
+  },
+  "printed": {
+    "person_name": "Master Kiran Rao",
+    "document_date": "20/08/2026",
+    "designation": "Software Engineer"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.06948745550435252,
+        0.029389261660725755,
+        0.2725925767502021,
+        0.049655101719548726
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Letter of Appointment",
+      "page": 0,
+      "bbox": [
+        0.06961929664969677,
+        0.06294471440221973,
+        0.24629947134452448,
+        0.07782922037708785
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.06992009625263827,
+        0.13950250548337187,
+        0.11025907393221783,
+        0.15140063359782346
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Master Kiran Rao",
+      "page": 0,
+      "bbox": [
+        0.3381956322026292,
+        0.14000689752716322,
+        0.4757769403854003,
+        0.15337335143795044
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07003269870848924,
+        0.16816143723050203,
+        0.10197310047187325,
+        0.18002779168401598
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "20/08/2026",
+      "page": 0,
+      "bbox": [
+        0.3381802242264698,
+        0.16862123399776902,
+        0.42188232260182884,
+        0.181864165117822
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.07014519373389368,
+        0.1967930263960434,
+        0.14986646522717834,
+        0.2087136230062752
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Software Engineer",
+      "page": 0,
+      "bbox": [
+        0.33816483092462996,
+        0.19720831266538738,
+        0.4848994517038692,
+        0.21051781515201226
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07034180198588667,
+        0.2468326319464453,
+        0.5219900534921984,
+        0.25915406019078074
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07040726520409736,
+        0.2634939550807316,
+        0.5477640840254948,
+        0.2757936120733186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07310596631067498,
+        0.9496927975538321,
+        0.3085084392784693,
+        0.9605814110655124
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "designation": [
+      7
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "work",
+  "folder": "Kiran Rao/Work",
+  "expected_ask": []
+}

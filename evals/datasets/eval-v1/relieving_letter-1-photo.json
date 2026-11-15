@@ -1,0 +1,191 @@
+{
+  "doc_id": "relieving_letter-1-photo",
+  "base_id": "relieving_letter-1",
+  "doc_type": "relieving_letter",
+  "person": "Ravi Rao",
+  "variant": "photo",
+  "files": [
+    "relieving_letter-1-photo.jpg"
+  ],
+  "fields": {
+    "person_name": "Ravi Rao",
+    "document_date": "2026-01-09",
+    "expiry_date": null,
+    "employer": "Kaveri Systems Limited",
+    "designation": "Associate Manager"
+  },
+  "printed": {
+    "person_name": "Ravi Rao",
+    "document_date": "09/01/2026",
+    "employer": "Kaveri Systems Limited",
+    "designation": "Associate Manager"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.11293268720633216,
+        0.044612712949657816,
+        0.29985586648218016,
+        0.06476625410441947
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Relieving Letter",
+      "page": 0,
+      "bbox": [
+        0.11258716024487488,
+        0.0763414684872938,
+        0.23088784188029637,
+        0.09093816318545613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.11167934523347156,
+        0.14830845823366334,
+        0.14900399788951627,
+        0.1597005307895401
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi Rao",
+      "page": 0,
+      "bbox": [
+        0.3598816809553627,
+        0.14566319385580323,
+        0.4264056176926356,
+        0.15857700812817613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.11132561909816928,
+        0.17515861339540192,
+        0.14093982979457306,
+        0.18649348556699796
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "09/01/2026",
+      "page": 0,
+      "bbox": [
+        0.3597594947644781,
+        0.17237263589135876,
+        0.4376227198812511,
+        0.18540622833424145
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.11097123190197902,
+        0.201712371215171,
+        0.17010436284666738,
+        0.2133365123428447
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kaveri Systems Limited",
+      "page": 0,
+      "bbox": [
+        0.35963707990767213,
+        0.1983355587466949,
+        0.5353934286830085,
+        0.21228565821058865
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.11061618179003266,
+        0.2284584768652978,
+        0.18458852307931511,
+        0.24022975161390284
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Associate Manager",
+      "page": 0,
+      "bbox": [
+        0.35951443574243686,
+        0.22557408904727175,
+        0.501603602114901,
+        0.23921543883691496
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.10999324334916606,
+        0.272554234968013,
+        0.5312957958040466,
+        0.2874141686234531
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.10978514305169722,
+        0.2881263975475312,
+        0.5555613905029687,
+        0.30317670721702683
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.1012874482643269,
+        0.9352855035393535,
+        0.32809055924053027,
+        0.9468338459695628
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "employer": [
+      7
+    ],
+    "designation": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "work",
+  "folder": "Ravi Kumar Rao/Work",
+  "expected_ask": []
+}

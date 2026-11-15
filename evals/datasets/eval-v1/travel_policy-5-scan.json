@@ -1,0 +1,322 @@
+{
+  "doc_id": "travel_policy-5-scan",
+  "base_id": "travel_policy-5",
+  "doc_type": "travel_policy",
+  "person": "RAVI KUMAR RAO",
+  "variant": "scan",
+  "files": [
+    "travel_policy-5-scan.pdf"
+  ],
+  "fields": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "product": null,
+    "policy_number": null,
+    "policyholder": "RAVI KUMAR RAO",
+    "insured": [
+      "RAVI KUMAR RAO",
+      "Suresh Rao"
+    ],
+    "nominee": null,
+    "sum_insured": "1000000",
+    "premium": "21240",
+    "premium_frequency": null,
+    "start_date": "2026-09-07",
+    "end_date": "2027-05-18",
+    "premium_due_date": null,
+    "agent": null,
+    "claim_helpline": "1800 763 6183"
+  },
+  "printed": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "policyholder": "RAVI KUMAR RAO",
+    "insured": "RAVI KUMAR RAO\nSuresh Rao",
+    "sum_insured": "Rs. 10,00,000",
+    "premium": "Rs. 21,240",
+    "start_date": "07/09/2026",
+    "end_date": "18/05/2027",
+    "claim_helpline": "1800 763 6183"
+  },
+  "lines": [
+    {
+      "text": "Nilgiri General Insurance Company Limited",
+      "page": 0,
+      "bbox": [
+        0.07984964624430542,
+        0.024809815907735216,
+        0.5904850177644966,
+        0.0482918379917206
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Travel Insurance Certificate",
+      "page": 0,
+      "bbox": [
+        0.0798263756308478,
+        0.05801564630768354,
+        0.30366251546161177,
+        0.07401550197860136
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Insurer",
+      "page": 0,
+      "bbox": [
+        0.07976547989661592,
+        0.1338587041021285,
+        0.1264444600501029,
+        0.14589589902967467
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.34578321270023626,
+        0.1356684237536241,
+        0.6490649454455534,
+        0.15068722820477295
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policyholder",
+      "page": 0,
+      "bbox": [
+        0.07974184733120833,
+        0.16227978854539635,
+        0.16137957596563077,
+        0.17452399817173878
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "RAVI KUMAR RAO",
+      "page": 0,
+      "bbox": [
+        0.3457085996916401,
+        0.1640164283868397,
+        0.49291356085342725,
+        0.17794797521798106
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Insured persons",
+      "page": 0,
+      "bbox": [
+        0.079718223856212,
+        0.19068993977680176,
+        0.1871489849102557,
+        0.20306576576916444
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "RAVI KUMAR RAO",
+      "page": 0,
+      "bbox": [
+        0.11301256960348842,
+        0.20864343940988567,
+        0.2608118855137887,
+        0.22253445506985867
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Suresh Rao",
+      "page": 0,
+      "bbox": [
+        0.11299256625016887,
+        0.22756682594901564,
+        0.20544300805022606,
+        0.24110784847980593
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sum insured",
+      "page": 0,
+      "bbox": [
+        0.07966608752597239,
+        0.2533903238010332,
+        0.16375308547618442,
+        0.26556211000462265
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 10,00,000",
+      "page": 0,
+      "bbox": [
+        0.34546940946211435,
+        0.25489287715992276,
+        0.449502815396296,
+        0.2684408756372185
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium",
+      "page": 0,
+      "bbox": [
+        0.07964249318066384,
+        0.28176544020190614,
+        0.13957075264348517,
+        0.29378255051451696
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 21,240",
+      "page": 0,
+      "bbox": [
+        0.3453949168129634,
+        0.28319514915328015,
+        0.4264192141378478,
+        0.2965889039698572
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Start date",
+      "page": 0,
+      "bbox": [
+        0.0796189079037252,
+        0.31012964990258113,
+        0.14456471512114571,
+        0.3221509708649522
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "07/09/2026",
+      "page": 0,
+      "bbox": [
+        0.34532045272125217,
+        0.311486570257991,
+        0.42818167772544724,
+        0.3248624077778854
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End date",
+      "page": 0,
+      "bbox": [
+        0.07959533168992941,
+        0.3384829591902529,
+        0.13954549308585038,
+        0.3504584924991867
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "18/05/2027",
+      "page": 0,
+      "bbox": [
+        0.3452460171705622,
+        0.3397671467130891,
+        0.428091426627339,
+        0.3531153531461088
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Claims helpline",
+      "page": 0,
+      "bbox": [
+        0.07957176453405333,
+        0.3668253743472843,
+        0.18102937990347945,
+        0.3789647078715681
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 763 6183",
+      "page": 0,
+      "bbox": [
+        0.34517161014448766,
+        0.3680368847528257,
+        0.4555703305148743,
+        0.3814797675687908
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07953054379119406,
+        0.4163984057491692,
+        0.5270532643715479,
+        0.429855860796063
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.0795168096996101,
+        0.4329153455704329,
+        0.5525452460371421,
+        0.4463963270683912
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07909267100514729,
+        0.9440488348416436,
+        0.3144658469410374,
+        0.9545912609458932
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "insurer": [
+      3
+    ],
+    "policyholder": [
+      5
+    ],
+    "insured": [
+      7,
+      8
+    ],
+    "sum_insured": [
+      10
+    ],
+    "premium": [
+      12
+    ],
+    "start_date": [
+      14
+    ],
+    "end_date": [
+      16
+    ],
+    "claim_helpline": [
+      18
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1",
+    "p4"
+  ],
+  "area": "insurance",
+  "folder": "Ravi Kumar Rao/Insurance",
+  "expected_ask": [
+    "missing_required"
+  ]
+}

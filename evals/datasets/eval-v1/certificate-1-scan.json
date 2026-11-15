@@ -1,0 +1,191 @@
+{
+  "doc_id": "certificate-1-scan",
+  "base_id": "certificate-1",
+  "doc_type": "certificate",
+  "person": "KIRAN RAO",
+  "variant": "scan",
+  "files": [
+    "certificate-1-scan.pdf"
+  ],
+  "fields": {
+    "person_name": "KIRAN RAO",
+    "document_date": "2026-03-03",
+    "expiry_date": null,
+    "issuer": "Cauvery Institute of Technology",
+    "credential_id": "CR-90954651"
+  },
+  "printed": {
+    "person_name": "KIRAN RAO",
+    "document_date": "03/03/2026",
+    "issuer": "Cauvery Institute of Technology",
+    "credential_id": "CR-90954651"
+  },
+  "lines": [
+    {
+      "text": "Issuing authority",
+      "page": 0,
+      "bbox": [
+        0.06996779692126974,
+        0.03197387940617166,
+        0.27241178644559655,
+        0.051999358874601304
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Completion",
+      "page": 0,
+      "bbox": [
+        0.07024688774272757,
+        0.0653778961215596,
+        0.27181956646176786,
+        0.08015962382906236
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.07088341535577876,
+        0.1418941653125274,
+        0.11110427808353879,
+        0.15375175966736557
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KIRAN RAO",
+      "page": 0,
+      "bbox": [
+        0.33812127050635227,
+        0.1412282793388897,
+        0.4326163342168195,
+        0.1544906397058397
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.07112161447147151,
+        0.17044205921017802,
+        0.10297596775783159,
+        0.1822730220259897
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "03/03/2026",
+      "page": 0,
+      "bbox": [
+        0.3382070825283325,
+        0.16974086741844838,
+        0.4216228493644057,
+        0.18297620430756298
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Issuer",
+      "page": 0,
+      "bbox": [
+        0.07135954227061098,
+        0.19891878230184876,
+        0.11237576443813592,
+        0.2107618053677165
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Cauvery Institute of Technology",
+      "page": 0,
+      "bbox": [
+        0.3382927969259343,
+        0.19780210667335638,
+        0.5916971492718929,
+        0.21142937064324302
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credential id",
+      "page": 0,
+      "bbox": [
+        0.07159719921649092,
+        0.22727659891894256,
+        0.1559762850232088,
+        0.23921816513992922
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "CR-90954651",
+      "page": 0,
+      "bbox": [
+        0.338378413865657,
+        0.22657325748242324,
+        0.44201085583705096,
+        0.2398501939540738
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.07201244852086194,
+        0.2760213073723083,
+        0.5215933683174306,
+        0.28893894185214164
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.07215068136654196,
+        0.29247634865078836,
+        0.5473123447656739,
+        0.30549055680220283
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.07760580748635469,
+        0.9459370464022512,
+        0.31150324201954455,
+        0.9574079002102287
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      3
+    ],
+    "document_date": [
+      5
+    ],
+    "issuer": [
+      7
+    ],
+    "credential_id": [
+      9
+    ]
+  },
+  "set_name": "eval-v1",
+  "split": "val",
+  "owner": "p3",
+  "linked_people": [
+    "p3"
+  ],
+  "area": "education",
+  "folder": "Kiran Rao/Education",
+  "expected_ask": []
+}
