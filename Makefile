@@ -2,8 +2,9 @@ COV_MIN ?= 80
 
 .PHONY: setup visits spikes-setup finetune-setup lint test eval eval-smoke run docker
 
+# On macOS the mac group adds Apple Vision (ocrmac) for the reader.
 setup:
-	uv sync
+	uv sync $(if $(filter Darwin,$(shell uname -s)),--group mac)
 	uv run pre-commit install
 
 # Renders the doctor-visit audio for the transcription spike with macOS `say` and ffmpeg.

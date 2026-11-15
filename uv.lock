@@ -1172,6 +1172,7 @@ wheels = [
 name = "household-docs-vault"
 source = { editable = "." }
 dependencies = [
+    { name = "httpx" },
     { name = "pillow" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
@@ -1203,6 +1204,9 @@ finetune = [
     { name = "torchvision" },
     { name = "transformers" },
 ]
+mac = [
+    { name = "ocrmac", marker = "sys_platform == 'darwin'" },
+]
 spikes = [
     { name = "httpx" },
     { name = "mlx-whisper", marker = "sys_platform == 'darwin'" },
@@ -1225,6 +1229,7 @@ synth = [
 
 [package.metadata]
 requires-dist = [
+    { name = "httpx" },
     { name = "pillow" },
     { name = "pydantic", specifier = ">=2.9" },
     { name = "pydantic-settings", specifier = ">=2.16.3" },
@@ -1256,6 +1261,7 @@ finetune = [
     { name = "torchvision" },
     { name = "transformers", specifier = ">=4.57" },
 ]
+mac = [{ name = "ocrmac", marker = "sys_platform == 'darwin'" }]
 spikes = [
     { name = "httpx" },
     { name = "mlx-whisper", marker = "sys_platform == 'darwin'" },
