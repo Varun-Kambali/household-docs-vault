@@ -128,10 +128,10 @@ def test_a_real_mismatch_leaves_no_partial_and_no_record(filer, vault, store, in
 def test_restart_after_stop_between_copy_and_clear(  # Review Focus 7
     filer, vault, store, inbox_item, monkeypatch
 ):
-    monkeypatch.setattr(vault, "unlink", raise_(KeyboardInterrupt()))
-    with pytest.raises(KeyboardInterrupt):
-        filer.file(inbox_item, READING, DECISION)
-    monkeypatch.undo()
+    with monkeypatch.context() as mp:
+        mp.setattr(vault, "unlink", raise_(KeyboardInterrupt()))
+        with pytest.raises(KeyboardInterrupt):
+            filer.file(inbox_item, READING, DECISION)
     assert store.item(inbox_item.id).state == "filed_pending_clear"
     assert fresh_filer(vault, store).recover() == [inbox_item.id]
     assert not vault.exists(inbox_item.rel_path) and store.item(inbox_item.id).state == "filed"
@@ -143,10 +143,10 @@ def test_restart_after_stop_between_copy_and_clear(  # Review Focus 7
 def test_restart_after_stop_between_link_and_database(  # Review Focus 7
     filer, vault, store, inbox_item, monkeypatch
 ):
-    monkeypatch.setattr(records, "write_record", raise_(KeyboardInterrupt()))
-    with pytest.raises(KeyboardInterrupt):
-        filer.file(inbox_item, READING, DECISION)
-    monkeypatch.undo()
+    with monkeypatch.context() as mp:
+        mp.setattr(records, "write_record", raise_(KeyboardInterrupt()))
+        with pytest.raises(KeyboardInterrupt):
+            filer.file(inbox_item, READING, DECISION)
     assert store.item(inbox_item.id).state == "filing"
     fresh_filer(vault, store).recover()
     assert store.item(inbox_item.id).state == "filed" and not vault.exists(inbox_item.rel_path)
@@ -157,10 +157,10 @@ def test_restart_after_stop_between_link_and_database(  # Review Focus 7
 def test_restart_after_stop_between_record_and_database(
     filer, vault, store, inbox_item, monkeypatch
 ):
-    monkeypatch.setattr(store, "add_document", raise_(KeyboardInterrupt()))
-    with pytest.raises(KeyboardInterrupt):
-        filer.file(inbox_item, READING, DECISION)
-    monkeypatch.undo()
+    with monkeypatch.context() as mp:
+        mp.setattr(store, "add_document", raise_(KeyboardInterrupt()))
+        with pytest.raises(KeyboardInterrupt):
+            filer.file(inbox_item, READING, DECISION)
     (record_file,) = [e.name for e in vault.list_dir("_system/records")]
     fresh_filer(vault, store).recover()
     doc = store.item(inbox_item.id).document_id
@@ -178,10 +178,10 @@ def test_restart_after_stop_before_the_final_state(filer, vault, store, inbox_it
             raise KeyboardInterrupt
         return real(item_id, **changes)
 
-    monkeypatch.setattr(store, "update_item", stop_at_filed)
-    with pytest.raises(KeyboardInterrupt):
-        filer.file(inbox_item, READING, DECISION)
-    monkeypatch.undo()
+    with monkeypatch.context() as mp:
+        mp.setattr(store, "update_item", stop_at_filed)
+        with pytest.raises(KeyboardInterrupt):
+            filer.file(inbox_item, READING, DECISION)
     assert not vault.exists(inbox_item.rel_path)  # already cleared
     assert store.item(inbox_item.id).state == "filed_pending_clear"
     assert fresh_filer(vault, store).recover() == [inbox_item.id]
@@ -210,10 +210,10 @@ def test_restart_removes_a_partial_copy_and_requeues(filer, vault, store, inbox_
 def test_a_stop_before_the_link_requeues_without_a_partial(
     filer, vault, store, inbox_item, now, monkeypatch
 ):
-    monkeypatch.setattr(vault, "copy_verified", raise_(KeyboardInterrupt()))
-    with pytest.raises(KeyboardInterrupt):
-        filer.file(inbox_item, READING, DECISION)
-    monkeypatch.undo()
+    with monkeypatch.context() as mp:
+        mp.setattr(vault, "copy_verified", raise_(KeyboardInterrupt()))
+        with pytest.raises(KeyboardInterrupt):
+            filer.file(inbox_item, READING, DECISION)
     assert filer.recover() == [inbox_item.id]
     item = store.item(inbox_item.id)
     assert (item.state, item.target, item.pending) == ("queued", None, None)
@@ -238,10 +238,10 @@ def test_recovery_never_deletes_a_file_it_did_not_make(filer, vault, store, inbo
 def test_recovery_keeps_an_inbox_file_that_changed_since(
     filer, vault, store, inbox_item, monkeypatch
 ):
-    monkeypatch.setattr(vault, "unlink", raise_(KeyboardInterrupt()))
-    with pytest.raises(KeyboardInterrupt):
-        filer.file(inbox_item, READING, DECISION)
-    monkeypatch.undo()
+    with monkeypatch.context() as mp:
+        mp.setattr(vault, "unlink", raise_(KeyboardInterrupt()))
+        with pytest.raises(KeyboardInterrupt):
+            filer.file(inbox_item, READING, DECISION)
     vault.unlink(inbox_item.rel_path)
     vault.write_atomic(inbox_item.rel_path, b"%PDF-1.4 a newer file with the same name")
     fresh_filer(vault, store).recover()
@@ -252,10 +252,10 @@ def test_recovery_keeps_an_inbox_file_that_changed_since(
 def test_recovery_keeps_the_inbox_copy_when_the_filed_copy_is_gone(
     filer, vault, store, inbox_item, monkeypatch
 ):
-    monkeypatch.setattr(vault, "unlink", raise_(KeyboardInterrupt()))
-    with pytest.raises(KeyboardInterrupt):
-        filer.file(inbox_item, READING, DECISION)
-    monkeypatch.undo()
+    with monkeypatch.context() as mp:
+        mp.setattr(vault, "unlink", raise_(KeyboardInterrupt()))
+        with pytest.raises(KeyboardInterrupt):
+            filer.file(inbox_item, READING, DECISION)
     doc = store.documents_of_type(DocType.health_policy)[0]
     vault.unlink(doc.rel_path)  # deleted in Drive before the restart
     assert fresh_filer(vault, store).recover() == []
@@ -304,10 +304,10 @@ def test_file_new_files_made_bytes_and_leaves_the_photo(filer, vault, store):
 
 def test_file_new_recovers_without_touching_the_photo(filer, vault, store, monkeypatch):
     photo = make_item(vault, store, "card.jpg", b"\xff\xd8\xff real photo", kind="jpeg")
-    monkeypatch.setattr(records, "write_record", raise_(KeyboardInterrupt()))
-    with pytest.raises(KeyboardInterrupt):
-        filer.file_new(photo, b"\xff\xd8\xff masked", "jpg", card_reading(), CARD_DECISION, "u")
-    monkeypatch.undo()
+    with monkeypatch.context() as mp:
+        mp.setattr(records, "write_record", raise_(KeyboardInterrupt()))
+        with pytest.raises(KeyboardInterrupt):
+            filer.file_new(photo, b"\xff\xd8\xff masked", "jpg", card_reading(), CARD_DECISION, "u")
     assert fresh_filer(vault, store).recover() == [photo.id]
     done = store.item(photo.id)
     assert done.state == "filed" and len(store.documents_of_type(DocType.card_front)) == 1
@@ -318,10 +318,10 @@ def test_file_new_stopped_mid_write_removes_the_partial_and_requeues(
     filer, vault, store, monkeypatch
 ):
     photo = make_item(vault, store, "card.jpg", b"\xff\xd8\xff real photo", kind="jpeg")
-    monkeypatch.setattr(vault, "move", raise_(KeyboardInterrupt()))
-    with pytest.raises(KeyboardInterrupt):
-        filer.file_new(photo, b"\xff\xd8\xff masked", "jpg", card_reading(), CARD_DECISION, "u")
-    monkeypatch.undo()
+    with monkeypatch.context() as mp:
+        mp.setattr(vault, "move", raise_(KeyboardInterrupt()))
+        with pytest.raises(KeyboardInterrupt):
+            filer.file_new(photo, b"\xff\xd8\xff masked", "jpg", card_reading(), CARD_DECISION, "u")
     assert count_files(vault, "Ravi Kumar Rao") == 1  # the hidden partial
     fresh_filer(vault, store).recover()
     assert count_files(vault, "Ravi Kumar Rao") == 0 and store.item(photo.id).state == "queued"

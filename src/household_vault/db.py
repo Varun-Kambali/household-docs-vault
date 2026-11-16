@@ -31,6 +31,8 @@ ItemState = Literal[
     "filing",
     "filed_pending_clear",
     "filed",
+    "undoing",
+    "moving",
     "asked",
     "held",
     "waiting_secrets",

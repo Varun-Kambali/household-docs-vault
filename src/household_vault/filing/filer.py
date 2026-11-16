@@ -2,16 +2,22 @@
 
 Nothing here deletes or overwrites a file except one step: the `Inbox` copy is removed after the
 filed copy has been verified by its SHA-256 and the database knows about it, and only while it
-is still the file that was copied. Before the final link the item row holds the target path and
-`pending` (the decision, the secret reference, the extra fields, the new document's id and time
-and the SHA-256 of the bytes being filed), so a stop at any point is finished or rolled back by
-`recover` from the database alone:
+is still the file that was copied.
 
-1. `filing`: target and pending saved. The copy is made as a hidden `.partial`, verified, then
-   linked into place without replacing anything.
-2. The record JSON is written, then one transaction adds the document and sets
-   `filed_pending_clear`.
-3. The `Inbox` copy is removed and the item becomes `filed`.
+Every move of a file follows one pattern, so a stop at any point is finished or rolled back by
+`recover` from the database and the files alone:
+
+1. One commit writes the intent: the item's state (`filing`, `undoing` or `moving`), `target`
+   (where the file is going) and `pending` (what is needed to finish: the SHA-256, and for a
+   filing the decision, secret reference, extra fields and the new document's id and time).
+2. The file is copied or moved. Nothing is ever replaced.
+3. One transaction records the outcome (the document row, or its removal) with the item's final
+   state and the activity row.
+4. The `Inbox` copy of a filing is removed last, only if it still has the copied content.
+
+An ordinary exception before step 3 of a filing rolls the copy back and is raised to the worker.
+After step 3 the document is filed: a failure to clear `Inbox` is logged, not raised, and
+`recover` clears it later. A stop of the process (not an exception) keeps the intent for `recover`.
 """
 
 from __future__ import annotations
@@ -37,8 +43,10 @@ from household_vault.filing.decide import Decision
 from household_vault.filing.names import clean_component, filed_name
 from household_vault.filing.questions import Question
 from household_vault.filing.records import (
+    LONG_RUN_TYPES,
     DocumentRecord,
     build_record,
+    check_extra_fields,
     decision_from_json,
     decision_to_json,
     record_path,
@@ -52,7 +60,6 @@ from household_vault.reasons import Reason
 from household_vault.vaultroot import (
     INBOX,
     NEEDS_A_LOOK,
-    CopyMismatch,
     VaultGone,
     VaultPathError,
     VaultRoot,
@@ -60,9 +67,22 @@ from household_vault.vaultroot import (
 
 log = logging.getLogger(__name__)
 
+# A file in one of these states is being worked on or is done: the filer will not start on it.
+BUSY: frozenset[ItemState] = frozenset(
+    {"filing", "filed_pending_clear", "undoing", "moving", "filed"}
+)
+_FILING_KEYS = frozenset(
+    {"doc_id", "created_at", "sha256", "decision", "secret_ref", "extra_fields"}
+)
+
 
 class UndoError(Exception):
     """Undo was refused. The message is shown to the owner as it is."""
+
+
+class TargetGone(Exception):
+    """The folder a copy was going into vanished (Drive, or the owner). The source is fine and
+    nothing was changed; the job can be tried again."""
 
 
 def _suffix_of(path: str) -> str:
@@ -96,8 +116,9 @@ class Filer:
         secret_ref: str | None = None,
         extra_fields: Mapping[str, JsonValue] | None = None,
     ) -> DocumentRecord:
-        """File the item's own file. On `CopyMismatch` the source is untouched and the error
-        goes to the worker; a stop of the process is finished by `recover`."""
+        """File the item's own file. `CopyMismatch`, `VaultGone` (the source is gone),
+        `TargetGone` and any other exception leave the item and the vault as they were; a stop
+        of the process is finished by `recover`."""
         if item.rel_path is None:
             raise ValueError("this item has no file in the vault; use file_new for made bytes")
         with self.lock:
@@ -130,24 +151,29 @@ class Filer:
         extra_fields: Mapping[str, JsonValue] | None,
         data: bytes | None,
     ) -> DocumentRecord:
+        item = self._idle(item)
         if decision.outcome != "file" or decision.folder is None or decision.owner is None:
             raise ValueError("a decision that asks a question cannot be filed")
-        if decision.owner != "home":
-            self.household.by_id(decision.owner)
+        self._check_people(decision)
+        effective = self._effective_type(item, reading)
+        if effective is None:
+            raise ValueError("a document without a type cannot be filed")
+        extra = dict(extra_fields or {})
+        check_extra_fields(effective, extra)
         name = filed_name(decision.doc_date, decision.description, ext)
         self.vault.mkdirs(decision.folder)
         target = f"{decision.folder}/{self.vault.free_name(decision.folder, name)}"
         sha = item.sha256 if data is None else hashlib.sha256(data).hexdigest()
-        stored = stored_reading(reading, card_item=self._is_card(item, reading))
         pending: dict[str, Any] = {
             "doc_id": uuid.uuid4().hex,
             "created_at": self.clock().isoformat(),
             "sha256": sha,
             "decision": decision_to_json(decision),
             "secret_ref": secret_ref,
-            "extra_fields": dict(extra_fields or {}),
+            "extra_fields": extra,
             "new": data is not None,
         }
+        stored = stored_reading(reading, card_item=effective in LONG_RUN_TYPES)
         before = item.state
         self.store.update_item(
             item.id, state="filing", target=target, pending=pending, reading=stored
@@ -158,14 +184,25 @@ class Filer:
                 self.vault.copy_verified(item.rel_path, target, sha)
             else:
                 self._write_bytes(target, data)
-        except Exception:
-            # A stop of the process (not an exception) leaves the marker for `recover`. Here
-            # the copy failed: if our file is nevertheless in place, recovery finishes it.
-            if not self._ours(target, sha):
-                self._remove_partials(target)
-                self.store.update_item(item.id, state=before, target=None, pending=None)
+        except FileExistsError:
+            # Something else took the name first, even identical bytes: never ours to adopt.
+            self._abandon(item.id, before, target)
             raise
-        return self._complete(item.id)
+        except VaultGone as exc:
+            self._abandon(item.id, before, target)
+            if data is None and item.rel_path is not None and not self.vault.exists(item.rel_path):
+                raise  # the file itself is gone
+            raise TargetGone("the folder for this document is gone") from exc
+        except Exception:
+            self._abandon(item.id, before, target)
+            raise
+        try:
+            record = self._commit(item.id)
+        except Exception:
+            self._roll_back(item.id, before, target, sha, pending["doc_id"])
+            raise
+        self._clear_quietly(item.id)
+        return record
 
     def _write_bytes(self, target: str, data: bytes) -> None:
         folder, _, name = target.rpartition("/")
@@ -173,8 +210,30 @@ class Filer:
         self.vault.write_atomic(partial, data)
         self.vault.move(partial, target)
 
-    def _complete(self, item_id: int) -> DocumentRecord:
-        """Steps 2 and 3 from the item row alone, so a restart runs the same code."""
+    def _abandon(self, item_id: int, before: ItemState, target: str) -> None:
+        """The copy did not happen: drop the partial and the intent. The target is not touched."""
+        self._remove_partials(target)
+        self.store.update_item(item_id, state=before, target=None, pending=None)
+
+    def _roll_back(
+        self, item_id: int, before: ItemState, target: str, sha: str, doc_id: str
+    ) -> None:
+        """The copy is in place but the filing cannot be recorded: remove what this filing made
+        and restore the item. If a file cannot be removed the intent stays, so `recover`
+        finishes the filing rather than losing track of the copy."""
+        try:
+            if self._ours(target, sha):
+                self.vault.unlink(target)
+            with contextlib.suppress(VaultPathError):
+                self.vault.unlink(record_path(doc_id))
+        except Exception as exc:
+            log.warning("could not roll back filing of item %s: %s", item_id, type(exc).__name__)
+            return
+        self.store.update_item(item_id, state=before, target=None, pending=None)
+
+    def _commit(self, item_id: int) -> DocumentRecord:
+        """Step 3 from the item row alone, so a restart runs the same code: the record file,
+        then one transaction with the document and the state `filed_pending_clear`."""
         item = self.store.item(item_id)
         pending, target = item.pending, item.target
         if pending is None or target is None:
@@ -196,8 +255,23 @@ class Filer:
             if self.store.document(record.id) is None:
                 self.store.add_document(row, people, pages)
             self.store.update_item(item_id, state="filed_pending_clear", document_id=record.id)
-        self._finish_clear(self.store.item(item_id))
         return record
+
+    def _clear_quietly(self, item_id: int) -> None:
+        """Step 4 after the document is filed: a failure here is not a failed filing."""
+        try:
+            self._finish_clear(self.store.item(item_id))
+        except Exception as exc:
+            log.warning(
+                "could not clear the Inbox copy of item %s: %s", item_id, type(exc).__name__
+            )
+            with contextlib.suppress(Exception):
+                self.activity.record(
+                    item_id,
+                    Step.error,
+                    "clear_failed",
+                    f"The Inbox copy could not be removed yet: {type(exc).__name__}",
+                )
 
     def _finish_clear(self, item: Item) -> bool:
         """Remove the `Inbox` copy and mark the item filed, when the filed copy verifies and the
@@ -209,38 +283,34 @@ class Filer:
         if not made and item.rel_path is not None and self._ours(item.rel_path, item.sha256):
             with contextlib.suppress(VaultGone):
                 self.vault.unlink(item.rel_path)
-        self.store.update_item(item.id, state="filed", target=None, pending=None)
-        self.activity.record(
-            item.id, Step.filed, "filed", f"Filed as {doc.description}", file=doc.rel_path
-        )
+        with self.store.transaction():
+            self.store.update_item(item.id, state="filed", target=None, pending=None)
+            self.activity.record(
+                item.id, Step.filed, "filed", f"Filed as {doc.description}", file=doc.rel_path
+            )
+        self.activity.backfill_csv()
         return True
 
-    # -- needs a look, undo --------------------------------------------------------------------
+    # -- Needs a look, Undo --------------------------------------------------------------------
 
     def to_needs_a_look(
         self, item: Item, reasons: list[Reason], question: Question, reading: Reading | None
     ) -> Item:
+        item = self._idle(item)
         if item.rel_path is None:
             raise ValueError("this item has no file in the vault to move")
         with self.lock:
+            stored = None
+            if reading is not None:
+                effective = self._effective_type(item, reading)
+                stored = stored_reading(reading, card_item=effective in LONG_RUN_TYPES)
+            columns: dict[str, Any] = {
+                "reasons": reasons,
+                "question": dataclasses.asdict(question),
+                "reading": stored,
+            }
             name = self.vault.free_name(NEEDS_A_LOOK, PurePosixPath(item.rel_path).name)
-            dest = f"{NEEDS_A_LOOK}/{name}"
-            stored = (
-                None
-                if reading is None
-                else stored_reading(reading, card_item=self._is_card(item, reading))
-            )
-            with self.store.transaction():
-                self.store.update_item(
-                    item.id,
-                    state="asked",
-                    rel_path=dest,
-                    reasons=reasons,
-                    question=dataclasses.asdict(question),
-                    reading=stored,
-                )
-                self.vault.move(item.rel_path, dest)
-            self.activity.record(item.id, Step.needs_a_look, "needs_a_look", question.text, dest)
+            self._move(item, item.rel_path, f"{NEEDS_A_LOOK}/{name}", "moving", "asked", columns)
             return self.store.item(item.id)
 
     def undo(self, doc_id: str) -> Item:
@@ -250,27 +320,25 @@ class Filer:
             doc = self.store.document(doc_id)
             if doc is None:
                 raise UndoError(f"There is no filed document {doc_id}. Nothing was changed.")
+            if doc.secret_ref is not None:
+                raise UndoError("Undo for cards comes with the secrets store. Nothing was changed.")
             if not self._ours(doc.rel_path, doc.sha256):
                 raise UndoError(
                     f"The filed copy is no longer at {doc.rel_path}. Nothing was changed."
                 )
             item = self.store.item(doc.item_id)
+            if item.state != "filed":
+                raise UndoError("This document is still being filed. Nothing was changed.")
             dest = self._inbox_path(item, _suffix_of(doc.rel_path))
-            with self.store.transaction():
-                self.store.remove_document(doc_id)
-                self.store.update_item(
-                    item.id,
-                    state="held",
-                    rel_path=dest,
-                    sha256=doc.sha256,
-                    document_id=None,
-                    target=None,
-                    pending=None,
-                )
-                self.vault.move(doc.rel_path, dest)
-            with contextlib.suppress(VaultGone):
-                self.vault.unlink(record_path(doc_id))
-            self.activity.record(item.id, Step.undone, "undone", "Moved back to Inbox", dest)
+            self._move(
+                item,
+                doc.rel_path,
+                dest,
+                "undoing",
+                "held",
+                {},
+                {"doc_id": doc_id, "sha256": doc.sha256},
+            )
             return self.store.item(item.id)
 
     def undo_needs_a_look(self, item_id: int) -> Item:
@@ -279,11 +347,75 @@ class Filer:
             if item.state != "asked" or item.rel_path is None:
                 raise ValueError(f"item {item_id} is not waiting in {NEEDS_A_LOOK}")
             dest = self._inbox_path(item, _suffix_of(item.rel_path))
-            with self.store.transaction():
-                self.store.update_item(item_id, state="held", rel_path=dest)
-                self.vault.move(item.rel_path, dest)
-            self.activity.record(item_id, Step.undone, "undone", "Moved back to Inbox", dest)
+            self._move(item, item.rel_path, dest, "moving", "held", {})
             return self.store.item(item_id)
+
+    def _move(
+        self,
+        item: Item,
+        src: str,
+        dest: str,
+        state: ItemState,
+        final: ItemState,
+        columns: dict[str, Any],
+        extra: dict[str, Any] | None = None,
+    ) -> None:
+        """Move a file with its intent saved first (see the module note). While the file is in
+        flight the item claims whichever of the two paths is in `Inbox`, so the watcher does
+        not take it for a new file."""
+        pending = {"from": src, "sha256": item.sha256, "final": final, **(extra or {})}
+        claim = dest if dest.startswith(f"{INBOX}/") else src
+        self.store.update_item(
+            item.id, state=state, target=dest, rel_path=claim, pending=pending, **columns
+        )
+        try:
+            self.vault.move(src, dest)
+        except Exception:
+            if not self._ours(dest, pending["sha256"]):  # nothing was placed: put the item back
+                self.store.update_item(
+                    item.id,
+                    state=item.state,
+                    rel_path=item.rel_path,
+                    target=item.target,
+                    pending=item.pending,
+                    reasons=item.reasons,
+                    question=item.question,
+                    reading=item.reading,
+                )
+            raise  # a file that was placed keeps its intent; `recover` finishes the move
+        self._finish_move(item.id)
+
+    def _finish_move(self, item_id: int) -> None:
+        """The last step of a move, from the item row alone: for an Undo the record file goes;
+        then one transaction with the document row's removal, the final state and the activity."""
+        item = self.store.item(item_id)
+        pending, dest = item.pending, item.target
+        if pending is None or dest is None:
+            raise ValueError(f"item {item_id} has no move under way")
+        doc_id = pending.get("doc_id")
+        if doc_id:
+            with contextlib.suppress(VaultGone):
+                self.vault.unlink(record_path(doc_id))
+        changes: dict[str, Any] = {
+            "state": pending["final"],
+            "rel_path": dest,
+            "target": None,
+            "pending": None,
+        }
+        if doc_id:
+            changes.update(sha256=pending["sha256"], document_id=None)
+        with self.store.transaction():
+            if doc_id:
+                self.store.remove_document(doc_id)
+            self.store.update_item(item_id, **changes)
+            if doc_id or pending["final"] == "held":
+                self.activity.record(
+                    item_id, Step.undone, "undone", "Moved back to Inbox", file=dest
+                )
+            else:
+                text = (item.question or {}).get("text", "")
+                self.activity.record(item_id, Step.needs_a_look, "needs_a_look", text, file=dest)
+        self.activity.backfill_csv()
 
     # -- recovery ------------------------------------------------------------------------------
 
@@ -296,6 +428,9 @@ class Filer:
                     touched.append(item.id)
             for item in self.store.items(["filed_pending_clear"]):
                 if self._guarded(item, self._finish_clear):
+                    touched.append(item.id)
+            for item in self.store.items(["undoing", "moving"]):
+                if self._guarded(item, self._recover_move):
                     touched.append(item.id)
             for item in self._filed_card_items():
                 if self._guarded(item, self._clear_card_photo):
@@ -315,22 +450,43 @@ class Filer:
 
     def _recover_filing(self, item: Item) -> bool:
         target, pending = item.target, item.pending
-        complete = {"doc_id", "created_at", "sha256", "decision", "secret_ref", "extra_fields"}
         if (
             target
             and pending
-            and complete <= pending.keys()
+            and pending.keys() >= _FILING_KEYS
             and self._ours(target, pending["sha256"])
         ):
-            self._complete(item.id)
+            self._remove_partials(target)  # a stop right after a hard link leaves one behind
+            self._commit(item.id)
+            self._finish_clear(self.store.item(item.id))
             return True
         # Not linked (or not ours): the partial copy goes and the item is read again. A file at
         # the target that this filing did not make is left alone.
         if target:
             self._remove_partials(target)
+        if pending and pending.get("doc_id"):
+            with contextlib.suppress(VaultPathError):
+                self.vault.unlink(record_path(pending["doc_id"]))
         with self.store.transaction():
             self.store.update_item(item.id, target=None, pending=None)
             self.store.requeue(item.id)
+        return True
+
+    def _recover_move(self, item: Item) -> bool:
+        """Finish a move by the content of the two paths: only the source has it, move it; both
+        have it (a hard-link stop), remove the source; only the destination, it is done."""
+        pending, dest = item.pending, item.target
+        if pending is None or dest is None or "from" not in pending:
+            raise ValueError("no move to finish")
+        src, sha = pending["from"], pending["sha256"]
+        at_dest, at_src = self._ours(dest, sha), self._ours(src, sha)
+        if at_dest and at_src:
+            self.vault.unlink(src)
+        elif at_src:
+            self.vault.move(src, dest)
+        elif not at_dest:
+            raise ValueError("neither the source nor the destination holds the file")
+        self._finish_move(item.id)
         return True
 
     def _filed_card_items(self) -> list[Item]:
@@ -355,6 +511,21 @@ class Filer:
         return True
 
     # -- helpers -------------------------------------------------------------------------------
+
+    def _idle(self, item: Item) -> Item:
+        """The item as the database has it now; refused while it is being worked on or filed."""
+        current = self.store.item(item.id)
+        if current.state in BUSY:
+            raise ValueError(f"item {item.id} is busy or already filed ({current.state})")
+        return current
+
+    def _check_people(self, decision: Decision) -> None:
+        for person in [decision.owner, *decision.linked]:
+            if person is not None and person != "home":
+                try:
+                    self.household.by_id(person)
+                except KeyError:
+                    raise ValueError(f"{person} is not in the household") from None
 
     def _ours(self, rel: str, sha256: str) -> bool:
         """True when a regular file at rel has exactly this content."""
@@ -385,11 +556,10 @@ class Filer:
         return PurePosixPath(item.original_name).suffix.lower().lstrip(".")  # audio
 
     @staticmethod
-    def _is_card(item: Item, reading: Reading) -> bool:
-        return (item.overrides.get("doc_type") or reading.doc_type) in (
-            DocType.card_front,
-            DocType.card_front.value,
-        )
+    def _effective_type(item: Item, reading: Reading) -> DocType | None:
+        """The type the document is filed as: the owner's answer first, else what was read."""
+        answer = item.overrides.get("doc_type")
+        return DocType(answer) if answer else reading.doc_type
 
 
-__all__ = ["CopyMismatch", "Filer", "ItemState", "UndoError"]
+__all__ = ["BUSY", "Filer", "TargetGone", "UndoError"]
