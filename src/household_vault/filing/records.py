@@ -26,7 +26,7 @@ from household_vault.schemas._coerce import secret_fields
 from household_vault.schemas.parse import mask_card_numbers
 from household_vault.vaultroot import RECORDS, VaultRoot
 
-RECORD_VERSION = 1
+RECORD_VERSION: Literal[1] = 1
 
 BOX_DIGITS = 4
 CONFIDENCE_DIGITS = 3
