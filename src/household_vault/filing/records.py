@@ -9,6 +9,7 @@ a long fraction as a number. `filer.py` imports this module, never the other way
 
 from __future__ import annotations
 
+import re
 import uuid
 from collections.abc import Mapping
 from datetime import date, datetime
@@ -19,6 +20,7 @@ from pydantic import BaseModel, JsonValue, TypeAdapter, field_validator
 from household_vault.db import DocumentRow, Item
 from household_vault.doctypes import DocType
 from household_vault.filing.decide import Decision, base_field
+from household_vault.filing.names import DEFAULT_NAME, scrub_identifiers
 from household_vault.reading.lines import Line, PageText
 from household_vault.reading.pipeline import Reading
 from household_vault.schemas import SCHEMAS
@@ -34,7 +36,11 @@ SECONDS_DIGITS = 1
 FIELD_DIGITS = 4
 
 # Types whose text is masked for every long digit run: a card, or a page of unknown type.
-_LONG_RUN_TYPES = frozenset({None, DocType.card_front, DocType.other})
+LONG_RUN_TYPES = frozenset({None, DocType.card_front, DocType.other})
+_DIGITS = re.compile(r"\d+")
+# A secret value this short is a CVV or a PIN, kept out of text by exact match; a longer one
+# is a card number, which `mask_card_numbers` handles and keeps the last four of.
+_SECRET_RUN_LENGTHS = range(3, 13)
 
 _DECISION = TypeAdapter(Decision)
 
@@ -87,6 +93,8 @@ class DocumentRecord(BaseModel):
     record_version: Literal[1] = RECORD_VERSION
     id: str
     item_id: int
+    original_name: str
+    origin: Literal["inbox", "upload"]
     doc_type: DocType
     owner: str
     linked_people: list[str]
@@ -124,9 +132,20 @@ def stored_reading(reading: Reading, *, card_item: bool = False) -> dict[str, An
     """The reading as the database and the record keep it: line text with card numbers masked
     (every 13 to 19 digit run for a card, an unknown type or `other`), floats rounded. The
     secret values and the models' raw answers are never in a dump, so they are not here."""
-    long_run = card_item or reading.doc_type in _LONG_RUN_TYPES
+    long_run = card_item or reading.doc_type in LONG_RUN_TYPES
+    secret_runs = {
+        digits
+        for value in reading.secret_values.values()
+        if (digits := "".join(c for c in value if c.isdigit()))
+        and len(digits) in _SECRET_RUN_LENGTHS
+    }
+
+    def hide(match: re.Match[str]) -> str:
+        return "X" * len(match.group()) if match.group() in secret_runs else match.group()
 
     def mask(text: str) -> str:
+        if secret_runs:
+            text = _DIGITS.sub(hide, text)
         return mask_card_numbers(text, any_long_run=long_run)
 
     dump: dict[str, Any] = reading.model_dump(mode="json")
@@ -140,6 +159,15 @@ def stored_reading(reading: Reading, *, card_item: bool = False) -> dict[str, An
     dump["fields"] = _round_floats(dump["fields"])
     dump["issues"] = {k: mask(v) for k, v in dump["issues"].items()}
     return dump
+
+
+def check_extra_fields(doc_type: DocType, extra: Mapping[str, JsonValue]) -> None:
+    """Only a field of the type's schema, or `last4`, may be added to a record by the caller."""
+    schema = SCHEMAS.get(doc_type)
+    allowed = {"last4", *(schema.model_fields if schema else ())}
+    unknown = sorted(set(extra) - allowed)
+    if unknown:
+        raise ValueError(f"not a field of {doc_type.value}: {', '.join(unknown)}")
 
 
 def build_record(
@@ -169,6 +197,7 @@ def build_record(
     if decision.owner is None or decision.area is None:
         raise ValueError("a decision that asks a question has nothing to file")
     override_fields: dict[str, JsonValue] = dict(ov.get("fields") or {})
+    check_extra_fields(doc_type, extra_fields or {})
     fields: dict[str, JsonValue] = {
         **(stored.get("fields") or {}),
         **override_fields,
@@ -185,9 +214,11 @@ def build_record(
     return DocumentRecord(
         id=doc_id or uuid.uuid4().hex,
         item_id=item.id,
+        original_name=scrub_identifiers(item.original_name) or DEFAULT_NAME,
+        origin=item.origin,
         doc_type=doc_type,
         owner=decision.owner,
-        linked_people=list(decision.linked),
+        linked_people=[p for p in decision.linked if p != decision.owner],
         area=str(decision.area.value),
         rel_path=rel_path,
         sha256=sha256 or item.sha256,
@@ -227,7 +258,7 @@ def record_rows(
     record: DocumentRecord,
 ) -> tuple[DocumentRow, list[tuple[str, Literal["owner", "linked"]]], list[PageText]]:
     """Everything the database holds for the document, so it can be rebuilt from records. The
-    owner has one row, as owner, even when the decision also lists them as linked."""
+    owner has one row, as owner; `linked_people` never holds the owner."""
     row = DocumentRow(
         id=record.id,
         item_id=record.item_id,

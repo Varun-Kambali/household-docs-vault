@@ -36,6 +36,7 @@ def test_record_rounds_floats_round_trips_and_holds_no_secret(vault):
         None,
         NOW,
     )
+    assert rec.linked_people == ["p3"]  # the owner is never also linked
     assert rec.pages[0].lines[0].bbox[0] == 0.1235
     assert rec.pages[0].lines[0].confidence == 0.877
     assert rec.reading.seconds == {"read": 1.2, "fill": 12.3}
@@ -71,7 +72,7 @@ def test_the_record_is_a_plain_file_in_the_records_folder(vault):
     assert read_record(vault, rec.id) == rec
     assert rec.record_version == RECORD_VERSION == 1
     data = json.loads(vault.read_bytes(rel))
-    assert data["fields"]["insurer"] == "Star Health" and data["linked_people"] == ["p1", "p3"]
+    assert data["fields"]["insurer"] == "Star Health" and data["linked_people"] == ["p3"]
     assert (rec.doc_type, rec.owner, rec.area, rec.sha256) == (
         DocType.health_policy,
         "p1",
@@ -141,3 +142,44 @@ def test_ids_and_times_can_be_fixed_for_a_rebuild():
 
 def test_a_decision_round_trips_as_json():
     assert decision_from_json(json.loads(json.dumps(decision_to_json(DECISION)))) == DECISION
+
+
+def test_a_record_keeps_a_scrubbed_name_and_the_origin_for_a_rebuild():
+    item = ITEM.__class__(
+        **{**ITEM.__dict__, "original_name": "Aadhaar 2345 6789 0123 scan.pdf", "origin": "upload"}
+    )
+    rec = build_record(item, stored_reading(READING), DECISION, "a/b.pdf", None, NOW)
+    assert rec.origin == "upload" and rec.original_name == "Aadhaar scan.pdf"
+    assert "2345" not in rec.model_dump_json()
+    plain = build_record(ITEM, stored_reading(READING), DECISION, "a/b.pdf", None, NOW)
+    assert (plain.original_name, plain.origin) == ("policy.pdf", "inbox")
+
+
+def test_a_name_that_is_all_identifier_still_gives_a_usable_name():
+    item = ITEM.__class__(**{**ITEM.__dict__, "original_name": "2345 6789 0123 4567"})
+    assert build_record(ITEM, stored_reading(READING), DECISION, "a", None, NOW).original_name
+    assert build_record(item, stored_reading(READING), DECISION, "a", None, NOW).original_name
+
+
+def test_only_schema_fields_and_last4_can_be_added_to_a_record():
+    card_item = ITEM.__class__(**{**ITEM.__dict__, "overrides": {"doc_type": "card_front"}})
+    for bad in ({"pin": "4321"}, {"password": "x"}):
+        with pytest.raises(ValueError, match="not a field"):
+            build_record(card_item, stored_reading(card_reading()), DECISION, "a", "u", NOW, bad)
+    ok = build_record(
+        card_item, stored_reading(card_reading()), DECISION, "a", "u", NOW, {"last4": "1111"}
+    )
+    assert ok.fields["last4"] == "1111"
+
+
+def test_a_secret_digit_run_is_hidden_in_lines_and_issues():
+    card = card_reading(
+        secret_values={"number": "4111111111111111", "cvv": "123"},
+        line_text="4111 1111 1111 1111 CVV 123 Main 1234",
+    )
+    card.issues = {"cvv": "CVV 123 is too short", "number": "read 4111 1111 1111 1112"}
+    out = stored_reading(card, card_item=True)
+    text = out["pages"][0]["lines"][0]["text"]
+    assert text == "XXXX XXXX XXXX 1111 CVV XXX Main 1234"
+    assert out["issues"]["cvv"] == "CVV XXX is too short"
+    assert "123" not in json.dumps(out).replace("1234", "")
