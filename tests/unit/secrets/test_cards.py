@@ -273,6 +273,12 @@ def test_a_gate_that_runs_out_again_keeps_the_card_waiting(card_world):
     assert card_world.store.documents_of_type(DocType.card_front)
 
 
+def test_a_card_handler_puts_every_log_line_through_the_redaction(card_world, caplog):
+    caplog.set_level(logging.INFO)
+    logging.getLogger("household_vault.anything").info("number %s", "4111111111111111")
+    assert "4111111111111111" not in caplog.text and "XXXXXXXXXXXX1111" in caplog.text
+
+
 def test_the_logs_and_the_activity_never_hold_a_secret(card_world, caplog):
     caplog.set_level(logging.DEBUG)
     card = card_world.drop_card(base=5)
