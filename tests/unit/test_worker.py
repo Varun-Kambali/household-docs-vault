@@ -1,5 +1,7 @@
 import threading
 
+import pytest
+
 from household_vault.activity import Step
 from household_vault.doctypes import DocType
 from household_vault.reasons import Reason
@@ -158,6 +160,7 @@ def test_a_held_file_removed_in_drive_ends_as_gone(world):
     assert held.rel_path is not None
     world.vault.unlink(held.rel_path)
     world.drain()
+    world.drain()  # gone once it is missing on a second scan
     assert world.store.item(held.id).state == "gone"
     drop(world.vault, "w.pdf", d.data)  # the same name can come in again
     world.drain()
@@ -211,3 +214,184 @@ def test_scan_leaves_held_items_alone(world):
     (doc,) = world.store.documents_of_type(DocType.warranty_card)
     world.actions.undo_document(doc.id)
     assert world.worker.scan() == 0
+
+
+# -- fix round 1: outages, the busy guard, small counts ------------------------------------------
+
+import os  # noqa: E402
+from pathlib import Path  # noqa: E402
+
+from household_vault.filing import records  # noqa: E402
+from household_vault.filing.filer import BUSY  # noqa: E402
+from household_vault.vaultroot import NEEDS_A_LOOK, VaultGone  # noqa: E402
+
+
+def _unmount(w):
+    root = w.vault.root
+    aside = Path(str(root) + "-unmounted")
+    w.vault.mode = "app"  # app mode never makes the root again
+    os.rename(root, aside)
+    return lambda: os.rename(aside, root)
+
+
+def test_a_held_item_stays_held_while_the_vault_is_away(world):
+    drop(world.vault, "w.pdf", fileable(DocType.warranty_card).data)
+    world.drain()
+    (doc,) = world.store.documents_of_type(DocType.warranty_card)
+    held = world.actions.undo_document(doc.id)
+    back = _unmount(world)
+    world.drain()
+    world.drain()
+    assert world.store.item(held.id).state == "held"
+    back()
+    world.drain()
+    world.drain()
+    assert world.store.item(held.id).state == "held"
+
+
+def test_a_file_that_is_missing_for_one_scan_only_is_not_gone(world):
+    drop(world.vault, "w.pdf", fileable(DocType.warranty_card).data)
+    world.drain()
+    (doc,) = world.store.documents_of_type(DocType.warranty_card)
+    held = world.actions.undo_document(doc.id)
+    data = world.vault.read_bytes(held.rel_path)
+    world.vault.unlink(held.rel_path)
+    world.worker.scan()  # missing once
+    world.vault.write_atomic(held.rel_path, data)
+    world.worker.scan()  # back
+    world.vault.unlink(held.rel_path)
+    world.worker.scan()  # missing once more, the count starts again
+    assert world.store.item(held.id).state == "held"
+    world.worker.scan()  # missing on a second scan
+    assert world.store.item(held.id).state == "gone"
+
+
+def test_the_second_missing_scan_waits_for_the_settle_time(make_world):
+    w = make_world()
+    w.worker.settings = w.worker.settings.model_copy(update={"settle_seconds": 10.0})
+    drop(w.vault, "w.pdf", fileable(DocType.warranty_card).data)
+    w.worker.scan()
+    w.clock.advance(seconds=11)
+    w.worker.scan()
+    w.drain()
+    (doc,) = w.store.documents_of_type(DocType.warranty_card)
+    held = w.actions.undo_document(doc.id)
+    w.vault.unlink(held.rel_path)
+    w.worker.scan()
+    w.clock.advance(seconds=5)
+    w.worker.scan()
+    assert w.store.item(held.id).state == "held"
+    w.clock.advance(seconds=6)
+    w.worker.scan()
+    assert w.store.item(held.id).state == "gone"
+
+
+@pytest.mark.parametrize("how", ["retry", "type", "keep_both", "unlock"])
+def test_a_needs_a_look_job_waits_out_a_vault_outage(make_world, how):
+    w = make_world(models=TruthModels(patch={"patient": "Anita Sharma"}))
+    if how == "unlock":
+        d = fileable(DocType.health_policy, variant="locked")
+    elif how == "keep_both":
+        d = fileable(DocType.tax_invoice)
+    else:
+        d = fileable(DocType.prescription)
+    drop(w.vault, "a.pdf", d.data)
+    if how == "keep_both":
+        drop(w.vault, "b.pdf", d.data)
+    w.drain()
+    item = w.store.items(["asked"])[-1]
+    if how == "retry":
+        w.actions.retry(item.id)
+    elif how == "type":
+        w.actions.answer(item.id, "type", "lab_report")
+    elif how == "keep_both":
+        w.actions.answer(item.id, "copy", "keep_both")
+    else:
+        w.actions.unlock(item.id, d.doc.password)
+    back = _unmount(w)
+    w.drain()
+    assert w.store.item(item.id).state == "queued"
+    back()
+    w.clock.advance(seconds=700)
+    w.drain()
+    after = w.store.item(item.id)
+    assert after.state in ("filed", "asked")
+    claimed = {i.rel_path for i in w.store.items(["asked", "held", "queued"])}
+    on_disk = {f.name for f in (w.vault.root / NEEDS_A_LOOK).iterdir()}
+    assert {Path(p).name for p in claimed if p} >= on_disk
+    assert w.worker.pending_passwords == {}
+
+
+def test_a_missing_file_with_the_vault_present_still_ends_gone(world):
+    drop(world.vault, "a.pdf", fileable(DocType.tax_invoice).data)
+    world.worker.scan()
+    world.vault.unlink("Inbox/a.pdf")
+    world.drain()
+    assert [i.state for i in world.store.items(["gone"])] == ["gone"]
+
+
+def test_a_vanished_file_never_ends_a_busy_item_as_gone(make_world, monkeypatch):
+    w = make_world()
+    drop(w.vault, "a.pdf", fileable(DocType.tax_invoice).data)
+
+    def gone(*args, **kwargs):
+        raise VaultGone("the records folder vanished")
+
+    monkeypatch.setattr(records, "write_record", gone)
+    real_unlink = w.vault.unlink
+
+    def unlink(rel):
+        if not rel.startswith((INBOX, "_system")):
+            raise OSError("Drive refused")
+        real_unlink(rel)
+
+    monkeypatch.setattr(w.vault, "unlink", unlink)
+    w.worker.scan()
+    w.worker.run_once()
+    (item,) = w.store.items(["filing"])
+    assert item.state in BUSY
+    assert not w.store.items(["gone"])
+
+
+def test_an_item_held_after_a_double_failure_counts_as_finished(make_world, monkeypatch):
+    w = make_world()
+    drop(w.vault, "a.pdf", fileable(DocType.tax_invoice).data)
+
+    def boom(*args, **kwargs):
+        raise RuntimeError("x")
+
+    monkeypatch.setattr(w.worker.engines.pages, "read_pages", boom)
+    monkeypatch.setattr(w.filer, "to_needs_a_look", boom)
+    w.drain()
+    assert [i.state for i in w.store.items(["held"])] == ["held"]
+    p = w.worker.progress()
+    assert (p.total_in_batch, p.done_in_batch) == (1, 1)
+
+
+def test_a_skipped_job_leaves_no_password_in_memory(world):
+    d = fileable(DocType.health_policy, variant="locked")
+    drop(world.vault, "policy.pdf", d.data)
+    world.drain()
+    (item,) = world.store.items(["asked"])
+    world.worker.pending_passwords[item.id] = d.doc.password
+    world.store.update_item(item.id, state="discarded")
+    world.store.enqueue(item.id, "process")
+    world.drain()
+    assert world.worker.pending_passwords == {}
+
+
+def test_a_successful_job_resets_the_copy_mismatch_count(make_world, monkeypatch):
+    w = make_world()
+    real = w.vault.copy_verified
+    failures = iter([True, False])
+
+    def flaky(src, dst, sha):
+        if next(failures):
+            raise CopyMismatch("copy does not match")
+        real(src, dst, sha)
+
+    monkeypatch.setattr(w.vault, "copy_verified", flaky)
+    drop(w.vault, "a.pdf", fileable(DocType.tax_invoice).data)
+    w.drain()
+    (item,) = w.store.items(["filed"])
+    assert not item.overrides.get("copy_mismatches")

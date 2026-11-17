@@ -13,7 +13,7 @@ from __future__ import annotations
 import logging
 import threading
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Literal, Protocol
@@ -44,6 +44,7 @@ FIRST_WAIT_SECONDS = 30
 LONGEST_WAIT_SECONDS = 600
 READER_DOWN = "Waiting for the reader (Ollama is not running)"
 FOLDER_GONE = "Waiting for the folder to come back"
+VAULT_AWAY = "Waiting for the vault folder to come back"
 SECRETS_CLOSED = "Waiting for the secrets store to be unlocked"
 
 _CHECK_REASONS: dict[str, Reason] = {
@@ -60,7 +61,7 @@ _WHY: dict[Reason, str] = {
 }
 # States of a finished item for the batch count.
 _FINISHED: frozenset[ItemState] = frozenset(
-    {"filed", "filed_pending_clear", "asked", "gone", "discarded", "waiting_secrets"}
+    {"filed", "filed_pending_clear", "asked", "gone", "discarded", "waiting_secrets", "held"}
 )
 
 
@@ -162,6 +163,8 @@ class Worker:
         self._batch_started: datetime | None = None
         self._current: str | None = None
         self._step: str | None = None
+        # When a held or waiting file was first missing from Inbox, by item id.
+        self._missing_since: dict[int, tuple[datetime, int]] = {}
 
     # -- the loop ------------------------------------------------------------------------------
 
@@ -169,9 +172,10 @@ class Worker:
         """Queue what is new in Inbox and what can go on. Returns how many items it queued."""
         queued = 0
         try:
-            ready = self._settler.ready(inbox_listing(self.vault))
+            listing = inbox_listing(self.vault)
         except VaultGone:
-            ready = []
+            listing = None  # Inbox is not there (Drive is away): nothing can be said about it
+        ready = self._settler.ready(listing) if listing is not None else []
         for name in ready:
             rel = f"{INBOX}/{name}"
             if self.store.item_at(rel) is not None:
@@ -187,16 +191,33 @@ class Worker:
                     self._secrets_tried.add(item.id)
                     self.store.requeue(item.id)
                     queued += 1
-        self._notice_vanished()
+        if listing is not None:
+            self._notice_vanished(listing)
         self._refresh_batch()
         return queued
 
-    def _notice_vanished(self) -> None:
+    def _notice_vanished(self, listing: Mapping[str, tuple[int, int]]) -> None:
         """A held or waiting file that left Inbox (moved on the phone, removed in Drive) ends as
-        gone, so its name is free again."""
-        for item in self.store.items(["held", "waiting_secrets"]):
-            if item.rel_path is not None and not self.vault.exists(item.rel_path):
+        gone, so its name is free again. Only when Inbox was listed, and only when the file is
+        missing on two scans at least `settle_seconds` apart, so a sync that hides a file for a
+        moment does not end it."""
+        now = self.clock()
+        watching = self.store.items(["held", "waiting_secrets"])
+        for item in watching:
+            rel = item.rel_path
+            if rel is None or not rel.startswith(f"{INBOX}/"):
+                continue
+            if rel.removeprefix(f"{INBOX}/") in listing:
+                self._missing_since.pop(item.id, None)
+                continue
+            since, scans = self._missing_since.get(item.id, (now, 0))
+            self._missing_since[item.id] = (since, scans + 1)
+            if scans + 1 >= 2 and (now - since).total_seconds() >= self.settings.settle_seconds:
+                self._missing_since.pop(item.id, None)
                 self._gone(item)
+        live = {i.id for i in watching}
+        for item_id in [i for i in self._missing_since if i not in live]:
+            del self._missing_since[item_id]
 
     def run_once(self) -> bool:
         """Claim one job and run it. False when there is none to run."""
@@ -217,6 +238,7 @@ class Worker:
             self._current = None
             self._step = None
             if not deferred:
+                self.pending_passwords.pop(job.item_id, None)
                 self.store.finish(job.id, "failed" if failed else "done")
         self._refresh_batch()
         return True
@@ -305,11 +327,16 @@ class Worker:
         except TargetGone:
             deferred = self._defer(job_id, attempts, item, FOLDER_GONE)
         except VaultGone:
-            self._gone(self.store.item(item.id))
+            if self._vault_present():
+                self._gone(self.store.item(item.id))
+            else:  # Drive is away, not the file: wait for it
+                deferred = self._defer(job_id, attempts, item, VAULT_AWAY)
         except CopyMismatch:
             self._copy_mismatch(kind, item)
         except Exception as exc:
             self._failed(item, exc)
+        else:
+            self._forget_copy_mismatches(item.id)
         finally:
             if not deferred:
                 self.pending_passwords.pop(item.id, None)
@@ -323,7 +350,25 @@ class Worker:
             self.activity.record(item.id, Step.waiting, "waiting", detail, file=item.rel_path)
         return True
 
+    def _vault_present(self) -> bool:
+        """True when the vault folder and Inbox are there to be listed."""
+        try:
+            return self.vault.root.is_dir() and self.vault.exists(INBOX)
+        except VaultGone:
+            return False
+
+    def _forget_copy_mismatches(self, item_id: int) -> None:
+        """A job that ran through starts the count again for the next time."""
+        current = self.store.item(item_id)
+        if current.overrides.get("copy_mismatches"):
+            rest = {k: v for k, v in current.overrides.items() if k != "copy_mismatches"}
+            self.store.update_item(item_id, overrides=rest)
+
     def _gone(self, item: Item) -> None:
+        current = self.store.item(item.id)
+        if current.state in BUSY:  # being filed or moved: `recover` finishes it
+            log.warning("item %s is busy (%s), so it is not ended as gone", item.id, current.state)
+            return
         self.pending_passwords.pop(item.id, None)
         self.store.update_item(item.id, state="gone")
         self.activity.record(
@@ -490,6 +535,8 @@ class Worker:
             if other is not None:
                 context["path"] = other.rel_path
                 context["date"] = other.created_at.date().isoformat()
+                # Kept so a discard can check that this document is still there.
+                self.store.update_item(item.id, overrides={**item.overrides, "copy_of": other.id})
         self._ask(item, decision.reasons, reading, context, effective_reading(reading, ov))
 
     # -- asking --------------------------------------------------------------------------------
