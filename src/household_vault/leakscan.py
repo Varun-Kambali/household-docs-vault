@@ -72,7 +72,7 @@ def install_log_redaction() -> None:
         return
 
     def factory(*args: object, **kwargs: object) -> logging.LogRecord:
-        record = previous(*args, **kwargs)  # type: ignore[arg-type]
+        record = previous(*args, **kwargs)
         record.msg = redact(record.getMessage())
         record.args = None
         return record
