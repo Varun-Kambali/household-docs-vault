@@ -184,3 +184,18 @@ def test_a_crash_inside_migrate_leaves_nothing_behind(tmp_path, monkeypatch):
     fresh = connect(path, tmp_path / "vault")
     assert migrate(fresh) == SCHEMA_VERSION
     assert fresh.execute("select count(*) from meta").fetchone()[0] == 1
+
+
+def test_requeue_from_states_refuses_when_the_state_moved_on(store):
+    from household_vault.db import StateChanged
+    from tests.conftest import item_id
+
+    i = item_id(store)
+    store.update_item(i, state="filed")
+    with pytest.raises(StateChanged):
+        store.requeue(i, "refile", from_states=["asked", "held"])
+    assert store.item(i).state == "filed"
+    assert store.conn.execute("select count(*) from jobs").fetchone()[0] == 0
+    store.update_item(i, state="asked")
+    store.requeue(i, "refile", from_states=["asked", "held"])
+    assert store.item(i).state == "queued"

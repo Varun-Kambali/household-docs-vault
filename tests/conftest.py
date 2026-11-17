@@ -1,12 +1,15 @@
 """Shared fixtures. The spike set is generated once per session (seed 7, two per type)."""
 
 import csv
+import hashlib
 import io
 import random
 import sqlite3
 import string
 from collections.abc import Callable, Iterator
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, NoReturn
 
@@ -14,18 +17,25 @@ import pytest
 from vault_synth.cli import generate
 from vault_synth.household import HOUSEHOLD
 from vault_synth.model import SynthDoc
-from vault_synth.sets import load_set
+from vault_synth.sets import load_set, locked_password
 
 from household_vault import safety
+from household_vault.actions import Actions
 from household_vault.activity import Activity
 from household_vault.checks import gstin_check_char, verhoeff_valid
 from household_vault.config import load_settings
-from household_vault.db import DocumentRow, Store, connect, migrate
+from household_vault.db import DocumentRow, Item, Store, connect, migrate
 from household_vault.doctypes import REQUIRED, DocType
+from household_vault.filing.filer import Filer
+from household_vault.filing.records import stored_reading
 from household_vault.reading.cues import CueCheck
+from household_vault.reading.engines import Engines, PageReader
 from household_vault.reading.lines import Line
 from household_vault.reading.pipeline import Reading
+from household_vault.reasons import Reason
 from household_vault.vaultroot import INBOX, NEEDS_A_LOOK, VaultRoot
+from household_vault.worker import CardHandler, HoldCards, Worker
+from tests.fakes import EVAL_V1, TruthModels, TruthPages
 
 
 @pytest.fixture(autouse=True)
@@ -46,7 +56,6 @@ def fake_homes(tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.Mon
 
 
 SPIKE_DIR = Path(__file__).resolve().parents[1] / "evals" / "datasets" / "spike-v0"
-EVAL_V1 = Path(__file__).resolve().parents[1] / "evals" / "datasets" / "eval-v1"
 
 
 @pytest.fixture(scope="session")
@@ -291,3 +300,111 @@ def five_page_scan_pdf() -> bytes:
     buf = io.BytesIO()
     pages[0].save(buf, format="PDF", save_all=True, append_images=pages[1:])
     return buf.getvalue()
+
+
+# -- the whole intake, wired together (Task 19) ---------------------------------------------------
+
+
+@dataclass
+class World:
+    vault: VaultRoot
+    store: Store
+    activity: Activity
+    filer: Filer
+    worker: Worker
+    actions: Actions
+    clock: AwareClock
+    db_dir: Path
+
+    def drain(self) -> None:
+        self.worker.drain()
+
+
+@pytest.fixture
+def make_world(
+    tmp_path: Path, vault: VaultRoot, store: Store, activity: Activity, clock: AwareClock
+) -> Callable[..., World]:
+    """A dev vault, store, filer, worker and actions with no settling delay. By default the
+    engines answer from the eval-v1 truth and cards wait for the secrets store."""
+
+    def build(
+        pages: PageReader | None = None,
+        models: TruthModels | None = None,
+        cards: CardHandler | None = None,
+    ) -> World:
+        settings = load_settings(env={"VAULT_ROOT": str(vault.root)}).model_copy(
+            update={"settle_seconds": 0.0}
+        )
+        vault.mkdirs("_system")  # as start-up makes it
+        household = store.household()
+        filer = Filer(vault, store, activity, household, clock)
+        handler = cards if cards is not None else HoldCards()
+        if hasattr(handler, "filer"):
+            handler.filer = filer
+        engines = Engines(pages or TruthPages(), models or TruthModels())
+        worker = Worker(settings, vault, store, activity, engines, filer, handler, clock)
+        actions = Actions(worker, filer, store, activity, household)
+        return World(vault, store, activity, filer, worker, actions, clock, tmp_path / "db")
+
+    return build
+
+
+@pytest.fixture
+def world(make_world: Callable[..., World]) -> World:
+    return make_world()
+
+
+@pytest.fixture
+def asked_item(world: World, now: datetime) -> Item:
+    """A card item waiting in Needs a look with a stored reading of its type."""
+    data = b"card photo bytes"
+    world.vault.write_atomic(f"{NEEDS_A_LOOK}/card.jpg", data)
+    item = world.store.add_item(
+        hashlib.sha256(data).hexdigest(), "card.jpg", f"{NEEDS_A_LOOK}/card.jpg", now
+    )
+    return world.store.update_item(
+        item.id,
+        state="asked",
+        kind="jpeg",
+        reasons=[Reason.card_unreadable],
+        reading=stored_reading(reading_of(DocType.card_front)),
+    )
+
+
+def drop(vault: VaultRoot, name: str, data: bytes) -> None:
+    """Put a file in Inbox, as Drive would."""
+    vault.write_atomic(f"{INBOX}/{name}", data)
+
+
+@dataclass(frozen=True)
+class Fileable:
+    doc: SynthDoc
+    data: bytes
+    sha: str
+
+
+@lru_cache(maxsize=1)
+def _eval_docs() -> list[SynthDoc]:
+    return [d for d in load_set(EVAL_V1) if d.split in ("val", "test")]
+
+
+def fileable(doc_type: DocType, variant: str = "clean") -> Fileable:
+    """The first committed eval-v1 val or test document of the type and variant that the app
+    should file without asking."""
+    doc = next(
+        d
+        for d in _eval_docs()
+        if d.doc_type == doc_type and d.variant == variant and not d.expected_ask
+    )
+    if doc.variant == "locked":
+        doc = doc.model_copy(update={"password": locked_password(doc.base_id)})
+    data = (EVAL_V1 / doc.files[0]).read_bytes()
+    return Fileable(doc, data, hashlib.sha256(data).hexdigest())
+
+
+def everything_written(world: World) -> bytes:
+    """The bytes of every file in the vault and in the database folder (WAL files included)."""
+    out: list[bytes] = []
+    for root in (world.vault.root, world.db_dir):
+        out.extend(p.read_bytes() for p in sorted(root.rglob("*")) if p.is_file())
+    return b"\n".join(out)
