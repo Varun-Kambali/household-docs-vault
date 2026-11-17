@@ -163,6 +163,10 @@ def migrate(conn: sqlite3.Connection) -> int:
     return version
 
 
+class StateChanged(Exception):
+    """An item was not in any of the states the caller expected, so nothing was changed."""
+
+
 @dataclass(frozen=True)
 class Item:
     id: int
@@ -415,6 +419,19 @@ class Store:
         return self.item(item_id)
 
     @_locked
+    def update_item_if(
+        self, item_id: int, from_states: Collection[ItemState], **changes: Any
+    ) -> Item:
+        """`update_item`, but only while the item is in one of `from_states`; else `StateChanged`.
+        The check and the change are one step, so another thread cannot slip in between."""
+        if not from_states:
+            raise StateChanged(f"item {item_id}: no state allows this")
+        with self.transaction():
+            if self.item(item_id).state not in from_states:
+                raise StateChanged(f"item {item_id} is no longer in the expected state")
+            return self.update_item(item_id, **changes)
+
+    @_locked
     def items(self, states: Collection[ItemState]) -> list[Item]:
         if not states:
             return []
@@ -569,11 +586,20 @@ class Store:
 
     @_locked
     def requeue(
-        self, item_id: int, kind: JobKind = "process", not_before: datetime | None = None
+        self,
+        item_id: int,
+        kind: JobKind = "process",
+        not_before: datetime | None = None,
+        from_states: Collection[ItemState] | None = None,
     ) -> int:
-        """Put an item back in the queue: its state and a new job, together."""
+        """Put an item back in the queue: its state and a new job, together. With `from_states`
+        the state change only happens while the item is in one of them (checked in the same
+        transaction), and `StateChanged` is raised, with nothing changed, when it is not."""
         with self.transaction():
-            self.update_item(item_id, state="queued")
+            if from_states is None:
+                self.update_item(item_id, state="queued")
+            else:
+                self.update_item_if(item_id, from_states, state="queued")
             return self.enqueue(item_id, kind, not_before)
 
     @_locked

@@ -7,14 +7,13 @@ back to the queue through `Store.requeue`; the worker's job files it or asks the
 
 from __future__ import annotations
 
-import contextlib
 from collections.abc import Sequence
 from typing import Any
 
 from pydantic import JsonValue
 
 from household_vault.activity import Activity, Step
-from household_vault.db import Item, Store
+from household_vault.db import Item, ItemState, StateChanged, Store
 from household_vault.doctypes import DocType
 from household_vault.filing.filer import BUSY, Filer, UndoError
 from household_vault.filing.questions import AnswerKind
@@ -27,7 +26,9 @@ from household_vault.schemas.parse import parse_fields
 from household_vault.vaultroot import VaultGone, VaultPathError
 from household_vault.worker import Worker
 
-_ANSWERABLE = frozenset({"asked", "held"})
+_ANSWERABLE: frozenset[ItemState] = frozenset({"asked", "held"})
+_GONE_COPY = "The other copy is no longer there. Nothing was deleted."
+_CHANGED = "This file changed while you were answering. Look at it again"
 _TAKEN = "A file with that name is already in Inbox. Move or rename it, then try Undo again."
 
 
@@ -133,30 +134,76 @@ class Actions:
     def _requeue(
         self, item: Item, overrides: dict[str, Any], kind: Any, step: Step, what: str
     ) -> Item:
-        with self.store.transaction():
-            self.store.update_item(item.id, overrides=overrides)
-            self.store.requeue(item.id, kind)
+        try:
+            with self.store.transaction():
+                self.store.update_item(item.id, overrides=overrides)
+                self.store.requeue(item.id, kind, from_states=_ANSWERABLE)
+        except StateChanged:
+            raise AnswerError(_CHANGED) from None
         self.activity.record(item.id, step, what, f"Answered: {what}", file=item.rel_path)
         return self.store.item(item.id)
 
+    def _holds(self, rel: str | None, sha256: str) -> bool:
+        """True when a regular file at rel has exactly this content."""
+        if rel is None:
+            return False
+        try:
+            return self.filer.vault.sha256(rel) == sha256
+        except VaultPathError:
+            return False
+
+    def _another_copy_remains(self, item: Item) -> bool:
+        """Before a copy is deleted: the file it copies must still be there with the same content,
+        in the filed folder or as another item waiting in the vault."""
+        if Reason.duplicate in item.reasons:
+            if any(
+                self._holds(d.rel_path, item.sha256) for d in self.store.filed_with_sha(item.sha256)
+            ):
+                return True
+            live = self.store.items_with_sha(
+                item.sha256, ["asked", "held", "queued", "waiting_secrets"]
+            )
+            # An item whose old file name this file took over is not a second copy.
+            return any(
+                o.id != item.id
+                and o.rel_path != item.rel_path
+                and self._holds(o.rel_path, item.sha256)
+                for o in live
+            )
+        if Reason.possible_copy in item.reasons:
+            other_id = item.overrides.get("copy_of")
+            other = self.store.document(other_id) if isinstance(other_id, str) else None
+            return other is not None and self._holds(other.rel_path, other.sha256)
+        return True
+
     def _discard(self, item: Item) -> Item:
-        """Delete the file wherever it waits (in Drive it goes to Drive's trash)."""
+        """Delete the file wherever it waits (in Drive it goes to Drive's trash), unless it is a
+        copy and the file it copies is gone."""
         with self.filer.lock:
             current = self.store.item(item.id)
-            if current.state in BUSY or current.state in ("queued", "reading"):
-                raise AnswerError("This file is being worked on. Try again in a moment")
+            if current.state not in _ANSWERABLE:
+                raise AnswerError(_CHANGED)
+            if not self._another_copy_remains(current):
+                raise AnswerError(_GONE_COPY)
+            try:
+                self.store.update_item_if(item.id, _ANSWERABLE, state="discarded", rel_path=None)
+            except StateChanged:
+                raise AnswerError(_CHANGED) from None
             if current.rel_path is not None:
-                with contextlib.suppress(VaultGone):
+                try:
                     self.filer.vault.unlink(current.rel_path)
-            with self.store.transaction():
-                self.store.update_item(item.id, state="discarded", rel_path=None)
-                self.activity.record(
-                    item.id,
-                    Step.discarded,
-                    "discarded",
-                    "Discarded at your request",
-                    file=current.rel_path,
-                )
+                except VaultGone:
+                    pass
+                except Exception:
+                    self.store.update_item(item.id, state=current.state, rel_path=current.rel_path)
+                    raise
+            self.activity.record(
+                item.id,
+                Step.discarded,
+                "discarded",
+                "Discarded at your request",
+                file=current.rel_path,
+            )
         self.activity.backfill_csv()
         return self.store.item(item.id)
 
@@ -203,8 +250,13 @@ class Actions:
             raise AnswerError("This file could not be opened as a PDF") from None
         except VaultPathError:
             raise AnswerError("The file is no longer there") from None
+        # The password goes in first, so the job that starts at once finds it.
         self.worker.pending_passwords[item.id] = password
-        self.store.requeue(item.id)
+        try:
+            self.store.requeue(item.id, from_states=_ANSWERABLE)
+        except StateChanged:
+            self.worker.pending_passwords.pop(item.id, None)
+            raise AnswerError(_CHANGED) from None
         self.activity.record(
             item.id,
             Step.unlocked,

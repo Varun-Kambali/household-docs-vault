@@ -148,3 +148,212 @@ def test_answers_to_busy_or_finished_items_are_refused(world):
     (item,) = world.store.items(["filed"])
     with pytest.raises(AnswerError):
         world.actions.answer(item.id, "person", "p1")
+
+
+# -- discard never deletes the only copy ----------------------------------------------------------
+
+from household_vault.vaultroot import INBOX  # noqa: E402
+from tests.conftest import World  # noqa: E402
+
+GONE = "The other copy is no longer there. Nothing was deleted."
+
+
+def copies_of(w: World, sha: str) -> list[str]:
+    found = []
+    for folder in w.vault.root.rglob("*"):
+        rel = folder.relative_to(w.vault.root).as_posix()
+        if folder.is_file() and not rel.startswith("_system") and w.vault.sha256(rel) == sha:
+            found.append(rel)
+    return found
+
+
+def _duplicate(world: World):
+    d = fileable(DocType.tax_invoice)
+    drop(world.vault, "a.pdf", d.data)
+    drop(world.vault, "a (1).pdf", d.data)
+    world.drain()
+    (filed,) = world.store.documents_of_type(DocType.tax_invoice)
+    (dup,) = world.store.items(["asked"])
+    return d, filed, dup
+
+
+def test_a_duplicate_is_not_discarded_after_the_filed_original_was_deleted(world):
+    d, filed, dup = _duplicate(world)
+    world.vault.unlink(filed.rel_path)
+    with pytest.raises(AnswerError, match=GONE):
+        world.actions.answer(dup.id, "copy", "discard")
+    assert copies_of(world, d.sha) == [dup.rel_path]
+    assert world.store.item(dup.id).state == "asked"
+
+
+def test_a_duplicate_is_not_discarded_after_the_filed_original_was_replaced(world):
+    d, filed, dup = _duplicate(world)
+    world.vault.unlink(filed.rel_path)
+    world.vault.write_atomic(filed.rel_path, b"%PDF-1.4 an edited copy")
+    with pytest.raises(AnswerError, match=GONE):
+        world.actions.answer(dup.id, "copy", "discard")
+    assert copies_of(world, d.sha) == [dup.rel_path]
+
+
+def test_a_duplicate_is_discarded_while_the_filed_original_is_intact(world):
+    d, filed, dup = _duplicate(world)
+    world.actions.answer(dup.id, "copy", "discard")
+    assert copies_of(world, d.sha) == [filed.rel_path]
+
+
+def _two_in_needs_a_look(make_world):
+    w = make_world(models=TruthModels(patch={"patient": "Anita Sharma"}))
+    d = fileable(DocType.prescription)
+    drop(w.vault, "a.pdf", d.data)
+    w.drain()
+    (first,) = w.store.items(["asked"])
+    drop(w.vault, "a (1).pdf", d.data)
+    w.drain()
+    dup = next(i for i in w.store.items(["asked"]) if i.id != first.id)
+    assert dup.reasons == [Reason.duplicate]
+    return w, d, first, dup
+
+
+def test_a_duplicate_is_not_discarded_after_its_original_was_discarded(make_world):
+    w, d, first, dup = _two_in_needs_a_look(make_world)
+    w.actions.answer(first.id, "discard", "")
+    with pytest.raises(AnswerError, match=GONE):
+        w.actions.answer(dup.id, "copy", "discard")
+    assert copies_of(w, d.sha) == [dup.rel_path]
+
+
+def test_a_duplicate_is_not_discarded_after_its_original_was_undone_and_removed(make_world):
+    w, d, first, dup = _two_in_needs_a_look(make_world)
+    held = w.actions.undo_item(first.id)
+    w.vault.unlink(held.rel_path)
+    with pytest.raises(AnswerError, match=GONE):
+        w.actions.answer(dup.id, "copy", "discard")
+    assert copies_of(w, d.sha) == [dup.rel_path]
+
+
+def test_a_file_dragged_back_to_inbox_is_not_discarded_as_a_duplicate_of_its_old_self(make_world):
+    w = make_world(models=TruthModels(patch={"patient": "Anita Sharma"}))
+    d = fileable(DocType.prescription)
+    drop(w.vault, "a.pdf", d.data)
+    w.drain()
+    (first,) = w.store.items(["asked"])
+    w.vault.move(first.rel_path, f"{INBOX}/a.pdf")  # moved back by hand in Drive
+    w.drain()
+    new = next(i for i in w.store.items(["asked"]) if i.id != first.id)
+    assert new.reasons == [Reason.duplicate]
+    with pytest.raises(AnswerError, match=GONE):
+        w.actions.answer(new.id, "copy", "discard")
+    assert copies_of(w, d.sha) == [new.rel_path]
+
+
+def test_a_possible_copy_is_not_discarded_after_the_filed_document_was_deleted(make_world):
+    w = make_world(models=TruthModels(patch={"invoice_number": "INV-0001"}))
+    first = fileable(DocType.tax_invoice)
+    second = fileable(DocType.tax_invoice, variant="scan")
+    drop(w.vault, "a.pdf", first.data)
+    w.drain()
+    drop(w.vault, "b.pdf", second.data)
+    w.drain()
+    (filed,) = w.store.documents_of_type(DocType.tax_invoice)
+    (asked,) = w.store.items(["asked"])
+    assert asked.reasons == [Reason.possible_copy]
+    w.vault.unlink(filed.rel_path)
+    with pytest.raises(AnswerError, match=GONE):
+        w.actions.answer(asked.id, "copy", "discard")
+    assert copies_of(w, second.sha) == [asked.rel_path]
+
+
+def test_a_possible_copy_is_discarded_while_the_filed_document_is_intact(make_world):
+    w = make_world(models=TruthModels(patch={"invoice_number": "INV-0001"}))
+    drop(w.vault, "a.pdf", fileable(DocType.tax_invoice).data)
+    w.drain()
+    drop(w.vault, "b.pdf", fileable(DocType.tax_invoice, variant="scan").data)
+    w.drain()
+    (asked,) = w.store.items(["asked"])
+    w.actions.answer(asked.id, "copy", "discard")
+    assert w.store.item(asked.id).state == "discarded"
+    assert not w.vault.exists(asked.rel_path)
+    assert len(w.store.documents_of_type(DocType.tax_invoice)) == 1
+
+
+# -- an answer is refused when the item changed under it -----------------------------------------
+
+
+def _paused(world, monkeypatch, act):
+    """Run act in a thread that stops right after the state check passed."""
+    import threading
+
+    passed, go = threading.Event(), threading.Event()
+    real = type(world.actions)._answerable
+    me: dict[str, threading.Thread] = {}
+
+    def answerable(self, item_id):
+        out = real(self, item_id)
+        if threading.current_thread() is me.get("t"):
+            passed.set()
+            go.wait(10)
+        return out
+
+    monkeypatch.setattr(type(world.actions), "_answerable", answerable)
+    errors: list[Exception] = []
+
+    def run():
+        try:
+            act()
+        except Exception as exc:
+            errors.append(exc)
+
+    t = threading.Thread(target=run)
+    me["t"] = t
+    t.start()
+    assert passed.wait(10)
+    return go, t, errors
+
+
+def test_a_second_answer_does_not_revive_a_filed_item(make_world, monkeypatch):
+    w = make_world(models=TruthModels(patch={"patient": "Anita Sharma"}))
+    drop(w.vault, "a.pdf", fileable(DocType.prescription).data)
+    w.drain()
+    (item,) = w.store.items(["asked"])
+    go, t, errors = _paused(w, monkeypatch, lambda: w.actions.answer(item.id, "person", "p2"))
+    w.actions.answer(item.id, "person", "p2")
+    w.drain()
+    assert w.store.item(item.id).state == "filed"
+    go.set()
+    t.join(10)
+    w.drain()
+    assert [type(e) for e in errors] == [AnswerError]
+    assert w.store.item(item.id).state == "filed"
+    assert len(w.store.documents_of_type(DocType.prescription)) == 1
+
+
+def test_a_second_unlock_does_not_revive_a_filed_item_or_keep_the_password(world, monkeypatch):
+    d = fileable(DocType.health_policy, variant="locked")
+    drop(world.vault, "policy.pdf", d.data)
+    world.drain()
+    (item,) = world.store.items(["asked"])
+    go, t, errors = _paused(
+        world, monkeypatch, lambda: world.actions.unlock(item.id, d.doc.password)
+    )
+    world.actions.unlock(item.id, d.doc.password)
+    world.drain()
+    go.set()
+    t.join(10)
+    world.drain()
+    assert [type(e) for e in errors] == [AnswerError]
+    assert world.store.item(item.id).state == "filed"
+    assert world.worker.pending_passwords == {}
+
+
+def test_an_answer_racing_a_discard_does_not_revive_the_item(make_world, monkeypatch):
+    w = make_world(models=TruthModels(patch={"patient": "Anita Sharma"}))
+    drop(w.vault, "a.pdf", fileable(DocType.prescription).data)
+    w.drain()
+    (item,) = w.store.items(["asked"])
+    go, t, errors = _paused(w, monkeypatch, lambda: w.actions.answer(item.id, "person", "p2"))
+    w.actions.answer(item.id, "discard", "")
+    go.set()
+    t.join(10)
+    w.drain()
+    assert w.store.item(item.id).state == "discarded"
+    assert [type(e) for e in errors] == [AnswerError]
