@@ -256,7 +256,9 @@ def test_a_move_that_lost_both_files_is_reported_and_left(vault, store, activity
     assert filer.activity.entries()[0].step is Step.error
 
 
-def test_a_move_whose_destination_was_taken_is_reported_and_left(vault, store, activity, clock):
+def test_a_move_whose_destination_was_taken_finishes_under_a_free_name(
+    vault, store, activity, clock
+):
     item = make_item(vault, store, "policy.pdf", DATA)
     filer = Filer(vault, store, activity, HOUSEHOLD, clock)
     with pytest.MonkeyPatch.context() as mp:
@@ -265,9 +267,13 @@ def test_a_move_whose_destination_was_taken_is_reported_and_left(vault, store, a
             filer.to_needs_a_look(item, [Reason.person_unknown], QUESTION, READING)
     dest = store.item(item.id).target
     vault.write_atomic(dest, b"somebody else's file")
-    assert fresh_filer(vault, store, HOUSEHOLD).recover() == []
-    assert vault.read_bytes(dest) == b"somebody else's file" and vault.exists("Inbox/policy.pdf")
-    assert store.item(item.id).state == "moving"
+    assert fresh_filer(vault, store, HOUSEHOLD).recover() == [item.id]
+    done = store.item(item.id)
+    assert vault.read_bytes(dest) == b"somebody else's file" and not vault.exists(
+        "Inbox/policy.pdf"
+    )
+    assert (done.state, done.rel_path) == ("asked", "Needs a look/policy (2).pdf")
+    assert vault.sha256(done.rel_path) == sha(DATA)
 
 
 # -- an ordinary exception after the link -------------------------------------------------------
@@ -477,3 +483,92 @@ def test_a_cvv_never_reaches_the_item_row(vault, store, activity, clock):
     card = card_reading(secret_values={"cvv": "123"}, line_text="CVV 123")
     asked = filer.to_needs_a_look(item, [Reason.person_unknown], QUESTION, card)
     assert asked.reading["pages"][0]["lines"][0]["text"] == "CVV XXX"
+
+
+# -- fix round 2 ----------------------------------------------------------------------------------
+
+
+class RaceLock:
+    """Stands in for `Filer.lock`: runs `hook` once, just before the lock is first taken."""
+
+    def __init__(self, real, hook):
+        self.real, self.hook = real, hook
+
+    def __enter__(self):
+        hook, self.hook = self.hook, None
+        if hook:
+            hook()
+        return self.real.__enter__()
+
+    def __exit__(self, *exc):
+        return self.real.__exit__(*exc)
+
+
+def test_to_needs_a_look_checks_the_item_inside_the_lock(vault, store, activity, clock):
+    item = make_item(vault, store, "policy.pdf", DATA)
+    filer = Filer(vault, store, activity, HOUSEHOLD, clock)
+    stale = filer.to_needs_a_look(item, [Reason.person_unknown], QUESTION, READING)
+    filer.lock = RaceLock(filer.lock, lambda: filer.undo_needs_a_look(stale.id))
+    again = filer.to_needs_a_look(stale, [Reason.person_unknown], QUESTION, READING)
+    assert again.state == "asked" and copies(vault, DATA) == [again.rel_path]
+    assert again.rel_path.startswith(NEEDS_A_LOOK) and user_files(vault) == [again.rel_path]
+
+
+def test_asking_again_keeps_the_file_where_it_is(vault, store, activity, clock):
+    item = make_item(vault, store, "policy.pdf", DATA)
+    filer = Filer(vault, store, activity, HOUSEHOLD, clock)
+    first = filer.to_needs_a_look(item, [Reason.person_unknown], QUESTION, READING)
+    other = Question(Reason.read_failed, "Could not read it.", "retry", [Option("retry", "Retry")])
+    second = filer.to_needs_a_look(first, [Reason.read_failed], other, READING)
+    assert second.rel_path == first.rel_path == "Needs a look/policy.pdf"
+    assert second.state == "asked" and second.reasons == [Reason.read_failed]
+    assert second.question["text"] == "Could not read it."
+    assert user_files(vault) == [first.rel_path] and hidden_files(vault) == []
+    entry = filer.activity.entries()[0]
+    assert (entry.step, entry.detail) == (Step.needs_a_look, "Could not read it.")
+
+
+@MODES
+@pytest.mark.parametrize("which", ["undo", "undo_needs_a_look"])
+def test_a_stopped_move_whose_inbox_name_was_taken_finishes_under_a_free_name(
+    vault, store, activity, clock, which, drive
+):
+    item = make_item(vault, store, "policy.pdf", DATA)
+    filer = Filer(vault, store, activity, HOUSEHOLD, clock)
+    with pytest.MonkeyPatch.context() as mp:
+        if drive:
+            no_links(mp)
+        if which == "undo":
+            rec = filer.file(item, READING, DECISION)
+            arm_move(Kill(mp), vault, filer, "before_move")
+            with pytest.raises(Killed):
+                filer.undo(rec.id)
+        else:
+            asked = filer.to_needs_a_look(item, [Reason.person_unknown], QUESTION, READING)
+            arm_move(Kill(mp), vault, filer, "before_move")
+            with pytest.raises(Killed):
+                filer.undo_needs_a_look(asked.id)
+    taken = store.item(item.id).target
+    vault.write_atomic(taken, b"a different file synced in")
+    with pytest.MonkeyPatch.context() as mp:
+        if drive:
+            no_links(mp)
+        assert fresh_filer(vault, store, HOUSEHOLD).recover() == [item.id]
+    done = store.item(item.id)
+    assert (done.state, done.target, done.pending) == ("held", None, None)
+    assert done.rel_path == taken.replace(".pdf", " (2).pdf")
+    assert vault.read_bytes(taken) == b"a different file synced in"
+    assert vault.sha256(done.rel_path) == sha(DATA) and hidden_files(vault) == []
+    assert fresh_filer(vault, store, HOUSEHOLD).recover() == []
+
+
+def test_a_target_folder_that_cannot_be_made_is_not_a_gone_file(vault, store, activity, clock):
+    item = make_item(vault, store, "policy.pdf", DATA)
+    filer = Filer(vault, store, activity, HOUSEHOLD, clock)
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(vault, "mkdirs", boom(VaultGone("no such file or folder")))
+        with pytest.raises(TargetGone) as caught:
+            filer.file(item, READING, DECISION)
+    assert not isinstance(caught.value, VaultGone) and vault.exists("Inbox/policy.pdf")
+    after = store.item(item.id)
+    assert (after.state, after.target, after.pending) == ("reading", None, None)

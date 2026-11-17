@@ -161,8 +161,11 @@ class Filer:
         extra = dict(extra_fields or {})
         check_extra_fields(effective, extra)
         name = filed_name(decision.doc_date, decision.description, ext)
-        self.vault.mkdirs(decision.folder)
-        target = f"{decision.folder}/{self.vault.free_name(decision.folder, name)}"
+        try:
+            self.vault.mkdirs(decision.folder)
+            target = f"{decision.folder}/{self.vault.free_name(decision.folder, name)}"
+        except VaultGone as exc:
+            raise TargetGone("the folder for this document cannot be made") from exc
         sha = item.sha256 if data is None else hashlib.sha256(data).hexdigest()
         pending: dict[str, Any] = {
             "doc_id": uuid.uuid4().hex,
@@ -296,10 +299,10 @@ class Filer:
     def to_needs_a_look(
         self, item: Item, reasons: list[Reason], question: Question, reading: Reading | None
     ) -> Item:
-        item = self._idle(item)
-        if item.rel_path is None:
-            raise ValueError("this item has no file in the vault to move")
         with self.lock:
+            item = self._idle(item)
+            if item.rel_path is None:
+                raise ValueError("this item has no file in the vault to move")
             stored = None
             if reading is not None:
                 effective = self._effective_type(item, reading)
@@ -309,6 +312,18 @@ class Filer:
                 "question": dataclasses.asdict(question),
                 "reading": stored,
             }
+            if item.rel_path.startswith(f"{NEEDS_A_LOOK}/"):  # asked again: the file stays
+                with self.store.transaction():
+                    self.store.update_item(item.id, state="asked", **columns)
+                    self.activity.record(
+                        item.id,
+                        Step.needs_a_look,
+                        "needs_a_look",
+                        question.text,
+                        file=item.rel_path,
+                    )
+                self.activity.backfill_csv()
+                return self.store.item(item.id)
             name = self.vault.free_name(NEEDS_A_LOOK, PurePosixPath(item.rel_path).name)
             self._move(item, item.rel_path, f"{NEEDS_A_LOOK}/{name}", "moving", "asked", columns)
             return self.store.item(item.id)
@@ -483,6 +498,14 @@ class Filer:
         if at_dest and at_src:
             self.vault.unlink(src)
         elif at_src:
+            if self.vault.exists(dest):  # the name was taken by other bytes during the stop
+                folder, _, name = dest.rpartition("/")
+                free = f"{folder}/{self.vault.free_name(folder, name)}"
+                claimed = item.rel_path == dest
+                self.store.update_item(
+                    item.id, target=free, **({"rel_path": free} if claimed else {})
+                )
+                dest = free
             self.vault.move(src, dest)
         elif not at_dest:
             raise ValueError("neither the source nor the destination holds the file")
