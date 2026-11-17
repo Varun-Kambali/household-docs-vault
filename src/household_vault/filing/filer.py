@@ -294,6 +294,18 @@ class Filer:
         self.activity.backfill_csv()
         return True
 
+    def clear_card_photo(self, item_id: int) -> bool:
+        """Remove the `Inbox` photo of a filed card, under the filer's lock, only while it is
+        still the file that was photographed. True when it was removed."""
+        with self.lock:
+            item = self.store.item(item_id)
+            if item.state != "filed" or item.document_id is None:
+                return False
+            with contextlib.suppress(VaultGone):
+                return self._clear_card_photo(item)
+            self.store.update_item(item.id, rel_path=None)  # it vanished by itself
+            return False
+
     # -- Needs a look, Undo --------------------------------------------------------------------
 
     def to_needs_a_look(

@@ -335,6 +335,24 @@ def test_recover_removes_a_card_photo_left_after_filing(filer, vault, store):
     assert filer.recover() == []  # nothing left to do
 
 
+def test_clear_card_photo_removes_the_photo_under_the_lock_and_checks_the_hash(filer, vault, store):
+    photo = make_item(vault, store, "card.jpg", b"\xff\xd8\xff real photo", kind="jpeg")
+    filer.file_new(photo, b"\xff\xd8\xff masked", "jpg", card_reading(), CARD_DECISION, "u")
+    assert filer.clear_card_photo(photo.id) is True
+    assert not vault.exists(photo.rel_path) and store.item(photo.id).rel_path is None
+    assert filer.clear_card_photo(photo.id) is False  # nothing left to clear
+    assert not filer.lock.locked()
+
+
+def test_clear_card_photo_leaves_a_different_file_and_an_item_not_filed(filer, vault, store):
+    photo = make_item(vault, store, "card.jpg", b"\xff\xd8\xff real photo", kind="jpeg")
+    assert filer.clear_card_photo(photo.id) is False and vault.exists(photo.rel_path)
+    filer.file_new(photo, b"\xff\xd8\xff masked", "jpg", card_reading(), CARD_DECISION, "u")
+    vault.unlink(photo.rel_path)
+    vault.write_atomic(photo.rel_path, b"\xff\xd8\xff another photo")
+    assert filer.clear_card_photo(photo.id) is False and vault.exists(photo.rel_path)
+
+
 def test_recover_leaves_another_file_at_the_photo_name(filer, vault, store):
     photo = make_item(vault, store, "card.jpg", b"\xff\xd8\xff real photo", kind="jpeg")
     filer.file_new(photo, b"\xff\xd8\xff masked", "jpg", card_reading(), CARD_DECISION, "u")
