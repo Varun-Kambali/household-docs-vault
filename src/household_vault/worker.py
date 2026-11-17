@@ -34,12 +34,13 @@ from household_vault.reading.pipeline import Reading, read_document
 from household_vault.reading.render import DamagedFileError, LockedPdfError
 from household_vault.reading.source import DocumentSource
 from household_vault.reasons import Reason
-from household_vault.vaultroot import INBOX, CopyMismatch, VaultGone, VaultRoot
+from household_vault.vaultroot import INBOX, CopyMismatch, VaultGone, VaultPathError, VaultRoot
 
 log = logging.getLogger(__name__)
 
 # Items are added before their file is read, so their hash is not known yet.
 UNKNOWN_SHA = "0" * 64
+SYSTEM = "_system"
 FIRST_WAIT_SECONDS = 30
 LONGEST_WAIT_SECONDS = 600
 READER_DOWN = "Waiting for the reader (Ollama is not running)"
@@ -172,9 +173,9 @@ class Worker:
         """Queue what is new in Inbox and what can go on. Returns how many items it queued."""
         queued = 0
         try:
-            listing = inbox_listing(self.vault)
+            listing: Mapping[str, tuple[int, int]] | None = inbox_listing(self.vault)
         except VaultGone:
-            listing = None  # Inbox is not there (Drive is away): nothing can be said about it
+            listing = self._listing_after_making_inbox()
         ready = self._settler.ready(listing) if listing is not None else []
         for name in ready:
             rel = f"{INBOX}/{name}"
@@ -196,6 +197,17 @@ class Worker:
         self._refresh_batch()
         return queued
 
+    def _listing_after_making_inbox(self) -> Mapping[str, tuple[int, int]] | None:
+        """Inbox could not be listed. With the vault present the owner (or Drive) removed the
+        folder, so it is made again; with the vault away nothing is done."""
+        if not self._vault_present():
+            return None
+        try:
+            self.vault.mkdirs(INBOX)
+            return inbox_listing(self.vault)
+        except VaultGone:
+            return None
+
     def _notice_vanished(self, listing: Mapping[str, tuple[int, int]]) -> None:
         """A held or waiting file that left Inbox (moved on the phone, removed in Drive) ends as
         gone, so its name is free again. Only when Inbox was listed, and only when the file is
@@ -205,9 +217,16 @@ class Worker:
         watching = self.store.items(["held", "waiting_secrets"])
         for item in watching:
             rel = item.rel_path
-            if rel is None or not rel.startswith(f"{INBOX}/"):
+            if rel is None:
                 continue
-            if rel.removeprefix(f"{INBOX}/") in listing:
+            if rel.startswith(f"{INBOX}/"):
+                here = rel.removeprefix(f"{INBOX}/") in listing
+            else:  # Needs a look and anywhere else: by path, with the vault known to be there
+                try:
+                    here = self.vault.exists(rel) or not self._vault_present()
+                except VaultPathError:
+                    continue
+            if here:
                 self._missing_since.pop(item.id, None)
                 continue
             since, scans = self._missing_since.get(item.id, (now, 0))
@@ -256,6 +275,10 @@ class Worker:
 
     def start_up(self) -> None:
         """Finish what a stop left half done, and run again the jobs it cut off."""
+        try:
+            self.vault.mkdirs(SYSTEM)
+        except VaultGone:
+            log.warning("the vault folder is not there yet")
         self.filer.recover()
         for job in self.store.running_jobs():
             self.store.finish(job.id, "done")
@@ -351,9 +374,10 @@ class Worker:
         return True
 
     def _vault_present(self) -> bool:
-        """True when the vault folder and Inbox are there to be listed."""
+        """True when the vault folder is there and holds the app's own `_system` folder (made at
+        start-up). Inbox missing alone does not mean the vault is away."""
         try:
-            return self.vault.root.is_dir() and self.vault.exists(INBOX)
+            return self.vault.root.is_dir() and self.vault.exists(SYSTEM)
         except VaultGone:
             return False
 

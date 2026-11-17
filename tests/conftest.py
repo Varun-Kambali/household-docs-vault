@@ -335,6 +335,7 @@ def make_world(
         settings = load_settings(env={"VAULT_ROOT": str(vault.root)}).model_copy(
             update={"settle_seconds": 0.0}
         )
+        vault.mkdirs("_system")  # as start-up makes it
         household = store.household()
         filer = Filer(vault, store, activity, household, clock)
         handler = cards if cards is not None else HoldCards()

@@ -1,6 +1,6 @@
 import pytest
 
-from household_vault.actions import AnswerError
+from household_vault.actions import AnswerError, PartlyAnswered
 from household_vault.doctypes import DocType
 from household_vault.filing.filer import UndoError
 from household_vault.reasons import Reason
@@ -357,3 +357,36 @@ def test_an_answer_racing_a_discard_does_not_revive_the_item(make_world, monkeyp
     w.drain()
     assert w.store.item(item.id).state == "discarded"
     assert [type(e) for e in errors] == [AnswerError]
+
+
+def test_a_failed_second_unlock_leaves_the_first_ones_password_in_place(world, monkeypatch):
+    d = fileable(DocType.health_policy, variant="locked")
+    drop(world.vault, "policy.pdf", d.data)
+    world.drain()
+    (item,) = world.store.items(["asked"])
+    go, t, errors = _paused(
+        world, monkeypatch, lambda: world.actions.unlock(item.id, d.doc.password)
+    )
+    world.actions.unlock(item.id, d.doc.password)  # lands first; its job has not run yet
+    go.set()
+    t.join(10)
+    assert [type(e) for e in errors] == [AnswerError]
+    assert world.worker.pending_passwords == {item.id: d.doc.password}
+    world.drain()
+    assert world.store.item(item.id).state == "filed"
+    assert world.worker.pending_passwords == {}
+
+
+def test_answer_many_says_which_files_were_refused_and_answers_the_rest(make_world):
+    w = make_world(models=TruthModels(patch={"patient": "Anita Sharma"}))
+    drop(w.vault, "a.pdf", fileable(DocType.prescription).data)
+    drop(w.vault, "b.pdf", fileable(DocType.tax_invoice).data)
+    w.drain()
+    (asked,) = w.store.items(["asked"])
+    (filed,) = w.store.items(["filed"])
+    with pytest.raises(PartlyAnswered) as caught:
+        w.actions.answer_many([filed.id, asked.id], "p2")
+    assert list(caught.value.refused) == [filed.id]
+    assert [i.id for i in caught.value.answered] == [asked.id]
+    w.drain()
+    assert w.store.item(asked.id).state == "filed" and w.store.item(filed.id).state == "filed"

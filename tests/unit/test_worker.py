@@ -395,3 +395,40 @@ def test_a_successful_job_resets_the_copy_mismatch_count(make_world, monkeypatch
     w.drain()
     (item,) = w.store.items(["filed"])
     assert not item.overrides.get("copy_mismatches")
+
+
+@pytest.mark.parametrize("state", ["held", "waiting_secrets"])
+def test_a_file_deleted_from_needs_a_look_ends_gone(world, asked_item, state):
+    world.store.update_item(asked_item.id, state=state)
+    world.vault.unlink(asked_item.rel_path)
+    world.worker.scan()
+    assert world.store.item(asked_item.id).state == state  # once is not enough
+    world.worker.scan()
+    assert world.store.item(asked_item.id).state == "gone"
+
+
+def test_a_file_in_needs_a_look_is_not_ended_while_the_vault_is_away(world, asked_item):
+    world.store.update_item(asked_item.id, state="held")
+    back = _unmount(world)
+    for _ in range(4):
+        world.worker.scan()
+    back()
+    assert world.store.item(asked_item.id).state == "held"
+
+
+def test_a_missing_inbox_folder_is_made_again_and_does_not_hold_jobs_up(world):
+    drop(world.vault, "empty.pdf", b"")
+    world.drain()
+    (item,) = world.store.items(["asked"])
+    world.actions.retry(item.id)
+    (world.vault.root / INBOX).rmdir()
+    world.drain()
+    assert (world.vault.root / INBOX).is_dir()
+    assert world.store.item(item.id).state == "asked"  # read again, asked again, not deferred
+
+
+def test_the_vault_counts_as_away_only_when_its_folder_is_gone(world):
+    assert world.worker._vault_present() is True
+    back = _unmount(world)
+    assert world.worker._vault_present() is False
+    back()

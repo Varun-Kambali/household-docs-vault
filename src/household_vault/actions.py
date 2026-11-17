@@ -7,6 +7,7 @@ back to the queue through `Store.requeue`; the worker's job files it or asks the
 
 from __future__ import annotations
 
+import threading
 from collections.abc import Sequence
 from typing import Any
 
@@ -36,6 +37,18 @@ class AnswerError(Exception):
     """An answer that cannot be used. The message is shown to the owner as it is."""
 
 
+class PartlyAnswered(AnswerError):
+    """Some of several files were refused. `answered` were queued; `refused` maps each refused
+    item id to the reason, in words for the owner."""
+
+    def __init__(self, answered: list[Item], refused: dict[int, str]) -> None:
+        super().__init__(
+            f"{len(refused)} of {len(answered) + len(refused)} files were not answered"
+        )
+        self.answered = answered
+        self.refused = refused
+
+
 class Actions:
     def __init__(
         self, worker: Worker, filer: Filer, store: Store, activity: Activity, household: Household
@@ -45,6 +58,7 @@ class Actions:
         self.store = store
         self.activity = activity
         self.household = household
+        self._unlock_lock = threading.Lock()
 
     # -- answers -------------------------------------------------------------------------------
 
@@ -75,12 +89,19 @@ class Actions:
         return self._requeue(item, overrides, "refile", Step.answered, kind)
 
     def answer_many(self, item_ids: Sequence[int], value: str) -> list[Item]:
-        """Say whose several files are (a person id, or `home`). All are checked before any
-        is changed."""
+        """Say whose several files are (a person id, or `home`). A file that cannot be answered
+        (it changed meanwhile) does not stop the others: `PartlyAnswered` names those refused."""
         self._person(value)
+        answered: list[Item] = []
+        refused: dict[int, str] = {}
         for item_id in item_ids:
-            self._answerable(item_id)
-        return [self.answer(item_id, "person", value) for item_id in item_ids]
+            try:
+                answered.append(self.answer(item_id, "person", value))
+            except AnswerError as exc:
+                refused[item_id] = str(exc)
+        if refused:
+            raise PartlyAnswered(answered, refused)
+        return answered
 
     def retry(self, item_id: int) -> Item:
         """Try a held or asked file again from the start."""
@@ -250,13 +271,21 @@ class Actions:
             raise AnswerError("This file could not be opened as a PDF") from None
         except VaultPathError:
             raise AnswerError("The file is no longer there") from None
-        # The password goes in first, so the job that starts at once finds it.
-        self.worker.pending_passwords[item.id] = password
-        try:
-            self.store.requeue(item.id, from_states=_ANSWERABLE)
-        except StateChanged:
-            self.worker.pending_passwords.pop(item.id, None)
-            raise AnswerError(_CHANGED) from None
+        # The password goes in first, so the job that starts at once finds it. If the file moved
+        # on, put back what was there, but only if the entry is still the one stored here.
+        with self._unlock_lock:
+            passwords = self.worker.pending_passwords
+            before = passwords.get(item.id)
+            passwords[item.id] = password
+            try:
+                self.store.requeue(item.id, from_states=_ANSWERABLE)
+            except StateChanged:
+                if passwords.get(item.id) == password:
+                    if before is None:
+                        passwords.pop(item.id, None)
+                    else:
+                        passwords[item.id] = before
+                raise AnswerError(_CHANGED) from None
         self.activity.record(
             item.id,
             Step.unlocked,
