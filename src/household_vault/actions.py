@@ -7,6 +7,7 @@ back to the queue through `Store.requeue`; the worker's job files it or asks the
 
 from __future__ import annotations
 
+import logging
 import threading
 from collections.abc import Sequence
 from typing import Any
@@ -17,6 +18,7 @@ from household_vault.activity import Activity, Step
 from household_vault.db import Item, ItemState, StateChanged, Store
 from household_vault.doctypes import DocType
 from household_vault.filing.filer import BUSY, Filer, UndoError
+from household_vault.filing.names import DEFAULT_NAME, scrub_identifiers
 from household_vault.filing.questions import AnswerKind
 from household_vault.people import Household
 from household_vault.reading.render import DamagedFileError, LockedPdfError, page_count
@@ -24,10 +26,13 @@ from household_vault.reasons import Reason
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import field_kind, secret_fields
 from household_vault.schemas.parse import parse_fields
+from household_vault.secrets.gate import SecretsGate
+from household_vault.secrets.store import SecretsLocked
 from household_vault.vaultroot import VaultGone, VaultPathError
 from household_vault.worker import Worker
 
 _ANSWERABLE: frozenset[ItemState] = frozenset({"asked", "held"})
+log = logging.getLogger(__name__)
 _GONE_COPY = "The other copy is no longer there. Nothing was deleted."
 _CHANGED = "This file changed while you were answering. Look at it again"
 _TAKEN = "A file with that name is already in Inbox. Move or rename it, then try Undo again."
@@ -51,8 +56,15 @@ class PartlyAnswered(AnswerError):
 
 class Actions:
     def __init__(
-        self, worker: Worker, filer: Filer, store: Store, activity: Activity, household: Household
+        self,
+        worker: Worker,
+        filer: Filer,
+        store: Store,
+        activity: Activity,
+        household: Household,
+        gate: SecretsGate | None = None,
     ) -> None:
+        self.gate = gate
         self.worker = worker
         self.filer = filer
         self.store = store
@@ -228,11 +240,54 @@ class Actions:
         self.activity.backfill_csv()
         return self.store.item(item.id)
 
+    def _save_password(self, item: Item, password: str, master_password: str | None) -> None:
+        """Keep the PDF's password in the secrets store, which the master password opens. The
+        password was checked against the PDF first, so a wrong one is never saved."""
+        assert self.gate is not None
+        if not master_password:
+            raise AnswerError("Enter the master password to save this password")
+        try:
+            self.gate.unlock(master_password)
+        except SecretsLocked:
+            raise AnswerError("That master password did not open the secrets store") from None
+        title = f"PDF password: {scrub_identifiers(item.original_name) or DEFAULT_NAME}"
+        try:
+            self.gate.store().add_pdf_password(title, password)
+        except Exception as exc:  # a full disk, Drive away: nothing is said about the password
+            log.warning("could not save a PDF password: %s", type(exc).__name__)
+            raise AnswerError("The password could not be saved. Nothing was changed.") from None
+
     # -- Undo ----------------------------------------------------------------------------------
 
     def undo_document(self, doc_id: str) -> Item:
+        doc = self.store.document(doc_id)
+        if doc is not None and doc.secret_ref is not None and self.gate is not None:
+            return self._undo_card(doc.id, doc.secret_ref)
         try:
             return self.filer.undo(doc_id)
+        except FileExistsError:
+            raise UndoError(_TAKEN) from None
+
+    def _undo_card(self, doc_id: str, secret_ref: str) -> Item:
+        """Put the original photo back in Inbox from its attachment in the store, which needs
+        the secrets store open. The entry stays, so a refile reuses it."""
+        assert self.gate is not None
+        try:
+            secrets = self.gate.store()
+            names = secrets.attachment_names(secret_ref)
+            if not names:
+                raise KeyError(secret_ref)
+            original = secrets.attachment(secret_ref, names[0])
+        except SecretsLocked:
+            raise UndoError(
+                "Unlock the secrets store to undo a card. Nothing was changed."
+            ) from None
+        except KeyError:
+            raise UndoError(
+                "The original photo is not in the secrets store. Nothing was changed."
+            ) from None
+        try:
+            return self.filer.undo_card(doc_id, original, names[0].rpartition(".")[2])
         except FileExistsError:
             raise UndoError(_TAKEN) from None
 
@@ -258,7 +313,7 @@ class Actions:
     ) -> Item:
         """Open a locked PDF with its password. The password is kept in memory for the one job
         that reads the file, and nowhere else."""
-        if save:
+        if save and self.gate is None:
             raise AnswerError("Saving passwords comes with the secrets store")
         item = self._answerable(item_id)
         if Reason.locked not in item.reasons or item.rel_path is None:
@@ -271,6 +326,8 @@ class Actions:
             raise AnswerError("This file could not be opened as a PDF") from None
         except VaultPathError:
             raise AnswerError("The file is no longer there") from None
+        if save:
+            self._save_password(item, password, master_password)
         # The password goes in first, so the job that starts at once finds it. If the file moved
         # on, put back what was there, but only if the entry is still the one stored here.
         with self._unlock_lock:

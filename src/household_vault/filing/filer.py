@@ -348,7 +348,7 @@ class Filer:
             if doc is None:
                 raise UndoError(f"There is no filed document {doc_id}. Nothing was changed.")
             if doc.secret_ref is not None:
-                raise UndoError("Undo for cards comes with the secrets store. Nothing was changed.")
+                raise UndoError("Undo for cards needs the secrets store. Nothing was changed.")
             if not self._ours(doc.rel_path, doc.sha256):
                 raise UndoError(
                     f"The filed copy is no longer at {doc.rel_path}. Nothing was changed."
@@ -367,6 +367,61 @@ class Filer:
                 {"doc_id": doc_id, "sha256": doc.sha256},
             )
             return self.store.item(item.id)
+
+    def undo_card(self, doc_id: str, original: bytes, ext: str) -> Item:
+        """Undo a filed card: write the original photo (from its attachment in the secrets
+        store) to `Inbox` as a held file, and remove the masked copy and the record. The
+        store entry stays and `secret_ref` stays in the item's overrides, so a refile reuses
+        it. Refused, with nothing changed, when the masked copy is not as it was filed."""
+        with self.lock:
+            doc = self.store.document(doc_id)
+            if doc is None or doc.secret_ref is None:
+                raise UndoError(f"There is no filed card {doc_id}. Nothing was changed.")
+            if not self._ours(doc.rel_path, doc.sha256):
+                raise UndoError(
+                    f"The filed copy is no longer at {doc.rel_path}. Nothing was changed."
+                )
+            item = self.store.item(doc.item_id)
+            if item.state != "filed":
+                raise UndoError("This document is still being filed. Nothing was changed.")
+            dest = self._inbox_path(item, f".{ext}")
+            original_sha = hashlib.sha256(original).hexdigest()
+            before = dataclasses.replace(item)
+            pending = {
+                "from": doc.rel_path,
+                "sha256": doc.sha256,
+                "final": "held",
+                "doc_id": doc_id,
+                "card": True,
+                "item_sha256": original_sha,
+            }
+            self.store.update_item(
+                item.id,
+                state="undoing",
+                target=dest,
+                rel_path=dest,
+                pending=pending,
+                overrides={**item.overrides, "secret_ref": doc.secret_ref},
+            )
+            try:
+                self._write_bytes(dest, original)
+            except Exception:
+                self._remove_partials(dest)
+                if not self._ours(dest, original_sha):
+                    self._restore(before)
+                    raise
+            self._finish_move(item.id)
+            return self.store.item(item.id)
+
+    def _restore(self, before: Item) -> None:
+        self.store.update_item(
+            before.id,
+            state=before.state,
+            rel_path=before.rel_path,
+            target=before.target,
+            pending=before.pending,
+            overrides=before.overrides,
+        )
 
     def undo_needs_a_look(self, item_id: int) -> Item:
         with self.lock:
@@ -423,6 +478,9 @@ class Filer:
         if doc_id:
             with contextlib.suppress(VaultGone):
                 self.vault.unlink(record_path(doc_id))
+        if pending.get("card"):  # the masked copy goes; the original is back in Inbox
+            with contextlib.suppress(VaultGone):
+                self.vault.unlink(pending["from"])
         changes: dict[str, Any] = {
             "state": pending["final"],
             "rel_path": dest,
@@ -430,7 +488,7 @@ class Filer:
             "pending": None,
         }
         if doc_id:
-            changes.update(sha256=pending["sha256"], document_id=None)
+            changes.update(sha256=pending.get("item_sha256", pending["sha256"]), document_id=None)
         with self.store.transaction():
             if doc_id:
                 self.store.remove_document(doc_id)
@@ -505,6 +563,8 @@ class Filer:
         pending, dest = item.pending, item.target
         if pending is None or dest is None or "from" not in pending:
             raise ValueError("no move to finish")
+        if pending.get("card"):
+            return self._recover_card_undo(item, pending, dest)
         src, sha = pending["from"], pending["sha256"]
         at_dest, at_src = self._ours(dest, sha), self._ours(src, sha)
         if at_dest and at_src:
@@ -522,6 +582,18 @@ class Filer:
         elif not at_dest:
             raise ValueError("neither the source nor the destination holds the file")
         self._finish_move(item.id)
+        return True
+
+    def _recover_card_undo(self, item: Item, pending: dict[str, Any], dest: str) -> bool:
+        """A card Undo that was stopped: with the original in `Inbox` it is finished (the masked
+        copy goes); without it the card stays filed, because the original can only come from
+        the secrets store, which a restart does not have open."""
+        if self._ours(dest, pending["item_sha256"]):
+            self._finish_move(item.id)
+            return True
+        self._remove_partials(dest)
+        with self.store.transaction():
+            self.store.update_item(item.id, state="filed", rel_path=None, target=None, pending=None)
         return True
 
     def _filed_card_items(self) -> list[Item]:
