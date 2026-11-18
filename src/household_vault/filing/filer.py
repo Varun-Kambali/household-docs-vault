@@ -382,6 +382,8 @@ class Filer:
                     f"The filed copy is no longer at {doc.rel_path}. Nothing was changed."
                 )
             item = self.store.item(doc.item_id)
+            if item.origin == "upload":  # there is no Inbox photo, and none may be written
+                raise UndoError("This card came from an upload. Nothing was changed.")
             if item.state != "filed":
                 raise UndoError("This document is still being filed. Nothing was changed.")
             dest = self._inbox_path(item, f".{ext}")

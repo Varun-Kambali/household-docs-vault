@@ -35,6 +35,10 @@ _ANSWERABLE: frozenset[ItemState] = frozenset({"asked", "held"})
 log = logging.getLogger(__name__)
 _GONE_COPY = "The other copy is no longer there. Nothing was deleted."
 _CHANGED = "This file changed while you were answering. Look at it again"
+_UPLOADED = (
+    "This card came from an upload. To change it, delete the filed copy and upload it again. "
+    "Nothing was changed."
+)
 _TAKEN = "A file with that name is already in Inbox. Move or rename it, then try Undo again."
 
 
@@ -272,6 +276,9 @@ class Actions:
         """Put the original photo back in Inbox from its attachment in the store, which needs
         the secrets store open. The entry stays, so a refile reuses it."""
         assert self.gate is not None
+        doc = self.store.document(doc_id)
+        if doc is not None and self.store.item(doc.item_id).origin == "upload":
+            raise UndoError(_UPLOADED)
         try:
             secrets = self.gate.store()
             names = secrets.attachment_names(secret_ref)

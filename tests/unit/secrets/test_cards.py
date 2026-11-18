@@ -545,3 +545,16 @@ def test_a_card_undo_stopped_before_the_photo_was_written_stays_filed(card_world
     item = card_world.store.item(doc.item_id)
     assert item.state == "filed" and card_world.vault.exists(doc.rel_path)
     assert card_world.store.document(doc.id) is not None
+
+
+def test_undo_of_an_uploaded_card_is_refused_and_writes_no_photo(card_world):
+    rec = card_world.cards.upload(card_world.card(base=10).files, MASTER_PASSWORD)
+    with pytest.raises(UndoError, match="came from an upload"):
+        card_world.actions.undo_document(rec.id)
+    assert card_world.vault.list_dir(INBOX) == []
+    assert card_world.store.document(rec.id) is not None
+    assert card_world.vault.exists(rec.rel_path)
+    assert card_world.secrets().has_entry(rec.secret_ref)
+    card_world.gate.lock()
+    with pytest.raises(UndoError, match="came from an upload"):
+        card_world.actions.undo_document(rec.id)
