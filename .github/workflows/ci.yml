@@ -25,16 +25,17 @@ jobs:
       - run: uv sync
       - run: make lint
       - run: make test
-  # Builds the image and runs the stand-in command. The real app runs natively on a Mac.
+  # Builds the image, runs the app in it with the stand-in reader and takes a PDF through the
+  # API. The real app runs natively on a Mac.
   image:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - run: docker build -t household-docs-vault .
-      - name: Run the image
+      - name: Check the version
         run: |
           want="household-docs-vault $(sed -n 's/^__version__ = "\(.*\)"$/\1/p' src/household_vault/__init__.py)"
-          test "$(docker run --rm household-docs-vault)" = "$want"
+          test "$(docker run --rm household-docs-vault vault)" = "$want"
       # Imports every module of the package inside the image, so a dependency that only the
       # dev or synth groups provide shows up here.
       - name: Import every module in the image
@@ -44,6 +45,25 @@ jobs:
           for m in pkgutil.walk_packages(household_vault.__path__, 'household_vault.'):
               importlib.import_module(m.name)
           print('imported ok', household_vault.__version__)"
+      - name: Serve, then process a PDF
+        run: |
+          id=$(docker run -d -p 8710:8710 household-docs-vault)
+          trap 'docker logs "$id" | tail -n 40; docker stop "$id" >/dev/null' EXIT
+          up=0
+          for i in $(seq 1 30); do
+            if curl -fs http://localhost:8710/healthz; then up=1; break; fi
+            sleep 1
+          done
+          echo
+          test "$up" = 1 || { echo "no answer from /healthz in 30 s"; exit 1; }
+          docker cp evals/datasets/eval-v1/health_policy-1-clean.pdf "$id":/data/vault/Inbox/policy.pdf
+          for i in $(seq 1 60); do
+            if curl -fs http://localhost:8710/v1/activity | grep -q '"step":"needs_a_look"'; then
+              echo "needs a look after $i s"; exit 0
+            fi
+            sleep 1
+          done
+          echo "no needs_a_look entry in 60 s"; exit 1
   secrets-scan:
     runs-on: ubuntu-latest
     steps:

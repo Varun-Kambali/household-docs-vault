@@ -19,10 +19,13 @@ dependencies = [
     "pillow",
     "httpx",
     "pykeepass>=4.2.0",
+    "fastapi>=0.163.2",
+    "uvicorn>=0.54.0",
+    "python-multipart>=0.0.34",
 ]
 
 [project.scripts]
-vault = "household_vault.cli:main"
+vault = "household_vault.cli:console"
 
 [project.urls]
 Repository = "https://github.com/Varun-Kambali/household-docs-vault"

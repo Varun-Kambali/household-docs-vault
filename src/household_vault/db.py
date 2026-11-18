@@ -530,6 +530,14 @@ class Store:
         return None if r is None else _document(r)
 
     @_locked
+    def count_documents_with_secrets(self) -> int:
+        """How many filed documents keep something in the secrets file."""
+        row = self.conn.execute(
+            "select count(*) from documents where secret_ref is not null"
+        ).fetchone()
+        return int(row[0])
+
+    @_locked
     def documents_of_type(self, doc_type: DocType) -> list[DocumentRow]:
         rows = self.conn.execute(
             "select * from documents where doc_type = ? order by created_at, id",

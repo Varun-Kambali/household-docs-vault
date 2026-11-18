@@ -390,3 +390,15 @@ def test_answer_many_says_which_files_were_refused_and_answers_the_rest(make_wor
     assert [i.id for i in caught.value.answered] == [asked.id]
     w.drain()
     assert w.store.item(asked.id).state == "filed" and w.store.item(filed.id).state == "filed"
+
+
+def test_the_other_copy_is_found_by_a_live_check(world):
+    d = fileable(DocType.tax_invoice)
+    for name in ("a.pdf", "a (1).pdf"):
+        drop(world.vault, name, d.data)
+    world.drain()
+    (filed,) = world.store.documents_of_type(DocType.tax_invoice)
+    (dup,) = world.store.items(["asked"])
+    assert world.actions.other_copy_path(dup) == filed.rel_path
+    world.vault.unlink(filed.rel_path)
+    assert world.actions.other_copy_path(dup) is None

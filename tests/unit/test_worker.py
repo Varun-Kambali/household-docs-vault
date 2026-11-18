@@ -199,8 +199,8 @@ def test_run_forever_starts_up_and_stops(world):
     stop = threading.Event()
     original = world.worker.drain
 
-    def drain_then_stop() -> None:
-        original()
+    def drain_then_stop(max_seconds: float = 600.0, stop=None) -> None:
+        original(max_seconds, stop)
         stop.set()
 
     world.worker.drain = drain_then_stop  # type: ignore[method-assign]
@@ -432,3 +432,34 @@ def test_the_vault_counts_as_away_only_when_its_folder_is_gone(world):
     back = _unmount(world)
     assert world.worker._vault_present() is False
     back()
+
+
+def test_drain_stops_between_jobs_when_the_stop_event_is_set(make_world):
+    models = TruthModels()
+    w = make_world(models=models)
+    stop = threading.Event()
+    models.on_fill = stop.set  # the stop arrives while the first file is being read
+    for name, t in (("a.pdf", DocType.health_policy), ("b.pdf", DocType.tax_invoice)):
+        drop(w.vault, name, fileable(t).data)
+    w.worker.drain(stop=stop)
+    assert len(w.store.items(["filed"])) == 1  # the second file waits for the next start
+    assert w.worker.progress().waiting == 1
+
+
+def test_run_forever_hands_its_stop_event_to_drain(world, monkeypatch):
+    seen = []
+    stop = threading.Event()
+
+    def fake_drain(max_seconds=600.0, stop=None):
+        seen.append(stop)
+
+    monkeypatch.setattr(world.worker, "drain", fake_drain)
+    monkeypatch.setattr(world.worker, "start_up", lambda: None)
+    world.worker.settings = world.worker.settings.model_copy(update={"poll_seconds": 0.01})
+    t = threading.Thread(target=world.worker.run_forever, args=(stop,))
+    t.start()
+    while not seen:
+        pass
+    stop.set()
+    t.join(5)
+    assert not t.is_alive() and seen[0] is stop

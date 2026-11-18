@@ -271,12 +271,13 @@ class Worker:
         self._refresh_batch()
         return True
 
-    def drain(self, max_seconds: float = 600.0) -> None:
-        """Scan and run jobs until nothing is left to do."""
+    def drain(self, max_seconds: float = 600.0, stop: threading.Event | None = None) -> None:
+        """Scan and run jobs until nothing is left to do, or until `stop` is set (checked
+        between jobs, so a shutdown waits for the job in hand and no longer)."""
         self._seen = {}
         self._secrets_tried = set()
         deadline = time.monotonic() + max_seconds
-        while time.monotonic() < deadline:
+        while time.monotonic() < deadline and not (stop is not None and stop.is_set()):
             queued = self.scan()
             ran = self.run_once()
             if not ran and not queued:
@@ -298,7 +299,7 @@ class Worker:
         self.start_up()
         while not stop.is_set():
             try:
-                self.drain()
+                self.drain(stop=stop)
             except Exception as exc:  # keep the loop alive; the type is all that is logged
                 log.warning("the worker pass failed: %s", type(exc).__name__)
             stop.wait(self.settings.poll_seconds)
