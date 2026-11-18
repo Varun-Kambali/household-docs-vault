@@ -125,19 +125,6 @@ def install_log_redaction(secrets: Callable[[], Collection[str]] | None = None) 
 
     logging.Handler.format = format_redacted  # type: ignore[method-assign]
 
-    previous = logging.getLogRecordFactory()
-
-    def factory(*args: object, **kwargs: object) -> logging.LogRecord:
-        record = previous(*args, **kwargs)
-        try:
-            record.msg = redact(record.getMessage(), _current_secrets())
-            record.args = None
-        except Exception:  # the handler's own formatting reports it
-            pass
-        return record
-
-    logging.setLogRecordFactory(factory)
-
 
 # -- scanning what the app wrote ------------------------------------------------------------------
 

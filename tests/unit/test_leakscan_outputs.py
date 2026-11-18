@@ -200,3 +200,22 @@ def test_an_id_made_only_of_digits_is_not_a_card_number_in_a_card_record(vault, 
     body = '{"doc_type": "card_front", "secret_ref": "12345678-1234-1234-1234-123456789012"}'
     vault.write_atomic("_system/records/b.json", body.encode())
     assert scan_outputs(vault, settings.db_path, settings.log_dir) == []
+
+
+def test_a_formatter_that_reads_the_args_still_works_and_its_line_is_redacted():
+    install_log_redaction()
+
+    class AccessFormatter(logging.Formatter):
+        def format(self, record):
+            client, request = record.args[0], record.args[1]
+            return f"{client} - {request}"
+
+    buf = io.StringIO()
+    handler = logging.StreamHandler(buf)
+    handler.setFormatter(AccessFormatter())
+    log = logging.getLogger("household_vault.t_access")
+    log.handlers = [handler]
+    log.propagate = False
+    log.setLevel(logging.INFO)
+    log.info('%s - "%s"', "4111111111111111", "GET /x")
+    assert buf.getvalue().strip() == "XXXXXXXXXXXX1111 - GET /x"

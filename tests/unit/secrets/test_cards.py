@@ -677,3 +677,49 @@ def test_an_upload_whose_masked_copy_still_shows_the_number_writes_nothing(card_
     assert isinstance(result, Item) and result.state == "asked"
     assert result.question["text"] == "Take a straighter photo of the card."
     assert card_world.secrets().entries("Cards") == [] and card_world.vault.list_dir(INBOX) == []
+
+
+def test_a_reader_that_is_down_on_the_second_read_defers_the_card(card_world):
+    from household_vault.reading.ollama import ModelUnavailable
+
+    class Down(ReadsMaskedAs):
+        def read_pages(self, source: Any, sha256: str, password: str | None) -> Any:
+            try:
+                return TruthPages.read_pages(self, source, sha256, password)
+            except ValueError:
+                raise ModelUnavailable("the reader is down") from None
+
+    card_world.cards.engines = Engines(
+        Down(card_world.docs, card_world.folder, []), card_world.models
+    )
+    card = card_world.drop_card(base=5)
+    card_world.drain()
+    assert card_world.store.items(["asked", "filed"]) == []
+    (item,) = card_world.store.items(["queued"])
+    assert card_world.vault.read_bytes("Inbox/card.jpg") == card.data
+    assert [p for p in vault_files(card_world.vault) if p.startswith("Ravi")] == []
+    assert card_world.secrets().entries("Cards") == []
+    assert not card_world.store.documents_of_type(DocType.card_front)
+    assert item.state == "queued"
+
+
+def test_a_gate_that_closes_while_the_card_is_filed_leaves_it_waiting(card_world, monkeypatch):
+    real = card_world.gate.store
+    calls = []
+
+    def store_then_locked() -> Any:
+        calls.append(1)
+        if len(calls) > 1:
+            raise SecretsLocked("the secrets store is locked")
+        return real()
+
+    monkeypatch.setattr(card_world.gate, "store", store_then_locked)
+    card = card_world.drop_card(base=5)
+    card_world.drain()
+    (item,) = card_world.store.items(["waiting_secrets"])
+    assert card_world.vault.read_bytes("Inbox/card.jpg") == card.data
+    assert not card_world.store.documents_of_type(DocType.card_front)
+    monkeypatch.undo()
+    card_world.drain()
+    assert card_world.store.documents_of_type(DocType.card_front)
+    assert card_world.store.item(item.id).state == "filed"

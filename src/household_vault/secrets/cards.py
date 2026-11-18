@@ -45,7 +45,7 @@ from household_vault.reasons import Reason
 from household_vault.secrets.gate import SecretsGate
 from household_vault.secrets.mask import MaskError, mask_card, still_shows_number
 from household_vault.secrets.store import SecretsLocked
-from household_vault.vaultroot import VaultGone, VaultRoot
+from household_vault.vaultroot import VaultRoot
 from household_vault.worker import effective_reading, overrides_of
 
 log = logging.getLogger(__name__)
@@ -216,7 +216,12 @@ class CardIntake:
             return self._ask(item, [Reason.card_unreadable], reading, shown, context)
         except (MaskError, ValueError):
             return self._ask(item, [Reason.card_unreadable], reading, shown, {})
-        ref = self._entry_for(item, reading, source, decision, number, front)
+        try:
+            ref = self._entry_for(item, reading, source, decision, number, front)
+        except SecretsLocked:  # the gate ran out, or the file went, while the card was read
+            with self._held_lock:
+                self._held[item.id] = (item.sha256, reading)
+            return "waiting"
         record = self.filer.file_new(
             item,
             masked,
@@ -305,20 +310,6 @@ class CardIntake:
             self._photos(source, front),
             uid=ref,
         )
-        fields = {**reading.fields, **overrides_of(current).fields}
-        bank = str(fields.get("bank") or "").strip() or "Card"
-        expiry = fields.get("expiry")
-        holder = fields.get("holder")
-        ref = store.add_card(
-            f"{bank} card ending {decision.last4}",
-            number,
-            str(expiry) if expiry else None,
-            reading.secret_values.get("cvv"),
-            str(holder) if holder else None,
-            self._photos(source, front),
-        )
-        self.store.update_item(item.id, overrides={**current.overrides, "secret_ref": ref})
-        return ref
 
     @staticmethod
     def _photos(source: DocumentSource, front: int) -> list[tuple[str, bytes]]:
@@ -346,16 +337,12 @@ class CardIntake:
 
     def _check_masked(self, jpeg: bytes, number: str) -> None:
         """Read the masked copy with the same page reader. If the number can still be read in
-        it (a tilted card the band did not cover), the copy is refused. A reader that fails
-        refuses it too: a copy that was not checked is not filed."""
-        try:
-            pages = self.engines.pages.read_pages(
-                DocumentSource(FileKind.jpeg, data=jpeg), hashlib.sha256(jpeg).hexdigest(), None
-            )
-        except VaultGone:
-            raise
-        except Exception:
-            raise MaskError("the masked copy could not be checked") from None
+        it (a tilted card the band did not cover), the copy is refused. A reader that fails is
+        not a refusal: its error goes to the worker (a reader that is down defers the card), so
+        a copy that was not checked is never filed."""
+        pages = self.engines.pages.read_pages(
+            DocumentSource(FileKind.jpeg, data=jpeg), hashlib.sha256(jpeg).hexdigest(), None
+        )
         texts = [ln.text for page in pages for ln in page.lines]
         if still_shows_number(texts, number):
             raise StillShowsNumber("the masked copy still shows the number")
