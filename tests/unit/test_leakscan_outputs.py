@@ -219,3 +219,59 @@ def test_a_formatter_that_reads_the_args_still_works_and_its_line_is_redacted():
     log.setLevel(logging.INFO)
     log.info('%s - "%s"', "4111111111111111", "GET /x")
     assert buf.getvalue().strip() == "XXXXXXXXXXXX1111 - GET /x"
+
+
+def _luhn_check_digit(body: str) -> str:
+    return next(d for d in "0123456789" if luhn_valid(body + d))
+
+
+def test_values_that_sit_side_by_side_in_the_database_file_do_not_join_into_a_number(
+    vault, settings, store
+):
+    """A hash tail and a date (or any two values) are stored back to back; a scan over the raw
+    file would read their digits as one number that passes the card check by chance."""
+    first = "x1234567890123"
+    second = _luhn_check_digit("1234567890123") + "z"
+    assert not luhn_valid("1234567890123")
+    store.conn.execute("create table notes (id integer primary key, a text, b text)")
+    store.conn.execute("insert into notes (a, b) values (?, ?)", (first, second))
+    raw = "".join(
+        p.read_bytes().decode("latin-1")
+        for p in (settings.db_path, settings.db_path.with_name("vault.db-wal"))
+        if p.is_file()
+    )
+    assert scan_text(raw, allow_test_cards=False)  # the raw bytes do join into a number
+    assert scan_outputs(vault, settings.db_path, settings.log_dir) == []
+
+
+def test_a_known_card_number_in_a_deleted_row_is_still_found_in_the_file(vault, settings, store):
+    store.conn.execute("create table notes (id integer primary key, body text)")
+    store.conn.execute("insert into notes (body) values (?)", (f"n {VISA}",))
+    store.conn.execute("insert into notes (body) values (?)", ("n 4111 1111 1111 1111",))
+    store.conn.execute("insert into notes (body) values (?)", ("n 4111-1111-1111-1111",))
+    store.conn.execute("delete from notes")
+    hits = scan_outputs(vault, settings.db_path, settings.log_dir, known_secrets=[VISA])
+    files = {h.split(":")[0] for h in hits if "known secret" in h}
+    assert files & {"vault.db", "vault.db-wal"}
+    assert all(VISA[:-4] not in h for h in hits)
+
+
+def test_a_known_password_in_the_wal_is_found_without_its_value(vault, settings, store):
+    store.conn.execute("create table notes (id integer primary key, body text)")
+    store.conn.execute("insert into notes (body) values (?)", ("pw=correct-horse-battery",))
+    hits = scan_outputs(
+        vault, settings.db_path, settings.log_dir, known_secrets=["correct-horse-battery"]
+    )
+    assert hits and all("correct" not in h for h in hits)
+
+
+def test_a_misread_number_in_a_card_text_column_is_still_flagged(vault, settings, store):
+    misread = "4111111111111112"
+    assert not luhn_valid(misread)
+    store.conn.execute(
+        "insert into items (sha256, original_name, origin, state, created_at, updated_at, reading)"
+        " values ('a', 'a.jpg', 'inbox', 'queued', 'x', 'x', ?)",
+        (f'{{"lines": ["{misread}"]}}',),
+    )
+    hits = scan_outputs(vault, settings.db_path, settings.log_dir)
+    assert any(h.startswith("vault.db:items.reading") and h.endswith("1112") for h in hits)

@@ -204,6 +204,31 @@ def _secret_hits(where: str, text: str, secrets: Collection[str]) -> list[str]:
     return hits
 
 
+def _forms(secret: str) -> set[str]:
+    """How a known secret can be written: as it is, as digits only, and a card-length number
+    grouped 4-4-4-4 (the last group holding the rest) with spaces or with hyphens."""
+    forms = {secret}
+    digits = "".join(c for c in secret if c.isdigit())
+    if digits and all(c.isdigit() or c in " -" for c in secret):
+        forms.add(digits)
+        if 13 <= len(digits) <= 19:
+            groups = [digits[i : i + 4] for i in range(0, len(digits), 4)]
+            forms.update({" ".join(groups), "-".join(groups)})
+    return {f for f in forms if f}
+
+
+def _exact_secret_hits(where: str, text: str, secrets: Collection[str]) -> list[str]:
+    hits: list[str] = []
+    for secret in secrets:
+        if any(form in text for form in _forms(secret)):
+            digits = "".join(c for c in secret if c.isdigit())
+            if len(digits) > 4 and digits and all(c.isdigit() or c in " -" for c in secret):
+                hits.append(f"{where}: known secret ending {digits[-4:]}")
+            else:
+                hits.append(f"{where}: known secret (value not shown)")
+    return hits
+
+
 def _texts_of_database(db_path: Path) -> list[tuple[str, str]]:
     """Every text value of every table, as (table.column, value)."""
     found: list[tuple[str, str]] = []
@@ -255,7 +280,10 @@ def scan_outputs(
         check(rel, _file_text(rel, vault.read_bytes(rel)))
     for path in (db_path, db_path.with_name(db_path.name + "-wal")):
         if path.is_file():
-            check(path.name, path.read_bytes().decode("latin-1"))
+            # Values sit side by side in the file with nothing between them, so their digits
+            # would join into numbers that are not there: only the known secrets are looked for.
+            raw = path.read_bytes().decode("latin-1")
+            hits.extend(_exact_secret_hits(path.name, raw, known_secrets))
     if db_path.is_file():
         for where, value in _texts_of_database(db_path):
             check(f"{db_path.name}:{where}", value, card_text=where in CARD_COLUMNS)
