@@ -1,10 +1,17 @@
+import math
 from dataclasses import dataclass, field
 
 import pytest
 from PIL import Image, ImageDraw, ImageFont
 
 from household_vault.reading.lines import Line
-from household_vault.secrets.mask import MaskError, draw_last_four, mask_card, padded_box
+from household_vault.secrets.mask import (
+    MaskError,
+    draw_last_four,
+    mask_card,
+    padded_box,
+    still_shows_number,
+)
 
 NUMBER = "4111111111111111"
 GREY = (200, 200, 200)
@@ -51,7 +58,7 @@ def card_photo() -> CardPhoto:
     text = "4111 1111 1111 1111"
     lines = [
         Line(text=text, bbox=(0.05, 0.40, 0.95, 0.50)),
-        Line(text="TEST HOLDER", bbox=(0.05, 0.70, 0.50, 0.78)),
+        Line(text="TEST HOLDER", bbox=(0.05, 0.86, 0.50, 0.94)),
     ]
     start = 15 / len(text)  # the last four digits start at character 15
     edge = 0.05 + 0.90 * start
@@ -59,9 +66,9 @@ def card_photo() -> CardPhoto:
         image,
         lines,
         NUMBER,
-        box_before_last_four=(0.06, 0.41, edge - 0.01, 0.49),
+        box_before_last_four=(0.06, 0.41, 0.65, 0.49),
         last_four_box=(edge + 0.01, 0.41, 0.94, 0.49),
-        holder_box=(0.06, 0.71, 0.49, 0.77),
+        holder_box=(0.06, 0.87, 0.49, 0.93),
     )
 
 
@@ -80,11 +87,11 @@ def test_the_original_image_is_not_changed(card_photo):
 
 
 def test_a_line_that_holds_the_cvv_is_blacked_out(card_photo):
-    lines = [*card_photo.lines, Line(text="CVV 737", bbox=(0.05, 0.1, 0.5, 0.2))]
+    lines = [*card_photo.lines, Line(text="CVV 737", bbox=(0.05, 0.02, 0.5, 0.08))]
     masked = mask_card(card_photo.image, lines, NUMBER, "737")
-    assert is_black(masked, (0.06, 0.11, 0.49, 0.19))
+    assert is_black(masked, (0.06, 0.03, 0.49, 0.07))
     unmasked = mask_card(card_photo.image, lines, NUMBER, None)
-    assert is_untouched(unmasked, (0.06, 0.11, 0.49, 0.19))
+    assert is_untouched(unmasked, (0.06, 0.03, 0.49, 0.07))
 
 
 def test_a_number_that_is_not_on_the_card_raises(card_photo):
@@ -207,10 +214,11 @@ def draw_number(
     return Drawn(img, lines, digit_ink, others)
 
 
-def survivors(masked: Image.Image, ink: set[tuple[int, int]]) -> float:
-    """The share of a glyph's ink pixels that are not black in the masked image."""
-    data = masked.load()
-    return sum(1 for p in ink if data[p] != (0, 0, 0)) / len(ink)
+def survivors(masked: Image.Image, ink: set[tuple[int, int]], original: Image.Image) -> float:
+    """The share of a glyph's ink pixels that are as they were on the original: not blacked out
+    and not drawn over (a pixel that was black already does not count; a rotation can make one)."""
+    data, before = masked.load(), original.load()
+    return sum(1 for p in ink if data[p] == before[p] != (0, 0, 0)) / len(ink)
 
 
 def reference_last_four(masked: Image.Image, bbox, text: str) -> bool:
@@ -224,7 +232,9 @@ def reference_last_four(masked: Image.Image, bbox, text: str) -> bool:
 
 def _all_but_last_four_hidden(masked: Image.Image, drawn: Drawn, count: int) -> None:
     for index in range(count - 4):
-        assert survivors(masked, drawn.digit_ink[index]) == 0.0, f"digit {index + 1} shows"
+        assert survivors(masked, drawn.digit_ink[index], drawn.image) == 0.0, (
+            f"digit {index + 1} shows"
+        )
 
 
 @pytest.mark.parametrize(
@@ -264,13 +274,13 @@ def test_an_amex_number_in_its_own_grouping_and_its_cid_line():
     drawn = draw_number(["3782", "822463", "10005"], extra=[("1234", (800, 150), 0)])
     masked = mask_card(drawn.image, drawn.lines, "378282246310005", None)
     _all_but_last_four_hidden(masked, drawn, 15)
-    assert survivors(masked, drawn.other_ink[0]) == 0.0  # the CID
+    assert survivors(masked, drawn.other_ink[0], drawn.image) == 0.0  # the CID
 
 
 def test_a_four_digit_line_is_left_alone_on_a_card_that_is_not_amex():
     drawn = draw_number(["4111", "1111", "1111", "1111"], extra=[("1234", (800, 150), 0)])
     masked = mask_card(drawn.image, drawn.lines, "4111111111111111", None)
-    assert survivors(masked, drawn.other_ink[0]) > 0.9
+    assert survivors(masked, drawn.other_ink[0], drawn.image) > 0.9
 
 
 def test_the_last_four_are_drawn_in_the_box_and_differ_by_digit():
@@ -280,3 +290,77 @@ def test_the_last_four_are_drawn_in_the_box_and_differ_by_digit():
     b = mask_card(second.image, second.lines, "4111111111111119", None)
     assert a.tobytes() != b.tobytes()
     assert reference_last_four(a, first.lines[0].bbox, "1111")
+
+
+# -- a tilted card, and the check that the masked copy shows no number --
+
+
+def tilted(drawn: Drawn, degrees: float) -> Drawn:
+    """The card turned about its centre. The OCR box of a turned line is what a reader returns
+    for it: the size of the straight line, centred on where the turned line is."""
+    w, h = drawn.image.size
+    centre = (w / 2, h / 2)
+    image = drawn.image.rotate(degrees, resample=Image.BICUBIC, center=centre, fillcolor=BACK)
+    ink = []
+    for pixels in drawn.digit_ink:
+        layer = Image.new("L", (w, h), 0)
+        for p in pixels:
+            layer.putpixel(p, 255)
+        turned = layer.rotate(degrees, resample=Image.BICUBIC, center=centre).load()
+        box = layer.rotate(degrees, resample=Image.BICUBIC, center=centre).getbbox()
+        assert box is not None
+        ink.append(
+            {
+                (i, j)
+                for i in range(box[0], box[2])
+                for j in range(box[1], box[3])
+                if turned[i, j] > 128
+            }
+        )
+    lines = []
+    for line in drawn.lines:
+        cx, cy = (line.bbox[0] + line.bbox[2]) / 2 * w, (line.bbox[1] + line.bbox[3]) / 2 * h
+        dx, dy = cx - centre[0], cy - centre[1]
+        rad = math.radians(degrees)
+        nx = centre[0] + dx * math.cos(rad) + dy * math.sin(rad)
+        ny = centre[1] - dx * math.sin(rad) + dy * math.cos(rad)
+        half_w, half_h = (
+            (line.bbox[2] - line.bbox[0]) * w / 2,
+            (line.bbox[3] - line.bbox[1]) * h / 2,
+        )
+        lines.append(
+            Line(
+                text=line.text,
+                bbox=((nx - half_w) / w, (ny - half_h) / h, (nx + half_w) / w, (ny + half_h) / h),
+            )
+        )
+    return Drawn(image, lines, ink)
+
+
+@pytest.mark.parametrize("degrees", [6, 10, 15, -10, -15])
+def test_a_tilted_card_is_covered_by_the_band(degrees):
+    drawn = tilted(draw_number(["5555", "5555", "5555", "4444"]), degrees)
+    masked = mask_card(drawn.image, drawn.lines, "5555555555554444", None)
+    _all_but_last_four_hidden(masked, drawn, 16)
+
+
+def test_the_band_is_clipped_to_the_image():
+    image = Image.new("RGB", (400, 100), GREY)
+    lines = [Line(text="4111 1111 1111 1111", bbox=(0.0, 0.4, 1.0, 0.6))]
+    assert mask_card(image, lines, NUMBER, None).size == (400, 100)
+    assert padded_box((0.0, 0.4, 1.0, 0.6), (400, 100)) == (0, 0, 400, 100)
+
+
+def test_still_shows_number_finds_runs_of_three_digits_of_the_number():
+    number = "5555555555554444"
+    assert still_shows_number(["5555 55"], number)
+    assert still_shows_number(["card 4115 555"], number)
+    assert not still_shows_number(["05/29"], number)  # an expiry is not the number
+    assert not still_shows_number(["4444"], number)  # the drawn last four
+    assert not still_shows_number(["444", "TEST HOLDER", "12 34"], number)
+    assert not still_shows_number([], number)
+
+
+def test_the_drawn_last_four_of_a_number_full_of_the_same_digit_is_not_a_leak():
+    assert not still_shows_number(["1111", "111"], "4111111111111111")
+    assert still_shows_number(["4111 1111 11"], "4111111111111111")

@@ -27,6 +27,10 @@ _AMEX_PREFIXES = ("34", "37")
 _BLACK = (0, 0, 0)
 _WHITE = (255, 255, 255)
 _ROW_OVERLAP = 0.5
+MAX_TILT_DEGREES = 15
+_TAN_TILT = math.tan(math.radians(MAX_TILT_DEGREES))
+_TEXT_SHARE = 0.25  # the drawn last four take at most this share of the band's width
+_SAME_RUN = 3  # digits in a row that count as a piece of the number
 
 Box = tuple[int, int, int, int]
 
@@ -40,11 +44,17 @@ def _digits(text: str) -> str:
     return "".join(c for c in text if c.isdigit())
 
 
-def padded_box(bbox: tuple[float, float, float, float], size: tuple[int, int]) -> Box:
-    """The pixel box blacked out for one line, clipped to the image."""
+def padded_box(
+    bbox: tuple[float, float, float, float], size: tuple[int, int], *, tilt: bool = True
+) -> Box:
+    """The pixel box blacked out for one line, clipped to the image. For a number line the
+    band is also made taller by half of what a tilt of `MAX_TILT_DEGREES` moves the ends of the
+    line, at each side, because the reader's box of a turned line does not cover its ends."""
     width, height = size
     x0, y0, x1, y1 = bbox
     pad = (y1 - y0) * height * PAD_Y
+    if tilt:
+        pad += (x1 - x0) * width * _TAN_TILT / 2
     return (
         max(math.floor(x0 * width) - PAD_X, 0),
         max(math.floor(y0 * height - pad), 0),
@@ -59,10 +69,11 @@ def draw_last_four(image: Image.Image, box: Box, digits: str) -> None:
     draw = ImageDraw.Draw(image)
     margin = max((bottom - top) // 8, 1)
     size = max(int((bottom - top) * 0.6), 8)
+    limit = min(right - left - 2 * margin, (right - left) * _TEXT_SHARE)
     while True:
         font = ImageFont.load_default(size=size)
         left_, t, r, b = draw.textbbox((0, 0), digits, font=font)
-        if r - left_ <= right - left - 2 * margin or size <= 8:
+        if r - left_ <= limit or size <= 8:
             break
         size -= 1
     x = max(right - margin - (r - left_) - left_, left)
@@ -125,5 +136,21 @@ def mask_card(
         digits = _digits(ln.text)
         standalone_cid = amex and len(digits) == KEEP and ln.text.strip() == digits
         if (secret and digits == secret) or standalone_cid:
-            draw.rectangle(padded_box(ln.bbox, out.size), fill=_BLACK)
+            draw.rectangle(padded_box(ln.bbox, out.size, tilt=False), fill=_BLACK)
     return out
+
+
+def still_shows_number(texts: Sequence[str], number: str) -> bool:
+    """True when a text read from the masked copy holds three digits in a row that are in the
+    card number. The drawn last four (a text that is part of them) and digits that are not in
+    the number, such as the expiry, do not count."""
+    wanted = _digits(number)
+    last_four = wanted[-KEEP:]
+    pieces = {wanted[i : i + _SAME_RUN] for i in range(len(wanted) - _SAME_RUN + 1)}
+    for text in texts:
+        digits = _digits(text)
+        if not digits or digits in last_four:
+            continue
+        if any(digits[i : i + _SAME_RUN] in pieces for i in range(len(digits) - _SAME_RUN + 1)):
+            return True
+    return False

@@ -24,6 +24,7 @@ from household_vault.filing.filer import UndoError
 from household_vault.filing.records import read_record
 from household_vault.leakscan import install_log_redaction, scan_outputs
 from household_vault.reading.engines import Engines
+from household_vault.reading.lines import Line, PageText
 from household_vault.reasons import Reason
 from household_vault.secrets.cards import TRASH_NOTE, CardIntake, CardUploadError
 from household_vault.secrets.gate import SecretsGate
@@ -62,6 +63,27 @@ def forbid_temp_files(monkeypatch: pytest.MonkeyPatch) -> None:
         "SpooledTemporaryFile",
     ):
         monkeypatch.setattr(tempfile, name, refuse)
+
+
+class ReadsMaskedAs(TruthPages):
+    """The truth pages for the original photos; the masked copy (not in the set) reads as the
+    given lines."""
+
+    def __init__(self, docs: Any, folder: Path, masked_lines: list[str]) -> None:
+        super().__init__(docs, folder)
+        self.masked_lines = masked_lines
+        self.masked_reads = 0
+
+    def read_pages(self, source: Any, sha256: str, password: str | None) -> Any:
+        try:
+            return super().read_pages(source, sha256, password)
+        except ValueError:
+            self.masked_reads += 1
+            lines = [
+                Line(text=t, bbox=(0.1, 0.1 + 0.1 * i, 0.9, 0.18 + 0.1 * i))
+                for i, t in enumerate(self.masked_lines)
+            ]
+            return [PageText(page=0, width=1000, height=700, lines=lines)]
 
 
 @dataclass
@@ -161,7 +183,7 @@ def card_world(
 ) -> CardWorld:
     docs, folder = card_set
     models = TruthModels(docs, folder)
-    world = make_world(pages=TruthPages(docs, folder), models=models)
+    world = make_world(pages=ReadsMaskedAs(docs, folder, []), models=models)
     world.vault.write_atomic(SECRETS_FILE, empty_secrets_file)
     (settings.log_dir / "vault.log").write_text("app started\n")  # the scan reads a real log
     gate_clock = FakeClock(0.0)
@@ -612,3 +634,46 @@ def test_an_upload_that_is_asked_to_be_sent_again_forgets_its_held_reading(card_
     card_world.cards._held[item.id] = (item.sha256, object())  # type: ignore[assignment]
     card_world.cards._upload_again(item.id)
     assert card_world.cards._held == {}
+
+
+# -- the masked copy is read again before it is filed ------------------------------------------
+
+
+def _reads_masked_as(card_world: CardWorld, lines: list[str]) -> ReadsMaskedAs:
+    pages = ReadsMaskedAs(card_world.docs, card_world.folder, lines)
+    card_world.cards.engines = Engines(pages, card_world.models)
+    return pages
+
+
+def test_a_masked_copy_that_still_reads_as_the_number_is_never_filed(card_world):
+    _reads_masked_as(card_world, ["3782 82"])
+    card = card_world.drop_card(base=5)
+    card_world.drain()
+    (item,) = card_world.store.items(["asked"])
+    assert item.reasons == [Reason.card_unreadable]
+    assert item.question["text"] == "Take a straighter photo of the card."
+    assert card_world.vault.read_bytes("Inbox/card.jpg") == card.data
+    assert [
+        p
+        for p in vault_files(card_world.vault)
+        if p not in (SECRETS_FILE, "Inbox/card.jpg") and not p.startswith("_system/")
+    ] == []
+    assert not card_world.store.documents_of_type(DocType.card_front)
+    assert card_world.secrets().entries("Cards") == []
+    assert card_world.vault.list_dir(NEEDS_A_LOOK) == []
+
+
+def test_an_expiry_read_on_the_masked_copy_does_not_stop_the_filing(card_world):
+    pages = _reads_masked_as(card_world, ["05/29", "TEST BANK", "1111"])
+    card_world.drop_card(base=5)
+    card_world.drain()
+    assert pages.masked_reads == 1
+    assert card_world.store.documents_of_type(DocType.card_front)
+
+
+def test_an_upload_whose_masked_copy_still_shows_the_number_writes_nothing(card_world):
+    _reads_masked_as(card_world, ["3782 822"])
+    result = card_world.cards.upload(card_world.card(base=5).files, MASTER_PASSWORD)
+    assert isinstance(result, Item) and result.state == "asked"
+    assert result.question["text"] == "Take a straighter photo of the card."
+    assert card_world.secrets().entries("Cards") == [] and card_world.vault.list_dir(INBOX) == []

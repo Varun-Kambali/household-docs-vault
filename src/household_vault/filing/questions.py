@@ -187,6 +187,9 @@ def question_for(
             text = "I could not read this document. Try again, or tell me what it is."
             return Question(reason, text, "retry", [Option("retry", "Try again"), *_types()])
         case Reason.card_unreadable:
+            if context.get("why") == "tilted":
+                text = "Take a straighter photo of the card."
+                return Question(reason, text, "discard", [Option("discard", "Discard")])
             text = (
                 "I could not read this card's number. "
                 "Upload a clearer photo in the app, then discard this one."

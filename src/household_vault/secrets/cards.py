@@ -17,6 +17,7 @@ Where a secret could travel, and what stops it:
 from __future__ import annotations
 
 import dataclasses
+import hashlib
 import io
 import logging
 import threading
@@ -42,9 +43,9 @@ from household_vault.reading.render import page_count, render_page
 from household_vault.reading.source import DocumentSource, document_key
 from household_vault.reasons import Reason
 from household_vault.secrets.gate import SecretsGate
-from household_vault.secrets.mask import MaskError, mask_card
+from household_vault.secrets.mask import MaskError, mask_card, still_shows_number
 from household_vault.secrets.store import SecretsLocked
-from household_vault.vaultroot import VaultRoot
+from household_vault.vaultroot import VaultGone, VaultRoot
 from household_vault.worker import effective_reading, overrides_of
 
 log = logging.getLogger(__name__)
@@ -57,6 +58,10 @@ TRASH_NOTE = (
 UPLOAD_KINDS = frozenset({FileKind.jpeg, FileKind.png})
 MAX_UPLOAD_PHOTOS = MAX_VISION_PAGES
 _JPEG_QUALITY = 92
+
+
+class StillShowsNumber(MaskError):
+    """The masked copy was read again and the card number can still be read in it."""
 
 
 class CardUploadError(Exception):
@@ -206,6 +211,9 @@ class CardIntake:
             return "waiting"
         try:
             masked, front = self._masked_front(source, item.sha256, number, reading)
+        except StillShowsNumber:
+            context = {"why": "tilted"}
+            return self._ask(item, [Reason.card_unreadable], reading, shown, context)
         except (MaskError, ValueError):
             return self._ask(item, [Reason.card_unreadable], reading, shown, {})
         ref = self._entry_for(item, reading, source, decision, number, front)
@@ -332,8 +340,25 @@ class CardIntake:
                 masked = mask_card(image, page.lines, number, cvv)
                 buf = io.BytesIO()
                 masked.save(buf, format="JPEG", quality=_JPEG_QUALITY)
+                self._check_masked(buf.getvalue(), number)
                 return buf.getvalue(), index
         raise MaskError("no page holds the card number")
+
+    def _check_masked(self, jpeg: bytes, number: str) -> None:
+        """Read the masked copy with the same page reader. If the number can still be read in
+        it (a tilted card the band did not cover), the copy is refused. A reader that fails
+        refuses it too: a copy that was not checked is not filed."""
+        try:
+            pages = self.engines.pages.read_pages(
+                DocumentSource(FileKind.jpeg, data=jpeg), hashlib.sha256(jpeg).hexdigest(), None
+            )
+        except VaultGone:
+            raise
+        except Exception:
+            raise MaskError("the masked copy could not be checked") from None
+        texts = [ln.text for page in pages for ln in page.lines]
+        if still_shows_number(texts, number):
+            raise StillShowsNumber("the masked copy still shows the number")
 
     @staticmethod
     def _images(source: DocumentSource) -> list[Image.Image]:
