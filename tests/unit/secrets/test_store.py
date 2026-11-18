@@ -125,3 +125,39 @@ def test_the_repr_and_errors_never_show_a_secret(vault):
     with pytest.raises(SecretsLocked) as exc:
         SecretsStore.open(vault, "wrong-password-text")
     assert "wrong-password-text" not in str(exc.value)
+
+
+def test_two_instances_that_write_at_once_keep_both_entries(vault):
+    import threading
+
+    SecretsStore.create(vault, MASTER_PASSWORD)
+    first = SecretsStore.open(vault, MASTER_PASSWORD)
+    second = SecretsStore.open(vault, MASTER_PASSWORD)
+    go = threading.Event()
+    real_save = first._save
+
+    def slow_save() -> None:
+        go.wait(5)
+        real_save()
+
+    first._save = slow_save  # type: ignore[method-assign]
+    box: dict[str, str] = {}
+    t = threading.Thread(
+        target=lambda: box.setdefault(
+            "card", first.add_card("T card ending 1111", CARD, None, None, None, [])
+        )
+    )
+    t.start()
+    threading.Timer(0.2, go.set).start()
+    second.add_pdf_password("Policy.pdf", "pdf-pass-one")
+    t.join()
+    fresh = SecretsStore.open(vault, MASTER_PASSWORD)
+    assert len(fresh.entries("Cards")) == 1 and len(fresh.entries("Documents")) == 1
+
+
+def test_a_save_after_the_file_vanished_is_refused(vault):
+    store = SecretsStore.create(vault, MASTER_PASSWORD)
+    vault.unlink(SECRETS_FILE)
+    with pytest.raises(SecretsLocked):
+        store.add_pdf_password("x", "pw-x")
+    assert not vault.exists(SECRETS_FILE)

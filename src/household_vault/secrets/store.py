@@ -13,6 +13,7 @@ holds the passwords of locked PDFs.
 
 from __future__ import annotations
 
+import hmac
 import io
 import threading
 import uuid
@@ -33,6 +34,18 @@ class SecretsLocked(Exception):
     The message is shown to the owner as it is and never holds a secret."""
 
 
+_LOCKS: dict[str, threading.RLock] = {}
+_LOCKS_GUARD = threading.Lock()
+
+
+def _lock_for(vault: VaultRoot) -> threading.RLock:
+    """One lock per secrets file, shared by every `SecretsStore` on it, so two writers never
+    interleave a read, a change and a save."""
+    key = str(vault.path(SECRETS_FILE))
+    with _LOCKS_GUARD:
+        return _LOCKS.setdefault(key, threading.RLock())
+
+
 def _parse(data: bytes, master_password: str) -> Any:
     try:
         return PyKeePass(io.BytesIO(data), password=master_password)
@@ -47,7 +60,7 @@ class SecretsStore:
         self._vault = vault
         self._kp = kp
         self._snapshot = snapshot
-        self._lock = threading.RLock()
+        self._lock = _lock_for(vault)
 
     def __repr__(self) -> str:
         return "SecretsStore()"
@@ -57,23 +70,29 @@ class SecretsStore:
     @classmethod
     def create(cls, vault: VaultRoot, master_password: str) -> SecretsStore:
         """A new KDBX4 file with the two groups. Refuses to touch a file that exists."""
-        if vault.exists(SECRETS_FILE):
-            raise FileExistsError("the secrets file already exists")
-        buf = io.BytesIO()
-        kp = create_database(buf, password=master_password)
-        for name in GROUPS:
-            kp.add_group(kp.root_group, name)
-        store = cls(vault, kp, b"")
-        store._save()
-        return store
+        with _lock_for(vault):
+            if vault.exists(SECRETS_FILE):
+                raise FileExistsError("the secrets file already exists")
+            buf = io.BytesIO()
+            kp = create_database(buf, password=master_password)
+            for name in GROUPS:
+                kp.add_group(kp.root_group, name)
+            store = cls(vault, kp, b"")
+            store._save()
+            return store
 
     @classmethod
     def open(cls, vault: VaultRoot, master_password: str) -> SecretsStore:
-        try:
-            data = vault.read_bytes(SECRETS_FILE)
-        except VaultPathError:  # missing, a link, a folder
-            raise SecretsLocked("There is no secrets file yet.") from None
-        return cls(vault, _parse(data, master_password), data)
+        with _lock_for(vault):
+            try:
+                data = vault.read_bytes(SECRETS_FILE)
+            except VaultPathError:  # missing, a link, a folder
+                raise SecretsLocked("There is no secrets file yet.") from None
+            return cls(vault, _parse(data, master_password), data)
+
+    def password_matches(self, master_password: str) -> bool:
+        """True when this open store was opened with that password (constant time)."""
+        return hmac.compare_digest(str(self._kp.password).encode(), master_password.encode())
 
     @property
     def version(self) -> tuple[int, int]:
@@ -183,7 +202,7 @@ class SecretsStore:
         try:
             current = self._vault.read_bytes(SECRETS_FILE)
         except VaultPathError:
-            return  # missing: the next save makes it again from what is in memory
+            raise SecretsLocked("The secrets file is not there any more.") from None
         if current != self._snapshot:
             self._kp = _parse(current, self._kp.password)
             self._snapshot = current

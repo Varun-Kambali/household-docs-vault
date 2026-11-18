@@ -66,3 +66,22 @@ def test_the_gate_never_writes_the_password(vault):
     gate.create(MASTER_PASSWORD)
     assert MASTER_PASSWORD.encode() not in vault.read_bytes(SECRETS_FILE)
     assert MASTER_PASSWORD not in repr(gate)
+
+
+def test_unlocking_with_the_same_password_keeps_the_open_store(vault):
+    gate = SecretsGate(vault, FakeClock(0.0))
+    gate.create(MASTER_PASSWORD)
+    first = gate.store()
+    gate.unlock(MASTER_PASSWORD)
+    assert gate.store() is first
+    with pytest.raises(SecretsLocked):
+        gate.unlock("wrong")
+
+
+def test_the_store_is_dropped_by_a_timer_without_any_call(vault):
+    import time
+
+    gate = SecretsGate(vault, time.monotonic, unlock_seconds=0.1)
+    gate.create(MASTER_PASSWORD)
+    time.sleep(0.6)
+    assert gate._store is None
