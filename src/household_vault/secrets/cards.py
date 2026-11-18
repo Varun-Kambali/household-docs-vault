@@ -54,7 +54,8 @@ TRASH_NOTE = (
     "The card photo was removed from Inbox. Drive keeps deleted files in its trash for 30 days, "
     "so empty it there to remove the photo for good."
 )
-UPLOAD_KINDS = frozenset({FileKind.jpeg, FileKind.png, FileKind.heic})
+# HEIC needs a converter that writes a temporary file, and a card photo is never written
+UPLOAD_KINDS = frozenset({FileKind.jpeg, FileKind.png})
 MAX_UPLOAD_PHOTOS = MAX_VISION_PAGES
 _JPEG_QUALITY = 92
 
@@ -163,11 +164,14 @@ class CardIntake:
         kinds = {sniff(f[:64]) for f in files}
         kind = next(iter(kinds))
         if len(kinds) != 1 or kind not in UPLOAD_KINDS:
-            raise CardUploadError("The card photos must all be JPEG, PNG or HEIC pictures.")
+            raise CardUploadError(
+                "Upload a JPEG or PNG photo (a HEIC photo can be saved as JPEG first)."
+            )
         assert kind is not None
         return kind
 
     def _upload_again(self, item_id: int) -> None:
+        self._forget(item_id)
         question = upload_again_question()
         self.store.update_item(
             item_id,

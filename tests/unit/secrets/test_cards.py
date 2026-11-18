@@ -591,3 +591,20 @@ def test_a_stop_right_after_the_entry_is_saved_leaves_one_entry(card_world, monk
     card_world.drain()
     assert card_world.store.documents_of_type(DocType.card_front)
     assert len(card_world.secrets().entries("Cards")) == 1
+
+
+def test_a_heic_upload_is_refused_without_a_temporary_file(card_world, monkeypatch):
+    forbid_temp_files(monkeypatch)
+    heic = b"\x00\x00\x00\x18ftypheic" + b"\x00" * 64
+    with pytest.raises(CardUploadError, match="Upload a JPEG or PNG photo"):
+        card_world.cards.upload([heic], MASTER_PASSWORD)
+    assert card_world.store.items(["queued", "reading", "asked", "filed"]) == []
+
+
+def test_an_upload_that_is_asked_to_be_sent_again_forgets_its_held_reading(card_world):
+    item = card_world.store.add_item(
+        "b" * 64, "card upload", None, card_world.clock(), origin="upload"
+    )
+    card_world.cards._held[item.id] = (item.sha256, object())  # type: ignore[assignment]
+    card_world.cards._upload_again(item.id)
+    assert card_world.cards._held == {}
