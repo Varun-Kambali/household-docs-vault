@@ -193,3 +193,10 @@ def test_the_database_card_columns_are_scanned_for_any_long_digit_run(vault, set
     )
     hits = scan_outputs(vault, settings.db_path, settings.log_dir)
     assert any(h.startswith("vault.db:items.reading") for h in hits)
+
+
+def test_an_id_made_only_of_digits_is_not_a_card_number_in_a_card_record(vault, settings):
+    vault.mkdirs("_system/records")
+    body = '{"doc_type": "card_front", "secret_ref": "12345678-1234-1234-1234-123456789012"}'
+    vault.write_atomic("_system/records/b.json", body.encode())
+    assert scan_outputs(vault, settings.db_path, settings.log_dir) == []

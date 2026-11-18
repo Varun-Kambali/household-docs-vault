@@ -191,7 +191,9 @@ def _file_text(rel: str, data: bytes) -> str:
 
 # Columns that hold the text of a card page; there every long digit run counts.
 CARD_COLUMNS = frozenset({"items.reading", "items.question", "documents.fields"})
-_HEX_TOKEN = re.compile(r"\b[0-9a-f]{32,}\b")
+_HEX_TOKEN = re.compile(
+    r"\b(?:[0-9a-f]{32,}|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\b"
+)
 
 
 def _is_card_record(text: str) -> bool:
