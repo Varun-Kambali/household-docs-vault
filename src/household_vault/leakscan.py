@@ -29,14 +29,15 @@ def _masked(digits: str) -> str:
     return "X" * max(len(digits) - 4, 0) + digits[-4:]
 
 
-def scan_text(text: str, *, allow_test_cards: bool) -> list[str]:
+def scan_text(text: str, *, allow_test_cards: bool, any_long_run: bool = False) -> list[str]:
     """Masked descriptions of every card-shaped or Aadhaar-shaped number in text, once each.
 
     With `allow_test_cards` False the networks' published test numbers count too: in the
-    synthetic vault they are the secrets.
+    synthetic vault they are the secrets. With `any_long_run` every 13 to 19 digit run counts, as
+    it does in the text of a card.
     """
     found: list[str] = []
-    for hit in find_numbers(text, allow_test_cards=allow_test_cards):
+    for hit in find_numbers(text, allow_test_cards=allow_test_cards, any_long_run=any_long_run):
         line = f"{_LABEL[hit.kind]} {_masked(hit.digits)}"
         if line not in found:
             found.append(line)
@@ -178,6 +179,15 @@ def _file_text(rel: str, data: bytes) -> str:
     return data.decode("utf-8", errors="ignore")
 
 
+# Columns that hold the text of a card page; there every long digit run counts.
+CARD_COLUMNS = frozenset({"items.reading", "items.question", "documents.fields"})
+_HEX_TOKEN = re.compile(r"\b[0-9a-f]{32,}\b")
+
+
+def _is_card_record(text: str) -> bool:
+    return '"doc_type": "card_front"' in text
+
+
 def _squeeze(text: str) -> str:
     return _SEPARATORS.sub("", text)
 
@@ -229,8 +239,15 @@ def scan_outputs(
     file. Secrets are compared with spaces and hyphens removed."""
     hits: list[str] = []
 
-    def check(where: str, text: str) -> None:
-        hits.extend(f"{where}: {d}" for d in scan_text(text, allow_test_cards=False))
+    def check(where: str, text: str, *, card_text: bool = False) -> None:
+        long_run = card_text or _is_card_record(text)
+        scanned = _HEX_TOKEN.sub("", text) if long_run else text
+        hits.extend(
+            f"{where}: {d}"
+            for d in scan_text(scanned, allow_test_cards=False, any_long_run=long_run)
+        )
+        if _LABELLED.search(text):
+            hits.append(f"{where}: digits after a cvv, cvc, cid or pin label")
         hits.extend(_secret_hits(where, text, known_secrets))
 
     for rel in _vault_files(vault):
@@ -242,7 +259,7 @@ def scan_outputs(
             check(path.name, path.read_bytes().decode("latin-1"))
     if db_path.is_file():
         for where, value in _texts_of_database(db_path):
-            check(f"{db_path.name}:{where}", value)
+            check(f"{db_path.name}:{where}", value, card_text=where in CARD_COLUMNS)
     if log_dir.is_dir():
         for path in sorted(p for p in log_dir.rglob("*") if p.is_file() and not p.is_symlink()):
             check(path.relative_to(log_dir).as_posix(), path.read_text("utf-8", errors="ignore"))

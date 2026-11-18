@@ -165,3 +165,31 @@ def test_a_bad_format_call_does_not_raise_and_is_still_redacted():
     log, buf = _logger_with_plain_handler("household_vault.t_bad")
     log.warning("two args %s %s 4111111111111111", 1)
     assert "4111111111111111" not in buf.getvalue()
+
+
+def test_the_scan_finds_digits_after_a_cvv_label(vault, settings):
+    vault.write_atomic("Home/note.txt", b"the cvv 737 was here")
+    (hit,) = scan_outputs(vault, settings.db_path, settings.log_dir)
+    assert hit == "Home/note.txt: digits after a cvv, cvc, cid or pin label"
+    vault.write_atomic("Home/note.txt", b"the cvv XXX was here")
+    assert scan_outputs(vault, settings.db_path, settings.log_dir) == []
+
+
+def test_a_card_record_is_scanned_for_any_long_digit_run(vault, settings):
+    vault.mkdirs("_system/records")
+    sha = "0123456789012345678901234567890123456789012345678901234567890123"
+    body = f'{{"doc_type": "card_front", "sha256": "{sha}", "text": "4111111111111112"}}'
+    vault.write_atomic("_system/records/a.json", body.encode())
+    vault.write_atomic("Home/other.txt", b"order 4111111111111112")
+    hits = scan_outputs(vault, settings.db_path, settings.log_dir)
+    assert hits == ["_system/records/a.json: card-shaped XXXXXXXXXXXX1112"]
+
+
+def test_the_database_card_columns_are_scanned_for_any_long_digit_run(vault, settings, store):
+    store.conn.execute(
+        "insert into items (sha256, original_name, origin, state, created_at, updated_at, reading)"
+        " values ('a', 'a.jpg', 'inbox', 'queued', 'x', 'x', ?)",
+        ('{"lines": ["4111111111111112"]}',),
+    )
+    hits = scan_outputs(vault, settings.db_path, settings.log_dir)
+    assert any(h.startswith("vault.db:items.reading") for h in hits)
