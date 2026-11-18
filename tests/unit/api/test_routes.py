@@ -31,7 +31,7 @@ def state(settings, tmp_path, clock):
 
 @pytest.fixture
 def client(state):
-    return TestClient(create_app(state, start_worker=False))
+    return TestClient(create_app(state, start_worker=False), base_url="http://localhost")
 
 
 @pytest.fixture
@@ -290,7 +290,20 @@ def test_the_secrets_store_is_created_then_unlocked(client, state):
     assert again.status_code == 409
 
 
-@pytest.mark.parametrize("name", ["Secrets (1).kdbx", ".Secrets.kdbx.tmp", "Secrets.kdbx.partial"])
+@pytest.mark.parametrize(
+    "name",
+    [
+        "Secrets (1).kdbx",
+        ".Secrets.kdbx.tmp",
+        "Secrets.kdbx.partial",
+        "Secrets.kdbx (conflict)",
+        "Copy of Secrets.kdbx",
+        "Secrets.kdbx.crdownload",
+        "Secrets.kdbx.gstmp",
+        "Secrets.kdbx (1)",
+        ".~lock.Secrets.kdbx#",
+    ],
+)
 def test_creating_the_secrets_file_waits_while_drive_is_still_syncing(client, state, name):
     state.vault.write_atomic(name, b"partial")
     r = client.post("/v1/secrets/create", json={"master_password": MASTER_PASSWORD})
@@ -332,7 +345,7 @@ def test_an_unexpected_failure_is_a_fixed_message(state):
     def boom() -> None:
         raise RuntimeError("document text 4111111111111111")
 
-    r = TestClient(app, raise_server_exceptions=False).get("/boom")
+    r = TestClient(app, raise_server_exceptions=False, base_url="http://localhost").get("/boom")
     assert r.status_code == 500 and "4111" not in r.text
     assert r.json() == {"detail": "Something went wrong. Nothing was changed."}
 
@@ -351,7 +364,7 @@ def test_the_worker_runs_with_the_app_and_stops_with_it(state, monkeypatch):
         stop.wait(5)
 
     monkeypatch.setattr(state.worker, "run_forever", fake_run_forever)
-    with TestClient(create_app(state)):
+    with TestClient(create_app(state), base_url="http://localhost"):
         assert not seen["stop"].is_set()
     assert seen["stop"].is_set()
 
@@ -411,7 +424,7 @@ def test_a_name_that_points_here_from_another_site_is_refused(state):
     app = create_app(state, start_worker=False)
     assert TestClient(app, base_url="http://evil.example").get("/healthz").status_code == 400
     assert TestClient(app, base_url="http://localhost:8710").get("/healthz").status_code == 200
-    assert TestClient(app).get("/docs").status_code == 404
+    assert TestClient(app, base_url="http://localhost").get("/docs").status_code == 404
 
 
 def test_any_host_is_served_when_the_stand_in_reader_binds_all_addresses(state):
@@ -419,3 +432,119 @@ def test_any_host_is_served_when_the_stand_in_reader_binds_all_addresses(state):
     state.settings = open_settings
     app = create_app(state, start_worker=False)
     assert TestClient(app, base_url="http://vault.test").get("/healthz").status_code == 200
+
+
+def test_a_plain_file_with_secrets_in_its_name_does_not_block_creating(client, state):
+    state.vault.write_atomic("Secrets to sort.docx", b"x")
+    r = client.post("/v1/secrets/create", json={"master_password": MASTER_PASSWORD})
+    assert r.status_code == 200
+
+
+@pytest.mark.parametrize("name", [".tmp.drivedownload", ".tmp.driveupload"])
+def test_a_busy_drive_cache_folder_blocks_creating(client, state, name):
+    state.vault.mkdirs(name)
+    assert (
+        client.post("/v1/secrets/create", json={"master_password": MASTER_PASSWORD}).status_code
+        == 200
+    )  # empty: nothing is on its way
+    state.gate.lock()
+    state.vault.unlink(SECRETS_FILE)
+    state.vault.write_atomic(f"{name}/part", b"1")
+    r = client.post("/v1/secrets/create", json={"master_password": MASTER_PASSWORD})
+    assert r.status_code == 409 and "syncing" in r.json()["detail"]
+
+
+@pytest.mark.parametrize("rel", ["Secrets.kdbx", "_system/log/2026-11.csv", "Home/old.KDBX"])
+def test_the_secrets_file_and_system_files_are_never_served(client, state, filed_doc, rel):
+    state.vault.write_atomic(SECRETS_FILE, b"kdbx bytes") if rel == "Secrets.kdbx" else None
+    state.store.conn.execute("update documents set rel_path = ? where id = ?", (rel, filed_doc.id))
+    assert client.get(f"/v1/documents/{filed_doc.id}/file").status_code == 404
+
+
+def test_served_files_carry_a_sandboxing_policy(client, filed_doc):
+    r = client.get(f"/v1/documents/{filed_doc.id}/file")
+    assert r.headers["content-security-policy"] == "sandbox; default-src 'none'"
+
+
+def test_a_post_from_another_site_is_refused(client, state, outsider_prescription):
+    url = f"/v1/items/{outsider_prescription.id}/retry"
+    r = client.post(url, headers={"Origin": "https://evil.example"})
+    assert (
+        r.status_code == 403
+        and r.json()["detail"] == "Requests from another site are not accepted."
+    )
+    assert client.post(url, headers={"Origin": "null"}).status_code == 403
+    assert client.post(url, headers={"Origin": "http://localhost"}).status_code == 200
+    assert client.get("/healthz", headers={"Origin": "https://evil.example"}).status_code == 200
+
+
+def test_testserver_is_not_an_allowed_host(state):
+    assert TestClient(create_app(state, start_worker=False)).get("/healthz").status_code == 400
+
+
+def _multipart(parts: list[tuple[str, bytes]]) -> tuple[bytes, dict[str, str]]:
+    body = b""
+    for name, data in parts:
+        filename = '; filename="f.bin"' if name != "master_password" else ""
+        body += f'--B\r\nContent-Disposition: form-data; name="{name}"{filename}\r\n\r\n'.encode()
+        body += data + b"\r\n"
+    return body + b"--B--\r\n", {"content-type": "multipart/form-data; boundary=B"}
+
+
+def test_extra_file_parts_are_refused(client):
+    parts = [(f"junk{i}", b"\0" * 1024) for i in range(8)]
+    body, headers = _multipart([("master_password", b"x"), *parts, ("front", b"x")])
+    r = client.post("/v1/cards", content=body, headers=headers)
+    assert r.status_code == 400
+    body, headers = _multipart([("master_password", b"x"), ("front", b"x"), ("extra", b"x")])
+    assert client.post("/v1/cards", content=body, headers=headers).status_code == 422
+
+
+def _drive(app, chunks, headers=()):
+    """Run the ASGI app on a body arriving in chunks (no Content-Length). Returns the status
+    and how many chunks were asked for."""
+    import asyncio
+
+    served = {"n": 0}
+    sent: list[dict] = []
+    queue = list(chunks)
+
+    async def receive():
+        if not queue:
+            return {"type": "http.disconnect"}
+        served["n"] += 1
+        return {"type": "http.request", "body": queue.pop(0), "more_body": bool(queue)}
+
+    async def send(message):
+        sent.append(message)
+
+    scope = {
+        "type": "http",
+        "method": "POST",
+        "path": "/v1/cards",
+        "raw_path": b"/v1/cards",
+        "query_string": b"",
+        "headers": [
+            (b"host", b"localhost"),
+            (b"content-type", b"multipart/form-data; boundary=B"),
+            *headers,
+        ],
+        "scheme": "http",
+        "server": ("localhost", 8710),
+        "client": ("127.0.0.1", 1),
+        "http_version": "1.1",
+    }
+    asyncio.run(app(scope, receive, send))
+    status = next(m["status"] for m in sent if m["type"] == "http.response.start")
+    return status, served["n"]
+
+
+def test_a_chunked_body_over_the_limit_is_stopped_early(state):
+    from household_vault.api.app import _MAX_BODY_BYTES
+
+    head = b'--B\r\nContent-Disposition: form-data; name="front"; filename="f.jpg"\r\n\r\n'
+    chunk = b"\0" * (1 << 20)
+    total = _MAX_BODY_BYTES // len(chunk) + 40
+    status, asked = _drive(create_app(state, start_worker=False), [head] + [chunk] * total)
+    assert status == 413
+    assert asked <= _MAX_BODY_BYTES // len(chunk) + 2  # it did not read the rest

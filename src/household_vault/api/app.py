@@ -10,19 +10,23 @@ PDF passwords travel only in request bodies.
 from __future__ import annotations
 
 import dataclasses
+import json
 import logging
 import threading
-from collections.abc import AsyncIterator, Awaitable, Callable
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import PurePosixPath
 from typing import Annotated, Any
+from urllib.parse import urlparse
 
-from fastapi import FastAPI, Form, HTTPException, Query, Request, UploadFile
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 from starlette.concurrency import run_in_threadpool
+from starlette.datastructures import UploadFile
 from starlette.formparsers import MultiPartParser
 from starlette.middleware.trustedhost import TrustedHostMiddleware
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from household_vault import __version__
 from household_vault.actions import AnswerError, PartlyAnswered
@@ -54,13 +58,13 @@ from household_vault.reasons import Reason
 from household_vault.secrets.cards import CardUploadError
 from household_vault.secrets.mask import MaskError
 from household_vault.secrets.store import SecretsLocked
-from household_vault.vaultroot import SECRETS_FILE, VaultGone, VaultPathError
+from household_vault.vaultroot import SECRETS_FILE, VaultGone, VaultPathError, VaultRoot
 
 log = logging.getLogger(__name__)
 
 MAX_UPLOAD_BYTES = 25 * 1024 * 1024  # a file
 _MAX_BODY_BYTES = 2 * MAX_UPLOAD_BYTES + 1024 * 1024  # two files and the form around them
-_LOCAL_HOSTS = ("localhost", "127.0.0.1", "[::1]", "::1", "testserver")
+_LOCAL_HOSTS = ("localhost", "127.0.0.1", "[::1]", "::1")
 _MEDIA = {
     ".pdf": "application/pdf",
     ".jpg": "image/jpeg",
@@ -99,10 +103,115 @@ def _detail(status: int, message: str, **extra: Any) -> JSONResponse:
     return JSONResponse(status_code=status, content={"detail": message, **extra})
 
 
+def _is_private(rel: str) -> bool:
+    """The secrets file, any KeePass file and the app's own folder are never served."""
+    parts = PurePosixPath(rel).parts
+    low = rel.lower()
+    return bool(parts) and (parts[0] == "_system" or rel == SECRETS_FILE or ".kdbx" in low)
+
+
 def _is_syncing(name: str) -> bool:
-    """A name beside the secrets file that Drive or another app leaves while a copy of the file
-    is on its way: a conflict copy ("Secrets (1).kdbx"), or a temporary or partial download."""
-    return name != SECRETS_FILE and name.lower().lstrip(".").startswith("secrets")
+    """A name that looks like a copy, a conflict or a partial download of the secrets file
+    (the word `secrets` with `.kdbx` after it), or KeePassXC's lock file for it."""
+    if name == SECRETS_FILE:
+        return False
+    low = name.lower()
+    at = low.find("secrets")
+    return at >= 0 and ".kdbx" in low[at:]
+
+
+def _drive_is_busy(vault: VaultRoot, names: list[str]) -> bool:
+    """Drive for desktop keeps what is on its way in these two entries of the folder."""
+    for name in names:
+        if name not in _DRIVE_CACHES:
+            continue
+        try:
+            if vault.list_dir(name):
+                return True
+        except VaultPathError:
+            return True  # a file, or not readable now: treat as busy
+    return False
+
+
+_DRIVE_CACHES = (".tmp.drivedownload", ".tmp.driveupload")
+_UNSAFE_METHODS = frozenset({"POST", "PUT", "PATCH", "DELETE"})
+OTHER_SITE = "Requests from another site are not accepted."
+
+
+async def _send_json(send: Send, status: int, message: str) -> None:
+    body = json.dumps({"detail": message}).encode()
+    await send(
+        {
+            "type": "http.response.start",
+            "status": status,
+            "headers": [
+                (b"content-type", b"application/json"),
+                (b"content-length", str(len(body)).encode()),
+            ],
+        }
+    )
+    await send({"type": "http.response.body", "body": body})
+
+
+class BodyLimit:
+    """Counts the bytes of a request body as they arrive and answers 413 once the limit is
+    passed, without reading the rest. A Content-Length that is already too big is refused at
+    once; a chunked body carries none, so the count is what stops it."""
+
+    def __init__(self, app: ASGIApp, limit: int) -> None:
+        self.app = app
+        self.limit = limit
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+        length = dict(scope["headers"]).get(b"content-length", b"")
+        if length.isdigit() and int(length) > self.limit:
+            await _send_json(send, 413, TOO_LARGE)
+            return
+        seen = 0
+        answered = False
+
+        async def counted() -> Message:
+            nonlocal seen, answered
+            message = await receive()
+            if message["type"] == "http.request" and not answered:
+                seen += len(message.get("body", b""))
+                if seen > self.limit:
+                    answered = True
+                    await _send_json(send, 413, TOO_LARGE)
+                    return {"type": "http.disconnect"}
+            return message
+
+        async def guarded(message: Message) -> None:
+            if not answered:
+                await send(message)
+
+        try:
+            await self.app(scope, counted, guarded)
+        except Exception:
+            if not answered:
+                raise
+
+
+class SameOrigin:
+    """Refuses a POST, PUT, PATCH or DELETE that a page on another site sent: its Origin header
+    names a different host than the one this request was made to."""
+
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] == "http" and scope["method"] in _UNSAFE_METHODS:
+            headers = dict(scope["headers"])
+            origin = headers.get(b"origin")
+            if origin is not None:
+                host = headers.get(b"host", b"").decode("latin-1").lower()
+                if urlparse(origin.decode("latin-1")).netloc.lower() != host:
+                    await _send_json(send, 403, OTHER_SITE)
+                    return
+        await self.app(scope, receive, send)
 
 
 def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
@@ -141,14 +250,8 @@ def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
         # A page on another site cannot reach this app through a name that points here.
         app.add_middleware(TrustedHostMiddleware, allowed_hosts=list(_LOCAL_HOSTS))
 
-    @app.middleware("http")
-    async def limit_body(
-        request: Request, call_next: Callable[[Request], Awaitable[Response]]
-    ) -> Response:
-        length = request.headers.get("content-length", "")
-        if length.isdigit() and int(length) > _MAX_BODY_BYTES:
-            return _detail(413, TOO_LARGE)
-        return await call_next(request)
+    app.add_middleware(SameOrigin)
+    app.add_middleware(BodyLimit, limit=_MAX_BODY_BYTES)
 
     # -- errors --------------------------------------------------------------------------------
 
@@ -228,7 +331,7 @@ def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
         return doc
 
     def serve(rel: str | None) -> Response:
-        if rel is None:
+        if rel is None or _is_private(rel):
             raise HTTPException(404, "That file is not available.")
         try:
             data = state.vault.read_bytes(rel)
@@ -238,7 +341,11 @@ def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
         return Response(
             data,
             media_type=media,
-            headers={"X-Content-Type-Options": "nosniff", "Content-Disposition": "inline"},
+            headers={
+                "X-Content-Type-Options": "nosniff",
+                "Content-Disposition": "inline",
+                "Content-Security-Policy": "sandbox; default-src 'none'",
+            },
         )
 
     def live_question(item: Item) -> Question | None:
@@ -429,14 +536,24 @@ def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
         return serve(known_item(item_id).rel_path)
 
     @app.post("/v1/cards")
-    async def upload_card(
-        front: UploadFile,
-        master_password: Annotated[str, Form()],
-        back: UploadFile | None = None,
-    ) -> CardOut:
+    async def upload_card(request: Request) -> CardOut:
+        # Read the form here so the parser is limited to the three parts the route takes: a
+        # front photo, an optional back photo and the master password.
+        form = await request.form(max_files=2, max_fields=1)
+        master_password = form.get("master_password")
+        front = form.get("front")
+        back = form.get("back")
+        unknown = [k for k in form if k not in ("front", "back", "master_password")]
+        if (
+            unknown
+            or not isinstance(master_password, str)
+            or not isinstance(front, UploadFile)
+            or not (back is None or isinstance(back, UploadFile))
+        ):
+            return _detail(422, NOT_UNDERSTOOD)  # type: ignore[return-value]
         photos: list[bytes] = []
         for part in (front, back):
-            if part is None or (part is back and not part.filename):
+            if part is None or not part.filename:
                 continue
             data = await part.read(MAX_UPLOAD_BYTES + 1)
             if len(data) > MAX_UPLOAD_BYTES:
@@ -451,7 +568,8 @@ def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
     def secrets_create(body: MasterPasswordIn) -> dict[str, str]:
         if state.vault.exists(SECRETS_FILE):
             raise AnswerError(SECRETS_EXIST)
-        if any(_is_syncing(e.name) for e in state.vault.list_root()):
+        names = [e.name for e in state.vault.list_root()]
+        if any(_is_syncing(n) for n in names) or _drive_is_busy(state.vault, names):
             raise AnswerError(SECRETS_SYNCING)
         if state.store.count_documents_with_secrets() > 0:
             raise AnswerError(SECRETS_MISSING)

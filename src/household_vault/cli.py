@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from collections import Counter
 from datetime import date
@@ -24,6 +25,8 @@ from household_vault.emergency import sheet_html
 from household_vault.people import Household
 from household_vault.safety import UnsafePathError, assert_safe_path, is_within
 from household_vault.vaultroot import INBOX, VaultRoot
+
+_SAFE_NAME = re.compile(r"[\w.\- ]+")
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -142,6 +145,9 @@ def _dev_vault(source: Path, split: str, limit: int, app: bool) -> None:
     names = [
         name for doc in manifest["documents"] if doc["split"] == split for name in doc["files"]
     ][: max(limit, 0)]
+    for name in names:
+        if not _SAFE_NAME.fullmatch(name) or name in (".", "..") or ".." in name:
+            raise _fail("the dataset lists a file name that is not a plain name")
     vault = VaultRoot.from_settings(settings)
     vault.mkdirs(INBOX)
     copied = 0

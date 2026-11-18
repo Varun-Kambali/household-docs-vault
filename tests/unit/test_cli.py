@@ -103,3 +103,20 @@ def test_the_vault_command_reads_the_shell_arguments(monkeypatch, capsys):
     monkeypatch.setattr("sys.argv", ["vault", "bogus"])
     with pytest.raises(SystemExit):
         cli.console()
+
+
+@pytest.mark.parametrize(
+    "name", ["../x.pdf", "a/b.pdf", "..", "x\ny.pdf", "/etc/hosts", "a\\b.pdf"]
+)
+def test_dev_vault_refuses_a_file_name_that_could_leave_the_inbox(dev_env, name):
+    source = dev_env / "set"
+    source.mkdir()
+    (source / "household.json").write_text((EVAL_V1 / "household.json").read_text())
+    manifest = {"documents": [{"doc_id": "d", "split": "val", "files": [name]}]}
+    (source / "manifest.json").write_text(json.dumps(manifest))
+    (dev_env / "x.pdf").write_bytes(b"outside")
+    with pytest.raises(SystemExit):
+        main(["dev-vault", "--from", str(source), "--split", "val", "--limit", "3"])
+    assert not (dev_env / "vault" / "Inbox").exists() or not list(
+        (dev_env / "vault" / "Inbox").iterdir()
+    )
