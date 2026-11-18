@@ -161,3 +161,13 @@ def test_a_save_after_the_file_vanished_is_refused(vault):
     with pytest.raises(SecretsLocked):
         store.add_pdf_password("x", "pw-x")
     assert not vault.exists(SECRETS_FILE)
+
+
+def test_a_card_added_with_its_own_id_is_found_again_by_that_id(vault):
+    import uuid
+
+    store = SecretsStore.create(vault, MASTER_PASSWORD)
+    uid = str(uuid.uuid4())
+    assert store.add_card("T card ending 1111", CARD, None, None, None, [], uid=uid) == uid
+    assert store.add_card("T card ending 1111", CARD, None, None, None, [], uid=uid) == uid
+    assert store.entries("Cards") == [uid]

@@ -20,6 +20,7 @@ import dataclasses
 import io
 import logging
 import threading
+import uuid
 from collections.abc import Sequence
 from typing import Literal
 
@@ -272,12 +273,28 @@ class CardIntake:
         store = self.gate.store()
         current = self.store.item(item.id)
         ref = current.overrides.get("secret_ref")
-        if (
-            isinstance(ref, str)
-            and store.has_entry(ref)
-            and store.entry_fields(ref).get("number") == number
-        ):
-            return ref
+        if isinstance(ref, str) and store.has_entry(ref):
+            if store.entry_fields(ref).get("number") == number:
+                return ref  # an earlier filing (or an Undo) made it for this card
+            ref = None  # the number read now is another card's: a new entry
+        if not isinstance(ref, str):
+            # The id is saved before the entry is made, so a stop after the entry is on disk
+            # is found again by that id and never makes a second entry.
+            ref = str(uuid.uuid4())
+            self.store.update_item(item.id, overrides={**current.overrides, "secret_ref": ref})
+        fields = {**reading.fields, **overrides_of(current).fields}
+        bank = str(fields.get("bank") or "").strip() or "Card"
+        expiry = fields.get("expiry")
+        holder = fields.get("holder")
+        return store.add_card(
+            f"{bank} card ending {decision.last4}",
+            number,
+            str(expiry) if expiry else None,
+            reading.secret_values.get("cvv"),
+            str(holder) if holder else None,
+            self._photos(source, front),
+            uid=ref,
+        )
         fields = {**reading.fields, **overrides_of(current).fields}
         bank = str(fields.get("bank") or "").strip() or "Card"
         expiry = fields.get("expiry")

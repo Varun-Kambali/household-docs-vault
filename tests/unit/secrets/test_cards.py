@@ -558,3 +558,36 @@ def test_undo_of_an_uploaded_card_is_refused_and_writes_no_photo(card_world):
     card_world.gate.lock()
     with pytest.raises(UndoError, match="came from an upload"):
         card_world.actions.undo_document(rec.id)
+
+
+def test_a_stop_right_after_the_entry_is_saved_leaves_one_entry(card_world, monkeypatch):
+    store = card_world.secrets()
+    real = store.add_card
+
+    def stop_after_saving(*args: Any, **kwargs: Any) -> str:
+        real(*args, **kwargs)
+        raise KeyboardInterrupt  # the process stops once the entry is on disk
+
+    monkeypatch.setattr(store, "add_card", stop_after_saving)
+    card_world.drop_card(base=5)
+    with pytest.raises(KeyboardInterrupt):
+        card_world.drain()
+    monkeypatch.undo()
+    (item,) = card_world.store.items(["reading"])
+    assert "secret_ref" in item.overrides  # saved before the entry was made
+    with card_world.store.lock:  # a hard stop leaves the job marked running
+        card_world.store.conn.execute("update jobs set state = 'running'")
+    fresh = CardIntake(
+        card_world.gate,
+        card_world.vault,
+        card_world.filer,
+        card_world.activity,
+        card_world.store,
+        card_world.cards.engines,
+        card_world.filer.household,
+    )
+    card_world.world.worker.cards = fresh
+    card_world.world.worker.start_up()
+    card_world.drain()
+    assert card_world.store.documents_of_type(DocType.card_front)
+    assert len(card_world.secrets().entries("Cards")) == 1

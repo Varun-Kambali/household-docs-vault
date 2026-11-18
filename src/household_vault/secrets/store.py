@@ -143,12 +143,19 @@ class SecretsStore:
         cvv: str | None,
         holder: str | None,
         photos: Sequence[tuple[str, bytes]],
+        uid: str | None = None,
     ) -> str:
         """Add a card and save. The number and CVV are protected fields and the photos are
-        protected attachments. Returns the entry's UUID."""
+        protected attachments. With `uid` the entry gets that UUID (made and remembered by the
+        caller first, so a stop after the save is found again); an entry that already has it is
+        returned as it is. Returns the entry's UUID."""
         with self._lock:
             self._refresh()
+            if uid is not None and self._find(uid) is not None:
+                return uid
             entry = self._kp.add_entry(self._group("Cards"), title, "", "", force_creation=True)
+            if uid is not None:
+                entry.uuid = uuid.UUID(uid)
             entry.set_custom_property("number", number, protect=True)
             if cvv:
                 entry.set_custom_property("cvv", cvv, protect=True)
