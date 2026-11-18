@@ -189,28 +189,38 @@ class Actions:
         except VaultPathError:
             return False
 
-    def _another_copy_remains(self, item: Item) -> bool:
-        """Before a copy is deleted: the file it copies must still be there with the same content,
-        in the filed folder or as another item waiting in the vault."""
+    def other_copy_path(self, item: Item) -> str | None:
+        """Where the file this one copies is now, checked live against the vault, or None when
+        it is gone or the item is not a copy."""
         if Reason.duplicate in item.reasons:
-            if any(
-                self._holds(d.rel_path, item.sha256) for d in self.store.filed_with_sha(item.sha256)
-            ):
-                return True
+            for d in self.store.filed_with_sha(item.sha256):
+                if self._holds(d.rel_path, item.sha256):
+                    return d.rel_path
             live = self.store.items_with_sha(
                 item.sha256, ["asked", "held", "queued", "waiting_secrets"]
             )
             # An item whose old file name this file took over is not a second copy.
-            return any(
-                o.id != item.id
-                and o.rel_path != item.rel_path
-                and self._holds(o.rel_path, item.sha256)
-                for o in live
-            )
+            for o in live:
+                if (
+                    o.id != item.id
+                    and o.rel_path is not None
+                    and o.rel_path != item.rel_path
+                    and self._holds(o.rel_path, item.sha256)
+                ):
+                    return o.rel_path
+            return None
         if Reason.possible_copy in item.reasons:
             other_id = item.overrides.get("copy_of")
             other = self.store.document(other_id) if isinstance(other_id, str) else None
-            return other is not None and self._holds(other.rel_path, other.sha256)
+            if other is not None and self._holds(other.rel_path, other.sha256):
+                return other.rel_path
+        return None
+
+    def _another_copy_remains(self, item: Item) -> bool:
+        """Before a copy is deleted: the file it copies must still be there with the same content,
+        in the filed folder or as another item waiting in the vault."""
+        if Reason.duplicate in item.reasons or Reason.possible_copy in item.reasons:
+            return self.other_copy_path(item) is not None
         return True
 
     def _discard(self, item: Item) -> Item:
