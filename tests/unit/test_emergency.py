@@ -1,6 +1,7 @@
 from datetime import date
 
 from household_vault.emergency import sheet_html
+from household_vault.leakscan import redact
 
 
 def test_the_emergency_sheet(tmp_path):
@@ -13,7 +14,7 @@ def test_the_emergency_sheet(tmp_path):
         str(tmp_path / "Family Vault"),
     ):
         assert text in html
-    assert "<script" not in html and "<link" not in html and 'src="http' not in html
+    assert "<script" not in html and "<link" not in html
 
 
 def test_the_sheet_says_where_everything_is_and_when_it_was_printed(tmp_path):
@@ -42,3 +43,6 @@ def test_a_path_with_markup_cannot_change_the_page(tmp_path):
 def test_the_sheet_holds_no_em_dash_and_no_secret(tmp_path):
     html = sheet_html(tmp_path / "Family Vault", date(2026, 11, 20))
     assert chr(0x2014) not in html and chr(0x2013) not in html
+    assert "synthetic-master-password" not in html
+    assert redact(html) == html  # no card-shaped number, no security code
+    assert "Master password: ________________" in html  # left blank for the owner

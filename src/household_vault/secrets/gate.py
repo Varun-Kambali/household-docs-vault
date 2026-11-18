@@ -10,6 +10,7 @@ from __future__ import annotations
 import threading
 from collections.abc import Callable
 
+from household_vault.leakscan import register_secret_source
 from household_vault.secrets.store import SecretsLocked, SecretsStore
 from household_vault.vaultroot import VaultRoot
 
@@ -30,6 +31,7 @@ class SecretsGate:
         self._until = 0.0
         self._timer: threading.Timer | None = None
         self._lock = threading.Lock()
+        register_secret_source(self.held_secrets)  # the password never reaches a log line
 
     def __repr__(self) -> str:
         return "SecretsGate()"

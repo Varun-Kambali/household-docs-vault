@@ -85,3 +85,20 @@ def test_the_store_is_dropped_by_a_timer_without_any_call(vault):
     gate.create(MASTER_PASSWORD)
     time.sleep(0.6)
     assert gate._store is None
+
+
+def test_the_master_password_is_hidden_from_logs_while_the_gate_holds_it(vault):
+    import io
+    import logging
+
+    from household_vault.leakscan import install_log_redaction
+
+    install_log_redaction()
+    gate = SecretsGate(vault, FakeClock(0.0))
+    gate.create(MASTER_PASSWORD)
+    buf = io.StringIO()
+    log = logging.getLogger("household_vault.t_gate")
+    log.handlers = [logging.StreamHandler(buf)]
+    log.propagate = False
+    log.warning("oops %s", MASTER_PASSWORD)
+    assert MASTER_PASSWORD not in buf.getvalue() and "[removed]" in buf.getvalue()

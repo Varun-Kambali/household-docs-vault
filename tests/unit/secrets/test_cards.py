@@ -163,6 +163,7 @@ def card_world(
     models = TruthModels(docs, folder)
     world = make_world(pages=TruthPages(docs, folder), models=models)
     world.vault.write_atomic(SECRETS_FILE, empty_secrets_file)
+    (settings.log_dir / "vault.log").write_text("app started\n")  # the scan reads a real log
     gate_clock = FakeClock(0.0)
     gate = SecretsGate(world.vault, gate_clock)
     gate.unlock(MASTER_PASSWORD)

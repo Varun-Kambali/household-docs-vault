@@ -12,12 +12,13 @@ from __future__ import annotations
 import logging
 import re
 import sqlite3
+import weakref
 from collections.abc import Callable, Collection
 from pathlib import Path
 
 from household_vault.checks import find_numbers
 from household_vault.reading.render import DamagedFileError, LockedPdfError, page_count, text_layer
-from household_vault.vaultroot import SECRETS_FILE, VaultGone, VaultPathError, VaultRoot
+from household_vault.vaultroot import RECORDS, SECRETS_FILE, VaultGone, VaultPathError, VaultRoot
 
 IMAGE_SUFFIXES = frozenset({".jpg", ".jpeg", ".png", ".heic", ".heif", ".gif", ".webp", ".tif"})
 _LABEL = {"card": "card-shaped", "aadhaar": "Aadhaar-shaped"}
@@ -80,12 +81,21 @@ def _merged_spans(spans: list[tuple[int, int]]) -> list[tuple[int, int]]:
 
 
 _SECRET_SOURCES: list[Callable[[], Collection[str]]] = []
+_WEAK_SOURCES: list[weakref.WeakMethod[Callable[[], Collection[str]]]] = []
 _INSTALLED = False
+
+
+def register_secret_source(source: Callable[[], Collection[str]]) -> None:
+    """Hide what a bound method returns (the master password a gate holds) in every log line,
+    whenever redaction is installed. Held weakly, so a gate that is gone is forgotten."""
+    _WEAK_SOURCES.append(weakref.WeakMethod(source))
 
 
 def _current_secrets() -> list[str]:
     found: list[str] = []
-    for source in _SECRET_SOURCES:
+    _WEAK_SOURCES[:] = [w for w in _WEAK_SOURCES if w() is not None]
+    sources = [*_SECRET_SOURCES, *(m for w in _WEAK_SOURCES if (m := w()) is not None)]
+    for source in sources:
         try:
             found.extend(source())
         except Exception:  # a source that fails must not stop a log line
@@ -240,7 +250,7 @@ def scan_outputs(
     hits: list[str] = []
 
     def check(where: str, text: str, *, card_text: bool = False) -> None:
-        long_run = card_text or _is_card_record(text)
+        long_run = card_text or (where.startswith(f"{RECORDS}/") and _is_card_record(text))
         scanned = _HEX_TOKEN.sub("", text) if long_run else text
         hits.extend(
             f"{where}: {d}"
