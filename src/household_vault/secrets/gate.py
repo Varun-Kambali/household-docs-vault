@@ -58,6 +58,12 @@ class SecretsGate:
             raise SecretsLocked("The secrets store is locked. Enter the master password.")
         return store
 
+    def held_secrets(self) -> list[str]:
+        """The master password while the gate holds one, for `install_log_redaction`."""
+        with self._lock:
+            held = self._current()
+            return [] if held is None else [held.master_password()]
+
     def lock(self) -> None:
         with self._lock:
             self._store = None

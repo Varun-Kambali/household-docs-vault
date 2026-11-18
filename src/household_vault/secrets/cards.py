@@ -35,7 +35,6 @@ from household_vault.filing.filer import Filer
 from household_vault.filing.questions import question_for, upload_again_question
 from household_vault.filing.records import DocumentRecord, stored_reading
 from household_vault.intake.sniff import EXTENSION, FileKind, sniff
-from household_vault.leakscan import install_log_redaction
 from household_vault.people import Household
 from household_vault.reading.engines import Engines, open_image
 from household_vault.reading.pipeline import MAX_VISION_PAGES, Reading, read_document
@@ -92,7 +91,6 @@ class CardIntake:
         self.store = store
         self.engines = engines
         self.household = household
-        install_log_redaction()  # no number reaches a log, whatever logs it
         # The reading of a card that waits for the gate, by item id, with the hash it was read
         # from. In memory only; dropped when the card is filed, asked about or gone.
         self._held: dict[int, tuple[str, Reading]] = {}

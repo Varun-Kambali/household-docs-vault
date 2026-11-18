@@ -90,6 +90,10 @@ class SecretsStore:
                 raise SecretsLocked("There is no secrets file yet.") from None
             return cls(vault, _parse(data, master_password), data)
 
+    def master_password(self) -> str:
+        """The password this store was opened with, for the log redaction only."""
+        return str(self._kp.password)
+
     def password_matches(self, master_password: str) -> bool:
         """True when this open store was opened with that password (constant time)."""
         return hmac.compare_digest(str(self._kp.password).encode(), master_password.encode())

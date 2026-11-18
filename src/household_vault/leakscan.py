@@ -12,10 +12,10 @@ from __future__ import annotations
 import logging
 import re
 import sqlite3
-from collections.abc import Collection
+from collections.abc import Callable, Collection
 from pathlib import Path
 
-from household_vault.checks import NumberHit, find_numbers
+from household_vault.checks import find_numbers
 from household_vault.reading.render import DamagedFileError, LockedPdfError, page_count, text_layer
 from household_vault.vaultroot import SECRETS_FILE, VaultGone, VaultPathError, VaultRoot
 
@@ -43,41 +43,88 @@ def scan_text(text: str, *, allow_test_cards: bool) -> list[str]:
     return found
 
 
-def _merged(hits: list[NumberHit]) -> list[tuple[int, int]]:
-    spans: list[list[int]] = []
-    for hit in hits:
-        if spans and hit.start < spans[-1][1]:
-            spans[-1][1] = max(spans[-1][1], hit.end)
-        else:
-            spans.append([hit.start, hit.end])
-    return [(a, b) for a, b in spans]
+_DOTTED = re.compile(r"(?<![\d.])\d{4}(?:\.\d{3,6}){3,4}(?!\d)")
+_LABELLED = re.compile(r"(?i)\b(cvv2?|cvc2?|cid|pin)\b([^\w\n]{0,3}\s?)(\d{3,6})(?!\d)")
+REMOVED = "[removed]"
+_FAILED = "[a log line could not be formatted]"
 
 
-def redact(text: str) -> str:
-    """Every digit of every card or Aadhaar number except the last four becomes X. Separators
-    stay, and overlapping hits are merged first so no window leaves other digits showing."""
+def redact(text: str, secrets: Collection[str] = ()) -> str:
+    """Take secrets out of a text. Every digit of every 13 to 19 digit run (spaces, hyphens or
+    dots between groups) except the last four becomes X, whether or not it passes the card
+    check, because a misread number is still close to a real one. Digits after a cvv, cvc, cid
+    or pin label become X, and each of `secrets` (the master password) is replaced."""
+    for secret in secrets:
+        if secret:
+            text = text.replace(secret, REMOVED)
+    found = find_numbers(text, allow_test_cards=False, any_long_run=True)
+    spans = [(h.start, h.end) for h in found]
+    spans += [m.span() for m in _DOTTED.finditer(text)]
     chars = list(text)
-    for start, end in _merged(find_numbers(text, allow_test_cards=False)):
+    for start, end in _merged_spans(spans):
         positions = [i for i in range(start, end) if chars[i].isdigit()]
         for i in positions[:-4]:
             chars[i] = "X"
-    return "".join(chars)
+    return _LABELLED.sub(lambda m: m[1] + m[2] + "X" * len(m[3]), "".join(chars))
 
 
-def install_log_redaction() -> None:
-    """Put every log message through `redact`, for every logger in the process. Safe to call
-    more than once."""
-    previous = logging.getLogRecordFactory()
-    if getattr(previous, "redacts", False):
+def _merged_spans(spans: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    merged: list[list[int]] = []
+    for start, end in sorted(spans):
+        if merged and start < merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], end)
+        else:
+            merged.append([start, end])
+    return [(a, b) for a, b in merged]
+
+
+_SECRET_SOURCES: list[Callable[[], Collection[str]]] = []
+_INSTALLED = False
+
+
+def _current_secrets() -> list[str]:
+    found: list[str] = []
+    for source in _SECRET_SOURCES:
+        try:
+            found.extend(source())
+        except Exception:  # a source that fails must not stop a log line
+            continue
+    return found
+
+
+def install_log_redaction(secrets: Callable[[], Collection[str]] | None = None) -> None:
+    """Redact the final text of every log line, for every handler in the process (also the ones
+    added later), including the traceback. Call it once at start-up; `secrets` returns the
+    values to hide, such as the master password while the gate holds one. A line that cannot
+    be formatted is replaced, never raised. Safe to call again."""
+    global _INSTALLED
+    if secrets is not None and secrets not in _SECRET_SOURCES:
+        _SECRET_SOURCES.append(secrets)
+    if _INSTALLED:
         return
+    _INSTALLED = True
+    original_format = logging.Handler.format
+
+    def format_redacted(self: logging.Handler, record: logging.LogRecord) -> str:
+        try:
+            text = original_format(self, record)
+        except Exception:
+            return _FAILED
+        return redact(text, _current_secrets())
+
+    logging.Handler.format = format_redacted  # type: ignore[method-assign]
+
+    previous = logging.getLogRecordFactory()
 
     def factory(*args: object, **kwargs: object) -> logging.LogRecord:
         record = previous(*args, **kwargs)
-        record.msg = redact(record.getMessage())
-        record.args = None
+        try:
+            record.msg = redact(record.getMessage(), _current_secrets())
+            record.args = None
+        except Exception:  # the handler's own formatting reports it
+            pass
         return record
 
-    factory.redacts = True  # type: ignore[attr-defined]
     logging.setLogRecordFactory(factory)
 
 

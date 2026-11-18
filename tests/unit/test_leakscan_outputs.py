@@ -112,3 +112,56 @@ def test_a_known_password_is_reported_without_its_value(vault, settings):
 def test_a_clean_world_has_no_hits(vault, settings):
     vault.write_atomic("Home/ok.json", b'{"x": 1.12345678901234}')
     assert scan_outputs(vault, settings.db_path, settings.log_dir) == []
+
+
+def _logger_with_plain_handler(name: str):
+    buf = io.StringIO()
+    handler = logging.StreamHandler(buf)
+    handler.setFormatter(logging.Formatter("%(message)s"))
+    log = logging.getLogger(name)
+    log.handlers = [handler]
+    log.propagate = False
+    log.setLevel(logging.DEBUG)
+    return log, buf
+
+
+def test_redact_hides_a_misread_number_and_spaced_or_dotted_forms():
+    assert redact("misread 4111111111111112") == "misread XXXXXXXXXXXX1112"
+    assert redact("4111 1111 1111 1111") == "XXXX XXXX XXXX 1111"
+    assert redact("4111.1111.1111.1111") == "XXXX.XXXX.XXXX.1111"
+    assert redact("version 1.2.3 on 2026-11-20 took 0.12345678901234 s") == (
+        "version 1.2.3 on 2026-11-20 took 0.12345678901234 s"
+    )
+
+
+def test_redact_hides_digits_after_a_cvv_cvc_cid_or_pin_label():
+    assert redact("cvv 737 and CVV: 1234") == "cvv XXX and CVV: XXXX"
+    assert redact("cvc=123, Cid 4567, PIN 9876") == "cvc=XXX, Cid XXXX, PIN XXXX"
+    assert redact("pinned 12 items") == "pinned 12 items"
+
+
+def test_redact_hides_the_secrets_it_is_given():
+    assert redact(f"master {MASTER} here", secrets=[MASTER]) == "master [removed] here"
+
+
+MASTER = "synthetic-master-password"
+
+
+def test_the_handler_redacts_the_final_text_including_a_traceback():
+    install_log_redaction(lambda: [MASTER])
+    log, buf = _logger_with_plain_handler("household_vault.t_tb")
+    try:
+        raise ValueError("bad card 5555555555554444 and " + MASTER)
+    except ValueError:
+        log.exception("failed")
+    log.info("extra", extra={"number": "4111111111111111"})
+    out = buf.getvalue()
+    assert "5555555555554444" not in out and MASTER not in out
+    assert "XXXXXXXXXXXX4444" in out and "Traceback" in out
+
+
+def test_a_bad_format_call_does_not_raise_and_is_still_redacted():
+    install_log_redaction()
+    log, buf = _logger_with_plain_handler("household_vault.t_bad")
+    log.warning("two args %s %s 4111111111111111", 1)
+    assert "4111111111111111" not in buf.getvalue()

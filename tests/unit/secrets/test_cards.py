@@ -22,7 +22,7 @@ from household_vault.db import Item
 from household_vault.doctypes import DocType
 from household_vault.filing.filer import UndoError
 from household_vault.filing.records import read_record
-from household_vault.leakscan import scan_outputs
+from household_vault.leakscan import install_log_redaction, scan_outputs
 from household_vault.reading.engines import Engines
 from household_vault.reasons import Reason
 from household_vault.secrets.cards import TRASH_NOTE, CardIntake, CardUploadError
@@ -273,10 +273,13 @@ def test_a_gate_that_runs_out_again_keeps_the_card_waiting(card_world):
     assert card_world.store.documents_of_type(DocType.card_front)
 
 
-def test_a_card_handler_puts_every_log_line_through_the_redaction(card_world, caplog):
+def test_the_master_password_and_numbers_are_redacted_from_every_log_line(card_world, caplog):
+    install_log_redaction(card_world.gate.held_secrets)
     caplog.set_level(logging.INFO)
     logging.getLogger("household_vault.anything").info("number %s", "4111111111111111")
+    logging.getLogger("household_vault.anything").info("pw %s", MASTER_PASSWORD)
     assert "4111111111111111" not in caplog.text and "XXXXXXXXXXXX1111" in caplog.text
+    assert MASTER_PASSWORD not in caplog.text
 
 
 def test_the_logs_and_the_activity_never_hold_a_secret(card_world, caplog):
