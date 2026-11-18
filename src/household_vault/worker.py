@@ -10,6 +10,7 @@ memory, and are dropped when the job ends.
 
 from __future__ import annotations
 
+import dataclasses
 import logging
 import threading
 import time
@@ -24,7 +25,8 @@ from household_vault.db import Item, ItemState, Store
 from household_vault.doctypes import LABEL, DocType
 from household_vault.filing.decide import Overrides, base_field, decide
 from household_vault.filing.filer import BUSY, Filer, TargetGone
-from household_vault.filing.questions import Question, question_for
+from household_vault.filing.questions import Question, question_for, upload_again_question
+from household_vault.filing.records import stored_reading
 from household_vault.intake.checks import CheckResult, check_file
 from household_vault.intake.sniff import FileKind
 from household_vault.intake.watcher import Settler, inbox_listing
@@ -79,6 +81,10 @@ class CardHandler(Protocol):
 
     def ready(self) -> bool: ...
 
+    def held_reading(self, item_id: int, sha256: str) -> Reading | None:
+        """The reading kept while the gate was closed (so the card is read once), or None."""
+        ...
+
 
 class HoldCards:
     """The handler until the secrets store exists: the file stays in `Inbox`, untouched, and the
@@ -86,6 +92,9 @@ class HoldCards:
 
     def ready(self) -> bool:
         return False
+
+    def held_reading(self, item_id: int, sha256: str) -> Reading | None:
+        return None
 
     def handle(
         self,
@@ -462,8 +471,9 @@ class Worker:
 
     def _process(self, item: Item) -> None:
         rel = item.rel_path
-        if rel is None:
-            raise ValueError("this item has no file in the vault")
+        if rel is None:  # an upload stopped before it was filed: its photos were only in memory
+            self._upload_again(item)
+            return
         ov = overrides_of(item)
         self._step = "checking"
         result = check_file(
@@ -488,8 +498,9 @@ class Worker:
         assert result.kind is not None
         self._step = "reading"
         source = DocumentSource(result.kind, data=self.vault.read_bytes(rel))
+        held = None if "reread" in item.overrides else self.cards.held_reading(item.id, item.sha256)
         try:
-            reading = read_document(
+            reading = held or read_document(
                 source,
                 result.sha256,
                 self.engines,
@@ -518,12 +529,51 @@ class Worker:
             item = self.store.item(item.id)
         if (ov.doc_type or reading.doc_type) is DocType.card_front:
             self._step = "filing"
-            outcome_of_card = self.cards.handle(item, reading, source, item.origin)
+            try:
+                outcome_of_card = self.cards.handle(item, reading, source, item.origin)
+            except (ModelUnavailable, TargetGone, VaultGone, CopyMismatch):
+                raise
+            except Exception as exc:  # a card is never moved: it is asked about where it is
+                self._card_failed(item, reading, exc)
+                return
             if outcome_of_card == "waiting":
                 self.store.update_item(item.id, state="waiting_secrets")
                 self.activity.record(item.id, Step.waiting, "waiting", SECRETS_CLOSED, file=rel)
             return
         self._decide_and_file(item, reading, ov)
+
+    def _upload_again(self, item: Item) -> None:
+        question = upload_again_question()
+        self.store.update_item(
+            item.id,
+            state="asked",
+            reasons=[question.reason],
+            question=dataclasses.asdict(question),
+        )
+        self.activity.record(item.id, Step.needs_a_look, "needs_a_look", question.text)
+
+    def _card_failed(self, item: Item, reading: Reading, exc: Exception) -> None:
+        """The card handler failed in a way nothing expects. The item is asked about in place:
+        the photo is not moved to Needs a look, because it is not masked."""
+        log.warning("filing a card for item %s failed: %s", item.id, type(exc).__name__)
+        self.activity.record(
+            item.id,
+            Step.error,
+            "read_failed",
+            f"Could not file this card: {type(exc).__name__}",
+            file=item.rel_path,
+        )
+        question = question_for([Reason.read_failed], reading, self.filer.household, {})
+        self.store.update_item(
+            item.id,
+            state="asked",
+            reasons=[Reason.read_failed],
+            question=dataclasses.asdict(question),
+            reading=stored_reading(reading, card_item=True),
+        )
+        self.activity.record(
+            item.id, Step.needs_a_look, "needs_a_look", question.text, file=item.rel_path
+        )
 
     def _refile(self, item: Item) -> None:
         """After an answer: decide again from the stored reading. A new type, a retry, a card

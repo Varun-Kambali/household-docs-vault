@@ -207,7 +207,13 @@ class VaultRoot:
         return fd
 
     def list_dir(self, rel: str) -> list[Entry]:
-        folder = self.path(rel)
+        return self._scan(self.path(rel), rel)
+
+    def list_root(self) -> list[Entry]:
+        """What is directly in the vault folder."""
+        return self._scan(self.root, ".")
+
+    def _scan(self, folder: Path, rel: str) -> list[Entry]:
         entries: list[Entry] = []
         try:
             with os.scandir(folder) as it:

@@ -241,6 +241,9 @@ class OpenGateCards:
     def ready(self) -> bool:
         return True
 
+    def held_reading(self, item_id: int, sha256: str) -> Reading | None:
+        return None
+
     def handle(
         self,
         item: Item,

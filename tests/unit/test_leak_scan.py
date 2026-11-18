@@ -4,96 +4,20 @@ Results files hold raw model output, and a model that misreads one digit of a sy
 has about a 1 in 9 chance of landing on a number that passes the public Verhoeff check.
 """
 
-import re
 import subprocess
 from pathlib import Path
 
-from vault_synth.checks import TEST_CARD_NUMBERS, luhn_valid, verhoeff_valid
+from household_vault.checks import luhn_valid, verhoeff_valid
+from household_vault.leakscan import scan_text as scan_text_in_src
 
 ROOT = Path(__file__).resolve().parents[2]
 SUFFIXES = {".json", ".md", ".yaml", ".yml", ".txt"}
 SKIP_DIRS = {".venv", ".worktrees", ".git", "node_modules"}
 
-_TOKEN = re.compile(r"\d+")
-
-
-def _mask(digits: str) -> str:
-    # CI logs on this repo are public: show the last four digits only
-    return "*" * (len(digits) - 4) + digits[-4:] if len(digits) > 4 else "*" * len(digits)
-
-
-def _runs(text: str) -> list[list[tuple[str, str]]]:
-    """Split text into runs of digit groups joined by one space or dash.
-
-    Each run is a list of (digits, separator before it). A group that is part of a float
-    ("1.123" or "123.5") is dropped and ends the run.
-    """
-    runs: list[list[tuple[str, str]]] = []
-    current: list[tuple[str, str]] = []
-    prev_end = -1
-    for m in _TOKEN.finditer(text):
-        before, after = text[max(0, m.start() - 2) : m.start()], text[m.end() : m.end() + 2]
-        is_float = bool(re.fullmatch(r"\d\.", before)) or bool(re.fullmatch(r"\.\d", after))
-        sep = text[prev_end : m.start()] if prev_end >= 0 else ""
-        joined = bool(current) and m.start() - prev_end == 1 and sep in (" ", "-")
-        if is_float:
-            if current:
-                runs.append(current)
-            current, prev_end = [], -1
-            continue
-        if not joined and current:
-            runs.append(current)
-            current = []
-        current.append((m.group(), sep if joined else ""))
-        prev_end = m.end()
-    if current:
-        runs.append(current)
-    return runs
-
 
 def scan_text(text: str) -> list[str]:
-    """Return masked descriptions of every Aadhaar-shaped or card-shaped number in text.
-
-    Every window of consecutive groups in a separator-joined run is tested, so a number that
-    follows or precedes other digits ("DOB 1990 2345 6789 0124", a card then " 12") is found.
-    """
-    found: list[str] = []
-    seen: set[str] = set()
-    for run in _runs(text):
-        digits = [d for d, _ in run]
-        test_card_spans: list[tuple[int, int]] = []
-        for i in range(len(run)):
-            for j in range(i, len(run)):
-                number = "".join(digits[i : j + 1])
-                if len(number) > 19:
-                    break
-                if 13 <= len(number) <= 19:
-                    if number in TEST_CARD_NUMBERS:
-                        test_card_spans.append((i, j))
-                    elif luhn_valid(number) and number not in seen:
-                        seen.add(number)
-                        found.append(f"card-shaped {_mask(number)}")
-        # 12 digits as one group, or three groups of four joined by spaces
-        for i in range(len(run)):
-            windows = []
-            if len(digits[i]) == 12:
-                windows.append((i, i))
-            if (
-                i + 2 < len(run)
-                and all(len(digits[k]) == 4 for k in range(i, i + 3))
-                and run[i + 1][1] == " "
-                and run[i + 2][1] == " "
-            ):
-                windows.append((i, i + 2))
-            for lo, hi in windows:
-                if any(s <= lo and hi <= e for s, e in test_card_spans):
-                    continue
-                number = "".join(digits[lo : hi + 1])
-                key = "A" + number
-                if verhoeff_valid(number) and key not in seen:
-                    seen.add(key)
-                    found.append(f"Aadhaar-shaped {_mask(number)}")
-    return found
+    """The scan of committed outputs: published test cards are allowed there."""
+    return scan_text_in_src(text, allow_test_cards=True)
 
 
 def committed_outputs(root: Path = ROOT) -> list[Path]:
@@ -130,7 +54,7 @@ def _valid_card_like() -> str:
 def test_scanner_flags_a_verhoeff_valid_twelve_digit_run() -> None:
     number = _valid_aadhaar_like()
     spaced = f"{number[:4]} {number[4:8]} {number[8:]}"
-    expected = [f"Aadhaar-shaped {'*' * 8}{number[-4:]}"]
+    expected = [f"Aadhaar-shaped {'X' * 8}{number[-4:]}"]
     assert scan_text(f"read: {number} here") == expected
     assert scan_text(f"read: {spaced}.") == expected
 
@@ -153,7 +77,7 @@ def test_scanner_finds_a_spaced_aadhaar_after_another_group() -> None:
 def test_scanner_flags_a_luhn_valid_card_but_not_published_test_cards() -> None:
     number = _valid_card_like()
     assert len(number) == 16
-    expected = [f"card-shaped {'*' * 12}{number[-4:]}"]
+    expected = [f"card-shaped {'X' * 12}{number[-4:]}"]
     assert scan_text(f"card {number}") == expected
     dashed = "-".join(number[i : i + 4] for i in range(0, 16, 4))
     assert scan_text(dashed) == expected
@@ -165,7 +89,7 @@ def test_scanner_finds_a_card_followed_by_other_digits() -> None:
     spaced = " ".join(number[i : i + 4] for i in range(0, 16, 4))
     for tail in (" 7 items", " 12"):
         hits = scan_text(spaced + tail)
-        assert f"card-shaped {'*' * 12}{number[-4:]}" in hits
+        assert f"card-shaped {'X' * 12}{number[-4:]}" in hits
     assert scan_text("4111 1111 1111 1111 7 items") == []
 
 

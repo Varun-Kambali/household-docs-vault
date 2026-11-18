@@ -13,9 +13,9 @@ from vault_synth.model import SynthDoc
 
 from household_vault.checks import TEST_CARD_NUMBERS, luhn_valid, verhoeff_valid
 from household_vault.doctypes import AREA, OWNER, REQUIRED, Area, DocType
+from household_vault.leakscan import scan_text
 from household_vault.schemas import SCHEMAS
 from tests.conftest import group_by_base
-from tests.unit.test_leak_scan import scan_text
 
 
 @pytest.fixture(scope="module")
@@ -71,7 +71,9 @@ def test_form_ids_use_the_reserved_prefix_and_carry_specimen(form_docs: list[Syn
 
 
 def test_no_generated_line_holds_a_real_shaped_number(form_docs: list[SynthDoc]) -> None:
-    assert not [h for d in form_docs for ln in d.lines for h in scan_text(ln.text)]
+    assert not [
+        h for d in form_docs for ln in d.lines for h in scan_text(ln.text, allow_test_cards=True)
+    ]
 
 
 def test_card_forms_print_only_the_last_four_of_a_test_number(form_docs: list[SynthDoc]) -> None:

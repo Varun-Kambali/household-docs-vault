@@ -23,7 +23,7 @@ from household_vault import safety
 from household_vault.actions import Actions
 from household_vault.activity import Activity
 from household_vault.checks import gstin_check_char, verhoeff_valid
-from household_vault.config import load_settings
+from household_vault.config import Settings, load_settings
 from household_vault.db import DocumentRow, Item, Store, connect, migrate
 from household_vault.doctypes import REQUIRED, DocType
 from household_vault.filing.filer import Filer
@@ -54,6 +54,8 @@ def fake_homes(tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.Mon
     monkeypatch.setattr(safety, "_pwd_home", lambda: pwd_home)
     return home
 
+
+MASTER_PASSWORD = "synthetic-master-password"
 
 SPIKE_DIR = Path(__file__).resolve().parents[1] / "evals" / "datasets" / "spike-v0"
 
@@ -97,6 +99,21 @@ def vault(tmp_path: Path) -> VaultRoot:
     for rel in (INBOX, NEEDS_A_LOOK, "Home"):
         root.mkdirs(rel)
     return root
+
+
+@pytest.fixture
+def settings(tmp_path: Path, vault: VaultRoot) -> Settings:
+    """Development settings on the temp folders of the `vault` and `store` fixtures, with the
+    stand-in reader and an existing log folder."""
+    (tmp_path / "logs").mkdir(exist_ok=True)
+    return load_settings(
+        env={
+            "VAULT_ROOT": str(vault.root),
+            "VAULT_DB": str(tmp_path / "db" / "vault.db"),
+            "VAULT_LOG_DIR": str(tmp_path / "logs"),
+            "VAULT_READER": "stand-in",
+        }
+    )
 
 
 def raise_(exc: BaseException) -> Callable[..., NoReturn]:
