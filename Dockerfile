@@ -11,7 +11,17 @@ FROM python:3.12-slim
 RUN useradd --create-home --uid 1000 app
 COPY --from=build --chown=app:app /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
+# The image runs the whole app with the stand-in reader, to check the packaging and the API in CI.
+# The real app runs natively on the Mac, because Docker on macOS cannot use the GPU or Apple Vision.
+ENV VAULT_READER=stand-in \
+    VAULT_HOST=0.0.0.0 \
+    VAULT_ROOT=/data/vault \
+    VAULT_DB=/data/vault.db \
+    VAULT_HOUSEHOLD=/data/household.json \
+    VAULT_LOG_DIR=/data/logs
+RUN mkdir /data && chown app:app /data
 USER app
-# Stand-in command until the API exists. The real app runs natively on the Mac, because Docker on
-# macOS cannot use the GPU; this image is built in CI to check the packaging.
-CMD ["vault"]
+EXPOSE 8710
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8710/healthz', timeout=3)"]
+CMD ["vault", "run"]

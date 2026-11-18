@@ -25,7 +25,7 @@ dependencies = [
 ]
 
 [project.scripts]
-vault = "household_vault.cli:main"
+vault = "household_vault.cli:console"
 
 [project.urls]
 Repository = "https://github.com/Varun-Kambali/household-docs-vault"

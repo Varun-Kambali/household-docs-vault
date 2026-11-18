@@ -56,11 +56,28 @@ make setup
 make test
 ```
 
-Until the app exists, `make test` is all there is to run.
+The app is work in progress: the screens come in a later milestone, so for now it is an API and a worker.
 
 ## Usage
 
-[Arrives with M2.]
+These commands work on the synthetic vault only (`VAULT_ROOT` in `.env`). The app mode (`vault run --app`) is for the installed app and reads the real folder from its own config file.
+
+```bash
+make vault        # copy twelve synthetic val documents into the synthetic Inbox
+make run          # serve the API on http://127.0.0.1:8710 and run the worker
+uv run vault process                          # run the worker once over Inbox and print counts
+uv run vault emergency-sheet --out sheet.html # the printable emergency sheet
+```
+
+While `make run` is up, the worker files what it can and puts the rest in `Needs a look`:
+
+```bash
+curl -s localhost:8710/v1/inbox/progress   # how far the batch is
+curl -s localhost:8710/v1/activity         # what happened, newest first, with the buttons each row has
+curl -s localhost:8710/v1/needs-a-look     # the questions waiting for an answer
+```
+
+Reading needs Ollama running with the two models in `.env.example`. Without it, files wait in `Inbox` and the worker tries again.
 
 ## Evaluation
 
@@ -68,11 +85,11 @@ Until the app exists, `make test` is all there is to run.
 
 ## Testing
 
-`make test` · `make lint` · CI runs both and builds the Docker image.
+`make test` · `make lint` · CI runs both, builds the Docker image, runs the app in it with the stand-in reader and takes a PDF through the API.
 
 ## Deployment
 
-The app is not deployed anywhere. It runs on one Mac, and the phone reaches it over Tailscale ([ADR 0001](docs/decisions/0001-runs-only-on-my-mac.md), [ADR 0005](docs/decisions/0005-phone-over-tailscale.md)). CI builds a Docker image only to check the packaging, because Docker on a Mac cannot use the GPU.
+The app is not deployed anywhere. It runs on one Mac, and the phone reaches it over Tailscale ([ADR 0001](docs/decisions/0001-runs-only-on-my-mac.md), [ADR 0005](docs/decisions/0005-phone-over-tailscale.md)). CI builds a Docker image and runs the app in it with the stand-in reader (no models), only to check the packaging and the API, because Docker on a Mac cannot use the GPU.
 
 ## Project structure
 

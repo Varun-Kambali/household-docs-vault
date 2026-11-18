@@ -1,6 +1,6 @@
 COV_MIN ?= 80
 
-.PHONY: setup visits spikes-setup finetune-setup lint test eval eval-smoke run docker
+.PHONY: setup visits spikes-setup finetune-setup lint test eval eval-smoke run vault docker
 
 setup:
 	uv sync
@@ -34,9 +34,18 @@ eval-smoke:
 	@echo "make eval-smoke: added in a later milestone" >&2; exit 1
 
 run:
-	@echo "make run: added in a later milestone" >&2; exit 1
+	uv run vault run
+
+# Fills the synthetic Inbox with twelve val documents and writes the household file.
+vault:
+	uv run vault dev-vault --from evals/datasets/eval-v1 --split val --limit 12
 
 docker:
 	docker build -t household-docs-vault .
-	docker run --rm household-docs-vault
+	docker run --rm household-docs-vault vault
 	docker run --rm --entrypoint python household-docs-vault -c "import importlib, pkgutil, household_vault; [importlib.import_module(m.name) for m in pkgutil.walk_packages(household_vault.__path__, 'household_vault.')]; print('imported ok', household_vault.__version__)"
+	@# the anonymous /data volume goes when the container stops
+	@id=$$(docker run -d --rm -p 8710:8710 -v /data household-docs-vault); ok=1; \
+	for i in $$(seq 1 30); do \
+	  if curl -fs http://localhost:8710/healthz; then echo; ok=0; break; fi; sleep 1; done; \
+	docker stop $$id >/dev/null; exit $$ok
