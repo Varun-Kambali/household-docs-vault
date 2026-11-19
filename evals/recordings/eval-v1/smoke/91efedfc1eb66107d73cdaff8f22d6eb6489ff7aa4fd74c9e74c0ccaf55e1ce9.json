@@ -1,0 +1,185 @@
+{
+ "sha256": "91efedfc1eb66107d73cdaff8f22d6eb6489ff7aa4fd74c9e74c0ccaf55e1ce9",
+ "doc_id": "card_front-6-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1000,
+   "height": 1400,
+   "lines": [
+    {
+     "text": "Deccan Trust Bank",
+     "page": 0,
+     "bbox": [
+      0.08427403167540151,
+      0.13458527236188014,
+      0.3757751370266279,
+      0.20774371246202114
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Credit Card",
+     "page": 0,
+     "bbox": [
+      0.804333772140942,
+      0.11045374411892271,
+      0.9232245882176167,
+      0.15545491773843959
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "5105 1051 0510 5100",
+     "page": 0,
+     "bbox": [
+      0.07770193156213885,
+      0.4571191102990916,
+      0.5683880004704933,
+      0.5511280198784418
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "VALID THRU",
+     "page": 0,
+     "bbox": [
+      0.07614564176214285,
+      0.6044716001918191,
+      0.1635897110267307,
+      0.6324422856231804
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "09/28",
+     "page": 0,
+     "bbox": [
+      0.21432343317606234,
+      0.586308823247099,
+      0.2917189764872151,
+      0.6316326921010995
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "SURESH N RAO",
+     "page": 0,
+     "bbox": [
+      0.0738188510133157,
+      0.702013879640395,
+      0.2711074459884445,
+      0.7540142970075737
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 0,
+     "bbox": [
+      0.07146293139885851,
+      0.816980594161255,
+      0.24719780667858907,
+      0.8771082565025898
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  },
+  {
+   "page": 1,
+   "width": 1000,
+   "height": 1400,
+   "lines": [
+    {
+     "text": "Authorised signature",
+     "page": 1,
+     "bbox": [
+      0.07113013192864977,
+      0.48847920908348175,
+      0.22317145270727104,
+      0.5139478773483361
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "674",
+     "page": 1,
+     "bbox": [
+      0.752709184389741,
+      0.3962475193726627,
+      0.8093005831997874,
+      0.44494508836540636
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "CVV",
+     "page": 1,
+     "bbox": [
+      0.7674193471579019,
+      0.490580756909229,
+      0.7996619000791491,
+      0.5148501994402674
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Customer care: 1800 204 1618",
+     "page": 1,
+     "bbox": [
+      0.07446042902569415,
+      0.6377891791256063,
+      0.3660522264708485,
+      0.6720004126266986
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This card remains the property of the issuing bank.",
+     "page": 1,
+     "bbox": [
+      0.07562161326936034,
+      0.6884343940450517,
+      0.49448834529044117,
+      0.7210535519104275
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 1,
+     "bbox": [
+      0.0780939807516581,
+      0.8011546128524419,
+      0.27677552180850684,
+      0.8622777600784866
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\"doc_type\": \"card_front\"}",
+ "fill_raw": "{\"bank\": \"Deccan Trust Bank\", \"card_name\": null, \"number\": \"5105105105105100\", \"expiry\": \"09/28\", \"holder\": \"SURESH N RAO\", \"network\": null, \"cvv\": \"674\"}",
+ "seconds": {
+  "read": 0.0,
+  "classify": 0.0,
+  "fill": 0.0
+ },
+ "engine": "oracle",
+ "prompt_version": "v2"
+}

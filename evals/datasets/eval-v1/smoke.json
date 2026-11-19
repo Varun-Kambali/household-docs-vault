@@ -1,0 +1,29 @@
+{
+  "set": "eval-v1",
+  "split": "val",
+  "rule": "val documents. The photo of base 1 of each of the nine hand-drawn types and of passport, life_policy, utility_bill, payslip and card_statement; the first two locked PDFs (by id) that expect no question; the photo of the first card with a back (two files); the clean PDFs of the outsider document (prescription) and the missing-field document (pan) that the generator guarantees in val, and of health_policy; the scans of aadhaar and tax_invoice.",
+  "documents": [
+    "health_policy-1-photo",
+    "vehicle_policy-1-photo",
+    "warranty_card-1-photo",
+    "tax_invoice-1-photo",
+    "aadhaar-1-photo",
+    "pan-1-photo",
+    "card_front-1-photo",
+    "prescription-1-photo",
+    "lab_report-1-photo",
+    "passport-1-photo",
+    "life_policy-1-photo",
+    "utility_bill-1-photo",
+    "payslip-1-photo",
+    "card_statement-1-photo",
+    "card_statement-1-locked",
+    "gadget_policy-1-locked",
+    "card_front-6-photo",
+    "prescription-1-clean",
+    "pan-1-clean",
+    "health_policy-1-clean",
+    "aadhaar-1-scan",
+    "tax_invoice-1-scan"
+  ]
+}

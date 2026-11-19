@@ -1,0 +1,250 @@
+{
+ "sha256": "9c20b397b3ab70843e7b3dee999c1aca1b085f68cfcb27490aec5cd7bfe26a47",
+ "doc_id": "prescription-1-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1000,
+   "height": 1400,
+   "lines": [
+    {
+     "text": "Hill Park Medical Centre",
+     "page": 0,
+     "bbox": [
+      0.10954957420604398,
+      0.03748419978134667,
+      0.421338014681787,
+      0.06145605514892841
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Temple Road, Mysuru",
+     "page": 0,
+     "bbox": [
+      0.10944564216703748,
+      0.07071490409724085,
+      0.2682989349826952,
+      0.08472111883192458
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Dr. Anay Thakur",
+     "page": 0,
+     "bbox": [
+      0.10915225592424814,
+      0.13236994072177136,
+      0.2713333906211861,
+      0.15039528136597502
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "MBBS, MD (General Medicine)",
+     "page": 0,
+     "bbox": [
+      0.10908261684700221,
+      0.15254218563262198,
+      0.3084064103262744,
+      0.16598390622543896
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Patient",
+     "page": 0,
+     "bbox": [
+      0.10889826950841609,
+      0.19538648595547403,
+      0.15429185828061912,
+      0.20724983935822563
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Sathvik Khosla",
+     "page": 0,
+     "bbox": [
+      0.20589494316533605,
+      0.19348932883777875,
+      0.3213444867130838,
+      0.20738402933101105
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.6535105535914313,
+      0.18937483646754463,
+      0.6836427690756508,
+      0.20093785534341319
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "22/09/2026",
+     "page": 0,
+     "bbox": [
+      0.716777168522121,
+      0.18810173629791097,
+      0.7957445700342773,
+      0.20144973321582965
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Age/Sex: 49 / M",
+     "page": 0,
+     "bbox": [
+      0.10878560665212017,
+      0.21989119660190828,
+      0.21234932855574187,
+      0.2324692861379503
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rx",
+     "page": 0,
+     "bbox": [
+      0.10848702751912534,
+      0.27097393859329255,
+      0.15411707434317282,
+      0.29930587098646916
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Medicine, dose, timing, duration",
+     "page": 0,
+     "bbox": [
+      0.18936742833892628,
+      0.2815564869631016,
+      0.39370291290840126,
+      0.2955830889472299
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "1. Tab Vitamin D3 60000 IU  1-0-0  30 days",
+     "page": 0,
+     "bbox": [
+      0.18923545077462817,
+      0.30704114536442445,
+      0.5294690298881792,
+      0.3255717333012555
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "2. Tab Telmisartan 40 mg  1-1-1  3 months",
+     "page": 0,
+     "bbox": [
+      0.18910447424857363,
+      0.3366774608706845,
+      0.5234792012907783,
+      0.35533291641948916
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "3. Tab Paracetamol 650 mg  1-0-0  15 days",
+     "page": 0,
+     "bbox": [
+      0.1889734913225829,
+      0.36614653552482634,
+      0.5292254162527038,
+      0.3850955537652792
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "4. Tab Metformin 500 mg  0-0-1  30 days",
+     "page": 0,
+     "bbox": [
+      0.18884250199618682,
+      0.3960206122051057,
+      0.5086370506629166,
+      0.41485964544521564
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+     "page": 0,
+     "bbox": [
+      0.1076838253331681,
+      0.4597923980523306,
+      0.5034499011662015,
+      0.47910172782947275
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Next visit: 22/12/2026",
+     "page": 0,
+     "bbox": [
+      0.10753473557677953,
+      0.49545758154052144,
+      0.28626550760638714,
+      0.5124752929978174
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Signature",
+     "page": 0,
+     "bbox": [
+      0.8661675843011465,
+      0.8473446863551202,
+      0.9266358624587397,
+      0.8600487406238161
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.10559377432763908,
+      0.930754926759275,
+      0.33520126123474137,
+      0.9469571669140079
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\"doc_type\": \"prescription\"}",
+ "fill_raw": "{\"hospital\": \"Hill Park Medical Centre\", \"doctor\": \"Dr. Anay Thakur\", \"patient\": \"Sathvik Khosla\", \"date\": \"2026-09-22\", \"medicines\": [{\"name\": \"Vitamin D3\", \"dose\": \"60000 IU\", \"timing\": \"1-0-0\", \"duration\": \"30 days\"}, {\"name\": \"Telmisartan\", \"dose\": \"40 mg\", \"timing\": \"1-1-1\", \"duration\": \"3 months\"}, {\"name\": \"Paracetamol\", \"dose\": \"650 mg\", \"timing\": \"1-0-0\", \"duration\": \"15 days\"}, {\"name\": \"Metformin\", \"dose\": \"500 mg\", \"timing\": \"0-0-1\", \"duration\": \"30 days\"}], \"next_visit\": \"2026-12-22\"}",
+ "seconds": {
+  "read": 0.0,
+  "classify": 0.0,
+  "fill": 0.0
+ },
+ "engine": "oracle",
+ "prompt_version": "v2"
+}

@@ -1,0 +1,178 @@
+{
+ "sha256": "812f0b0acdde592699a5ecef30a01bc8ebadc2468027cc1ed051683260b8e51c",
+ "doc_id": "pan-1-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1000,
+   "height": 1400,
+   "lines": [
+    {
+     "text": "INCOME TAX DEPARTMENT",
+     "page": 0,
+     "bbox": [
+      0.06408565939942294,
+      0.05942103154846318,
+      0.40100531699456793,
+      0.12209443420902834
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "GOVT. OF INDIA",
+     "page": 0,
+     "bbox": [
+      0.7568413156686266,
+      0.10933360246475417,
+      0.9037436358201767,
+      0.15142129447886415
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Permanent Account Number Card",
+     "page": 0,
+     "bbox": [
+      0.06762210097737006,
+      0.1343719686201697,
+      0.3091889782618379,
+      0.17545068941415967
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.07996785493685699,
+      0.39602646162537364,
+      0.11877053885542377,
+      0.422463385471361
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "R K RAO",
+     "page": 0,
+     "bbox": [
+      0.08155916410654791,
+      0.42975248559898893,
+      0.17989765009141634,
+      0.47402787001670443
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Father's Name",
+     "page": 0,
+     "bbox": [
+      0.08578154169585635,
+      0.5192410717989481,
+      0.17840869626628097,
+      0.5475247244381661
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "NITARA RAO",
+     "page": 0,
+     "bbox": [
+      0.08735706578797421,
+      0.5526325486494812,
+      0.23169016075476218,
+      0.5980002051706634
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Date of Birth",
+     "page": 0,
+     "bbox": [
+      0.09153766276746975,
+      0.6412356413985003,
+      0.17021907110946471,
+      0.668420721867381
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "06/10/1963",
+     "page": 0,
+     "bbox": [
+      0.0930976354938139,
+      0.6742975243870132,
+      0.20803967508935595,
+      0.7176936932203041
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "PHOTO",
+     "page": 0,
+     "bbox": [
+      0.7769216565669379,
+      0.4608944679966342,
+      0.8375212236538123,
+      0.49368911773413465
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Signature",
+     "page": 0,
+     "bbox": [
+      0.09993748974703362,
+      0.8192606107022427,
+      0.16788714062934257,
+      0.8483120751283771
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 0,
+     "bbox": [
+      0.7065268754773336,
+      0.7188792985415736,
+      0.9170735737662992,
+      0.7970573199638793
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only. Not a real PAN.",
+     "page": 0,
+     "bbox": [
+      0.36623820005380425,
+      0.9273663455327077,
+      0.662137385958241,
+      0.9566979240028216
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\"doc_type\": \"pan\"}",
+ "fill_raw": "{\"number\": null, \"holder\": \"R K RAO\", \"father_name\": \"NITARA RAO\", \"date_of_birth\": \"1963-10-06\"}",
+ "seconds": {
+  "read": 0.0,
+  "classify": 0.0,
+  "fill": 0.0
+ },
+ "engine": "oracle",
+ "prompt_version": "v2"
+}
