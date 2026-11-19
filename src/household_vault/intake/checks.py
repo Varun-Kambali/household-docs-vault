@@ -11,6 +11,7 @@ from PIL import Image
 from household_vault.db import Store
 from household_vault.intake.sniff import FileKind, sniff
 from household_vault.reading.render import DamagedFileError, LockedPdfError, page_count
+from household_vault.reasons import Reason
 from household_vault.vaultroot import VaultRoot
 
 Outcome = Literal["ok", "empty", "unsupported", "damaged", "locked", "duplicate"]
@@ -35,7 +36,8 @@ def _duplicate_of(
     if filed:
         return filed[0].rel_path
     for other in store.items_with_sha(sha, ["asked"]):
-        if other.id != item_id:
+        # An asked duplicate is a waiting copy of some original, never the original itself.
+        if other.id != item_id and Reason.duplicate not in other.reasons:
             return other.rel_path or other.original_name
     earlier = seen.get(sha)
     if earlier is not None and earlier != rel:

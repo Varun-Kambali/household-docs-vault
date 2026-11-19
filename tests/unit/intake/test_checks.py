@@ -9,6 +9,7 @@ from reportlab.lib.pdfencrypt import StandardEncryption
 from household_vault.db import Store
 from household_vault.intake.checks import check_file
 from household_vault.intake.sniff import FileKind
+from household_vault.reasons import Reason
 from household_vault.vaultroot import VaultRoot
 from tests.conftest import item_id, row
 
@@ -174,3 +175,13 @@ def test_a_half_synced_image_is_damaged(vault: VaultRoot, store: Store, data: by
 def test_whole_images_are_ok(vault: VaultRoot, store: Store, data: bytes) -> None:
     vault.write_atomic("Inbox/p.dat", data)
     assert check_file(vault, "Inbox/p.dat", store, {}, item_id=None).outcome == "ok"
+
+
+def test_a_waiting_copy_is_not_an_original(
+    vault: VaultRoot, store: Store, clean_pdf_bytes: bytes, now: datetime
+) -> None:  # range review I3
+    vault.write_atomic("Inbox/a.pdf", clean_pdf_bytes)
+    vault.write_atomic("Needs a look/b.pdf", clean_pdf_bytes)
+    copy = store.add_item(sha(clean_pdf_bytes), "b.pdf", "Needs a look/b.pdf", now)
+    store.update_item(copy.id, state="asked", reasons=[Reason.duplicate])
+    assert check_file(vault, "Inbox/a.pdf", store, {}, item_id=None).outcome == "ok"

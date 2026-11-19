@@ -168,9 +168,7 @@ def _run_vault(
     now_copies: list[_Entry] = []
     later_copies: list[_Entry] = []
     for n, e in enumerate(pool[::10]):
-        # A locked PDF dropped twice in one pass ends with both held as duplicates of each other
-        # once it is unlocked (see the README), so its copy always arrives after the unlock.
-        (now_copies if n % 2 == 0 and variant != "locked" else later_copies).append(e)
+        (now_copies if n % 2 == 0 else later_copies).append(e)
     for e in now_copies:
         vault.copied.add(e.key)
         _drop(state, _copy_name(e.doc.files[0]), e.files[0])
