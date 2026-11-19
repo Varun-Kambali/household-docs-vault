@@ -1,5 +1,8 @@
+import io
+
 import pypdfium2 as pdfium
 import pytest
+from reportlab.pdfgen import canvas
 
 from household_vault.reading.render import (
     DamagedFileError,
@@ -8,6 +11,14 @@ from household_vault.reading.render import (
     png_bytes,
     render_page,
 )
+
+
+def _pdf_of_size(width: float, height: float) -> bytes:
+    buf = io.BytesIO()
+    pdf = canvas.Canvas(buf, pagesize=(width, height))
+    pdf.drawString(10, 10, "big")
+    pdf.save()
+    return buf.getvalue()
 
 
 def test_render_closes_the_document(monkeypatch, clean_pdf_bytes):
@@ -33,3 +44,9 @@ def test_locked_pdf_needs_its_password(locked_pdf_bytes):
 def test_garbage_is_a_damaged_file():
     with pytest.raises(DamagedFileError):
         page_count(b"not a pdf")
+
+
+def test_a_huge_page_is_rendered_no_larger_than_5000_pixels():  # range review minor 7
+    image = render_page(_pdf_of_size(14400, 7200), 0, dpi=200)  # 200 x 100 in
+    assert max(image.size) <= 5000 and max(image.size) >= 4990
+    assert image.size[0] == 2 * image.size[1] or abs(image.size[0] - 2 * image.size[1]) <= 2

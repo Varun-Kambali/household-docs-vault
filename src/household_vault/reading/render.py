@@ -36,12 +36,21 @@ def page_count(data: bytes, password: str | None = None) -> int:
         pdf.close()
 
 
+MAX_SIDE_PIXELS = 5000  # a page's long side; a 200 x 200 in MediaBox would be gigabytes at 200 dpi
+
+
 def render_page(
     data: bytes, index: int, *, dpi: int = 200, password: str | None = None
 ) -> Image.Image:
     pdf = _open(data, password)
     try:
-        image: Image.Image = pdf[index].render(scale=dpi / 72).to_pil().convert("RGB")
+        page = pdf[index]
+        width, height = page.get_size()
+        scale = dpi / 72
+        long_side = max(width, height) * scale
+        if long_side > MAX_SIDE_PIXELS:
+            scale *= MAX_SIDE_PIXELS / long_side
+        image: Image.Image = page.render(scale=scale).to_pil().convert("RGB")
         return image
     finally:
         pdf.close()
