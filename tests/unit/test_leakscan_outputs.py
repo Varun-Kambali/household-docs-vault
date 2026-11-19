@@ -178,7 +178,7 @@ def test_the_scan_finds_digits_after_a_cvv_label(vault, settings):
 
 def test_a_card_record_is_scanned_for_any_long_digit_run(vault, settings):
     vault.mkdirs("_system/records")
-    sha = "0123456789012345678901234567890123456789012345678901234567890123"
+    sha = "a123456789012345678901234567890123456789012345678901234567890123"
     body = f'{{"doc_type": "card_front", "sha256": "{sha}", "text": "4111111111111112"}}'
     vault.write_atomic("_system/records/a.json", body.encode())
     vault.write_atomic("Home/other.txt", b"order 4111111111111112")

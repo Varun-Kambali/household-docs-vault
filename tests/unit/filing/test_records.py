@@ -180,6 +180,75 @@ def test_a_secret_digit_run_is_hidden_in_lines_and_issues():
     card.issues = {"cvv": "CVV 123 is too short", "number": "read 4111 1111 1111 1112"}
     out = stored_reading(card, card_item=True)
     text = out["pages"][0]["lines"][0]["text"]
-    assert text == "XXXX XXXX XXXX 1111 CVV XXX Main 1234"
+    assert text == "XXXX XXXX XXXX 1111 CVV XXX Main XXXX"
     assert out["issues"]["cvv"] == "CVV XXX is too short"
     assert "123" not in json.dumps(out).replace("1234", "")
+
+
+def _stored_texts(text, fill, type_, photo, *, card_item=False):
+    from household_vault.intake.sniff import FileKind
+    from household_vault.reading.engines import Engines, VisionPageReader
+    from household_vault.reading.pipeline import read_document
+    from household_vault.reading.source import DocumentSource
+    from tests.fakes import FakeModels, FakeOcr
+
+    models = FakeModels(type_=type_, fill=json.dumps(fill))
+    reading = read_document(
+        DocumentSource(FileKind.jpeg, data=photo),
+        "k" * 64,
+        Engines(VisionPageReader(FakeOcr(text=text)), models),
+        mode="dev",
+    )
+    stored = stored_reading(reading, card_item=card_item)
+    return [ln["text"] for p in stored["pages"] for ln in p["lines"]]
+
+
+def test_a_cvv_the_fill_missed_is_masked_in_stored_lines(photo):
+    texts = _stored_texts(
+        "AUTHORISED SIGNATURE 123 call 1800 22 3344 if found",
+        {"bank": "Deccan", "cvv": None},
+        "card_front",
+        photo,
+        card_item=True,
+    )
+    assert texts[0] == "AUTHORISED SIGNATURE XXX call XXXX 22 XXXX if found"
+
+
+def test_a_misread_cvv_leaves_nothing_of_the_printed_one(photo):
+    texts = _stored_texts(
+        "AUTHORISED SIGNATURE 123",
+        {"bank": "Deccan", "cvv": "128"},
+        "card_front",
+        photo,
+        card_item=True,
+    )
+    assert "123" not in texts[0] and "128" not in texts[0]
+
+
+def test_a_lone_back_typed_other_is_masked_too(photo):
+    texts = _stored_texts("AUTHORISED SIGNATURE 123 not transferable", {}, "other", photo)
+    assert texts[0] == "AUTHORISED SIGNATURE XXX not transferable"
+
+
+def test_a_glued_run_of_digits_on_a_card_page_is_masked(photo):
+    glued = "4111111111111111123"  # a number and a CVV with no space, then more digits
+    texts = _stored_texts(f"NUMBER {glued}9999", {}, "card_front", photo, card_item=True)
+    assert "4111" not in texts[0] and texts[0].endswith("9999")
+
+
+def test_a_masked_number_keeps_its_last_four_and_dates_stay(photo):
+    texts = _stored_texts(
+        "4111 1111 1111 1111 VALID THRU 08/29 and 08/2029 ref 5678",
+        {},
+        "card_front",
+        photo,
+        card_item=True,
+    )
+    assert texts[0] == "XXXX XXXX XXXX 1111 VALID THRU 08/29 and 08/2029 ref XXXX"
+
+
+def test_other_types_keep_their_numbers_in_stored_lines(photo):
+    texts = _stored_texts(
+        "Policy 123456 issued", {"policy_number": "123456"}, "health_policy", photo
+    )
+    assert texts[0] == "Policy 123456 issued"

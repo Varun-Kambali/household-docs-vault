@@ -111,3 +111,10 @@ def test_app_mode_flags_a_misread_id_and_dev_mode_does_not() -> None:
         ("gstin", one_digit_changed(gstin)),
     ):
         assert id_checksum_issue(kind, value, mode="dev") is None  # type: ignore[arg-type]
+
+
+def test_any_long_run_counts_one_group_longer_than_nineteen_digits() -> None:
+    glued = "41111111111111111239"
+    (hit,) = find_numbers(f"ref {glued} end", allow_test_cards=False, any_long_run=True)
+    assert hit.digits == glued and hit.kind == "card"
+    assert find_numbers(glued, allow_test_cards=False) == []  # Luhn-only mode is unchanged

@@ -38,6 +38,9 @@ FIELD_DIGITS = 4
 # Types whose text is masked for every long digit run: a card, or a page of unknown type.
 LONG_RUN_TYPES = frozenset({None, DocType.card_front, DocType.other})
 _DIGITS = re.compile(r"\d+")
+# On a card or unknown page every run of 3 or more digits goes, except the last four of a masked
+# card number (just after an X) and a month and year (MM/YY, MM/YYYY).
+_DATE_OR_RUN = re.compile(r"(?<!\d)(?:0[1-9]|1[0-2])/(?:\d{4}|\d{2})(?!\d)|\d{3,}")
 # A secret value this short is a CVV or a PIN, kept out of text by exact match; a longer one
 # is a card number, which `mask_card_numbers` handles and keeps the last four of.
 _SECRET_RUN_LENGTHS = range(3, 13)
@@ -128,9 +131,27 @@ def decision_from_json(data: Mapping[str, Any]) -> Decision:
     return _DECISION.validate_python(dict(data))
 
 
+def mask_digit_runs(text: str) -> str:
+    """Every run of 3 or more digits as X, for a card or unknown page, where a CVV or a glued
+    number may sit in a line no field names. Kept: the last four of an already masked card
+    number (a run of at most four digits straight after an X) and MM/YY or MM/YYYY."""
+
+    def sub(match: re.Match[str]) -> str:
+        run = match.group()
+        if "/" in run:
+            return run
+        before = text[max(0, match.start() - 2) : match.start()]
+        if len(run) <= 4 and (before.endswith("X") or before in ("X ", "X-")):
+            return run
+        return "X" * len(run)
+
+    return _DATE_OR_RUN.sub(sub, text)
+
+
 def stored_reading(reading: Reading, *, card_item: bool = False) -> dict[str, Any]:
     """The reading as the database and the record keep it: line text with card numbers masked
-    (every 13 to 19 digit run for a card, an unknown type or `other`), floats rounded. The
+    (for a card, an unknown type or `other`: every 13 to 19 digit run, then every run of 3 or more
+    digits except a masked number's last four and MM/YY dates), floats rounded. The
     secret values and the models' raw answers are never in a dump, so they are not here."""
     long_run = card_item or reading.doc_type in LONG_RUN_TYPES
     secret_runs = {
@@ -146,7 +167,8 @@ def stored_reading(reading: Reading, *, card_item: bool = False) -> dict[str, An
     def mask(text: str) -> str:
         if secret_runs:
             text = _DIGITS.sub(hide, text)
-        return mask_card_numbers(text, any_long_run=long_run)
+        text = mask_card_numbers(text, any_long_run=long_run)
+        return mask_digit_runs(text) if long_run else text
 
     dump: dict[str, Any] = reading.model_dump(mode="json")
     for page in dump["pages"]:
