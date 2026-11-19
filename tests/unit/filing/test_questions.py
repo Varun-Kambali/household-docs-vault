@@ -161,7 +161,7 @@ def test_every_label_gets_its_article():
     from household_vault.doctypes import LABEL
 
     for t in LABEL:
-        if t is DocType.pan:
+        if t in (DocType.pan, DocType.other):
             continue
         r = reading_of(t, type_check=CueCheck("conflicts", DocType.pan))
         text = question_for([Reason.type_unsure], r, HOUSEHOLD, {}).text
@@ -176,3 +176,9 @@ def test_every_label_gets_its_article():
     assert question_for([Reason.type_unsure], r, HOUSEHOLD, {}).text == (
         "Is this a utility bill or a Form 16?"
     )
+
+
+def test_other_is_never_offered_as_an_answer():
+    r = reading_of(DocType.other)
+    options = question_for([Reason.type_unsure], r, HOUSEHOLD, {}).options
+    assert "other" not in [o.value for o in options]

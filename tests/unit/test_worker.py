@@ -463,3 +463,18 @@ def test_run_forever_hands_its_stop_event_to_drain(world, monkeypatch):
     stop.set()
     t.join(5)
     assert not t.is_alive() and seen[0] is stop
+
+
+class _AnswersOther(TruthModels):
+    def classify(self, ocr_text: str, sha256: str) -> str:
+        self._gate()
+        return '{"doc_type": "other"}'
+
+
+def test_a_document_read_as_other_is_asked_about_not_failed(make_world):
+    w = make_world(models=_AnswersOther())
+    drop(w.vault, "a.pdf", fileable(DocType.health_policy).data)
+    w.drain()
+    (item,) = w.store.items(["asked"])
+    assert item.reasons == [Reason.type_unsure]
+    assert not w.store.items(["failed"])

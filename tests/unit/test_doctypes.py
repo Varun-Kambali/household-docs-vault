@@ -123,3 +123,10 @@ def _is_name_kind(schema, name):
         isinstance(m, Kind) and m.kind == "name"
         for m in typing.get_args(typing.get_args(items[0])[0])[1:]
     )
+
+
+def test_every_type_has_a_label_and_an_article():
+    from household_vault.filing.questions import ARTICLE
+
+    for t in DocType:
+        assert LABEL[t] and t in ARTICLE, t

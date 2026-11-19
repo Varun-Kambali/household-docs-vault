@@ -28,6 +28,7 @@ _AN = frozenset(
         DocType.appraisal_letter,
         DocType.experience_letter,
         DocType.itr_acknowledgement,
+        DocType.other,
     }
 )
 # The article for each label, as it is read aloud: "an RC", "a FASTag", "an ITR acknowledgement".
@@ -80,7 +81,9 @@ def _people(household: Household, first: Sequence[str] = ()) -> list[Option]:
 
 
 def _types(first: Sequence[DocType] = ()) -> list[Option]:
-    rest = [t for t in LABEL if t not in first and t is not DocType.visit_recording]
+    rest = [
+        t for t in LABEL if t not in first and t not in (DocType.visit_recording, DocType.other)
+    ]
     return [Option(t.value, LABEL[t]) for t in (*first, *rest)]
 
 

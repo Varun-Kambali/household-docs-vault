@@ -391,4 +391,5 @@ LABEL: dict[DocType, str] = {
     _D.discharge_summary: "Discharge summary",
     _D.hospital_bill: "Hospital bill",
     _D.visit_recording: "Visit recording",
+    _D.other: "Unsorted document",
 }
