@@ -182,3 +182,19 @@ def test_other_is_never_offered_as_an_answer():
     r = reading_of(DocType.other)
     options = question_for([Reason.type_unsure], r, HOUSEHOLD, {}).options
     assert "other" not in [o.value for o in options]
+
+
+def test_a_reading_typed_other_never_offers_other_even_when_the_page_names_a_type():
+    r = reading_of(DocType.other, type_check=CueCheck("conflicts", DocType.tax_proof))
+    q = question_for([Reason.type_unsure], r, HOUSEHOLD, {})
+    assert q.text == "What kind of document is this?"
+    assert "other" not in [o.value for o in q.options]
+    assert "tax_proof" in [o.value for o in q.options]
+
+
+def test_one_name_read_that_matches_one_person_is_not_called_unknown():
+    r = reading_of(DocType.marriage_certificate, parties=["Ravi Rao"])
+    q = question_for([Reason.person_unsure], r, HOUSEHOLD, {"printed": "Ravi Rao"})
+    assert q.reason is Reason.person_unsure
+    assert q.text == 'Marriage certificate for "Ravi Rao". Whose is it?'
+    assert q.options[0].value == "p1"

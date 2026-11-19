@@ -147,6 +147,8 @@ class Actions:
             doc_type = DocType(value)
         except ValueError:
             raise AnswerError("That kind of document is not one I know") from None
+        if doc_type is DocType.other:
+            raise AnswerError("Choose what kind of document it is")
         if doc_type is DocType.visit_recording:
             raise AnswerError("Recordings are filed by the medical step, not by a type answer")
         return doc_type

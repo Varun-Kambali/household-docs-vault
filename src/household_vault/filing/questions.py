@@ -81,10 +81,10 @@ def _people(household: Household, first: Sequence[str] = ()) -> list[Option]:
 
 
 def _types(first: Sequence[DocType] = ()) -> list[Option]:
-    rest = [
-        t for t in LABEL if t not in first and t not in (DocType.visit_recording, DocType.other)
-    ]
-    return [Option(t.value, LABEL[t]) for t in (*first, *rest)]
+    skip = (DocType.visit_recording, DocType.other)
+    ordered = [t for t in first if t not in skip]
+    rest = [t for t in LABEL if t not in ordered and t not in skip]
+    return [Option(t.value, LABEL[t]) for t in (*ordered, *rest)]
 
 
 def _field_text(name: str) -> str:
@@ -123,7 +123,11 @@ def question_for(
             return Question(reason, text, "person", _people(household))
         case Reason.person_unsure:
             printed = context.get("printed", "")
-            ids = match_person(printed, household).candidates
+            match = match_person(printed, household)
+            ids = match.candidates or ([match.person_id] if match.person_id else [])
+            if len(ids) == 1:
+                text = f'{label} for "{printed}". Whose is it?'
+                return Question(reason, text, "person", _people(household, ids))
             if len(ids) < 2:
                 text = f"{label} with no name I know on it. Whose is it?"
                 return Question(Reason.person_unknown, text, "person", _people(household))
@@ -136,7 +140,7 @@ def question_for(
             if (
                 reason is Reason.type_unsure
                 and reading is not None
-                and reading.doc_type is not None
+                and reading.doc_type not in (None, DocType.other)
                 and check is not None
                 and check.verdict == "conflicts"
                 and check.other is not None
