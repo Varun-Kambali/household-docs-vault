@@ -7,7 +7,7 @@ from vault_synth.sets import load_set
 
 from household_vault.doctypes import DocType
 from household_vault.reading.prompt import (
-    CLASSIFY_GUIDE,
+    CLASSIFY_GUIDE_V3,
     PROMPT_V1,
     PROMPT_V2,
     PROMPT_V3,
@@ -78,8 +78,8 @@ def test_field_descriptions_reach_the_prompt_schema():
 
 
 def test_the_type_call_carries_the_guide():
-    text = classify_prompt("page text")
-    assert CLASSIFY_GUIDE in text
+    text = classify_prompt("page text", guide=CLASSIFY_GUIDE_V3)
+    assert CLASSIFY_GUIDE_V3 in text
     for phrase in (
         "investment declaration",
         "80C or 80D",
@@ -92,7 +92,7 @@ def test_the_type_call_carries_the_guide():
         "lists charges",
     ):
         assert phrase in text, phrase
-    assert len(CLASSIFY_GUIDE.split()) < 120
+    assert len(CLASSIFY_GUIDE_V3.split()) < 120
 
 
 def test_a_fill_answer_as_printed_parses_through_the_code():

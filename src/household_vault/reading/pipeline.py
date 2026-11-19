@@ -20,7 +20,7 @@ from household_vault.reading.engines import Engines
 from household_vault.reading.heic import heic_to_png
 from household_vault.reading.lines import Line, PageText
 from household_vault.reading.ollama import ModelError
-from household_vault.reading.prompt import OCR_TEXT_LIMIT, PROMPT_V3, ocr_to_text
+from household_vault.reading.prompt import OCR_TEXT_LIMIT, PROMPT_V4, ocr_to_text
 from household_vault.reading.render import page_count, png_bytes, render_page
 from household_vault.reading.source import DocumentSource
 from household_vault.schemas import SCHEMAS
@@ -48,7 +48,7 @@ class Reading(BaseModel):
     issues: dict[str, str] = Field(default_factory=dict)
     seconds: dict[str, float] = Field(default_factory=dict)
     engine: str = ""
-    prompt_version: str = PROMPT_V3.version
+    prompt_version: str = PROMPT_V4.version
     vision_pages: int = 0
     # Left out of every dump and repr: card numbers and the models' raw answers.
     secret_values: dict[str, str] = Field(default_factory=dict, exclude=True, repr=False)
@@ -153,7 +153,7 @@ def read_document(
         english_letters=letters,
         seconds={"read": read_seconds},
         engine=engines.models.name,
-        prompt_version=PROMPT_V3.version,
+        prompt_version=PROMPT_V4.version,
     )
     if forced_type is None and letters < MIN_ENGLISH_LETTERS:
         return reading

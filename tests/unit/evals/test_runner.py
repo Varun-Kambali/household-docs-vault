@@ -107,7 +107,7 @@ def test_a_reading_run_writes_results_and_the_test_summary(
     (path,) = results.glob("*_reading_val_*.json")
     body = json.loads(path.read_text())
     assert body["dataset"]["name"] == "eval-v1" and len(body["dataset"]["manifest_sha256"]) == 64
-    assert body["prompt_version"] == "v3" and body["run"]["commit"]
+    assert body["prompt_version"] == "v4" and body["run"]["commit"]
     assert body["models"] == {"recorded_engines": ["oracle"]}
     assert not (results / "summary.md").exists()  # only the test split writes it
 

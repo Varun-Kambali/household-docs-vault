@@ -64,13 +64,19 @@ PROMPT_V3 = Prompt(
     ),
 )
 
+# The app's prompt from tuning round 2: the same system text as v3, and a type guide that tells
+# a lab report from a scan report (CLASSIFY_GUIDE_V4). v3 stays as it was: its recordings and
+# results name it.
+PROMPT_V4 = Prompt("v4", PROMPT_V3.system)
+
 CLASSIFY_SYSTEM = (
     "You sort Indian household documents by type. Read the page text and answer with the one "
     "type that fits best, or other if none fits."
 )
 
-# Types the small model confused in the first val run, described in one line each.
-CLASSIFY_GUIDE = (
+# Types the small model confused in the first val run, described in one line each. Frozen: the
+# v3 recordings were made with it. A change is a new constant below.
+CLASSIFY_GUIDE_V3 = (
     "How to tell similar types apart:\n"
     "- tax_proof: an investment declaration or proof submitted for a tax section such as "
     "80C or 80D.\n"
@@ -79,6 +85,24 @@ CLASSIFY_GUIDE = (
     "- card_welcome_letter: a bank's letter about a new card, not the card itself.\n"
     "- prescription: lists medicines a doctor prescribed. hospital_bill: lists charges."
 )
+
+# v3's guide with the lab report and scan report lines changed (the val re-run typed a lab
+# report from "Prima Scan and Labs" as a scan report). Every other line is as in v3.
+CLASSIFY_GUIDE_V4 = (
+    "How to tell similar types apart:\n"
+    "- tax_proof: an investment declaration or proof submitted for a tax section such as "
+    "80C or 80D.\n"
+    "- scan_photo: the page of ultrasound or scan images.\n"
+    "- lab_report: a laboratory's test results with units and reference ranges, even when "
+    "the lab's or centre's name says Scan.\n"
+    "- scan_report: a radiologist's written report of an imaging scan (ultrasound, X-ray, CT "
+    "or MRI), with findings and an impression; not lab test results.\n"
+    "- card_welcome_letter: a bank's letter about a new card, not the card itself.\n"
+    "- prescription: lists medicines a doctor prescribed. hospital_bill: lists charges."
+)
+
+# The guide the app uses.
+CLASSIFY_GUIDE = CLASSIFY_GUIDE_V4
 
 # How much page text the type call is shown.
 OCR_TEXT_LIMIT = 6000
@@ -183,11 +207,11 @@ def classify_schema() -> dict[str, Any]:
     }
 
 
-def classify_prompt(ocr_text: str) -> str:
+def classify_prompt(ocr_text: str, guide: str = CLASSIFY_GUIDE_V4) -> str:
     types = "\n".join(
         f"- {t.value}: {LABEL.get(t, 'Other')}" for t in DocType if t is not DocType.visit_recording
     )
     return (
-        f"Document types:\n{types}\n\n{CLASSIFY_GUIDE}\n\n"
+        f"Document types:\n{types}\n\n{guide}\n\n"
         f"The text read from the page, top to bottom:\n{ocr_text[:OCR_TEXT_LIMIT]}"
     )
