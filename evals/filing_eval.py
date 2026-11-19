@@ -28,7 +28,7 @@ from household_vault.config import Settings, load_settings
 from household_vault.db import DocumentRow, Item, ItemState
 from household_vault.doctypes import DocType
 from household_vault.filing.decide import Decision
-from household_vault.leakscan import scan_outputs
+from household_vault.leakscan import scan_outputs, waiting_original_paths
 from household_vault.people import load_household
 from household_vault.reading.engines import Engines, PageReader
 from household_vault.reading.lines import PageText
@@ -311,6 +311,16 @@ def _is_card(item: Item) -> bool:
     return (item.reading or {}).get("doc_type") == DocType.card_front.value
 
 
+def _waiting_originals(state: AppState) -> set[str]:
+    """The hashes of the originals that wait in `Inbox` on the owner's answer."""
+    waiting: set[ItemState] = {"asked", "held", "waiting_secrets"}
+    return {
+        i.sha256
+        for i in state.store.items(sorted(waiting))
+        if i.rel_path is not None and i.rel_path.startswith(f"{INBOX}/")
+    }
+
+
 def _leftover_in_inbox(vault: _Vault) -> int:
     state = vault.state
     left = 0
@@ -348,9 +358,15 @@ def run_filing(
             wanted, matched = _placement(vault)
             copies, caught = _copies_caught(vault)
             state = vault.state
+            waiting = _waiting_originals(state)
             hits = scan_outputs(
-                state.vault, state.settings.db_path, state.settings.log_dir, _secrets(entries)
+                state.vault,
+                state.settings.db_path,
+                state.settings.log_dir,
+                _secrets(entries),
+                waiting_originals=waiting,
             )
+            skipped = len(waiting_original_paths(state.vault, waiting))
             firsts = [(_filed_item(state, e), e) for e in entries]
             asked = [(i, e) for i, e in firsts if i is not None and i.state == "asked"]
             counts = {
@@ -361,6 +377,7 @@ def run_filing(
                 "copies_caught": caught,
                 "wrong_merges": _wrong_merges(vault),
                 "secrets_found": len(hits),
+                "waiting_originals_skipped": skipped,
                 "cvv_stored": _cvv_rows(vault),
                 "asked": len(asked),
                 "asked_though_clean": sum(1 for _, e in asked if not e.doc.expected_ask),
@@ -399,6 +416,7 @@ def _report(
         "exact_copies_caught": _share(totals["copies_caught"], totals["copies"]),
         "wrong_merges": totals["wrong_merges"],
         "secrets_found": totals["secrets_found"],
+        "waiting_originals_skipped": totals["waiting_originals_skipped"],
         # masked descriptions only (the last four digits of a number, never a value)
         "secret_hits": secret_hits[:20],
         "cvv_stored": totals["cvv_stored"],

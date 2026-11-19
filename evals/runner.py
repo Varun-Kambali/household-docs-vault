@@ -268,6 +268,7 @@ def write_summary(folder: Path) -> Path | None:
             f"| Exact copies caught | {_pct(f['exact_copies_caught'])} |",
             f"| Wrong merges | {f['wrong_merges']} |",
             f"| Secrets found by the leak scan | {f['secrets_found']} |",
+            f"| Waiting originals skipped by it | {f.get('waiting_originals_skipped', 0)} |",
             f"| Values stored for cvv | {f['cvv_stored']} |",
             f"| Undo then retry back to the same path | {_pct(f['undo_same_path'])} |",
             f"| Files left in Inbox, apart from held ones | {f['inbox_left']} |",

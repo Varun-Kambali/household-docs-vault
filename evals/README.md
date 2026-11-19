@@ -61,6 +61,8 @@ The filing eval adds, from the real worker:
   document. Must be 0.
 - **Secrets found**: `scan_outputs` over the vault, the database and the logs, with every card
   number of the split, every PDF password and the master password as known secrets. Must find 0.
+  An untouched original that still waits on a question in `Inbox` is skipped and counted under
+  `waiting_originals_skipped`.
   **Values stored for cvv**: rows and record files with a value for `cvv`. Must be 0.
 - **Undo then retry**: three filed documents of the clean vault are undone and retried; they must
   come back to the same path.
