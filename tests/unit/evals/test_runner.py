@@ -168,3 +168,13 @@ def test_a_run_that_places_copies_or_undoes_nothing_fails_the_smoke_check():
     for name in ("documents_placed", "exact_copies", "undo_tried"):
         misses = check_smoke(smoke_metrics(reading, {**filing, name: 0}), thresholds)
         assert misses == [f"{name}: 0 is below the minimum 1"]
+
+
+def test_the_committed_smoke_recordings_are_real_ones_with_honest_thresholds():
+    recs = [json.loads(p.read_text()) for p in SMOKE_RECORDINGS.glob("*.json")]
+    assert len(recs) == 22
+    assert all(r["engine"] != "oracle" and r["prompt_version"] in {"v3", "v4"} for r in recs)
+    thresholds = load_thresholds()["smoke"]
+    assert all(v < 1.0 for v in thresholds["min"].values() if isinstance(v, float))
+    zeros = ("silent_misfiles_per_100", "wrong_merges", "secrets_found", "cvv_stored", "inbox_left")
+    assert all(thresholds["max"][name] == 0 for name in zeros)

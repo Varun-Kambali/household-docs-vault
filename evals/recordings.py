@@ -3,7 +3,7 @@
 An oracle recording answers from the ground truth: the page lines are the truth lines, the type
 answer is the truth type and the fill answer is the truth fields. Scoring it must give a perfect
 result, which checks the scorers and the filing rules without a model. The committed smoke
-recordings are oracle ones until a run on the real models replaces them.
+recordings are real ones from a run on `val`; oracle ones serve the tests that need a perfect run.
 """
 
 from __future__ import annotations

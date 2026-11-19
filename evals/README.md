@@ -99,10 +99,12 @@ development mode only. Before a recording is written, every card-number-shaped r
 published test number is masked, so the eval set's own test numbers survive for scoring and
 nothing else does.
 
-- `evals/recordings/eval-v1/smoke/` holds **oracle** recordings of the smoke documents: the
-  truth lines, the truth type and the truth fields, read back. They score perfectly, which checks
-  the scorers and the filing rules. Task 23 replaces them with recordings of the real models on
-  `val`.
+- `evals/recordings/eval-v1/smoke/` holds the recordings of the 22 smoke documents from the real
+  run on `val` (qwen3-vl:4b and Apple Vision; prompt v3, and v4 for the three lab report files).
+  `python -m evals.import_smoke --source <val run folder>` copies them out of a run, finds each
+  smoke id by the `doc_id` in the recording, and masks every card- or Aadhaar-shaped number to
+  its last four digits. Oracle recordings (the truth read back, built by `evals/recordings.py`)
+  still serve the tests that need a perfect run.
 - `evals/recordings/eval-v1/test/` is where `make eval` records the real run.
 - `var/recordings/val/` is where `make eval-val` records. It is not committed.
 
@@ -123,8 +125,10 @@ All are `val` documents:
 
 ## Thresholds
 
-`evals/thresholds.toml` has `[smoke.min]` and `[smoke.max]`. They start at the oracle values and
-are set from the real `val` recordings in Task 23.
+`evals/thresholds.toml` has `[smoke.min]` and `[smoke.max]`. Each rate is the value measured on
+the committed smoke recordings less 2 points (the two Needs-a-look shares: plus 2 points); silent
+misfiles, wrong merges, secrets, stored CVVs and files left in Inbox are exactly 0. They guard
+against regressions and are never tuned on `test`.
 
 ## Commands
 
