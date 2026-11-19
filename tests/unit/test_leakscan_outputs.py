@@ -14,6 +14,7 @@ from household_vault.leakscan import (
     scan_outputs,
     scan_text,
     unscanned_files,
+    waiting_original_paths,
 )
 from household_vault.vaultroot import SECRETS_FILE
 
@@ -330,3 +331,67 @@ def test_the_hex_strip_does_not_hide_numbers_in_other_long_tokens(vault, setting
     assert _scan_log(vault, settings, f"{blob} then {grouped}") == [
         f"vault.log: card-shaped {'X' * 12}{card[-4:]}"
     ]
+
+
+# -- an untouched original that is waiting on a question ------------------------------------------
+
+
+def _card_pdf(number: str = VISA, note: str = "") -> bytes:
+    buf = io.BytesIO()
+    page = canvas.Canvas(buf)
+    page.drawString(72, 700, f"Card {number} {note}".strip())
+    page.save()
+    return buf.getvalue()
+
+
+def _sha(data: bytes) -> str:
+    import hashlib
+
+    return hashlib.sha256(data).hexdigest()
+
+
+def test_an_inbox_original_waiting_on_a_question_is_not_a_hit(vault, settings):
+    data = _card_pdf()
+    vault.write_atomic("Inbox/card.pdf", data)
+    assert scan_outputs(vault, settings.db_path, settings.log_dir)  # scanned by default
+    waiting = [_sha(data)]
+    assert scan_outputs(vault, settings.db_path, settings.log_dir, waiting_originals=waiting) == []
+    assert waiting_original_paths(vault, waiting) == ["Inbox/card.pdf"]
+
+
+def test_the_same_inbox_file_with_one_byte_changed_is_a_hit(vault, settings):
+    waiting = [_sha(_card_pdf())]
+    vault.write_atomic("Inbox/card.pdf", _card_pdf(note="x"))
+    assert scan_outputs(vault, settings.db_path, settings.log_dir, waiting_originals=waiting)
+    assert waiting_original_paths(vault, waiting) == []
+
+
+def test_a_leftover_inbox_original_with_nothing_waiting_is_a_hit(vault, settings):
+    vault.write_atomic("Inbox/card.pdf", _card_pdf())
+    hits = scan_outputs(vault, settings.db_path, settings.log_dir, waiting_originals=())
+    assert any(h.startswith("Inbox/card.pdf:") for h in hits)
+
+
+def test_the_same_bytes_outside_the_inbox_are_a_hit(vault, settings):
+    data = _card_pdf()
+    vault.mkdirs("Home/Cards")
+    vault.write_atomic("Home/Cards/card.pdf", data)
+    vault.mkdirs("Inbox/sub")
+    vault.write_atomic("Inbox/sub/card.pdf", data)
+    hits = scan_outputs(vault, settings.db_path, settings.log_dir, waiting_originals=[_sha(data)])
+    assert {h.split(":")[0] for h in hits} == {"Home/Cards/card.pdf", "Inbox/sub/card.pdf"}
+    assert waiting_original_paths(vault, [_sha(data)]) == []
+
+
+def test_database_log_and_record_hits_ignore_waiting_originals(vault, settings, store):
+    data = _card_pdf()
+    waiting = [_sha(data)]
+    (settings.log_dir / "vault.log").write_text(f"oops {VISA}")
+    store.conn.execute("create table notes (id integer primary key, body text)")
+    store.conn.execute("insert into notes (body) values (?)", (f"n {VISA}",))
+    vault.mkdirs("Home/Records")
+    vault.write_atomic("Home/Records/r.json", f'{{"number": "{VISA}"}}'.encode())
+    hits = scan_outputs(vault, settings.db_path, settings.log_dir, waiting_originals=waiting)
+    where = {h.split(":")[0] for h in hits}
+    assert {"vault.log", "vault.db", "Home/Records/r.json"} <= where
+    assert any(h.startswith("vault.db:notes.body") for h in hits)

@@ -9,6 +9,7 @@ test can show that no secret travelled anywhere but `Secrets.kdbx`.
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import re
 import sqlite3
@@ -18,7 +19,14 @@ from pathlib import Path
 
 from household_vault.checks import find_numbers
 from household_vault.reading.render import DamagedFileError, LockedPdfError, page_count, text_layer
-from household_vault.vaultroot import RECORDS, SECRETS_FILE, VaultGone, VaultPathError, VaultRoot
+from household_vault.vaultroot import (
+    INBOX,
+    RECORDS,
+    SECRETS_FILE,
+    VaultGone,
+    VaultPathError,
+    VaultRoot,
+)
 
 IMAGE_SUFFIXES = frozenset({".jpg", ".jpeg", ".png", ".heic", ".heif", ".gif", ".webp", ".tif"})
 _LABEL = {"card": "card-shaped", "aadhaar": "Aadhaar-shaped"}
@@ -170,6 +178,29 @@ def _pdf_text(data: bytes) -> str:
     return "\n".join(ln.text for i in range(pages) for ln in text_layer(data, i)[2])
 
 
+def _is_waiting_original(
+    vault: VaultRoot, rel: str, waiting_originals: Collection[str], data: bytes | None = None
+) -> bool:
+    """True for a file directly in `Inbox` whose bytes hash to one of `waiting_originals`."""
+    if (
+        not waiting_originals
+        or "/" in rel.removeprefix(f"{INBOX}/")
+        or not rel.startswith(f"{INBOX}/")
+    ):
+        return False
+    data = vault.read_bytes(rel) if data is None else data
+    return hashlib.sha256(data).hexdigest() in waiting_originals
+
+
+def waiting_original_paths(vault: VaultRoot, waiting_originals: Collection[str]) -> list[str]:
+    """The files `scan_outputs` skips for `waiting_originals`, as relative paths."""
+    return [
+        rel
+        for rel in _vault_files(vault)
+        if rel.startswith(f"{INBOX}/") and _is_waiting_original(vault, rel, waiting_originals)
+    ]
+
+
 def _file_text(rel: str, data: bytes) -> str:
     if Path(rel).suffix.lower() == ".pdf":
         return _pdf_text(data)
@@ -260,12 +291,16 @@ def scan_outputs(
     db_path: Path,
     log_dir: Path,
     known_secrets: Collection[str] = (),
+    *,
+    waiting_originals: Collection[str] = (),
 ) -> list[str]:
     """Masked hits for every card-shaped or Aadhaar-shaped number (test cards included) and
     every known secret in what the app wrote: each vault file except `Secrets.kdbx` (text
     files as text, PDFs through their text layer; photos are in `unscanned_files`), the
     database file with its write-ahead log as bytes and every text column in it, and every log
-    file. Secrets are compared with spaces and hyphens removed."""
+    file. Secrets are compared with spaces and hyphens removed. A file directly in `Inbox`
+    whose SHA-256 is in `waiting_originals` is skipped: the owner dropped it and it waits,
+    untouched, for his answer, so the app wrote nothing there."""
     hits: list[str] = []
 
     def check(where: str, text: str, *, card_text: bool = False) -> None:
@@ -284,7 +319,10 @@ def scan_outputs(
     for rel in _vault_files(vault):
         if _is_secrets_file(rel) or Path(rel).suffix.lower() in IMAGE_SUFFIXES:
             continue
-        check(rel, _file_text(rel, vault.read_bytes(rel)))
+        data = vault.read_bytes(rel)
+        if _is_waiting_original(vault, rel, waiting_originals, data):
+            continue
+        check(rel, _file_text(rel, data))
     for path in (db_path, db_path.with_name(db_path.name + "-wal")):
         if path.is_file():
             # Values sit side by side in the file with nothing between them, so their digits
