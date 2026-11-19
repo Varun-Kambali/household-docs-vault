@@ -587,7 +587,8 @@ def test_a_card_document_never_returns_a_long_digit_run(settings, tmp_path, cloc
         assert docs, "the statement should have been filed"
         c = TestClient(create_app(s, start_worker=False), base_url="http://localhost")
         for doc in docs:
-            body = c.get(f"/v1/documents/{doc.id}").text
+            # The document's own id and hash are hex and can hold a long run of digits by chance.
+            body = re.sub(r"[0-9a-f]{32,64}", "", c.get(f"/v1/documents/{doc.id}").text)
             assert not re.search(r"\d(?:[ -]?\d){12,18}", body), body
             assert "1111" in body
     finally:
