@@ -19,6 +19,7 @@ from household_vault.doctypes import (
     REQUIRED,
     Area,
     DocType,
+    OwnerRule,
 )
 from household_vault.filing.names import describe, folder_for
 from household_vault.people import Household, match_person
@@ -188,7 +189,7 @@ def decide(
             if rule.home:
                 owner = "home"
             else:
-                owner = _owner_from_fields(rule.owner_fields, fields, household, found, printed)
+                owner = _owner_from_fields(rule, fields, household, found, printed)
         for name in rule.linked_fields:
             for text in _names(fields.get(name)):
                 person = match_person(text, household).person_id
@@ -233,7 +234,7 @@ def decide(
 
 
 def _owner_from_fields(
-    owner_fields: tuple[str, ...],
+    rule: OwnerRule,
     fields: Mapping[str, JsonValue],
     household: Household,
     found: set[Reason],
@@ -242,10 +243,16 @@ def _owner_from_fields(
     """The first owner field with a name gives the owner: the first of its names (a list field
     has several) that matches one person. An unmatched name is `person_unknown`, a tie
     `person_unsure`; the printed name is kept for the question."""
-    for name in owner_fields:
+    for name in rule.owner_fields:
         texts = _names(fields.get(name))
         if not texts:
             continue
+        if len(texts) < rule.min_names:
+            # a page that prints two people was read as one: the other may be the household
+            # member, so the owner is asked, never taken from the one name
+            found.add(Reason.person_unsure)
+            printed[name] = texts[0]
+            return None
         tied: str | None = None
         for text in texts:
             match = match_person(text, household)

@@ -283,3 +283,27 @@ def test_an_unknown_owner_override_is_a_value_error():
         decide(
             reading_of(DocType.pan, holder="Ravi Rao"), HOUSEHOLD, TODAY, [], Overrides(owner="p9")
         )
+
+
+def test_a_marriage_certificate_with_one_party_asks_who_it_belongs_to():
+    one = decide(
+        reading_of(DocType.marriage_certificate, parties=["Ravi Rao"]), HOUSEHOLD, TODAY, []
+    )
+    assert one.outcome == "ask" and one.owner is None
+    assert one.reasons == [Reason.person_unsure] and one.printed_names == {"parties": "Ravi Rao"}
+    both = decide(
+        reading_of(DocType.marriage_certificate, parties=["Ravi Rao", "Kavita Rao"]),
+        HOUSEHOLD,
+        TODAY,
+        [],
+    )
+    assert both.outcome == "file" and both.owner == "p1" and both.linked == ["p1", "p2"]
+    # the answer settles the owner, so the same reading files once Varun has said whose it is
+    answered = decide(
+        reading_of(DocType.marriage_certificate, parties=["Ravi Rao"]),
+        HOUSEHOLD,
+        TODAY,
+        [],
+        Overrides(owner="p1"),
+    )
+    assert answered.outcome == "file" and answered.owner == "p1"
