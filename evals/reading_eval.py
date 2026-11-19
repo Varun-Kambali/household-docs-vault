@@ -23,7 +23,7 @@ from vault_synth.sets import load_set, locked_password
 
 from household_vault.filing.decide import Decision, decide
 from household_vault.intake.sniff import FileKind, sniff
-from household_vault.people import load_household
+from household_vault.people import Household, load_household
 from household_vault.reading.engines import Engines, PageReader
 from household_vault.reading.lines import PageText
 from household_vault.reading.pipeline import Reading, read_document
@@ -230,6 +230,27 @@ def load_documents(
     return docs if limit is None else docs[:limit]
 
 
+def read_and_decide(
+    doc: SynthDoc,
+    files: Sequence[bytes],
+    engines: Engines,
+    household: Household,
+) -> tuple[Reading, Decision, list[PageText]]:
+    """Read one document as the app reads it and decide where it would go. A locked document is
+    opened with its derived password. Raises `LockedPdfError` or `DamagedFileError` when the
+    reader cannot open it."""
+    capture = _Capture(engines.pages)
+    password = locked_password(doc.base_id) if doc.variant == "locked" else None
+    reading = read_document(
+        source_of(files),
+        document_key(files),
+        Engines(capture, engines.models),
+        mode="dev",
+        password=password,
+    )
+    return reading, decide(reading, household, REFERENCE_DATE, []), capture.pages
+
+
 def run_reading(
     set_dir: Path,
     split: str,
@@ -250,16 +271,8 @@ def run_reading(
         key = document_key(files)
         replay = record_to is not None and resume and (record_to / f"{key}.json").is_file()
         active = recorded_engines(record_to) if replay and record_to else engines
-        capture = _Capture(active.pages)
-        password = locked_password(doc.base_id) if doc.variant == "locked" else None
         try:
-            reading = read_document(
-                source_of(files),
-                key,
-                Engines(capture, active.models),
-                mode="dev",
-                password=password,
-            )
+            reading, decision, pages = read_and_decide(doc, files, active, household)
         except LockedPdfError:
             results.append(_undecided(doc, Reason.locked))
             continue
@@ -272,7 +285,7 @@ def run_reading(
                 Recording(
                     key=key,
                     doc_id=doc.doc_id,
-                    pages=capture.pages,
+                    pages=pages,
                     classify_raw=reading.raw.get("classify"),
                     fill_raw=reading.raw.get("fill"),
                     seconds=dict(reading.seconds),
@@ -280,9 +293,8 @@ def run_reading(
                     prompt_version=reading.prompt_version,
                 ),
             )
-        decision = decide(reading, household, REFERENCE_DATE, [])
         seconds = sum((recorded_seconds(active, key) or reading.seconds).values())
-        results.append(score_reading(doc, reading, decision, capture.pages, round(seconds, 3)))
+        results.append(score_reading(doc, reading, decision, pages, round(seconds, 3)))
     return results
 
 
