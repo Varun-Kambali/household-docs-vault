@@ -125,7 +125,9 @@ class CardIntake:
         origin: Literal["inbox", "upload"],
     ) -> Literal["filed", "waiting", "asked"]:
         self._drop_stale()
-        outcome = self._run(item, reading, source)
+        # A HEIC photo was converted to PNG once, while it was read: the mask and the image
+        # checks use those bytes, so `sips` writes one temporary copy of the card, not three.
+        outcome = self._run(item, reading, reading.converted or source)
         if isinstance(outcome, DocumentRecord):
             return "filed"
         return outcome

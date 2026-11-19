@@ -733,3 +733,33 @@ def test_a_gate_that_closes_while_the_card_is_filed_leaves_it_waiting(card_world
     card_world.drain()
     assert card_world.store.documents_of_type(DocType.card_front)
     assert card_world.store.item(item.id).state == "filed"
+
+
+def test_a_heic_card_is_converted_once_for_the_whole_card(card_world, monkeypatch):
+    """`sips` writes the unmasked photo to a temporary folder on each conversion, so the reader,
+    the mask and the image checks share one."""
+    import hashlib
+
+    from household_vault.intake.sniff import FileKind
+    from household_vault.reading import engines, pipeline
+    from household_vault.reading.pipeline import read_document
+    from household_vault.reading.source import DocumentSource
+
+    card = card_world.card(5)
+    sha = hashlib.sha256(card.data).hexdigest()
+    calls: list[int] = []
+
+    def convert(data: bytes) -> bytes:
+        calls.append(1)
+        return data  # the stand-in: the bytes are already an image
+
+    monkeypatch.setattr(engines, "heic_to_png", convert)
+    monkeypatch.setattr(pipeline, "heic_to_png", convert)
+    source = DocumentSource(FileKind.heic, data=card.data)
+    reading = read_document(
+        source, sha, card_world.cards.engines, mode="dev", forced_type=DocType.card_front
+    )
+    item = card_world.store.add_item(sha, "card.heic", None, card_world.filer.clock())
+    outcome = card_world.cards.handle(item, reading, source, "inbox")
+    assert outcome == "filed"
+    assert len(calls) == 1

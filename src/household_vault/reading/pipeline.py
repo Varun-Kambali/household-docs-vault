@@ -54,6 +54,9 @@ class Reading(BaseModel):
     # Left out of every dump and repr: card numbers and the models' raw answers.
     secret_values: dict[str, str] = Field(default_factory=dict, exclude=True, repr=False)
     raw: dict[str, str] = Field(default_factory=dict, exclude=True, repr=False)
+    # The source as read when it had to be converted (a HEIC photo as PNG), so a later step
+    # reuses the conversion. In memory only: it holds the unmasked photo.
+    converted: Any = Field(default=None, exclude=True, repr=False)
 
 
 def _english_letters(pages: list[PageText]) -> int:
@@ -167,6 +170,7 @@ def read_document(
 ) -> Reading:
     if forced_type is DocType.visit_recording:
         raise ValueError("a recording is not read as a page")
+    converted_source: DocumentSource | None = None
     if source.kind is FileKind.heic:  # converted once; the page reader and the fill share it
         files = source.images if source.images is not None else [source.data or b""]
         converted = [heic_to_png(f) for f in files]
@@ -175,6 +179,7 @@ def read_document(
             data=None if source.images is not None else converted[0],
             images=converted if source.images is not None else None,
         )
+        converted_source = source
     started = time.perf_counter()
     pages = engines.pages.read_pages(source, sha256, password)
     read_seconds = round(time.perf_counter() - started, 3)
@@ -185,6 +190,7 @@ def read_document(
         seconds={"read": read_seconds},
         engine=engines.models.name,
         prompt_version=PROMPT_V4.version,
+        converted=converted_source,
     )
     if forced_type is None and letters < MIN_ENGLISH_LETTERS:
         return reading
