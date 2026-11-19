@@ -1,12 +1,18 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from household_vault.schemas._coerce import Amount, FlexDate, Name, Text, TextItem
 
 
 class Medicine(BaseModel):
-    name: Text | None = None
-    dose: Text | None = None
-    timing: Text | None = None
+    name: Text | None = Field(
+        default=None, description="the medicine name only, without its strength"
+    )
+    dose: Text | None = Field(
+        default=None, description="the strength as printed, for example 500 mg or 60000 IU"
+    )
+    timing: Text | None = Field(
+        default=None, description="the dosing pattern as printed, for example 1-0-1"
+    )
     duration: Text | None = None
 
     def key(self) -> str:

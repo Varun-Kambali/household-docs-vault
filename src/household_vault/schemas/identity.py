@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from household_vault.schemas._coerce import (
     AadhaarNumber,
@@ -20,6 +20,15 @@ class IdentityDoc(BaseModel):
     expiry_date: FlexDate | None = None
     address: Address | None = None
     parties: list[NameItem] | None = None
+
+
+class MarriageCertificate(IdentityDoc):
+    """The two people a marriage certificate names; the other identity types have no parties."""
+
+    parties: list[NameItem] | None = Field(
+        default=None,
+        description="both people the certificate names as married, one entry each",
+    )
 
 
 class Aadhaar(BaseModel):

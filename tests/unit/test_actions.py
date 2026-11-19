@@ -402,3 +402,23 @@ def test_the_other_copy_is_found_by_a_live_check(world):
     assert world.actions.other_copy_path(dup) == filed.rel_path
     world.vault.unlink(filed.rel_path)
     assert world.actions.other_copy_path(dup) is None
+
+
+class _ReadsOther(TruthModels):
+    def classify(self, ocr_text: str, sha256: str) -> str:
+        self._gate()
+        return '{"doc_type": "other"}'
+
+
+def test_other_is_refused_as_a_type_answer_and_a_real_type_ends_the_question(make_world):
+    w = make_world(models=_ReadsOther())
+    drop(w.vault, "t.pdf", fileable(DocType.tax_proof).data)
+    w.drain()
+    (item,) = w.store.items(["asked"])
+    assert item.reasons == [Reason.type_unsure]
+    with pytest.raises(AnswerError, match="Choose what kind of document it is"):
+        w.actions.answer(item.id, "type", "other")
+    w.actions.answer(item.id, "type", DocType.tax_proof.value)
+    w.drain()
+    after = w.store.item(item.id)
+    assert after.state == "filed" or Reason.type_unsure not in after.reasons

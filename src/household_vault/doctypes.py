@@ -168,11 +168,13 @@ LIGHT: frozenset[DocType] = frozenset(t for t, a in AREA.items() if a not in _CO
 class OwnerRule:
     """Who a document belongs to. `home` documents belong to the household and are linked to
     the people named by `linked_fields`; otherwise the person named by `owner_fields` owns it.
-    A field that holds a list gives its first name that matches the household."""
+    A field that holds a list gives its first name that matches the household. A document
+    that prints two people (`min_names` 2) is not filed from a reading that holds fewer."""
 
     home: bool
     owner_fields: tuple[str, ...]
     linked_fields: tuple[str, ...]
+    min_names: int = 1
 
 
 def _rule(types: tuple[DocType, ...], rule: OwnerRule) -> dict[DocType, OwnerRule]:
@@ -200,7 +202,7 @@ OWNER: dict[DocType, OwnerRule] = {
         ),
         OwnerRule(False, ("holder",), ("holder",)),
     ),
-    **_rule((_D.marriage_certificate,), OwnerRule(False, ("parties",), ("parties",))),
+    **_rule((_D.marriage_certificate,), OwnerRule(False, ("parties",), ("parties",), min_names=2)),
     **_rule(_AREA_TYPES[Area.cards], OwnerRule(False, ("holder",), ("holder",))),
     **_rule(
         (
@@ -391,4 +393,5 @@ LABEL: dict[DocType, str] = {
     _D.discharge_summary: "Discharge summary",
     _D.hospital_bill: "Hospital bill",
     _D.visit_recording: "Visit recording",
+    _D.other: "Unsorted document",
 }

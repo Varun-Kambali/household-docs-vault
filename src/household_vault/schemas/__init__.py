@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from household_vault.doctypes import AREA, DocType
 from household_vault.schemas.card import CardDoc, CardFront
-from household_vault.schemas.identity import Aadhaar, IdentityDoc, Pan
+from household_vault.schemas.identity import Aadhaar, IdentityDoc, MarriageCertificate, Pan
 from household_vault.schemas.insurance import HealthPolicy, Policy, VehiclePolicy
 from household_vault.schemas.light import light_schema
 from household_vault.schemas.medical import (
@@ -57,12 +57,13 @@ def _schema_for(doc_type: DocType) -> type[BaseModel]:
         DocType.accident_policy,
     ):
         return Policy
+    if doc_type is DocType.marriage_certificate:
+        return MarriageCertificate
     if doc_type in (
         DocType.passport,
         DocType.voter_id,
         DocType.driving_licence,
         DocType.birth_certificate,
-        DocType.marriage_certificate,
     ):
         return IdentityDoc
     return light_schema(doc_type)
@@ -82,6 +83,7 @@ __all__ = [
     "IdentityDoc",
     "LabReport",
     "LabTest",
+    "MarriageCertificate",
     "MedicalDoc",
     "Medicine",
     "Pan",

@@ -34,7 +34,7 @@ from evals.recordings import load_smoke
 from household_vault.config import load_settings
 from household_vault.reading.engines import Engines, make_engines
 from household_vault.reading.ollama import ModelError, ModelUnavailable, OllamaClient
-from household_vault.reading.prompt import PROMPT_V2
+from household_vault.reading.prompt import PROMPT_V3
 from household_vault.reading.recorded import recorded_engines
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -78,7 +78,7 @@ def _run_facts(models: Mapping[str, Any]) -> dict[str, Any]:
     return {
         "dataset": dataset_info(SET_DIR),
         "models": dict(models),
-        "prompt_version": PROMPT_V2.version,
+        "prompt_version": PROMPT_V3.version,
         "thresholds": load_thresholds(),
     }
 

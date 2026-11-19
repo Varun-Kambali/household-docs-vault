@@ -37,9 +37,7 @@ class WarrantyCard(BaseModel):
 
 class TaxInvoice(BaseModel):
     seller: Text | None = None
-    seller_location: Address | None = Field(
-        default=None, description="city of the store, or the online platform"
-    )
+    seller_location: Address | None = Field(default=None, description="the city only, as printed")
     buyer: Name | None = None
     gstin: Gstin | None = None
     invoice_number: Identifier | None = None
@@ -68,5 +66,5 @@ class Purchase(BaseModel):
     invoice_number: Identifier | None = None
     period_start: FlexDate | None = None
     period_end: FlexDate | None = None
-    visits: Amount | None = None
+    visits: Amount | None = Field(default=None, description="the number of visits as printed")
     service_helpline: Identifier | None = None
