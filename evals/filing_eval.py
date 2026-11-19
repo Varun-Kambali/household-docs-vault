@@ -335,6 +335,7 @@ def run_filing(
     docs = load_documents(set_dir, split, only)
     engines = recorded_engines(recordings)
     totals: Counter[str] = Counter()
+    secret_hits: list[str] = []
     per_variant: dict[str, dict[str, int]] = {}
     started = datetime.now().astimezone().isoformat(timespec="seconds")
     for variant in VARIANTS:
@@ -370,9 +371,10 @@ def run_filing(
         finally:
             vault.state.gate.lock()
             vault.state.store.conn.close()
+        secret_hits += [f"{variant}: {h}" for h in hits]
         per_variant[variant] = counts
         totals.update(counts)
-    return _report(totals, per_variant, started)
+    return _report(totals, per_variant, started, secret_hits)
 
 
 def _share(hits: int, total: int) -> float:
@@ -380,7 +382,10 @@ def _share(hits: int, total: int) -> float:
 
 
 def _report(
-    totals: Counter[str], per_variant: dict[str, dict[str, int]], started: str
+    totals: Counter[str],
+    per_variant: dict[str, dict[str, int]],
+    started: str,
+    secret_hits: list[str],
 ) -> dict[str, Any]:
     documents = totals["documents"]
     return {
@@ -391,6 +396,8 @@ def _report(
         "exact_copies_caught": _share(totals["copies_caught"], totals["copies"]),
         "wrong_merges": totals["wrong_merges"],
         "secrets_found": totals["secrets_found"],
+        # masked descriptions only (the last four digits of a number, never a value)
+        "secret_hits": secret_hits[:20],
         "cvv_stored": totals["cvv_stored"],
         "needs_a_look_share": {
             "expected_clean": _share(totals["asked_though_clean"], totals["expected_clean"])

@@ -127,7 +127,7 @@ def _filing(args: argparse.Namespace) -> int:
     with tempfile.TemporaryDirectory(prefix="vault-eval-") as work:
         report = run_filing(SET_DIR, args.split, recordings, Path(work))
     rows = [{"variant": v, **counts} for v, counts in report["by_variant"].items()]
-    summary = {k: v for k, v in report.items() if k != "by_variant"}
+    summary = {k: v for k, v in report.items() if k not in ("by_variant", "secret_hits")}
     path = write_results(
         Path(args.results),
         "filing",
@@ -201,7 +201,7 @@ def _smoke(args: argparse.Namespace) -> int:
         print(f"{name}: {value:.4g}")
     if misses:
         print("\nsmoke run failed:")
-        for line in misses:
+        for line in (*misses, *filing["secret_hits"]):
             print(f"  {line}")
         return 1
     print(f"\nsmoke run passed on {len(ids)} documents")
