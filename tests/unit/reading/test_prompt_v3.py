@@ -125,3 +125,30 @@ def test_every_printed_date_and_amount_in_train_and_val_parses_to_the_truth():
                 continue
             checked[kind] += 1
     assert checked["date"] > 200 and checked["amount"] > 50
+
+
+def test_only_the_marriage_schema_talks_about_marriage():
+    passport = json.dumps(schema_for_prompt(SCHEMAS[DocType.passport], as_printed=True))
+    marriage = json.dumps(schema_for_prompt(SCHEMAS[DocType.marriage_certificate], as_printed=True))
+    assert "married" not in passport and "married" in marriage
+
+
+def test_an_existing_description_is_kept_on_an_amount():
+    props = schema_for_prompt(SCHEMAS[DocType.amc], as_printed=True)["properties"]
+    assert props["visits"] == {
+        "type": ["string", "null"],
+        "description": "the number of visits as printed",
+    }
+    assert props["amount"]["description"] == "an amount exactly as printed"
+    veh = schema_for_prompt(SCHEMAS[DocType.vehicle_policy], as_printed=True)["properties"]
+    assert veh["ncb_percent"]["description"] == "a percentage as printed, for example 20%"
+    assert veh["ncb_percent"]["type"] == ["string", "null"]
+
+
+def test_a_percentage_and_a_count_as_printed_parse():
+    parsed = parse_json_fields(
+        SCHEMAS[DocType.vehicle_policy], json.dumps({"ncb_percent": "20%"}), mode="dev"
+    )
+    assert parsed.issues == {} and parsed.model.ncb_percent == Decimal(20)  # type: ignore[attr-defined]
+    amc = parse_json_fields(SCHEMAS[DocType.amc], json.dumps({"visits": "4"}), mode="dev")
+    assert amc.issues == {} and amc.model.visits == Decimal(4)  # type: ignore[attr-defined]

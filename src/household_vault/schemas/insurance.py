@@ -34,4 +34,6 @@ class HealthPolicy(Policy):
 class VehiclePolicy(Policy):
     registration_number: Identifier | None = None
     idv: Amount | None = None
-    ncb_percent: Amount | None = None
+    ncb_percent: Amount | None = Field(
+        default=None, description="a percentage as printed, for example 20%"
+    )

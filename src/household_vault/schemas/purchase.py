@@ -66,5 +66,5 @@ class Purchase(BaseModel):
     invoice_number: Identifier | None = None
     period_start: FlexDate | None = None
     period_end: FlexDate | None = None
-    visits: Amount | None = None
+    visits: Amount | None = Field(default=None, description="the number of visits as printed")
     service_helpline: Identifier | None = None

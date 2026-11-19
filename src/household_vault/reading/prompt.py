@@ -134,7 +134,7 @@ def schema_for_prompt(schema: type[BaseModel], *, as_printed: bool = False) -> d
             prop.pop("anyOf", None)
             prop.pop("pattern", None)
             prop["type"] = ["string", "null"]
-            prop["description"] = "an amount exactly as printed"
+            prop.setdefault("description", "an amount exactly as printed")
         flat["properties"][name] = prop
     flat["required"] = list(flat["properties"])
     flat["additionalProperties"] = False

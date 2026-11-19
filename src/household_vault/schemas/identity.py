@@ -19,6 +19,12 @@ class IdentityDoc(BaseModel):
     issue_date: FlexDate | None = None
     expiry_date: FlexDate | None = None
     address: Address | None = None
+    parties: list[NameItem] | None = None
+
+
+class MarriageCertificate(IdentityDoc):
+    """The two people a marriage certificate names; the other identity types have no parties."""
+
     parties: list[NameItem] | None = Field(
         default=None,
         description="both people the certificate names as married, one entry each",
