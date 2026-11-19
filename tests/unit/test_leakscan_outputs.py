@@ -275,3 +275,16 @@ def test_a_misread_number_in_a_card_text_column_is_still_flagged(vault, settings
     )
     hits = scan_outputs(vault, settings.db_path, settings.log_dir)
     assert any(h.startswith("vault.db:items.reading") and h.endswith("1112") for h in hits)
+
+
+def test_a_document_id_is_not_an_aadhaar_number(vault, settings):
+    """A 32-digit hex id can hold a 12-digit run that passes the Aadhaar check by chance."""
+    from tests.conftest import valid_aadhaar
+
+    number = valid_aadhaar()
+    ident = f"ab{number}" + "cdef0123456789abcdef"[: 30 - len(number)]
+    assert len(ident) == 32
+    (settings.log_dir / "vault.log").write_text(f'{{"id": "{ident}"}}')
+    assert scan_outputs(vault, settings.db_path, settings.log_dir) == []
+    (settings.log_dir / "vault.log").write_text(f"number {number} here")
+    assert scan_outputs(vault, settings.db_path, settings.log_dir)

@@ -265,7 +265,9 @@ def scan_outputs(
 
     def check(where: str, text: str, *, card_text: bool = False) -> None:
         long_run = card_text or (where.startswith(f"{RECORDS}/") and _is_card_record(text))
-        scanned = _HEX_TOKEN.sub("", text) if long_run else text
+        # Hash and id tokens go first: a 32-digit hex id holds a run of 12 digits that passes the
+        # Aadhaar check now and then (about one id in a hundred), and that is no leak.
+        scanned = _HEX_TOKEN.sub("", text)
         hits.extend(
             f"{where}: {d}"
             for d in scan_text(scanned, allow_test_cards=False, any_long_run=long_run)
