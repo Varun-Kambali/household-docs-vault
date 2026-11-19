@@ -15,7 +15,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
 from household_vault.checks import find_numbers
 from household_vault.doctypes import DocType
@@ -33,9 +33,13 @@ class RecordingRefused(Exception):
 
 
 class Recording(BaseModel):
-    """One document as the reader saw it. `key` is `document_key` of its files."""
+    """One document as the reader saw it. `key` is `document_key` of its files. In the file it
+    is called `sha256`: a field named `key` holding a hash reads as an API key to the secret
+    scan."""
 
-    key: str
+    model_config = ConfigDict(populate_by_name=True)
+
+    key: str = Field(alias="sha256")
     doc_id: str
     pages: list[PageText]
     classify_raw: str | None
@@ -100,7 +104,7 @@ def write_recording(folder: Path, rec: Recording, *, mode: Literal["dev", "app"]
     folder = assert_safe_path(folder.expanduser().absolute())
     target = _path(folder, rec.key)
     folder.mkdir(parents=True, exist_ok=True)
-    text = _masked(rec).model_dump_json(indent=1) + "\n"
+    text = _masked(rec).model_dump_json(indent=1, by_alias=True) + "\n"
     temp = target.with_name(f".{target.name}.tmp")
     temp.write_text(text, encoding="utf-8")
     os.replace(temp, target)

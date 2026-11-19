@@ -122,3 +122,11 @@ def test_make_engines_builds_the_recorded_reader(tmp_path: Path) -> None:
     assert engines.models.name == "recorded"
     with pytest.raises(ConfigError):
         make_engines(load_settings(env={"VAULT_READER": "recorded"}))
+
+
+def test_the_file_names_the_hash_sha256_not_key(tmp_path: Path) -> None:
+    """A field called "key" that holds a hash is flagged by the secret scan as an API key."""
+    write_recording(tmp_path, recording())
+    body = json.loads((tmp_path / f"{KEY}.json").read_text())
+    assert body["sha256"] == KEY and "key" not in body
+    assert recorded_engines(tmp_path).models.classify("", KEY)
