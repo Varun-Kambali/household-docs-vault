@@ -178,8 +178,13 @@ def _file_text(rel: str, data: bytes) -> str:
 
 # Columns that hold the text of a card page; there every long digit run counts.
 CARD_COLUMNS = frozenset({"items.reading", "items.question", "documents.fields"})
+# An id or hash the app makes: exactly 32 (uuid4 hex) or 64 (sha256) lowercase hex characters
+# holding at least one letter a to f, so a run of digits is never one, or a dashed UUID.
 _HEX_TOKEN = re.compile(
-    r"\b(?:[0-9a-f]{32,}|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\b"
+    r"(?<![0-9a-zA-Z-])(?:"
+    r"(?=[0-9]*[a-f])(?:[0-9a-f]{32}|[0-9a-f]{64})"
+    r"|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    r")(?![0-9a-zA-Z-])"
 )
 
 

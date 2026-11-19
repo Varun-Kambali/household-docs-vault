@@ -47,3 +47,23 @@ def test_the_masked_copy_stand_in_never_hides_a_missing_recording(tmp_path):
     assert [p.lines for p in pages.read_pages(source, "b" * 64, None)] == [[]]
     with pytest.raises(ModelUnavailable):
         pages.read_pages(source, known, None)
+
+
+def test_cvv_scan_treats_only_a_missing_records_folder_as_empty():
+    from types import SimpleNamespace
+
+    from evals.filing_eval import _cvv_rows
+    from household_vault.vaultroot import VaultGone
+
+    def vault_that(error):
+        def list_dir(rel):
+            raise error
+
+        state = SimpleNamespace(
+            vault=SimpleNamespace(list_dir=list_dir), store=SimpleNamespace(items=lambda s: [])
+        )
+        return SimpleNamespace(state=state)
+
+    assert _cvv_rows(vault_that(VaultGone("nothing here"))) == 0
+    with pytest.raises(OSError):
+        _cvv_rows(vault_that(OSError("disk")))

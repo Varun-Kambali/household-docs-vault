@@ -57,6 +57,8 @@ class DocResult(BaseModel):
     owner_ok: bool | None
     linked_ok: bool
     exact: dict[str, bool]
+    # per field, [tp, fp, fn]; they sum to tp, fp and fn below
+    field_counts: dict[str, list[int]]
     tp: int
     fp: int
     fn: int
@@ -122,6 +124,28 @@ def _scoring_truth(doc: SynthDoc) -> dict[str, Any]:
     return out
 
 
+def _field_counts(
+    schema: type[BaseModel],
+    truth: Mapping[str, Any],
+    exact: Mapping[str, bool],
+    got: BaseModel,
+) -> dict[str, list[int]]:
+    """[tp, fp, fn] for each field that took part, split the way `score_fields` totals them: a
+    value where the page prints none is a false positive; a printed field is a true positive when
+    right, else a false negative, and also a false positive when something wrong was read."""
+    counts: dict[str, list[int]] = {}
+    for name in schema.model_fields:
+        value = getattr(got, name, None)
+        if truth.get(name) is None:
+            if value is not None:
+                counts[name] = [0, 1, 0]
+        elif exact[name]:
+            counts[name] = [1, 0, 0]
+        else:
+            counts[name] = [0, int(value is not None), 1]
+    return counts
+
+
 def score_reading(
     doc: SynthDoc,
     reading: Reading,
@@ -139,9 +163,11 @@ def score_reading(
         got = parse_fields(schema, raw, mode="dev").model
         fields = score_fields(schema, truth, got)
         exact, tp, fp, fn = fields.exact, fields.tp, fields.fp, fields.fn
+        counts = _field_counts(schema, truth, fields.exact, got)
     else:
         exact = {k: False for k, v in truth.items() if v is not None}
         tp, fp, fn = 0, 0, len(exact)
+        counts = {name: [0, 0, 1] for name in exact}
     recalls: list[float] = []
     if doc.variant == "photo":
         for number in sorted({ln.page for ln in doc.lines}):
@@ -159,6 +185,7 @@ def score_reading(
         owner_ok=person_ok(doc, decision),
         linked_ok=_linked_ok(doc, decision),
         exact=exact,
+        field_counts=counts,
         tp=tp,
         fp=fp,
         fn=fn,
@@ -212,6 +239,7 @@ def _undecided(doc: SynthDoc, reason: Reason) -> DocResult:
         owner_ok=None if doc.owner == "home" else False,
         linked_ok=False,
         exact={k: False for k, v in doc.fields.items() if v is not None},
+        field_counts={k: [0, 0, 1] for k, v in doc.fields.items() if v is not None},
         tp=0,
         fp=0,
         fn=sum(v is not None for v in doc.fields.values()),
@@ -325,6 +353,12 @@ def summarise_reading(results: Sequence[DocResult]) -> dict[str, Any]:
     for r in results:
         for name, ok in r.exact.items():
             by_field[f"{r.doc_type}.{name}"].append(ok)
+    counts_by_field: dict[str, list[int]] = defaultdict(lambda: [0, 0, 0])
+    for r in results:
+        for name, c in r.field_counts.items():
+            total = counts_by_field[f"{r.doc_type}.{name}"]
+            for i in range(3):
+                total[i] += c[i]
     return {
         "documents": len(results),
         "by_variant": {v: len(rs) for v, rs in sorted(by_variant.items())},
@@ -341,6 +375,10 @@ def summarise_reading(results: Sequence[DocResult]) -> dict[str, Any]:
         },
         "field_f1": {"all": field_f1(results)},
         "field_f1_by_type": {t: field_f1(rs) for t, rs in sorted(by_type.items())},
+        "field_f1_by_field": {
+            name: 2 * c[0] / d if (d := 2 * c[0] + c[1] + c[2]) else 1.0
+            for name, c in sorted(counts_by_field.items())
+        },
         "line_recall_photo": statistics.fmean(recalls) if recalls else None,
         "silent_misfiles": sum(r.silent_misfile for r in results),
         "silent_misfiles_per_100": 100 * sum(r.silent_misfile for r in results) / len(results)

@@ -277,14 +277,56 @@ def test_a_misread_number_in_a_card_text_column_is_still_flagged(vault, settings
     assert any(h.startswith("vault.db:items.reading") and h.endswith("1112") for h in hits)
 
 
-def test_a_document_id_is_not_an_aadhaar_number(vault, settings):
-    """A 32-digit hex id can hold a 12-digit run that passes the Aadhaar check by chance."""
+def _scan_log(vault, settings, text):
+    (settings.log_dir / "vault.log").write_text(text)
+    return scan_outputs(vault, settings.db_path, settings.log_dir)
+
+
+def _padded(core: str, length: int, fill: str = "cdef0123456789abcdef" * 4) -> str:
+    """`core` inside a lowercase hex token of `length` characters that holds a letter."""
+    head = "ab"
+    return (head + core + fill)[:length]
+
+
+def test_a_document_id_or_hash_is_not_an_aadhaar_number(vault, settings):
+    """A uuid4 hex id (32) and a sha256 (64) can hold a 12-digit run that passes the Aadhaar
+    check by chance. The strip applies to every caller of scan_outputs."""
+    import uuid
+
     from tests.conftest import valid_aadhaar
 
     number = valid_aadhaar()
-    ident = f"ab{number}" + "cdef0123456789abcdef"[: 30 - len(number)]
-    assert len(ident) == 32
-    (settings.log_dir / "vault.log").write_text(f'{{"id": "{ident}"}}')
-    assert scan_outputs(vault, settings.db_path, settings.log_dir) == []
-    (settings.log_dir / "vault.log").write_text(f"number {number} here")
-    assert scan_outputs(vault, settings.db_path, settings.log_dir)
+    uuid_hex = _padded(number, 32)
+    sha = _padded(number, 64)
+    dashed = str(uuid.UUID(uuid_hex))
+    assert (len(uuid_hex), len(sha)) == (32, 64) and number not in dashed
+    for token in (uuid_hex, sha):
+        assert _scan_log(vault, settings, f'{{"id": "{token}"}}') == []
+    assert _scan_log(vault, settings, f"number {number} here") == [
+        f"vault.log: Aadhaar-shaped {'X' * 8}{number[-4:]}"
+    ]
+
+
+def test_the_hex_strip_does_not_hide_numbers_in_other_long_tokens(vault, settings):
+    from household_vault.leakscan import _HEX_TOKEN
+    from tests.conftest import valid_aadhaar
+
+    card = _other_card()
+    number = valid_aadhaar()
+    # the pattern leaves alone: a bare 32-digit run (two cards pasted together), 33 and 31 hex
+    # characters, a token with a letter that is not hex or in capitals, a longer token
+    blob = ("9" * 8) + card + ("9" * 8)
+    assert len(blob) == 32
+    for token in (blob, _padded(number, 33), _padded(number, 31), "g" + _padded(number, 31)):
+        assert _HEX_TOKEN.sub("", f"x {token} y") == f"x {token} y"
+    upper = f"x {_padded(number, 32).upper()} y"
+    assert _HEX_TOKEN.sub("", upper) == upper
+    # and the scan still finds the number in a token that is not an id
+    for token in (_padded(number, 33), "g" + _padded(number, 31)):
+        found = _scan_log(vault, settings, f"x {token} y")
+        assert f"vault.log: Aadhaar-shaped {'X' * 8}{number[-4:]}" in found
+    # a card in groups beside the digit blob is still found
+    grouped = " ".join(card[i : i + 4] for i in range(0, 16, 4))
+    assert _scan_log(vault, settings, f"{blob} then {grouped}") == [
+        f"vault.log: card-shaped {'X' * 12}{card[-4:]}"
+    ]

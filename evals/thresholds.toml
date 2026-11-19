@@ -18,6 +18,10 @@ line_recall_photo = 1.0
 placement_matches_decision = 1.0
 exact_copies_caught = 1.0
 undo_same_path = 1.0
+# Counts, so that a rate over nothing cannot pass: something was filed, copied and undone.
+documents_placed = 1
+exact_copies = 1
+undo_tried = 1
 
 [smoke.max]
 silent_misfiles_per_100 = 0

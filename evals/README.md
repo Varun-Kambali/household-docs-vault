@@ -39,7 +39,9 @@ output.
   as the wrong type scores every truth field as wrong and adds no false positives. Secret fields
   (card number, CVV) are scored from `Reading.secret_values` and never written out.
 - **F1**: from `tp` (right), `fp` (a value where the page prints none, or a wrong value) and `fn`
-  (a printed field that was missed or wrong), pooled over all documents and per type.
+  (a printed field that was missed or wrong), pooled over all documents, per type
+  (`field_f1_by_type`) and per field (`field_f1_by_field`, keyed `<type>.<field>`). Each document
+  records its `[tp, fp, fn]` per field, and they add up to the document's own `tp`, `fp` and `fn`.
 - **Line recall**: the mean over photo pages of `score_page` over the page's English lines. It is
   taken from the pages as the page reader returned them.
 - **Silent misfile**: a document the app would file (`outcome == "file"`) to an owner or folder

@@ -75,6 +75,9 @@ def test_thresholds_name_only_known_metrics():
         },
         {
             "placement_matches_decision": 1.0,
+            "documents_placed": 12,
+            "exact_copies": 4,
+            "undo_tried": 1,
             "exact_copies_caught": 1.0,
             "undo_same_path": 1.0,
             "wrong_merges": 0,
@@ -135,3 +138,33 @@ def test_summary_md_leads_with_the_headline_and_copies_the_newest_test_results(t
 def test_summary_md_is_not_written_without_test_results(tmp_path):
     assert write_summary(tmp_path) is None
     assert not (tmp_path / "summary.md").exists()
+
+
+def test_a_run_that_places_copies_or_undoes_nothing_fails_the_smoke_check():
+    thresholds = load_thresholds()
+    reading = {
+        "type_accuracy": 1.0,
+        "person_accuracy": 1.0,
+        "linked_accuracy": 1.0,
+        "field_exact": {"photo": 1.0, "all": 1.0},
+        "line_recall_photo": 1.0,
+        "silent_misfiles_per_100": 0.0,
+        "needs_a_look_share": {"expected_clean": 0.0},
+    }
+    filing = {
+        "placement_matches_decision": 1.0,
+        "documents_placed": 12,
+        "exact_copies": 4,
+        "undo_tried": 1,
+        "exact_copies_caught": 1.0,
+        "undo_same_path": 1.0,
+        "wrong_merges": 0,
+        "secrets_found": 0,
+        "cvv_stored": 0,
+        "inbox_left": 0,
+        "needs_a_look_share": {"expected_clean": 0.0},
+    }
+    assert check_smoke(smoke_metrics(reading, filing), thresholds) == []
+    for name in ("documents_placed", "exact_copies", "undo_tried"):
+        misses = check_smoke(smoke_metrics(reading, {**filing, name: 0}), thresholds)
+        assert misses == [f"{name}: 0 is below the minimum 1"]

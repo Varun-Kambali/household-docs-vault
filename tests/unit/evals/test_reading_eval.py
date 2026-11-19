@@ -98,3 +98,34 @@ def test_limit_and_only_pick_documents():
         only=None,
     )
     assert len(rows) == 3
+
+
+def test_per_field_counts_sum_to_the_document_counts():
+    r = doc_result(
+        truth={"nominee": None, "policy_number": "P1", "insurer": "Acme", "agent": "Asha"},
+        got={"nominee": "X", "policy_number": "P2", "insurer": "Acme"},
+    )
+    assert r.field_counts == {
+        "nominee": [0, 1, 0],  # printed nowhere, filled in
+        "policy_number": [0, 1, 1],  # wrong value
+        "insurer": [1, 0, 0],
+        "agent": [0, 0, 1],  # printed, missed
+    }
+    assert [sum(c[i] for c in r.field_counts.values()) for i in range(3)] == [r.tp, r.fp, r.fn]
+
+
+def test_field_f1_by_field_is_keyed_by_type_and_field(eval_slice, oracle_dir):
+    rows = run_reading(
+        EVAL_V1,
+        "val",
+        recorded_engines(oracle_dir),
+        record_to=None,
+        resume=False,
+        limit=None,
+        only=eval_slice,
+    )
+    by_field = summarise_reading(rows)["field_f1_by_field"]
+    assert by_field["health_policy.policy_number"] == 1.0
+    assert all(k.count(".") == 1 for k in by_field)
+    for r in rows:
+        assert [sum(c[i] for c in r.field_counts.values()) for i in range(3)] == [r.tp, r.fp, r.fn]

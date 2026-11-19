@@ -34,7 +34,7 @@ from household_vault.reading.lines import PageText
 from household_vault.reading.recorded import recorded_engines
 from household_vault.reading.source import DocumentSource, document_key
 from household_vault.reasons import Reason
-from household_vault.vaultroot import INBOX, RECORDS
+from household_vault.vaultroot import INBOX, RECORDS, VaultGone
 
 MASTER_PASSWORD = "synthetic-master-password"
 VARIANTS = ("clean", "photo", "scan", "locked")
@@ -284,7 +284,7 @@ def _cvv_rows(vault: _Vault) -> int:
     )
     try:
         names = [e.name for e in state.vault.list_dir(RECORDS) if e.kind == "file"]
-    except Exception:
+    except VaultGone:  # no records folder yet: nothing was filed here
         names = []
     for name in names:
         record = json.loads(state.vault.read_bytes(f"{RECORDS}/{name}").decode("utf-8"))
@@ -392,7 +392,9 @@ def _report(
         "started": started,
         "documents": documents,
         "placement_matches_decision": _share(totals["filed_as_decided"], totals["should_file"]),
+        "documents_placed": totals["filed_as_decided"],
         "exact_copies": totals["copies"],
+        "undo_tried": totals["undo_tried"],
         "exact_copies_caught": _share(totals["copies_caught"], totals["copies"]),
         "wrong_merges": totals["wrong_merges"],
         "secrets_found": totals["secrets_found"],
