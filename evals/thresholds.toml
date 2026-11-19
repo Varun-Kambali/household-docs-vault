@@ -2,8 +2,9 @@
 # smoke documents (evals/datasets/eval-v1/smoke.json) with no model.
 #
 # The recordings are real: the answers of qwen3-vl:4b and Apple Vision on the `val` split, from
-# the run at commit 8cd6b3f on 2026-11-19 (prompt v3; the three lab report recordings were made
-# with prompt v4, whose fill prompt is v3's text). Each rate is the value measured on these
+# the run at commit 2e007af on 2026-11-19 with prompt v3. The app's prompt v4 has the same fill
+# text and changes only the type guide for lab and scan reports; a type-only check with v4 on
+# every val document left these 22 types unchanged. Each rate is the value measured on these
 # recordings less 2 points (the two Needs-a-look shares: plus 2 points); misfiles, wrong merges
 # and secrets are exactly 0. These are regression guards, not targets, and nothing here is tuned
 # on the `test` split. Measured: field_exact_photo 0.9798, field_exact_all 0.9866,
