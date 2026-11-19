@@ -25,6 +25,18 @@ jobs:
       - run: uv sync
       - run: make lint
       - run: make test
+  # Replays the committed recordings of the smoke documents through the reading scores and the
+  # real worker, with no model, and fails when a number is below evals/thresholds.toml.
+  eval-smoke:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          enable-cache: true
+      - run: uv sync
+      - run: make eval-smoke
   # Builds the image, runs the app in it with the stand-in reader and takes a PDF through the
   # API. The real app runs natively on a Mac.
   image:
