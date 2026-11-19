@@ -314,6 +314,16 @@ def test_the_logs_and_the_activity_never_hold_a_secret(card_world, caplog):
         assert secret not in caplog.text and secret not in entries
 
 
+def test_a_card_back_with_a_cvv_and_no_number_asks_for_both_sides(card_world):
+    card_world.models.patch = {"number": None, "cvv": "123"}
+    card_world.drop_card(base=5)
+    card_world.drain()
+    (item,) = card_world.store.items(["asked"])
+    assert item.reasons == [Reason.card_unreadable]
+    assert item.question and "back of a card" in item.question["text"]
+    assert "123" not in str(item.reading)
+
+
 def test_a_number_that_fails_the_check_asks_in_place_and_stores_nothing(card_world):
     card_world.models.patch = {"number": "4111111111111112"}
     card = card_world.drop_card(base=5)

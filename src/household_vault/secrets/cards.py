@@ -193,7 +193,9 @@ class CardIntake:
         shown = effective_reading(reading, ov)
         number = _digits(reading.secret_values.get("number"))
         if not _readable(number):
-            return self._ask(item, [Reason.card_unreadable], reading, shown, {})
+            # A CVV with no number is the back of a card: its front has to come with it.
+            context = {"why": "back_only"} if reading.secret_values.get("cvv") else {}
+            return self._ask(item, [Reason.card_unreadable], reading, shown, context)
         decision = decide(
             reading,
             self.household,

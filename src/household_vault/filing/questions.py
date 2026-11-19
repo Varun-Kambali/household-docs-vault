@@ -197,6 +197,12 @@ def question_for(
             if context.get("why") == "tilted":
                 text = "Take a straighter photo of the card."
                 return Question(reason, text, "discard", [Option("discard", "Discard")])
+            if context.get("why") == "back_only":
+                text = (
+                    "This looks like the back of a card. "
+                    "Upload the front and back together in the app, then discard this one."
+                )
+                return Question(reason, text, "discard", [Option("discard", "Discard")])
             text = (
                 "I could not read this card's number. "
                 "Upload a clearer photo in the app, then discard this one."
