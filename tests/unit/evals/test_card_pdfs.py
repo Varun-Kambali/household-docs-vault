@@ -112,3 +112,21 @@ def test_joined_bytes_do_not_depend_on_the_clock():
     time.sleep(1.1)  # pdfium stamps the current second, so a later join would differ unfixed
     assert join_pdfs(files) == first
     assert b"/CreationDate(D:20000101000000+00'00')" in first
+
+
+def test_a_card_that_is_asked_waits_in_the_inbox_and_is_counted_not_flagged(oracle_dir, tmp_path):
+    doc_id = "card_front-1-clean"
+    assert _doc(doc_id).expected_ask
+    write_recording(oracle_dir, oracle_recording(_doc(doc_id), files_as_filed(_files(doc_id))))
+    r = run_filing(EVAL_V1, "val", oracle_dir, tmp_path, only=[doc_id])
+    clean = r["by_variant"]["clean"]
+    assert (clean["asked"], clean["secrets_found"], clean["waiting_originals_skipped"]) == (1, 0, 1)
+    assert (r["secrets_found"], r["waiting_originals_skipped"]) == (0, 1)
+
+
+def test_a_card_that_files_skips_no_original(oracle_dir, tmp_path):
+    ids = ["card_front-6-clean"]
+    for doc_id in ids:
+        write_recording(oracle_dir, oracle_recording(_doc(doc_id), files_as_filed(_files(doc_id))))
+    r = run_filing(EVAL_V1, "val", oracle_dir, tmp_path, only=ids)
+    assert (r["secrets_found"], r["waiting_originals_skipped"]) == (0, 0)
