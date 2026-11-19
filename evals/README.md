@@ -83,9 +83,6 @@ possible copies of each other. In each vault:
   copy of a filed file. The clean vault keeps its first three fileable documents for the Undo step.
 - Locked PDFs are unlocked with `vault_synth.sets.locked_password(base_id)`. The truth holds no
   password.
-- A copy of a locked PDF arrives after the password has been given. Dropped in the same pass, both files end held
-  as duplicates of each other once the password is given, because each sees the other as a held
-  twin. The eval does not hide this; it avoids it so the copy check stays about copies.
 
 The filer reads a masked card copy again to check the number cannot be read. That copy is made
 during the run, so no recording of it exists; the eval's page reader answers a content hash that

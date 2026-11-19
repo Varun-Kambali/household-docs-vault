@@ -218,12 +218,12 @@ class Worker:
             return None
 
     def _notice_vanished(self, listing: Mapping[str, tuple[int, int]]) -> None:
-        """A held or waiting file that left Inbox (moved on the phone, removed in Drive) ends as
-        gone, so its name is free again. Only when Inbox was listed, and only when the file is
-        missing on two scans at least `settle_seconds` apart, so a sync that hides a file for a
-        moment does not end it."""
+        """A held, waiting or asked file that left Inbox (moved on the phone, removed in Drive)
+        ends as gone, so its name is free again. Only when Inbox was listed, and only when the file
+        is missing on two scans at least `settle_seconds` apart, so a sync that hides a file for
+        a moment does not end it."""
         now = self.clock()
-        watching = self.store.items(["held", "waiting_secrets"])
+        watching = self.store.items(["held", "waiting_secrets", "asked"])
         for item in watching:
             rel = item.rel_path
             if rel is None:
@@ -294,6 +294,12 @@ class Worker:
             self.store.finish(job.id, "done")
             if self.store.item(job.item_id).state in ("queued", "reading"):
                 self.store.requeue(job.item_id, job.kind)
+        # An upload keeps its photos in memory only and has no job while it is read, so a stop
+        # leaves it `reading` with nothing to run again: the owner is asked to upload it again.
+        active = self._active_ids()
+        for item in self.store.items(["reading", "queued"]):
+            if item.origin == "upload" and item.id not in active:
+                self._upload_again(item)
 
     def run_forever(self, stop: threading.Event) -> None:
         self.start_up()
