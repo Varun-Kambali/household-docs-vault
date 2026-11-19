@@ -270,3 +270,45 @@ def test_a_forced_other_masks_a_misread_card_number(photo):
         forced_type=DocType.other,
     )
     assert "1111 1111 1112" not in r.model_dump_json() + repr(r)
+
+
+_CARD_NUMBER = "4111 1111 1111 1111"  # a published test number
+
+
+def _fields_of(photo, type_, fill, text="Deccan Trust Bank welcome"):
+    models = FakeModels(type_=type_, fill=json.dumps(fill))
+    return read(DocumentSource(FileKind.jpeg, data=photo), FakeOcr(text=text), models)
+
+
+def test_a_full_number_in_a_card_letter_field_keeps_only_the_last_four(photo):
+    r = _fields_of(photo, "card_welcome_letter", {"bank": "Deccan", "last4": _CARD_NUMBER})
+    assert r.fields["last4"] == "1111"
+    assert "4111" not in json.dumps(r.fields)
+
+
+def test_last4_with_fewer_than_four_digits_is_dropped(photo):
+    r = _fields_of(photo, "card_statement", {"bank": "Deccan", "last4": "12"})
+    assert r.fields["last4"] is None
+
+
+def test_a_full_number_in_a_card_front_text_field_is_masked(photo):
+    r = _fields_of(
+        photo, "card_front", {"number": _CARD_NUMBER, "card_name": _CARD_NUMBER, "bank": "Deccan"}
+    )
+    dumped = json.dumps(r.fields)
+    assert _CARD_NUMBER not in dumped and "4111111111111111" not in dumped
+    assert r.fields["card_name"] == "XXXX XXXX XXXX 1111"
+    assert r.secret_values["number"]  # the real number still reaches the card step
+
+
+def test_the_read_cvv_is_blanked_wherever_it_appears_as_a_token(photo):
+    r = _fields_of(
+        photo, "card_front", {"bank": "Deccan 123 Trust", "card_name": "X1234", "cvv": "123"}
+    )
+    assert r.fields["bank"] == "Deccan XXX Trust"
+    assert r.fields["card_name"] == "X1234"  # not a whole-token match
+
+
+def test_other_types_keep_their_fields_untouched(photo):
+    r = _fields_of(photo, "health_policy", {"policy_number": "4111 1111 1111 1111"})
+    assert r.fields["policy_number"] == "4111 1111 1111 1111"

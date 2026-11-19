@@ -8,6 +8,7 @@ in `secret_values`, which no dump, repr, log or recording carries.
 from __future__ import annotations
 
 import json
+import re
 import time
 from typing import Any, Literal
 
@@ -64,6 +65,36 @@ def _english_letters(pages: list[PageText]) -> int:
         for c in ln.text
         if c.isascii() and c.isalpha()
     )
+
+
+# Types whose fields are scrubbed of card numbers and the CVV after parsing.
+_CARD_FIELD_TYPES = frozenset(
+    {DocType.card_front, DocType.card_statement, DocType.card_welcome_letter}
+)
+
+
+def _scrub_value(value: JsonValue, cvv: str | None) -> JsonValue:
+    if isinstance(value, str):
+        text = mask_card_numbers(value, any_long_run=True)
+        if cvv:
+            text = re.sub(rf"(?<!\d){re.escape(cvv)}(?!\d)", lambda m: "X" * len(m.group()), text)
+        return text
+    if isinstance(value, list):
+        return [_scrub_value(v, cvv) for v in value]
+    return value
+
+
+def scrub_card_fields(fields: dict[str, Any], cvv: str | None) -> dict[str, Any]:
+    """A card-area reading's fields with no card number and no CVV in them, wherever the model
+    put them. `last4` keeps only its last four digits (None with fewer)."""
+    out: dict[str, Any] = {}
+    for name, value in fields.items():
+        if name == "last4" and isinstance(value, str):
+            digits = "".join(c for c in value if c.isdigit())
+            out[name] = digits[-4:] if len(digits) >= 4 else None
+        else:
+            out[name] = _scrub_value(value, cvv)
+    return out
 
 
 # Types masked like an unknown type: a card, or a page the router could not place.
@@ -207,6 +238,8 @@ def read_document(
         if value is not None:
             reading.secret_values[name] = str(value)
         dumped[name] = None
+    if doc_type in _CARD_FIELD_TYPES:
+        dumped = scrub_card_fields(dumped, reading.secret_values.get("cvv"))
     reading.fields = dumped
     reading.issues = parsed.issues
     return reading

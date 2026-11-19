@@ -548,3 +548,46 @@ def test_a_chunked_body_over_the_limit_is_stopped_early(state):
     status, asked = _drive(create_app(state, start_worker=False), [head] + [chunk] * total)
     assert status == 413
     assert asked <= _MAX_BODY_BYTES // len(chunk) + 2  # it did not read the rest
+
+
+def _Pages(ocr):
+    from household_vault.reading.engines import VisionPageReader
+
+    return VisionPageReader(ocr)
+
+
+def test_a_card_document_never_returns_a_long_digit_run(settings, tmp_path, clock, photo):
+    import json
+    import re
+
+    from tests.fakes import FakeModels, FakeOcr
+
+    people = tmp_path / "household.json"
+    people.write_text(HOUSEHOLD.model_dump_json())
+    ready = settings.model_copy(update={"household_path": people, "settle_seconds": 0.0})
+    number = "4111 1111 1111 1111"
+    fill = json.dumps(
+        {
+            "bank": "Deccan Trust Bank",
+            "card_name": number,
+            "holder": "Ravi Kumar Rao",
+            "last4": number,
+            "statement_date": "2026-10-01",
+        }
+    )
+    models = FakeModels(type_="card_statement", fill=fill)
+    ocr = FakeOcr(text="Card statement Ravi Kumar Rao " + number)
+    s = build_app_state(ready, engines=Engines(_Pages(ocr), models), clock=clock)
+    try:
+        drop(s.vault, "statement.jpg", photo)
+        s.worker.drain()
+        docs = s.store.documents_of_type(DocType.card_statement)
+        assert docs, "the statement should have been filed"
+        c = TestClient(create_app(s, start_worker=False), base_url="http://localhost")
+        for doc in docs:
+            body = c.get(f"/v1/documents/{doc.id}").text
+            assert not re.search(r"\d(?:[ -]?\d){12,18}", body), body
+            assert "1111" in body
+    finally:
+        s.gate.lock()
+        s.store.conn.close()
