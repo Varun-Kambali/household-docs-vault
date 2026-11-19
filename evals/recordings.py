@@ -8,13 +8,17 @@ recordings are oracle ones until a run on the real models replaces them.
 
 from __future__ import annotations
 
+import io
 import json
+import re
 from collections.abc import Sequence
 from pathlib import Path
 
+import pypdfium2 as pdfium
 from vault_synth.model import SynthDoc
 from vault_synth.sets import load_set, lowest_base
 
+from household_vault.intake.sniff import FileKind, sniff
 from household_vault.reading.lines import Line, PageText
 from household_vault.reading.recorded import Recording, write_recording
 from household_vault.reading.source import document_key
@@ -41,6 +45,53 @@ SMOKE_RULE = (
     "PDFs of the outsider document (prescription) and the missing-field document (pan) that the "
     "generator guarantees in val, and of health_policy; the scans of aadhaar and tax_invoice."
 )
+
+
+_PDF_DATE = re.compile(rb"/CreationDate\(D:\d{14}[+-]\d\d'\d\d'\)")
+_FIXED_DATE = b"/CreationDate(D:20000101000000+00'00')"
+_PDF_ID = re.compile(rb"/ID\[<[0-9A-Fa-f]+><[0-9A-Fa-f]+>\]")
+
+
+def _fixed_id(pdf: bytes) -> bytes:
+    def zeros(m: re.Match[bytes]) -> bytes:
+        first, second = re.findall(rb"<([0-9A-Fa-f]+)>", m.group())
+        return b"/ID[<" + b"0" * len(first) + b"><" + b"0" * len(second) + b">]"
+
+    out, n = _PDF_ID.subn(zeros, pdf)
+    out, dates = _PDF_DATE.subn(lambda _m: _FIXED_DATE, out)
+    if n != 1 or dates != 1:
+        raise ValueError("expected one /ID and one /CreationDate in the joined PDF")
+    return out
+
+
+def join_pdfs(files: Sequence[bytes]) -> bytes:
+    """The pages of each PDF, in order, as one PDF: what a scanner saves for a card's two sides.
+    The same files always give the same bytes, because the document key is the SHA-256 of the
+    file the app sees. pdfium writes a random /ID and the current time as /CreationDate, so both
+    are overwritten with fixed values of the same length (the byte offsets stay right); nothing
+    else it writes varies (tested)."""
+    joined = pdfium.PdfDocument.new()
+    try:
+        for data in files:
+            part = pdfium.PdfDocument(data)
+            try:
+                joined.import_pages(part)
+            finally:
+                part.close()
+        out = io.BytesIO()
+        joined.save(out)
+        return _fixed_id(out.getvalue())
+    finally:
+        joined.close()
+
+
+def files_as_filed(files: Sequence[bytes]) -> list[bytes]:
+    """The files of a document as the app gets them. A document of several PDFs (a card's front
+    and back) is one multi-page PDF in the Inbox, so the evals join it. Photos with a back stay
+    separate, as the card upload takes them; a single file is unchanged."""
+    if len(files) > 1 and all(sniff(f[:64]) is FileKind.pdf for f in files):
+        return [join_pdfs(files)]
+    return list(files)
 
 
 def _pages(doc: SynthDoc) -> list[PageText]:
@@ -109,5 +160,5 @@ def write_oracle_recordings(set_dir: Path, ids: Sequence[str], folder: Path) -> 
     by_id = {d.doc_id: d for d in load_set(set_dir)}
     for doc_id in ids:
         doc = by_id[doc_id]
-        files = [(set_dir / name).read_bytes() for name in doc.files]
+        files = files_as_filed([(set_dir / name).read_bytes() for name in doc.files])
         write_recording(folder, oracle_recording(doc, files))
