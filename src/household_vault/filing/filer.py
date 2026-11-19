@@ -582,6 +582,18 @@ class Filer:
                 dest = free
             self.vault.move(src, dest)
         elif not at_dest:
+            if self.vault.exists(src):
+                # other bytes were put at the source during the stop: this item's file is lost,
+                # and the new one at that name is a file of its own, read on the next scan
+                self.store.update_item(item.id, state="gone", target=None, pending=None)
+                self.activity.record(
+                    item.id,
+                    Step.gone,
+                    "gone",
+                    "The file was replaced while the app was stopped, so nothing was filed",
+                    file=src,
+                )
+                return True
             raise ValueError("neither the source nor the destination holds the file")
         self._finish_move(item.id)
         return True

@@ -256,6 +256,25 @@ def test_a_move_that_lost_both_files_is_reported_and_left(vault, store, activity
     assert filer.activity.entries()[0].step is Step.error
 
 
+def test_a_move_whose_source_was_replaced_ends_gone_and_frees_the_name(
+    vault, store, activity, clock
+):  # range review minor 5
+    item = make_item(vault, store, "policy.pdf", DATA)
+    filer = Filer(vault, store, activity, HOUSEHOLD, clock)
+    with pytest.MonkeyPatch.context() as mp:
+        arm_move(Kill(mp), vault, filer, "before_move")
+        with pytest.raises(Killed):
+            filer.to_needs_a_look(item, [Reason.person_unknown], QUESTION, READING)
+    vault.write_atomic("Inbox/policy.pdf", b"a different file, dropped while the app was down")
+    assert fresh_filer(vault, store, HOUSEHOLD).recover() == [item.id]
+    done = store.item(item.id)
+    assert (done.state, done.target, done.pending) == ("gone", None, None)
+    assert filer.activity.entries()[0].step is Step.gone
+    assert store.item_at("Inbox/policy.pdf") is None  # the new file there can be read
+    assert vault.read_bytes("Inbox/policy.pdf").startswith(b"a different file")
+    assert fresh_filer(vault, store, HOUSEHOLD).recover() == []
+
+
 def test_a_move_whose_destination_was_taken_finishes_under_a_free_name(
     vault, store, activity, clock
 ):
