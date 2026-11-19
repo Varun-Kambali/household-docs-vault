@@ -397,7 +397,7 @@ def test_a_successful_job_resets_the_copy_mismatch_count(make_world, monkeypatch
     assert not item.overrides.get("copy_mismatches")
 
 
-@pytest.mark.parametrize("state", ["held", "waiting_secrets"])
+@pytest.mark.parametrize("state", ["held", "waiting_secrets", "asked"])
 def test_a_file_deleted_from_needs_a_look_ends_gone(world, asked_item, state):
     world.store.update_item(asked_item.id, state=state)
     world.vault.unlink(asked_item.rel_path)
@@ -478,3 +478,21 @@ def test_a_document_read_as_other_is_asked_about_not_failed(make_world):
     (item,) = w.store.items(["asked"])
     assert item.reasons == [Reason.type_unsure]
     assert not w.store.items(["failed"])
+
+
+def test_an_upload_stopped_mid_read_asks_for_the_upload_again(world):  # range review minor 3
+    item = world.store.add_item("a" * 64, "card upload", None, world.clock(), origin="upload")
+    world.store.update_item(item.id, state="reading")  # what upload() leaves when the app stops
+    world.worker.start_up()
+    stopped = world.store.item(item.id)
+    assert stopped.state == "asked"
+    assert "Upload it again" in stopped.question["text"]
+    assert world.store.item(item.id).reasons == [stopped.reasons[0]]
+
+
+def test_an_upload_waiting_in_the_queue_is_left_to_its_job(world):
+    item = world.store.add_item("b" * 64, "card upload", None, world.clock(), origin="upload")
+    world.store.update_item(item.id, state="queued")
+    world.store.enqueue(item.id, "process")
+    world.worker.start_up()
+    assert world.store.item(item.id).state == "queued"

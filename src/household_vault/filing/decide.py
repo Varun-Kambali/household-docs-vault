@@ -175,7 +175,9 @@ def decide(
         and reading.type_check.verdict == "conflicts"
     ):
         found.add(Reason.type_unsure)
-    if "_json" in reading.issues:
+    if "_json" in reading.issues and ov.doc_type is None:
+        # once the owner has named the type, an unreadable fill counts as "no fields read": the
+        # missing-field and person questions follow, so what is typed can still file the paper
         found.add(Reason.read_failed)
 
     last4 = _last4(reading.secret_values) if doc_type is DocType.card_front else None
