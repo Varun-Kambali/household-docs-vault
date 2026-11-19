@@ -1,0 +1,442 @@
+{
+ "key": "390d53caf442d2f8c76731fc3521cc9cf2b67576e86cd2241cc416ce63ade902",
+ "doc_id": "life_policy-1-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1000,
+   "height": 1400,
+   "lines": [
+    {
+     "text": "Insurer",
+     "page": 0,
+     "bbox": [
+      0.09354175405533138,
+      0.1654858870273974,
+      0.13705253317124833,
+      0.1783497082879249
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Western Ghats Life Assurance Limited",
+     "page": 0,
+     "bbox": [
+      0.34382718925813555,
+      0.14853240992560235,
+      0.6366032483038643,
+      0.17123851344373536
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Product",
+     "page": 0,
+     "bbox": [
+      0.09362255001128525,
+      0.1929675826403827,
+      0.14175801510182554,
+      0.20591593168407923
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Shield Cover",
+     "page": 0,
+     "bbox": [
+      0.343647174262948,
+      0.18313232815729263,
+      0.4405071864454549,
+      0.19906469304886293
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Policy number",
+     "page": 0,
+     "bbox": [
+      0.09370317875874448,
+      0.21926060303831524,
+      0.18221016996728762,
+      0.23342513068988985
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "PL/NY304449",
+     "page": 0,
+     "bbox": [
+      0.34346753506040684,
+      0.21094336051927198,
+      0.4428918310188875,
+      0.22683278375056543
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Policyholder",
+     "page": 0,
+     "bbox": [
+      0.09378364081623346,
+      0.24721318001273138,
+      0.1697576735528796,
+      0.26087748206630545
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Mrs Kavita Rao",
+     "page": 0,
+     "bbox": [
+      0.3432882704750026,
+      0.23832164621523177,
+      0.4575688724810909,
+      0.25454296725555026
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Insured persons",
+     "page": 0,
+     "bbox": [
+      0.09386393670013475,
+      0.2739906913239089,
+      0.19387273099879884,
+      0.2882731618444774
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Mrs Kavita Rao",
+     "page": 0,
+     "bbox": [
+      0.12481159626051495,
+      0.28990168346873485,
+      0.23700180561466824,
+      0.30573025577608426
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "R K Rao",
+     "page": 0,
+     "bbox": [
+      0.1248437604636771,
+      0.3097075660578734,
+      0.18508434241009813,
+      0.32395874045747447
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "S N Rao",
+     "page": 0,
+     "bbox": [
+      0.12487588042141363,
+      0.32799357234642645,
+      0.18422178559645946,
+      0.34216216168995206
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Nominee",
+     "page": 0,
+     "bbox": [
+      0.0940938663734358,
+      0.3539951415268941,
+      0.14965453663789952,
+      0.3667216464521415
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Edhitha Pandey",
+     "page": 0,
+     "bbox": [
+      0.34259713699425226,
+      0.3455965268088475,
+      0.46080820130048034,
+      0.36137631381339386
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Sum insured",
+     "page": 0,
+     "bbox": [
+      0.09417352317281344,
+      0.38067034800276345,
+      0.17209056111763602,
+      0.39389937307643635
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 10,00,000",
+     "page": 0,
+     "bbox": [
+      0.3424196819936527,
+      0.3736752369782677,
+      0.4412470284998696,
+      0.38880677711099826
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Premium",
+     "page": 0,
+     "bbox": [
+      0.09425301628565827,
+      0.4084552661733386,
+      0.14968570954301294,
+      0.42102127592616606
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 14,160",
+     "page": 0,
+     "bbox": [
+      0.34224259480215224,
+      0.40172315702006256,
+      0.4190788530171251,
+      0.41618038557804893
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Premium frequency",
+     "page": 0,
+     "bbox": [
+      0.09433234621599092,
+      0.4340437885056973,
+      0.21461187577370658,
+      0.44808752682015063
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Monthly",
+     "page": 0,
+     "bbox": [
+      0.3420658742774036,
+      0.4295436462257376,
+      0.40218709923136264,
+      0.44349731579515433
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Start date",
+     "page": 0,
+     "bbox": [
+      0.09441151346576489,
+      0.46258412818884886,
+      0.15438492231299053,
+      0.47509829687281624
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "13/01/2026",
+     "page": 0,
+     "bbox": [
+      0.341889519281785,
+      0.45646862335699384,
+      0.42032379259356073,
+      0.47075774361244405
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "End date",
+     "page": 0,
+     "bbox": [
+      0.09449051853487696,
+      0.48972475489286743,
+      0.1497944890929179,
+      0.5020537564978008
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "12/01/2027",
+     "page": 0,
+     "bbox": [
+      0.3417135286823767,
+      0.48377818556007396,
+      0.42006591252710124,
+      0.4979618441533411
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Next premium due",
+     "page": 0,
+     "bbox": [
+      0.09456936192117804,
+      0.5154910062011355,
+      0.2075342975092269,
+      0.5289540754115384
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "16/12/2026",
+     "page": 0,
+     "bbox": [
+      0.34153790135093526,
+      0.5110311895560231,
+      0.4198085665312397,
+      0.5251097918183125
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Agent",
+     "page": 0,
+     "bbox": [
+      0.09464804412048326,
+      0.5440117470750319,
+      0.13066040109908103,
+      0.5557994226368206
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Anand Insurance Services",
+     "page": 0,
+     "bbox": [
+      0.3413626361638702,
+      0.5358669975257552,
+      0.5374747869207983,
+      0.5522017602885967
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Claims helpline",
+     "page": 0,
+     "bbox": [
+      0.09472656562658269,
+      0.5697662572962403,
+      0.18821213948121157,
+      0.5825899665063371
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "1800 723 5037",
+     "page": 0,
+     "bbox": [
+      0.34118773200222013,
+      0.5648713291671477,
+      0.44540354481848476,
+      0.5792379225299059
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Western Ghats Life Assurance Limited",
+     "page": 0,
+     "bbox": [
+      0.09323047781657509,
+      0.04420107331596593,
+      0.5282860423556943,
+      0.07979475277023416
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Life Insurance Policy Schedule",
+     "page": 0,
+     "bbox": [
+      0.09332547674245609,
+      0.08446211590665259,
+      0.3292020283963835,
+      0.1071029625414654
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.09486359307226667,
+      0.6111003185856798,
+      0.5129576494154748,
+      0.6293420515658968
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.09490916031481357,
+      0.6264965111017132,
+      0.5371150916054063,
+      0.6448890518110801
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.09579337786176774,
+      0.9346228296382683,
+      0.3117648077908143,
+      0.9453822000555275
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\"doc_type\": \"life_policy\"}",
+ "fill_raw": "{\"insurer\": \"Western Ghats Life Assurance Limited\", \"product\": \"Shield Cover\", \"policy_number\": \"PL/NY304449\", \"policyholder\": \"Mrs Kavita Rao\", \"insured\": [\"Mrs Kavita Rao\", \"R K Rao\", \"S N Rao\"], \"nominee\": \"Edhitha Pandey\", \"sum_insured\": \"1000000\", \"premium\": \"14160\", \"premium_frequency\": \"Monthly\", \"start_date\": \"2026-01-13\", \"end_date\": \"2027-01-12\", \"premium_due_date\": \"2026-12-16\", \"agent\": \"Anand Insurance Services\", \"claim_helpline\": \"1800 723 5037\"}",
+ "seconds": {
+  "read": 0.0,
+  "classify": 0.0,
+  "fill": 0.0
+ },
+ "engine": "oracle",
+ "prompt_version": "v2"
+}

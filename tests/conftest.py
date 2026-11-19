@@ -26,6 +26,7 @@ from household_vault.checks import gstin_check_char, verhoeff_valid
 from household_vault.config import Settings, load_settings
 from household_vault.db import DocumentRow, Item, Store, connect, migrate
 from household_vault.doctypes import REQUIRED, DocType
+from household_vault.filing.decide import Decision
 from household_vault.filing.filer import Filer
 from household_vault.filing.records import stored_reading
 from household_vault.reading.cues import CueCheck
@@ -425,3 +426,89 @@ def everything_written(world: World) -> bytes:
     for root in (world.vault.root, world.db_dir):
         out.extend(p.read_bytes() for p in sorted(root.rglob("*")) if p.is_file())
     return b"\n".join(out)
+
+
+# -- the evals (Task 22) --------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="session")
+def eval_slice() -> list[str]:
+    """The ids of the smoke.json documents (val documents)."""
+    from evals.recordings import load_smoke
+
+    return load_smoke(EVAL_V1)
+
+
+@pytest.fixture
+def oracle_dir(tmp_path: Path, eval_slice: list[str]) -> Path:
+    """Oracle recordings (the truth, as the reader would have recorded it) of the eval slice,
+    in a temp folder."""
+    from evals.recordings import write_oracle_recordings
+
+    folder = tmp_path / "oracle"
+    write_oracle_recordings(EVAL_V1, eval_slice, folder)
+    return folder
+
+
+def truth_doc(**changes: Any) -> SynthDoc:
+    """A truth record of a health policy owned by p1; `changes` replace its fields."""
+    values: dict[str, Any] = {
+        "doc_id": "health_policy-1-clean",
+        "base_id": "health_policy-1",
+        "doc_type": DocType.health_policy,
+        "person": "Ravi Kumar Rao",
+        "variant": "clean",
+        "files": ["health_policy-1-clean.pdf"],
+        "fields": {},
+        "printed": {},
+        "lines": [],
+        "field_lines": {},
+        "set_name": "eval-v1",
+        "split": "val",
+        "owner": "p1",
+        "linked_people": ["p1"],
+        "area": "insurance",
+        "folder": "Ravi Kumar Rao/Insurance",
+        "expected_ask": [],
+    }
+    values.update(changes)
+    return SynthDoc.model_validate(values)
+
+
+def _decision(
+    outcome: str, reasons: list[Reason], owner: str | None, folder: str | None
+) -> Decision:
+    return Decision(
+        outcome=outcome,  # type: ignore[arg-type]
+        reasons=reasons,
+        owner=owner,
+        linked=[] if owner is None else [owner],
+        area=None,
+        folder=folder,
+        doc_date=date(2026, 11, 12),
+        date_source="received",
+        description="Health policy",
+        possible_copy_of=None,
+        printed_names={},
+        last4=None,
+    )
+
+
+def asked(*reasons: Reason, owner: str | None = None) -> Decision:
+    """A decision to ask the owner about `reasons`."""
+    return _decision("ask", list(reasons), owner, None)
+
+
+def filed_to(owner: str, folder: str) -> Decision:
+    """A decision to file to this owner and folder."""
+    return _decision("file", [], owner, folder)
+
+
+def doc_result(truth: dict[str, Any], got: dict[str, Any]) -> Any:
+    """The eval's score of a health policy with these truth fields and these read fields,
+    filed to its owner."""
+    from evals.reading_eval import score_reading
+
+    doc = truth_doc(fields=truth)
+    reading = Reading(pages=[], english_letters=200, doc_type=DocType.health_policy, fields=got)
+    return score_reading(doc, reading, filed_to("p1", "Ravi Kumar Rao/Insurance"), [], 0.0)

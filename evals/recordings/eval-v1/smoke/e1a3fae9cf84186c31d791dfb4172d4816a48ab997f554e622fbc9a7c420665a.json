@@ -1,0 +1,214 @@
+{
+ "key": "e1a3fae9cf84186c31d791dfb4172d4816a48ab997f554e622fbc9a7c420665a",
+ "doc_id": "passport-1-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1000,
+   "height": 1400,
+   "lines": [
+    {
+     "text": "Holder",
+     "page": 0,
+     "bbox": [
+      0.08274611187942815,
+      0.13024403740356874,
+      0.12561350990022294,
+      0.14234230062112868
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Master Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.34089021584274937,
+      0.13591910051305675,
+      0.47380741234958146,
+      0.15125626272549794
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Number",
+     "page": 0,
+     "bbox": [
+      0.08239171853711241,
+      0.15730166801842357,
+      0.1341582196314484,
+      0.16961552284236417
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "ZZG0558911",
+     "page": 0,
+     "bbox": [
+      0.34070576400451263,
+      0.1630045027075459,
+      0.43600736872045925,
+      0.17753791018160875
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Date of birth",
+     "page": 0,
+     "bbox": [
+      0.0820368578133492,
+      0.18439497310603079,
+      0.16131354500057565,
+      0.1973396545020638
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "13/01/1962",
+     "page": 0,
+     "bbox": [
+      0.3405210686836821,
+      0.19012564772607424,
+      0.4215216874185484,
+      0.20436650029030448
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Date of issue",
+     "page": 0,
+     "bbox": [
+      0.08168152878293963,
+      0.2115240232661166,
+      0.16666702115088233,
+      0.22461824009926046
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "05/01/2020",
+     "page": 0,
+     "bbox": [
+      0.34033612939783175,
+      0.21728260636653685,
+      0.4213902484253731,
+      0.23154864703551947
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Valid until",
+     "page": 0,
+     "bbox": [
+      0.0813257305182412,
+      0.23868888928481918,
+      0.14452793939552266,
+      0.25131773193729545
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "02/01/2030",
+     "page": 0,
+     "bbox": [
+      0.34015094566326,
+      0.2444754496139304,
+      0.4212586357032588,
+      0.2587667325552576
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Republic of India",
+     "page": 0,
+     "bbox": [
+      0.0840033848849565,
+      0.026852338384060905,
+      0.27865426087614303,
+      0.04957714324399041
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Passport (Specimen)",
+     "page": 0,
+     "bbox": [
+      0.08365652993715889,
+      0.058264229390392414,
+      0.2491421972643561,
+      0.07545656264964089
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.08070195166107569,
+      0.2863138003071286,
+      0.5184890632098286,
+      0.30743369695116274
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.08049370453805652,
+      0.30221325958426826,
+      0.5436081337335796,
+      0.3239388334642783
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 0,
+     "bbox": [
+      0.37508922300215325,
+      0.8575731295992245,
+      0.6158053764581992,
+      0.8994950977865693
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07241503839290901,
+      0.9202961711883991,
+      0.30644986672835106,
+      0.9363871065009602
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\"doc_type\": \"passport\"}",
+ "fill_raw": "{\"holder\": \"Master Kiran Rao\", \"number\": \"ZZG0558911\", \"date_of_birth\": \"1962-01-13\", \"issue_date\": \"2020-01-05\", \"expiry_date\": \"2030-01-02\", \"address\": null, \"parties\": null}",
+ "seconds": {
+  "read": 0.0,
+  "classify": 0.0,
+  "fill": 0.0
+ },
+ "engine": "oracle",
+ "prompt_version": "v2"
+}
