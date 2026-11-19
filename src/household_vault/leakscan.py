@@ -14,7 +14,8 @@ import logging
 import re
 import sqlite3
 import weakref
-from collections.abc import Callable, Collection
+from collections.abc import Callable, Collection, Mapping
+from functools import partial
 from pathlib import Path
 
 from household_vault.checks import find_numbers
@@ -179,25 +180,28 @@ def _pdf_text(data: bytes) -> str:
 
 
 def _is_waiting_original(
-    vault: VaultRoot, rel: str, waiting_originals: Collection[str], data: bytes | None = None
+    rel: str, waiting_originals: Mapping[str, str], data: Callable[[], bytes]
 ) -> bool:
-    """True for a file directly in `Inbox` whose bytes hash to one of `waiting_originals`."""
-    if (
-        not waiting_originals
-        or "/" in rel.removeprefix(f"{INBOX}/")
-        or not rel.startswith(f"{INBOX}/")
-    ):
+    """True for a file directly in `Inbox` that is a waiting item's own path and whose current
+    bytes hash to that item's SHA-256."""
+    expected = waiting_originals.get(rel)
+    if expected is None or "/" in rel.removeprefix(f"{INBOX}/") or not rel.startswith(f"{INBOX}/"):
         return False
-    data = vault.read_bytes(rel) if data is None else data
-    return hashlib.sha256(data).hexdigest() in waiting_originals
+    return hashlib.sha256(data()).hexdigest() == expected
 
 
-def waiting_original_paths(vault: VaultRoot, waiting_originals: Collection[str]) -> list[str]:
-    """The files `scan_outputs` skips for `waiting_originals`, as relative paths."""
+def _is_scanned_as_text(rel: str) -> bool:
+    return not _is_secrets_file(rel) and Path(rel).suffix.lower() not in IMAGE_SUFFIXES
+
+
+def waiting_original_paths(vault: VaultRoot, waiting_originals: Mapping[str, str]) -> list[str]:
+    """The files `scan_outputs` skips for `waiting_originals`, as relative paths. Photos and
+    the secrets file are not counted: the scan never reads them."""
     return [
         rel
         for rel in _vault_files(vault)
-        if rel.startswith(f"{INBOX}/") and _is_waiting_original(vault, rel, waiting_originals)
+        if _is_scanned_as_text(rel)
+        and _is_waiting_original(rel, waiting_originals, partial(vault.read_bytes, rel))
     ]
 
 
@@ -292,15 +296,17 @@ def scan_outputs(
     log_dir: Path,
     known_secrets: Collection[str] = (),
     *,
-    waiting_originals: Collection[str] = (),
+    waiting_originals: Mapping[str, str] | None = None,
 ) -> list[str]:
     """Masked hits for every card-shaped or Aadhaar-shaped number (test cards included) and
     every known secret in what the app wrote: each vault file except `Secrets.kdbx` (text
     files as text, PDFs through their text layer; photos are in `unscanned_files`), the
     database file with its write-ahead log as bytes and every text column in it, and every log
     file. Secrets are compared with spaces and hyphens removed. A file directly in `Inbox`
-    whose SHA-256 is in `waiting_originals` is skipped: the owner dropped it and it waits,
-    untouched, for his answer, so the app wrote nothing there."""
+    that is a waiting item's path in `waiting_originals` (path to SHA-256) and whose bytes
+    still hash to it is skipped: the owner dropped it and it waits, untouched, for his answer,
+    so the app wrote nothing there."""
+    waiting = waiting_originals or {}
     hits: list[str] = []
 
     def check(where: str, text: str, *, card_text: bool = False) -> None:
@@ -320,7 +326,7 @@ def scan_outputs(
         if _is_secrets_file(rel) or Path(rel).suffix.lower() in IMAGE_SUFFIXES:
             continue
         data = vault.read_bytes(rel)
-        if _is_waiting_original(vault, rel, waiting_originals, data):
+        if _is_waiting_original(rel, waiting, partial(bytes, data)):
             continue
         check(rel, _file_text(rel, data))
     for path in (db_path, db_path.with_name(db_path.name + "-wal")):

@@ -311,11 +311,11 @@ def _is_card(item: Item) -> bool:
     return (item.reading or {}).get("doc_type") == DocType.card_front.value
 
 
-def _waiting_originals(state: AppState) -> set[str]:
-    """The hashes of the originals that wait in `Inbox` on the owner's answer."""
+def _waiting_originals(state: AppState) -> dict[str, str]:
+    """Path and hash of each original that waits in `Inbox` on the owner's answer."""
     waiting: set[ItemState] = {"asked", "held", "waiting_secrets"}
     return {
-        i.sha256
+        i.rel_path: i.sha256
         for i in state.store.items(sorted(waiting))
         if i.rel_path is not None and i.rel_path.startswith(f"{INBOX}/")
     }
