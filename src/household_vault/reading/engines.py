@@ -173,4 +173,10 @@ def make_engines(settings: Settings) -> Engines:
         )
     if settings.reader == "stand-in":
         return Engines(VisionPageReader(None), StandInModels())
-    raise ConfigError("the recorded reader is not available yet")
+    if settings.reader == "recorded":
+        if settings.mode != "dev" or settings.recordings_dir is None:
+            raise ConfigError("the recorded reader needs development mode and VAULT_RECORDINGS")
+        from household_vault.reading.recorded import recorded_engines
+
+        return recorded_engines(settings.recordings_dir)
+    raise ConfigError(f"unknown reader {settings.reader!r}")

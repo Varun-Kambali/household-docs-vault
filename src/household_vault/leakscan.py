@@ -178,8 +178,13 @@ def _file_text(rel: str, data: bytes) -> str:
 
 # Columns that hold the text of a card page; there every long digit run counts.
 CARD_COLUMNS = frozenset({"items.reading", "items.question", "documents.fields"})
+# An id or hash the app makes: exactly 32 (uuid4 hex) or 64 (sha256) lowercase hex characters
+# holding at least one letter a to f, so a run of digits is never one, or a dashed UUID.
 _HEX_TOKEN = re.compile(
-    r"\b(?:[0-9a-f]{32,}|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\b"
+    r"(?<![0-9a-zA-Z-])(?:"
+    r"(?=[0-9]*[a-f])(?:[0-9a-f]{32}|[0-9a-f]{64})"
+    r"|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    r")(?![0-9a-zA-Z-])"
 )
 
 
@@ -265,7 +270,9 @@ def scan_outputs(
 
     def check(where: str, text: str, *, card_text: bool = False) -> None:
         long_run = card_text or (where.startswith(f"{RECORDS}/") and _is_card_record(text))
-        scanned = _HEX_TOKEN.sub("", text) if long_run else text
+        # Hash and id tokens go first: a 32-digit hex id holds a run of 12 digits that passes the
+        # Aadhaar check now and then (about one id in a hundred), and that is no leak.
+        scanned = _HEX_TOKEN.sub("", text)
         hits.extend(
             f"{where}: {d}"
             for d in scan_text(scanned, allow_test_cards=False, any_long_run=long_run)

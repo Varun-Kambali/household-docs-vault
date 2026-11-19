@@ -1,6 +1,6 @@
 COV_MIN ?= 80
 
-.PHONY: setup visits spikes-setup finetune-setup lint test eval eval-smoke run vault docker
+.PHONY: setup visits spikes-setup finetune-setup lint test eval eval-val eval-smoke run vault docker
 
 setup:
 	uv sync
@@ -27,11 +27,22 @@ lint:
 test:
 	uv run pytest --cov=src --cov=synth --cov-fail-under=$(COV_MIN)
 
+# Real models on the test split (scored once, at the end of M2), recorded, then the filing eval
+# replays the recordings. Needs Ollama with the models pulled and the Mac's Apple Vision.
 eval:
-	@echo "make eval: added in a later milestone" >&2; exit 1
+	@echo "make eval calls the local models for about 2 hours and needs Varun's yes first." >&2
+	uv run python -m evals.runner reading --split test --engines mac --record evals/recordings/eval-v1/test
+	uv run python -m evals.runner filing --split test --recordings evals/recordings/eval-v1/test
 
+# The same on the val split, for tuning. The recordings stay out of git (var/ is ignored).
+eval-val:
+	@echo "make eval-val calls the local models for about 2 hours and needs Varun's yes first." >&2
+	uv run python -m evals.runner reading --split val --engines mac --record var/recordings/val
+	uv run python -m evals.runner filing --split val --recordings var/recordings/val
+
+# What CI runs: the committed smoke recordings, no model.
 eval-smoke:
-	@echo "make eval-smoke: added in a later milestone" >&2; exit 1
+	uv run python -m evals.runner smoke
 
 run:
 	uv run vault run

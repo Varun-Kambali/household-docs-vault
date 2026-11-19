@@ -1,0 +1,33 @@
+# Thresholds for `make eval-smoke`, the CI check that replays the committed recordings of the
+# smoke documents (evals/datasets/eval-v1/smoke.json) with no model.
+#
+# They start at the oracle values: every rate at 1.0, every count at 0, because the committed
+# recordings are the ground truth read back. Task 23 replaces the recordings with real ones made
+# on `val` and sets each threshold from them, never from the `test` split.
+#
+# Each name is a number `evals.runner.smoke_metrics` computes; "min" must be reached or beaten,
+# "max" must not be exceeded.
+
+[smoke.min]
+type_accuracy = 1.0
+person_accuracy = 1.0
+linked_accuracy = 1.0
+field_exact_photo = 1.0
+field_exact_all = 1.0
+line_recall_photo = 1.0
+placement_matches_decision = 1.0
+exact_copies_caught = 1.0
+undo_same_path = 1.0
+# Counts, so that a rate over nothing cannot pass: something was filed, copied and undone.
+documents_placed = 1
+exact_copies = 1
+undo_tried = 1
+
+[smoke.max]
+silent_misfiles_per_100 = 0
+needs_a_look_expected_clean = 0
+filing_needs_a_look_expected_clean = 0
+wrong_merges = 0
+secrets_found = 0
+cvv_stored = 0
+inbox_left = 0

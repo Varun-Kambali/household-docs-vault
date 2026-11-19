@@ -1,0 +1,142 @@
+{
+ "sha256": "2ec92be3965fa85a71ba576ce88c54c5c8b8698c4166710dce1188efe27ac2b4",
+ "doc_id": "payslip-1-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1000,
+   "height": 1400,
+   "lines": [
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.07956700424326589,
+      0.14513312361334232,
+      0.11902252504195389,
+      0.15686323752801795
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "KIRAN RAO",
+     "page": 0,
+     "bbox": [
+      0.33764699179074853,
+      0.14892997277592845,
+      0.4286373857313354,
+      0.16254403470636042
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.08074882328994046,
+      0.17221100063310443,
+      0.11210140388587994,
+      0.183799946106547
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "30/11/2025",
+     "page": 0,
+     "bbox": [
+      0.3388195695363407,
+      0.17580203214140833,
+      0.4192638870048938,
+      0.18920108126229357
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Net pay",
+     "page": 0,
+     "bbox": [
+      0.08193063995084536,
+      0.19928882299003267,
+      0.13274779067065626,
+      0.21110207775906234
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 12,500",
+     "page": 0,
+     "bbox": [
+      0.3399921449328109,
+      0.20267403767186745,
+      0.41864932779865105,
+      0.21598657979603858
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Payslip",
+     "page": 0,
+     "bbox": [
+      0.07641547512164913,
+      0.07292518431886347,
+      0.13454181369269655,
+      0.0875225547208894
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.08399881336669233,
+      0.246674880582711,
+      0.5178673398158705,
+      0.2627823931051612
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.08468820288167078,
+      0.26247019591277454,
+      0.5430762586862223,
+      0.2786441302907525
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.11344487084984468,
+      0.9194722126189726,
+      0.3433431902699418,
+      0.9312719086234706
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\"doc_type\": \"payslip\"}",
+ "fill_raw": "{\"person_name\": \"KIRAN RAO\", \"document_date\": \"2025-11-30\", \"expiry_date\": null, \"employer\": null, \"net_pay\": \"12500\"}",
+ "seconds": {
+  "read": 0.0,
+  "classify": 0.0,
+  "fill": 0.0
+ },
+ "engine": "oracle",
+ "prompt_version": "v2"
+}

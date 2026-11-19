@@ -1,0 +1,478 @@
+{
+ "sha256": "d78420a1b0e9f78ed590a0d673514dec886ae54c1d3dc1e7c1ec72680525848b",
+ "doc_id": "vehicle_policy-1-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1000,
+   "height": 1400,
+   "lines": [
+    {
+     "text": "Tata AIG General Insurance Company Limited",
+     "page": 0,
+     "bbox": [
+      0.08339690764942793,
+      0.03162899884544027,
+      0.6512758861678477,
+      0.058527434189517925
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Private Car Package Policy - Certificate cum Policy Schedule",
+     "page": 0,
+     "bbox": [
+      0.08290382251616481,
+      0.06473333047288209,
+      0.5677878285258153,
+      0.08410757684274785
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Policy details",
+     "page": 0,
+     "bbox": [
+      0.08178663558021698,
+      0.12369909944763635,
+      0.20711655432592702,
+      0.14048331251570012
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Policy Number",
+     "page": 0,
+     "bbox": [
+      0.08124794751734359,
+      0.15663671503946563,
+      0.17678233897033127,
+      0.16919717843857981
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "3001/66404013/00/000",
+     "page": 0,
+     "bbox": [
+      0.32520030433753744,
+      0.1590398960549495,
+      0.49230816953441614,
+      0.17355943246381156
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Insured Name",
+     "page": 0,
+     "bbox": [
+      0.0807688675733756,
+      0.182474493130372,
+      0.17300015349621387,
+      0.19496622797446117
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Master Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.3245493675649257,
+      0.1848228482114823,
+      0.45816649694340994,
+      0.1989691043442093
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Period of Insurance From",
+     "page": 0,
+     "bbox": [
+      0.08029046749682227,
+      0.20827559284575944,
+      0.24559322787829488,
+      0.22141118104513247
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "30/01/2026",
+     "page": 0,
+     "bbox": [
+      0.3238993526136508,
+      0.21056927501886913,
+      0.405306146782395,
+      0.22418281824642883
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Period of Insurance To",
+     "page": 0,
+     "bbox": [
+      0.07981274584149918,
+      0.2340400922311762,
+      0.2279703381774619,
+      0.24696750260591868
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "29/01/2027",
+     "page": 0,
+     "bbox": [
+      0.3232502575269486,
+      0.23627925403747707,
+      0.40459968429539267,
+      0.2498564909171024
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "(midnight to midnight)",
+     "page": 0,
+     "bbox": [
+      0.48501034007164245,
+      0.24009910608905102,
+      0.6094579429715163,
+      0.25148495479480654
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Vehicle details",
+     "page": 0,
+     "bbox": [
+      0.07874467119009601,
+      0.2877933903958403,
+      0.2143277852271292,
+      0.3043534136823955
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Registration No.",
+     "page": 0,
+     "bbox": [
+      0.07821082384692336,
+      0.3204349146019386,
+      0.1830587388198908,
+      0.33283729889630664
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "KA46WX8246",
+     "page": 0,
+     "bbox": [
+      0.32107366287221484,
+      0.3224918028677473,
+      0.4246166550414363,
+      0.33613459656590156
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Make / Model",
+     "page": 0,
+     "bbox": [
+      0.07773604575265068,
+      0.34604061130670016,
+      0.16550191337592435,
+      0.35826491870692334
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Hyundai / i20 Sportz",
+     "page": 0,
+     "bbox": [
+      0.32042855897798755,
+      0.34804363920734804,
+      0.4749462757736019,
+      0.36206103203689083
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Chassis No. (last 5)",
+     "page": 0,
+     "bbox": [
+      0.07726193839239223,
+      0.371610122532642,
+      0.2046019630480786,
+      0.38411332532186254
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "XXXXXXXXXXXX66630",
+     "page": 0,
+     "bbox": [
+      0.3197843645469248,
+      0.37355944003796143,
+      0.49392958919336044,
+      0.38768116297757005
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Year of manufacture",
+     "page": 0,
+     "bbox": [
+      0.07678850034580056,
+      0.3971435249305388,
+      0.20892640546461425,
+      0.40964020324445755
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "2017",
+     "page": 0,
+     "bbox": [
+      0.3191410776571486,
+      0.3990392815366692,
+      0.35532716946536747,
+      0.41204220649586215
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Premium and cover",
+     "page": 0,
+     "bbox": [
+      0.07572999193194561,
+      0.4504152024264853,
+      0.25586680338268253,
+      0.4669746496659368
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Insured Declared Value (IDV)",
+     "page": 0,
+     "bbox": [
+      0.07520092035144745,
+      0.4827646099279477,
+      0.26504238911572586,
+      0.4955156699309733
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 3,85,000",
+     "page": 0,
+     "bbox": [
+      0.38129928244088784,
+      0.48493789988795494,
+      0.47361963003437374,
+      0.49823991065289747
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "No Claim Bonus",
+     "page": 0,
+     "bbox": [
+      0.07473038642390972,
+      0.5081413381805069,
+      0.17983516304598965,
+      0.5202608813961526
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "20%",
+     "page": 0,
+     "bbox": [
+      0.3806151400653819,
+      0.5102476409034901,
+      0.4130934415386502,
+      0.5231068733000341
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Own damage premium",
+     "page": 0,
+     "bbox": [
+      0.07398104051499439,
+      0.5472897226024416,
+      0.23713310676463345,
+      0.5609870195567187
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 11,240",
+     "page": 0,
+     "bbox": [
+      0.8216780408317061,
+      0.5521910522392922,
+      0.8991475354205194,
+      0.5652531066350823
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Third party premium",
+     "page": 0,
+     "bbox": [
+      0.07355481399114985,
+      0.5702784638493748,
+      0.21782372584248405,
+      0.5838100417132819
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 3,416",
+     "page": 0,
+     "bbox": [
+      0.8296264469704745,
+      0.5750881068124554,
+      0.8982006477710365,
+      0.588062735968793
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "GST at 18%",
+     "page": 0,
+     "bbox": [
+      0.07312913149767833,
+      0.5932378522423476,
+      0.16104830483045657,
+      0.6063841445474483
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 2,638",
+     "page": 0,
+     "bbox": [
+      0.8287240287189644,
+      0.5978981588774137,
+      0.8972549607452347,
+      0.6108434534930678
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Total premium",
+     "page": 0,
+     "bbox": [
+      0.07253408799642665,
+      0.6253317901416743,
+      0.18356198355776515,
+      0.6385655959168641
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 17,294",
+     "page": 0,
+     "bbox": [
+      0.809917686939878,
+      0.629680482424979,
+      0.8959330116129122,
+      0.6439378736004108
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "After an accident, inform us within 24 hours. Do not move an unsafe vehicle.",
+     "page": 0,
+     "bbox": [
+      0.07111665138395867,
+      0.7030360931782859,
+      0.5570040799248368,
+      0.7168188402160108
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "24x7 claims helpline",
+     "page": 0,
+     "bbox": [
+      0.07039858988192506,
+      0.7417622675040458,
+      0.20046152464425304,
+      0.7536482019451619
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "1800 442 6802",
+     "page": 0,
+     "bbox": [
+      0.24655543465844923,
+      0.7403558526092,
+      0.3641667287141312,
+      0.7546633271653987
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This is a computer generated schedule. Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06693788978983703,
+      0.9296413291978144,
+      0.5195680329864029,
+      0.9410144796302985
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\"doc_type\": \"vehicle_policy\"}",
+ "fill_raw": "{\"insurer\": \"Tata AIG General Insurance Company Limited\", \"product\": null, \"policy_number\": \"3001/66404013/00/000\", \"policyholder\": \"Master Kiran Rao\", \"insured\": null, \"nominee\": null, \"sum_insured\": null, \"premium\": \"17294\", \"premium_frequency\": null, \"start_date\": \"2026-01-30\", \"end_date\": \"2027-01-29\", \"premium_due_date\": null, \"agent\": null, \"claim_helpline\": \"1800 442 6802\", \"registration_number\": \"KA46WX8246\", \"idv\": \"385000\", \"ncb_percent\": \"20\"}",
+ "seconds": {
+  "read": 0.0,
+  "classify": 0.0,
+  "fill": 0.0
+ },
+ "engine": "oracle",
+ "prompt_version": "v2"
+}

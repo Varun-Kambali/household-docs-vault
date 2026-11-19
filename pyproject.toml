@@ -105,7 +105,7 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 [tool.mypy]
 strict = true
 plugins = ["pydantic.mypy"]
-files = ["src", "synth"]
+files = ["src", "synth", "evals"]
 
 [[tool.mypy.overrides]]
 module = [
