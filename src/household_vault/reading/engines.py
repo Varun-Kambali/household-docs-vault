@@ -19,7 +19,7 @@ from household_vault.reading.ocr import AppleVisionOcr, OcrEngine
 from household_vault.reading.ollama import ModelUnavailable, OllamaClient
 from household_vault.reading.prompt import (
     CLASSIFY_SYSTEM,
-    PROMPT_V3,
+    PROMPT_V4,
     classify_prompt,
     classify_schema,
     schema_for_prompt,
@@ -146,7 +146,7 @@ class OllamaModels:
         use_images = self._vision is True and bool(images)
         user = user_prompt(doc_type.value, json.dumps(schema), None if use_images else ocr_text)
         return self.client.chat_json(
-            model, PROMPT_V3.system, user, images if use_images else [], schema,
+            model, PROMPT_V4.system, user, images if use_images else [], schema,
             prefill_for(model),
         )  # fmt: skip
 
