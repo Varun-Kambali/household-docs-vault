@@ -21,6 +21,7 @@ from vault_synth.data import REFERENCE_DATE
 from vault_synth.model import SynthDoc
 from vault_synth.sets import load_set, locked_password
 
+from evals.recordings import files_as_filed
 from household_vault.filing.decide import Decision, decide
 from household_vault.intake.sniff import FileKind, sniff
 from household_vault.people import Household, load_household
@@ -295,7 +296,7 @@ def run_reading(
     household = load_household(set_dir / "household.json")
     results: list[DocResult] = []
     for doc in load_documents(set_dir, split, only, limit):
-        files = [(set_dir / name).read_bytes() for name in doc.files]
+        files = files_as_filed([(set_dir / name).read_bytes() for name in doc.files])
         key = document_key(files)
         replay = record_to is not None and resume and (record_to / f"{key}.json").is_file()
         active = recorded_engines(record_to) if replay and record_to else engines

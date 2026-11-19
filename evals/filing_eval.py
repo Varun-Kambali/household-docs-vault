@@ -22,6 +22,7 @@ from vault_synth.model import SynthDoc
 from vault_synth.sets import locked_password
 
 from evals.reading_eval import load_documents, read_and_decide
+from evals.recordings import files_as_filed
 from household_vault.app_state import AppState, build_app_state
 from household_vault.config import Settings, load_settings
 from household_vault.db import DocumentRow, Item, ItemState
@@ -124,7 +125,7 @@ def _prepare(
     for doc in docs:
         if doc.variant != variant:
             continue
-        files = [(set_dir / name).read_bytes() for name in doc.files]
+        files = files_as_filed([(set_dir / name).read_bytes() for name in doc.files])
         _, decision, _ = read_and_decide(doc, files, engines, household)
         entries.append(_Entry(doc, files, document_key(files), decision))
     return entries
