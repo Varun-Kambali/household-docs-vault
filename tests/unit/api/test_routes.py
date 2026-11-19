@@ -1,3 +1,4 @@
+import json
 import logging
 from datetime import date
 from pathlib import Path
@@ -7,7 +8,7 @@ from fastapi.testclient import TestClient
 from starlette.formparsers import MultiPartParser
 from vault_synth.household import HOUSEHOLD
 
-from household_vault.api.app import MAX_UPLOAD_BYTES, create_app
+from household_vault.api.app import _MAX_BODY_BYTES, MAX_UPLOAD_BYTES, create_app
 from household_vault.app_state import AppState, build_app_state
 from household_vault.doctypes import DocType
 from household_vault.logging_setup import configure
@@ -272,7 +273,8 @@ def test_a_card_upload_over_the_limit_is_a_413(client):
 
 
 def test_uploads_stay_in_memory_not_in_a_temporary_file(client):
-    assert MultiPartParser.spool_max_size >= MAX_UPLOAD_BYTES
+    # A part can be as large as the body the limit lets through, so no part can roll over to disk.
+    assert MultiPartParser.spool_max_size >= _MAX_BODY_BYTES >= MAX_UPLOAD_BYTES
 
 
 def test_the_secrets_store_is_created_then_unlocked(client, state):
@@ -456,7 +458,7 @@ def test_a_busy_drive_cache_folder_blocks_creating(client, state, name):
 
 @pytest.mark.parametrize("rel", ["Secrets.kdbx", "_system/log/2026-11.csv", "Home/old.KDBX"])
 def test_the_secrets_file_and_system_files_are_never_served(client, state, filed_doc, rel):
-    state.vault.write_atomic(SECRETS_FILE, b"kdbx bytes") if rel == "Secrets.kdbx" else None
+    state.vault.write_atomic(rel, b"private bytes")  # a real file, so only the rule refuses it
     state.store.conn.execute("update documents set rel_path = ? where id = ?", (rel, filed_doc.id))
     assert client.get(f"/v1/documents/{filed_doc.id}/file").status_code == 404
 
@@ -591,3 +593,37 @@ def test_a_card_document_never_returns_a_long_digit_run(settings, tmp_path, cloc
     finally:
         s.gate.lock()
         s.store.conn.close()
+
+
+def test_a_waiting_card_items_file_is_not_served(client, state, outsider_prescription):
+    item = outsider_prescription
+    assert client.get(f"/v1/items/{item.id}/file").status_code == 200  # an ordinary asked item
+    state.store.conn.execute(
+        "update items set reasons = ? where id = ?", ('["card_unreadable"]', item.id)
+    )
+    r = client.get(f"/v1/items/{item.id}/file")
+    assert r.status_code == 423 and "secrets store" in r.json()["detail"]
+    state.store.conn.execute("update items set reasons = '[]' where id = ?", (item.id,))
+    assert client.get(f"/v1/items/{item.id}/file").status_code == 200
+    state.store.conn.execute("update items set state = 'waiting_secrets' where id = ?", (item.id,))
+    assert client.get(f"/v1/items/{item.id}/file").status_code == 423
+
+
+def test_an_item_typed_card_front_is_not_served(client, state, outsider_prescription):
+    item = outsider_prescription
+    state.store.conn.execute(
+        "update items set overrides = ? where id = ?", ('{"doc_type": "card_front"}', item.id)
+    )
+    assert client.get(f"/v1/items/{item.id}/file").status_code == 423
+    state.store.conn.execute("update items set overrides = '{}' where id = ?", (item.id,))
+    reading = dict(item.reading or {}, doc_type="card_front")
+    state.store.conn.execute(
+        "update items set reading = ? where id = ?", (json.dumps(reading), item.id)
+    )
+    assert client.get(f"/v1/items/{item.id}/file").status_code == 423
+
+
+def test_a_malformed_origin_is_refused_not_a_server_error(client, state, outsider_prescription):
+    url = f"/v1/items/{outsider_prescription.id}/retry"
+    r = client.post(url, headers={"Origin": "http://[abc"})
+    assert r.status_code == 403

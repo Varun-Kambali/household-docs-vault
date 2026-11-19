@@ -48,6 +48,7 @@ from household_vault.api.models import (
 )
 from household_vault.app_state import AppState
 from household_vault.db import Item
+from household_vault.doctypes import DocType
 from household_vault.emergency import sheet_html
 from household_vault.filing.filer import TargetGone, UndoError
 from household_vault.filing.questions import Option, Question, question_for
@@ -95,6 +96,7 @@ SECRETS_MISSING = (
     "folder. Restore Secrets.kdbx (from Drive's trash or a backup) instead of making a new one, "
     "because a new file would lose those numbers."
 )
+CARD_PHOTO_PRIVATE = "Card photos open from the secrets store."
 SOMETHING_WENT_WRONG = "Something went wrong. Nothing was changed."
 NOT_UNDERSTOOD = "The request was not understood."
 
@@ -208,7 +210,11 @@ class SameOrigin:
             origin = headers.get(b"origin")
             if origin is not None:
                 host = headers.get(b"host", b"").decode("latin-1").lower()
-                if urlparse(origin.decode("latin-1")).netloc.lower() != host:
+                try:
+                    origin_host = urlparse(origin.decode("latin-1")).netloc.lower()
+                except ValueError:  # a malformed Origin is no host of ours
+                    origin_host = None
+                if origin_host != host:
                     await _send_json(send, 403, OTHER_SITE)
                     return
         await self.app(scope, receive, send)
@@ -218,8 +224,10 @@ def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
     settings = state.settings
     configure(settings.log_dir)
     # Uploads stay in memory (the default spools files over 1 MB to a temporary file on disk, and
-    # a card photo is never written anywhere but the secrets store).
-    MultiPartParser.spool_max_size = MAX_UPLOAD_BYTES + 1024 * 1024
+    # a card photo is never written anywhere but the secrets store). BodyLimit lets a body of
+    # _MAX_BODY_BYTES through, so a part never gets a chance to roll over before the route's own
+    # size check runs.
+    MultiPartParser.spool_max_size = _MAX_BODY_BYTES
 
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:
@@ -533,36 +541,47 @@ def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
 
     @app.get("/v1/items/{item_id}/file")
     def item_file(item_id: int) -> Response:
-        return serve(known_item(item_id).rel_path)
+        item = known_item(item_id)
+        doc_type = item.overrides.get("doc_type") or (item.reading or {}).get("doc_type")
+        if (
+            doc_type == DocType.card_front.value
+            or item.state == "waiting_secrets"
+            or Reason.card_unreadable in item.reasons
+        ):
+            return _detail(423, CARD_PHOTO_PRIVATE)
+        return serve(item.rel_path)
 
     @app.post("/v1/cards")
     async def upload_card(request: Request) -> CardOut:
         # Read the form here so the parser is limited to the three parts the route takes: a
         # front photo, an optional back photo and the master password.
         form = await request.form(max_files=2, max_fields=1)
-        master_password = form.get("master_password")
-        front = form.get("front")
-        back = form.get("back")
-        unknown = [k for k in form if k not in ("front", "back", "master_password")]
-        if (
-            unknown
-            or not isinstance(master_password, str)
-            or not isinstance(front, UploadFile)
-            or not (back is None or isinstance(back, UploadFile))
-        ):
-            return _detail(422, NOT_UNDERSTOOD)  # type: ignore[return-value]
-        photos: list[bytes] = []
-        for part in (front, back):
-            if part is None or not part.filename:
-                continue
-            data = await part.read(MAX_UPLOAD_BYTES + 1)
-            if len(data) > MAX_UPLOAD_BYTES:
-                raise HTTPException(413, TOO_LARGE)
-            photos.append(data)
-        result = await run_in_threadpool(state.cards.upload, photos, master_password)
-        if isinstance(result, DocumentRecord):
-            return CardOut(status="filed", document_id=result.id)
-        return CardOut(status=result.state, item_id=result.id)
+        try:
+            master_password = form.get("master_password")
+            front = form.get("front")
+            back = form.get("back")
+            unknown = [k for k in form if k not in ("front", "back", "master_password")]
+            if (
+                unknown
+                or not isinstance(master_password, str)
+                or not isinstance(front, UploadFile)
+                or not (back is None or isinstance(back, UploadFile))
+            ):
+                return _detail(422, NOT_UNDERSTOOD)  # type: ignore[return-value]
+            photos: list[bytes] = []
+            for part in (front, back):
+                if part is None or not part.filename:
+                    continue
+                data = await part.read(MAX_UPLOAD_BYTES + 1)
+                if len(data) > MAX_UPLOAD_BYTES:
+                    raise HTTPException(413, TOO_LARGE)
+                photos.append(data)
+            result = await run_in_threadpool(state.cards.upload, photos, master_password)
+            if isinstance(result, DocumentRecord):
+                return CardOut(status="filed", document_id=result.id)
+            return CardOut(status=result.state, item_id=result.id)
+        finally:
+            await form.close()  # drop the parsed parts, memory-backed or not
 
     @app.post("/v1/secrets/create")
     def secrets_create(body: MasterPasswordIn) -> dict[str, str]:
