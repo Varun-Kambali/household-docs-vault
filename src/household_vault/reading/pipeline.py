@@ -27,7 +27,7 @@ from household_vault.reading.render import page_count, png_bytes, render_page
 from household_vault.reading.source import DocumentSource
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import secret_fields
-from household_vault.schemas.parse import mask_card_numbers, parse_json_fields
+from household_vault.schemas.parse import mask_card_numbers, mask_glued_runs, parse_json_fields
 
 MAX_VISION_PAGES = 2
 MIN_ENGLISH_LETTERS = 40
@@ -138,7 +138,9 @@ def scrub_card_fields(fields: dict[str, Any], cvv: str | None, doc_type: DocType
 _CARD_TYPES = frozenset({DocType.other, *CARD_FIELD_TYPES})
 
 
-def _masked(pages: list[PageText], *, any_long_run: bool) -> list[PageText]:
+def _masked(
+    pages: list[PageText], *, any_long_run: bool, number: str | None = None
+) -> list[PageText]:
     """The pages as kept: every line with card numbers masked. Without a type, or for a card,
     every 13 to 19 digit run goes (a misread digit fails Luhn); other types keep non-card
     numbers readable for search."""
@@ -149,7 +151,10 @@ def _masked(pages: list[PageText], *, any_long_run: bool) -> list[PageText]:
                     Line(
                         **{
                             **ln.model_dump(),
-                            "text": mask_card_numbers(ln.text, any_long_run=any_long_run),
+                            "text": mask_card_numbers(
+                                mask_glued_runs(ln.text, number) if any_long_run else ln.text,
+                                any_long_run=any_long_run,
+                            ),
                         }
                     )
                     for ln in p.lines
@@ -278,6 +283,9 @@ def read_document(
         if value is not None:
             reading.secret_values[name] = str(value)
         dumped[name] = None
+    if doc_type in _CARD_TYPES:  # the number is known now: a CVV glued to it goes too
+        digits = "".join(c for c in reading.secret_values.get("number", "") if c.isdigit())
+        reading.pages = _masked(pages, any_long_run=True, number=digits or None)
     if doc_type in CARD_FIELD_TYPES:
         dumped = scrub_card_fields(dumped, reading.secret_values.get("cvv"), doc_type)
     reading.fields = dumped

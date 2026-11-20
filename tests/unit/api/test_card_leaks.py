@@ -9,6 +9,7 @@ from vault_synth.household import HOUSEHOLD
 from household_vault.actions import AnswerError
 from household_vault.api.app import create_app
 from household_vault.app_state import build_app_state
+from household_vault.doctypes import DocType
 from household_vault.reading.engines import Engines, VisionPageReader
 from tests.conftest import drop
 from tests.fakes import FakeModels, FakeOcr
@@ -60,3 +61,45 @@ def test_a_typed_full_number_is_refused_as_the_last_four_digits(make_state, phot
         s.actions.answer(item.id, "field", NUMBER, field="last4")
     s.actions.answer(item.id, "field", "1111", field="last4")
     assert s.store.item(item.id).overrides["fields"]["last4"] == "1111"
+
+
+def test_an_asked_card_cannot_be_retyped_as_another_document(make_state, photo):
+    s = make_state(f"{NUMBER} Anita Sharma", "card_front", CARD_FILL)
+    drop(s.vault, "card.jpg", photo)
+    s.worker.drain()
+    (item,) = s.store.items(["asked"])
+    c = client_of(s)
+    assert c.get(f"/v1/items/{item.id}/file").status_code == 423
+    r = c.post(f"/v1/needs-a-look/{item.id}/answer", json={"kind": "type", "value": "tax_invoice"})
+    assert r.status_code == 409 and "bank card" in r.json()["detail"]
+    assert c.get(f"/v1/items/{item.id}/file").status_code == 423
+    s.worker.drain()
+    assert s.store.item(item.id).rel_path == "Inbox/card.jpg"
+    assert s.store.documents_of_type(DocType.tax_invoice) == []
+    ok = c.post(
+        f"/v1/needs-a-look/{item.id}/answer", json={"kind": "type", "value": "card_statement"}
+    )
+    assert ok.status_code == 200  # another card-area type is allowed
+
+
+def test_the_item_file_is_refused_for_a_stored_card_whatever_the_override(make_state, photo):
+    s = make_state(f"{NUMBER} Anita Sharma", "card_front", CARD_FILL)
+    drop(s.vault, "card.jpg", photo)
+    s.worker.drain()
+    (item,) = s.store.items(["asked"])
+    s.store.update_item(item.id, overrides={"doc_type": "tax_invoice"})
+    assert client_of(s).get(f"/v1/items/{item.id}/file").status_code == 423
+
+
+def test_a_copy_of_a_waiting_card_photo_stays_in_inbox_and_is_not_served(make_state, photo):
+    s = make_state(f"{NUMBER} Anita Sharma", "card_front", CARD_FILL)
+    drop(s.vault, "card.jpg", photo)
+    drop(s.vault, "card (1).jpg", photo)
+    s.worker.drain()
+    items = s.store.items(["asked", "waiting_secrets", "held"])
+    assert len(items) == 2
+    c = client_of(s)
+    for item in items:
+        assert c.get(f"/v1/items/{item.id}/file").status_code == 423
+        assert item.rel_path.startswith("Inbox/")
+    assert s.vault.list_dir("Needs a look") == []

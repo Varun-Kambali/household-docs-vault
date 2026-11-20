@@ -8,6 +8,7 @@ that an Aadhaar number or GSTIN passes its checksum.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from datetime import date
 from typing import Any, Literal
@@ -118,4 +119,28 @@ def mask_card_numbers(text: str, *, any_long_run: bool = False) -> str:
         positions = [i for i in range(start, end) if chars[i].isdigit()]
         for i in positions[:-4]:
             chars[i] = "X"
+    return "".join(chars)
+
+
+_GLUED = re.compile(r"\d+(?:[ -]\d+)*")
+
+
+def mask_glued_runs(text: str, number: str | None) -> str:
+    """A card number glued to other digits (its CVV, another number): every digit of such a run
+    goes except the last four of the number that was read. With no number read, a run of more
+    than 19 digits loses all of its digits."""
+    chars = list(text)
+    for m in _GLUED.finditer(text):
+        positions = [i for i in range(m.start(), m.end()) if chars[i].isdigit()]
+        digits = "".join(chars[i] for i in positions)
+        if number and number in digits and len(digits) > len(number):
+            at = digits.index(number) + len(number)
+            keep = set(positions[at - 4 : at])
+        elif len(digits) > 19:
+            keep = set()
+        else:
+            continue
+        for i in positions:
+            if i not in keep:
+                chars[i] = "X"
     return "".join(chars)

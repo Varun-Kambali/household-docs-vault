@@ -233,7 +233,7 @@ def test_a_lone_back_typed_other_is_masked_too(photo):
 def test_a_glued_run_of_digits_on_a_card_page_is_masked(photo):
     glued = "4111111111111111123"  # a number and a CVV with no space, then more digits
     texts = _stored_texts(f"NUMBER {glued}9999", {}, "card_front", photo, card_item=True)
-    assert "4111" not in texts[0] and texts[0].endswith("9999")
+    assert texts[0] == "NUMBER " + "X" * 23
 
 
 def test_a_masked_number_keeps_its_last_four_and_dates_stay(photo):
@@ -258,7 +258,7 @@ def test_other_types_keep_their_numbers_in_stored_lines(photo):
     ("line", "masked"),
     [
         ("4111 1111 1111 1112", "XXXX XXXX XXXX 1112"),
-        ("41111111111111111234", "XXXXXXXXXXXXXXXX1234"),
+        ("41111111111111111234", "XXXXXXXXXXXXXXXXXXXX"),
     ],
 )
 def test_a_card_letter_masks_a_misread_or_glued_number_in_stored_lines(photo, line, masked):
@@ -274,3 +274,28 @@ def test_a_card_letter_masks_a_misread_or_glued_number_in_stored_lines(photo, li
 def test_a_statement_keeps_its_amounts_and_dates_in_stored_lines(photo):
     texts = _stored_texts("Total due 12345.50 on 01/11/2026 ref 98765", {}, "card_statement", photo)
     assert texts[0] == "Total due 12345.50 on 01/11/2026 ref 98765"
+
+
+@pytest.mark.parametrize(
+    ("line", "cvv", "masked"),
+    [
+        ("4111111111111111123", "123", "XXXXXXXXXXXX1111XXX"),
+        ("4111 1111 1111 1111123", "123", "XXXX XXXX XXXX 1111XXX"),
+        ("41111111111111111234", "1234", "XXXXXXXXXXXX1111XXXX"),
+        ("4111111111111111123", None, "XXXXXXXXXXXX1111XXX"),
+    ],
+)
+def test_a_number_glued_to_its_cvv_keeps_only_the_number_last_four(photo, line, cvv, masked):
+    texts = _stored_texts(
+        f"AUTHORISED SIGNATURE {line}",
+        {"bank": "Deccan", "number": "4111111111111111", "cvv": cvv},
+        "card_front",
+        photo,
+        card_item=True,
+    )
+    assert texts[0] == f"AUTHORISED SIGNATURE {masked}"
+
+
+def test_a_long_glued_run_with_no_number_read_keeps_no_digit(photo):
+    texts = _stored_texts("ref 411111111111111112345", {}, "other", photo)
+    assert texts[0] == "ref " + "X" * 21

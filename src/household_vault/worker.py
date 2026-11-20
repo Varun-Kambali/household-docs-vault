@@ -23,6 +23,7 @@ from household_vault.activity import Activity, Step
 from household_vault.config import Settings
 from household_vault.db import Item, ItemState, Store
 from household_vault.doctypes import LABEL, DocType
+from household_vault.filing.cardness import CARD_STATES, is_card_item
 from household_vault.filing.decide import Overrides, base_field, decide
 from household_vault.filing.filer import BUSY, Filer, TargetGone
 from household_vault.filing.questions import Question, question_for, upload_again_question
@@ -628,7 +629,27 @@ class Worker:
             context["path"] = result.duplicate_of
         if reason in _WHY:
             context["why"] = _WHY[reason]
+        if reason is Reason.duplicate and any(
+            is_card_item(other)
+            for other in self.store.items_with_sha(item.sha256, CARD_STATES)
+            if other.id != item.id
+        ):
+            self._ask_in_place(item, reason, context)  # the original is a card: never moved
+            return
         self._ask(item, [reason], None, context)
+
+    def _ask_in_place(self, item: Item, reason: Reason, context: dict[str, str]) -> None:
+        question = question_for([reason], None, self.filer.household, context)
+        with self.filer.lock:
+            self.store.update_item(
+                item.id,
+                state="asked",
+                reasons=[reason],
+                question=dataclasses.asdict(question),
+            )
+            self.activity.record(
+                item.id, Step.needs_a_look, "needs_a_look", question.text, file=item.rel_path
+            )
 
     def _ask(
         self,

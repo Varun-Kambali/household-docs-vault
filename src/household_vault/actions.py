@@ -18,6 +18,7 @@ from pydantic import JsonValue
 from household_vault.activity import Activity, Step
 from household_vault.db import Item, ItemState, StateChanged, Store
 from household_vault.doctypes import DocType
+from household_vault.filing.cardness import is_card_item
 from household_vault.filing.filer import BUSY, Filer, UndoError
 from household_vault.filing.names import DEFAULT_NAME, scrub_identifiers
 from household_vault.filing.questions import AnswerKind
@@ -33,6 +34,7 @@ from household_vault.secrets.store import SecretsLocked
 from household_vault.vaultroot import VaultGone, VaultPathError
 from household_vault.worker import Worker
 
+CARD_NOT_RETYPED = "This was read as a bank card. Discard it, or upload the card in the app."
 _ANSWERABLE: frozenset[ItemState] = frozenset({"asked", "held"})
 log = logging.getLogger(__name__)
 _GONE_COPY = "The other copy is no longer there. Nothing was deleted."
@@ -90,7 +92,10 @@ class Actions:
         if kind == "person":
             overrides["owner"] = self._person(value)
         elif kind == "type":
-            overrides["doc_type"] = self._doc_type(value).value
+            doc_type = self._doc_type(value)
+            if is_card_item(item) and doc_type not in CARD_FIELD_TYPES:
+                raise AnswerError(CARD_NOT_RETYPED)
+            overrides["doc_type"] = doc_type.value
             overrides["reread"] = True
         elif kind == "field":
             name, parsed = self._field(item, field, value)

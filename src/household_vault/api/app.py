@@ -48,8 +48,8 @@ from household_vault.api.models import (
 )
 from household_vault.app_state import AppState
 from household_vault.db import Item
-from household_vault.doctypes import DocType
 from household_vault.emergency import sheet_html
+from household_vault.filing.cardness import shares_card_photo
 from household_vault.filing.filer import TargetGone, UndoError
 from household_vault.filing.questions import Option, Question, question_for
 from household_vault.filing.records import DocumentRecord
@@ -542,12 +542,7 @@ def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
     @app.get("/v1/items/{item_id}/file")
     def item_file(item_id: int) -> Response:
         item = known_item(item_id)
-        doc_type = item.overrides.get("doc_type") or (item.reading or {}).get("doc_type")
-        if (
-            doc_type == DocType.card_front.value
-            or item.state == "waiting_secrets"
-            or Reason.card_unreadable in item.reasons
-        ):
+        if shares_card_photo(state.store, item):
             return _detail(423, CARD_PHOTO_PRIVATE)
         return serve(item.rel_path)
 
