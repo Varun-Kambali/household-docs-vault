@@ -96,7 +96,7 @@ def test_a_card_photo_with_a_misread_digit_is_masked_in_the_stored_pages(photo):
         models,
     )
     assert "1111 1111 1112" not in r.model_dump_json() + repr(r)
-    assert "XXXX XXXX XXXX 1112" in " ".join(ln.text for ln in r.pages[0].lines)
+    assert "XXXX XXXX XXXX XXXX" in " ".join(ln.text for ln in r.pages[0].lines)
 
 
 def test_a_page_with_no_type_masks_every_long_run_in_its_lines(photo):
@@ -339,3 +339,22 @@ def test_a_letter_or_statement_keeps_dates_and_amounts(photo):
         photo, "card_welcome_letter", {"bank": "Deccan", "card_name": "4111.1111.1111.1111"}
     )
     assert letter.fields["card_name"] == "XXXX.XXXX.XXXX.1111"
+
+
+@pytest.mark.parametrize(
+    "shown",
+    [
+        "4111    1111    1111    1111",
+        "4111\t1111\t1111\t1111",
+        "\u2013".join(["4111", "1111", "1111", "1111"]),
+        "\u2011".join(["4111", "1111", "1111", "1111"]),
+        "4111_1111_1111_1111",
+        "\u200b".join(["4111", "1111", "1111", "1111"]),
+        "4111 . - 1111 . - 1111 . - 1111",
+        "ref 411111111111111112345",
+    ],
+)
+def test_a_card_field_holding_thirteen_digits_is_masked(photo, shown):
+    r = _fields_of(photo, "card_front", {"number": _CARD_NUMBER, "card_name": shown})
+    name = r.fields["card_name"]
+    assert sum(c.isdigit() for c in name) <= 4

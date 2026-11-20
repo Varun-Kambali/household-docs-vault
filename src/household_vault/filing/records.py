@@ -25,7 +25,7 @@ from household_vault.reading.lines import Line, PageText
 from household_vault.reading.pipeline import Reading
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import secret_fields
-from household_vault.schemas.parse import mask_card_numbers
+from household_vault.schemas.parse import mask_card_numbers, mask_card_shapes
 from household_vault.vaultroot import RECORDS, VaultRoot
 
 RECORD_VERSION: Literal[1] = 1
@@ -156,7 +156,6 @@ def stored_reading(reading: Reading, *, card_item: bool = False) -> dict[str, An
     digits except a masked number's last four and MM/YY dates), floats rounded. The
     secret values and the models' raw answers are never in a dump, so they are not here."""
     long_run = card_item or reading.doc_type in LONG_RUN_TYPES
-    any_run = long_run or reading.doc_type in CARD_AREA_TYPES
     secret_runs = {
         digits
         for value in reading.secret_values.values()
@@ -170,7 +169,10 @@ def stored_reading(reading: Reading, *, card_item: bool = False) -> dict[str, An
     def mask(text: str) -> str:
         if secret_runs:
             text = _DIGITS.sub(hide, text)
-        text = mask_card_numbers(text, any_long_run=any_run)
+        if reading.doc_type in CARD_AREA_TYPES:
+            text = mask_card_shapes(text)
+        else:
+            text = mask_card_numbers(text, any_long_run=long_run)
         return mask_digit_runs(text) if long_run else text
 
     dump: dict[str, Any] = reading.model_dump(mode="json")

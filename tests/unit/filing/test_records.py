@@ -239,7 +239,7 @@ def test_a_glued_run_of_digits_on_a_card_page_is_masked(photo):
 def test_a_masked_number_keeps_its_last_four_and_dates_stay(photo):
     texts = _stored_texts(
         "4111 1111 1111 1111 VALID THRU 08/29 and 08/2029 ref 5678",
-        {},
+        {"number": "4111111111111111"},
         "card_front",
         photo,
         card_item=True,
@@ -299,3 +299,41 @@ def test_a_number_glued_to_its_cvv_keeps_only_the_number_last_four(photo, line, 
 def test_a_long_glued_run_with_no_number_read_keeps_no_digit(photo):
     texts = _stored_texts("ref 411111111111111112345", {}, "other", photo)
     assert texts[0] == "ref " + "X" * 21
+
+
+def test_a_card_page_with_no_number_read_keeps_no_digit_of_a_masked_run(photo):
+    texts = _stored_texts(
+        "4111 1111 1111 1111 VALID THRU 08/29", {}, "card_front", photo, card_item=True
+    )
+    assert texts[0] == "XXXX XXXX XXXX XXXX VALID THRU 08/29"
+
+
+_SEPARATED = [
+    "4111  1111  1111  1111",
+    "4111.1111.1111.1111",
+    "4111/1111/1111/1111",
+    "4111 - 1111 - 1111 - 1111",
+    "\u00a0".join(["4111", "1111", "1111", "1111"]),
+    "\u2013".join(["4111", "1111", "1111", "1111"]),
+    "\u2011".join(["4111", "1111", "1111", "1111"]),
+    "4111_1111_1111_1111",
+    "4111\t1111\t1111\t1111",
+    "\u200b".join(["4111", "1111", "1111", "1111"]),
+]
+
+
+@pytest.mark.parametrize("shown", _SEPARATED)
+@pytest.mark.parametrize("type_", ["card_welcome_letter", "card_statement"])
+def test_card_area_lines_mask_a_number_under_any_separator(photo, shown, type_):
+    texts = _stored_texts(f"Your card {shown} Deccan", {"bank": "Deccan"}, type_, photo)
+    assert texts[0].count("1") == 4 and texts[0].startswith("Your card X")
+
+
+def test_card_area_lines_keep_dates_and_amount_rows(photo):
+    line = "Period 01-10-2026 31-10-2026 and 01/10/2026 - 31/10/2026 Opening 100 200 300 400 500"
+    assert _stored_texts(line, {}, "card_statement", photo)[0] == line
+
+
+def test_a_misread_number_on_a_letter_is_masked_without_luhn(photo):
+    texts = _stored_texts("Card 4111 1111 1111 1112 sent", {}, "card_welcome_letter", photo)
+    assert texts[0] == "Card XXXX XXXX XXXX 1112 sent"

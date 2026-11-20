@@ -14,7 +14,6 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field, JsonValue
 
-from household_vault.checks import luhn_valid
 from household_vault.doctypes import DocType
 from household_vault.intake.sniff import FileKind
 from household_vault.reading.cues import CueCheck, cue_check
@@ -27,7 +26,12 @@ from household_vault.reading.render import page_count, png_bytes, render_page
 from household_vault.reading.source import DocumentSource
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import secret_fields
-from household_vault.schemas.parse import mask_card_numbers, mask_glued_runs, parse_json_fields
+from household_vault.schemas.parse import (
+    mask_card_numbers,
+    mask_card_shapes,
+    mask_glued_runs,
+    parse_json_fields,
+)
 
 MAX_VISION_PAGES = 2
 MIN_ENGLISH_LETTERS = 40
@@ -77,86 +81,80 @@ CARD_FIELD_TYPES = frozenset(
 )
 
 
-# Digit groups split by up to three of: space, dot, slash, no-break space, hyphen.
-_SPLIT_DIGITS = re.compile(r"\d+(?:[ .\-/\u00a0]{1,3}\d+)+")
-
-
-def _mask_all_but_four(text: str) -> str:
-    positions = [i for i, c in enumerate(text) if c.isdigit()]
-    chars = list(text)
-    for i in positions[:-4]:
-        chars[i] = "X"
-    return "".join(chars)
-
-
-def _mask_split_numbers(text: str, doc_type: DocType) -> str:
-    """Numbers written with groups apart by other separators than one space or hyphen. On a
-    card every such run of 13 to 19 digits goes; on a letter or statement only a Luhn-valid one
-    does, and never a date range (it has a slash)."""
-
-    def sub(m: re.Match[str]) -> str:
-        digits = "".join(c for c in m.group() if c.isdigit())
-        if not 13 <= len(digits) <= 19:
-            return m.group()
-        if doc_type is DocType.card_front:
-            return _mask_all_but_four(m.group())
-        if "/" in m.group() or not luhn_valid(digits):
-            return m.group()
-        return _mask_all_but_four(m.group())
-
-    return _SPLIT_DIGITS.sub(sub, text)
-
-
-def _scrub_value(value: JsonValue, cvv: str | None, doc_type: DocType) -> JsonValue:
+def _scrub_value(
+    value: JsonValue, cvv: str | None, doc_type: DocType, number: str | None
+) -> JsonValue:
     if isinstance(value, str):
-        text = mask_card_numbers(value, any_long_run=doc_type is DocType.card_front)
-        text = _mask_split_numbers(text, doc_type)
+        if doc_type is DocType.card_front:
+            digits = [c for c in value if c.isdigit()]
+            text = value
+            if len(digits) >= 13:  # no field of a card holds that many digits but a number
+                tail = "".join(digits[-4:])
+                keep = 4 if number and tail == number[-4:] else 0
+                positions = [i for i, c in enumerate(value) if c.isdigit()]
+                chars = list(value)
+                for i in positions[: len(positions) - keep]:
+                    chars[i] = "X"
+                text = "".join(chars)
+            text = mask_card_numbers(text, any_long_run=True)
+        else:
+            text = mask_card_shapes(value)
         if cvv:
             text = re.sub(rf"(?<!\d){re.escape(cvv)}(?!\d)", lambda m: "X" * len(m.group()), text)
         return text
     if isinstance(value, list):
-        return [_scrub_value(v, cvv, doc_type) for v in value]
+        return [_scrub_value(v, cvv, doc_type, number) for v in value]
     return value
 
 
-def scrub_card_fields(fields: dict[str, Any], cvv: str | None, doc_type: DocType) -> dict[str, Any]:
+def scrub_card_fields(
+    fields: dict[str, Any], cvv: str | None, doc_type: DocType, number: str | None = None
+) -> dict[str, Any]:
     """A card-area reading's fields with no card number and no CVV in them, wherever the model
-    put them. `last4` keeps only its last four digits (None with fewer). On a card every 13 to
-    19 digit run goes; on a letter or statement a Luhn-valid one, so dates and amounts stay."""
+    put them. `last4` keeps only its last four digits (None with fewer). On a card a value with
+    13 or more digits goes (all but the read number's last four); on a letter or statement a
+    card-shaped or Luhn-valid run does, so dates and amounts stay."""
     out: dict[str, Any] = {}
     for name, value in fields.items():
         if name == "last4" and isinstance(value, str):
             digits = "".join(c for c in value if c.isdigit())
             out[name] = digits[-4:] if len(digits) >= 4 else None
         else:
-            out[name] = _scrub_value(value, cvv, doc_type)
+            out[name] = _scrub_value(value, cvv, doc_type, number)
     return out
 
 
 # Types whose lines are masked for every 13 to 19 digit run (a misread digit fails Luhn): a card
 # or its letter or statement, or a page the router could not place.
-_CARD_TYPES = frozenset({DocType.other, *CARD_FIELD_TYPES})
+_CARD_TYPES = frozenset({DocType.other, DocType.card_front})
+
+
+def _mask_line(text: str, doc_type: DocType | None, number: str | None) -> str:
+    """One line as kept. A typed page that is not a card keeps non-card numbers for search. A
+    card (or a page with no type yet) loses every 13 to 19 digit run, because a misread digit
+    fails Luhn; a card page with no number read keeps no digit of such a run. A card's letter
+    or statement loses card-shaped and Luhn-valid runs under any separator, so its dates and
+    amounts stay."""
+    if doc_type in (DocType.card_statement, DocType.card_welcome_letter):
+        return mask_card_shapes(mask_glued_runs(text, number))
+    if doc_type is None or doc_type in _CARD_TYPES:
+        if doc_type is DocType.card_front and number is None:
+            return mask_card_numbers(
+                mask_glued_runs(text, None, keep_none_over=12), any_long_run=True, keep=0
+            )
+        return mask_card_numbers(mask_glued_runs(text, number), any_long_run=True)
+    return mask_card_numbers(text)
 
 
 def _masked(
-    pages: list[PageText], *, any_long_run: bool, number: str | None = None
+    pages: list[PageText], doc_type: DocType | None = None, number: str | None = None
 ) -> list[PageText]:
-    """The pages as kept: every line with card numbers masked. Without a type, or for a card,
-    every 13 to 19 digit run goes (a misread digit fails Luhn); other types keep non-card
-    numbers readable for search."""
+    """The pages as kept: every line with card numbers masked (see `_mask_line`)."""
     return [
         p.model_copy(
             update={
                 "lines": [
-                    Line(
-                        **{
-                            **ln.model_dump(),
-                            "text": mask_card_numbers(
-                                mask_glued_runs(ln.text, number) if any_long_run else ln.text,
-                                any_long_run=any_long_run,
-                            ),
-                        }
-                    )
+                    Line(**{**ln.model_dump(), "text": _mask_line(ln.text, doc_type, number)})
                     for ln in p.lines
                 ]
             }
@@ -224,7 +222,7 @@ def read_document(
     read_seconds = round(time.perf_counter() - started, 3)
     letters = _english_letters(pages)
     reading = Reading(
-        pages=_masked(pages, any_long_run=True),
+        pages=_masked(pages),
         english_letters=letters,
         seconds={"read": read_seconds},
         engine=engines.models.name,
@@ -250,8 +248,7 @@ def read_document(
         doc_type = classified
         reading.type_check = cue_check(text, doc_type)
     reading.doc_type = doc_type
-    if doc_type not in _CARD_TYPES:
-        reading.pages = _masked(pages, any_long_run=False)
+    reading.pages = _masked(pages, doc_type)
     reading.engine = engines.models.name  # a fallback shows once the models have been asked
     if doc_type is DocType.other:
         return reading
@@ -283,11 +280,10 @@ def read_document(
         if value is not None:
             reading.secret_values[name] = str(value)
         dumped[name] = None
-    if doc_type in _CARD_TYPES:  # the number is known now: a CVV glued to it goes too
-        digits = "".join(c for c in reading.secret_values.get("number", "") if c.isdigit())
-        reading.pages = _masked(pages, any_long_run=True, number=digits or None)
-    if doc_type in CARD_FIELD_TYPES:
-        dumped = scrub_card_fields(dumped, reading.secret_values.get("cvv"), doc_type)
+    number = "".join(c for c in reading.secret_values.get("number", "") if c.isdigit()) or None
+    if doc_type in CARD_FIELD_TYPES:  # the number is known now: a CVV glued to it goes too
+        reading.pages = _masked(pages, doc_type, number)
+        dumped = scrub_card_fields(dumped, reading.secret_values.get("cvv"), doc_type, number)
     reading.fields = dumped
     reading.issues = parsed.issues
     return reading

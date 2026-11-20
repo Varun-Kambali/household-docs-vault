@@ -15,7 +15,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ValidationError
 
-from household_vault.checks import find_numbers, id_checksum_issue
+from household_vault.checks import find_numbers, id_checksum_issue, luhn_valid
 from household_vault.schemas._coerce import field_kind
 
 Mode = Literal["dev", "app"]
@@ -100,8 +100,9 @@ def parse_json_fields(schema: type[BaseModel], text: str, *, mode: Mode) -> Pars
     return parse_fields(schema, raw, mode=mode)
 
 
-def mask_card_numbers(text: str, *, any_long_run: bool = False) -> str:
-    """Replace every digit of each card number except the last four with X, keeping separators.
+def mask_card_numbers(text: str, *, any_long_run: bool = False, keep: int = 4) -> str:
+    """Replace every digit of each card number except the last `keep` (four) with X, keeping
+    separators.
 
     The only mask style in the app. Overlapping hits are merged first, so no window leaves a
     different set of digits showing.
@@ -117,6 +118,58 @@ def mask_card_numbers(text: str, *, any_long_run: bool = False) -> str:
     chars = list(text)
     for start, end in spans:
         positions = [i for i in range(start, end) if chars[i].isdigit()]
+        for i in positions[: len(positions) - keep]:
+            chars[i] = "X"
+    return "".join(chars)
+
+
+# Up to three non-alphanumeric characters between digit groups: space, tab, dot, slash, hyphen,
+# the dashes, the non-breaking hyphen, NBSP, underscore, zero-width space.
+_SEP = r"[\s.\-/\u2010-\u2015\u00a0_\u200b-\u200d]{1,3}"
+_CANDIDATE = re.compile(rf"\d+(?:{_SEP}\d+)*")
+_SHAPES = ((4, 4, 4, 4), (4, 6, 5), (4, 4, 4, 4, 3))
+
+
+def mask_card_shapes(text: str) -> str:
+    """For a card's letter or statement: mask (all digits but the last four) every run of digit
+    groups that has a card shape (4-4-4-4, 4-6-5, 4-4-4-4-3) or passes Luhn at 13 to 19 digits,
+    whatever separators sit between the groups, and any single group of 13 digits or more.
+    Dates and amount rows are not shaped like that, so they stay readable."""
+    spans: list[list[int]] = []
+    for cand in _CANDIDATE.finditer(text):
+        groups = [
+            (cand.start() + g.start(), cand.start() + g.end())
+            for g in re.finditer(r"\d+", cand.group())
+        ]
+        for i in range(len(groups)):
+            total = 0
+            lengths: list[int] = []
+            for j in range(i, len(groups)):
+                size = groups[j][1] - groups[j][0]
+                total += size
+                lengths.append(size)
+                if total > 19 and j > i:
+                    break
+                hit = (
+                    (j == i and size >= 13)
+                    or (13 <= total <= 19 and tuple(lengths) in _SHAPES)
+                    or (
+                        13 <= total <= 19
+                        and min(lengths) >= 3  # a date or an amount row has short groups
+                        and luhn_valid(
+                            "".join(c for c in text[groups[i][0] : groups[j][1]] if c.isdigit())
+                        )
+                    )
+                )
+                if hit:
+                    span = [groups[i][0], groups[j][1]]
+                    if spans and span[0] < spans[-1][1]:
+                        spans[-1][1] = max(spans[-1][1], span[1])
+                    else:
+                        spans.append(span)
+    chars = list(text)
+    for start, end in spans:
+        positions = [i for i in range(start, end) if chars[i].isdigit()]
         for i in positions[:-4]:
             chars[i] = "X"
     return "".join(chars)
@@ -125,7 +178,7 @@ def mask_card_numbers(text: str, *, any_long_run: bool = False) -> str:
 _GLUED = re.compile(r"\d+(?:[ -]\d+)*")
 
 
-def mask_glued_runs(text: str, number: str | None) -> str:
+def mask_glued_runs(text: str, number: str | None, *, keep_none_over: int = 19) -> str:
     """A card number glued to other digits (its CVV, another number): every digit of such a run
     goes except the last four of the number that was read. With no number read, a run of more
     than 19 digits loses all of its digits."""
@@ -136,7 +189,7 @@ def mask_glued_runs(text: str, number: str | None) -> str:
         if number and number in digits and len(digits) > len(number):
             at = digits.index(number) + len(number)
             keep = set(positions[at - 4 : at])
-        elif len(digits) > 19:
+        elif len(digits) > keep_none_over:
             keep = set()
         else:
             continue
