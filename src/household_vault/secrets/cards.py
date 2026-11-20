@@ -125,9 +125,7 @@ class CardIntake:
         origin: Literal["inbox", "upload"],
     ) -> Literal["filed", "waiting", "asked"]:
         self._drop_stale()
-        # A HEIC photo was converted to PNG once, while it was read: the mask and the image
-        # checks use those bytes, so `sips` writes one temporary copy of the card, not three.
-        outcome = self._run(item, reading, reading.converted or source)
+        outcome = self._run(item, reading, source)
         if isinstance(outcome, DocumentRecord):
             return "filed"
         return outcome
@@ -214,7 +212,11 @@ class CardIntake:
                 self._held[item.id] = (item.sha256, reading)
             return "waiting"
         try:
-            masked, front = self._masked_front(source, item.sha256, number, reading)
+            # A HEIC photo was converted to PNG once, while it was read: the mask and the image
+            # checks use those bytes, so `sips` writes one temporary copy of the card, not three.
+            # The secrets entry and Undo keep the photo as it came (`source`).
+            seen = reading.converted or source
+            masked, front = self._masked_front(seen, item.sha256, number, reading)
         except StillShowsNumber:
             context = {"why": "tilted"}
             return self._ask(item, [Reason.card_unreadable], reading, shown, context)

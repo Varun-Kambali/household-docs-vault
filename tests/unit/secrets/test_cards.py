@@ -763,3 +763,32 @@ def test_a_heic_card_is_converted_once_for_the_whole_card(card_world, monkeypatc
     outcome = card_world.cards.handle(item, reading, source, "inbox")
     assert outcome == "filed"
     assert len(calls) == 1
+
+
+def test_a_heic_card_keeps_its_original_in_the_secrets_store(card_world, monkeypatch):
+    import hashlib
+
+    from household_vault.intake.sniff import FileKind
+    from household_vault.reading import engines, pipeline
+    from household_vault.reading.pipeline import read_document
+    from household_vault.reading.source import DocumentSource
+
+    card = card_world.card(5)
+    original = b"HEIC-ORIGINAL" + card.data  # stands for the HEIC bytes
+    sha = hashlib.sha256(card.data).hexdigest()  # the truth key
+
+    def convert(data: bytes) -> bytes:
+        return data.removeprefix(b"HEIC-ORIGINAL")  # the stand-in PNG
+
+    monkeypatch.setattr(engines, "heic_to_png", convert)
+    monkeypatch.setattr(pipeline, "heic_to_png", convert)
+    source = DocumentSource(FileKind.heic, data=original)
+    reading = read_document(
+        source, sha, card_world.cards.engines, mode="dev", forced_type=DocType.card_front
+    )
+    item = card_world.store.add_item(sha, "card.heic", None, card_world.filer.clock())
+    assert card_world.cards.handle(item, reading, source, "inbox") == "filed"
+    ref = card_world.store.item(item.id).overrides["secret_ref"]
+    store = card_world.gate.store()
+    names = store.attachment_names(ref)
+    assert names == ["front.heic"] and store.attachment(ref, names[0]) == original
