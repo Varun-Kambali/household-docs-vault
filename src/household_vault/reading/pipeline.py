@@ -23,6 +23,7 @@ from household_vault.reading.lines import Line, PageText
 from household_vault.reading.ollama import ModelError
 from household_vault.reading.prompt import OCR_TEXT_LIMIT, PROMPT_V4, ocr_to_text
 from household_vault.reading.render import page_count, png_bytes, render_page
+from household_vault.reading.snap import snap_fields
 from household_vault.reading.source import DocumentSource
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import secret_fields
@@ -283,6 +284,11 @@ def read_document(
         if value is not None:
             reading.secret_values[name] = str(value)
         dumped[name] = None
+    # A name the model misspelled takes the page's own OCR spelling, on the unmasked lines and
+    # before any card scrub.
+    dumped = snap_fields(
+        schema, dumped, [ln.text for p in pages for ln in p.lines if ln.lang == "en"]
+    )
     number = "".join(c for c in reading.secret_values.get("number", "") if c.isdigit()) or None
     if doc_type in CARD_FIELD_TYPES:  # the number is known now: a CVV glued to it goes too
         reading.pages = _masked(pages, doc_type, number)
