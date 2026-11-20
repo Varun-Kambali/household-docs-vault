@@ -39,6 +39,7 @@ from household_vault.activity import Activity, Step
 from household_vault.db import Item, ItemState, Store
 from household_vault.doctypes import DocType
 from household_vault.filing import records
+from household_vault.filing.cardness import is_card_photo, mark_card
 from household_vault.filing.decide import Decision
 from household_vault.filing.names import clean_component, filed_name
 from household_vault.filing.questions import Question
@@ -78,6 +79,10 @@ _FILING_KEYS = frozenset(
 
 class UndoError(Exception):
     """Undo was refused. The message is shown to the owner as it is."""
+
+
+class CardPhotoError(ValueError):
+    """The file is a card photo: only its masked copy may be filed."""
 
 
 class TargetGone(Exception):
@@ -138,6 +143,8 @@ class Filer:
     ) -> DocumentRecord:
         """File bytes the app made (the masked card copy). The item's own file is never touched:
         for an Inbox card the caller removes the photo afterwards (under `lock`)."""
+        if is_card_photo(self.store, hashlib.sha256(data).hexdigest()):
+            raise CardPhotoError("only the masked copy of a card may be filed as made bytes")
         with self.lock:
             return self._file(item, ext, reading, decision, secret_ref, extra_fields, data)
 
@@ -152,6 +159,8 @@ class Filer:
         data: bytes | None,
     ) -> DocumentRecord:
         item = self._idle(item)
+        if data is None and is_card_photo(self.store, item.sha256):
+            raise CardPhotoError("the raw bytes of a card photo are never filed")
         if decision.outcome != "file" or decision.folder is None or decision.owner is None:
             raise ValueError("a decision that asks a question cannot be filed")
         self._check_people(decision)
@@ -324,7 +333,10 @@ class Filer:
                 "question": dataclasses.asdict(question),
                 "reading": stored,
             }
-            if item.rel_path.startswith(f"{NEEDS_A_LOOK}/"):  # asked again: the file stays
+            card = is_card_photo(self.store, item.sha256)
+            if card:  # a card photo is asked about where it is, never moved
+                mark_card(self.store, item)
+            if card or item.rel_path.startswith(f"{NEEDS_A_LOOK}/"):  # the file stays
                 with self.store.transaction():
                     self.store.update_item(item.id, state="asked", **columns)
                     self.activity.record(

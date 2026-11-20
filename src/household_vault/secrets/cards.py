@@ -193,7 +193,9 @@ class CardIntake:
         shown = effective_reading(reading, ov)
         number = _digits(reading.secret_values.get("number"))
         if not _readable(number):
-            return self._ask(item, [Reason.card_unreadable], reading, shown, {})
+            # A CVV with no number is the back of a card: its front has to come with it.
+            context = {"why": "back_only"} if reading.secret_values.get("cvv") else {}
+            return self._ask(item, [Reason.card_unreadable], reading, shown, context)
         decision = decide(
             reading,
             self.household,
@@ -210,7 +212,11 @@ class CardIntake:
                 self._held[item.id] = (item.sha256, reading)
             return "waiting"
         try:
-            masked, front = self._masked_front(source, item.sha256, number, reading)
+            # A HEIC photo was converted to PNG once, while it was read: the mask and the image
+            # checks use those bytes, so `sips` writes one temporary copy of the card, not three.
+            # The secrets entry and Undo keep the photo as it came (`source`).
+            seen = reading.converted or source
+            masked, front = self._masked_front(seen, item.sha256, number, reading)
         except StillShowsNumber:
             context = {"why": "tilted"}
             return self._ask(item, [Reason.card_unreadable], reading, shown, context)

@@ -161,7 +161,8 @@ def find_numbers(
 
     Every window of consecutive groups in a run is tried, so a number that follows or precedes
     other digits is found. A card is 13 to 19 digits passing Luhn (the published test numbers
-    only when allow_test_cards is False). With any_long_run every 13 to 19 digit window counts.
+    only when allow_test_cards is False). With any_long_run every 13 to 19 digit window counts,
+    and so does one group of more than 19 digits.
     An Aadhaar number is 12 digits, as one group or three groups of four joined by spaces,
     passing Verhoeff, and not inside a card hit.
     """
@@ -187,6 +188,11 @@ def find_numbers(
                     card_spans.append((i, j))
                 if counts:
                     hits.append(NumberHit(run[i].start, run[j].end, digits, "card"))
+        if any_long_run:  # one group too long for any window: a number glued to other digits
+            for i, group in enumerate(run):
+                if len(group.digits) > 19:
+                    card_spans.append((i, i))
+                    hits.append(NumberHit(group.start, group.end, group.digits, "card"))
         for i in range(len(run)):
             windows = []
             if len(run[i].digits) == 12:

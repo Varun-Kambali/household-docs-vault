@@ -1,3 +1,5 @@
+import hashlib
+import json
 import logging
 from datetime import date
 from pathlib import Path
@@ -7,7 +9,7 @@ from fastapi.testclient import TestClient
 from starlette.formparsers import MultiPartParser
 from vault_synth.household import HOUSEHOLD
 
-from household_vault.api.app import MAX_UPLOAD_BYTES, create_app
+from household_vault.api.app import _MAX_BODY_BYTES, MAX_UPLOAD_BYTES, create_app
 from household_vault.app_state import AppState, build_app_state
 from household_vault.doctypes import DocType
 from household_vault.logging_setup import configure
@@ -272,7 +274,8 @@ def test_a_card_upload_over_the_limit_is_a_413(client):
 
 
 def test_uploads_stay_in_memory_not_in_a_temporary_file(client):
-    assert MultiPartParser.spool_max_size >= MAX_UPLOAD_BYTES
+    # A part can be as large as the body the limit lets through, so no part can roll over to disk.
+    assert MultiPartParser.spool_max_size >= _MAX_BODY_BYTES >= MAX_UPLOAD_BYTES
 
 
 def test_the_secrets_store_is_created_then_unlocked(client, state):
@@ -456,7 +459,7 @@ def test_a_busy_drive_cache_folder_blocks_creating(client, state, name):
 
 @pytest.mark.parametrize("rel", ["Secrets.kdbx", "_system/log/2026-11.csv", "Home/old.KDBX"])
 def test_the_secrets_file_and_system_files_are_never_served(client, state, filed_doc, rel):
-    state.vault.write_atomic(SECRETS_FILE, b"kdbx bytes") if rel == "Secrets.kdbx" else None
+    state.vault.write_atomic(rel, b"private bytes")  # a real file, so only the rule refuses it
     state.store.conn.execute("update documents set rel_path = ? where id = ?", (rel, filed_doc.id))
     assert client.get(f"/v1/documents/{filed_doc.id}/file").status_code == 404
 
@@ -548,3 +551,232 @@ def test_a_chunked_body_over_the_limit_is_stopped_early(state):
     status, asked = _drive(create_app(state, start_worker=False), [head] + [chunk] * total)
     assert status == 413
     assert asked <= _MAX_BODY_BYTES // len(chunk) + 2  # it did not read the rest
+
+
+def _Pages(ocr):
+    from household_vault.reading.engines import VisionPageReader
+
+    return VisionPageReader(ocr)
+
+
+def test_a_card_document_never_returns_a_long_digit_run(settings, tmp_path, clock, photo):
+    import json
+    import re
+
+    from tests.fakes import FakeModels, FakeOcr
+
+    people = tmp_path / "household.json"
+    people.write_text(HOUSEHOLD.model_dump_json())
+    ready = settings.model_copy(update={"household_path": people, "settle_seconds": 0.0})
+    number = "4111 1111 1111 1111"
+    fill = json.dumps(
+        {
+            "bank": "Deccan Trust Bank",
+            "card_name": number,
+            "holder": "Ravi Kumar Rao",
+            "last4": number,
+            "statement_date": "2026-10-01",
+        }
+    )
+    models = FakeModels(type_="card_statement", fill=fill)
+    ocr = FakeOcr(text="Card statement Ravi Kumar Rao " + number)
+    s = build_app_state(ready, engines=Engines(_Pages(ocr), models), clock=clock)
+    try:
+        drop(s.vault, "statement.jpg", photo)
+        s.worker.drain()
+        docs = s.store.documents_of_type(DocType.card_statement)
+        assert docs, "the statement should have been filed"
+        c = TestClient(create_app(s, start_worker=False), base_url="http://localhost")
+        for doc in docs:
+            # The document's own id and hash are hex and can hold a long run of digits by chance.
+            body = re.sub(r"[0-9a-f]{32,64}", "", c.get(f"/v1/documents/{doc.id}").text)
+            assert not re.search(r"\d(?:[ -]?\d){12,18}", body), body
+            assert "1111" in body
+    finally:
+        s.gate.lock()
+        s.store.conn.close()
+
+
+def test_a_waiting_card_items_file_is_not_served(client, state, outsider_prescription):
+    item = outsider_prescription
+    assert client.get(f"/v1/items/{item.id}/file").status_code == 200  # an ordinary asked item
+    state.store.conn.execute(
+        "update items set reasons = ? where id = ?", ('["card_unreadable"]', item.id)
+    )
+    r = client.get(f"/v1/items/{item.id}/file")
+    assert r.status_code == 423 and "secrets store" in r.json()["detail"]
+    state.store.conn.execute("update items set reasons = '[]' where id = ?", (item.id,))
+    assert client.get(f"/v1/items/{item.id}/file").status_code == 200
+    state.store.conn.execute("update items set state = 'waiting_secrets' where id = ?", (item.id,))
+    assert client.get(f"/v1/items/{item.id}/file").status_code == 423
+
+
+def test_an_item_typed_card_front_is_not_served(client, state, outsider_prescription):
+    item = outsider_prescription
+    state.store.conn.execute(
+        "update items set overrides = ? where id = ?", ('{"doc_type": "card_front"}', item.id)
+    )
+    assert client.get(f"/v1/items/{item.id}/file").status_code == 423
+    state.store.conn.execute("update items set overrides = '{}' where id = ?", (item.id,))
+    reading = dict(item.reading or {}, doc_type="card_front")
+    state.store.conn.execute(
+        "update items set reading = ? where id = ?", (json.dumps(reading), item.id)
+    )
+    assert client.get(f"/v1/items/{item.id}/file").status_code == 423
+
+
+def test_a_malformed_origin_is_refused_not_a_server_error(client, state, outsider_prescription):
+    url = f"/v1/items/{outsider_prescription.id}/retry"
+    r = client.post(url, headers={"Origin": "http://[abc"})
+    assert r.status_code == 403
+
+
+def _a_card_item(state, sha, st="filed"):
+    item = state.store.add_item(sha, "card.jpg", None, state.worker.clock())
+    state.store.update_item(item.id, state=st, reading={"doc_type": "card_front"})
+    return item
+
+
+def test_a_copy_of_a_card_photo_stays_protected_after_the_original_is_filed(client, state):
+    _a_card_item(state, "c" * 64, "filed")
+    copy = state.store.add_item("c" * 64, "copy.jpg", "Inbox/copy.jpg", state.worker.clock())
+    state.store.update_item(copy.id, state="asked", reasons=[Reason.duplicate])
+    assert client.get(f"/v1/items/{copy.id}/file").status_code == 423
+    r = client.post(
+        f"/v1/needs-a-look/{copy.id}/answer", json={"kind": "type", "value": "tax_invoice"}
+    )
+    assert r.status_code == 409
+
+
+def test_the_document_file_of_a_card_photo_is_refused(client, state, filed_doc):
+    assert client.get(f"/v1/documents/{filed_doc.id}/file").status_code == 200
+    _a_card_item(state, filed_doc.sha256, "discarded")  # these bytes were once a card photo
+    r = client.get(f"/v1/documents/{filed_doc.id}/file")
+    assert r.status_code == 423 and "secrets store" in r.json()["detail"]
+
+
+def test_the_filer_will_not_file_or_move_a_card_photo(client, state):
+    from datetime import date
+
+    from household_vault.filing.decide import Decision
+    from household_vault.filing.filer import CardPhotoError
+    from household_vault.filing.questions import question_for
+    from household_vault.reading.pipeline import Reading
+
+    _a_card_item(state, "d" * 64, "gone")
+    path = "Inbox/raw.jpg"
+    state.vault.write_atomic(path, b"raw card bytes")
+    item = state.store.add_item("d" * 64, "raw.jpg", path, state.worker.clock())
+    state.store.update_item(item.id, state="queued", kind="jpeg")
+    item = state.store.item(item.id)
+    reading = Reading(pages=[], english_letters=0)
+    decision = Decision(
+        "file", [], "p1", [], None, "Home", date(2026, 1, 1), "document", "x", None, {}, None
+    )
+    with pytest.raises(CardPhotoError):
+        state.filer.file(item, reading, decision)
+    question = question_for([Reason.person_unknown], None, state.filer.household, {})
+    moved = state.filer.to_needs_a_look(item, [Reason.person_unknown], question, None)
+    assert moved.rel_path == path and state.vault.exists(path)  # asked where it is
+    assert moved.overrides.get("was_card") is True  # and the copy is marked for good
+
+
+def test_the_worker_asks_about_raw_card_bytes_in_place(settings, tmp_path, clock, photo):
+    import hashlib
+    import json
+
+    from household_vault.reading.engines import VisionPageReader
+    from tests.fakes import FakeModels, FakeOcr
+
+    people = tmp_path / "household.json"
+    people.write_text(HOUSEHOLD.model_dump_json())
+    ready = settings.model_copy(update={"household_path": people, "settle_seconds": 0.0})
+    fill = json.dumps({"seller": "Deccan", "invoice_date": "2026-11-01"})
+    models = FakeModels("tax_invoice", fill)
+    s = build_app_state(
+        ready,
+        engines=Engines(VisionPageReader(FakeOcr(text="Tax invoice Ravi Kumar Rao")), models),
+        clock=clock,
+    )
+    try:
+        _a_card_item(s, hashlib.sha256(photo).hexdigest(), "discarded")
+        drop(s.vault, "raw.jpg", photo)
+        s.worker.drain()
+        (item,) = s.store.items(["asked"])
+        assert item.rel_path == "Inbox/raw.jpg" and s.vault.list_dir("Needs a look") == []
+        assert s.store.documents_of_type(DocType.tax_invoice) == []
+    finally:
+        s.gate.lock()
+        s.store.conn.close()
+
+
+# Every API route and every filer entry, and what it does with a file's raw bytes. A new one that
+# is not listed here fails the test below until it is classified (and, if it returns, moves or
+# writes raw bytes, gated by `is_card_photo`).
+_ROUTES_WITH_BYTES = {
+    ("GET", "/v1/documents/{doc_id}/file"): "document_file refuses a card sha",
+    ("GET", "/v1/items/{item_id}/file"): "item_file refuses a card item or sha",
+}
+_ROUTES_WITHOUT_BYTES = {
+    ("GET", "/healthz"), ("GET", "/v1/activity"), ("GET", "/v1/inbox/progress"),
+    ("GET", "/v1/needs-a-look"), ("POST", "/v1/needs-a-look/answer-many"),
+    ("POST", "/v1/needs-a-look/{item_id}/answer"), ("POST", "/v1/needs-a-look/{item_id}/unlock"),
+    ("POST", "/v1/needs-a-look/{item_id}/undo"), ("POST", "/v1/documents/{doc_id}/undo"),
+    ("POST", "/v1/items/{item_id}/retry"), ("GET", "/v1/documents/{doc_id}"),
+    ("POST", "/v1/cards"), ("POST", "/v1/secrets/create"), ("POST", "/v1/secrets/unlock"),
+    ("GET", "/v1/emergency-sheet"),
+}  # fmt: skip
+_FRAMEWORK_PATHS = {"/openapi.json", "/docs", "/docs/oauth2-redirect", "/redoc"}
+_FILER_ENTRIES = {
+    "file": "gated: CardPhotoError for a card sha",
+    "file_new": "files bytes the app made (the masked copy), never the raw photo",
+    "to_needs_a_look": "gated: a card photo stays where it is",
+    "undo": "moves a filed document back to Inbox: the filed copy is masked or not a card",
+    "undo_card": "writes the original photo back to Inbox from the secrets store, by design",
+    "undo_needs_a_look": "moves a Needs a look file back to Inbox; a card photo is never there",
+    "clear_card_photo": "removes the Inbox photo, writes nothing",
+    "recover": "finishes interrupted moves of files already filed or asked",
+}
+
+
+def test_every_route_and_filer_entry_is_classified_for_raw_card_bytes(client):
+    import inspect
+
+    from fastapi.routing import APIRoute
+
+    from household_vault.filing.filer import Filer
+
+    seen = set()
+    for route in client.app.routes:
+        if isinstance(route, APIRoute):
+            seen |= {(m, route.path) for m in route.methods - {"HEAD", "OPTIONS"}}
+        elif getattr(route, "path", "") in _FRAMEWORK_PATHS:
+            continue  # FastAPI's own docs and schema routes
+        else:  # a plain Route or a Mount (static files) would bypass the gate: refuse any
+            seen.add((type(route).__name__, getattr(route, "path", "?")))
+    classified = set(_ROUTES_WITH_BYTES) | _ROUTES_WITHOUT_BYTES
+    assert seen == classified, (
+        f"classify new routes for raw card bytes: {sorted(seen ^ classified)}"
+    )
+    public = {n for n, f in inspect.getmembers(Filer, inspect.isfunction) if not n.startswith("_")}
+    assert public == set(_FILER_ENTRIES), (
+        f"classify filer entries: {sorted(public ^ set(_FILER_ENTRIES))}"
+    )
+
+
+def test_file_new_refuses_the_raw_bytes_of_a_card_photo(state):
+    from datetime import date
+
+    from household_vault.filing.decide import Decision
+    from household_vault.filing.filer import CardPhotoError
+    from household_vault.reading.pipeline import Reading
+
+    raw = b"raw card photo bytes"
+    _a_card_item(state, hashlib.sha256(raw).hexdigest(), "filed")
+    item = state.store.add_item("e" * 64, "x.jpg", None, state.worker.clock())
+    reading = Reading(pages=[], english_letters=0)
+    decision = Decision(
+        "file", [], "p1", [], None, "Home", date(2026, 1, 1), "document", "x", None, {}, None
+    )
+    with pytest.raises(CardPhotoError):
+        state.filer.file_new(item, raw, ".jpg", reading, decision, None)

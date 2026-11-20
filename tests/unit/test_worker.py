@@ -496,3 +496,14 @@ def test_an_upload_waiting_in_the_queue_is_left_to_its_job(world):
     world.store.enqueue(item.id, "process")
     world.worker.start_up()
     assert world.store.item(item.id).state == "queued"
+
+
+def test_an_upload_made_after_the_start_is_not_asked_again(world):  # re-review minor c
+    started = world.clock()
+    world.clock.advance(5)
+    item = world.store.add_item("c" * 64, "card upload", None, world.clock(), origin="upload")
+    world.store.update_item(item.id, state="reading")  # being read right now
+    assert world.store.item(item.id).created_at > started
+    world.worker.clock = lambda: started  # the worker started before the upload came in
+    world.worker.start_up()
+    assert world.store.item(item.id).state == "reading"

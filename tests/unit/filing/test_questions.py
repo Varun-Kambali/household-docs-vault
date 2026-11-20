@@ -198,3 +198,12 @@ def test_one_name_read_that_matches_one_person_is_not_called_unknown():
     assert q.reason is Reason.person_unsure
     assert q.text == 'Marriage certificate for "Ravi Rao". Whose is it?'
     assert q.options[0].value == "p1"
+
+
+def test_a_lone_card_back_asks_for_the_front_and_back_together():
+    q = question_for([Reason.card_unreadable], None, HOUSEHOLD, {"why": "back_only"})
+    assert q.text == (
+        "This looks like the back of a card. "
+        "Upload the front and back together in the app, then discard this one."
+    )
+    assert q.answer_kind == "discard"

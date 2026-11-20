@@ -23,6 +23,7 @@ from household_vault.activity import Activity, Step
 from household_vault.config import Settings
 from household_vault.db import Item, ItemState, Store
 from household_vault.doctypes import LABEL, DocType
+from household_vault.filing.cardness import is_card_photo
 from household_vault.filing.decide import Overrides, base_field, decide
 from household_vault.filing.filer import BUSY, Filer, TargetGone
 from household_vault.filing.questions import Question, question_for, upload_again_question
@@ -285,6 +286,7 @@ class Worker:
 
     def start_up(self) -> None:
         """Finish what a stop left half done, and run again the jobs it cut off."""
+        started = self.clock()
         try:
             self.vault.mkdirs(SYSTEM)
         except VaultGone:
@@ -298,7 +300,8 @@ class Worker:
         # leaves it `reading` with nothing to run again: the owner is asked to upload it again.
         active = self._active_ids()
         for item in self.store.items(["reading", "queued"]):
-            if item.origin == "upload" and item.id not in active:
+            # Only an upload made before this start: one accepted since is being read right now.
+            if item.origin == "upload" and item.id not in active and item.created_at <= started:
                 self._upload_again(item)
 
     def run_forever(self, stop: threading.Event) -> None:
@@ -601,6 +604,9 @@ class Worker:
 
     def _decide_and_file(self, item: Item, reading: Reading, ov: Overrides) -> None:
         item = self.store.item(item.id)
+        if is_card_photo(self.store, item.sha256):  # raw card bytes are never filed or moved
+            self._ask(item, [Reason.card_unreadable], reading, {})
+            return
         doc_type = ov.doc_type or reading.doc_type
         filed = self.store.documents_of_type(doc_type) if doc_type else []
         decision = decide(reading, self.filer.household, self.clock().date(), filed, ov)

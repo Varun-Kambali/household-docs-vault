@@ -87,8 +87,11 @@ def _types(first: Sequence[DocType] = ()) -> list[Option]:
     return [Option(t.value, LABEL[t]) for t in (*ordered, *rest)]
 
 
+_FIELD_WORDS = {"last4": "last four digits of the card"}
+
+
 def _field_text(name: str) -> str:
-    return name.replace("_", " ")
+    return _FIELD_WORDS.get(name, name.replace("_", " "))
 
 
 def _problem_field(reason: Reason, reading: Reading | None, context: Mapping[str, str]) -> str:
@@ -196,6 +199,12 @@ def question_for(
         case Reason.card_unreadable:
             if context.get("why") == "tilted":
                 text = "Take a straighter photo of the card."
+                return Question(reason, text, "discard", [Option("discard", "Discard")])
+            if context.get("why") == "back_only":
+                text = (
+                    "This looks like the back of a card. "
+                    "Upload the front and back together in the app, then discard this one."
+                )
                 return Question(reason, text, "discard", [Option("discard", "Discard")])
             text = (
                 "I could not read this card's number. "

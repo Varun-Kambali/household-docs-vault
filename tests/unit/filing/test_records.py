@@ -180,6 +180,182 @@ def test_a_secret_digit_run_is_hidden_in_lines_and_issues():
     card.issues = {"cvv": "CVV 123 is too short", "number": "read 4111 1111 1111 1112"}
     out = stored_reading(card, card_item=True)
     text = out["pages"][0]["lines"][0]["text"]
-    assert text == "XXXX XXXX XXXX 1111 CVV XXX Main 1234"
+    assert text == "XXXX XXXX XXXX 1111 CVV XXX Main XXXX"
     assert out["issues"]["cvv"] == "CVV XXX is too short"
     assert "123" not in json.dumps(out).replace("1234", "")
+
+
+def _stored_texts(text, fill, type_, photo, *, card_item=False):
+    from household_vault.intake.sniff import FileKind
+    from household_vault.reading.engines import Engines, VisionPageReader
+    from household_vault.reading.pipeline import read_document
+    from household_vault.reading.source import DocumentSource
+    from tests.fakes import FakeModels, FakeOcr
+
+    models = FakeModels(type_=type_, fill=json.dumps(fill))
+    reading = read_document(
+        DocumentSource(FileKind.jpeg, data=photo),
+        "k" * 64,
+        Engines(VisionPageReader(FakeOcr(text=text)), models),
+        mode="dev",
+    )
+    stored = stored_reading(reading, card_item=card_item)
+    return [ln["text"] for p in stored["pages"] for ln in p["lines"]]
+
+
+def test_a_cvv_the_fill_missed_is_masked_in_stored_lines(photo):
+    texts = _stored_texts(
+        "AUTHORISED SIGNATURE 123 call 1800 22 3344 if found",
+        {"bank": "Deccan", "cvv": None},
+        "card_front",
+        photo,
+        card_item=True,
+    )
+    assert texts[0] == "AUTHORISED SIGNATURE XXX call XXXX 22 XXXX if found"
+
+
+def test_a_misread_cvv_leaves_nothing_of_the_printed_one(photo):
+    texts = _stored_texts(
+        "AUTHORISED SIGNATURE 123",
+        {"bank": "Deccan", "cvv": "128"},
+        "card_front",
+        photo,
+        card_item=True,
+    )
+    assert "123" not in texts[0] and "128" not in texts[0]
+
+
+def test_a_lone_back_typed_other_is_masked_too(photo):
+    texts = _stored_texts("AUTHORISED SIGNATURE 123 not transferable", {}, "other", photo)
+    assert texts[0] == "AUTHORISED SIGNATURE XXX not transferable"
+
+
+def test_a_glued_run_of_digits_on_a_card_page_is_masked(photo):
+    glued = "4111111111111111123"  # a number and a CVV with no space, then more digits
+    texts = _stored_texts(f"NUMBER {glued}9999", {}, "card_front", photo, card_item=True)
+    assert texts[0] == "NUMBER " + "X" * 23
+
+
+def test_a_masked_number_keeps_its_last_four_and_dates_stay(photo):
+    texts = _stored_texts(
+        "4111 1111 1111 1111 VALID THRU 08/29 and 08/2029 ref 5678",
+        {"number": "4111111111111111"},
+        "card_front",
+        photo,
+        card_item=True,
+    )
+    assert texts[0] == "XXXX XXXX XXXX 1111 VALID THRU 08/29 and 08/2029 ref XXXX"
+
+
+def test_other_types_keep_their_numbers_in_stored_lines(photo):
+    texts = _stored_texts(
+        "Policy 123456 issued", {"policy_number": "123456"}, "health_policy", photo
+    )
+    assert texts[0] == "Policy 123456 issued"
+
+
+@pytest.mark.parametrize(
+    ("line", "masked"),
+    [
+        ("4111 1111 1111 1112", "XXXX XXXX XXXX 1112"),
+        ("41111111111111111234", "XXXXXXXXXXXXXXXXXXXX"),
+    ],
+)
+def test_a_card_letter_masks_a_misread_or_glued_number_in_stored_lines(photo, line, masked):
+    texts = _stored_texts(
+        f"Your new card {line} Deccan Trust Bank",
+        {"bank": "Deccan Trust Bank", "last4": "1111"},
+        "card_welcome_letter",
+        photo,
+    )
+    assert texts[0] == f"Your new card {masked} Deccan Trust Bank"
+
+
+def test_a_statement_keeps_its_amounts_and_dates_in_stored_lines(photo):
+    texts = _stored_texts("Total due 12345.50 on 01/11/2026 ref 98765", {}, "card_statement", photo)
+    assert texts[0] == "Total due 12345.50 on 01/11/2026 ref 98765"
+
+
+@pytest.mark.parametrize(
+    ("line", "cvv", "masked"),
+    [
+        ("4111111111111111123", "123", "XXXXXXXXXXXX1111XXX"),
+        ("4111 1111 1111 1111123", "123", "XXXX XXXX XXXX 1111XXX"),
+        ("41111111111111111234", "1234", "XXXXXXXXXXXX1111XXXX"),
+        ("4111111111111111123", None, "XXXXXXXXXXXX1111XXX"),
+    ],
+)
+def test_a_number_glued_to_its_cvv_keeps_only_the_number_last_four(photo, line, cvv, masked):
+    texts = _stored_texts(
+        f"AUTHORISED SIGNATURE {line}",
+        {"bank": "Deccan", "number": "4111111111111111", "cvv": cvv},
+        "card_front",
+        photo,
+        card_item=True,
+    )
+    assert texts[0] == f"AUTHORISED SIGNATURE {masked}"
+
+
+def test_a_long_glued_run_with_no_number_read_keeps_no_digit(photo):
+    texts = _stored_texts("ref 411111111111111112345", {}, "other", photo)
+    assert texts[0] == "ref " + "X" * 21
+
+
+def test_a_card_page_with_no_number_read_keeps_no_digit_of_a_masked_run(photo):
+    texts = _stored_texts(
+        "4111 1111 1111 1111 VALID THRU 08/29", {}, "card_front", photo, card_item=True
+    )
+    assert texts[0] == "XXXX XXXX XXXX XXXX VALID THRU 08/29"
+
+
+_SEPARATED = [
+    "4111  1111  1111  1111",
+    "4111.1111.1111.1111",
+    "4111/1111/1111/1111",
+    "4111 - 1111 - 1111 - 1111",
+    "\u00a0".join(["4111", "1111", "1111", "1111"]),
+    "\u2013".join(["4111", "1111", "1111", "1111"]),
+    "\u2011".join(["4111", "1111", "1111", "1111"]),
+    "4111_1111_1111_1111",
+    "4111\t1111\t1111\t1111",
+    "\u200b".join(["4111", "1111", "1111", "1111"]),
+]
+
+
+@pytest.mark.parametrize("shown", _SEPARATED)
+@pytest.mark.parametrize("type_", ["card_welcome_letter", "card_statement"])
+def test_card_area_lines_mask_a_number_under_any_separator(photo, shown, type_):
+    texts = _stored_texts(f"Your card {shown} Deccan", {"bank": "Deccan"}, type_, photo)
+    assert texts[0].count("1") == 4 and texts[0].startswith("Your card X")
+
+
+def test_card_area_lines_keep_dates_and_amount_rows(photo):
+    line = "Period 01-10-2026 31-10-2026 and 01/10/2026 - 31/10/2026 Opening 100 200 300 400 500"
+    assert _stored_texts(line, {}, "card_statement", photo)[0] == line
+
+
+def test_a_misread_number_on_a_letter_is_masked_without_luhn(photo):
+    texts = _stored_texts("Card 4111 1111 1111 1112 sent", {}, "card_welcome_letter", photo)
+    assert texts[0] == "Card XXXX XXXX XXXX 1112 sent"
+
+
+@pytest.mark.parametrize(
+    ("line", "masked"),
+    [
+        ("Card 4111 1111 1111 111 sent", "Card XXXX XXXX XXX1 111 sent"),
+        ("Card 4111 1111 1111 1111123 sent", "Card XXXX XXXX XXXX XXXXXXX sent"),
+        ("Card 41111 1111 1111 1111 sent", "Card XXXXX XXXX XXXX XXXX sent"),
+    ],
+)
+def test_a_damaged_number_on_a_letter_or_statement_is_masked(photo, line, masked):
+    for type_ in ("card_welcome_letter", "card_statement"):
+        assert _stored_texts(line, {}, type_, photo)[0] == masked
+
+
+def test_amount_rows_and_dates_stay_on_a_statement(photo):
+    line = "Opening 100 200 300 400 500 on 01-10-2026 31-10-2026 due 12000 4500 800"
+    assert _stored_texts(line, {}, "card_statement", photo)[0] == line
+
+
+def test_an_other_page_with_no_number_keeps_no_digit_of_a_glued_run(photo):
+    assert _stored_texts("ref 4111111111111111123", {}, "other", photo)[0] == "ref " + "X" * 19

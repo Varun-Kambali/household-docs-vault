@@ -314,6 +314,16 @@ def test_the_logs_and_the_activity_never_hold_a_secret(card_world, caplog):
         assert secret not in caplog.text and secret not in entries
 
 
+def test_a_card_back_with_a_cvv_and_no_number_asks_for_both_sides(card_world):
+    card_world.models.patch = {"number": None, "cvv": "123"}
+    card_world.drop_card(base=5)
+    card_world.drain()
+    (item,) = card_world.store.items(["asked"])
+    assert item.reasons == [Reason.card_unreadable]
+    assert item.question and "back of a card" in item.question["text"]
+    assert "123" not in str(item.reading)
+
+
 def test_a_number_that_fails_the_check_asks_in_place_and_stores_nothing(card_world):
     card_world.models.patch = {"number": "4111111111111112"}
     card = card_world.drop_card(base=5)
@@ -723,3 +733,62 @@ def test_a_gate_that_closes_while_the_card_is_filed_leaves_it_waiting(card_world
     card_world.drain()
     assert card_world.store.documents_of_type(DocType.card_front)
     assert card_world.store.item(item.id).state == "filed"
+
+
+def test_a_heic_card_is_converted_once_for_the_whole_card(card_world, monkeypatch):
+    """`sips` writes the unmasked photo to a temporary folder on each conversion, so the reader,
+    the mask and the image checks share one."""
+    import hashlib
+
+    from household_vault.intake.sniff import FileKind
+    from household_vault.reading import engines, pipeline
+    from household_vault.reading.pipeline import read_document
+    from household_vault.reading.source import DocumentSource
+
+    card = card_world.card(5)
+    sha = hashlib.sha256(card.data).hexdigest()
+    calls: list[int] = []
+
+    def convert(data: bytes) -> bytes:
+        calls.append(1)
+        return data  # the stand-in: the bytes are already an image
+
+    monkeypatch.setattr(engines, "heic_to_png", convert)
+    monkeypatch.setattr(pipeline, "heic_to_png", convert)
+    source = DocumentSource(FileKind.heic, data=card.data)
+    reading = read_document(
+        source, sha, card_world.cards.engines, mode="dev", forced_type=DocType.card_front
+    )
+    item = card_world.store.add_item(sha, "card.heic", None, card_world.filer.clock())
+    outcome = card_world.cards.handle(item, reading, source, "inbox")
+    assert outcome == "filed"
+    assert len(calls) == 1
+
+
+def test_a_heic_card_keeps_its_original_in_the_secrets_store(card_world, monkeypatch):
+    import hashlib
+
+    from household_vault.intake.sniff import FileKind
+    from household_vault.reading import engines, pipeline
+    from household_vault.reading.pipeline import read_document
+    from household_vault.reading.source import DocumentSource
+
+    card = card_world.card(5)
+    original = b"HEIC-ORIGINAL" + card.data  # stands for the HEIC bytes
+    sha = hashlib.sha256(card.data).hexdigest()  # the truth key
+
+    def convert(data: bytes) -> bytes:
+        return data.removeprefix(b"HEIC-ORIGINAL")  # the stand-in PNG
+
+    monkeypatch.setattr(engines, "heic_to_png", convert)
+    monkeypatch.setattr(pipeline, "heic_to_png", convert)
+    source = DocumentSource(FileKind.heic, data=original)
+    reading = read_document(
+        source, sha, card_world.cards.engines, mode="dev", forced_type=DocType.card_front
+    )
+    item = card_world.store.add_item(sha, "card.heic", None, card_world.filer.clock())
+    assert card_world.cards.handle(item, reading, source, "inbox") == "filed"
+    ref = card_world.store.item(item.id).overrides["secret_ref"]
+    store = card_world.gate.store()
+    names = store.attachment_names(ref)
+    assert names == ["front.heic"] and store.attachment(ref, names[0]) == original
