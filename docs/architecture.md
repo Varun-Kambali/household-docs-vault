@@ -7,35 +7,50 @@ The vault is a web app that runs on my Mac. Files live in a `Family Vault` folde
 ```mermaid
 flowchart LR
   P[Phone: Drive scanner, recorder, installed app] --> D[(Google Drive: Family Vault)]
-  D <-->|Drive for desktop sync| W[Inbox watcher]
-  W --> Q[Job queue]
-  Q --> R[Reader: pages, text and line boxes, type, person, fields]
-  R --> S[Secrets split]
-  S --> K[(Secrets.kdbx)]
-  R --> F[Filer: copy, verify, record, clear Inbox]
+  D <-->|Drive for desktop sync| W[Inbox watcher and checks]
+  UP[Card upload through the API] --> CI[Card intake]
+  W --> Q[Job queue in SQLite]
+  Q --> R[Reader: Apple Vision lines, type call, fill, spelling snap, card masking]
+  CI --> R
+  R --> DEC[Decide: owner, folder, required fields, one question]
+  DEC --> F[Filer: copy, verify, record, clear Inbox]
+  DEC --> NAL[Needs a look]
+  CI --> K[(Secrets.kdbx)]
+  F --> K
+  F --> REC[(Records in _system)]
   F --> DB[(App database on the Mac)]
-  F --> I[Index: keyword and vector]
-  F --> RM[Reminders]
-  F --> PDF[Person PDFs: What we have, history, checkups]
-  PDF --> D
-  API[API] --> DB
-  API --> I
+  F --> D
+  G{{Card gate: is_card_photo}} -.-> F
+  G -.-> API
+  API[API on localhost] --> DB
+  API --> Q
   API --> K
-  UI[Web app: Mac browser and phone over Tailscale] --> API
+  EV[Evals and CI smoke run] -. replay recordings .-> R
+  EV -. real worker and filer .-> F
 ```
+
+Not built yet, and drawn in the plan only: the index, reminders, the person PDFs, the web app, tracing and the transcriber (M3 to M5).
 
 ## Components
 
-- **Inbox watcher.** Notices a new file in `Inbox`, waits until Drive has finished syncing it, and checks that it opens, is not empty, is a supported type and is not a duplicate (SHA-256).
-- **Job queue.** Jobs are stored in SQLite. One worker runs one model-heavy job at a time so the models fit in 16 GB.
-- **Reader.** On the Mac only. Apple Vision text recognition, through `ocrmac`, returns each page's text with line positions ([ADR 0008](decisions/0008-reading-engine.md)). qwen3-vl:4b, run through Ollama, reads the page image and fills the type's JSON schema ([ADR 0009](decisions/0009-extraction-model-and-runtime.md)); qwen3:4b on the OCR text is the fallback. Every output is checked against its schema and by code: dates are real dates, totals add up, card numbers pass the Luhn check.
+Built in M2:
+
+- **Inbox watcher and checks.** Polls `Inbox`, ignores hidden and temporary names, and waits until a file's size and time have stopped changing, so Drive has finished syncing it. Then it checks that the file opens, is not empty, is a supported type and is not a duplicate by SHA-256. A file that fails goes to `Needs a look` with the reason.
+- **Job queue and worker.** Items and their state live in SQLite. One worker runs one model-heavy job at a time so the models fit in 16 GB. A drive outage pauses work instead of ending files as gone.
+- **Reader.** On the Mac only. Apple Vision, through `ocrmac`, returns each page's text with line positions ([ADR 0008](decisions/0008-reading-engine.md)). A type call to the local model reads that text, masked, and answers with a type; title cues check it ([ADR 0015](decisions/0015-document-type-from-text-and-title-cues.md)). qwen3-vl:4b, run through Ollama, then reads the page image and fills the type's JSON schema, copying dates, amounts and names as printed ([ADR 0009](decisions/0009-extraction-model-and-runtime.md), [ADR 0017](decisions/0017-values-read-as-printed-and-the-spelling-snap.md)). The app parses the dates and amounts, checks every field against its schema (dates are real dates, card and ID numbers pass their checksums), and the spelling snap fixes a misspelt name from the page's own text. qwen3:4b on the OCR text is the fallback when no vision model runs.
+- **Card masking.** Card fields and stored line text are masked by card shape before anything is stored, and a card photo's number line is blacked out in the filed copy (ADR 0014).
+- **Decide.** A pure function from a reading, the household and what is already filed to a decision: owner, linked people, folder, date, description, or one question. Owner rules, required fields and copy keys are per type ([ADR 0013](decisions/0013-who-owns-a-document-and-when-to-ask.md)).
+- **Filer.** Copies the file to its folder, confirms the copy's SHA-256, writes the record JSON and the database rows, then clears `Inbox`. Every move writes its intent first, so a stop at any point is finished or rolled back by `recover` from the database and the files. Undo moves a file back and removes its record. Discard only deletes when another copy verifies by hash ([ADR 0012](decisions/0012-record-json-and-database.md)).
+- **Secrets store and gate.** `Secrets.kdbx` is written only by the app. The master password unlocks it for 10 minutes in memory. Card photos that arrive while it is locked wait and are filed when it opens. One gate, `is_card_photo`, is asked by every route that serves, moves or files raw bytes ([ADR 0014](decisions/0014-secrets-in-the-filing-pipeline.md)).
+- **API.** Python and FastAPI with Pydantic models at every boundary. It listens on localhost only and refuses cross-site posts and a body that grows past its limit. It lists activity and Inbox progress, the `Needs a look` questions and answers (one at a time or many), unlock, Undo, retry, document files and the card upload. The screens that call it come in M3.
+- **Evals and the CI smoke run.** A reading eval and a filing eval score the reader and the real worker on `eval-v1` ([ADR 0016](decisions/0016-synthetic-eval-set-v1.md)). Recordings of model answers let the filing eval, and a 22-document smoke run in CI, replay a run with no model.
+
+Planned, from M3:
+
 - **Transcriber.** On the Mac only. Parakeet TDT 0.6B v2, through `parakeet-mlx`, turns a visit recording into a timestamped transcript. Each medicine name in the draft checkup is matched against that visit's prescription and a list of known medicine names, and a name that matches neither waits for my confirmation ([ADR 0011](decisions/0011-transcription-model.md)).
-- **Secrets split.** Card numbers, CVV, PINs and passwords are taken out of the reader's output and written to `Secrets.kdbx`. The rest continues to the filer. A card photo is stored as a protected attachment in its KeePass entry and a masked copy is filed.
-- **Filer.** Copies the file to its folder, confirms the copy's fingerprint, writes the record JSON, updates the database and index, then clears `Inbox`. Undo moves the file back and removes the record.
-- **Index.** SQLite full-text search for keywords (policy numbers, serial numbers) and a vector index in the same database for meaning.
+- **Index.** SQLite full-text search for keywords and a vector index in the same database for meaning.
 - **Reminders.** Built from extracted dates with lead times per kind of date.
-- **PDF writer.** HTML templates rendered to PDF for checkups, medical histories, What we have pages and the emergency sheet.
-- **API.** Python and FastAPI with Pydantic models at every boundary. It listens on localhost only.
+- **PDF writer.** HTML templates rendered to PDF for checkups, medical histories, What we have pages and the emergency sheet (the emergency sheet exists as a command already).
 - **Web app.** React, TypeScript and Vite, installable on the phone, keyboard-first on the Mac, with a page viewer that draws line outlines.
 - **Tracing.** Local tracing of each pipeline run and search, with IDs masked and secrets never recorded.
 
@@ -43,11 +58,11 @@ flowchart LR
 
 1. A paper is scanned with the Drive app on the phone into `Inbox`, or an invoice PDF is saved there.
 2. Drive for desktop syncs it to the Mac. The watcher waits for the sync to finish, then checks the file and fingerprints it.
-3. A job is queued. The reader renders page images, extracts text with the position of every line, decides the document type and whose it is, and fills the fields for that type.
-4. The secrets split removes anything secret and writes it to `Secrets.kdbx`.
-5. If the type or the person is below the confidence threshold, or required fields are missing, the file moves to `Needs a look` with the reason and the app asks one question.
+3. A job is queued. The reader renders page images, extracts text with the position of every line, asks the model for the document type from that text, and fills the fields for that type from the page image.
+4. Anything secret is taken out of the reading and written to `Secrets.kdbx`, and card numbers are masked in everything that is stored.
+5. The decision step works out whose it is. If the type is doubtful, a name matches nobody or two people, or required fields are missing, the file moves to `Needs a look` with the reason and the app asks one question.
 6. Otherwise the filer copies the file to `<Person>/<Area>/<date> <name>.<ext>`, confirms the copy's fingerprint, writes `_system/records/<id>.json`, updates the database and the index, and removes the file from `Inbox`.
-7. Reminders are created from the extracted dates, and the owner's What we have PDF is rewritten.
+7. (M4) Reminders are created from the extracted dates, and the owner's What we have PDF is rewritten.
 8. Every step is written to the activity log in the database and to `_system/log/<YYYY-MM>.csv`.
 
 ## Where data lives
@@ -67,12 +82,12 @@ flowchart LR
 | Threat | What the design does |
 |---|---|
 | A document carries instructions ("ignore previous rules...") | Document text is data. Models only fill fixed schemas; nothing a document says triggers an action; outputs are validated |
-| Secrets leak into plain storage or a model | Secrets go only to `Secrets.kdbx`; a leak test scans the database, index, logs, traces and Drive files on every eval run |
+| Secrets leak into plain storage or a model | Secrets go only to `Secrets.kdbx`; one gate keeps raw card photos from being served, moved or filed; a leak scan covers the vault, database and logs on every eval run (ADR 0014) |
 | Someone else on a network the phone uses | The app is not on the public internet; only my Tailscale devices reach it, over HTTPS, and it needs sign-in |
 | Lost or stolen phone | Remove the device from Tailscale and end its app session; secrets need the master password |
 | Lost or stolen Mac | Setup checks that FileVault disk encryption is on; the KeePass file needs the master password |
 | My Google account is broken into | Plain documents are readable (an accepted trade-off, ADR 0002); `Secrets.kdbx` is not. The README recommends 2-step verification on the Google account |
-| A misread document filed in the wrong place | Thresholds send doubtful files to `Needs a look`; Undo; the misfiling rate is a tracked eval metric |
+| A misread document filed in the wrong place | Rules send doubtful files to `Needs a look` (ADR 0013); Undo; the misfiling rate is a tracked eval metric (0 silent misfiles per 100 on the test split) |
 | Real data reaches the public repo or a cloud model | The repo holds code and synthetic data only; the cloud comparison runs only on the synthetic set and refuses the real vault path |
 | Accidental loss | Originals are never changed; Undo; nothing is deleted outside Drive's own trash without a confirm |
 
@@ -91,3 +106,9 @@ The reasoning behind the main choices is in `docs/decisions/`:
 - 0009 Fields are filled by a small vision model reading the page image
 - 0010 The fine-tune path: LoRA in PyTorch, merged and converted to GGUF for Ollama
 - 0011 Visits are transcribed with Parakeet, and medicine names are checked before a note is saved
+- 0012 One record file per document, and a database on the Mac that the records can rebuild
+- 0013 Who owns a document, where it goes, and when the app asks instead
+- 0014 How secrets are kept out of everything the filing pipeline writes
+- 0015 The document type comes from the page's text, and title cues only check the model
+- 0016 A synthetic eval set of 50 document types, scored once on a held-out split
+- 0017 Values are read as printed and converted by code, and spelling slips are fixed from the page's own text

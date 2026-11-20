@@ -1,6 +1,6 @@
 # Case study: Household docs vault
 
-Draft written at kickoff, before any code. Every number is a [bracket] until a results file in `evals/results/` holds it.
+Updated at the close of M2 (intake and reading). Every number comes from a results file in `evals/results/`; numbers for later milestones are still [brackets].
 
 ## Why: the problem
 I keep my family's papers: insurance policies, warranty cards and bills, IDs, home and vehicle papers, work papers, cards and medical records. They arrive on paper from shops and as invoices from online orders, and they end up scattered. There is no single place to put them and nothing that sorts them, so finding one means digging.
@@ -42,13 +42,48 @@ The first milestone measured the models before any app code was written, each ag
 
 Models only fill fixed schemas and code checks every output. Text inside a document is data and never an instruction.
 
-## Results
-[Table copied from `evals/results/summary.md` once M2 produces it.]
+M2 built the app from the Inbox to a filed document, and measured it on a synthetic set of 187 held-out test documents. The decisions from it:
 
-The targets are in [docs/requirements.md](requirements.md): among them 0 secrets found anywhere the app writes, at most 1 silent misfile per 100 documents, 92% of fields exactly right on photos, and no medicine saved wrong without my OK. Before v1.0.0 I will run the app on [20 to 30] of my own documents and publish counts only, never a value or a file name.
+- **One record file per document, and a database rebuildable from them.** The record sits in Drive next to the document, so it holds no secret and only masked line text. [ADR 0012](decisions/0012-record-json-and-database.md).
+- **Ask rather than guess.** Each type has an owner rule and a list of required fields. A name that matches nobody, two people tied, a missing field or a type the title disagrees with makes the app ask one question. A marriage certificate that reads with one name asks, because the first validation run filed one silently. [ADR 0013](decisions/0013-who-owns-a-document-and-when-to-ask.md).
+- **Secrets behind one gate.** I first guarded the places where the model should put a card number. The end-of-milestone review found it could put one anywhere, and fixing routes one by one took four rounds, each finding another way to the raw photo. Now one check on a file's SHA-256 is asked by every route that serves, moves or files raw bytes, and a test fails if a new route skips it. [ADR 0014](decisions/0014-secrets-in-the-filing-pipeline.md).
+- **The type comes from the page's text, and title cues only check it.** A cue can send a document to a question, never pick its type. [ADR 0015](decisions/0015-document-type-from-text-and-title-cues.md).
+- **A synthetic set split by base document**, tuned on one split and scored once on the other. [ADR 0016](decisions/0016-synthetic-eval-set-v1.md).
+- **Read as printed, convert in code, snap spelling from the OCR text.** [ADR 0017](decisions/0017-values-read-as-printed-and-the-spelling-snap.md).
+
+The tuning story, all on the validation split: the first run got 86.5% of photo fields exactly right against a target of 92%. 38 of the 72 misses were the model converting dates and amounts the app already knows how to parse, so I changed the prompt to copy them as printed and let code convert them (96.7%), then added a line to the type guide for lab reports mistaken for scan reports (97.6%). The rest were one-letter spelling slips in names that Apple Vision had read correctly, so after the test run I added a step that takes the OCR spelling when the model's value is a near match (99.4% on validation). That step was measured on the test split once, by replaying the recordings of the test run, with no model call.
+
+## Results
+Test split of eval-v1, 187 documents (59 clean PDFs, 59 photos, 59 scans, 10 locked PDFs). Copied from `evals/results/summary.md`, which replays the test run's committed recordings through the final code:
+
+| Measure | Result |
+|---|---|
+| Type accuracy | 100.0% |
+| Person accuracy (documents with a named person) | 100.0% |
+| Fields exactly right, all documents | 99.4% |
+| Fields exactly right, clean PDFs | 99.1% |
+| Fields exactly right, scans | 99.4% |
+| Fields exactly right, locked PDFs | 100.0% |
+| Line recall on photos | 98.5% |
+| Silent misfiles per 100 documents | 0.00 |
+| Needs a look, documents that should file | 0.0% |
+| Needs a look, all documents | 13.9% |
+| Seconds per photo, median and maximum | 51.12 and 112.042 |
+
+Filing, with the real worker and recorded readings: placement equals the decision on 100.0%, exact copies caught 100.0%, 0 wrong merges, 0 secrets found by the leak scan, 0 values stored for CVV.
+
+What these numbers do not show. The test run itself was made before the spelling snap. The live numbers are lower on the same documents: fields exactly right on photos 96.7%, person accuracy 92.4%, silent misfiles still 0, and 19.8% of all documents asked about (`evals/results/2026-11-20_reading_test_bcfd85d.json`). Every person miss in the live run was a name the model misspelt, and the app asked about each one; none was filed wrong. The table above is the replay with the snap (`..._b2a1fde.json`), and it is a replay, so a field made of a long digit run (an acknowledgement number) scores wrong in it even where the live read was right. The seconds are the live run's: median 50.6 over all documents, 12 of 187 took over a minute (long medical lists), and the slowest took 112 seconds. Every number is on synthetic pages.
+
+The targets are in [docs/requirements.md](requirements.md), with the M2 value beside each. Before v1.0.0 I will run the app on [20 to 30] of my own documents and publish counts only, never a value or a file name.
 
 ## Limits, and what better inputs would change
-The app's tests and scores use synthetic documents, and real Indian layouts differ, so the real-document check at the end is what shows whether the scores hold. The local models have to fit a 16 GB Mac, which caps how large a model the reader can use. Documents are read in English only. Files in Drive are not encrypted, so someone who gets into my Google account can read them; only the secrets file is protected. The first measurements use two documents per type and five text-to-speech visits, too few to rank close models, so M2's full eval set measures the picks again; the voices are also cleaner than a real clinic. Filing a photo document takes a median of 35.0 s and at most 46.8 s on my Mac, because the vision model is slow on a full page. That is fine in the background but means a batch of papers takes minutes. Better inputs (more real layouts, a larger model) would help the reader, and the design lets the model be swapped without touching the rest.
+The scores are on synthetic documents, and real Indian layouts differ, so the real-document check at the end is what shows whether they hold. The 9 most-used types have hand-drawn templates; the other 41 share a generic form layout, and the test split holds one base document of each of those, so a single odd document moves a type's score a lot. The photos are the clean pages put through a perspective transform and blur in code, not taken with a phone. The type cues and guide were written with these forms in view, so 100% type accuracy says little about a real cover page.
+
+The spelling snap works only when Apple Vision has the right spelling; where it does not, the app asks. The test re-measure was a replay, which masks long digit runs, so one field type scores lower there than it did live.
+
+On secrets: a card photo dropped in Drive's `Inbox` stays there, as Drive holds it, until its question is answered, and I do not count that as a leak. A lone card back is filed without its CVV reaching KeePass. The local type call can see a card back's CVV. A paper once misread as a card front can only be filed as a card or discarded. Masking by card shape misses a number split across two lines or damaged by OCR, and it masks card-shaped policy numbers. Drive keeps deleted files in its trash for 30 days. The full list is in [ADR 0014](decisions/0014-secrets-in-the-filing-pipeline.md).
+
+Documents are read in English only. Files in Drive are not encrypted, so someone who gets into my Google account can read them; only the secrets file is protected. The local models have to fit a 16 GB Mac, which caps how large a model the reader can use. Filing a photo takes a median of 51.1 s on my Mac and up to 112 s, because the vision model is slow on a full page. That is fine in the background but means a batch of papers takes minutes. Visits and medicine names (M5) are still measured on five synthetic recordings that are cleaner than a real clinic. A larger model or more real layouts would help, and the model can be swapped without touching the rest.
 
 ## What I learned
 [Mine to write once there is something to learn.]
