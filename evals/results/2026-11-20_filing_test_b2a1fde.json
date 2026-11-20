@@ -1,0 +1,142 @@
+{
+ "kind": "filing",
+ "split": "test",
+ "run": {
+  "date": "2026-11-20",
+  "machine": "Apple M5, 16 GB",
+  "os": "macOS 27.2.1",
+  "python": "3.12.15",
+  "commit": "b2a1fde",
+  "code_dirty": false
+ },
+ "dataset": {
+  "name": "eval-v1",
+  "manifest_sha256": "7558180de0ac486f92cbd3c9f6d17c15fbd2e346f20d4bba742d5d3bc55803fe"
+ },
+ "models": {
+  "recorded_engines": [
+   "ollama:qwen3-vl:4b"
+  ]
+ },
+ "prompt_version": "v4",
+ "thresholds": {
+  "smoke": {
+   "min": {
+    "type_accuracy": 0.98,
+    "person_accuracy": 0.98,
+    "linked_accuracy": 0.98,
+    "field_exact_photo": 0.9598,
+    "field_exact_all": 0.9666,
+    "line_recall_photo": 0.9606,
+    "placement_matches_decision": 0.98,
+    "exact_copies_caught": 0.98,
+    "undo_same_path": 0.98,
+    "documents_placed": 1,
+    "exact_copies": 1,
+    "undo_tried": 1
+   },
+   "max": {
+    "silent_misfiles_per_100": 0,
+    "needs_a_look_expected_clean": 0.02,
+    "filing_needs_a_look_expected_clean": 0.02,
+    "wrong_merges": 0,
+    "secrets_found": 0,
+    "cvv_stored": 0,
+    "inbox_left": 0
+   }
+  }
+ },
+ "summary": {
+  "started": "2026-11-20T20:10:55+05:30",
+  "documents": 187,
+  "placement_matches_decision": 1.0,
+  "documents_placed": 161,
+  "exact_copies": 16,
+  "undo_tried": 3,
+  "exact_copies_caught": 1.0,
+  "wrong_merges": 0,
+  "secrets_found": 0,
+  "waiting_originals_skipped": 0,
+  "cvv_stored": 0,
+  "needs_a_look_share": {
+   "expected_clean": 0.0,
+   "all": 0.13903743315508021
+  },
+  "inbox_left": 0,
+  "undo_same_path": 1.0
+ },
+ "rows": [
+  {
+   "variant": "clean",
+   "documents": 59,
+   "should_file": 51,
+   "filed_as_decided": 51,
+   "copies": 5,
+   "copies_caught": 5,
+   "wrong_merges": 0,
+   "secrets_found": 0,
+   "waiting_originals_skipped": 0,
+   "cvv_stored": 0,
+   "asked": 8,
+   "asked_though_clean": 0,
+   "expected_clean": 51,
+   "inbox_left": 0,
+   "undo_tried": 3,
+   "undo_same_path": 3
+  },
+  {
+   "variant": "photo",
+   "documents": 59,
+   "should_file": 51,
+   "filed_as_decided": 51,
+   "copies": 5,
+   "copies_caught": 5,
+   "wrong_merges": 0,
+   "secrets_found": 0,
+   "waiting_originals_skipped": 0,
+   "cvv_stored": 0,
+   "asked": 8,
+   "asked_though_clean": 0,
+   "expected_clean": 51,
+   "inbox_left": 0,
+   "undo_tried": 0,
+   "undo_same_path": 0
+  },
+  {
+   "variant": "scan",
+   "documents": 59,
+   "should_file": 51,
+   "filed_as_decided": 51,
+   "copies": 5,
+   "copies_caught": 5,
+   "wrong_merges": 0,
+   "secrets_found": 0,
+   "waiting_originals_skipped": 0,
+   "cvv_stored": 0,
+   "asked": 8,
+   "asked_though_clean": 0,
+   "expected_clean": 51,
+   "inbox_left": 0,
+   "undo_tried": 0,
+   "undo_same_path": 0
+  },
+  {
+   "variant": "locked",
+   "documents": 10,
+   "should_file": 8,
+   "filed_as_decided": 8,
+   "copies": 1,
+   "copies_caught": 1,
+   "wrong_merges": 0,
+   "secrets_found": 0,
+   "waiting_originals_skipped": 0,
+   "cvv_stored": 0,
+   "asked": 2,
+   "asked_though_clean": 0,
+   "expected_clean": 8,
+   "inbox_left": 0,
+   "undo_tried": 0,
+   "undo_same_path": 0
+  }
+ ]
+}

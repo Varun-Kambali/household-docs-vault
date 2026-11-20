@@ -135,6 +135,61 @@ def test_summary_md_leads_with_the_headline_and_copies_the_newest_test_results(t
     assert "| Type accuracy | 90.0% |" in text
 
 
+def test_summary_md_takes_the_later_run_of_the_same_day(tmp_path):
+    """Two test runs on one day: the one written last wins, whatever its commit hash."""
+    import os
+
+    base = {
+        "run": {"date": "2026-11-20", "machine": "Mac", "commit": "x"},
+        "models": {"tags": {}},
+        "summary": {
+            "documents": 10,
+            "type_accuracy": 0.9,
+            "person_accuracy": 0.8,
+            "field_exact": {"all": 0.7, "photo": 0.6, "clean": 0.8, "scan": 0.5, "locked": 0.9},
+            "line_recall_photo": 0.95,
+            "silent_misfiles_per_100": 0.0,
+            "needs_a_look_share": {"expected_clean": 0.1, "all": 0.2},
+            "seconds_photo": {"median": 30.0, "max": 41.0},
+        },
+    }
+    later = {
+        **base,
+        "summary": {
+            **base["summary"],
+            "field_exact": {**base["summary"]["field_exact"], "photo": 0.99},
+        },
+    }
+    first = tmp_path / "2026-11-20_reading_test_bcfd85d.json"
+    second = tmp_path / "2026-11-20_reading_test_b2a1fde.json"  # sorts first by name
+    first.write_text(json.dumps(base))
+    second.write_text(json.dumps(later))
+    os.utime(first, (1_000, 1_000))
+    os.utime(second, (2_000, 2_000))
+    text = write_summary(tmp_path).read_text()
+    assert "**Fields exactly right on photos: 99.0%**" in text
+    assert "replay the committed recordings" not in text
+
+
+def test_summary_md_says_when_the_numbers_are_a_replay(tmp_path):
+    reading = {
+        "run": {"date": "2026-11-20", "machine": "Mac", "commit": "x"},
+        "models": {"recorded_engines": ["ollama:qwen3-vl:4b"]},
+        "summary": {
+            "documents": 1,
+            "type_accuracy": 1.0,
+            "person_accuracy": 1.0,
+            "field_exact": {"all": 1.0, "photo": 1.0},
+            "line_recall_photo": 1.0,
+            "silent_misfiles_per_100": 0.0,
+            "needs_a_look_share": {"expected_clean": 0.0, "all": 0.0},
+            "seconds_photo": {"median": 1.0, "max": 1.0},
+        },
+    }
+    (tmp_path / "2026-11-20_reading_test_x.json").write_text(json.dumps(reading))
+    assert "replay the committed recordings" in write_summary(tmp_path).read_text()
+
+
 def test_summary_md_is_not_written_without_test_results(tmp_path):
     assert write_summary(tmp_path) is None
     assert not (tmp_path / "summary.md").exists()
