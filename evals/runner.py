@@ -215,7 +215,12 @@ def _smoke(args: argparse.Namespace) -> int:
 
 
 def _newest(folder: Path, kind: str) -> dict[str, Any] | None:
-    found = sorted(folder.glob(f"*_{kind}_test_*.json"))
+    # by run date (the name starts with it), then by when the file was written: two runs on one
+    # day must not be ordered by their commit hashes
+    found = sorted(
+        folder.glob(f"*_{kind}_test_*.json"),
+        key=lambda p: (p.name[:10], p.stat().st_mtime, p.name),
+    )
     return json.loads(found[-1].read_text(encoding="utf-8")) if found else None
 
 
@@ -240,6 +245,18 @@ def write_summary(folder: Path) -> Path | None:
             f"Run {run['date']} on {run['machine']}, commit {run['commit']}, "
             f"{s['documents']} documents. Models: {json.dumps(reading['models'], sort_keys=True)}.",
             "",
+            *(
+                [
+                    "These numbers replay the committed recordings in "
+                    "`evals/recordings/eval-v1/test/` through this commit, with no model calls. "
+                    "The recordings hold long digit runs masked, so a field made of one (such as "
+                    "an acknowledgement number) scores as wrong on replay even when the live read "
+                    "was right. The seconds are the live run's.",
+                    "",
+                ]
+                if "recorded_engines" in reading["models"]
+                else []
+            ),
             "| Measure | Result |",
             "|---|---|",
             f"| Type accuracy | {_pct(s['type_accuracy'])} |",
