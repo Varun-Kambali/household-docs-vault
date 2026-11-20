@@ -337,3 +337,25 @@ def test_card_area_lines_keep_dates_and_amount_rows(photo):
 def test_a_misread_number_on_a_letter_is_masked_without_luhn(photo):
     texts = _stored_texts("Card 4111 1111 1111 1112 sent", {}, "card_welcome_letter", photo)
     assert texts[0] == "Card XXXX XXXX XXXX 1112 sent"
+
+
+@pytest.mark.parametrize(
+    ("line", "masked"),
+    [
+        ("Card 4111 1111 1111 111 sent", "Card XXXX XXXX XXX1 111 sent"),
+        ("Card 4111 1111 1111 1111123 sent", "Card XXXX XXXX XXXX XXXXXXX sent"),
+        ("Card 41111 1111 1111 1111 sent", "Card XXXXX XXXX XXXX XXXX sent"),
+    ],
+)
+def test_a_damaged_number_on_a_letter_or_statement_is_masked(photo, line, masked):
+    for type_ in ("card_welcome_letter", "card_statement"):
+        assert _stored_texts(line, {}, type_, photo)[0] == masked
+
+
+def test_amount_rows_and_dates_stay_on_a_statement(photo):
+    line = "Opening 100 200 300 400 500 on 01-10-2026 31-10-2026 due 12000 4500 800"
+    assert _stored_texts(line, {}, "card_statement", photo)[0] == line
+
+
+def test_an_other_page_with_no_number_keeps_no_digit_of_a_glued_run(photo):
+    assert _stored_texts("ref 4111111111111111123", {}, "other", photo)[0] == "ref " + "X" * 19

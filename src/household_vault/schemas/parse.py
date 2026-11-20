@@ -135,7 +135,7 @@ def mask_card_shapes(text: str) -> str:
     groups that has a card shape (4-4-4-4, 4-6-5, 4-4-4-4-3) or passes Luhn at 13 to 19 digits,
     whatever separators sit between the groups, and any single group of 13 digits or more.
     Dates and amount rows are not shaped like that, so they stay readable."""
-    spans: list[list[int]] = []
+    spans: list[list[int]] = []  # start, end, 1 when no digit may stay (a run that holds a CVV)
     for cand in _CANDIDATE.finditer(text):
         groups = [
             (cand.start() + g.start(), cand.start() + g.end())
@@ -150,9 +150,17 @@ def mask_card_shapes(text: str) -> str:
                 lengths.append(size)
                 if total > 19 and j > i:
                     break
+                shaped = 13 <= total <= 19 and tuple(lengths) in _SHAPES
+                loose = (
+                    13 <= total <= 19
+                    and len(lengths) >= 3
+                    and min(lengths) >= 3
+                    and max(lengths) >= 4  # an amount row of 3-digit groups stays
+                )
                 hit = (
                     (j == i and size >= 13)
-                    or (13 <= total <= 19 and tuple(lengths) in _SHAPES)
+                    or shaped
+                    or loose
                     or (
                         13 <= total <= 19
                         and min(lengths) >= 3  # a date or an amount row has short groups
@@ -162,15 +170,17 @@ def mask_card_shapes(text: str) -> str:
                     )
                 )
                 if hit:
-                    span = [groups[i][0], groups[j][1]]
+                    none = int(loose and not shaped and total > 16)
+                    span = [groups[i][0], groups[j][1], none]
                     if spans and span[0] < spans[-1][1]:
                         spans[-1][1] = max(spans[-1][1], span[1])
+                        spans[-1][2] |= none
                     else:
                         spans.append(span)
     chars = list(text)
-    for start, end in spans:
+    for start, end, none in spans:
         positions = [i for i in range(start, end) if chars[i].isdigit()]
-        for i in positions[:-4]:
+        for i in positions[: len(positions) - (0 if none else 4)]:
             chars[i] = "X"
     return "".join(chars)
 

@@ -143,6 +143,8 @@ class Filer:
     ) -> DocumentRecord:
         """File bytes the app made (the masked card copy). The item's own file is never touched:
         for an Inbox card the caller removes the photo afterwards (under `lock`)."""
+        if is_card_photo(self.store, hashlib.sha256(data).hexdigest()):
+            raise CardPhotoError("only the masked copy of a card may be filed as made bytes")
         with self.lock:
             return self._file(item, ext, reading, decision, secret_ref, extra_fields, data)
 

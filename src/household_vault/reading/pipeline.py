@@ -142,7 +142,10 @@ def _mask_line(text: str, doc_type: DocType | None, number: str | None) -> str:
             return mask_card_numbers(
                 mask_glued_runs(text, None, keep_none_over=12), any_long_run=True, keep=0
             )
-        return mask_card_numbers(mask_glued_runs(text, number), any_long_run=True)
+        over = 16 if number is None else 19  # no number read: a run may hold a CVV
+        return mask_card_numbers(
+            mask_glued_runs(text, number, keep_none_over=over), any_long_run=True
+        )
     return mask_card_numbers(text)
 
 

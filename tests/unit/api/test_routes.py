@@ -1,3 +1,4 @@
+import hashlib
 import json
 import logging
 from datetime import date
@@ -725,6 +726,7 @@ _ROUTES_WITHOUT_BYTES = {
     ("POST", "/v1/cards"), ("POST", "/v1/secrets/create"), ("POST", "/v1/secrets/unlock"),
     ("GET", "/v1/emergency-sheet"),
 }  # fmt: skip
+_FRAMEWORK_PATHS = {"/openapi.json", "/docs", "/docs/oauth2-redirect", "/redoc"}
 _FILER_ENTRIES = {
     "file": "gated: CardPhotoError for a card sha",
     "file_new": "files bytes the app made (the masked copy), never the raw photo",
@@ -748,6 +750,10 @@ def test_every_route_and_filer_entry_is_classified_for_raw_card_bytes(client):
     for route in client.app.routes:
         if isinstance(route, APIRoute):
             seen |= {(m, route.path) for m in route.methods - {"HEAD", "OPTIONS"}}
+        elif getattr(route, "path", "") in _FRAMEWORK_PATHS:
+            continue  # FastAPI's own docs and schema routes
+        else:  # a plain Route or a Mount (static files) would bypass the gate: refuse any
+            seen.add((type(route).__name__, getattr(route, "path", "?")))
     classified = set(_ROUTES_WITH_BYTES) | _ROUTES_WITHOUT_BYTES
     assert seen == classified, (
         f"classify new routes for raw card bytes: {sorted(seen ^ classified)}"
@@ -756,3 +762,21 @@ def test_every_route_and_filer_entry_is_classified_for_raw_card_bytes(client):
     assert public == set(_FILER_ENTRIES), (
         f"classify filer entries: {sorted(public ^ set(_FILER_ENTRIES))}"
     )
+
+
+def test_file_new_refuses_the_raw_bytes_of_a_card_photo(state):
+    from datetime import date
+
+    from household_vault.filing.decide import Decision
+    from household_vault.filing.filer import CardPhotoError
+    from household_vault.reading.pipeline import Reading
+
+    raw = b"raw card photo bytes"
+    _a_card_item(state, hashlib.sha256(raw).hexdigest(), "filed")
+    item = state.store.add_item("e" * 64, "x.jpg", None, state.worker.clock())
+    reading = Reading(pages=[], english_letters=0)
+    decision = Decision(
+        "file", [], "p1", [], None, "Home", date(2026, 1, 1), "document", "x", None, {}, None
+    )
+    with pytest.raises(CardPhotoError):
+        state.filer.file_new(item, raw, ".jpg", reading, decision, None)
