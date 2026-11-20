@@ -35,6 +35,10 @@ from household_vault.vaultroot import VaultGone, VaultPathError
 from household_vault.worker import Worker
 
 CARD_NOT_RETYPED = "This was read as a bank card. Discard it, or upload the card in the app."
+UPLOAD_CARD_NOT_RETYPED = (
+    "This card was uploaded in the app, so it can only be filed as a card. "
+    "Discard it, or upload the card again."
+)
 _ANSWERABLE: frozenset[ItemState] = frozenset({"asked", "held"})
 log = logging.getLogger(__name__)
 _GONE_COPY = "The other copy is no longer there. Nothing was deleted."
@@ -95,6 +99,12 @@ class Actions:
             doc_type = self._doc_type(value)
             if is_card_item(item) and doc_type not in CARD_FIELD_TYPES:
                 raise AnswerError(CARD_NOT_RETYPED)
+            if (
+                is_card_item(item)
+                and item.origin == "upload"
+                and doc_type is not DocType.card_front
+            ):
+                raise AnswerError(UPLOAD_CARD_NOT_RETYPED)
             overrides["doc_type"] = doc_type.value
             overrides["reread"] = True
         elif kind == "field":

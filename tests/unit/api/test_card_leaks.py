@@ -103,3 +103,49 @@ def test_a_copy_of_a_waiting_card_photo_stays_in_inbox_and_is_not_served(make_st
         assert c.get(f"/v1/items/{item.id}/file").status_code == 423
         assert item.rel_path.startswith("Inbox/")
     assert s.vault.list_dir("Needs a look") == []
+
+
+def test_an_inbox_card_retyped_as_a_letter_is_never_served(make_state, photo):
+    s = make_state(f"{NUMBER} Anita Sharma", "card_front", CARD_FILL)
+    drop(s.vault, "card.jpg", photo)
+    s.worker.drain()
+    (item,) = s.store.items(["asked"])
+    c = client_of(s)
+    r = c.post(
+        f"/v1/needs-a-look/{item.id}/answer", json={"kind": "type", "value": "card_welcome_letter"}
+    )
+    assert r.status_code == 200  # an Inbox card may be a letter: its original is in Drive
+    assert c.get(f"/v1/items/{item.id}/file").status_code == 423  # before the re-read
+    s.worker.drain()
+    after = s.store.item(item.id)
+    assert c.get(f"/v1/items/{item.id}/file").status_code == 423  # after it
+    assert after.overrides.get("was_card") is True
+
+
+def test_being_a_card_survives_any_later_overrides(make_state, photo):
+    s = make_state(f"{NUMBER} Anita Sharma", "card_front", CARD_FILL)
+    drop(s.vault, "card.jpg", photo)
+    s.worker.drain()
+    (item,) = s.store.items(["asked"])
+    s.store.update_item(item.id, overrides={}, reading=None)
+    assert s.store.item(item.id).overrides.get("was_card") is True
+    assert client_of(s).get(f"/v1/items/{item.id}/file").status_code == 423
+
+
+def test_an_uploaded_card_can_only_be_answered_as_a_card(make_state):
+    s = make_state("x", "card_front", CARD_FILL)
+    item = s.store.add_item("u" * 64, "card upload", None, s.worker.clock(), origin="upload")
+    s.store.update_item(item.id, state="asked", reasons=[], reading={"doc_type": "card_front"})
+    for kind in ("card_welcome_letter", "card_statement", "tax_invoice"):
+        with pytest.raises(AnswerError):
+            s.actions.answer(item.id, "type", kind)
+    s.actions.answer(item.id, "type", "card_front")
+
+
+def test_an_ordinary_item_is_still_served(make_state, photo):
+    s = make_state("Policy", "tax_invoice", {"seller": "X"})
+    drop(s.vault, "a.jpg", photo)
+    s.worker.drain()
+    items = s.store.items(["asked", "held"])
+    c = client_of(s)
+    assert items and all(c.get(f"/v1/items/{i.id}/file").status_code == 200 for i in items)

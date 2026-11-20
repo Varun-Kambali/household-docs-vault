@@ -42,6 +42,8 @@ ItemState = Literal[
 JobKind = Literal["process", "refile"]
 Origin = Literal["inbox", "upload"]
 
+CARD_MARK = "was_card"  # in an item's overrides: it has been read as a card front
+
 _SCHEMA = """
 create table people (id text primary key, name text not null default '');
 create table items (
@@ -402,6 +404,20 @@ class Store:
         unknown = set(changes) - _ITEM_COLUMNS
         if unknown:
             raise KeyError(f"not an item field: {sorted(unknown)}")
+        # Being a card is sticky: once a reading comes back as a card front, the item keeps a
+        # marker in its overrides that no later answer or re-read can clear.
+        current = self.item(item_id)
+        new_reading = changes.get("reading")
+        marked = (
+            current.overrides.get(CARD_MARK)
+            or (changes.get("overrides") or {}).get(CARD_MARK)
+            or (isinstance(new_reading, dict) and new_reading.get("doc_type") == "card_front")
+        )
+        if marked:
+            changes["overrides"] = {
+                **(changes.get("overrides", current.overrides)),
+                CARD_MARK: True,
+            }
         sets, args = [], []
         for name, value in changes.items():
             if name == "reasons":

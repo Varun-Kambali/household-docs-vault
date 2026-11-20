@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from household_vault.db import Item, ItemState, Store
+from household_vault.db import CARD_MARK, Item, ItemState, Store
 from household_vault.doctypes import DocType
 from household_vault.reasons import Reason
 
@@ -26,6 +26,7 @@ def is_card_item(item: Item) -> bool:
     stored = (item.reading or {}).get("doc_type")
     return (
         DocType.card_front.value in (stored, item.overrides.get("doc_type"))
+        or bool(item.overrides.get(CARD_MARK))
         or item.state == "waiting_secrets"
         or Reason.card_unreadable in item.reasons
     )
