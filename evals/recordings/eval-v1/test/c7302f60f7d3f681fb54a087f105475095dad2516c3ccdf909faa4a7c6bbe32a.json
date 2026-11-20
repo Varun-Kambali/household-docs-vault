@@ -1,0 +1,346 @@
+{
+ "sha256": "c7302f60f7d3f681fb54a087f105475095dad2516c3ccdf909faa4a7c6bbe32a",
+ "doc_id": "extended_warranty-5-clean",
+ "pages": [
+  {
+   "page": 0,
+   "width": 595,
+   "height": 842,
+   "lines": [
+    {
+     "text": "Brand",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.13412830778652018,
+      0.10649411497997636,
+      0.1418990545204869
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Vistara Home",
+     "page": 0,
+     "bbox": [
+      0.33613445378151263,
+      0.13425182786520184,
+      0.4429243841091124,
+      0.14288598284868614
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Product",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.16263187073188834,
+      0.11924537209903492,
+      0.17040261746585506
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Split air conditioner",
+     "page": 0,
+     "bbox": [
+      0.3367394968241203,
+      0.1626128063065989,
+      0.49418488831079305,
+      0.17358673893074528
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Model",
+     "page": 0,
+     "bbox": [
+      0.06834621910287553,
+      0.1911354336772565,
+      0.1073563006745667,
+      0.19890618041122332
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "MDRY776693",
+     "page": 0,
+     "bbox": [
+      0.33732774237624735,
+      0.19122328950786815,
+      0.4409579749868697,
+      0.1999049968221125
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Seller",
+     "page": 0,
+     "bbox": [
+      0.0679075609736082,
+      0.21951069231554332,
+      0.10610083572003019,
+      0.22740974335659148
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Lakeview Digital Store",
+     "page": 0,
+     "bbox": [
+      0.337428578609178,
+      0.21961993219733522,
+      0.5139159643349527,
+      0.2307482649198337
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Seller location",
+     "page": 0,
+     "bbox": [
+      0.0679075609736082,
+      0.24801425526091148,
+      0.1611747934036896,
+      0.25591330630195963
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Mangaluru",
+     "page": 0,
+     "bbox": [
+      0.33732774237624735,
+      0.24826607964667458,
+      0.41993277413504465,
+      0.25925182786520184
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Buyer",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.27664612251336107,
+      0.10694789726193211,
+      0.28653323791938834
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Kavita Rao",
+     "page": 0,
+     "bbox": [
+      0.3373949579831933,
+      0.27676964259204273,
+      0.4223865669314601,
+      0.28540379757552703
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Purchase date",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.3051496854587292,
+      0.16413949918346243,
+      0.31292043219269594
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "26/02/2026",
+     "page": 0,
+     "bbox": [
+      0.3365546218487395,
+      0.3051306210334397,
+      0.4196470629267332,
+      0.3139073605208952
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Amount",
+     "page": 0,
+     "bbox": [
+      0.06722689075630252,
+      0.3336532484040974,
+      0.11924537209903492,
+      0.3414239951380641
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 62,000",
+     "page": 0,
+     "bbox": [
+      0.3373613373572085,
+      0.33374110423470904,
+      0.41752939945509454,
+      0.34416869247327786
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Cover starts",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.3620285070423842,
+      0.14816638081013656,
+      0.36992755808343225
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "19/03/2026",
+     "page": 0,
+     "bbox": [
+      0.3374621735901392,
+      0.3621377469241761,
+      0.4196470629267332,
+      0.37092637449432153
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Cover ends",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.39053206998775236,
+      0.14397647120371587,
+      0.3984311210288005
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "18/03/2028",
+     "page": 0,
+     "bbox": [
+      0.3374621735901392,
+      0.39064130986954426,
+      0.419478985441833,
+      0.3994299374396897
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Service helpline",
+     "page": 0,
+     "bbox": [
+      0.0679075609736082,
+      0.4190356329331205,
+      0.17336639917197347,
+      0.42893351285304704
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "1800 440 5753",
+     "page": 0,
+     "bbox": [
+      0.3374621735901392,
+      0.4192517930708135,
+      0.44754623284860817,
+      0.42793350038505795
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Vistara Home",
+     "page": 0,
+     "bbox": [
+      0.06722689075630252,
+      0.02560569781305666,
+      0.22741176060267856,
+      0.038556966532437675
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Extended Warranty Certificate",
+     "page": 0,
+     "bbox": [
+      0.06868739408605239,
+      0.05820905454368319,
+      0.3130537786403624,
+      0.07045015529895338
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06757479114692752,
+      0.46904513615044163,
+      0.519904128643645,
+      0.47893232404477803
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.4855439464723129,
+      0.5459511636685924,
+      0.4955594024295762
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06783193379891019,
+      0.9509928741817519,
+      0.30519660500919116,
+      0.9598954896179344
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"extended_warranty\"\n}",
+ "fill_raw": "{\n  \"brand\": \"Vistara Home\",\n  \"product\": \"Split air conditioner\",\n  \"model\": \"MDRY776693\",\n  \"serial_number\": null,\n  \"seller\": \"Lakeview Digital Store\",\n  \"seller_location\": \"Mangaluru\",\n  \"order_id\": null,\n  \"buyer\": \"Kavita Rao\",\n  \"purchase_date\": \"26/02/2026\",\n  \"amount\": \"Rs. 62,000\",\n  \"invoice_number\": null,\n  \"period_start\": \"19/03/2026\",\n  \"period_end\": \"18/03/2028\",\n  \"visits\": null,\n  \"service_helpline\": \"1800 440 5753\"\n}",
+ "seconds": {
+  "read": 0.003,
+  "classify": 1.187,
+  "fill": 55.039
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

@@ -1,0 +1,154 @@
+{
+ "sha256": "038293f82deecd1aa00b85816211e5dff031fed9e0f44e0451f355841b7fb10f",
+ "doc_id": "property_tax_receipt-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Municipal Corporation",
+     "page": 0,
+     "bbox": [
+      0.10266940388444022,
+      0.026068376470645194,
+      0.3634496922301646,
+      0.04505813915995849
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Property Tax Receipt",
+     "page": 0,
+     "bbox": [
+      0.10032619578451855,
+      0.056495696136787954,
+      0.2754467420631896,
+      0.07420859895577747
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.09839040675316223,
+      0.13048794215347292,
+      0.14185599916171723,
+      0.14276787161613402
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.09856262892069101,
+      0.15843023274557966,
+      0.13347022477540757,
+      0.1700581391536451
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Amount",
+     "page": 0,
+     "bbox": [
+      0.09645813951229133,
+      0.1859193601087228,
+      0.15405520644460977,
+      0.19780156988655484
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Ravi Kumar Rao",
+     "page": 0,
+     "bbox": [
+      0.35934291427660925,
+      0.13226744165782411,
+      0.48665297870080343,
+      0.14534883738578053
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "29/01/2026",
+     "page": 0,
+     "bbox": [
+      0.35728952874269193,
+      0.16133720916493144,
+      0.4435318262831006,
+      0.1729651163881032
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rs. 12,500",
+     "page": 0,
+     "bbox": [
+      0.3572264724335509,
+      0.18733297134464966,
+      0.4415414945065793,
+      0.20365540070819388
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.098433184345611,
+      0.23489854220664563,
+      0.5381198961285992,
+      0.24887906534053483
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.09430588235192237,
+      0.25101270488612715,
+      0.5648239830028066,
+      0.26709628447936173
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.0718685838930534,
+      0.9447674417991738,
+      0.312114988796885,
+      0.9551282052185615
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"property_tax_receipt\" }",
+ "fill_raw": "{\n  \"person_name\": \"Ravi Kumar Rao\",\n  \"document_date\": \"29/01/2026\",\n  \"expiry_date\": null,\n  \"receipt_number\": null,\n  \"amount\": \"Rs. 12,500\"\n}",
+ "seconds": {
+  "read": 0.344,
+  "classify": 2.797,
+  "fill": 46.66
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

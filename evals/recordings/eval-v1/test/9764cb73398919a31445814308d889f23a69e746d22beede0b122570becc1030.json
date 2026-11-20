@@ -1,0 +1,178 @@
+{
+ "sha256": "9764cb73398919a31445814308d889f23a69e746d22beede0b122570becc1030",
+ "doc_id": "hospital_bill-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Sunrise Family Hospital",
+     "page": 0,
+     "bbox": [
+      0.10212201619770703,
+      0.031562519815255596,
+      0.38032180825011785,
+      0.054329997584373624
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Final Bill",
+     "page": 0,
+     "bbox": [
+      0.1023505961431258,
+      0.06292394057687267,
+      0.17478607434434962,
+      0.07660921755389005
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Patient",
+     "page": 0,
+     "bbox": [
+      0.10049641516446085,
+      0.1378127793585312,
+      0.15207031958709633,
+      0.14997791822264084
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.10061601658161674,
+      0.16569767458666496,
+      0.1375770012417919,
+      0.1773255809947304
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Hospital",
+     "page": 0,
+     "bbox": [
+      0.10061601630457286,
+      0.19476744170956595,
+      0.16016427090575275,
+      0.2063953489327376
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Total amount",
+     "page": 0,
+     "bbox": [
+      0.10061601444543654,
+      0.22222222205855324,
+      0.19301848070856759,
+      0.23418803402436517
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Mrs Kavita Rao",
+     "page": 0,
+     "bbox": [
+      0.35892080828315426,
+      0.14150343696846834,
+      0.47885975209302334,
+      0.15650439162091223
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "01/11/2026",
+     "page": 0,
+     "bbox": [
+      0.35708183081524986,
+      0.1699883230274961,
+      0.443841137458827,
+      0.18308048467884652
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Sunrise Family Hospital",
+     "page": 0,
+     "bbox": [
+      0.3589779329175205,
+      0.1975214669973131,
+      0.5464366954404289,
+      0.2146811278583366
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "RS. 48,600",
+     "page": 0,
+     "bbox": [
+      0.35927135391976045,
+      0.22654004933870275,
+      0.44155000110615045,
+      0.241483206436935
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.10236811088822777,
+      0.2703641066144059,
+      0.5383082456585762,
+      0.2885538343650048
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.10237820233402173,
+      0.2871705716196107,
+      0.5649640205682267,
+      0.3061771254977428
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.09650923776644559,
+      0.9374999998029224,
+      0.3285420966738292,
+      0.9505813955308788
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"hospital_bill\" }",
+ "fill_raw": "{\n  \"patient\": \"Mrs Kavita Rao\",\n  \"doctor\": null,\n  \"date\": \"01/11/2026\",\n  \"hospital\": \"Sunrise Family Hospital\",\n  \"department\": null,\n  \"diagnoses\": null,\n  \"procedures\": null,\n  \"allergies\": null,\n  \"medicines\": null,\n  \"tests\": null,\n  \"next_visit\": null,\n  \"amount\": \"Rs. 48,600\"\n}",
+ "seconds": {
+  "read": 0.261,
+  "classify": 0.947,
+  "fill": 51.995
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

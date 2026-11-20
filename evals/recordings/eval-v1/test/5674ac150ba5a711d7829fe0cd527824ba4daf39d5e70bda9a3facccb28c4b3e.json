@@ -1,0 +1,478 @@
+{
+ "sha256": "5674ac150ba5a711d7829fe0cd527824ba4daf39d5e70bda9a3facccb28c4b3e",
+ "doc_id": "vehicle_policy-10-locked",
+ "pages": [
+  {
+   "page": 0,
+   "width": 595,
+   "height": 842,
+   "lines": [
+    {
+     "text": "ICICI Lombard General Insurance Company Limited",
+     "page": 0,
+     "bbox": [
+      0.06905546428776589,
+      0.027876466583469428,
+      0.7244906898306197,
+      0.04568169745583428
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Private Car Package Policy - Certificate cum Policy Schedule",
+     "page": 0,
+     "bbox": [
+      0.06865042037322741,
+      0.060584351455797214,
+      0.5668116465336135,
+      0.0728254522110674
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Policy details",
+     "page": 0,
+     "bbox": [
+      0.0686991587406447,
+      0.12024708654988125,
+      0.19517310647403494,
+      0.13342995541679037
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Policy Number",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.15313068308343225,
+      0.16577312565651262,
+      0.16301779848945963
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "3001/99583058/00/000",
+     "page": 0,
+     "bbox": [
+      0.3199663947610294,
+      0.15311161865814282,
+      0.49137814305409666,
+      0.16190024622828825
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Insured Name",
+     "page": 0,
+     "bbox": [
+      0.06863361647149094,
+      0.1792589491166865,
+      0.1615983209690126,
+      0.1870296958506532
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "K Rao",
+     "page": 0,
+     "bbox": [
+      0.3205882352941177,
+      0.17938246919536815,
+      0.3672773088727679,
+      0.18801662417885245
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Period of Insurance From",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.2052589108428593,
+      0.23691093380711659,
+      0.21315796188390734
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "19/02/2026",
+     "page": 0,
+     "bbox": [
+      0.32065545090106357,
+      0.2053681507246511,
+      0.4028403402376576,
+      0.21415677829479662
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Period of Insurance To",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.23138717687611343,
+      0.2196823504792542,
+      0.23928622791716148
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "18/02/2027",
+     "page": 0,
+     "bbox": [
+      0.32065545090106357,
+      0.23149641675790533,
+      0.4026890858882616,
+      0.24028504432805076
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "(midnight to midnight)",
+     "page": 0,
+     "bbox": [
+      0.4882151371290704,
+      0.23365323390643555,
+      0.6161747780166754,
+      0.24255581309846352
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Vehicle details",
+     "page": 0,
+     "bbox": [
+      0.06722689075630252,
+      0.28651787039786225,
+      0.20638654692834166,
+      0.2968789143686906
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Registration No.",
+     "page": 0,
+     "bbox": [
+      0.06842184627757353,
+      0.31940146693141325,
+      0.174349590910583,
+      0.3292885823374406
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "KA15JG4056",
+     "page": 0,
+     "bbox": [
+      0.3205882352941177,
+      0.3193824025061238,
+      0.421495812680541,
+      0.3281591419935793
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Make / Model",
+     "page": 0,
+     "bbox": [
+      0.06834621910287553,
+      0.34540142865758605,
+      0.15695463549189206,
+      0.3533004796986342
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Tata / Nexon XZ",
+     "page": 0,
+     "bbox": [
+      0.31968068355271795,
+      0.34551066853937795,
+      0.4450924656972164,
+      0.35428740802683345
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Chassis No. (last 5)",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.3715296946908403,
+      0.19864200624097295,
+      0.3815451144039489
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "XXXXXXXXXXXX90865",
+     "page": 0,
+     "bbox": [
+      0.31932773109243695,
+      0.3717458548285333,
+      0.5000671899619222,
+      0.3804275621427776
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Year of manufacture",
+     "page": 0,
+     "bbox": [
+      0.06727226962562369,
+      0.39765796072409443,
+      0.20364874831768645,
+      0.40555701176514247
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "2020",
+     "page": 0,
+     "bbox": [
+      0.31974789915966384,
+      0.3978741208617874,
+      0.3558823529411765,
+      0.4065439400933417
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Premium and cover",
+     "page": 0,
+     "bbox": [
+      0.0686991587406447,
+      0.4527885817575341,
+      0.2546688817128414,
+      0.4631496257283625
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Insured Declared Value (IDV)",
+     "page": 0,
+     "bbox": [
+      0.06863361647149094,
+      0.4855439464723129,
+      0.2642285771730567,
+      0.4955594024295762
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 42,000",
+     "page": 0,
+     "bbox": [
+      0.3877815054244354,
+      0.4857601066100059,
+      0.4679495675223214,
+      0.49618765860442027
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "No Claim Bonus",
+     "page": 0,
+     "bbox": [
+      0.06837646740825236,
+      0.511672212505567,
+      0.1759075645639115,
+      0.5195712635466152
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "25%",
+     "page": 0,
+     "bbox": [
+      0.3869747899159664,
+      0.5117814886315135,
+      0.41939497234440654,
+      0.5207601080597721
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Own damage premium",
+     "page": 0,
+     "bbox": [
+      0.06803361267602744,
+      0.5521496480547617,
+      0.2361344537815126,
+      0.5632897963716412
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 4,120",
+     "page": 0,
+     "bbox": [
+      0.8621680508140757,
+      0.5522684201491983,
+      0.9319664193802522,
+      0.5624822041201195
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Third party premium",
+     "page": 0,
+     "bbox": [
+      0.06761344460880055,
+      0.5760570172742541,
+      0.2165042139902836,
+      0.5870427654927813
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 3,416",
+     "page": 0,
+     "bbox": [
+      0.8621680508140757,
+      0.5760213892703385,
+      0.9320000656512605,
+      0.5862351732412596
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "GST at 18%",
+     "page": 0,
+     "bbox": [
+      0.06811764500722164,
+      0.5996674743797321,
+      0.1577479001854648,
+      0.6086104658040752
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 1,356",
+     "page": 0,
+     "bbox": [
+      0.8621680508140757,
+      0.5997743583914786,
+      0.9320000656512605,
+      0.6099881423623998
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Total premium",
+     "page": 0,
+     "bbox": [
+      0.06757983039407169,
+      0.6330641431649904,
+      0.1819327731092437,
+      0.6438954912851655
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 8,892",
+     "page": 0,
+     "bbox": [
+      0.8539613355107668,
+      0.6331484470684567,
+      0.9318487600118173,
+      0.6446187433890662
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "After an accident, inform us within 24 hours. Do not move an unsafe vehicle.",
+     "page": 0,
+     "bbox": [
+      0.06722689075630252,
+      0.7135724500352583,
+      0.57623347434677,
+      0.7228610475952438
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "24x7 claims helpline",
+     "page": 0,
+     "bbox": [
+      0.06766554888556986,
+      0.7540487076494303,
+      0.20278657544560794,
+      0.7638503593390458
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "1800 200 9844",
+     "page": 0,
+     "bbox": [
+      0.25356135007714026,
+      0.7519133107962348,
+      0.3750235421316964,
+      0.761463192466319
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This is a computer generated schedule. Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06753613127379858,
+      0.9509928741817519,
+      0.5443360400800945,
+      0.9598954896179344
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"vehicle_policy\"\n}",
+ "fill_raw": "{\n  \"insurer\": \"ICICI Lombard General Insurance Company Limited\",\n  \"product\": \"Private Car Package Policy\",\n  \"policy_number\": \"3001/99583058/00/000\",\n  \"policyholder\": \"K Rao\",\n  \"insured\": [\n    \"K Rao\"\n  ],\n  \"nominee\": null,\n  \"sum_insured\": \"Rs. 42,000\",\n  \"premium\": \"Rs. 8,892\",\n  \"premium_frequency\": null,\n  \"start_date\": \"19/02/2026\",\n  \"end_date\": \"18/02/2027\",\n  \"premium_due_date\": null,\n  \"agent\": null,\n  \"claim_helpline\": \"1800 200 9844\",\n  \"registration_number\": \"KA15JG4056\",\n  \"idv\": \"Rs. 42,000\",\n  \"ncb_percent\": \"25%\"\n}",
+ "seconds": {
+  "read": 0.004,
+  "classify": 1.46,
+  "fill": 12.368
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

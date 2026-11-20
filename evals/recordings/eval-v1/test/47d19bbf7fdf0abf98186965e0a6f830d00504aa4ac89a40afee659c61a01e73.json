@@ -1,0 +1,298 @@
+{
+ "sha256": "47d19bbf7fdf0abf98186965e0a6f830d00504aa4ac89a40afee659c61a01e73",
+ "doc_id": "home_policy-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Nilgiri General Insurance Company Limited",
+     "page": 0,
+     "bbox": [
+      0.06308670712573158,
+      0.03884201064884074,
+      0.557237037232197,
+      0.06987269163946741
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Home Insurance Policy Schedule",
+     "page": 0,
+     "bbox": [
+      0.06320814275040508,
+      0.07614138769091572,
+      0.3270562779824656,
+      0.09771914289351069
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Insurer",
+     "page": 0,
+     "bbox": [
+      0.0677424303945404,
+      0.15546608343804547,
+      0.11911588562204287,
+      0.1643013583870785
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Product",
+     "page": 0,
+     "bbox": [
+      0.0717290098123513,
+      0.18123864160716252,
+      0.12539624665709795,
+      0.19085438160887347
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Policy number",
+     "page": 0,
+     "bbox": [
+      0.07159856163288003,
+      0.2076930008379061,
+      0.16872319874308164,
+      0.22139276795878904
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Policyholder",
+     "page": 0,
+     "bbox": [
+      0.07170564000198681,
+      0.23492118018106467,
+      0.15622043781694298,
+      0.24909044768876454
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Sum insured",
+     "page": 0,
+     "bbox": [
+      0.0779781557189965,
+      0.26142033223788275,
+      0.16021486429893056,
+      0.27200989965056077
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Premium",
+     "page": 0,
+     "bbox": [
+      0.07597535853118621,
+      0.29069767434477933,
+      0.13963039074328332,
+      0.3008720930631663
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Start date",
+     "page": 0,
+     "bbox": [
+      0.07802874742057614,
+      0.316666666533551,
+      0.14373716613178525,
+      0.32863247849936306
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "End date",
+     "page": 0,
+     "bbox": [
+      0.07799218410467124,
+      0.34292273024554354,
+      0.14172034134186137,
+      0.35475168831673876
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Claims helpline",
+     "page": 0,
+     "bbox": [
+      0.08003745112330655,
+      0.36900902548898695,
+      0.1827962254251884,
+      0.38244446261808096
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Nilgiri General Insurance Company Limited",
+     "page": 0,
+     "bbox": [
+      0.321882833000339,
+      0.14017799939158693,
+      0.6536189075379183,
+      0.1635772171112927
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Protect Plus",
+     "page": 0,
+     "bbox": [
+      0.32443531866501035,
+      0.17587209288712213,
+      0.42094455792636537,
+      0.18760683771713138
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "PL/JT011385",
+     "page": 0,
+     "bbox": [
+      0.3262671620148084,
+      0.2018048100163945,
+      0.42530453538346485,
+      0.21469973470188086
+     ],
+     "lang": "en",
+     "confidence": 0.5
+    },
+    {
+     "text": "Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.328482184484641,
+      0.22942339339213869,
+      0.4045773642350212,
+      0.240053350542329
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rs. 25,00,000",
+     "page": 0,
+     "bbox": [
+      0.328340088146659,
+      0.25668878915035354,
+      0.43166607610435626,
+      0.27249010641422566
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rs. 14,160",
+     "page": 0,
+     "bbox": [
+      0.3305247134277548,
+      0.2832334969819631,
+      0.4107483873485765,
+      0.2981618509355284
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "07/10/2026",
+     "page": 0,
+     "bbox": [
+      0.3302943081759573,
+      0.3107193874454196,
+      0.4150604424172851,
+      0.32383261551788767
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "06/10/2027",
+     "page": 0,
+     "bbox": [
+      0.3304517466807832,
+      0.33678279158443725,
+      0.4149281299868783,
+      0.35217069673789114
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "1800 850 5805",
+     "page": 0,
+     "bbox": [
+      0.3324806675580208,
+      0.3641174378889992,
+      0.4437155700287121,
+      0.3776346049070093
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.0817502735230453,
+      0.4090573901146335,
+      0.5157873586906314,
+      0.43255387120312516
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.08369915232801643,
+      0.42351237263539687,
+      0.5405140116652293,
+      0.4481730031468194
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.11269349533739051,
+      0.9248884501023891,
+      0.3410819576116121,
+      0.9392191200597375
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"home_policy\"\n}",
+ "fill_raw": "{\n  \"insurer\": \"Nilgiri General Insurance Company Limited\",\n  \"product\": \"Protect Plus\",\n  \"policy_number\": \"PL/JT011385\",\n  \"policyholder\": \"Kiran Rao\",\n  \"insured\": [],\n  \"nominee\": null,\n  \"sum_insured\": \"Rs. 25,00,000\",\n  \"premium\": \"Rs. 14,160\",\n  \"premium_frequency\": null,\n  \"start_date\": \"07/10/2026\",\n  \"end_date\": \"06/10/2027\",\n  \"premium_due_date\": null,\n  \"agent\": null,\n  \"claim_helpline\": \"1800 850 5805\"\n}",
+ "seconds": {
+  "read": 0.309,
+  "classify": 3.875,
+  "fill": 54.894
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

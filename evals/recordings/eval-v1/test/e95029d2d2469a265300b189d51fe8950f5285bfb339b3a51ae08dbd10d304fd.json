@@ -1,0 +1,298 @@
+{
+ "sha256": "e95029d2d2469a265300b189d51fe8950f5285bfb339b3a51ae08dbd10d304fd",
+ "doc_id": "accident_policy-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Western Ghats Life Assurance Limited",
+     "page": 0,
+     "bbox": [
+      0.09621555927857513,
+      0.04198203974226067,
+      0.5362981139400964,
+      0.06419445949668023
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Personal Accident Insurance Schedule",
+     "page": 0,
+     "bbox": [
+      0.0961983792297854,
+      0.0744310186740974,
+      0.4006601524759878,
+      0.0918708103616308
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Insurer",
+     "page": 0,
+     "bbox": [
+      0.09240246309210522,
+      0.1511627906196098,
+      0.14373716708414394,
+      0.16133720933799678
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Policy number",
+     "page": 0,
+     "bbox": [
+      0.0924024644577967,
+      0.17732558159912348,
+      0.18891170371915175,
+      0.19059829050824784
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Policyholder",
+     "page": 0,
+     "bbox": [
+      0.09215251109097997,
+      0.20379391328630214,
+      0.1767901080239597,
+      0.2166664380368405
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Insured persons",
+     "page": 0,
+     "bbox": [
+      0.09202936141830471,
+      0.22986409444828793,
+      0.1995465162087748,
+      0.24407680385886565
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Kavita R Rao",
+     "page": 0,
+     "bbox": [
+      0.1232032835871478,
+      0.2485465114923231,
+      0.22587269157122522,
+      0.2602564102535181
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "SURESH N RAO",
+     "page": 0,
+     "bbox": [
+      0.12320328773527436,
+      0.26581196584878497,
+      0.24845995643497018,
+      0.2777777778145969
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Master Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.12089926333855915,
+      0.28298607757223904,
+      0.2569737215795894,
+      0.29722203381316203
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Nominee",
+     "page": 0,
+     "bbox": [
+      0.09026681851988412,
+      0.30929371745715284,
+      0.15203297593538254,
+      0.3186132592578881
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Premium",
+     "page": 0,
+     "bbox": [
+      0.08805742527388176,
+      0.3350679423754719,
+      0.15218898098104527,
+      0.34807159245387864
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "End date",
+     "page": 0,
+     "bbox": [
+      0.09021810767319889,
+      0.3629756933250454,
+      0.15002829866969414,
+      0.37394291128393586
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Claims helpline",
+     "page": 0,
+     "bbox": [
+      0.09034907714543382,
+      0.38953488365134437,
+      0.18891170290590087,
+      0.39970930236973135
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Western Ghats Life Assurance Limited",
+     "page": 0,
+     "bbox": [
+      0.34673639620188146,
+      0.14292677616615146,
+      0.6430696999647764,
+      0.16042728185807098
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "PL/EP172326",
+     "page": 0,
+     "bbox": [
+      0.3468868539522622,
+      0.17362719530181692,
+      0.44985633607892483,
+      0.18627588453923227
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Kavita R Rao",
+     "page": 0,
+     "bbox": [
+      0.34702258543091735,
+      0.2020348835858513,
+      0.4496919934149948,
+      0.21367521384343002
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Arin Acharya",
+     "page": 0,
+     "bbox": [
+      0.3446992120733901,
+      0.30612515584968547,
+      0.4478330352329181,
+      0.31950704375836014
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rs. 8,200",
+     "page": 0,
+     "bbox": [
+      0.3427818501887568,
+      0.33246094014734884,
+      0.4169717431801791,
+      0.3463181295540454
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "01/06/2027",
+     "page": 0,
+     "bbox": [
+      0.3429158105557386,
+      0.36046511613647625,
+      0.4250513350979233,
+      0.3720930233596479
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "1800 981 4926",
+     "page": 0,
+     "bbox": [
+      0.3429158117730867,
+      0.38662790689775806,
+      0.45174537925450015,
+      0.39700854709068656
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.08808958155885883,
+      0.4323903884050785,
+      0.5216971327368742,
+      0.4498294253042213
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0861246785102117,
+      0.4489482305831647,
+      0.5463290924073928,
+      0.4646037489763959
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07583377918420642,
+      0.9229832705050658,
+      0.3040271245366191,
+      0.9351067692586705
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"accident_policy\" }",
+ "fill_raw": "{\n  \"insurer\": \"Western Ghat Life Assurance Limited\",\n  \"product\": \"Personal Accident Insurance Schedule\",\n  \"policy_number\": \"PL/EP172326\",\n  \"policyholder\": \"Kavita R Rao\",\n  \"insured\": [\n    \"Kavita R Rao\",\n    \"SURES N RAO\",\n    \"Master Kiran Rao\"\n  ],\n  \"nominee\": \"Arin Acharya\",\n  \"sum_insured\": null,\n  \"premium\": \"Rs. 8,200\",\n  \"premium_frequency\": null,\n  \"start_date\": null,\n  \"end_date\": \"01/06/2027\",\n  \"premium_due_date\": null,\n  \"agent\": null,\n  \"claim_helpline\": \"1800 981 4926\"\n}",
+ "seconds": {
+  "read": 0.31,
+  "classify": 3.04,
+  "fill": 55.581
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

@@ -1,0 +1,178 @@
+{
+ "sha256": "dc44eb5fc4ebd36a1c65f8479802202d5ba3141e5709b5afefa77d67d040dcd1",
+ "doc_id": "appraisal_letter-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Northstar Software Private Limited",
+     "page": 0,
+     "bbox": [
+      0.07369368982494308,
+      0.055158509265723854,
+      0.46019394577406264,
+      0.07457458312191456
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Annual Appraisal Letter",
+     "page": 0,
+     "bbox": [
+      0.07164711028616452,
+      0.08667344447095471,
+      0.2569047140710232,
+      0.10272716590702324
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.07186858361797792,
+      0.15697674403376305,
+      0.11498973238818225,
+      0.1686046512569347
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.07186858369481833,
+      0.18168604667968824,
+      0.10677617954953487,
+      0.19331395308775368
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Employer",
+     "page": 0,
+     "bbox": [
+      0.07124656785742675,
+      0.20750287873237983,
+      0.13798580356590098,
+      0.22214224572999264
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Designation",
+     "page": 0,
+     "bbox": [
+      0.0718333915350522,
+      0.23390346513316473,
+      0.15198591005077167,
+      0.2472011859852259
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Master Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.3203285429502547,
+      0.15552325567997316,
+      0.4537987668717849,
+      0.1671511629031448
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "30/10/2025",
+     "page": 0,
+     "bbox": [
+      0.32032854232329416,
+      0.1816860463735066,
+      0.40451745336459083,
+      0.19331395359667825
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Northstar Software Private Limited",
+     "page": 0,
+     "bbox": [
+      0.3223819312368746,
+      0.20769230774463343,
+      0.587268992580823,
+      0.21965811971044535
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Project Lead",
+     "page": 0,
+     "bbox": [
+      0.3222888426088722,
+      0.2336903775518241,
+      0.42103764589175174,
+      0.24886776195280313
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.07392196897553127,
+      0.28034188028178253,
+      0.49691991990651296,
+      0.29230769224759445
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.07186857517819412,
+      0.2965116277810961,
+      0.5277207469965134,
+      0.3081395350042677
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06721636353552776,
+      0.9266897375957287,
+      0.29830308526717264,
+      0.9436456976982991
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"appraisal_letter\" }",
+ "fill_raw": "{\n  \"person_name\": \"Master Kiran Rao\",\n  \"document_date\": \"30/10/2025\",\n  \"expiry_date\": null,\n  \"employer\": \"Northstar Software Private Limited\",\n  \"designation\": \"Project Lead\"\n}",
+ "seconds": {
+  "read": 0.291,
+  "classify": 2.964,
+  "fill": 45.908
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

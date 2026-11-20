@@ -1,0 +1,178 @@
+{
+ "sha256": "c177643f3f5f9c6ed3380e8c13ada2daf3b46d948ad56197ba33dea649d54d8b",
+ "doc_id": "offer_letter-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Northstar Software Private Limited",
+     "page": 0,
+     "bbox": [
+      0.08817729159160766,
+      0.052246288061659985,
+      0.4908609786287147,
+      0.07352407356664514
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Offer Letter",
+     "page": 0,
+     "bbox": [
+      0.08816392587236443,
+      0.08526411719869587,
+      0.18288330179637913,
+      0.09932890601705524
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.08560470092808158,
+      0.15986978935450213,
+      0.1320635252979803,
+      0.17288257758911496
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.08829568741844175,
+      0.1875000001525866,
+      0.12320328557950488,
+      0.2005813950654367
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Employer",
+     "page": 0,
+     "bbox": [
+      0.08801041114491445,
+      0.21444577847894286,
+      0.15428938310180637,
+      0.230321663293083
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Designation",
+     "page": 0,
+     "bbox": [
+      0.08817510229049812,
+      0.2409647489644715,
+      0.17055179688327038,
+      0.25758176261860977
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "R K Rao",
+     "page": 0,
+     "bbox": [
+      0.3406056932128001,
+      0.16081078277175687,
+      0.4090113842650905,
+      0.17545171395826986
+     ],
+     "lang": "en",
+     "confidence": 0.5
+    },
+    {
+     "text": "16/10/2026",
+     "page": 0,
+     "bbox": [
+      0.34083987717804953,
+      0.18743919843715284,
+      0.427127268407054,
+      0.2035491736161893
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Northstar Software Private Limited",
+     "page": 0,
+     "bbox": [
+      0.34071140155640683,
+      0.21627119910132642,
+      0.6079567853206715,
+      0.23263938363929548
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Senior Analyst",
+     "page": 0,
+     "bbox": [
+      0.3405854726623267,
+      0.2429351720608781,
+      0.4621928183725368,
+      0.25986378534864896
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.08804782851435264,
+      0.2896500437945937,
+      0.5197556143271549,
+      0.3091575073639087
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.08605559217271372,
+      0.3063037530525379,
+      0.5463942907939539,
+      0.3240818513300945
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.09207761063676966,
+      0.9238962652366667,
+      0.3103382592419503,
+      0.9380868974943728
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"offer_letter\" }",
+ "fill_raw": "{\n  \"person_name\": \"R K Rao\",\n  \"document_date\": \"16/10/2026\",\n  \"expiry_date\": null,\n  \"employer\": \"Northstar Software Private Limited\",\n  \"designation\": \"Senior Analyst\"\n}",
+ "seconds": {
+  "read": 0.277,
+  "classify": 0.75,
+  "fill": 46.074
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

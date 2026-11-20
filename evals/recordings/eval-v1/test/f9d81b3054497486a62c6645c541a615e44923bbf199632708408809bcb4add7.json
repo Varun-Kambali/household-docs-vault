@@ -1,0 +1,250 @@
+{
+ "sha256": "f9d81b3054497486a62c6645c541a615e44923bbf199632708408809bcb4add7",
+ "doc_id": "card_welcome_letter-5-clean",
+ "pages": [
+  {
+   "page": 0,
+   "width": 595,
+   "height": 842,
+   "lines": [
+    {
+     "text": "Bank",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.13412830778652018,
+      0.10163865289768251,
+      0.1418990545204869
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Deccan Trust Bank",
+     "page": 0,
+     "bbox": [
+      0.33734453986672797,
+      0.13425182786520184,
+      0.48820164784663866,
+      0.14288598284868614
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Card name",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.162503566424807,
+      0.1414201752478335,
+      0.17040261746585506
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Cashback Select",
+     "page": 0,
+     "bbox": [
+      0.3369243717995011,
+      0.1626128063065989,
+      0.4695125804227941,
+      0.17140143387674434
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Network",
+     "page": 0,
+     "bbox": [
+      0.06837646740825236,
+      0.1911354336772565,
+      0.12263360544413078,
+      0.19890618041122332
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "American Express",
+     "page": 0,
+     "bbox": [
+      0.33613445378151263,
+      0.19125895375593827,
+      0.48198319122570904,
+      0.20209030187611343
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Card holder",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.21951069231554332,
+      0.14645715280741203,
+      0.22740974335659148
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Kavita R Rao",
+     "page": 0,
+     "bbox": [
+      0.3373949579831933,
+      0.21976251670130642,
+      0.4391932896205357,
+      0.22839667168479072
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Card number",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.24801425526091148,
+      0.15569917053735557,
+      0.25591330630195963
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "XXXX XXXX XXXX 0005",
+     "page": 0,
+     "bbox": [
+      0.33613445378151263,
+      0.24823041539860446,
+      0.521546179506959,
+      0.2569002346301589
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Credit limit",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.27651781820627974,
+      0.13854621438419118,
+      0.2844168692473278
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 2,50,000",
+     "page": 0,
+     "bbox": [
+      0.3373613373572085,
+      0.27673397834397273,
+      0.4315462513130252,
+      0.28716156658254155
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Annual fee",
+     "page": 0,
+     "bbox": [
+      0.06722689075630252,
+      0.3050213811516479,
+      0.13892437590270484,
+      0.31292043219269594
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 999",
+     "page": 0,
+     "bbox": [
+      0.3373613373572085,
+      0.3052375412893409,
+      0.3942184832917542,
+      0.3139192486035852
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Deccan Trust Bank",
+     "page": 0,
+     "bbox": [
+      0.06904201988412552,
+      0.02560569781305666,
+      0.2953277331440389,
+      0.038556966532437675
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Welcome to your new card",
+     "page": 0,
+     "bbox": [
+      0.06744873944450827,
+      0.05836584675623513,
+      0.28473108115316437,
+      0.07045015529895338
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06757479114692752,
+      0.35503092061312347,
+      0.519904128643645,
+      0.36491803601915085
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.3715296946908403,
+      0.5459511636685924,
+      0.3815451144039489
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06783193379891019,
+      0.9509928741817519,
+      0.30519660500919116,
+      0.9598954896179344
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"card_welcome_letter\"\n}",
+ "fill_raw": "{\n  \"bank\": \"Deccan Trust Bank\",\n  \"card_name\": \"Cashback Select\",\n  \"network\": \"American Express\",\n  \"holder\": \"Kavita R Rao\",\n  \"last4\": \"0005\",\n  \"statement_date\": null,\n  \"payment_due_date\": null,\n  \"total_due\": null,\n  \"credit_limit\": \"Rs. 2,50,000\",\n  \"annual_fee\": \"Rs. 999\"\n}",
+ "seconds": {
+  "read": 0.006,
+  "classify": 1.556,
+  "fill": 52.986
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

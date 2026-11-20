@@ -1,0 +1,178 @@
+{
+ "sha256": "f61216685791f23b3a966f421e483377299baf1b1ef15e80c68f8cae40b43bda",
+ "doc_id": "tax_proof-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Investment Declaration",
+     "page": 0,
+     "bbox": [
+      0.07164819614869898,
+      0.025026301235915427,
+      0.3534361468789363,
+      0.04674171810342431
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Investment Proof",
+     "page": 0,
+     "bbox": [
+      0.07167482056113555,
+      0.05600108563735562,
+      0.2198971568747361,
+      0.07520035590207086
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.06967002032479812,
+      0.13206126560257192,
+      0.11924168379037872,
+      0.1499154785020652
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.0718685841328821,
+      0.15988372126320383,
+      0.11088295529216924,
+      0.17587209237051715
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Section",
+     "page": 0,
+     "bbox": [
+      0.06962991687374069,
+      0.18717999737739643,
+      0.12954872756940272,
+      0.2052618629325973
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Amount",
+     "page": 0,
+     "bbox": [
+      0.0718685830130184,
+      0.2151162790094422,
+      0.1314168376141983,
+      0.2325581394366466
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Master Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.3347022596732569,
+      0.13226744185377126,
+      0.4804928118148455,
+      0.14970930228097568
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "14/04/2026",
+     "page": 0,
+     "bbox": [
+      0.3324832325622552,
+      0.15804042397264118,
+      0.4272703597238001,
+      0.17916887793648328
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "80C",
+     "page": 0,
+     "bbox": [
+      0.3347022599542373,
+      0.18895348830383973,
+      0.37371663111352443,
+      0.20639534873104404
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rs. 1,20,000",
+     "page": 0,
+     "bbox": [
+      0.33459048210062425,
+      0.21626255504094727,
+      0.437483439647315,
+      0.2357723286213843
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06965373381416815,
+      0.2637963798184604,
+      0.5237971057652149,
+      0.28523475511215945
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.06765225134898437,
+      0.2817669707142012,
+      0.5504279383671978,
+      0.3011596314583711
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06970335171147803,
+      0.9447147128246589,
+      0.30813890552396855,
+      0.9564349862582464
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"tax_proof\" }",
+ "fill_raw": "{\n  \"person_name\": \"Master Kiran Rao\",\n  \"document_date\": \"14/04/2026\",\n  \"expiry_date\": null,\n  \"section\": \"80C\",\n  \"amount\": \"Rs. 1,20,000\"\n}",
+ "seconds": {
+  "read": 0.208,
+  "classify": 2.0,
+  "fill": 35.222
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

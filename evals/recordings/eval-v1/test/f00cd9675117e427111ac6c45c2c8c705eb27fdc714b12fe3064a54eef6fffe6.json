@@ -1,0 +1,106 @@
+{
+ "sha256": "f00cd9675117e427111ac6c45c2c8c705eb27fdc714b12fe3064a54eef6fffe6",
+ "doc_id": "card_front-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1190,
+   "height": 750,
+   "lines": [
+    {
+     "text": "Nilgiri Bank",
+     "page": 0,
+     "bbox": [
+      0.0654487160637079,
+      0.10047334540169561,
+      0.258921031747794,
+      0.15819332119108365
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Credit Card",
+     "page": 0,
+     "bbox": [
+      0.8151260503373702,
+      0.10666666664313729,
+      0.9344537814298072,
+      0.13866666664313732
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "3782 822463 10005",
+     "page": 0,
+     "bbox": [
+      0.05833333312684371,
+      0.45999999996506746,
+      0.5333333331268437,
+      0.5399999999650675
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "VALID THRU",
+     "page": 0,
+     "bbox": [
+      0.0588235293277311,
+      0.610666666645977,
+      0.15630252092436975,
+      0.634666666645977
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "06/29",
+     "page": 0,
+     "bbox": [
+      0.2117647058629606,
+      0.5973333332564102,
+      0.2957983193083387,
+      0.6373333332564103
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "RAVI KUMAR RAO",
+     "page": 0,
+     "bbox": [
+      0.05714285717729716,
+      0.7306666666382513,
+      0.3109243697823392,
+      0.765333333304918
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 0,
+     "bbox": [
+      0.05528571182246904,
+      0.8572205637975212,
+      0.24892100163175213,
+      0.9089126872106071
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"card_front\" }",
+ "fill_raw": "{\n  \"bank\": \"Nilgiri Bank\",\n  \"card_name\": \"Credit Card\",\n  \"number\": \"3782 822463 10005\",\n  \"expiry\": \"06/29\",\n  \"holder\": \"RAVI KUMAR RAO\",\n  \"network\": null,\n  \"cvv\": null\n}",
+ "seconds": {
+  "read": 0.111,
+  "classify": 0.796,
+  "fill": 11.022
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

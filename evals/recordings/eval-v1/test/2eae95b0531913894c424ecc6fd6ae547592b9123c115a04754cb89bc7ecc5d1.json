@@ -1,0 +1,346 @@
+{
+ "sha256": "2eae95b0531913894c424ecc6fd6ae547592b9123c115a04754cb89bc7ecc5d1",
+ "doc_id": "discharge_summary-5-clean",
+ "pages": [
+  {
+   "page": 0,
+   "width": 595,
+   "height": 842,
+   "lines": [
+    {
+     "text": "Patient",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.13412830778652018,
+      0.1142083945394564,
+      0.1418990545204869
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Kavita R Rao",
+     "page": 0,
+     "bbox": [
+      0.3373949579831933,
+      0.13425182786520184,
+      0.4391932896205357,
+      0.14288598284868614
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.16263187073188834,
+      0.0985529410738905,
+      0.17040261746585506
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "07/10/2026",
+     "page": 0,
+     "bbox": [
+      0.33684033305705097,
+      0.1626128063065989,
+      0.4196470629267332,
+      0.1713895457940543
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Hospital",
+     "page": 0,
+     "bbox": [
+      0.06843697684151785,
+      0.1911354336772565,
+      0.12080335857487526,
+      0.20090497304594712
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Hill Park Medical Centre",
+     "page": 0,
+     "bbox": [
+      0.3373613373572085,
+      0.19111636925196707,
+      0.5269915925354517,
+      0.19989310873942245
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Doctor",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.21963899662262465,
+      0.11198486841025472,
+      0.22740974335659148
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Dr. Yashodhara Magar",
+     "page": 0,
+     "bbox": [
+      0.33734453986672797,
+      0.21976251670130642,
+      0.5147394773339024,
+      0.2307482649198337
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Department",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.24814255956799292,
+      0.14613950072216386,
+      0.25791209893668354
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Cardiology",
+     "page": 0,
+     "bbox": [
+      0.3369243717995011,
+      0.24812349514270338,
+      0.42364707113314076,
+      0.25925182786520184
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Diagnoses",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.27664612251336107,
+      0.13809243851349134,
+      0.28653323791938834
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Type 2 diabetes mellitus",
+     "page": 0,
+     "bbox": [
+      0.10119327577222295,
+      0.2945487051848278,
+      0.2943193195246849,
+      0.30557011765142517
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Procedures",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.32058911538747026,
+      0.14397647120371587,
+      0.3283598621214371
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Endoscopy",
+     "page": 0,
+     "bbox": [
+      0.10206722612140559,
+      0.3385273623070071,
+      0.19115967309775472,
+      0.34951311052553447
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Allergies",
+     "page": 0,
+     "bbox": [
+      0.06722689075630252,
+      0.36453210826157956,
+      0.12463025004923844,
+      0.37441922366760694
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Penicillin",
+     "page": 0,
+     "bbox": [
+      0.10206722612140559,
+      0.3824703551811164,
+      0.1734957911387211,
+      0.3911045101646007
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Sulfa drugs",
+     "page": 0,
+     "bbox": [
+      0.10144537917706145,
+      0.4013301822182118,
+      0.1924873929063813,
+      0.41245844245240126
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Medicines on discharge",
+     "page": 0,
+     "bbox": [
+      0.06834621910287553,
+      0.42747744018844636,
+      0.22549074317226891,
+      0.43736462808278276
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "1. Tab Pantoprazole 40 mg 1-0-1 10 days",
+     "page": 0,
+     "bbox": [
+      0.10216806876559217,
+      0.44538005910406775,
+      0.4316302131204044,
+      0.45640143532651056
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "2. Tab Metformin 500 mg 0-0-1 5 days",
+     "page": 0,
+     "bbox": [
+      0.10126050420168067,
+      0.4642755503892332,
+      0.4073277064732143,
+      0.47540381062342263
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Next visit",
+     "page": 0,
+     "bbox": [
+      0.06837646740825236,
+      0.49042280835946783,
+      0.12847227208754597,
+      0.4981935913375891
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "02/01/2027",
+     "page": 0,
+     "bbox": [
+      0.33684033305705097,
+      0.4904038164224874,
+      0.4194958085773372,
+      0.49918051966578825
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Hill Park Medical Centre",
+     "page": 0,
+     "bbox": [
+      0.0690672289423582,
+      0.025391929789563505,
+      0.35351259888721115,
+      0.038556966532437675
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Discharge Summary",
+     "page": 0,
+     "bbox": [
+      0.06865042037322741,
+      0.05820905454368319,
+      0.23450084013097428,
+      0.07045015529895338
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06757479114692752,
+      0.5403040435138621,
+      0.519904128643645,
+      0.5501912314081985
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.5568028538357334,
+      0.5459511636685924,
+      0.5668183097929966
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06783193379891019,
+      0.9509928741817519,
+      0.30519660500919116,
+      0.9598954896179344
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"discharge_summary\" }",
+ "fill_raw": "{\n  \"patient\": \"Kavita R Rao\",\n  \"doctor\": \"Dr. Yashodhara Magar\",\n  \"date\": \"07/10/2026\",\n  \"hospital\": \"Hill Park Medical Centre\",\n  \"department\": \"Cardiology\",\n  \"diagnoses\": [\n    \"Type 2 diabetes mellitus\"\n  ],\n  \"procedures\": [\n    \"Endoscopy\"\n  ],\n  \"allergies\": [\n    \"Penicillin\",\n    \"Sulfa drugs\"\n  ],\n  \"medicines\": [\n    {\n      \"name\": \"Pantoprazole\",\n      \"dose\": \"40 mg\",\n      \"timing\": \"1-0-1\",\n      \"duration\": \"10 days\"\n    },\n    {\n      \"name\": \"Metformin\",\n      \"dose\": \"500 mg\",\n      \"timing\": \"0-0-1\",\n      \"duration\": \"5 days\"\n    }\n  ],\n  \"tests\": [],\n  \"next_visit\": \"02/01/2027\",\n  \"amount\": null\n}",
+ "seconds": {
+  "read": 0.004,
+  "classify": 1.339,
+  "fill": 59.898
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

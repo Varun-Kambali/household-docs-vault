@@ -1,0 +1,178 @@
+{
+ "sha256": "b185473d41716e8b71a860304291440369669b0e107c0d7ffc81dccb824f95a3",
+ "doc_id": "vehicle_service_record-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Greenfield Motors Service Centre",
+     "page": 0,
+     "bbox": [
+      0.0739219750675204,
+      0.02761627869414096,
+      0.47022586460850063,
+      0.050872093140484353
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Vehicle Service Invoice",
+     "page": 0,
+     "bbox": [
+      0.07567368004471635,
+      0.05943826998591484,
+      0.2692645015380658,
+      0.0788366307681142
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.07590044652647102,
+      0.13361009733344242,
+      0.12327819779499855,
+      0.14982013495613877
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.07392197091784192,
+      0.1613372089301106,
+      0.11498973318893425,
+      0.17732558166763646
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Registration number",
+     "page": 0,
+     "bbox": [
+      0.07392197057547718,
+      0.18888888862980435,
+      0.21560574971884172,
+      0.2064102561511718
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Odometer (km)",
+     "page": 0,
+     "bbox": [
+      0.07385188638230057,
+      0.21634928931691255,
+      0.18282162438427968,
+      0.23423210592504806
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Master Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.33470225896832057,
+      0.13504273540974188,
+      0.47843942461079714,
+      0.15128205164905806
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "12/05/2026",
+     "page": 0,
+     "bbox": [
+      0.33461022933042395,
+      0.16111051869942994,
+      0.4271967512771015,
+      0.1804592484769698
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "KA-58311571",
+     "page": 0,
+     "bbox": [
+      0.33260799017915416,
+      0.1888206586042771,
+      0.44562609525822383,
+      0.20652817846156968
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "1,19,185",
+     "page": 0,
+     "bbox": [
+      0.3324753427950644,
+      0.2162424906769126,
+      0.40879775764991444,
+      0.23724588125809243
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.07378913387189731,
+      0.2643931927010992,
+      0.5237491621178163,
+      0.2847506767850084
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.07392196816091955,
+      0.2819767440305839,
+      0.5523613914694708,
+      0.29957264975839426
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07378591343590238,
+      0.9476100065369003,
+      0.31224674480705755,
+      0.9596412519723053
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"vehicle_service_record\" }",
+ "fill_raw": "{\n  \"person_name\": \"Master Kiran Rao\",\n  \"document_date\": \"12/05/2026\",\n  \"expiry_date\": null,\n  \"registration_number\": \"KA-58311571\",\n  \"odometer_km\": \"1,19,185\"\n}",
+ "seconds": {
+  "read": 0.255,
+  "classify": 2.753,
+  "fill": 46.868
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

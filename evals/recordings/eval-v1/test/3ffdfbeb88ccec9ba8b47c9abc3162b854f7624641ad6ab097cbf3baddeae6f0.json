@@ -1,0 +1,178 @@
+{
+ "sha256": "3ffdfbeb88ccec9ba8b47c9abc3162b854f7624641ad6ab097cbf3baddeae6f0",
+ "doc_id": "certificate-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Cauvery Institute of Technology",
+     "page": 0,
+     "bbox": [
+      0.0873609078246929,
+      0.03965186731406356,
+      0.4566377733306633,
+      0.06911332204788767
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Certificate of Completion",
+     "page": 0,
+     "bbox": [
+      0.08751698460489767,
+      0.07067505090508885,
+      0.28618571706928325,
+      0.09232281884420812
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.0903490762138027,
+      0.14825581414092848,
+      0.13347022498400704,
+      0.1598837205489939
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.09240246461542066,
+      0.17587209321069597,
+      0.1273100604701372,
+      0.1874999996187614
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Issuer",
+     "page": 0,
+     "bbox": [
+      0.09240246510221481,
+      0.2049418606663992,
+      0.13757700037153114,
+      0.21656976707446463
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Credential id",
+     "page": 0,
+     "bbox": [
+      0.0939717106490619,
+      0.23230186326671576,
+      0.17707552251966915,
+      0.24589581166357788
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Ravi K Rao",
+     "page": 0,
+     "bbox": [
+      0.34495038113787185,
+      0.15545968179221237,
+      0.4332837047537982,
+      0.16866822512952084
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "26/03/2026",
+     "page": 0,
+     "bbox": [
+      0.34476101571044454,
+      0.18378542529132558,
+      0.429326101106525,
+      0.1965709056601762
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Cauvery Institute of Technology",
+     "page": 0,
+     "bbox": [
+      0.34423815291391846,
+      0.2096409701737001,
+      0.5901973598790409,
+      0.23288480011280055
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "CR-30661447",
+     "page": 0,
+     "bbox": [
+      0.3466721572756373,
+      0.23987083386253727,
+      0.4498908724405784,
+      0.25328024546406847
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.09587175590890255,
+      0.2802825338157231,
+      0.5262199780810043,
+      0.3054533556332353
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.09792350808260188,
+      0.29627231915211516,
+      0.550907986997354,
+      0.3221252658981588
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.11662851346139766,
+      0.9221842123541395,
+      0.3372770241740639,
+      0.9393741690843871
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"certificate\"\n}",
+ "fill_raw": "{\n  \"person_name\": \"Ravi K Rao\",\n  \"document_date\": \"26/03/2026\",\n  \"expiry_date\": null,\n  \"issuer\": \"Cauvery Institute of Technology\",\n  \"credential_id\": \"CR-30661447\"\n}",
+ "seconds": {
+  "read": 0.292,
+  "classify": 3.243,
+  "fill": 47.473
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

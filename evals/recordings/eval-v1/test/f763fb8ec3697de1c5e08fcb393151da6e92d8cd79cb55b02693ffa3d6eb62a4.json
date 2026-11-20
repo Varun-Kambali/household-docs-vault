@@ -1,0 +1,154 @@
+{
+ "sha256": "f763fb8ec3697de1c5e08fcb393151da6e92d8cd79cb55b02693ffa3d6eb62a4",
+ "doc_id": "sale_deed-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Office of the Sub-Registrar",
+     "page": 0,
+     "bbox": [
+      0.07528572336046783,
+      0.021392023655127712,
+      0.40311252197131653,
+      0.050955858994796155
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Sale Deed",
+     "page": 0,
+     "bbox": [
+      0.07771454945618106,
+      0.05562700752027827,
+      0.17080236044764585,
+      0.07369526243126079
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.07770321785956363,
+      0.13032319638788015,
+      0.12558220282056018,
+      0.14729308258078877
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.07597535896712324,
+      0.15843023215594632,
+      0.11704312123821557,
+      0.17441860489347216
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Registration number",
+     "page": 0,
+     "bbox": [
+      0.07597535947855637,
+      0.18749999965352382,
+      0.21971252512103295,
+      0.20348837239104978
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Ravi Rao",
+     "page": 0,
+     "bbox": [
+      0.34281950969550484,
+      0.13348357256793542,
+      0.4210408596307943,
+      0.14994665992698075
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "01/09/2026",
+     "page": 0,
+     "bbox": [
+      0.3406787858701081,
+      0.16083936604014404,
+      0.43344852399017214,
+      0.17927691299026427
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "KA-57725071",
+     "page": 0,
+     "bbox": [
+      0.3427925281901004,
+      0.18997794034027482,
+      0.4518686625731302,
+      0.20682438521196533
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.07778408245290548,
+      0.23606369202258892,
+      0.5320581596780982,
+      0.2576805087470564
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.07576948372159709,
+      0.25279856759295893,
+      0.5587502326281305,
+      0.27454618278768717
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07789316983858681,
+      0.941806636471086,
+      0.3163545178313789,
+      0.9537575128374649
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"sale_deed\"\n}",
+ "fill_raw": "{\n  \"person_name\": \"Ravi Rao\",\n  \"document_date\": \"01/09/2026\",\n  \"expiry_date\": null,\n  \"registration_number\": \"KA-57725071\"\n}",
+ "seconds": {
+  "read": 0.294,
+  "classify": 2.892,
+  "fill": 46.714
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

@@ -1,0 +1,178 @@
+{
+ "sha256": "3d1dd8cc0c980dae8182425ad96027c52e89770f626877fa796607287fafb01a",
+ "doc_id": "experience_letter-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Kaveri Systems Limited",
+     "page": 0,
+     "bbox": [
+      0.10599514211661691,
+      0.031547946392398996,
+      0.37644848793546515,
+      0.0578572051060805
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Experience Certificate",
+     "page": 0,
+     "bbox": [
+      0.10445208503531735,
+      0.06376054992936586,
+      0.2795599925346561,
+      0.0803773826299159
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.10266940475589716,
+      0.135174418713633,
+      0.14579055352610149,
+      0.1482558136264832
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.10061601655081592,
+      0.16133720935680163,
+      0.13757700121099106,
+      0.17441860426965183
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Employer",
+     "page": 0,
+     "bbox": [
+      0.10027638993138298,
+      0.18945680185366065,
+      0.1665397064075983,
+      0.20382022278026812
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Designation",
+     "page": 0,
+     "bbox": [
+      0.10058563583647508,
+      0.21647648769383698,
+      0.1807285322742065,
+      0.2297444424957389
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Peter Shankar",
+     "page": 0,
+     "bbox": [
+      0.3531827517058359,
+      0.13953488369089184,
+      0.46406570568636135,
+      0.15427350454676125
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "19/08/2026",
+     "page": 0,
+     "bbox": [
+      0.3510970378670525,
+      0.16704672790177022,
+      0.4353506004160577,
+      0.18033699297693206
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Kaveri Systems Limited",
+     "page": 0,
+     "bbox": [
+      0.35052323570366856,
+      0.19298228511597726,
+      0.5322561330181808,
+      0.21201264091181304
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Associate Manager",
+     "page": 0,
+     "bbox": [
+      0.35067030612512023,
+      0.22062545370148612,
+      0.4993698439996857,
+      0.2374517181725565
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.09810582678543683,
+      0.26268284365831596,
+      0.5260831246594355,
+      0.284990849292852
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.09807099594870554,
+      0.27817758631534195,
+      0.5507339147960075,
+      0.3020506179641572
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07976977082289889,
+      0.9215754792135994,
+      0.31035359829252746,
+      0.9366458955907403
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"experience_letter\" }",
+ "fill_raw": "{\n  \"person_name\": \"Peter Shankar\",\n  \"document_date\": \"19/08/2026\",\n  \"expiry_date\": null,\n  \"employer\": \"Kaveri Systems Limited\",\n  \"designation\": \"Associate Manager\"\n}",
+ "seconds": {
+  "read": 0.293,
+  "classify": 2.847,
+  "fill": 51.345
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

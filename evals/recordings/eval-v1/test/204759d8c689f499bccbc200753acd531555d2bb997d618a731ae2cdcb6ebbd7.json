@@ -1,0 +1,190 @@
+{
+ "sha256": "204759d8c689f499bccbc200753acd531555d2bb997d618a731ae2cdcb6ebbd7",
+ "doc_id": "birth_certificate-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Registrar of Births and Deaths",
+     "page": 0,
+     "bbox": [
+      0.07355746591895859,
+      0.0511321708603667,
+      0.43765553162850745,
+      0.0761427558301726
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Certificate of Birth",
+     "page": 0,
+     "bbox": [
+      0.07186858738382312,
+      0.08418803448751455,
+      0.22381929902274772,
+      0.10174418585313705
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Holder",
+     "page": 0,
+     "bbox": [
+      0.06981519488789487,
+      0.15843023219591723,
+      0.12320328537904558,
+      0.1744186049334432
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Number",
+     "page": 0,
+     "bbox": [
+      0.06981519578162289,
+      0.18604651175359943,
+      0.1314168368819148,
+      0.2005813951712344
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date of birth",
+     "page": 0,
+     "bbox": [
+      0.0697554126548956,
+      0.2120393042219736,
+      0.16022405342632093,
+      0.2283676716345734
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date of issue",
+     "page": 0,
+     "bbox": [
+      0.0697496445604002,
+      0.2396261172035523,
+      0.16638998578751532,
+      0.2560134167982684
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "SURESH N RAO",
+     "page": 0,
+     "bbox": [
+      0.33470225961061717,
+      0.1555232554776773,
+      0.46817248353214735,
+      0.17151162821520316
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "ZZG6978705",
+     "page": 0,
+     "bbox": [
+      0.3347022576907273,
+      0.1831395348848791,
+      0.43942505217391675,
+      0.2005813953120834
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "03/12/1964",
+     "page": 0,
+     "bbox": [
+      0.3346209818689272,
+      0.21051849216665963,
+      0.4271859994399671,
+      0.22698150779635462
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "25/12/1964",
+     "page": 0,
+     "bbox": [
+      0.3345572013838576,
+      0.23795347611532058,
+      0.425196391873178,
+      0.2547790819805382
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06966428958655092,
+      0.2839864823469458,
+      0.5217381121615585,
+      0.30514636843812915
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe: you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.06970070750466015,
+      0.30214951291494574,
+      0.55043703061105,
+      0.3210437198830739
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 0,
+     "bbox": [
+      0.37577002285595373,
+      0.8837209298418626,
+      0.6201232007580094,
+      0.9098837212977754
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06981519218367727,
+      0.9504273502717363,
+      0.3080082105883969,
+      0.960755813883176
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"birth_certificate\" }",
+ "fill_raw": "{\n  \"holder\": \"SURESHER N RAO\",\n  \"number\": \"ZZG6978705\",\n  \"date_of_birth\": \"03/12/1964\",\n  \"issue_date\": \"25/12/1964\",\n  \"expiry_date\": null,\n  \"address\": null,\n  \"parties\": null\n}",
+ "seconds": {
+  "read": 0.295,
+  "classify": 3.262,
+  "fill": 48.825
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

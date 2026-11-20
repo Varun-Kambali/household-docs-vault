@@ -1,0 +1,154 @@
+{
+ "sha256": "b93df9d00d93427e59380698b6df639cdab960c89c562bf5bd0b6cd9a1fcbbdb",
+ "doc_id": "aadhaar-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1667,
+   "height": 1057,
+   "lines": [
+    {
+     "text": "PHOTO",
+     "page": 0,
+     "bbox": [
+      0.11182130003548747,
+      0.44581218159300484,
+      0.18178335102457902,
+      0.4878262621381815
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Government of India",
+     "page": 0,
+     "bbox": [
+      0.36191860393321174,
+      0.11212814643991398,
+      0.636627907535252,
+      0.15595463184120462
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "KIRAN RAO",
+     "page": 0,
+     "bbox": [
+      0.27748285382747706,
+      0.2963190293581006,
+      0.4187380747483965,
+      0.3398365765616982
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 0,
+     "bbox": [
+      0.6845930265875345,
+      0.3318077797327901,
+      0.9069767407099866,
+      0.3844393598187609
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "DOB: 04/01/1996",
+     "page": 0,
+     "bbox": [
+      0.27604752652554304,
+      0.4337161087074276,
+      0.434708287126047,
+      0.47932736945146126
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Male",
+     "page": 0,
+     "bbox": [
+      0.27616279050123593,
+      0.4897025171229419,
+      0.3241279065675626,
+      0.5286041183843044
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Address:",
+     "page": 0,
+     "bbox": [
+      0.27616279008356365,
+      0.5263157895061586,
+      0.34156976778509385,
+      0.5537757435498013
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "No. 135, 16th Cross",
+     "page": 0,
+     "bbox": [
+      0.2776162783392974,
+      0.5652173910940446,
+      0.4273255819413377,
+      0.597353496954158
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rose Garden Extension",
+     "page": 0,
+     "bbox": [
+      0.2790697692442337,
+      0.6039697539982681,
+      0.454941858438113,
+      0.6315789472557064
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Kochi, Kerala - 682715",
+     "page": 0,
+     "bbox": [
+      0.27083333312499996,
+      0.6379962197974152,
+      0.45833333312499996,
+      0.6843100194193433
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only. Not a real Aadhaar.",
+     "page": 0,
+     "bbox": [
+      0.3225793274188734,
+      0.917936471928334,
+      0.6803304922096971,
+      0.9486629822484676
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"aadhaar\" }",
+ "fill_raw": "{\n  \"holder\": \"KIRAN RAO\",\n  \"date_of_birth\": \"04/01/1996\",\n  \"address\": \"No. 135, 16th Cross\\nRose Garden Extension\\nKochi, Kerala - 682715\",\n  \"number\": null\n}",
+ "seconds": {
+  "read": 0.148,
+  "classify": 1.135,
+  "fill": 18.313
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

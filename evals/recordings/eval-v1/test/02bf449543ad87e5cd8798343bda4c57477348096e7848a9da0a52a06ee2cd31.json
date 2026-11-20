@@ -1,0 +1,202 @@
+{
+ "sha256": "02bf449543ad87e5cd8798343bda4c57477348096e7848a9da0a52a06ee2cd31",
+ "doc_id": "pan-10-clean",
+ "pages": [
+  {
+   "page": 0,
+   "width": 540,
+   "height": 340,
+   "lines": [
+    {
+     "text": "INCOME TAX DEPARTMENT",
+     "page": 0,
+     "bbox": [
+      0.05731851789686415,
+      0.044964779124540444,
+      0.4050110993561921,
+      0.07539412554572611
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "GOVT. OF INDIA",
+     "page": 0,
+     "bbox": [
+      0.7869611386899595,
+      0.05591762767118569,
+      0.944362951208044,
+      0.07982644473805145
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Permanent Account Number Card",
+     "page": 0,
+     "bbox": [
+      0.05683889035825376,
+      0.12008236155790442,
+      0.3053721957736545,
+      0.13964412913602942
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Permanent Account Number",
+     "page": 0,
+     "bbox": [
+      0.05669629485518844,
+      0.23774117862477018,
+      0.2426666259765625,
+      0.25484704410328585
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "ZZXPR5107Z",
+     "page": 0,
+     "bbox": [
+      0.05596296169139721,
+      0.2765293794519761,
+      0.2812592683015046,
+      0.31947057387408084
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.056681481114140266,
+      0.3906823550953584,
+      0.09445926524974682,
+      0.4077882205738741
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "SURESH N RAO",
+     "page": 0,
+     "bbox": [
+      0.056422222985161676,
+      0.42704705631031714,
+      0.2391685203269676,
+      0.4553412044749541
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Father's Name",
+     "page": 0,
+     "bbox": [
+      0.05677037062468352,
+      0.5200941198012408,
+      0.151629638671875,
+      0.5371999852797564
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "TANAY RAO",
+     "page": 0,
+     "bbox": [
+      0.0560611124391909,
+      0.5564588210161994,
+      0.19768888685438368,
+      0.5847147324505975
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Date of Birth",
+     "page": 0,
+     "bbox": [
+      0.05669629485518844,
+      0.6492235295912798,
+      0.13688888549804687,
+      0.6666117499856388
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "19/01/1965",
+     "page": 0,
+     "bbox": [
+      0.05745740819860388,
+      0.6858706081614775,
+      0.17530000474717883,
+      0.7141647114473231
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "PHOTO",
+     "page": 0,
+     "bbox": [
+      0.8018333152488426,
+      0.42620589312385115,
+      0.8654259575737847,
+      0.44797058105468746
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Signature",
+     "page": 0,
+     "bbox": [
+      0.05630555682712131,
+      0.8406705968520221,
+      0.12620555736400463,
+      0.8654735340791591
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 0,
+     "bbox": [
+      0.7188667014793113,
+      0.7123764711267808,
+      0.9458444100839121,
+      0.7646117715274586
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only. Not a real PAN.",
+     "page": 0,
+     "bbox": [
+      0.33847500836407696,
+      0.948952938528622,
+      0.6609805071795428,
+      0.9682441178490134
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"pan\"\n}",
+ "fill_raw": "{\n  \"number\": \"ZZXPR5107Z\",\n  \"holder\": \"SURESH N RAO\",\n  \"father_name\": \"TANAY RAO\",\n  \"date_of_birth\": \"19/01/1965\"\n}",
+ "seconds": {
+  "read": 0.002,
+  "classify": 0.863,
+  "fill": 12.198
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

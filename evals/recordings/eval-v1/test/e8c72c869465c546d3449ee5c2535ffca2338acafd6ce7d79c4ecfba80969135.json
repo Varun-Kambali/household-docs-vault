@@ -1,0 +1,154 @@
+{
+ "sha256": "e8c72c869465c546d3449ee5c2535ffca2338acafd6ce7d79c4ecfba80969135",
+ "doc_id": "appointment_letter-5-clean",
+ "pages": [
+  {
+   "page": 0,
+   "width": 595,
+   "height": 842,
+   "lines": [
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.06837646740825236,
+      0.13412830778652018,
+      0.10694790367318803,
+      0.1418990545204869
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Master Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.33732774237624735,
+      0.13425182786520184,
+      0.4737479073660714,
+      0.14288598284868614
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.16263187073188834,
+      0.0985529410738905,
+      0.17040261746585506
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "02/09/2026",
+     "page": 0,
+     "bbox": [
+      0.33684033305705097,
+      0.1626128063065989,
+      0.4196470629267332,
+      0.17140143387674434
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Employer",
+     "page": 0,
+     "bbox": [
+      0.06842184627757353,
+      0.1911354336772565,
+      0.13131595900078782,
+      0.20102254908328387
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Northstar Software Private Limited",
+     "page": 0,
+     "bbox": [
+      0.3373781604927127,
+      0.19111636925196707,
+      0.6114957921645221,
+      0.1999049968221125
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Northstar Software Private Limited",
+     "page": 0,
+     "bbox": [
+      0.06909243800059087,
+      0.025391929789563505,
+      0.48026887268579305,
+      0.03857479865647273
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Letter of Appointment",
+     "page": 0,
+     "bbox": [
+      0.06857647294757747,
+      0.05820905454368319,
+      0.24385545233718486,
+      0.07030641098203683
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06757479114692752,
+      0.24101666883165085,
+      0.519904128643645,
+      0.2509037842376781
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.25751544290936756,
+      0.5459511636685924,
+      0.2675308626224763
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06783193379891019,
+      0.9509928741817519,
+      0.30519660500919116,
+      0.9598954896179344
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"appointment_letter\" }",
+ "fill_raw": "{\n  \"person_name\": \"Master Kiran Rao\",\n  \"document_date\": \"02/09/2026\",\n  \"expiry_date\": null,\n  \"employer\": \"Northstar Software Private Limited\",\n  \"designation\": null\n}",
+ "seconds": {
+  "read": 0.003,
+  "classify": 3.129,
+  "fill": 45.996
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

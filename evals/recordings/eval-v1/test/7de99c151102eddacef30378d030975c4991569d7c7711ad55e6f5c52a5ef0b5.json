@@ -1,0 +1,178 @@
+{
+ "sha256": "7de99c151102eddacef30378d030975c4991569d7c7711ad55e6f5c52a5ef0b5",
+ "doc_id": "marriage_certificate-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Office of the Registrar of Marriages",
+     "page": 0,
+     "bbox": [
+      0.09587615603692429,
+      0.04189564334981477,
+      0.47510437202137484,
+      0.06986372561477194
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Certificate of Registration of Marriage",
+     "page": 0,
+     "bbox": [
+      0.09600259993899803,
+      0.07386654518121083,
+      0.3721510535280719,
+      0.09429805884526077
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Parties",
+     "page": 0,
+     "bbox": [
+      0.09650924070730031,
+      0.14970930231429525,
+      0.13963038947750464,
+      0.15843023252789745
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "R K Rao",
+     "page": 0,
+     "bbox": [
+      0.1231134308528941,
+      0.16400237727169942,
+      0.18489478247975039,
+      0.17611390170688945
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "SURESH N RAO",
+     "page": 0,
+     "bbox": [
+      0.1229578235556331,
+      0.17933864956858714,
+      0.2405059715851496,
+      0.1931538332896241
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Number",
+     "page": 0,
+     "bbox": [
+      0.0923168869061125,
+      0.20616689363133534,
+      0.1458761313779658,
+      0.21679822260534998
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date of issue",
+     "page": 0,
+     "bbox": [
+      0.09436753705746735,
+      0.23073659759539522,
+      0.1766796908471675,
+      0.2416471232841535
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "ZZA3539390",
+     "page": 0,
+     "bbox": [
+      0.3304050630676295,
+      0.1995849705910686,
+      0.4252637884528226,
+      0.21225138838949398
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "01/08/2021",
+     "page": 0,
+     "bbox": [
+      0.3303978066106962,
+      0.22604562870978806,
+      0.4129798952056979,
+      0.2386684375085535
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.09410931884800673,
+      0.2695095728373629,
+      0.5034153572397843,
+      0.2897984094877222
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.09218151589449157,
+      0.28549565324354487,
+      0.532084544537176,
+      0.30580787447720625
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 0,
+     "bbox": [
+      0.3646235816731278,
+      0.8539015744599828,
+      0.6059646524733187,
+      0.8919317586922545
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.08175307027592586,
+      0.9184366882707056,
+      0.3084225847578636,
+      0.9339855100704811
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"marriage_certificate\"\n}",
+ "fill_raw": "{\n  \"holder\": \"R K Rao SURESH N RAO\",\n  \"number\": \"ZZA3539390\",\n  \"date_of_birth\": null,\n  \"issue_date\": \"01/08/2021\",\n  \"expiry_date\": null,\n  \"address\": null,\n  \"parties\": [\n    \"R K Rao\",\n    \"SURES N RAO\"\n  ]\n}",
+ "seconds": {
+  "read": 0.288,
+  "classify": 3.133,
+  "fill": 48.798
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

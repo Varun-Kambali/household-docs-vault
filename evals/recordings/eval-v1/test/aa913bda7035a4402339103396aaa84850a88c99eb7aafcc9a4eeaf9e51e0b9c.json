@@ -1,0 +1,310 @@
+{
+ "sha256": "aa913bda7035a4402339103396aaa84850a88c99eb7aafcc9a4eeaf9e51e0b9c",
+ "doc_id": "warranty_card-10-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Samsung",
+     "page": 0,
+     "bbox": [
+      0.06815317877615726,
+      0.03365352360786045,
+      0.2994100904356286,
+      0.07237493098466341
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Warranty Card",
+     "page": 0,
+     "bbox": [
+      0.7513928922366907,
+      0.050247187950200334,
+      0.9323853415900576,
+      0.07329932364595937
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Product details",
+     "page": 0,
+     "bbox": [
+      0.06776180498786238,
+      0.14389534897801004,
+      0.21765913935306133,
+      0.1585470085930295
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Product",
+     "page": 0,
+     "bbox": [
+      0.0676842490051513,
+      0.17567101185778633,
+      0.12738761925282266,
+      0.18770108109486772
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Model",
+     "page": 0,
+     "bbox": [
+      0.06776180672730373,
+      0.20203488357243848,
+      0.11498973310842524,
+      0.21366279079561012
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Serial number",
+     "page": 0,
+     "bbox": [
+      0.06762785564866594,
+      0.22620987627148637,
+      0.16851177312854426,
+      0.2403598901543761
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Front Load Washing Machine 8 kg",
+     "page": 0,
+     "bbox": [
+      0.31827514980112914,
+      0.17587209269434267,
+      0.5934291620914103,
+      0.1918803417978563
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "WW80445FN",
+     "page": 0,
+     "bbox": [
+      0.31827515226216985,
+      0.2020348838299122,
+      0.42299794674535923,
+      0.2151162787427623
+     ],
+     "lang": "en",
+     "confidence": 0.5
+    },
+    {
+     "text": "632SJK302147",
+     "page": 0,
+     "bbox": [
+      0.31622176742480895,
+      0.22819767421776804,
+      0.4394250496253928,
+      0.24127906994572434
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Purchase details",
+     "page": 0,
+     "bbox": [
+      0.06981519323668274,
+      0.2965116280483886,
+      0.23203285582194005,
+      0.31111111108191936
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date of purchase",
+     "page": 0,
+     "bbox": [
+      0.06776180766603343,
+      0.328488372228521,
+      0.18891170336750523,
+      0.34316239346849464
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "15/01/2025",
+     "page": 0,
+     "bbox": [
+      0.318206852668777,
+      0.3268528647838961,
+      0.410745919227947,
+      0.34465876307532906
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Dealer location",
+     "page": 0,
+     "bbox": [
+      0.0677310362361861,
+      0.37780199071677,
+      0.17662214627010012,
+      0.39400033482515595
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Hubballi",
+     "page": 0,
+     "bbox": [
+      0.31622176836843363,
+      0.37790697667593265,
+      0.39425051068700795,
+      0.39534883710313706
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Warranty terms",
+     "page": 0,
+     "bbox": [
+      0.0694131556886482,
+      0.4704726006890333,
+      0.22205492257007203,
+      0.49001651744021024
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Part and warranty period",
+     "page": 0,
+     "bbox": [
+      0.06952866996013629,
+      0.5011235597134309,
+      0.23844230248332818,
+      0.5180576823043681
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Digital Inverter Motor - 10 years",
+     "page": 0,
+     "bbox": [
+      0.06959317663846154,
+      0.5230665927829936,
+      0.3246767335459585,
+      0.5425301172346162
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Product - 2 years",
+     "page": 0,
+     "bbox": [
+      0.06981519402174688,
+      0.5494186044957001,
+      0.21149897316511146,
+      0.5668604649229044
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "1. Warranty starts on the date of purchase shown on the original invoice.",
+     "page": 0,
+     "bbox": [
+      0.06972894452861762,
+      0.6583085574554046,
+      0.5565635063390015,
+      0.6747609995267814
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "2. Keep this card and the invoice. Service is refused without them.",
+     "page": 0,
+     "bbox": [
+      0.07186858797141879,
+      0.6786324784852089,
+      0.5133470173944085,
+      0.6905982904510208
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "3. Damage from misuse, power surges or unauthorised repair is not covered.",
+     "page": 0,
+     "bbox": [
+      0.07179200910314051,
+      0.6973766722186293,
+      0.5832324845485569,
+      0.7119681729166211
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "4. Consumables and accessories carry no warranty.",
+     "page": 0,
+     "bbox": [
+      0.07175037116772995,
+      0.715378463029046,
+      0.41901668253647617,
+      0.7287575873199688
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Authorised signature and seal",
+     "page": 0,
+     "bbox": [
+      0.7310061634132283,
+      0.8952991453488356,
+      0.9301848014332744,
+      0.9069767443020826
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07186858307425151,
+      0.9418604650539412,
+      0.3100616014789711,
+      0.9521367520838923
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"warranty_card\" }",
+ "fill_raw": "{\n  \"brand\": \"Samsung\",\n  \"product\": \"Front Load Washing Machine 8 kg\",\n  \"model\": \"WW80445FN\",\n  \"serial_number\": \"632SJ K302147\",\n  \"purchase_date\": \"15/01/2025\",\n  \"seller\": null,\n  \"seller_location\": \"Hubballi\",\n  \"buyer\": null,\n  \"warranty_parts\": [\n    {\n      \"part\": \"Digital Inverter Motor\",\n      \"years\": 10\n    },\n    {\n      \"part\": \"Product\",\n      \"years\": 2\n    }\n  ]\n}",
+ "seconds": {
+  "read": 0.23,
+  "classify": 2.428,
+  "fill": 50.739
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}
