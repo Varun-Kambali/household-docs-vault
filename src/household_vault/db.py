@@ -469,6 +469,21 @@ class Store:
         return None if r is None else _item(r)
 
     @_locked
+    def is_card_sha(self, sha256: str) -> bool:
+        """True when any item, in any state, holding these bytes was read or typed as a card
+        front, is marked as a card, waits for the secrets store or asks about a card number."""
+        row = self.conn.execute(
+            "select 1 from items where sha256 = ? and ("
+            " json_extract(reading, '$.doc_type') = 'card_front'"
+            " or json_extract(overrides, '$.doc_type') = 'card_front'"
+            " or json_extract(overrides, '$.was_card') = 1"
+            " or state = 'waiting_secrets' or reasons like '%card_unreadable%'"
+            ") limit 1",
+            (sha256,),
+        ).fetchone()
+        return row is not None
+
+    @_locked
     def items_with_sha(self, sha256: str, states: Collection[ItemState]) -> list[Item]:
         if not states:
             return []

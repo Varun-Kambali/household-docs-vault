@@ -76,10 +76,11 @@ def test_an_asked_card_cannot_be_retyped_as_another_document(make_state, photo):
     s.worker.drain()
     assert s.store.item(item.id).rel_path == "Inbox/card.jpg"
     assert s.store.documents_of_type(DocType.tax_invoice) == []
-    ok = c.post(
-        f"/v1/needs-a-look/{item.id}/answer", json={"kind": "type", "value": "card_statement"}
-    )
-    assert ok.status_code == 200  # another card-area type is allowed
+    for other in ("card_statement", "card_welcome_letter"):  # no exception, from Inbox or upload
+        r = c.post(f"/v1/needs-a-look/{item.id}/answer", json={"kind": "type", "value": other})
+        assert r.status_code == 409
+    ok = c.post(f"/v1/needs-a-look/{item.id}/answer", json={"kind": "type", "value": "card_front"})
+    assert ok.status_code == 200
 
 
 def test_the_item_file_is_refused_for_a_stored_card_whatever_the_override(make_state, photo):
@@ -105,7 +106,7 @@ def test_a_copy_of_a_waiting_card_photo_stays_in_inbox_and_is_not_served(make_st
     assert s.vault.list_dir("Needs a look") == []
 
 
-def test_an_inbox_card_retyped_as_a_letter_is_never_served(make_state, photo):
+def test_an_inbox_card_retyped_as_a_letter_is_refused_and_never_served(make_state, photo):
     s = make_state(f"{NUMBER} Anita Sharma", "card_front", CARD_FILL)
     drop(s.vault, "card.jpg", photo)
     s.worker.drain()
@@ -114,12 +115,12 @@ def test_an_inbox_card_retyped_as_a_letter_is_never_served(make_state, photo):
     r = c.post(
         f"/v1/needs-a-look/{item.id}/answer", json={"kind": "type", "value": "card_welcome_letter"}
     )
-    assert r.status_code == 200  # an Inbox card may be a letter: its original is in Drive
-    assert c.get(f"/v1/items/{item.id}/file").status_code == 423  # before the re-read
+    assert r.status_code == 409  # a card can only be answered as a card
+    assert c.get(f"/v1/items/{item.id}/file").status_code == 423  # before a re-read
     s.worker.drain()
     after = s.store.item(item.id)
     assert c.get(f"/v1/items/{item.id}/file").status_code == 423  # after it
-    assert after.overrides.get("was_card") is True
+    assert after.overrides.get("was_card") is True and after.rel_path == "Inbox/card.jpg"
 
 
 def test_being_a_card_survives_any_later_overrides(make_state, photo):

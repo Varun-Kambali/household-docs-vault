@@ -628,3 +628,131 @@ def test_a_malformed_origin_is_refused_not_a_server_error(client, state, outside
     url = f"/v1/items/{outsider_prescription.id}/retry"
     r = client.post(url, headers={"Origin": "http://[abc"})
     assert r.status_code == 403
+
+
+def _a_card_item(state, sha, st="filed"):
+    item = state.store.add_item(sha, "card.jpg", None, state.worker.clock())
+    state.store.update_item(item.id, state=st, reading={"doc_type": "card_front"})
+    return item
+
+
+def test_a_copy_of_a_card_photo_stays_protected_after_the_original_is_filed(client, state):
+    _a_card_item(state, "c" * 64, "filed")
+    copy = state.store.add_item("c" * 64, "copy.jpg", "Inbox/copy.jpg", state.worker.clock())
+    state.store.update_item(copy.id, state="asked", reasons=[Reason.duplicate])
+    assert client.get(f"/v1/items/{copy.id}/file").status_code == 423
+    r = client.post(
+        f"/v1/needs-a-look/{copy.id}/answer", json={"kind": "type", "value": "tax_invoice"}
+    )
+    assert r.status_code == 409
+
+
+def test_the_document_file_of_a_card_photo_is_refused(client, state, filed_doc):
+    assert client.get(f"/v1/documents/{filed_doc.id}/file").status_code == 200
+    _a_card_item(state, filed_doc.sha256, "discarded")  # these bytes were once a card photo
+    r = client.get(f"/v1/documents/{filed_doc.id}/file")
+    assert r.status_code == 423 and "secrets store" in r.json()["detail"]
+
+
+def test_the_filer_will_not_file_or_move_a_card_photo(client, state):
+    from datetime import date
+
+    from household_vault.filing.decide import Decision
+    from household_vault.filing.filer import CardPhotoError
+    from household_vault.filing.questions import question_for
+    from household_vault.reading.pipeline import Reading
+
+    _a_card_item(state, "d" * 64, "gone")
+    path = "Inbox/raw.jpg"
+    state.vault.write_atomic(path, b"raw card bytes")
+    item = state.store.add_item("d" * 64, "raw.jpg", path, state.worker.clock())
+    state.store.update_item(item.id, state="queued", kind="jpeg")
+    item = state.store.item(item.id)
+    reading = Reading(pages=[], english_letters=0)
+    decision = Decision(
+        "file", [], "p1", [], None, "Home", date(2026, 1, 1), "document", "x", None, {}, None
+    )
+    with pytest.raises(CardPhotoError):
+        state.filer.file(item, reading, decision)
+    question = question_for([Reason.person_unknown], None, state.filer.household, {})
+    moved = state.filer.to_needs_a_look(item, [Reason.person_unknown], question, None)
+    assert moved.rel_path == path and state.vault.exists(path)  # asked where it is
+    assert moved.overrides.get("was_card") is True  # and the copy is marked for good
+
+
+def test_the_worker_asks_about_raw_card_bytes_in_place(settings, tmp_path, clock, photo):
+    import hashlib
+    import json
+
+    from household_vault.reading.engines import VisionPageReader
+    from tests.fakes import FakeModels, FakeOcr
+
+    people = tmp_path / "household.json"
+    people.write_text(HOUSEHOLD.model_dump_json())
+    ready = settings.model_copy(update={"household_path": people, "settle_seconds": 0.0})
+    fill = json.dumps({"seller": "Deccan", "invoice_date": "2026-11-01"})
+    models = FakeModels("tax_invoice", fill)
+    s = build_app_state(
+        ready,
+        engines=Engines(VisionPageReader(FakeOcr(text="Tax invoice Ravi Kumar Rao")), models),
+        clock=clock,
+    )
+    try:
+        _a_card_item(s, hashlib.sha256(photo).hexdigest(), "discarded")
+        drop(s.vault, "raw.jpg", photo)
+        s.worker.drain()
+        (item,) = s.store.items(["asked"])
+        assert item.rel_path == "Inbox/raw.jpg" and s.vault.list_dir("Needs a look") == []
+        assert s.store.documents_of_type(DocType.tax_invoice) == []
+    finally:
+        s.gate.lock()
+        s.store.conn.close()
+
+
+# Every API route and every filer entry, and what it does with a file's raw bytes. A new one that
+# is not listed here fails the test below until it is classified (and, if it returns, moves or
+# writes raw bytes, gated by `is_card_photo`).
+_ROUTES_WITH_BYTES = {
+    ("GET", "/v1/documents/{doc_id}/file"): "document_file refuses a card sha",
+    ("GET", "/v1/items/{item_id}/file"): "item_file refuses a card item or sha",
+}
+_ROUTES_WITHOUT_BYTES = {
+    ("GET", "/healthz"), ("GET", "/v1/activity"), ("GET", "/v1/inbox/progress"),
+    ("GET", "/v1/needs-a-look"), ("POST", "/v1/needs-a-look/answer-many"),
+    ("POST", "/v1/needs-a-look/{item_id}/answer"), ("POST", "/v1/needs-a-look/{item_id}/unlock"),
+    ("POST", "/v1/needs-a-look/{item_id}/undo"), ("POST", "/v1/documents/{doc_id}/undo"),
+    ("POST", "/v1/items/{item_id}/retry"), ("GET", "/v1/documents/{doc_id}"),
+    ("POST", "/v1/cards"), ("POST", "/v1/secrets/create"), ("POST", "/v1/secrets/unlock"),
+    ("GET", "/v1/emergency-sheet"),
+}  # fmt: skip
+_FILER_ENTRIES = {
+    "file": "gated: CardPhotoError for a card sha",
+    "file_new": "files bytes the app made (the masked copy), never the raw photo",
+    "to_needs_a_look": "gated: a card photo stays where it is",
+    "undo": "moves a filed document back to Inbox: the filed copy is masked or not a card",
+    "undo_card": "writes the original photo back to Inbox from the secrets store, by design",
+    "undo_needs_a_look": "moves a Needs a look file back to Inbox; a card photo is never there",
+    "clear_card_photo": "removes the Inbox photo, writes nothing",
+    "recover": "finishes interrupted moves of files already filed or asked",
+}
+
+
+def test_every_route_and_filer_entry_is_classified_for_raw_card_bytes(client):
+    import inspect
+
+    from fastapi.routing import APIRoute
+
+    from household_vault.filing.filer import Filer
+
+    seen = set()
+    for route in client.app.routes:
+        if isinstance(route, APIRoute):
+            seen |= {(m, route.path) for m in route.methods - {"HEAD", "OPTIONS"}}
+    classified = set(_ROUTES_WITH_BYTES) | _ROUTES_WITHOUT_BYTES
+    assert seen == classified, (
+        f"classify new routes for raw card bytes: {sorted(seen ^ classified)}"
+    )
+    public = {n for n, f in inspect.getmembers(Filer, inspect.isfunction) if not n.startswith("_")}
+    assert public == set(_FILER_ENTRIES), (
+        f"classify filer entries: {sorted(public ^ set(_FILER_ENTRIES))}"
+    )

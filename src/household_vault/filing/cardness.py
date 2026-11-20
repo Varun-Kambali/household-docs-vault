@@ -2,22 +2,9 @@
 
 from __future__ import annotations
 
-from household_vault.db import CARD_MARK, Item, ItemState, Store
+from household_vault.db import CARD_MARK, Item, Store
 from household_vault.doctypes import DocType
 from household_vault.reasons import Reason
-
-# Every state in which an item can still hold its file.
-CARD_STATES: tuple[ItemState, ...] = (
-    "queued",
-    "reading",
-    "filing",
-    "filed_pending_clear",
-    "undoing",
-    "moving",
-    "asked",
-    "held",
-    "waiting_secrets",
-)
 
 
 def is_card_item(item: Item) -> bool:
@@ -32,8 +19,19 @@ def is_card_item(item: Item) -> bool:
     )
 
 
+def is_card_photo(store: Store, sha256: str) -> bool:
+    """The one gate: these bytes were, in any item and any state, a card photo. Every route that
+    serves, moves or files a file's raw bytes asks it. The masked copy of a card has its own
+    SHA-256, so it passes."""
+    return store.is_card_sha(sha256)
+
+
 def shares_card_photo(store: Store, item: Item) -> bool:
-    """True for a card item, or an item with the same bytes as one (a copy of the photo)."""
-    if is_card_item(item):
-        return True
-    return any(is_card_item(other) for other in store.items_with_sha(item.sha256, CARD_STATES))
+    """True for a card item, or an item whose bytes were ever a card photo."""
+    return is_card_item(item) or is_card_photo(store, item.sha256)
+
+
+def mark_card(store: Store, item: Item) -> None:
+    """Mark an item (a copy of a card photo) as a card, for good."""
+    if not item.overrides.get(CARD_MARK):
+        store.update_item(item.id, overrides={**item.overrides, CARD_MARK: True})
