@@ -1,0 +1,178 @@
+{
+ "sha256": "767285bace6cbf5e8df001951919142578433e178f717dc35df4419f84fff238",
+ "doc_id": "payslip-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Kaveri Systems Limited",
+     "page": 0,
+     "bbox": [
+      0.09220666151115868,
+      0.043489576467547364,
+      0.3800949727842561,
+      0.06897107766373212
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Payslip",
+     "page": 0,
+     "bbox": [
+      0.09445585214336874,
+      0.07848837208290949,
+      0.16016427085457785,
+      0.09593023251011379
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.09445585189670824,
+      0.15406976762715052,
+      0.14168377827782977,
+      0.16715116254000062
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.09650924123418257,
+      0.1787790701270604,
+      0.13552361239346972,
+      0.19476744123437373
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Employer",
+     "page": 0,
+     "bbox": [
+      0.0963835766832675,
+      0.20613394016981945,
+      0.1685034867054911,
+      0.22409861789897767
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Net pay",
+     "page": 0,
+     "bbox": [
+      0.09650924015687558,
+      0.2354651159282678,
+      0.1560574947580555,
+      0.25145348866579376
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Kavita R Rao",
+     "page": 0,
+     "bbox": [
+      0.35724308766758567,
+      0.14809681817226306,
+      0.466165536339012,
+      0.16440318097644768
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "05/10/2026",
+     "page": 0,
+     "bbox": [
+      0.3572895257262441,
+      0.1758720930209412,
+      0.44763860549026313,
+      0.19331395344814561
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Kaveri Systems Limited",
+     "page": 0,
+     "bbox": [
+      0.359000123547161,
+      0.20128452618921988,
+      0.5486327745659979,
+      0.2217286234636089
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rs. 1,20,000",
+     "page": 0,
+     "bbox": [
+      0.3593040559000866,
+      0.22954754681452505,
+      0.4599977920398662,
+      0.2486501267301504
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.09817464270792094,
+      0.2783300203050665,
+      0.5424153004174509,
+      0.3007996965592086
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.09819351661033188,
+      0.2942753137627331,
+      0.5690919245890955,
+      0.31677212734936755
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.11229685767345256,
+      0.9331158955463994,
+      0.34536580127372085,
+      0.9510971720993008
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"payslip\" }",
+ "fill_raw": "{\n  \"person_name\": \"Kavita R Rao\",\n  \"document_date\": \"05/10/2026\",\n  \"expiry_date\": null,\n  \"employer\": \"Kaveri Systems Limited\",\n  \"net_pay\": \"Rs. 1,20,000\"\n}",
+ "seconds": {
+  "read": 0.271,
+  "classify": 2.925,
+  "fill": 47.261
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

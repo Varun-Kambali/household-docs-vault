@@ -1,0 +1,250 @@
+{
+ "sha256": "29858d4747b554cde8ec6f6d245b56049699b0c0d9a503e9bfa1c0ece41bdc4e",
+ "doc_id": "scan_report-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Hill Park Medical Centre",
+     "page": 0,
+     "bbox": [
+      0.10008185749385855,
+      0.030963284667125723,
+      0.36625945813765765,
+      0.05490602094230146
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Radiology Report",
+     "page": 0,
+     "bbox": [
+      0.10016962556317269,
+      0.062234448299508416,
+      0.23864934499038987,
+      0.07993984806543597
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Patient",
+     "page": 0,
+     "bbox": [
+      0.10051533997999165,
+      0.13207608556233774,
+      0.14999800614322284,
+      0.14554019323878675
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.10061601695970539,
+      0.15988372109829285,
+      0.13552361281442193,
+      0.1715116275063583
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Hospital",
+     "page": 0,
+     "bbox": [
+      0.10028696530055121,
+      0.18657211713482147,
+      0.15634937998417803,
+      0.19915475912763492
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Doctor",
+     "page": 0,
+     "bbox": [
+      0.10061601611813191,
+      0.21366279053570092,
+      0.14784394249925342,
+      0.22529069775887267
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Department",
+     "page": 0,
+     "bbox": [
+      0.10017872043716372,
+      0.23996570631879766,
+      0.17897187827068284,
+      0.2538091090183252
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Diagnoses",
+     "page": 0,
+     "bbox": [
+      0.09991189196036532,
+      0.26683715921503137,
+      0.17095814229100317,
+      0.2814304596676305
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Acute gastritis",
+     "page": 0,
+     "bbox": [
+      0.1311103867762468,
+      0.2853158832050531,
+      0.24253076563998624,
+      0.29983025039829136
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Hypertension",
+     "page": 0,
+     "bbox": [
+      0.13107530339879836,
+      0.3029802327171909,
+      0.2343692146880734,
+      0.31761533344867376
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Type 2 diabetes mellitus",
+     "page": 0,
+     "bbox": [
+      0.13092214374319758,
+      0.3195722285756739,
+      0.3145986270081991,
+      0.3376389836911504
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "RAVI KUMAR RAO",
+     "page": 0,
+     "bbox": [
+      0.3444523096778897,
+      0.1382782049490746,
+      0.4851894073477195,
+      0.15523126734891435
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "26/08/2026",
+     "page": 0,
+     "bbox": [
+      0.34489538139458453,
+      0.165462778068446,
+      0.4271785397949114,
+      0.17901396599125796
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Hill Park Medical Centre",
+     "page": 0,
+     "bbox": [
+      0.34656651162434327,
+      0.1922711082904529,
+      0.5261153356163701,
+      0.20911514941380238
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Dr. Tarak Purohit",
+     "page": 0,
+     "bbox": [
+      0.3445838628135641,
+      0.21883563806404405,
+      0.4767669331520428,
+      0.2347878689902969
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Radiology",
+     "page": 0,
+     "bbox": [
+      0.34443522425721396,
+      0.2458234591034948,
+      0.42566374571265814,
+      0.2606944320221438
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.10198486545875887,
+      0.36320023703875126,
+      0.5179530350712513,
+      0.38721533111114204
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.09795065809582497,
+      0.378818699269432,
+      0.5468326814931761,
+      0.40571444078919683
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.09791835779426479,
+      0.9127270761468635,
+      0.32509582204995174,
+      0.9314995942722183
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"scan_report\" }",
+ "fill_raw": "{\n  \"patient\": \"RAVI KUMAR RAO\",\n  \"doctor\": \"Dr. Tarak Purohit\",\n  \"date\": \"26/08/2026\",\n  \"hospital\": \"Hill Park Medical Centre\",\n  \"department\": \"Radiology\",\n  \"diagnoses\": [\n    \"Acute gastritis\",\n    \"Hypertension\",\n    \"Type 2 diabetes mellitus\"\n  ],\n  \"procedures\": null,\n  \"allergies\": null,\n  \"medicines\": null,\n  \"tests\": null,\n  \"next_visit\": null,\n  \"amount\": null\n}",
+ "seconds": {
+  "read": 0.305,
+  "classify": 1.013,
+  "fill": 53.041
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

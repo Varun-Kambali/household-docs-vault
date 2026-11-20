@@ -1,0 +1,142 @@
+{
+ "sha256": "fb8b66600ab3269012cce2f22a2ec6b2a0a999d54fa94a9e32a4b4943ebdfd48",
+ "doc_id": "degree-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Degree Certificate",
+     "page": 0,
+     "bbox": [
+      0.06336294323363698,
+      0.05940628109513302,
+      0.21586953052852342,
+      0.07701031180207663
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.06342591263194974,
+      0.13471515497811093,
+      0.10905868668053934,
+      0.1472615891360448
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.06365503101009039,
+      0.16279069786185874,
+      0.10061601567026553,
+      0.17441860426992417
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Roll number",
+     "page": 0,
+     "bbox": [
+      0.06365503261833,
+      0.1918604649785305,
+      0.15195071665785068,
+      0.20348837220170213
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.33059548273963624,
+      0.13504273512443865,
+      0.4147843937809329,
+      0.14829059837230196
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "23/12/2025",
+     "page": 0,
+     "bbox": [
+      0.3305498925042642,
+      0.164089131847154,
+      0.41893676026270493,
+      0.17748063556429938
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "RN-90936233",
+     "page": 0,
+     "bbox": [
+      0.33059548309707565,
+      0.19186046491389463,
+      0.4394250505784891,
+      0.20494186064185094
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.0635367992689524,
+      0.2397659882367631,
+      0.5155068177964804,
+      0.2570980049452676
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.06365503303988035,
+      0.2572649575614606,
+      0.5462012293466556,
+      0.2718023254229557
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06776180768668791,
+      0.9418604650538818,
+      0.3080082125905195,
+      0.9521367520838327
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"degree\" }",
+ "fill_raw": "{\n  \"person_name\": \"Kiran Rao\",\n  \"document_date\": \"23/12/2025\",\n  \"expiry_date\": null,\n  \"issuer\": null,\n  \"roll_number\": \"RN-90936233\"\n}",
+ "seconds": {
+  "read": 0.249,
+  "classify": 1.849,
+  "fill": 24.394
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

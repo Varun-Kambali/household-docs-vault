@@ -1,0 +1,262 @@
+{
+ "sha256": "92a4ffc20ebf1378fc45da5a966a5ab67dd0bdca85c7c6dbad7da87b36fab8a8",
+ "doc_id": "travel_policy-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Western Ghats Life Assurance Limited",
+     "page": 0,
+     "bbox": [
+      0.06776181267598602,
+      0.05213675192444789,
+      0.5112936285980878,
+      0.06837606816376407
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Travel Insurance Certificate",
+     "page": 0,
+     "bbox": [
+      0.06570842247837815,
+      0.08284883701326684,
+      0.289527716938541,
+      0.09593023274122314
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Insurer",
+     "page": 0,
+     "bbox": [
+      0.06570841792184512,
+      0.15697674410882978,
+      0.11704312191388383,
+      0.16715116282721665
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Policyholder",
+     "page": 0,
+     "bbox": [
+      0.06764086239530719,
+      0.18274018477989862,
+      0.1520716630673286,
+      0.19662028030252654
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Insured persons",
+     "page": 0,
+     "bbox": [
+      0.06776180753436833,
+      0.21068376053180793,
+      0.17659137501578176,
+      0.22094017078821815
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "RAVI KUMAR RAO",
+     "page": 0,
+     "bbox": [
+      0.10061601746249997,
+      0.22674418591499224,
+      0.24640656960408858,
+      0.2384615384153208
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Suresh Rao",
+     "page": 0,
+     "bbox": [
+      0.10061601601906099,
+      0.24563953474758726,
+      0.19507186878130403,
+      0.2572674419707589
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Sum insured",
+     "page": 0,
+     "bbox": [
+      0.06974039125805818,
+      0.2700308462571953,
+      0.15407891039018107,
+      0.28084124673911215
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Premium",
+     "page": 0,
+     "bbox": [
+      0.0698151957462886,
+      0.2979651161990782,
+      0.1314168368465805,
+      0.30813953491746515
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "End date",
+     "page": 0,
+     "bbox": [
+      0.06750943878426927,
+      0.3233965743477323,
+      0.13166920572296428,
+      0.3364871465418887
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Claims helpline",
+     "page": 0,
+     "bbox": [
+      0.06763958728883017,
+      0.3498385093525995,
+      0.17260681760938357,
+      0.36527776864533246
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Western Ghats Life Assurance Limited",
+     "page": 0,
+     "bbox": [
+      0.32432957524696876,
+      0.1525523934678079,
+      0.6222684652543845,
+      0.16733268255534806
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "RAVI KUMAR RAO",
+     "page": 0,
+     "bbox": [
+      0.3262234888586835,
+      0.18006887504651803,
+      0.4704937619035511,
+      0.19504831089387387
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rs. 10,00,000",
+     "page": 0,
+     "bbox": [
+      0.32637192527073605,
+      0.2680132845920017,
+      0.4314417972400859,
+      0.2835676181402622
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rs. 21,240",
+     "page": 0,
+     "bbox": [
+      0.32624277548481634,
+      0.294552895090774,
+      0.40904736194838476,
+      0.30894728516437087
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "22/06/202ł",
+     "page": 0,
+     "bbox": [
+      0.32431142238151967,
+      0.32219785110588584,
+      0.4108015137999324,
+      0.334778893045124
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "1800 716 6052",
+     "page": 0,
+     "bbox": [
+      0.32639193802375477,
+      0.34846001331509957,
+      0.4374684313850191,
+      0.3637492889816869
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06761865133735695,
+      0.39536412272801913,
+      0.5073293860264628,
+      0.41273092328077865
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.06757378090448915,
+      0.4108502984085456,
+      0.5340812739847114,
+      0.4299969706818392
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07350576575787801,
+      0.9376968091116827,
+      0.30838340170907586,
+      0.9538739262230193
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"travel_policy\"\n}",
+ "fill_raw": "{\n  \"insurer\": \"Western Ghat Life Assurance Limited\",\n  \"product\": \"Travel Insurance Certificate\",\n  \"policy_number\": null,\n  \"policyholder\": \"RAVI KUMAR RAO\",\n  \"insured\": [\n    \"RAVI KUMAR RAO\",\n    \"Suresh Rao\"\n  ],\n  \"nominee\": null,\n  \"sum_insured\": \"Rs. 10,00,000\",\n  \"premium\": \"Rs. 21,240\",\n  \"premium_frequency\": null,\n  \"start_date\": null,\n  \"end_date\": \"22/06/2027\",\n  \"premium_due_date\": null,\n  \"agent\": null,\n  \"claim_helpline\": \"1800 716 6052\"\n}",
+ "seconds": {
+  "read": 0.278,
+  "classify": 1.076,
+  "fill": 55.222
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

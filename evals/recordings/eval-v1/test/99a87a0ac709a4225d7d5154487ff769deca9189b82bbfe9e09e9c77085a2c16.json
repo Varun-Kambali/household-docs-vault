@@ -1,0 +1,274 @@
+{
+ "sha256": "99a87a0ac709a4225d7d5154487ff769deca9189b82bbfe9e09e9c77085a2c16",
+ "doc_id": "gadget_policy-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Western Ghats Life Assurance Limited",
+     "page": 0,
+     "bbox": [
+      0.06981518786487603,
+      0.030341880222220063,
+      0.5277207461823072,
+      0.05232558116195274
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Mobile and Gadget Protection Plan",
+     "page": 0,
+     "bbox": [
+      0.06776180835179567,
+      0.06239316240556125,
+      0.3572895261358608,
+      0.07994186043960316
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Insurer",
+     "page": 0,
+     "bbox": [
+      0.06776180761626495,
+      0.13662790662118374,
+      0.12320328460652767,
+      0.15261627935870958
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Product",
+     "page": 0,
+     "bbox": [
+      0.06981519483200026,
+      0.16279069756878983,
+      0.12936344943318015,
+      0.18023255799599425
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Policy number",
+     "page": 0,
+     "bbox": [
+      0.06759702209224537,
+      0.19135368421456778,
+      0.17264938427825752,
+      0.20980910644482376
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Policyholder",
+     "page": 0,
+     "bbox": [
+      0.06773222839838186,
+      0.21940009729724186,
+      0.15814046133983062,
+      0.23699525149708656
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Sum insured",
+     "page": 0,
+     "bbox": [
+      0.06957406445482713,
+      0.24644872331133394,
+      0.160405401291544,
+      0.2651791835842289
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Premium",
+     "page": 0,
+     "bbox": [
+      0.06776180853953397,
+      0.2747093021701188,
+      0.13757700024896705,
+      0.2921511625973231
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "End date",
+     "page": 0,
+     "bbox": [
+      0.06967192318659086,
+      0.3020443484751436,
+      0.13772027351037977,
+      0.3200486746026767
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Claims helpline",
+     "page": 0,
+     "bbox": [
+      0.0697521308701946,
+      0.3311786957012144,
+      0.17870782783411257,
+      0.34760037321727144
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Western Ghats Life Assurance Limited",
+     "page": 0,
+     "bbox": [
+      0.3305954798469027,
+      0.13662790735539643,
+      0.6386036945737487,
+      0.15261627846270986
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Protect Plus",
+     "page": 0,
+     "bbox": [
+      0.330595481493616,
+      0.16410256377850463,
+      0.43531827597680545,
+      0.1816860464719079
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "PL/EX126621",
+     "page": 0,
+     "bbox": [
+      0.3305954846883128,
+      0.19186046511813515,
+      0.4435318251679502,
+      0.20930232554533945
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "SURESH N RAO",
+     "page": 0,
+     "bbox": [
+      0.3305177824755573,
+      0.217741582973355,
+      0.46619679452966856,
+      0.23720027629021412
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rs. 10,00,000",
+     "page": 0,
+     "bbox": [
+      0.32843353755519994,
+      0.24535075096200243,
+      0.4436403840022601,
+      0.2677306432623392
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rs. 33,000",
+     "page": 0,
+     "bbox": [
+      0.32842374537480284,
+      0.27443830787432577,
+      0.4210629073761301,
+      0.2953291339121322
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "05/09/2027",
+     "page": 0,
+     "bbox": [
+      0.3285420940188427,
+      0.30232558171443524,
+      0.42299794678108577,
+      0.321220929831318
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "1800 447 3468",
+     "page": 0,
+     "bbox": [
+      0.3326488706750496,
+      0.331196581079229,
+      0.4517453798774094,
+      0.34883720924184136
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.07392197851471198,
+      0.3837209301060782,
+      0.5215605674350376,
+      0.39534883732924975
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0739219696307001,
+      0.39957264963635275,
+      0.5462012334419153,
+      0.4115384616021647
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07597535563343852,
+      0.941860464932231,
+      0.31211498753904615,
+      0.9521367519621821
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"gadget_policy\"\n}",
+ "fill_raw": "{\n  \"insurer\": \"Western Ghat Life Assurance Limited\",\n  \"product\": \"Protect Plus\",\n  \"policy_number\": \"PL/EX126621\",\n  \"policyholder\": \"SURESHE N RAO\",\n  \"insured\": [],\n  \"nominee\": null,\n  \"sum_insured\": \"Rs. 10,00,000\",\n  \"premium\": \"Rs. 33,000\",\n  \"premium_frequency\": null,\n  \"start_date\": null,\n  \"end_date\": \"05/09/2027\",\n  \"premium_due_date\": null,\n  \"agent\": null,\n  \"claim_helpline\": \"1800 447 3468\"\n}",
+ "seconds": {
+  "read": 0.287,
+  "classify": 0.862,
+  "fill": 54.645
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

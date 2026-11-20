@@ -1,0 +1,197 @@
+{
+ "sha256": "804507a60ee1fd3513c7479758f958c11bddb3a40a96870b3e4ab627caa3c0ae",
+ "doc_id": "card_front-10-clean",
+ "pages": [
+  {
+   "page": 0,
+   "width": 428,
+   "height": 270,
+   "lines": [
+    {
+     "text": "Malnad Co-operative Bank",
+     "page": 0,
+     "bbox": [
+      0.058563085359947704,
+      0.08659261067708335,
+      0.4958411243474372,
+      0.13792594627097798
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Credit Card",
+     "page": 0,
+     "bbox": [
+      0.825654217015917,
+      0.09970369692201964,
+      0.9422429878020955,
+      0.12707406503182872
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "3782 822463 10005",
+     "page": 0,
+     "bbox": [
+      0.05915887779164537,
+      0.4719999525282118,
+      0.5294859698999708,
+      0.521037009910301
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "VALID THRU",
+     "page": 0,
+     "bbox": [
+      0.05614018663067684,
+      0.6101036919487848,
+      0.1519976642644294,
+      0.6289518568250868
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "06/31",
+     "page": 0,
+     "bbox": [
+      0.21257944196184106,
+      0.597659245243779,
+      0.2921214950418918,
+      0.6341036761248553
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "RAVI RAO",
+     "page": 0,
+     "bbox": [
+      0.05649999814612843,
+      0.7361814710828993,
+      0.20129205578955534,
+      0.7660814779776114
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "American Express",
+     "page": 0,
+     "bbox": [
+      0.658168186651212,
+      0.835022226969401,
+      0.9437943217910338,
+      0.8823629591200087
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 0,
+     "bbox": [
+      0.05742056124678282,
+      0.8647111115632233,
+      0.24833645330411253,
+      0.9085629639802155
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  },
+  {
+   "page": 1,
+   "width": 428,
+   "height": 270,
+   "lines": [
+    {
+     "text": "Authorised signature",
+     "page": 1,
+     "bbox": [
+      0.056074766355140186,
+      0.48417782253689234,
+      0.20539716916663625,
+      0.5081592701099538
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "038",
+     "page": 1,
+     "bbox": [
+      0.7582897293233426,
+      0.3792888500072338,
+      0.8118364565840391,
+      0.4136147958260995
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "CVV",
+     "page": 1,
+     "bbox": [
+      0.7690513824748102,
+      0.483866712782118,
+      0.8017289348851855,
+      0.5030259308991609
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Customer care: 1800 547 9007",
+     "page": 1,
+     "bbox": [
+      0.05712617000686788,
+      0.6549185011121962,
+      0.3449999372535777,
+      0.6795518380624277
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This card remains the property of the issuing bank.",
+     "page": 1,
+     "bbox": [
+      0.05650467293284764,
+      0.7138370372630931,
+      0.47414947224554616,
+      0.7415999801070602
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 1,
+     "bbox": [
+      0.05742056124678282,
+      0.8424888893410012,
+      0.24833645330411253,
+      0.8863407417579934
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"card_front\" }",
+ "fill_raw": "{\n  \"bank\": \"Malnad Co-operative Bank\",\n  \"card_name\": \"Credit Card\",\n  \"number\": \"3782 822463 10005\",\n  \"expiry\": \"06/31\",\n  \"holder\": \"RAVI RAO\",\n  \"network\": \"American Express\",\n  \"cvv\": \"038\"\n}",
+ "seconds": {
+  "read": 0.005,
+  "classify": 0.944,
+  "fill": 16.969
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

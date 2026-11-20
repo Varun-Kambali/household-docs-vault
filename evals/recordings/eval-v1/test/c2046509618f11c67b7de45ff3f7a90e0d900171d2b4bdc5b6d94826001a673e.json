@@ -1,0 +1,226 @@
+{
+ "sha256": "c2046509618f11c67b7de45ff3f7a90e0d900171d2b4bdc5b6d94826001a673e",
+ "doc_id": "card_statement-5-locked",
+ "pages": [
+  {
+   "page": 0,
+   "width": 595,
+   "height": 842,
+   "lines": [
+    {
+     "text": "Bank",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.13412830778652018,
+      0.10163865289768251,
+      0.1418990545204869
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Nilgiri Bank",
+     "page": 0,
+     "bbox": [
+      0.3373781604927127,
+      0.13425182786520184,
+      0.429361346589417,
+      0.14523757608372923
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Card name",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.162503566424807,
+      0.1414201752478335,
+      0.17040261746585506
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Everyday Rewards",
+     "page": 0,
+     "bbox": [
+      0.3373613373572085,
+      0.1627553908105701,
+      0.4847899364824055,
+      0.17374113902909738
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Card holder",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.19100712937017517,
+      0.14645715280741203,
+      0.19890618041122332
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "KIRAN RAO",
+     "page": 0,
+     "bbox": [
+      0.3373949579831933,
+      0.19111636925196707,
+      0.4306890920430672,
+      0.19989310873942245
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Card number",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.21951069231554332,
+      0.15569917053735557,
+      0.22740974335659148
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "XXXX XXXX XXXX 5100",
+     "page": 0,
+     "bbox": [
+      0.33613445378151263,
+      0.2197268524532363,
+      0.5212268476726628,
+      0.22839667168479072
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Payment due date",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.24814255956799292,
+      0.1893697530281644,
+      0.2580296749740202
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "23/11/2026",
+     "page": 0,
+     "bbox": [
+      0.3365546218487395,
+      0.24812349514270338,
+      0.4196470629267332,
+      0.2569002346301589
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Total amount due",
+     "page": 0,
+     "bbox": [
+      0.06757479114692752,
+      0.27664612251336107,
+      0.18431765772715336,
+      0.2844168692473278
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 3,420",
+     "page": 0,
+     "bbox": [
+      0.3373613373572085,
+      0.27673397834397273,
+      0.40818486574317225,
+      0.28716156658254155
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Nilgiri Bank",
+     "page": 0,
+     "bbox": [
+      0.06909243800059087,
+      0.02560569781305666,
+      0.20706721714564733,
+      0.04208432014084773
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Credit Card Statement",
+     "page": 0,
+     "bbox": [
+      0.0681512592219505,
+      0.05820905454368319,
+      0.25101008054589025,
+      0.0678634099892369
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06757479114692752,
+      0.3265273576677553,
+      0.519904128643645,
+      0.3364144730737827
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.34302613174547214,
+      0.5459511636685924,
+      0.35304155145858074
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06783193379891019,
+      0.9509928741817519,
+      0.30519660500919116,
+      0.9598954896179344
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"card_statement\" }",
+ "fill_raw": "{\n  \"bank\": \"Nilgiri Bank\",\n  \"card_name\": \"Everyday Rewards\",\n  \"network\": null,\n  \"holder\": \"KIRAN RAO\",\n  \"last4\": \"5100\",\n  \"statement_date\": null,\n  \"payment_due_date\": \"23/11/2026\",\n  \"total_due\": \"Rs. 3,420\",\n  \"credit_limit\": null,\n  \"annual_fee\": null\n}",
+ "seconds": {
+  "read": 0.006,
+  "classify": 2.926,
+  "fill": 7.431
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

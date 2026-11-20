@@ -1,0 +1,178 @@
+{
+ "sha256": "32abe447112df10f0cadcd946f3a6b853a177dd23556335359bc13ee7a6491fd",
+ "doc_id": "relieving_letter-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Kaveri Systems Limited",
+     "page": 0,
+     "bbox": [
+      0.0695958706994683,
+      0.0260495087948569,
+      0.3574825398537912,
+      0.05191637021975137
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Relieving Letter",
+     "page": 0,
+     "bbox": [
+      0.07169405354557946,
+      0.058958429962043035,
+      0.2055133384113405,
+      0.07912296453898071
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.06981519558307445,
+      0.13517441823537524,
+      0.11909650846330797,
+      0.15116279097290108
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.06981519469047587,
+      0.1627906972794929,
+      0.11088295696156819,
+      0.17877907001701876
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Employer",
+     "page": 0,
+     "bbox": [
+      0.0697117854810155,
+      0.19162579649316658,
+      0.141787187626678,
+      0.2080835057811523
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Designation",
+     "page": 0,
+     "bbox": [
+      0.06960806852018907,
+      0.2189390976519604,
+      0.15831800930944523,
+      0.23745625113920665
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Mason Shan",
+     "page": 0,
+     "bbox": [
+      0.3324884040208847,
+      0.13467131383408593,
+      0.43958551774436283,
+      0.1531193838059367
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "08/12/2025",
+     "page": 0,
+     "bbox": [
+      0.332648868624884,
+      0.16279069766222842,
+      0.42299794838890303,
+      0.18023255808943273
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Kaveri Systems Limited",
+     "page": 0,
+     "bbox": [
+      0.3326488722798245,
+      0.19186046512241017,
+      0.5277207373016466,
+      0.2094017090097653
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Software Engineer",
+     "page": 0,
+     "bbox": [
+      0.3345424192785108,
+      0.21880461851315847,
+      0.4888662047305636,
+      0.2390442186702849
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.07176108120433708,
+      0.27000801990540735,
+      0.5216735802596575,
+      0.2875034898708937
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.06776180853119329,
+      0.2876068375653458,
+      0.5482546183388566,
+      0.3023255812401211
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07774195818910021,
+      0.9417476149041716,
+      0.3102969186129307,
+      0.9554773485913524
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"relieving_letter\"\n}",
+ "fill_raw": "{\n  \"person_name\": \"Mason Shan\",\n  \"document_date\": \"08/12/2025\",\n  \"expiry_date\": null,\n  \"employer\": \"Kaveri Systems Limited\",\n  \"designation\": \"Software Engineer\"\n}",
+ "seconds": {
+  "read": 0.264,
+  "classify": 2.983,
+  "fill": 46.18
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

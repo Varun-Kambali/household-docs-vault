@@ -8,6 +8,7 @@ import subprocess
 from pathlib import Path
 
 from household_vault.checks import luhn_valid, verhoeff_valid
+from household_vault.leakscan import _HEX_TOKEN
 from household_vault.leakscan import scan_text as scan_text_in_src
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -16,8 +17,11 @@ SKIP_DIRS = {".venv", ".worktrees", ".git", "node_modules"}
 
 
 def scan_text(text: str) -> list[str]:
-    """The scan of committed outputs: published test cards are allowed there."""
-    return scan_text_in_src(text, allow_test_cards=True)
+    """The scan of committed outputs: published test cards are allowed there. Hash and id tokens
+    (a recording's SHA-256 key, uuid4 hex ids) go first, as in `scan_outputs`: a 64-character hex
+    key holds a digit run that passes the Aadhaar or card check now and then, and that is no
+    leak."""
+    return scan_text_in_src(_HEX_TOKEN.sub("", text), allow_test_cards=True)
 
 
 def committed_outputs(root: Path = ROOT) -> list[Path]:
@@ -123,3 +127,11 @@ def test_committed_outputs_hold_no_real_shaped_numbers() -> None:
         for hit in scan_text(p.read_text(encoding="utf-8", errors="ignore"))
     ]
     assert not hits, "\n".join(hits)
+
+
+def test_a_hash_key_with_an_aadhaar_shaped_digit_run_is_not_a_leak() -> None:
+    aadhaar = _valid_aadhaar_like()
+    key = "ab" + aadhaar + "c" * (64 - 2 - len(aadhaar))
+    assert len(key) == 64
+    assert scan_text(f'{{"sha256": "{key}"}}') == []
+    assert scan_text(f'{{"text": "{aadhaar}"}}')  # the same digits on their own are flagged

@@ -1,0 +1,178 @@
+{
+ "sha256": "592dfa458416715669e19aba7e1713581d796d693f8bfe5b6e86454e6863d88e",
+ "doc_id": "registration_certificate-5-clean",
+ "pages": [
+  {
+   "page": 0,
+   "width": 595,
+   "height": 842,
+   "lines": [
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.06837646740825236,
+      0.13412830778652018,
+      0.10694790367318803,
+      0.1418990545204869
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "KIRAN RAO",
+     "page": 0,
+     "bbox": [
+      0.3373949579831933,
+      0.13410924336123065,
+      0.4306890920430672,
+      0.14288598284868614
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.16263187073188834,
+      0.0985529410738905,
+      0.17040261746585506
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "22/03/2026",
+     "page": 0,
+     "bbox": [
+      0.3365546218487395,
+      0.1626128063065989,
+      0.4196470629267332,
+      0.1713895457940543
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Registration number",
+     "page": 0,
+     "bbox": [
+      0.06842184627757353,
+      0.1911354336772565,
+      0.2036184871897978,
+      0.20102254908328387
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "KA-47559811",
+     "page": 0,
+     "bbox": [
+      0.3373949579831933,
+      0.19122328950786815,
+      0.4380336216517857,
+      0.1999049968221125
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Valid till",
+     "page": 0,
+     "bbox": [
+      0.06728739377831211,
+      0.21963899662262465,
+      0.11827731092436974,
+      0.22740974335659148
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "18/03/2041",
+     "page": 0,
+     "bbox": [
+      0.3374621735901392,
+      0.21961993219733522,
+      0.417512601964614,
+      0.22840855976748065
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Regional Transport Office",
+     "page": 0,
+     "bbox": [
+      0.0690672289423582,
+      0.025391929789563505,
+      0.3758739311154149,
+      0.04208432014084773
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Certificate of Registration",
+     "page": 0,
+     "bbox": [
+      0.0681512592219505,
+      0.05820905454368319,
+      0.2734907390690651,
+      0.07045015529895338
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06757479114692752,
+      0.269520231777019,
+      0.519904128643645,
+      0.2794073471830463
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.2860190058547357,
+      0.5459511636685924,
+      0.29603442556784443
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06783193379891019,
+      0.9509928741817519,
+      0.30519660500919116,
+      0.9598954896179344
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"registration_certificate\" }",
+ "fill_raw": "{\n  \"person_name\": \"KIRAN RAO\",\n  \"document_date\": \"22/03/2026\",\n  \"expiry_date\": \"18/03/2041\",\n  \"registration_number\": \"KA-47559811\"\n}",
+ "seconds": {
+  "read": 0.008,
+  "classify": 3.058,
+  "fill": 47.808
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

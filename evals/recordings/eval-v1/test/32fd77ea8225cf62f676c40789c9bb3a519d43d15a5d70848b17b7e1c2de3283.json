@@ -1,0 +1,190 @@
+{
+ "sha256": "32fd77ea8225cf62f676c40789c9bb3a519d43d15a5d70848b17b7e1c2de3283",
+ "doc_id": "voter_id-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Election Commission",
+     "page": 0,
+     "bbox": [
+      0.07392197401091517,
+      0.03034188029367335,
+      0.3203285384120828,
+      0.046581196532989644
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Elector Photo Identity Card",
+     "page": 0,
+     "bbox": [
+      0.07392197085075122,
+      0.0623931625366444,
+      0.28747433281535406,
+      0.07703488356111687
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Holder",
+     "page": 0,
+     "bbox": [
+      0.07597535904378215,
+      0.13662790681719328,
+      0.12320328542490368,
+      0.14825581404036492
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Number",
+     "page": 0,
+     "bbox": [
+      0.07597535841627395,
+      0.16424418589269818,
+      0.13347022651834187,
+      0.17587209311586982
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date of birth",
+     "page": 0,
+     "bbox": [
+      0.0779398187520104,
+      0.19153902823307567,
+      0.1602531995180983,
+      0.20380980894314926
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Address",
+     "page": 0,
+     "bbox": [
+      0.08004116911222024,
+      0.21937501507088963,
+      0.13761796787067512,
+      0.23120638015085093
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Ravi Rao",
+     "page": 0,
+     "bbox": [
+      0.33059548293051616,
+      0.13662790716418438,
+      0.4045174522508665,
+      0.14829059823161095
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "ZZM3770381",
+     "page": 0,
+     "bbox": [
+      0.332550746002263,
+      0.16386529837231123,
+      0.43130962340706286,
+      0.17770446904017145
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "05/04/1989",
+     "page": 0,
+     "bbox": [
+      0.3324852909440273,
+      0.1912384594335601,
+      0.417001361862303,
+      0.20411037774504603
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "No. 174, 5th Cross, Chennai, Tamil Nadu - 600214",
+     "page": 0,
+     "bbox": [
+      0.3347022566840587,
+      0.2179487176184658,
+      0.7104722812339189,
+      0.23547008513983325
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.08418891259294062,
+      0.267441860338246,
+      0.5154004095203704,
+      0.27906976756141755
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe: you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.08206753631678199,
+      0.2830949540067953,
+      0.5421626847377501,
+      0.2983323383790826
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "SPECIMEN",
+     "page": 0,
+     "bbox": [
+      0.39630389826628876,
+      0.8517441856462934,
+      0.6262833706745604,
+      0.8779069771022062
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.11074746117023716,
+      0.9188474826169871,
+      0.336853599757091,
+      0.9306648767757661
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"voter_id\"\n}",
+ "fill_raw": "{\n  \"holder\": \"Ravi Rao\",\n  \"number\": \"ZZM3770381\",\n  \"date_of_birth\": \"05/04/1989\",\n  \"issue_date\": null,\n  \"expiry_date\": null,\n  \"address\": \"No. 174, 5th Cross, Chennai, Tamil Nadu - 600214\",\n  \"parties\": null\n}",
+ "seconds": {
+  "read": 0.286,
+  "classify": 3.161,
+  "fill": 49.576
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

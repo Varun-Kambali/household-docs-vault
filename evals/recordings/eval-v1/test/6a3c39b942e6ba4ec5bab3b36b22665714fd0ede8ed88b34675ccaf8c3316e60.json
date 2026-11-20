@@ -1,0 +1,202 @@
+{
+ "sha256": "6a3c39b942e6ba4ec5bab3b36b22665714fd0ede8ed88b34675ccaf8c3316e60",
+ "doc_id": "rent_agreement-5-clean",
+ "pages": [
+  {
+   "page": 0,
+   "width": 595,
+   "height": 842,
+   "lines": [
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.06837646740825236,
+      0.13412830778652018,
+      0.10694790367318803,
+      0.1418990545204869
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Mrs Kavita Rao",
+     "page": 0,
+     "bbox": [
+      0.33732774237624735,
+      0.13425182786520184,
+      0.4569411846769958,
+      0.14288598284868614
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.16263187073188834,
+      0.0985529410738905,
+      0.17040261746585506
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "25/12/2025",
+     "page": 0,
+     "bbox": [
+      0.3365546218487395,
+      0.1626128063065989,
+      0.4197311016691833,
+      0.1713895457940543
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rent amount",
+     "page": 0,
+     "bbox": [
+      0.06842184627757353,
+      0.1911354336772565,
+      0.15371765649619223,
+      0.19890618041122332
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 38,000",
+     "page": 0,
+     "bbox": [
+      0.3373613373572085,
+      0.19122328950786815,
+      0.41752939945509454,
+      0.20165087774643708
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Deposit",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.21963899662262465,
+      0.11839831696838891,
+      0.22940853599131528
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 38,000",
+     "page": 0,
+     "bbox": [
+      0.3373613373572085,
+      0.2197268524532363,
+      0.41752939945509454,
+      0.23015444069180524
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "End of term",
+     "page": 0,
+     "bbox": [
+      0.06842184627757353,
+      0.24801425526091148,
+      0.14444539046087185,
+      0.25591330630195963
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "24/12/2026",
+     "page": 0,
+     "bbox": [
+      0.3365546218487395,
+      0.24812349514270338,
+      0.4196470629267332,
+      0.2569002346301589
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rental Agreement",
+     "page": 0,
+     "bbox": [
+      0.0690672289423582,
+      0.02560569781305666,
+      0.2826470383075105,
+      0.04208432014084773
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rental Agreement",
+     "page": 0,
+     "bbox": [
+      0.06868739408605239,
+      0.05836584675623513,
+      0.2160873797761292,
+      0.07045015529895338
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06757479114692752,
+      0.29802379472238716,
+      0.519904128643645,
+      0.30791091012841454
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.3145225688001039,
+      0.5459511636685924,
+      0.3245379885132126
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06783193379891019,
+      0.9509928741817519,
+      0.30519660500919116,
+      0.9598954896179344
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"rent_agreement\"\n}",
+ "fill_raw": "{\n  \"person_name\": \"Mrs Kavita Rao\",\n  \"document_date\": \"25/12/2025\",\n  \"expiry_date\": \"24/12/2026\",\n  \"rent_amount\": \"Rs. 38,000\",\n  \"deposit\": \"Rs. 38,000\"\n}",
+ "seconds": {
+  "read": 0.003,
+  "classify": 3.338,
+  "fill": 47.667
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

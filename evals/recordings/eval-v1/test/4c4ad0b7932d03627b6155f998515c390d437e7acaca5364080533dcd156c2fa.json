@@ -1,0 +1,202 @@
+{
+ "sha256": "4c4ad0b7932d03627b6155f998515c390d437e7acaca5364080533dcd156c2fa",
+ "doc_id": "utility_bill-5-clean",
+ "pages": [
+  {
+   "page": 0,
+   "width": 595,
+   "height": 842,
+   "lines": [
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.06837646740825236,
+      0.13412830778652018,
+      0.10694790367318803,
+      0.1418990545204869
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.3373949579831933,
+      0.13425182786520184,
+      0.41490755481880254,
+      0.14288598284868614
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.16263187073188834,
+      0.0985529410738905,
+      0.17040261746585506
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "13/04/2026",
+     "page": 0,
+     "bbox": [
+      0.3374621735901392,
+      0.1626128063065989,
+      0.4196470629267332,
+      0.1713895457940543
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Provider",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.1911354336772565,
+      0.12375293379070378,
+      0.19890618041122332
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Cauvery Electricity Board",
+     "page": 0,
+     "bbox": [
+      0.3369243717995011,
+      0.19111636925196707,
+      0.5396134576877626,
+      0.20224470197446553
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Consumer number",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.21951069231554332,
+      0.19268235919856225,
+      0.22740974335659148
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "CS-56328186",
+     "page": 0,
+     "bbox": [
+      0.3369243717995011,
+      0.21961993219733522,
+      0.43924370773700105,
+      0.22840855976748065
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Due date",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.24814255956799292,
+      0.12798823508895746,
+      0.25591330630195963
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "28/04/2026",
+     "page": 0,
+     "bbox": [
+      0.3365546218487395,
+      0.24812349514270338,
+      0.4196470629267332,
+      0.2569121227128489
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Cauvery Electricity Board",
+     "page": 0,
+     "bbox": [
+      0.06841176778328519,
+      0.025391929789563505,
+      0.3724453709706539,
+      0.04208432014084773
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Electricity Bill",
+     "page": 0,
+     "bbox": [
+      0.06868739408605239,
+      0.05836584675623513,
+      0.17480503370781905,
+      0.07045015529895338
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06757479114692752,
+      0.29802379472238716,
+      0.519904128643645,
+      0.30791091012841454
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.3145225688001039,
+      0.5459511636685924,
+      0.3245379885132126
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06783193379891019,
+      0.9509928741817519,
+      0.30519660500919116,
+      0.9598954896179344
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"utility_bill\" }",
+ "fill_raw": "{\n  \"person_name\": \"Kiran Rao\",\n  \"document_date\": \"13/04/2026\",\n  \"expiry_date\": \"28/04/2026\",\n  \"provider\": \"Cauvery Electricity Board\",\n  \"consumer_number\": \"CS-56328186\"\n}",
+ "seconds": {
+  "read": 0.003,
+  "classify": 3.153,
+  "fill": 47.618
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

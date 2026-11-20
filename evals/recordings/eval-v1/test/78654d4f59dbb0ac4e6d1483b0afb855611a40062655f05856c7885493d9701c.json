@@ -1,0 +1,130 @@
+{
+ "sha256": "78654d4f59dbb0ac4e6d1483b0afb855611a40062655f05856c7885493d9701c",
+ "doc_id": "scan_photo-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Sunrise Family Hospital",
+     "page": 0,
+     "bbox": [
+      0.07368151273870721,
+      0.02749830895866201,
+      0.3616298259247807,
+      0.0530461761059936
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Ultrasound Images",
+     "page": 0,
+     "bbox": [
+      0.07351895400370137,
+      0.059662777089046326,
+      0.23439602034264295,
+      0.07980296688751554
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Patient",
+     "page": 0,
+     "bbox": [
+      0.07186858377946265,
+      0.13662790716500728,
+      0.12731006076972537,
+      0.1497093020778575
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Hospital",
+     "page": 0,
+     "bbox": [
+      0.07392197195118494,
+      0.16279069732255924,
+      0.13552361305147684,
+      0.1787790700600851
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Master Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.33470226046551066,
+      0.1350427349230383,
+      0.4825461991062112,
+      0.15261627902589447
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Sunrise Family Hospital",
+     "page": 0,
+     "bbox": [
+      0.33430754089825504,
+      0.16097558141963875,
+      0.53227916626668,
+      0.1828590462980797
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.07586518113389037,
+      0.5418121397617519,
+      0.5216879926065513,
+      0.5555595702207989
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.07377764448772862,
+      0.5580870427677066,
+      0.55043738006011,
+      0.5738974973726787
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07371480444928816,
+      0.9422632183382783,
+      0.3081974093559538,
+      0.9553662820357672
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"scan_photo\" }",
+ "fill_raw": "{\n  \"patient\": \"Master Kiran Rao\",\n  \"doctor\": null,\n  \"date\": null,\n  \"hospital\": \"Sunrise Family Hospital\",\n  \"department\": \"Ultrasound Images\",\n  \"diagnoses\": null,\n  \"procedures\": null,\n  \"allergies\": null,\n  \"medicines\": null,\n  \"tests\": null,\n  \"next_visit\": null,\n  \"amount\": null\n}",
+ "seconds": {
+  "read": 0.288,
+  "classify": 0.828,
+  "fill": 49.781
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

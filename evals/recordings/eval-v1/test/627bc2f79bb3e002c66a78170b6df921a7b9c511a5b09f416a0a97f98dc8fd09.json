@@ -1,0 +1,346 @@
+{
+ "sha256": "627bc2f79bb3e002c66a78170b6df921a7b9c511a5b09f416a0a97f98dc8fd09",
+ "doc_id": "amc-5-clean",
+ "pages": [
+  {
+   "page": 0,
+   "width": 595,
+   "height": 842,
+   "lines": [
+    {
+     "text": "Brand",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.13412830778652018,
+      0.10649411497997636,
+      0.1418990545204869
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Nimbus",
+     "page": 0,
+     "bbox": [
+      0.3373781604927127,
+      0.13425182786520184,
+      0.3969579872964811,
+      0.14288598284868614
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Product",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.16263187073188834,
+      0.11924537209903492,
+      0.17040261746585506
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Split air conditioner",
+     "page": 0,
+     "bbox": [
+      0.3367394968241203,
+      0.1626128063065989,
+      0.49418488831079305,
+      0.17358673893074528
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Serial number",
+     "page": 0,
+     "bbox": [
+      0.0679075609736082,
+      0.19100712937017517,
+      0.1615832032275801,
+      0.19890618041122332
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "SNHH907656",
+     "page": 0,
+     "bbox": [
+      0.3367394968241203,
+      0.19111636925196707,
+      0.43922688460149684,
+      0.1999049968221125
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Seller",
+     "page": 0,
+     "bbox": [
+      0.0679075609736082,
+      0.21951069231554332,
+      0.10610083572003019,
+      0.22740974335659148
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Lakeview Digital Store",
+     "page": 0,
+     "bbox": [
+      0.337428578609178,
+      0.21961993219733522,
+      0.5139159643349527,
+      0.2307482649198337
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Buyer",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.24814255956799292,
+      0.10694789726193211,
+      0.2580296749740202
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Kavita R Rao",
+     "page": 0,
+     "bbox": [
+      0.3373949579831933,
+      0.24826607964667458,
+      0.4391932896205357,
+      0.2569002346301589
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Purchase date",
+     "page": 0,
+     "bbox": [
+      0.0683915979721967,
+      0.27664612251336107,
+      0.16413949918346243,
+      0.2844168692473278
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "20/07/2025",
+     "page": 0,
+     "bbox": [
+      0.3365546218487395,
+      0.27662705808807153,
+      0.4197311016691833,
+      0.28540379757552703
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Amount",
+     "page": 0,
+     "bbox": [
+      0.06722689075630252,
+      0.3051496854587292,
+      0.11924537209903492,
+      0.31292043219269594
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Rs. 45,990",
+     "page": 0,
+     "bbox": [
+      0.3373613373572085,
+      0.3052375412893409,
+      0.41752939945509454,
+      0.3156651295279097
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Cover starts",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.33352494409701605,
+      0.14816638081013656,
+      0.3414239951380641
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "28/07/2025",
+     "page": 0,
+     "bbox": [
+      0.3365546218487395,
+      0.33363418397880795,
+      0.4197311016691833,
+      0.3424228115489534
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Cover ends",
+     "page": 0,
+     "bbox": [
+      0.0679831945595621,
+      0.3620285070423842,
+      0.14397647120371587,
+      0.36992755808343225
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "27/07/2027",
+     "page": 0,
+     "bbox": [
+      0.3365546218487395,
+      0.3621377469241761,
+      0.4194958085773372,
+      0.3709144864116315
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Visits a year",
+     "page": 0,
+     "bbox": [
+      0.06728739377831211,
+      0.3906603742948337,
+      0.14981513784713105,
+      0.40054752594501564
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "4",
+     "page": 0,
+     "bbox": [
+      0.3364537856158088,
+      0.39074823012544535,
+      0.34509244005219275,
+      0.3992874254240276
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Service helpline",
+     "page": 0,
+     "bbox": [
+      0.0679075609736082,
+      0.4190356329331205,
+      0.17336639917197347,
+      0.42893351285304704
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "1800 771 1058",
+     "page": 0,
+     "bbox": [
+      0.3374621735901392,
+      0.4192517930708135,
+      0.44751263786764706,
+      0.42793350038505795
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Nimbus",
+     "page": 0,
+     "bbox": [
+      0.06909243800059087,
+      0.02560569781305666,
+      0.15846219102875525,
+      0.038556966532437675
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Annual Maintenance Contract",
+     "page": 0,
+     "bbox": [
+      0.06722689075630252,
+      0.05820905454368319,
+      0.31063191389837186,
+      0.0678634099892369
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06757479114692752,
+      0.46904513615044163,
+      0.519904128643645,
+      0.47893232404477803
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0683310949501871,
+      0.4855439464723129,
+      0.5459511636685924,
+      0.4955594024295762
+     ],
+     "lang": "en",
+     "confidence": null
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06783193379891019,
+      0.9509928741817519,
+      0.30519660500919116,
+      0.9598954896179344
+     ],
+     "lang": "en",
+     "confidence": null
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{\n  \"doc_type\": \"amc\"\n}",
+ "fill_raw": "{\n  \"brand\": \"Nimbus\",\n  \"product\": \"Split air conditioner\",\n  \"model\": null,\n  \"serial_number\": \"SNHH907656\",\n  \"seller\": \"Lakeview Digital Store\",\n  \"seller_location\": null,\n  \"order_id\": null,\n  \"buyer\": \"Kavita R Rao\",\n  \"purchase_date\": \"20/07/2025\",\n  \"amount\": \"Rs. 45,990\",\n  \"invoice_number\": null,\n  \"period_start\": \"28/07/2025\",\n  \"period_end\": \"27/07/2027\",\n  \"visits\": \"4\",\n  \"service_helpline\": \"1800 771 1058\"\n}",
+ "seconds": {
+  "read": 0.004,
+  "classify": 1.389,
+  "fill": 54.808
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

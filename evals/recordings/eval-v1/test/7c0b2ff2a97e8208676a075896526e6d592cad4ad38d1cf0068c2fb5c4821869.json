@@ -1,0 +1,178 @@
+{
+ "sha256": "7c0b2ff2a97e8208676a075896526e6d592cad4ad38d1cf0068c2fb5c4821869",
+ "doc_id": "itr_acknowledgement-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Income Tax Department",
+     "page": 0,
+     "bbox": [
+      0.075975360674267,
+      0.027616278925200133,
+      0.3655030784583322,
+      0.04796511636197398
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Income Tax Return Acknowledgement",
+     "page": 0,
+     "bbox": [
+      0.07392196813014487,
+      0.058119657905329025,
+      0.39425052030243557,
+      0.07703488320330576
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.07389386424489885,
+      0.1336776761640981,
+      0.12323139201700199,
+      0.14975255612829075
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.07392197085624029,
+      0.16133720923407224,
+      0.11498973312733263,
+      0.17877906966127655
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Acknowledgement number",
+     "page": 0,
+     "bbox": [
+      0.07597535697682203,
+      0.1888888890826187,
+      0.26078028950308413,
+      0.20784883681539745
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Assessment year",
+     "page": 0,
+     "bbox": [
+      0.0758367816220341,
+      0.21752180158690715,
+      0.19931722210545025,
+      0.23596657037843194
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "R K Rao",
+     "page": 0,
+     "bbox": [
+      0.3366661498664792,
+      0.13353011791231917,
+      0.4107671147459499,
+      0.1513536029362742
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "14/05/2026",
+     "page": 0,
+     "bbox": [
+      0.33866907520025985,
+      0.1609904095814576,
+      0.431351458136749,
+      0.1805793576927064
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "AK-XXXXXXXXXXX6598",
+     "page": 0,
+     "bbox": [
+      0.34086242422550506,
+      0.18895348859728944,
+      0.5133470193063224,
+      0.2078488367141723
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "2025-26",
+     "page": 0,
+     "bbox": [
+      0.34081805856837855,
+      0.21794371384244515,
+      0.4086685935448442,
+      0.23699814624679216
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.07377111237549323,
+      0.2656055673522797,
+      0.5299425194638964,
+      0.28657363448886497
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.07379253131011253,
+      0.28320934129517017,
+      0.556597997875541,
+      0.30394896186255715
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.0780287473657563,
+      0.9476744185432812,
+      0.3162217657704759,
+      0.9578488372616681
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"itr_acknowledgement\" }",
+ "fill_raw": "{\n  \"person_name\": \"R K Rao\",\n  \"document_date\": \"14/05/2026\",\n  \"expiry_date\": null,\n  \"acknowledgement_number\": \"AK-XXXXXXXXXXX6598\",\n  \"assessment_year\": \"2025-26\"\n}",
+ "seconds": {
+  "read": 0.196,
+  "classify": 2.017,
+  "fill": 34.396
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

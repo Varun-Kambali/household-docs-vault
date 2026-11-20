@@ -1,0 +1,154 @@
+{
+ "sha256": "248a430883657c2c292fe40f714c1e01ac17af1e9234a16cad3fa865ae67fe42",
+ "doc_id": "khata-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Municipal Corporation",
+     "page": 0,
+     "bbox": [
+      0.06776181112758772,
+      0.02606837586196442,
+      0.3408624184679841,
+      0.04957264936623795
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Khata Certificate",
+     "page": 0,
+     "bbox": [
+      0.06776180718840007,
+      0.05811965851889145,
+      0.21149897283087665,
+      0.07564102604025891
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.06776180598481571,
+      0.13372092985701223,
+      0.11909650997685442,
+      0.14970930259453807
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.06776180744241322,
+      0.16279069730514273,
+      0.11088295621261755,
+      0.17877907004266858
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Khata number",
+     "page": 0,
+     "bbox": [
+      0.06771231635150189,
+      0.19025773567910775,
+      0.17253409000509734,
+      0.2079980782350097
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Kiran Rao",
+     "page": 0,
+     "bbox": [
+      0.3326488716636397,
+      0.13372093022915277,
+      0.4188911692040484,
+      0.15128205129760186
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "02/09/2026",
+     "page": 0,
+     "bbox": [
+      0.3304835874325665,
+      0.16105466935266943,
+      0.42516322961746866,
+      0.18051509803074184
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "KH-38838202",
+     "page": 0,
+     "bbox": [
+      0.3326186729121895,
+      0.18886316257426394,
+      0.44561541199641713,
+      0.20793916269007418
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.0698151862838951,
+      0.23974358939628715,
+      0.5236139716031023,
+      0.2587209298662996
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.06981519662197806,
+      0.25726495743124356,
+      0.5503080064296413,
+      0.2747863249526111
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07996318912309633,
+      0.9473079356279888,
+      0.3163181046451263,
+      0.9594108615073124
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"khata\" }",
+ "fill_raw": "{\n  \"person_name\": \"Kiran Rao\",\n  \"document_date\": \"02/09/2026\",\n  \"expiry_date\": null,\n  \"khata_number\": \"KH-38838202\"\n}",
+ "seconds": {
+  "read": 0.252,
+  "classify": 0.735,
+  "fill": 46.465
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

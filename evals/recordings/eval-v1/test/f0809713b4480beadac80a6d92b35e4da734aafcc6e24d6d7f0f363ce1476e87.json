@@ -1,0 +1,154 @@
+{
+ "sha256": "f0809713b4480beadac80a6d92b35e4da734aafcc6e24d6d7f0f363ce1476e87",
+ "doc_id": "encumbrance_certificate-5-photo",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1653,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Office of the Sub-Registrar",
+     "page": 0,
+     "bbox": [
+      0.10677617314901007,
+      0.03760683729533709,
+      0.4209445658239648,
+      0.05813953498925151
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Encumbrance Certificate",
+     "page": 0,
+     "bbox": [
+      0.10472279587133672,
+      0.07122093003573116,
+      0.3039014338913828,
+      0.08430232576368746
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.1026477136123229,
+      0.1467621320787399,
+      0.1458122447619507,
+      0.15847042589572213
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.10266940505005447,
+      0.1744186048192231,
+      0.137577000904771,
+      0.18604651122728855
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Certificate number",
+     "page": 0,
+     "bbox": [
+      0.10266940600916948,
+      0.2020348835187924,
+      0.2258726882097533,
+      0.2151162792467487
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "SURESH N RAO",
+     "page": 0,
+     "bbox": [
+      0.3593429142971431,
+      0.1452991452787662,
+      0.4866529787213373,
+      0.1585470085266294
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "16/11/2025",
+     "page": 0,
+     "bbox": [
+      0.3593105395582742,
+      0.17286052978723065,
+      0.44356420358652954,
+      0.18615109808191888
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "CN-27312609",
+     "page": 0,
+     "bbox": [
+      0.3592546224150081,
+      0.20022690462025894,
+      0.4621006135196692,
+      0.2140172813975818
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.10047360618922248,
+      0.2485908483245498,
+      0.5340430011691952,
+      0.2658704854901085
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.10045767201720157,
+      0.2643118281073613,
+      0.5627528905806274,
+      0.28261930529221124
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.08387040053105493,
+      0.9270560970861499,
+      0.30832672637111125,
+      0.9421299499512549
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"encumbrance_certificate\" }",
+ "fill_raw": "{\n  \"person_name\": \"SURESHER N RAO\",\n  \"document_date\": \"16/11/2025\",\n  \"expiry_date\": null,\n  \"certificate_number\": \"CN-27312609\"\n}",
+ "seconds": {
+  "read": 0.279,
+  "classify": 2.979,
+  "fill": 46.893
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

@@ -1,0 +1,238 @@
+{
+ "sha256": "de7d315c9a2ad9d6a35bee8f848391624296d1588890a41371bf85e56538670a",
+ "doc_id": "prescription-10-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Lakeview Multispeciality Clinic",
+     "page": 0,
+     "bbox": [
+      0.07359543635368564,
+      0.026890507701640143,
+      0.4972821915328914,
+      0.05803190294444527
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Lakeview Layout, Bengaluru",
+     "page": 0,
+     "bbox": [
+      0.07392197231845056,
+      0.06104651147244433,
+      0.28952772078216543,
+      0.07863247860970768
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Dr. Andrew Ratti",
+     "page": 0,
+     "bbox": [
+      0.07355732487306864,
+      0.122932055722482,
+      0.2508614832049062,
+      0.14519939896646405
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "MBBS, MD (General Medicine)",
+     "page": 0,
+     "bbox": [
+      0.07165801266186654,
+      0.14250157293308707,
+      0.28569789939478674,
+      0.16329996266133973
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Patient",
+     "page": 0,
+     "bbox": [
+      0.0739219710018579,
+      0.18604651153785134,
+      0.1273100614930086,
+      0.20348837196505565
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Age/Sex: 35 / F",
+     "page": 0,
+     "bbox": [
+      0.07164041574332712,
+      0.21260525345205372,
+      0.18303984375461133,
+      0.22975984679750017
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Kavita R Rao",
+     "page": 0,
+     "bbox": [
+      0.17032703912825983,
+      0.18574302177365953,
+      0.27936495273554235,
+      0.20524534935847227
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.6324435314988299,
+      0.18459302322347027,
+      0.6735112937699224,
+      0.20203488365067468
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Rx",
+     "page": 0,
+     "bbox": [
+      0.07392197097619058,
+      0.2688953484745027,
+      0.12731006146734128,
+      0.2921511629208461
+     ],
+     "lang": "en",
+     "confidence": 0.30000001192092896
+    },
+    {
+     "text": "Medicine, dose, timing, duration",
+     "page": 0,
+     "bbox": [
+      0.15400410705657427,
+      0.2760683763909304,
+      0.37166324201940115,
+      0.2950581390802437
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "1. Tab Telmisartan 40 mg 1-0-0 7 days",
+     "page": 0,
+     "bbox": [
+      0.15400410722606292,
+      0.305128205532579,
+      0.48459959189391366,
+      0.3256410260453997
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "2. Tab Cetirizine 10 mg 1-0-1 15 days",
+     "page": 0,
+     "bbox": [
+      0.15195071432352955,
+      0.33846153819009883,
+      0.4743326529949322,
+      0.354700854429415
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "3. Tab Atorvastatin 20 mg 1-0-1 7 days",
+     "page": 0,
+     "bbox": [
+      0.15605749254581014,
+      0.3705128206916056,
+      0.4825462042154368,
+      0.3837606839394688
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+     "page": 0,
+     "bbox": [
+      0.07384519869486612,
+      0.4357126618488365,
+      0.48261834186813923,
+      0.45039164790099917
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Next visit: 08/01/2027",
+     "page": 0,
+     "bbox": [
+      0.07186858121120161,
+      0.4694767443713366,
+      0.2566735137374637,
+      0.48255813928418667
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06968509728357608,
+      0.947705176639979,
+      0.3040483810428812,
+      0.959592991088409
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "07/10/2026",
+     "page": 0,
+     "bbox": [
+      0.6918881219445687,
+      0.1828664990604345,
+      0.7906580790384038,
+      0.20230791946067905
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Signature",
+     "page": 0,
+     "bbox": [
+      0.8578481910985769,
+      0.8787970902596046,
+      0.9241388562326978,
+      0.8902458444642487
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"prescription\" }",
+ "fill_raw": "{\n  \"hospital\": \"Lakeview Multispeciality Clinic\",\n  \"doctor\": \"Dr. Andrew Ratti\",\n  \"patient\": \"Kavita R Rao\",\n  \"date\": \"07/10/2026\",\n  \"medicines\": [\n    {\n      \"name\": \"Telmisartan\",\n      \"dose\": \"40 mg\",\n      \"timing\": \"1-0-0\",\n      \"duration\": \"7 days\"\n    },\n    {\n      \"name\": \"Cetirizine\",\n      \"dose\": \"10 mg\",\n      \"timing\": \"1-0-1\",\n      \"duration\": \"15 days\"\n    },\n    {\n      \"name\": \"Atorvastatin\",\n      \"dose\": \"20 mg\",\n      \"timing\": \"1-0-1\",\n      \"duration\": \"7 days\"\n    }\n  ],\n  \"next_visit\": \"08/01/2027\"\n}",
+ "seconds": {
+  "read": 0.468,
+  "classify": 0.773,
+  "fill": 55.323
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

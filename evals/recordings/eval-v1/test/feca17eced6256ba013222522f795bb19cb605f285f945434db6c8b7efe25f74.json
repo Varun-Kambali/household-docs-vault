@@ -1,0 +1,226 @@
+{
+ "sha256": "feca17eced6256ba013222522f795bb19cb605f285f945434db6c8b7efe25f74",
+ "doc_id": "appliance_service_record-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Aurora",
+     "page": 0,
+     "bbox": [
+      0.061601641190816424,
+      0.03052325593241334,
+      0.15400410745394746,
+      0.052325581058865644
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Service Report",
+     "page": 0,
+     "bbox": [
+      0.0656157998498562,
+      0.060697576862592695,
+      0.19516448730616476,
+      0.07883730599561178
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Brand",
+     "page": 0,
+     "bbox": [
+      0.06542528487154198,
+      0.13620246426048044,
+      0.11321947930637562,
+      0.1530417215252291
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Product",
+     "page": 0,
+     "bbox": [
+      0.06559915789004811,
+      0.16405667892511855,
+      0.12536593421826758,
+      0.1818735534373589
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Serial number",
+     "page": 0,
+     "bbox": [
+      0.06365502976815887,
+      0.1931623931044958,
+      0.1683778242513483,
+      0.20940170934381208
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Seller",
+     "page": 0,
+     "bbox": [
+      0.06570841861279712,
+      0.22238372056095668,
+      0.11293634499391865,
+      0.23837209329848252
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Buyer",
+     "page": 0,
+     "bbox": [
+      0.06570841854361882,
+      0.2499999999396747,
+      0.11293634492474035,
+      0.2674418603668791
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Purchase date",
+     "page": 0,
+     "bbox": [
+      0.06357185448466635,
+      0.2773348184636377,
+      0.1705143876340627,
+      0.2938861109156755
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Aurora",
+     "page": 0,
+     "bbox": [
+      0.3326488711130983,
+      0.13517441844918854,
+      0.39425051221339025,
+      0.15261627887639295
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Front-load washing machine",
+     "page": 0,
+     "bbox": [
+      0.33059548087877366,
+      0.16410256379045973,
+      0.5646817262852692,
+      0.18168604648386288
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "SNMT051063",
+     "page": 0,
+     "bbox": [
+      0.3326488719810301,
+      0.19186046511813515,
+      0.44353182596155555,
+      0.20930232554533945
+     ],
+     "lang": "en",
+     "confidence": 0.5
+    },
+    {
+     "text": "Metro Home Appliances",
+     "page": 0,
+     "bbox": [
+      0.33059548568196867,
+      0.21947674451471755,
+      0.5297741237020148,
+      0.23846153831631045
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Mrs Kavita Rao",
+     "page": 0,
+     "bbox": [
+      0.33047438016632874,
+      0.24808744949411687,
+      0.4600800297708032,
+      0.2664474333784881
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "26/07/2025",
+     "page": 0,
+     "bbox": [
+      0.330395950092846,
+      0.2756205274002119,
+      0.42319747889435466,
+      0.29414691441109597
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06555268272594075,
+      0.3257772197502584,
+      0.5237514238223359,
+      0.34564901625226585
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.0677618086266494,
+      0.34444444459073087,
+      0.5482546184343127,
+      0.3576923078385942
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06969757476163306,
+      0.947311451417686,
+      0.31013804489322694,
+      0.9594233145295243
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"appliance_service_record\" }",
+ "fill_raw": "{\n  \"brand\": \"Aurora\",\n  \"product\": \"Front-load washing machine\",\n  \"model\": null,\n  \"serial_number\": \"SNMT051063\",\n  \"seller\": \"Metro Home Appliances\",\n  \"seller_location\": null,\n  \"order_id\": null,\n  \"buyer\": \"Mrs Kavita Rao\",\n  \"purchase_date\": \"26/07/2025\",\n  \"amount\": null,\n  \"invoice_number\": null,\n  \"period_start\": null,\n  \"period_end\": null,\n  \"visits\": null,\n  \"service_helpline\": null\n}",
+ "seconds": {
+  "read": 0.268,
+  "classify": 3.162,
+  "fill": 55.732
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

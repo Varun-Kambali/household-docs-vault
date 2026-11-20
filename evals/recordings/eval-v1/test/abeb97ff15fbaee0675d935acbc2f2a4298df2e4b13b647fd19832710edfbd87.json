@@ -1,0 +1,202 @@
+{
+ "sha256": "abeb97ff15fbaee0675d935acbc2f2a4298df2e4b13b647fd19832710edfbd87",
+ "doc_id": "puc_certificate-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Authorised Testing Centre",
+     "page": 0,
+     "bbox": [
+      0.06548660630243969,
+      0.026519838784819783,
+      0.3883573428454793,
+      0.05306608556612813
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Pollution Under Control Certificate",
+     "page": 0,
+     "bbox": [
+      0.0655350726488998,
+      0.0594776091778777,
+      0.3533622011595652,
+      0.07956852906375755
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.06776180672730373,
+      0.1351744182443323,
+      0.11498973310842524,
+      0.15116279098185814
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.0657084185327527,
+      0.16279069729067353,
+      0.10677618080384502,
+      0.17877907002819948
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Registration number",
+     "page": 0,
+     "bbox": [
+      0.06776180719701405,
+      0.19040697674699214,
+      0.21149897283949062,
+      0.20784883717419644
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Certificate number",
+     "page": 0,
+     "bbox": [
+      0.06772453101179153,
+      0.21788445298878134,
+      0.19716253228238556,
+      0.23560391822821658
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Valid till",
+     "page": 0,
+     "bbox": [
+      0.06559343207189931,
+      0.24686960880107722,
+      0.12742504821641404,
+      0.26330480974498327
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "KAVITA RAO",
+     "page": 0,
+     "bbox": [
+      0.3325890269015164,
+      0.1349979199136796,
+      0.44359167104485736,
+      0.1542462660956958
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "23/03/2026",
+     "page": 0,
+     "bbox": [
+      0.3304871621858745,
+      0.16251731460620955,
+      0.42515965469633676,
+      0.18195942947698196
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "KA-76572485",
+     "page": 0,
+     "bbox": [
+      0.3324524113743154,
+      0.19068541151868612,
+      0.44385850011456157,
+      0.20898135005941376
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "CN-91610742",
+     "page": 0,
+     "bbox": [
+      0.3324922064759067,
+      0.21896641105274506,
+      0.4436884914792367,
+      0.237428937749105
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "23/03/2027",
+     "page": 0,
+     "bbox": [
+      0.33247387672850887,
+      0.24666742314044454,
+      0.4231729399753962,
+      0.26641397204577644
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.06556297815373359,
+      0.2946778439394505,
+      0.5196424366279816,
+      0.31540678009406875
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.06555544429946888,
+      0.3111769128817463,
+      0.5504793916902639,
+      0.33242566837751875
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.06762842231805008,
+      0.9417816516786345,
+      0.30608456719292726,
+      0.9538041387973474
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"puc_certificate\" }",
+ "fill_raw": "{\n  \"person_name\": \"KAVITA RAO\",\n  \"document_date\": \"23/03/2026\",\n  \"expiry_date\": \"23/03/2027\",\n  \"registration_number\": \"KA-76572485\",\n  \"certificate_number\": \"CN-91610742\"\n}",
+ "seconds": {
+  "read": 0.262,
+  "classify": 2.993,
+  "fill": 48.734
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}

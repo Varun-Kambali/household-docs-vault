@@ -1,0 +1,142 @@
+{
+ "sha256": "bae05cf371daa0ca6c2e3c1d5a5e9320be0e194478b5cb52c79a9ec663121c7f",
+ "doc_id": "marksheet-5-scan",
+ "pages": [
+  {
+   "page": 0,
+   "width": 1654,
+   "height": 2339,
+   "lines": [
+    {
+     "text": "Statement of Marks",
+     "page": 0,
+     "bbox": [
+      0.0775997092763965,
+      0.058655980017374154,
+      0.24063536842065852,
+      0.07806336158047933
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Name",
+     "page": 0,
+     "bbox": [
+      0.07597535829308147,
+      0.1366279071620342,
+      0.12114989817509099,
+      0.1497093020748843
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Date",
+     "page": 0,
+     "bbox": [
+      0.07597535821827632,
+      0.16279069778569166,
+      0.11498973399025665,
+      0.17732558120332653
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Roll number",
+     "page": 0,
+     "bbox": [
+      0.07592176627260602,
+      0.19025823581216184,
+      0.16432464007640551,
+      0.20654408972790628
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "R K Rao",
+     "page": 0,
+     "bbox": [
+      0.33863888656240143,
+      0.13333135311004818,
+      0.4108477662108153,
+      0.15009887939429045
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "18/12/2025",
+     "page": 0,
+     "bbox": [
+      0.338809036744322,
+      0.16133720895846837,
+      0.4271047207838427,
+      0.17732558169599422
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "RN-19283154",
+     "page": 0,
+     "bbox": [
+      0.3386632328499148,
+      0.18844354044015588,
+      0.44778440556922217,
+      0.20545180835632182
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "This document is computer generated and valid without a signature.",
+     "page": 0,
+     "bbox": [
+      0.07597536615562096,
+      0.23974358951156183,
+      0.5215605685768346,
+      0.2559829057508781
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+     "page": 0,
+     "bbox": [
+      0.07597535852734488,
+      0.25726495756474177,
+      0.5503080088376722,
+      0.27180232542623683
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    },
+    {
+     "text": "Specimen data for software testing only.",
+     "page": 0,
+     "bbox": [
+      0.07597536011984804,
+      0.9491279069094943,
+      0.31622176502367966,
+      0.9594017094955852
+     ],
+     "lang": "en",
+     "confidence": 1.0
+    }
+   ]
+  }
+ ],
+ "classify_raw": "{ \"doc_type\": \"marksheet\" }",
+ "fill_raw": "{\n  \"person_name\": \"R K Rao\",\n  \"document_date\": \"18/12/2025\",\n  \"expiry_date\": null,\n  \"issuer\": null,\n  \"roll_number\": \"RN-19283154\"\n}",
+ "seconds": {
+  "read": 0.285,
+  "classify": 3.159,
+  "fill": 46.686
+ },
+ "engine": "ollama:qwen3-vl:4b",
+ "prompt_version": "v4"
+}
