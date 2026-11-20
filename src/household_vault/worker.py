@@ -286,6 +286,7 @@ class Worker:
 
     def start_up(self) -> None:
         """Finish what a stop left half done, and run again the jobs it cut off."""
+        started = self.clock()
         try:
             self.vault.mkdirs(SYSTEM)
         except VaultGone:
@@ -299,7 +300,8 @@ class Worker:
         # leaves it `reading` with nothing to run again: the owner is asked to upload it again.
         active = self._active_ids()
         for item in self.store.items(["reading", "queued"]):
-            if item.origin == "upload" and item.id not in active:
+            # Only an upload made before this start: one accepted since is being read right now.
+            if item.origin == "upload" and item.id not in active and item.created_at <= started:
                 self._upload_again(item)
 
     def run_forever(self, stop: threading.Event) -> None:
