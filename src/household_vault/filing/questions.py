@@ -87,8 +87,11 @@ def _types(first: Sequence[DocType] = ()) -> list[Option]:
     return [Option(t.value, LABEL[t]) for t in (*ordered, *rest)]
 
 
+_FIELD_WORDS = {"last4": "last four digits of the card"}
+
+
 def _field_text(name: str) -> str:
-    return name.replace("_", " ")
+    return _FIELD_WORDS.get(name, name.replace("_", " "))
 
 
 def _problem_field(reason: Reason, reading: Reading | None, context: Mapping[str, str]) -> str:

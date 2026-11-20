@@ -8,6 +8,7 @@ back to the queue through `Store.requeue`; the worker's job files it or asks the
 from __future__ import annotations
 
 import logging
+import re
 import threading
 from collections.abc import Sequence
 from typing import Any
@@ -21,6 +22,7 @@ from household_vault.filing.filer import BUSY, Filer, UndoError
 from household_vault.filing.names import DEFAULT_NAME, scrub_identifiers
 from household_vault.filing.questions import AnswerKind
 from household_vault.people import Household
+from household_vault.reading.pipeline import CARD_FIELD_TYPES, scrub_card_fields
 from household_vault.reading.render import DamagedFileError, LockedPdfError, page_count
 from household_vault.reasons import Reason
 from household_vault.schemas import SCHEMAS
@@ -160,11 +162,17 @@ class Actions:
             raise AnswerError("That is not a field of this document")
         if field in secret_fields(schema):
             raise AnswerError("Card numbers are added from a photo, not typed")
+        assert raw_type is not None  # a schema was found for it
+        card_area = DocType(raw_type) in CARD_FIELD_TYPES
+        if card_area and field == "last4" and not re.fullmatch(r"\d{4}", value.strip()):
+            raise AnswerError("Type only the last four digits of the card")
         raw: Any = value
         if field_kind(schema, field) == "list":
             raw = [part.strip() for part in value.split(",") if part.strip()]
         parsed = parse_fields(schema, {field: raw}, mode=self.worker.settings.mode)
         dumped = parsed.model.model_dump(mode="json")[field]
+        if card_area:  # a typed answer is scrubbed like a read one: no card number, anywhere
+            dumped = scrub_card_fields({field: dumped}, None, DocType(raw_type))[field]
         if field in parsed.issues or dumped in (None, "", []):
             label = field.replace("_", " ")
             raise AnswerError(f"That is not something I can use for the {label}")

@@ -252,3 +252,25 @@ def test_other_types_keep_their_numbers_in_stored_lines(photo):
         "Policy 123456 issued", {"policy_number": "123456"}, "health_policy", photo
     )
     assert texts[0] == "Policy 123456 issued"
+
+
+@pytest.mark.parametrize(
+    ("line", "masked"),
+    [
+        ("4111 1111 1111 1112", "XXXX XXXX XXXX 1112"),
+        ("41111111111111111234", "XXXXXXXXXXXXXXXX1234"),
+    ],
+)
+def test_a_card_letter_masks_a_misread_or_glued_number_in_stored_lines(photo, line, masked):
+    texts = _stored_texts(
+        f"Your new card {line} Deccan Trust Bank",
+        {"bank": "Deccan Trust Bank", "last4": "1111"},
+        "card_welcome_letter",
+        photo,
+    )
+    assert texts[0] == f"Your new card {masked} Deccan Trust Bank"
+
+
+def test_a_statement_keeps_its_amounts_and_dates_in_stored_lines(photo):
+    texts = _stored_texts("Total due 12345.50 on 01/11/2026 ref 98765", {}, "card_statement", photo)
+    assert texts[0] == "Total due 12345.50 on 01/11/2026 ref 98765"

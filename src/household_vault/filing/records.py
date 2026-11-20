@@ -37,6 +37,8 @@ FIELD_DIGITS = 4
 
 # Types whose text is masked for every long digit run: a card, or a page of unknown type.
 LONG_RUN_TYPES = frozenset({None, DocType.card_front, DocType.other})
+# A card's letter or statement: every 13 to 19 digit run is masked, but amounts and dates stay.
+CARD_AREA_TYPES = frozenset({DocType.card_statement, DocType.card_welcome_letter})
 _DIGITS = re.compile(r"\d+")
 # On a card or unknown page every run of 3 or more digits goes, except the last four of a masked
 # card number (just after an X) and a month and year (MM/YY, MM/YYYY).
@@ -154,6 +156,7 @@ def stored_reading(reading: Reading, *, card_item: bool = False) -> dict[str, An
     digits except a masked number's last four and MM/YY dates), floats rounded. The
     secret values and the models' raw answers are never in a dump, so they are not here."""
     long_run = card_item or reading.doc_type in LONG_RUN_TYPES
+    any_run = long_run or reading.doc_type in CARD_AREA_TYPES
     secret_runs = {
         digits
         for value in reading.secret_values.values()
@@ -167,7 +170,7 @@ def stored_reading(reading: Reading, *, card_item: bool = False) -> dict[str, An
     def mask(text: str) -> str:
         if secret_runs:
             text = _DIGITS.sub(hide, text)
-        text = mask_card_numbers(text, any_long_run=long_run)
+        text = mask_card_numbers(text, any_long_run=any_run)
         return mask_digit_runs(text) if long_run else text
 
     dump: dict[str, Any] = reading.model_dump(mode="json")

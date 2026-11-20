@@ -312,3 +312,30 @@ def test_the_read_cvv_is_blanked_wherever_it_appears_as_a_token(photo):
 def test_other_types_keep_their_fields_untouched(photo):
     r = _fields_of(photo, "health_policy", {"policy_number": "4111 1111 1111 1111"})
     assert r.fields["policy_number"] == "4111 1111 1111 1111"
+
+
+@pytest.mark.parametrize(
+    "shown",
+    [
+        "4111  1111  1111  1111",
+        "4111.1111.1111.1111",
+        "4111/1111/1111/1111",
+        "4111 - 1111 - 1111 - 1111",
+        "4111" + chr(160) + "1111" + chr(160) + "1111" + chr(160) + "1111",
+    ],
+)
+def test_a_card_name_with_other_separators_is_masked(photo, shown):
+    r = _fields_of(photo, "card_front", {"number": _CARD_NUMBER, "card_name": shown})
+    name = r.fields["card_name"]
+    assert name.count("1") == 4 and name.endswith("1111") and "X" in name
+
+
+def test_a_letter_or_statement_keeps_dates_and_amounts(photo):
+    fill = {"bank": "Deccan", "statement_date": "2026-10-01", "total_due": 12345.5}
+    r = _fields_of(photo, "card_statement", {**fill, "card_name": "Period 01/10/2026 - 31/10/2026"})
+    assert r.fields["card_name"] == "Period 01/10/2026 - 31/10/2026"
+    assert r.fields["total_due"] == "12345.5"
+    letter = _fields_of(
+        photo, "card_welcome_letter", {"bank": "Deccan", "card_name": "4111.1111.1111.1111"}
+    )
+    assert letter.fields["card_name"] == "XXXX.XXXX.XXXX.1111"
