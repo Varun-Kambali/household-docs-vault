@@ -248,3 +248,11 @@ def test_chat_json_options_override_the_defaults_and_keep_the_rest():
 
 def test_chunk_is_a_plain_record():
     assert Chunk("d", None, None, None, "t").text == "t"
+
+
+def test_the_real_embedder_is_made_only_for_the_mac_reader(settings):
+    from household_vault.search.vectors import embedder_for
+
+    assert embedder_for(settings) is None  # the test settings use the stand-in reader
+    real = embedder_for(settings.model_copy(update={"reader": "mac"}))
+    assert isinstance(real, OllamaEmbedder) and real.name == settings.embed_model
