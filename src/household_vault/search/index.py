@@ -17,6 +17,7 @@ from household_vault.schemas._coerce import field_kind
 from household_vault.search.vocab import FIELD_LABELS
 
 _WORD = re.compile(r"\w")
+_CONTROL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
 
 
 @dataclass(frozen=True)
@@ -57,7 +58,7 @@ def _value_text(kind: str, value: Any) -> str:
 def _match_query(text: str, prefix_last: bool) -> str | None:
     """Every word quoted, so FTS5 operators are plain words. None when no word has a letter
     or a digit in it."""
-    words = [w for w in text.split() if _WORD.search(w)]
+    words = [w for w in _CONTROL.sub(" ", text).split() if _WORD.search(w)]
     if not words:
         return None
     quoted = ['"' + w.replace('"', '""') + '"' for w in words]

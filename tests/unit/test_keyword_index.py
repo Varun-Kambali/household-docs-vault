@@ -43,7 +43,19 @@ def test_a_new_database_has_both_tables(store):
 
 
 def test_keyword_search_treats_operators_as_words(keyword):  # Review Focus 11
-    for text in ['"', "*", "AND", "NEAR(", "-", "x" * 2000, "policy OR 1=1", "\U0001f642", ""]:
+    for text in [
+        '"',
+        "*",
+        "AND",
+        "NEAR(",
+        "-",
+        "x" * 2000,
+        "policy OR 1=1",
+        "\U0001f642",
+        "",
+        "a\x00b",
+        "a\x07b",
+    ]:
         keyword.search(text)  # never raises
     assert keyword.search("   ") == []
 
@@ -138,6 +150,24 @@ def test_undo_and_refile_update_search(filed_vault):  # Review Focus 12
     assert KeywordIndex(filed_vault.store).search("Croma") != []
     filed_vault.undo(doc.id)
     assert KeywordIndex(filed_vault.store).search("Croma") == []
+
+
+def test_a_refiled_document_is_searchable_once_at_its_new_path(filed_vault):
+    w = filed_vault.world
+    first = filed_vault.file("tax_invoice-1-clean")
+    item = w.filer.undo(first.id)
+    assert KeywordIndex(filed_vault.store).search("Croma") == []
+    w.actions.retry(item.id)
+    w.drain()
+    refiled = filed_vault.store.item(item.id)
+    assert refiled.state == "filed" and refiled.document_id is not None
+    again = filed_vault.store.document(refiled.document_id)
+    hits = KeywordIndex(filed_vault.store).search("Croma")
+    assert hits and {h.document_id for h in hits} == {again.id}
+    lines = filed_vault.store.conn.execute(
+        "select count(*) from search_text where document_id = ? and kind = 'line'", (again.id,)
+    ).fetchone()[0]
+    assert lines == len(filed_vault.store.lines_of(again.id))
 
 
 def test_filing_indexes_the_document(filed_vault):
