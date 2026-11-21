@@ -37,7 +37,7 @@ One user: me, keeping papers for my family. Family members appear as people in t
 - [ ] A search box is the home screen, and results update as I type. Every prompt stands alone; there is no thread.
 - [ ] Answer beside the page: the answer on one side, the page on the other with the supporting lines outlined, the file path and page, Open at page and Show in folder.
 - [ ] Quick finder: matching files as rows with type, person, key fields and path, with arrow keys, Enter to open and Cmd+Enter to show in the folder.
-- [ ] Results of a list prompt sit in date order with path and a Remind me action.
+- [ ] Results of a list prompt sit in date order with path.
 - [ ] Show in folder reveals the file in Finder on the Mac and copies the Drive path on the phone. Open at page uses the app's own viewer on both.
 - [ ] Adjustable sentence for lists: the app shows how it read the prompt ("Showing insurance and warranties for everyone that expire before 31 Mar 2027"), each part is a dropdown, and changing one updates the list without another model call.
 - [ ] A local model turns the prompt into a structured query under a fixed JSON schema.
@@ -57,6 +57,7 @@ One user: me, keeping papers for my family. Family members appear as people in t
 - [ ] The app listens on the Mac only and is published to my own devices with `tailscale serve`. On the phone it installs to the home screen.
 - [ ] The app has its own sign-in (Argon2 password hash), sessions that expire, and a way to sign out a lost phone. Secrets ask for the master password on every reveal.
 - [ ] Secrets are shown only after the master password, hidden again after 30 seconds, a copied secret is cleared from the clipboard after 30 seconds, and each reveal is logged without the value.
+- [ ] A Remind me action on the results of a list prompt.
 - [ ] Phone screens: search, document viewer, lists, Coming up, Inbox activity, What we have, checkups and history, recording upload.
 - [ ] A launch agent starts the app when I log in to the Mac.
 - [ ] The nightly copy of the app's database goes to `_system/backup/`.
