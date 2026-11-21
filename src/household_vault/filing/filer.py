@@ -268,6 +268,7 @@ class Filer:
             if self.store.document(record.id) is None:
                 self.store.add_document(row, people, pages)
                 KeywordIndex(self.store).add(record.id)
+                self.store.enqueue(item_id, "embed")
             self.store.update_item(item_id, state="filed_pending_clear", document_id=record.id)
         return record
 

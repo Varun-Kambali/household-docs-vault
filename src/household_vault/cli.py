@@ -127,16 +127,30 @@ _ALL_STATES = get_args(ItemState)
 
 def _index(app: bool) -> None:
     from household_vault.db import Store, connect, migrate
+    from household_vault.reading.ollama import ModelError, ModelUnavailable
     from household_vault.search.index import KeywordIndex
+    from household_vault.search.vectors import VectorIndex, embedder_for
 
     settings = _settings(app)
     conn = connect(settings.db_path, settings.vault_root)
     try:
         migrate(conn)
-        count = KeywordIndex(Store(conn)).rebuild()
+        store = Store(conn)
+        count = KeywordIndex(store).rebuild()
+        print(f"Indexed {count} documents.")
+        embedder = embedder_for(settings)
+        if embedder is None:
+            print("No embedding model in this mode, so no vectors were made.")
+            return
+        try:
+            VectorIndex(store, embedder).rebuild()
+        except (ModelUnavailable, ModelError) as exc:
+            print(f"error: the vectors were not made: {exc}", file=sys.stderr)
+            raise SystemExit(1) from None
+        total = conn.execute("select count(*) from vectors").fetchone()[0]
+        print(f"Embedded {count} documents into {total} vectors.")
     finally:
         conn.close()
-    print(f"Indexed {count} documents.")
 
 
 def _emergency_sheet(out: Path, app: bool) -> None:
