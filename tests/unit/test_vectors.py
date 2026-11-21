@@ -256,3 +256,84 @@ def test_the_real_embedder_is_made_only_for_the_mac_reader(settings):
     assert embedder_for(settings) is None  # the test settings use the stand-in reader
     real = embedder_for(settings.model_copy(update={"reader": "mac"}))
     assert isinstance(real, OllamaEmbedder) and real.name == settings.embed_model
+
+
+def embed_job_state(store: Store) -> str:
+    return store.conn.execute(
+        "select state from jobs where kind = 'embed' order by id desc"
+    ).fetchone()[0]
+
+
+def error_rows(store: Store) -> int:
+    return int(
+        store.conn.execute("select count(*) from activity where step = 'error'").fetchone()[0]
+    )
+
+
+@pytest.mark.parametrize("breakage", ["embed", "defer"])
+def test_an_embed_job_that_breaks_leaves_the_filed_item_alone(vectors_vault, monkeypatch, breakage):
+    doc = vectors_vault.file("tax_invoice-1-clean")
+    w, store = vectors_vault.world, vectors_vault.store
+    errors = error_rows(store)
+    w.worker.pending_passwords[doc.item_id] = "kept"
+    store.enqueue(doc.item_id, "embed")
+    if breakage == "embed":
+        monkeypatch.setattr(w.worker, "_embed", lambda *a: (_ for _ in ()).throw(RuntimeError("x")))
+    else:  # Ollama is off and the job cannot even be put off
+        w.vectors.embedder.fail = ModelUnavailable("off")
+        monkeypatch.setattr(store, "defer", lambda *a: (_ for _ in ()).throw(KeyError("gone")))
+    assert w.worker.run_once() is True
+    assert store.item(doc.item_id).state == "filed"
+    assert error_rows(store) == errors
+    assert w.worker.pending_passwords == {doc.item_id: "kept"}
+    assert store.running_jobs() == []
+
+
+def test_a_document_undone_while_it_is_embedded_leaves_no_vectors(store):
+    add_doc(store, "d1", "tax_invoice", {"seller": "Croma"}, ["Croma Electronics"])
+
+    class UndoDuringEmbed(FakeEmbedder):
+        def embed_documents(self, texts):
+            out = super().embed_documents(texts)
+            store.remove_document("d1")  # the owner pressed Undo while the model worked
+            return out
+
+    index = VectorIndex(store, UndoDuringEmbed())
+    assert index.add("d1") == 0
+    assert vector_rows(store) == 0 and index.search("Croma") == []
+    assert index._rows == []
+
+
+def test_a_search_waits_while_the_matrix_is_being_loaded(store, vectors, monkeypatch):
+    import threading
+
+    add_doc(store, "a", "tax_invoice", {"seller": "Croma"}, ["fridge"])
+    vectors.add("a")
+    in_load, release, second_done = threading.Event(), threading.Event(), threading.Event()
+    real_stack, armed = np.stack, [True]
+
+    def slow_stack(*args, **kwargs):
+        if armed[0]:
+            armed[0] = False
+            in_load.set()
+            release.wait(5)
+        return real_stack(*args, **kwargs)
+
+    monkeypatch.setattr(np, "stack", slow_stack)
+    results: dict[str, list] = {}
+
+    def run(name):
+        results[name] = vectors.search("fridge")
+        if name == "second":
+            second_done.set()
+
+    first = threading.Thread(target=run, args=("first",))
+    first.start()
+    assert in_load.wait(5)  # the first search is half way through loading the matrix
+    second = threading.Thread(target=run, args=("second",))
+    second.start()
+    assert not second_done.wait(0.3)  # it must wait for the load, not read around it
+    release.set()
+    first.join(5)
+    second.join(5)
+    assert results["first"] == results["second"] and results["first"]

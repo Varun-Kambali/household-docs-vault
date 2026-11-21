@@ -21,7 +21,7 @@ from typing import Literal, Protocol
 
 from household_vault.activity import Activity, Step
 from household_vault.config import Settings
-from household_vault.db import Item, ItemState, Store
+from household_vault.db import Item, ItemState, Job, Store
 from household_vault.doctypes import LABEL, DocType
 from household_vault.filing.cardness import is_card_photo
 from household_vault.filing.decide import Overrides, base_field, decide
@@ -257,13 +257,15 @@ class Worker:
         job = self.store.claim_next(self.clock())
         if job is None:
             return False
+        if job.kind == "embed":
+            self._run_embed_job(job)
+            self._refresh_batch()
+            return True
         deferred = False
         failed = False
         try:
             item = self.store.item(job.item_id)
-            if job.kind == "embed":
-                deferred = self._embed(job.id, job.attempts, item)
-            elif item.state in ("queued", "reading"):
+            if item.state in ("queued", "reading"):
                 deferred = self._run(job.id, job.kind, job.attempts, item)
         except Exception as exc:  # the job's own bookkeeping failed; the item is held
             failed = True
@@ -276,6 +278,23 @@ class Worker:
                 self.store.finish(job.id, "failed" if failed else "done")
         self._refresh_batch()
         return True
+
+    def _run_embed_job(self, job: Job) -> None:
+        """Run an embed job on its own. Whatever goes wrong, the item it belongs to is left as
+        it is: no held state, no error row, no change to a password waiting for a reprocess."""
+        deferred = False
+        try:
+            deferred = self._embed(job.id, job.attempts, self.store.item(job.item_id))
+        except Exception as exc:
+            log.warning("embed job %s ended badly: %s", job.id, type(exc).__name__)
+        finally:
+            self._current = None
+            self._step = None
+            if not deferred:
+                try:
+                    self.store.finish(job.id, "done")
+                except KeyError:
+                    log.warning("embed job %s was not running when it ended", job.id)
 
     def drain(self, max_seconds: float = 600.0, stop: threading.Event | None = None) -> None:
         """Scan and run jobs until nothing is left to do, or until `stop` is set (checked
