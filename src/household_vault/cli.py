@@ -4,6 +4,7 @@ vault                          print the version
 vault run [--app]              the API and the worker on the configured address
 vault process                  run the worker once over what is in Inbox and print counts
 vault emergency-sheet --out P  write the printable emergency sheet
+vault index --rebuild          index every filed document again for search
 vault dev-vault --from DIR     fill the synthetic Inbox from a dataset (development only)
 """
 
@@ -42,6 +43,10 @@ def _parser() -> argparse.ArgumentParser:
     sheet.add_argument("--out", required=True, type=Path)
     sheet.add_argument("--app", action="store_true", help="use the real vault from the app config")
 
+    index = sub.add_parser("index", help="manage the search index")
+    index.add_argument("--rebuild", action="store_true", required=True, help="index it all again")
+    index.add_argument("--app", action="store_true", help="use the real vault from the app config")
+
     dev = sub.add_parser("dev-vault", help="fill the synthetic Inbox from a dataset")
     dev.add_argument("--from", dest="source", required=True, type=Path)
     dev.add_argument("--split", default="val", choices=["train", "val", "test"])
@@ -79,6 +84,8 @@ def main(argv: list[str] | None = None) -> None:
         _process()
     elif args.command == "emergency-sheet":
         _emergency_sheet(args.out, args.app)
+    elif args.command == "index":
+        _index(args.app)
     elif args.command == "dev-vault":
         _dev_vault(args.source, args.split, args.limit, args.app)
 
@@ -116,6 +123,20 @@ def _process() -> None:
 
 
 _ALL_STATES = get_args(ItemState)
+
+
+def _index(app: bool) -> None:
+    from household_vault.db import Store, connect, migrate
+    from household_vault.search.index import KeywordIndex
+
+    settings = _settings(app)
+    conn = connect(settings.db_path, settings.vault_root)
+    try:
+        migrate(conn)
+        count = KeywordIndex(Store(conn)).rebuild()
+    finally:
+        conn.close()
+    print(f"Indexed {count} documents.")
 
 
 def _emergency_sheet(out: Path, app: bool) -> None:

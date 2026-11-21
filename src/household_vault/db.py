@@ -7,6 +7,7 @@ offset; job times are normalised to UTC so they compare as text.
 
 import functools
 import json
+import logging
 import sqlite3
 import threading
 from collections.abc import Callable, Collection, Iterator, Sequence
@@ -23,7 +24,7 @@ from household_vault.reading.lines import PageText
 from household_vault.reasons import Reason
 from household_vault.safety import is_within
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 ItemState = Literal[
     "queued",
@@ -131,6 +132,26 @@ create table meta (key text primary key, value text not null);
 """
 
 
+_SCHEMA_2 = """
+create virtual table search_text using fts5(
+    document_id unindexed, page unindexed, idx unindexed, kind unindexed, field unindexed,
+    text, tokenize = 'unicode61 remove_diacritics 2'
+);
+create table vectors (
+    id integer primary key,
+    document_id text not null references documents (id) on delete cascade,
+    page integer,
+    first integer,
+    last integer,
+    model text not null,
+    dims integer not null,
+    vec blob not null
+);
+"""
+
+log = logging.getLogger(__name__)
+
+
 def connect(path: Path, vault_root: Path) -> sqlite3.Connection:
     """Open (and create) the database. A path inside the vault is refused."""
     if is_within(path, vault_root):
@@ -147,12 +168,12 @@ def connect(path: Path, vault_root: Path) -> sqlite3.Connection:
 
 
 def migrate(conn: sqlite3.Connection) -> int:
-    """Create the tables on a new database and return the schema version."""
+    """Create the tables on a new database, upgrade a version-1 database, return the version."""
     has_meta = conn.execute("select 1 from sqlite_master where name = 'meta'").fetchone()
     if has_meta is None:
         version_row = f"insert into meta values ('schema_version', '{SCHEMA_VERSION}');"
         try:
-            conn.executescript("begin;" + _SCHEMA + version_row + "commit;")
+            conn.executescript("begin;" + _SCHEMA + _SCHEMA_2 + version_row + "commit;")
         except BaseException:
             if conn.in_transaction:
                 conn.execute("rollback")
@@ -160,9 +181,25 @@ def migrate(conn: sqlite3.Connection) -> int:
     # An owner of "home" is a household-wide document, so it needs a people row for the key.
     conn.execute("insert or ignore into people (id, name) values ('home', 'Home')")
     version = int(conn.execute("select value from meta where key = 'schema_version'").fetchone()[0])
+    if version == 1:
+        _upgrade_1_to_2(conn)
+        version = 2
     if version != SCHEMA_VERSION:
         raise ConfigError(f"the database has schema {version}; this app writes {SCHEMA_VERSION}")
     return version
+
+
+def _upgrade_1_to_2(conn: sqlite3.Connection) -> None:
+    """Add the search tables and index the documents already filed, all or nothing."""
+    from household_vault.search.index import KeywordIndex
+
+    store = Store(conn)
+    with store.transaction():
+        for statement in _SCHEMA_2.split(";\n"):
+            if statement.strip():
+                conn.execute(statement)
+        KeywordIndex(store).rebuild()
+        conn.execute("update meta set value = '2' where key = 'schema_version'")
 
 
 class StateChanged(Exception):
@@ -205,6 +242,16 @@ class DocumentRow:
     issues: dict[str, Any] = field(default_factory=dict)
     secret_ref: str | None = None
     created_at: datetime = field(default_factory=lambda: datetime.now().astimezone())
+
+
+@dataclass(frozen=True)
+class StoredLine:
+    """One stored (masked) line of a filed document."""
+
+    page: int
+    idx: int
+    text: str
+    bbox: tuple[float, float, float, float]
 
 
 @dataclass(frozen=True)
@@ -260,6 +307,17 @@ def _now() -> datetime:
     return datetime.now().astimezone()
 
 
+def _reasons(values: list[str]) -> list[Reason]:
+    """The stored reasons this version knows; one it does not know is dropped and logged."""
+    known: list[Reason] = []
+    for value in values:
+        try:
+            known.append(Reason(value))
+        except ValueError:
+            log.warning("dropping an unknown reason on an item: %r", value)
+    return known
+
+
 def _item(r: sqlite3.Row) -> Item:
     return Item(
         id=r["id"],
@@ -271,7 +329,7 @@ def _item(r: sqlite3.Row) -> Item:
         pending=_load(r["pending"]),
         kind=r["kind"],
         state=r["state"],
-        reasons=[Reason(x) for x in _load(r["reasons"])],
+        reasons=_reasons(_load(r["reasons"])),
         question=_load(r["question"]),
         reading=_load(r["reading"]),
         overrides=_load(r["overrides"]),
@@ -559,6 +617,20 @@ class Store:
     def document(self, doc_id: str) -> DocumentRow | None:
         r = self.conn.execute("select * from documents where id = ?", (doc_id,)).fetchone()
         return None if r is None else _document(r)
+
+    @_locked
+    def lines_of(self, doc_id: str, page: int | None = None) -> list[StoredLine]:
+        """The stored, masked lines of a document in page and line order."""
+        sql = "select page, idx, text, box from lines where document_id = ?"
+        args: tuple[Any, ...] = (doc_id,)
+        if page is not None:
+            sql += " and page = ?"
+            args = (doc_id, page)
+        rows = self.conn.execute(sql + " order by page, idx", args).fetchall()
+        return [
+            StoredLine(r["page"], r["idx"], r["text"], cast(Any, tuple(json.loads(r["box"]))))
+            for r in rows
+        ]
 
     @_locked
     def count_documents_with_secrets(self) -> int:
