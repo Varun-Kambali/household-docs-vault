@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
+import hashlib
 import io
 import json
+import re
 from collections.abc import Callable, Mapping, Sequence
 from functools import lru_cache
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal
 
 import httpx
+import numpy as np
 from PIL import Image
 from pydantic import JsonValue
 from vault_synth.model import SynthDoc
@@ -277,3 +280,37 @@ class OpenGateCards:
         )
         filer.clear_card_photo(item.id)
         return "filed"
+
+
+SYNONYMS = {"refrigerator": "fridge", "bill": "invoice", "television": "tv"}
+
+
+class FakeEmbedder:
+    """Vectors made from hashed words, with a few synonyms folded together so that "fridge"
+    and "refrigerator" share a word. No model runs."""
+
+    dims = 512
+
+    def __init__(self, name: str = "fake-embed") -> None:
+        self.name = name
+        self.fail: Exception | None = None
+        self.document_calls = 0
+
+    def _vec(self, text: str) -> Any:
+        out = np.zeros(self.dims, dtype=np.float32)
+        for word in re.findall(r"\w+", text.lower()):
+            word = SYNONYMS.get(word, word)
+            out[int(hashlib.md5(word.encode()).hexdigest(), 16) % self.dims] += 1.0
+        norm = np.linalg.norm(out)
+        return out / norm if norm else out
+
+    def embed_documents(self, texts: list[str]) -> Any:
+        self.document_calls += 1
+        if self.fail is not None:
+            raise self.fail
+        return np.stack([self._vec(t) for t in texts])
+
+    def embed_query(self, text: str) -> Any:
+        if self.fail is not None:
+            raise self.fail
+        return self._vec(text)
