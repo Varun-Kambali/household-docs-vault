@@ -40,7 +40,7 @@ ItemState = Literal[
     "gone",
     "discarded",
 ]
-JobKind = Literal["process", "refile"]
+JobKind = Literal["process", "refile", "embed"]
 Origin = Literal["inbox", "upload"]
 
 CARD_MARK = "was_card"  # in an item's overrides: it has been read as a card front
@@ -394,6 +394,9 @@ class Store:
         self._clock = clock or _now
         self.lock = threading.RLock()
         self._depth = 0
+        # Counts every change to the stored vectors that this Store makes, so a vector index
+        # holding them in memory knows to load them again.
+        self.vectors_epoch = 0
 
     @property
     def in_transaction(self) -> bool:
@@ -659,7 +662,9 @@ class Store:
 
     @_locked
     def remove_document(self, doc_id: str) -> None:
+        # The foreign key removes the document's vector rows with it.
         self.conn.execute("delete from documents where id = ?", (doc_id,))
+        self.vectors_epoch += 1
 
     # -- household -----------------------------------------------------------------------------
 
@@ -743,6 +748,15 @@ class Store:
         )
         if cur.rowcount == 0:
             raise KeyError(f"job {job_id} is not running")
+
+    @_locked
+    def has_open_job(self, item_id: int, kind: JobKind) -> bool:
+        row = self.conn.execute(
+            "select 1 from jobs where item_id = ? and kind = ? and state in ('queued', 'running')"
+            " limit 1",
+            (item_id, kind),
+        ).fetchone()
+        return row is not None
 
     @_locked
     def running_jobs(self) -> list[Job]:

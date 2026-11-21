@@ -33,6 +33,8 @@ _ENV_NAMES = {
     "ollama_url": "OLLAMA_URL",
     "vision_model": "VAULT_VISION_MODEL",
     "fallback_model": "VAULT_FALLBACK_MODEL",
+    "embed_model": "VAULT_EMBED_MODEL",
+    "query_model": "VAULT_QUERY_MODEL",
     "host": "VAULT_HOST",
     "port": "VAULT_PORT",
 }
@@ -60,6 +62,8 @@ class Settings(BaseSettings):
     ollama_url: str = "http://127.0.0.1:11434"
     vision_model: str = "qwen3-vl:4b"
     fallback_model: str = "qwen3:4b"
+    embed_model: str = "qwen3-embedding:0.6b"
+    query_model: str = "qwen3:4b"
     host: str = "127.0.0.1"
     port: int = 8710
     poll_seconds: float = 5.0
@@ -135,7 +139,7 @@ def load_settings(
         folder = (config_dir or app_config_dir()).expanduser()
         data = _read_app_config(folder)
         values["vault_root"] = Path(data["vault_root"])
-        for key in ("vision_model", "fallback_model", "port"):
+        for key in ("vision_model", "fallback_model", "embed_model", "query_model", "port"):
             if key in data:
                 values[key] = data[key]
         values.update(

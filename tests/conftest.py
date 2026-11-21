@@ -333,6 +333,7 @@ class World:
     actions: Actions
     clock: AwareClock
     db_dir: Path
+    vectors: Any = None
 
     def drain(self) -> None:
         self.worker.drain()
@@ -349,6 +350,7 @@ def make_world(
         pages: PageReader | None = None,
         models: TruthModels | None = None,
         cards: CardHandler | None = None,
+        embedder: Any = None,
     ) -> World:
         settings = load_settings(env={"VAULT_ROOT": str(vault.root)}).model_copy(
             update={"settle_seconds": 0.0}
@@ -360,9 +362,14 @@ def make_world(
         if hasattr(handler, "filer"):
             handler.filer = filer
         engines = Engines(pages or TruthPages(), models or TruthModels())
-        worker = Worker(settings, vault, store, activity, engines, filer, handler, clock)
+        from household_vault.search.vectors import VectorIndex
+
+        vectors = VectorIndex(store, embedder) if embedder is not None else None
+        worker = Worker(settings, vault, store, activity, engines, filer, handler, clock, vectors)
         actions = Actions(worker, filer, store, activity, household)
-        return World(vault, store, activity, filer, worker, actions, clock, tmp_path / "db")
+        return World(
+            vault, store, activity, filer, worker, actions, clock, tmp_path / "db", vectors
+        )
 
     return build
 
@@ -605,3 +612,11 @@ class FiledVault:
 def filed_vault(world: World) -> FiledVault:
     """Files eval-v1 documents through the real worker and filer, with the truth as readings."""
     return FiledVault(world)
+
+
+@pytest.fixture
+def vectors_vault(make_world: Callable[..., World]) -> FiledVault:
+    """`filed_vault` with a fake embedder wired into the worker."""
+    from tests.fakes import FakeEmbedder
+
+    return FiledVault(make_world(embedder=FakeEmbedder()))

@@ -46,6 +46,7 @@ class OllamaClient:
         images: list[bytes],
         schema: dict[str, Any],
         prefill_think: bool,
+        options: dict[str, Any] | None = None,
     ) -> str:
         message: dict[str, Any] = {"role": "user", "content": user}
         if images:
@@ -60,7 +61,12 @@ class OllamaClient:
             "think": False,
             "format": schema,
             "keep_alive": "10m",
-            "options": {"temperature": 0, "num_ctx": 12288, "num_predict": 1500},
+            "options": {
+                "temperature": 0,
+                "num_ctx": 12288,
+                "num_predict": 1500,
+                **(options or {}),
+            },
         }
         try:
             r = self._http.post("/api/chat", json=body)
@@ -77,3 +83,25 @@ class OllamaClient:
             return str(r.json()["message"]["content"])
         except (ValueError, KeyError, TypeError) as exc:
             raise ModelError("Ollama answered with something unreadable") from exc
+
+    def embed(self, model: str, texts: list[str]) -> list[list[float]]:
+        """One vector per text, from `/api/embed`."""
+        body = {"model": model, "input": texts, "keep_alive": "30m"}
+        try:
+            r = self._http.post("/api/embed", json=body)
+        except httpx.TimeoutException as exc:
+            raise ModelError("the model took too long") from exc
+        except httpx.TransportError as exc:
+            raise ModelUnavailable("Ollama is not running") from exc
+        # the status only: an error body could repeat the text
+        if r.status_code == 404:
+            raise ModelUnavailable(f"{model} is not pulled")
+        if r.status_code != 200:
+            raise ModelError(f"Ollama answered {r.status_code}")
+        try:
+            vectors = [[float(x) for x in v] for v in r.json()["embeddings"]]
+        except (ValueError, KeyError, TypeError) as exc:
+            raise ModelError("Ollama answered with something unreadable") from exc
+        if len(vectors) != len(texts):
+            raise ModelError("Ollama answered with the wrong number of vectors")
+        return vectors
