@@ -90,7 +90,7 @@ def build_app_state(
     filer = Filer(vault, store, activity, household, now)
     gate = SecretsGate(vault, lambda: now().timestamp())
     cards = CardIntake(gate, vault, filer, activity, store, chosen, household)
-    worker = Worker(settings, vault, store, activity, chosen, filer, cards, now)
+    worker = Worker(settings, vault, store, activity, chosen, filer, cards, now, vectors)
     actions = Actions(worker, filer, store, activity, household, gate)
     activity.backfill_csv()  # rows a failed CSV write left behind reach the vault log
     return AppState(

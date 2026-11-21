@@ -780,3 +780,28 @@ def test_file_new_refuses_the_raw_bytes_of_a_card_photo(state):
     )
     with pytest.raises(CardPhotoError):
         state.filer.file_new(item, raw, ".jpg", reading, decision, None)
+
+
+def test_app_state_wires_one_vector_index_into_the_worker(settings, clock):
+    from household_vault.search.vectors import OllamaEmbedder
+    from tests.fakes import FakeEmbedder
+
+    fake = FakeEmbedder()
+    s = build_app_state(settings, engines=Engines(TruthPages(), TruthModels()), embedder=fake)
+    assert s.vectors.embedder is fake and s.worker.vectors is s.vectors
+    # Injected engines mean no real models, so no real embedder either.
+    plain = build_app_state(
+        settings.model_copy(update={"db_path": settings.db_path.with_name("other.db")}),
+        engines=Engines(TruthPages(), TruthModels()),
+    )
+    assert plain.vectors.embedder is None
+    # Real engines: the Ollama embedder, on the configured model.
+    real = build_app_state(
+        settings.model_copy(
+            update={"db_path": settings.db_path.with_name("third.db"), "reader": "mac"}
+        )
+    )
+    assert isinstance(real.vectors.embedder, OllamaEmbedder)
+    assert real.vectors.embedder.name == settings.embed_model
+    for built in (s, plain, real):
+        built.store.conn.close()
