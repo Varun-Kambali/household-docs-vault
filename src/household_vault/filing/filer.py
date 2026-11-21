@@ -58,6 +58,7 @@ from household_vault.intake.sniff import EXTENSION, FileKind
 from household_vault.people import Household
 from household_vault.reading.pipeline import Reading
 from household_vault.reasons import Reason
+from household_vault.search.index import KeywordIndex
 from household_vault.vaultroot import (
     INBOX,
     NEEDS_A_LOOK,
@@ -266,6 +267,7 @@ class Filer:
         with self.store.transaction():
             if self.store.document(record.id) is None:
                 self.store.add_document(row, people, pages)
+                KeywordIndex(self.store).add(record.id)
             self.store.update_item(item_id, state="filed_pending_clear", document_id=record.id)
         return record
 
@@ -505,6 +507,7 @@ class Filer:
             changes.update(sha256=pending.get("item_sha256", pending["sha256"]), document_id=None)
         with self.store.transaction():
             if doc_id:
+                KeywordIndex(self.store).remove(doc_id)
                 self.store.remove_document(doc_id)
             self.store.update_item(item_id, **changes)
             if doc_id or pending["final"] == "held":

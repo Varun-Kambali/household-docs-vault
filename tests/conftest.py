@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, NoReturn
+from typing import Any, NoReturn, get_args
 
 import pytest
 from vault_synth.cli import generate
@@ -24,14 +24,14 @@ from household_vault.actions import Actions
 from household_vault.activity import Activity
 from household_vault.checks import gstin_check_char, verhoeff_valid
 from household_vault.config import Settings, load_settings
-from household_vault.db import DocumentRow, Item, Store, connect, migrate
-from household_vault.doctypes import REQUIRED, DocType
+from household_vault.db import DocumentRow, Item, ItemState, Store, connect, migrate
+from household_vault.doctypes import AREA, REQUIRED, DocType
 from household_vault.filing.decide import Decision
 from household_vault.filing.filer import Filer
 from household_vault.filing.records import stored_reading
 from household_vault.reading.cues import CueCheck
 from household_vault.reading.engines import Engines, PageReader
-from household_vault.reading.lines import Line
+from household_vault.reading.lines import Line, PageText
 from household_vault.reading.pipeline import Reading
 from household_vault.reasons import Reason
 from household_vault.vaultroot import INBOX, NEEDS_A_LOOK, VaultRoot
@@ -512,3 +512,96 @@ def doc_result(truth: dict[str, Any], got: dict[str, Any]) -> Any:
     doc = truth_doc(fields=truth)
     reading = Reading(pages=[], english_letters=200, doc_type=DocType.health_policy, fields=got)
     return score_reading(doc, reading, filed_to("p1", "Ravi Kumar Rao/Insurance"), [], 0.0)
+
+
+# -- search (Task 24) -----------------------------------------------------------------------------
+
+
+def add_doc(
+    store: Store,
+    doc_id: str,
+    doc_type: str,
+    fields: dict[str, Any],
+    lines: list[str],
+    owner: str = "p1",
+) -> None:
+    """Store a document with these stored fields and one page of these lines. It is not
+    indexed: call `KeywordIndex.add` for that."""
+    kind = DocType(doc_type)
+    store.add_document(
+        row(
+            doc_id,
+            item_id=item_id(store),
+            doc_type=kind,
+            area=AREA[kind].value,
+            owner=owner,
+            fields=fields,
+        ),
+        [(owner, "owner")],
+        [PageText(page=0, width=1, height=1, lines=[line(text) for text in lines])],
+    )
+
+
+@pytest.fixture
+def keyword(store: Store) -> Any:
+    from household_vault.search.index import KeywordIndex
+
+    return KeywordIndex(store)
+
+
+@pytest.fixture
+def v1_database(tmp_path: Path, clock: AwareClock) -> Iterator[sqlite3.Connection]:
+    """A schema-1 database (no search tables) holding one Croma invoice, "d1"."""
+    from tests.schema_v1 import SCHEMA_1
+
+    conn = connect(tmp_path / "old" / "vault.db", tmp_path / "vault")
+    conn.executescript(
+        "begin;" + SCHEMA_1 + "insert into meta values ('schema_version', '1');commit;"
+    )
+    conn.execute("insert into people (id, name) values ('home', 'Home')")
+    old = Store(conn, clock)
+    old.set_household(HOUSEHOLD)
+    add_doc(
+        old,
+        "d1",
+        "tax_invoice",
+        {"seller": "Croma", "invoice_date": "2026-05-01", "amount": 45999.0},
+        ["Croma Electronics", "Tax invoice"],
+    )
+    yield conn
+    conn.close()
+
+
+@dataclass
+class FiledVault:
+    world: World
+
+    @property
+    def store(self) -> Store:
+        return self.world.store
+
+    def file(self, doc_id: str) -> DocumentRow:
+        """Drop the eval-v1 document into Inbox, run the worker and return what was filed."""
+        doc = next(d for d in _eval_docs() if d.doc_id == doc_id)
+        before = {i.id for i in self.store.items(get_args(ItemState))}
+        data = (EVAL_V1 / doc.files[0]).read_bytes()
+        drop(self.world.vault, doc.files[0], data)
+        self.world.drain()
+        item = next(
+            i
+            for i in self.store.items(["filed"])
+            if i.id not in before and i.original_name == doc.files[0]
+        )
+        assert item.document_id is not None
+        filed = self.store.document(item.document_id)
+        assert filed is not None
+        return filed
+
+    def undo(self, doc_id: str) -> None:
+        self.world.filer.undo(doc_id)
+
+
+@pytest.fixture
+def filed_vault(world: World) -> FiledVault:
+    """Files eval-v1 documents through the real worker and filer, with the truth as readings."""
+    return FiledVault(world)
