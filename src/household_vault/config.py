@@ -37,6 +37,7 @@ _ENV_NAMES = {
     "query_model": "VAULT_QUERY_MODEL",
     "host": "VAULT_HOST",
     "port": "VAULT_PORT",
+    "drive_prefix": "VAULT_DRIVE_PREFIX",
 }
 _PATH_FIELDS = ("vault_root", "db_path", "household_path", "log_dir", "recordings_dir")
 # In app mode these come from the app's own folder, never from the environment.
@@ -66,6 +67,8 @@ class Settings(BaseSettings):
     query_model: str = "qwen3:4b"
     host: str = "127.0.0.1"
     port: int = 8710
+    # Where the vault folder sits in Drive on the web, shown beside a file so it can be found there.
+    drive_prefix: str = "My Drive/Family Vault"
     poll_seconds: float = 5.0
     settle_seconds: float = 10.0
 
@@ -139,7 +142,14 @@ def load_settings(
         folder = (config_dir or app_config_dir()).expanduser()
         data = _read_app_config(folder)
         values["vault_root"] = Path(data["vault_root"])
-        for key in ("vision_model", "fallback_model", "embed_model", "query_model", "port"):
+        for key in (
+            "vision_model",
+            "fallback_model",
+            "embed_model",
+            "query_model",
+            "port",
+            "drive_prefix",
+        ):
             if key in data:
                 values[key] = data[key]
         values.update(
