@@ -48,7 +48,7 @@ class Row:
     rel_path: str
     doc_date: date
     key_fields: dict[str, JsonValue]
-    date: date | None  # the query role's date; the document date when the query has no role
+    date: date | None  # the role's date (the document date by default); None when it has none
     score: float
     lines: list[LineRef]
 
@@ -212,14 +212,15 @@ class Searcher:
         """The filters narrow the candidates; the query's words, place and type words (or the
         prompt when it has none) rank them."""
         allowed = self._candidates(query) if _filtered(query) else None
+        only = None if allowed is None else set(allowed)  # rank inside the candidates
         base = " ".join(p for p in (query.words, query.place or "") if p).strip() or prompt
         text = " ".join([base, *(TYPE_LABELS[t] for t in query.types)])
         keyword_hits = [
-            self.keyword.search(p, limit=POOL, prefix_last=False)
+            self.keyword.search(p, limit=POOL, prefix_last=False, only=only)
             for p in (query.words, query.place or "")
             if p.strip()
-        ] or [self.keyword.search(prompt, limit=POOL, prefix_last=False)]
-        vec = self.vectors.search(text, limit=POOL)
+        ] or [self.keyword.search(prompt, limit=POOL, prefix_last=False, only=only)]
+        vec = self.vectors.search(text, limit=POOL, only=only)
         rows = self._fuse(keyword_hits, vec, allowed, query.role, limit)
         if allowed is not None and len(rows) < limit:
             # The filters named documents the rankings did not reach: they still answer.
@@ -238,7 +239,9 @@ class Searcher:
         found = self._candidates(query)
         hits: dict[str, list[KeywordHit]] = {}
         if query.words.strip():
-            for h in self.keyword.search(query.words, limit=100_000, prefix_last=False):
+            for h in self.keyword.search(
+                query.words, limit=100_000, prefix_last=False, only=set(found)
+            ):
                 hits.setdefault(h.document_id, []).append(h)
             found = {i: d for i, d in found.items() if i in hits}
         rows = [self._row(d, 0.0, hits.get(i, []), query.role) for i, d in found.items()]

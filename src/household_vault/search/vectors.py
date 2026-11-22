@@ -8,6 +8,7 @@ text and the stored fields.
 """
 
 import threading
+from collections.abc import Collection
 from dataclasses import dataclass
 from typing import Protocol, cast
 
@@ -232,9 +233,12 @@ class VectorIndex:
         )
         self._epoch = epoch
 
-    def search(self, text: str, limit: int = 50) -> list[VectorHit]:
+    def search(
+        self, text: str, limit: int = 50, only: Collection[str] | None = None
+    ) -> list[VectorHit]:
         """The chunks closest in meaning to the text. Empty with no embedder, a stale index,
-        Ollama off or the model not pulled."""
+        Ollama off or the model not pulled. `only` limits them to those document ids (chosen
+        before the top `limit`; None means all)."""
         if self.embedder is None or not text.strip() or self.stale():
             return []
         try:
@@ -246,7 +250,10 @@ class VectorIndex:
             if len(self._rows) == 0 or self._matrix.shape[1] != query.shape[0]:
                 return []
             scores = self._matrix @ query
-            top = np.argsort(-scores)[:limit]
+            order = np.argsort(-scores)
+            if only is not None:
+                order = np.array([i for i in order if self._rows[i][0] in only], dtype=int)
+            top = order[:limit]
             hits = []
             for i in top:
                 doc_id, page, first, last = self._rows[i]
