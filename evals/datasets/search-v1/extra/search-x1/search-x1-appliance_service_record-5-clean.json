@@ -1,0 +1,279 @@
+{
+  "doc_id": "search-x1-appliance_service_record-5-clean",
+  "base_id": "search-x1-appliance_service_record-5",
+  "doc_type": "appliance_service_record",
+  "person": "S N Rao",
+  "variant": "clean",
+  "files": [
+    "search-x1-appliance_service_record-5-clean.pdf"
+  ],
+  "fields": {
+    "brand": "Aurora",
+    "product": "Front-load washing machine",
+    "model": null,
+    "serial_number": null,
+    "seller": "Lakeview Digital Store",
+    "seller_location": null,
+    "order_id": null,
+    "buyer": "S N Rao",
+    "purchase_date": "2026-02-23",
+    "amount": "32000",
+    "invoice_number": null,
+    "period_start": null,
+    "period_end": null,
+    "visits": null,
+    "service_helpline": "1800 782 5296"
+  },
+  "printed": {
+    "brand": "Aurora",
+    "product": "Front-load washing machine",
+    "seller": "Lakeview Digital Store",
+    "buyer": "S N Rao",
+    "purchase_date": "23/02/2026",
+    "amount": "Rs. 32,000",
+    "service_helpline": "1800 782 5296"
+  },
+  "lines": [
+    {
+      "text": "Brand",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.10758319327731093,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Aurora",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.3912268907563025,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.1193512605042017,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Front-load washing machine",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.564,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Seller",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.10588907563025211,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Lakeview Digital Store",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.5145378151260503,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Buyer",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.10673613445378152,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "S N Rao",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.21852731591448932,
+        0.4005714285714286,
+        0.23159144893111638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.24703087885985747,
+        0.16475966386554625,
+        0.25878859857482184
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "23/02/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.24703087885985747,
+        0.4202352941176471,
+        0.26009501187648454
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Amount",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2755344418052256,
+        0.1193512605042017,
+        0.28729216152019005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 32,000",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.2755344418052256,
+        0.4183529411764706,
+        0.28859857482185275
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Service helpline",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.30403800475059384,
+        0.17398655462184873,
+        0.31579572446555815
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 782 5296",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.30403800475059384,
+        0.44826890756302523,
+        0.3171021377672209
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Aurora",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.1498655462184874,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Service Report",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.1894840336134454,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.35391923990498814,
+        0.5212201680672268,
+        0.36567695961995245
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.37054631828978624,
+        0.5472672268907564,
+        0.38230403800475055
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      1
+    ],
+    "product": [
+      3
+    ],
+    "seller": [
+      5
+    ],
+    "buyer": [
+      7
+    ],
+    "purchase_date": [
+      9
+    ],
+    "amount": [
+      11
+    ],
+    "service_helpline": [
+      13
+    ]
+  },
+  "set_name": "search-x1",
+  "split": "test",
+  "owner": "home",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "purchases",
+  "folder": "Home/Purchases",
+  "expected_ask": []
+}

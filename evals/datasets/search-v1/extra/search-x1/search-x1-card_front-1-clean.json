@@ -1,0 +1,127 @@
+{
+  "doc_id": "search-x1-card_front-1-clean",
+  "base_id": "search-x1-card_front-1",
+  "doc_type": "card_front",
+  "person": "Kavita Rao",
+  "variant": "clean",
+  "files": [
+    "search-x1-card_front-1-clean.pdf"
+  ],
+  "fields": {
+    "bank": "Deccan Trust Bank",
+    "card_name": null,
+    "number": "378282246310005",
+    "expiry": "12/28",
+    "holder": "KAVITA RAO",
+    "network": null,
+    "cvv": null
+  },
+  "printed": {
+    "bank": "Deccan Trust Bank",
+    "number": "3782 822463 10005",
+    "expiry": "12/28",
+    "holder": "KAVITA RAO"
+  },
+  "lines": [
+    {
+      "text": "Deccan Trust Bank",
+      "page": 0,
+      "bbox": [
+        0.056074766355140186,
+        0.08148148148148149,
+        0.3735280373831776,
+        0.1425925925925926
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credit Card",
+      "page": 0,
+      "bbox": [
+        0.8244859813084112,
+        0.0962962962962963,
+        0.9439252336448598,
+        0.13703703703703704
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3782 822463 10005",
+      "page": 0,
+      "bbox": [
+        0.056074766355140186,
+        0.45925925925925926,
+        0.5327102803738318,
+        0.5407407407407407
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "VALID THRU",
+      "page": 0,
+      "bbox": [
+        0.056074766355140186,
+        0.6074074074074074,
+        0.15330607476635516,
+        0.6359259259259259
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "12/28",
+      "page": 0,
+      "bbox": [
+        0.2102803738317757,
+        0.5925925925925926,
+        0.29439252336448596,
+        0.6414814814814814
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KAVITA RAO",
+      "page": 0,
+      "bbox": [
+        0.056074766355140186,
+        0.725925925925926,
+        0.2383177570093458,
+        0.778888888888889
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.056074766355140186,
+        0.8592592592592593,
+        0.2513271028037383,
+        0.9244444444444444
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "bank": [
+      0
+    ],
+    "number": [
+      2
+    ],
+    "expiry": [
+      4
+    ],
+    "holder": [
+      5
+    ]
+  },
+  "set_name": "search-x1",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "cards",
+  "folder": "Kavita Rao/Cards",
+  "expected_ask": []
+}

@@ -1,0 +1,304 @@
+{
+  "doc_id": "search-x2-gadget_policy-5-clean",
+  "base_id": "search-x2-gadget_policy-5",
+  "doc_type": "gadget_policy",
+  "person": "Kavita R Rao",
+  "variant": "clean",
+  "files": [
+    "search-x2-gadget_policy-5-clean.pdf"
+  ],
+  "fields": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "product": "Shield Cover",
+    "policy_number": "PL/FF603285",
+    "policyholder": "Kavita R Rao",
+    "insured": null,
+    "nominee": null,
+    "sum_insured": null,
+    "premium": "8200",
+    "premium_frequency": null,
+    "start_date": "2026-02-23",
+    "end_date": "2027-02-22",
+    "premium_due_date": null,
+    "agent": null,
+    "claim_helpline": "1800 342 4299"
+  },
+  "printed": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "product": "Shield Cover",
+    "policy_number": "PL/FF603285",
+    "policyholder": "Kavita R Rao",
+    "premium": "Rs. 8,200",
+    "start_date": "23/02/2026",
+    "end_date": "22/02/2027",
+    "claim_helpline": "1800 342 4299"
+  },
+  "lines": [
+    {
+      "text": "Insurer",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.11429915966386556,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.6443361344537815,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.1193512605042017,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Shield Cover",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.43887394957983195,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policy number",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.16305042016806723,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "PL/FF603285",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.438890756302521,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policyholder",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.1496033613445378,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita R Rao",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.21852731591448932,
+        0.4397983193277311,
+        0.23159144893111638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.24703087885985747,
+        0.12773109243697478,
+        0.25878859857482184
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 8,200",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.24703087885985747,
+        0.4090084033613446,
+        0.26009501187648454
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Start date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2755344418052256,
+        0.13281344537815126,
+        0.28729216152019005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "23/02/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.2755344418052256,
+        0.4202352941176471,
+        0.28859857482185275
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.30403800475059384,
+        0.1277764705882353,
+        0.31579572446555815
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "22/02/2027",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.30403800475059384,
+        0.4202352941176471,
+        0.3171021377672209
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Claims helpline",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.332541567695962,
+        0.16976638655462184,
+        0.34429928741092636
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 342 4299",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.332541567695962,
+        0.44826890756302523,
+        0.34560570071258906
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.5295294117647059,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mobile and Gadget Protection Plan",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.35392941176470594,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.3824228028503563,
+        0.5212201680672268,
+        0.39418052256532066
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.3990498812351544,
+        0.5472672268907564,
+        0.41080760095011876
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "insurer": [
+      1
+    ],
+    "product": [
+      3
+    ],
+    "policy_number": [
+      5
+    ],
+    "policyholder": [
+      7
+    ],
+    "premium": [
+      9
+    ],
+    "start_date": [
+      11
+    ],
+    "end_date": [
+      13
+    ],
+    "claim_helpline": [
+      15
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "test",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "insurance",
+  "folder": "Kavita Rao/Insurance",
+  "expected_ask": []
+}

@@ -1,0 +1,261 @@
+{
+  "doc_id": "search-x1-prescription-10-clean",
+  "base_id": "search-x1-prescription-10",
+  "doc_type": "prescription",
+  "person": "S N Rao",
+  "variant": "clean",
+  "files": [
+    "search-x1-prescription-10-clean.pdf"
+  ],
+  "fields": {
+    "hospital": "Lakeview Multispeciality Clinic",
+    "doctor": null,
+    "patient": "S N Rao",
+    "date": "2026-07-31",
+    "medicines": [
+      {
+        "name": "Atorvastatin",
+        "dose": "20 mg",
+        "timing": "1-0-0",
+        "duration": "30 days"
+      },
+      {
+        "name": "Telmisartan",
+        "dose": "40 mg",
+        "timing": "1-0-1",
+        "duration": "30 days"
+      },
+      {
+        "name": "Vitamin D3",
+        "dose": "60000 IU",
+        "timing": "0-0-1",
+        "duration": "5 days"
+      }
+    ],
+    "next_visit": "2027-01-29"
+  },
+  "printed": {
+    "hospital": "Lakeview Multispeciality Clinic",
+    "patient": "S N Rao",
+    "date": "31/07/2026",
+    "medicines": "1. Tab Atorvastatin 20 mg  1-0-0  30 days\n2. Tab Telmisartan 40 mg  1-0-1  30 days\n3. Tab Vitamin D3 60000 IU  0-0-1  5 days",
+    "next_visit": "29/01/2027"
+  },
+  "lines": [
+    {
+      "text": "Lakeview Multispeciality Clinic",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.021377672209026127,
+        0.484855462184874,
+        0.043586698337292167
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Market Street, Hyderabad",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.05463182897862233,
+        0.25964705882352945,
+        0.06769596199524941
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MBBS, MD (General Medicine)",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.14014251781472684,
+        0.2748319327731092,
+        0.15190023752969123
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1828978622327791,
+        0.1143142857142857,
+        0.19465558194774346
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "S N Rao",
+      "page": 0,
+      "bbox": [
+        0.16806722689075632,
+        0.1828978622327791,
+        0.23250420168067226,
+        0.19596199524940616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.6386554621848739,
+        0.1828978622327791,
+        0.6706016806722689,
+        0.19465558194774346
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "31/07/2026",
+      "page": 0,
+      "bbox": [
+        0.7058823529411765,
+        0.1828978622327791,
+        0.7899831932773109,
+        0.19596199524940616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Age/Sex: 24 / M",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.20902612826603326,
+        0.17484873949579832,
+        0.22078384798099762
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rx",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.26128266033254155,
+        0.11448067226890757,
+        0.29002375296912114
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicine, dose, timing, duration",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.2755344418052256,
+        0.3647949579831933,
+        0.28729216152019005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Atorvastatin 20 mg  1-0-0  30 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.30403800475059384,
+        0.49139159663865545,
+        0.31840855106888366
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Telmisartan 40 mg  1-0-1  30 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.334916864608076,
+        0.4903378151260504,
+        0.34928741092636584
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Tab Vitamin D3 60000 IU  0-0-1  5 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.3657957244655582,
+        0.49754789915966396,
+        0.380166270783848
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.4323040380047506,
+        0.48104201680672276,
+        0.44536817102137766
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit: 29/01/2027",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.4655581947743468,
+        0.2532285714285714,
+        0.4799287410926366
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Signature",
+      "page": 0,
+      "bbox": [
+        0.8680336134453782,
+        0.8788598574821853,
+        0.9327731092436975,
+        0.8906175771971496
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "hospital": [
+      0
+    ],
+    "patient": [
+      4
+    ],
+    "date": [
+      6
+    ],
+    "medicines": [
+      10,
+      11,
+      12
+    ],
+    "next_visit": [
+      14
+    ]
+  },
+  "set_name": "search-x1",
+  "split": "test",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "medical",
+  "folder": "Suresh Rao/Medical/Reports",
+  "expected_ask": []
+}

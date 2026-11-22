@@ -1,0 +1,278 @@
+{
+  "doc_id": "search-x2-scan_report-1-clean",
+  "base_id": "search-x2-scan_report-1",
+  "doc_type": "scan_report",
+  "person": "Ravi Rao",
+  "variant": "clean",
+  "files": [
+    "search-x2-scan_report-1-clean.pdf"
+  ],
+  "fields": {
+    "patient": "Ravi Rao",
+    "doctor": "Dr. Gautam Dewan",
+    "date": "2026-04-26",
+    "hospital": "Lakeview Multispeciality Clinic",
+    "department": "Orthopaedics",
+    "diagnoses": [
+      "Acute gastritis",
+      "Viral fever",
+      "Type 2 diabetes mellitus"
+    ],
+    "procedures": null,
+    "allergies": null,
+    "medicines": null,
+    "tests": null,
+    "next_visit": null,
+    "amount": null
+  },
+  "printed": {
+    "patient": "Ravi Rao",
+    "date": "26/04/2026",
+    "hospital": "Lakeview Multispeciality Clinic",
+    "doctor": "Dr. Gautam Dewan",
+    "department": "Orthopaedics",
+    "diagnoses": "Acute gastritis\nViral fever\nType 2 diabetes mellitus"
+  },
+  "lines": [
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.1143142857142857,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi Rao",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.4080504201680672,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.09917310924369749,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "26/04/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.4202352941176471,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hospital",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.12186218487394959,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Lakeview Multispeciality Clinic",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.5817983193277311,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Doctor",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.11177310924369747,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Gautam Dewan",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.21852731591448932,
+        0.485563025210084,
+        0.23159144893111638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Department",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.24703087885985747,
+        0.1462453781512605,
+        0.25878859857482184
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Orthopaedics",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.24703087885985747,
+        0.44447058823529406,
+        0.26009501187648454
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Diagnoses",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2755344418052256,
+        0.13868235294117648,
+        0.28729216152019005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Acute gastritis",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.29334916864608074,
+        0.21757983193277308,
+        0.30641330166270786
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Viral fever",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.31235154394299286,
+        0.18211764705882352,
+        0.3254156769596199
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Type 2 diabetes mellitus",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.331353919239905,
+        0.2951260504201681,
+        0.34441805225653205
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Lakeview Multispeciality Clinic",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.4357226890756302,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Radiology Report",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.21004201680672271,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.37885985748218526,
+        0.5212201680672268,
+        0.3906175771971496
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.39548693586698336,
+        0.5472672268907564,
+        0.4072446555819477
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      1
+    ],
+    "date": [
+      3
+    ],
+    "hospital": [
+      5
+    ],
+    "doctor": [
+      7
+    ],
+    "department": [
+      9
+    ],
+    "diagnoses": [
+      11,
+      12,
+      13
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "val",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "medical",
+  "folder": "Ravi Kumar Rao/Medical/Scans",
+  "expected_ask": []
+}

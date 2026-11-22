@@ -1,0 +1,194 @@
+{
+  "doc_id": "search-x1-marriage_certificate-1-clean",
+  "base_id": "search-x1-marriage_certificate-1",
+  "doc_type": "marriage_certificate",
+  "person": "R K Rao",
+  "variant": "clean",
+  "files": [
+    "search-x1-marriage_certificate-1-clean.pdf"
+  ],
+  "fields": {
+    "holder": null,
+    "number": "ZZN2361146",
+    "date_of_birth": null,
+    "issue_date": "2020-08-20",
+    "expiry_date": null,
+    "address": null,
+    "parties": [
+      "R K Rao",
+      "Mrs Kavita Rao"
+    ]
+  },
+  "printed": {
+    "parties": "R K Rao\nMrs Kavita Rao",
+    "number": "ZZN2361146",
+    "issue_date": "20/08/2020"
+  },
+  "lines": [
+    {
+      "text": "Parties",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.11429915966386556,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "R K Rao",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.1508313539192399,
+        0.1662016806722689,
+        0.16389548693586697
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Mrs Kavita Rao",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.16983372921615203,
+        0.22225210084033614,
+        0.1828978622327791
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Number",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19596199524940616,
+        0.12101512605042015,
+        0.20771971496437056
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ZZN2361146",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19596199524940616,
+        0.434218487394958,
+        0.20902612826603326
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of issue",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.22446555819477435,
+        0.15550252100840337,
+        0.2362232779097387
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "20/08/2020",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.22446555819477435,
+        0.4202352941176471,
+        0.2375296912114014
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Office of the Registrar of Marriages",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.488890756302521,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Registration of Marriage",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.3733966386554622,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.27434679334916867,
+        0.5212201680672268,
+        0.28610451306413304
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.29097387173396677,
+        0.5472672268907564,
+        0.30273159144893114
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.37626554621848735,
+        0.8788598574821853,
+        0.6220537815126049,
+        0.915439429928741
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "parties": [
+      1,
+      2
+    ],
+    "number": [
+      4
+    ],
+    "issue_date": [
+      6
+    ]
+  },
+  "set_name": "search-x1",
+  "split": "val",
+  "owner": "p1",
+  "linked_people": [
+    "p1",
+    "p2"
+  ],
+  "area": "identity",
+  "folder": "Ravi Kumar Rao/Identity",
+  "expected_ask": []
+}

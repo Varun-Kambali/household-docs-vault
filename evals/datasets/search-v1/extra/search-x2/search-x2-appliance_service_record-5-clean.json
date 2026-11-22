@@ -1,0 +1,305 @@
+{
+  "doc_id": "search-x2-appliance_service_record-5-clean",
+  "base_id": "search-x2-appliance_service_record-5",
+  "doc_type": "appliance_service_record",
+  "person": "Ravi Rao",
+  "variant": "clean",
+  "files": [
+    "search-x2-appliance_service_record-5-clean.pdf"
+  ],
+  "fields": {
+    "brand": "Nimbus",
+    "product": "Television",
+    "model": null,
+    "serial_number": "SNCC511769",
+    "seller": "Sapphire Electronics",
+    "seller_location": null,
+    "order_id": null,
+    "buyer": "Ravi Rao",
+    "purchase_date": "2026-03-14",
+    "amount": "62000",
+    "invoice_number": null,
+    "period_start": null,
+    "period_end": null,
+    "visits": null,
+    "service_helpline": "1800 158 4120"
+  },
+  "printed": {
+    "brand": "Nimbus",
+    "product": "Television",
+    "serial_number": "SNCC511769",
+    "seller": "Sapphire Electronics",
+    "buyer": "Ravi Rao",
+    "purchase_date": "14/03/2026",
+    "amount": "Rs. 62,000",
+    "service_helpline": "1800 158 4120"
+  },
+  "lines": [
+    {
+      "text": "Brand",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.10758319327731093,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nimbus",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.39776470588235296,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.1193512605042017,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Television",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.4183361344537815,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Serial number",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.16137142857142858,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SNCC511769",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.43981512605042017,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Seller",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.10588907563025211,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sapphire Electronics",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.21852731591448932,
+        0.503327731092437,
+        0.23159144893111638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Buyer",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.24703087885985747,
+        0.10673613445378152,
+        0.25878859857482184
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi Rao",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.24703087885985747,
+        0.4080504201680672,
+        0.26009501187648454
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2755344418052256,
+        0.16475966386554625,
+        0.28729216152019005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "14/03/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.2755344418052256,
+        0.4202352941176471,
+        0.28859857482185275
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Amount",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.30403800475059384,
+        0.1193512605042017,
+        0.31579572446555815
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 62,000",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.30403800475059384,
+        0.4183529411764706,
+        0.3171021377672209
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Service helpline",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.332541567695962,
+        0.17398655462184873,
+        0.34429928741092636
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 158 4120",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.332541567695962,
+        0.44826890756302523,
+        0.34560570071258906
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Nimbus",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.15967226890756303,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Service Report",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.1894840336134454,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.3824228028503563,
+        0.5212201680672268,
+        0.39418052256532066
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.3990498812351544,
+        0.5472672268907564,
+        0.41080760095011876
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      1
+    ],
+    "product": [
+      3
+    ],
+    "serial_number": [
+      5
+    ],
+    "seller": [
+      7
+    ],
+    "buyer": [
+      9
+    ],
+    "purchase_date": [
+      11
+    ],
+    "amount": [
+      13
+    ],
+    "service_helpline": [
+      15
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "test",
+  "owner": "home",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "purchases",
+  "folder": "Home/Purchases",
+  "expected_ask": []
+}

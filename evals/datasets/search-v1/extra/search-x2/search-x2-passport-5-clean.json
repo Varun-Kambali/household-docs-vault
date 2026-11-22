@@ -1,0 +1,204 @@
+{
+  "doc_id": "search-x2-passport-5-clean",
+  "base_id": "search-x2-passport-5",
+  "doc_type": "passport",
+  "person": "SURESH N RAO",
+  "variant": "clean",
+  "files": [
+    "search-x2-passport-5-clean.pdf"
+  ],
+  "fields": {
+    "holder": "SURESH N RAO",
+    "number": "ZZK4285136",
+    "date_of_birth": "1980-02-03",
+    "issue_date": "2019-08-23",
+    "expiry_date": null,
+    "address": null,
+    "parties": null
+  },
+  "printed": {
+    "holder": "SURESH N RAO",
+    "number": "ZZK4285136",
+    "date_of_birth": "03/02/1980",
+    "issue_date": "23/08/2019"
+  },
+  "lines": [
+    {
+      "text": "Holder",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.11177310924369747,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SURESH N RAO",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.46499159663865547,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Number",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.12101512605042015,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ZZK4285136",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.434218487394958,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of birth",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.14961848739495798,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "03/02/1980",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.4202352941176471,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of issue",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.15550252100840337,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "23/08/2019",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.21852731591448932,
+        0.4202352941176471,
+        0.23159144893111638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Republic of India",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.2703445378151261,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Passport (Specimen)",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.2398252100840336,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2684085510688836,
+        0.5212201680672268,
+        0.280166270783848
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2850356294536817,
+        0.5472672268907564,
+        0.2967933491686461
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.37626554621848735,
+        0.8788598574821853,
+        0.6220537815126049,
+        0.915439429928741
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "holder": [
+      1
+    ],
+    "number": [
+      3
+    ],
+    "date_of_birth": [
+      5
+    ],
+    "issue_date": [
+      7
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "test",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "identity",
+  "folder": "Suresh Rao/Identity",
+  "expected_ask": []
+}

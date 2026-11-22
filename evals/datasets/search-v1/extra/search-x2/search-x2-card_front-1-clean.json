@@ -1,0 +1,127 @@
+{
+  "doc_id": "search-x2-card_front-1-clean",
+  "base_id": "search-x2-card_front-1",
+  "doc_type": "card_front",
+  "person": "Kavita R Rao",
+  "variant": "clean",
+  "files": [
+    "search-x2-card_front-1-clean.pdf"
+  ],
+  "fields": {
+    "bank": "Nilgiri Bank",
+    "card_name": null,
+    "number": "3056930009020004",
+    "expiry": "11/28",
+    "holder": "KAVITA R RAO",
+    "network": null,
+    "cvv": null
+  },
+  "printed": {
+    "bank": "Nilgiri Bank",
+    "number": "3056 9300 0902 0004",
+    "expiry": "11/28",
+    "holder": "KAVITA R RAO"
+  },
+  "lines": [
+    {
+      "text": "Nilgiri Bank",
+      "page": 0,
+      "bbox": [
+        0.056074766355140186,
+        0.08148148148148149,
+        0.2508294392523365,
+        0.1425925925925926
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credit Card",
+      "page": 0,
+      "bbox": [
+        0.8244859813084112,
+        0.0962962962962963,
+        0.9439252336448598,
+        0.13703703703703704
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3056 9300 0902 0004",
+      "page": 0,
+      "bbox": [
+        0.056074766355140186,
+        0.45925925925925926,
+        0.5887850467289719,
+        0.5407407407407407
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "VALID THRU",
+      "page": 0,
+      "bbox": [
+        0.056074766355140186,
+        0.6074074074074074,
+        0.15330607476635516,
+        0.6359259259259259
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "11/28",
+      "page": 0,
+      "bbox": [
+        0.2102803738317757,
+        0.5925925925925926,
+        0.29439252336448596,
+        0.6414814814814814
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KAVITA R RAO",
+      "page": 0,
+      "bbox": [
+        0.056074766355140186,
+        0.725925925925926,
+        0.27476635514018694,
+        0.778888888888889
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.056074766355140186,
+        0.8592592592592593,
+        0.2513271028037383,
+        0.9244444444444444
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "bank": [
+      0
+    ],
+    "number": [
+      2
+    ],
+    "expiry": [
+      4
+    ],
+    "holder": [
+      5
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "cards",
+  "folder": "Kavita Rao/Cards",
+  "expected_ask": []
+}
