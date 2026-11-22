@@ -1,0 +1,1 @@
+{"system_sha256": "a84bfbf228c8a4c08ffbf5b9920cf377b3c409b51642314571fe1dbdb9d49a46", "model": "ollama:qwen3:4b", "raw": "{\n  \"intent\": \"lookup\",\n  \"people\": [\n    \"Kavita\"\n  ],\n  \"types\": [\n    \"life_policy\"\n  ],\n  \"areas\": [\n    \"insurance\"\n  ],\n  \"field\": null,\n  \"date\": null,\n  \"place\": null,\n  \"words\": \"life insurance policy\"\n}"}
