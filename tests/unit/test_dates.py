@@ -23,8 +23,8 @@ def test_date_phrases_around_the_year_end():  # Review Focus 15
 
 def test_a_month_with_no_year_is_its_next_occurrence_counting_this_month():
     assert parse_date_phrase("by November", TODAY) == DateRange(start=None, end=date(2026, 11, 30))
-    assert parse_date_phrase("before November", TODAY) == DateRange(
-        start=None, end=date(2026, 10, 31)
+    assert parse_date_phrase("in November", TODAY) == DateRange(
+        start=date(2026, 11, 1), end=date(2026, 11, 30)
     )
     assert parse_date_phrase("in January", TODAY) == DateRange(
         start=date(2027, 1, 1), end=date(2027, 1, 31)
@@ -96,3 +96,68 @@ def test_financial_and_assessment_years():
 )
 def test_anything_else_is_none(phrase):
     assert parse_date_phrase(phrase, TODAY) is None
+
+
+@pytest.mark.parametrize(
+    "phrase",
+    [
+        "in march 0000",
+        "FY 0000-01",
+        "AY 0001-02",
+        "before january 0001",
+        "before 01/01/0001",
+    ],
+)
+def test_year_edge_input_is_none_never_an_error(phrase):
+    assert parse_date_phrase(phrase, TODAY) is None
+
+
+def test_before_a_month_with_no_year_is_the_next_one_that_starts_after_today():
+    assert parse_date_phrase("before November", TODAY) == DateRange(
+        start=None, end=date(2027, 10, 31)
+    )
+    dec = date(2026, 12, 15)
+    assert parse_date_phrase("before March", dec) == DateRange(start=None, end=date(2027, 2, 28))
+    assert parse_date_phrase("before December", date(2026, 11, 30)) == DateRange(
+        start=None, end=date(2026, 11, 30)
+    )
+    assert parse_date_phrase("before November 2026", TODAY) == DateRange(
+        start=None, end=date(2026, 10, 31)
+    )
+
+
+def test_a_day_and_month_with_no_year_is_its_next_occurrence_counting_today():
+    assert parse_date_phrase("by 31 March", TODAY) == DateRange(start=None, end=date(2027, 3, 31))
+    assert parse_date_phrase("31 Mar", TODAY) == DateRange(
+        start=date(2027, 3, 31), end=date(2027, 3, 31)
+    )
+    assert parse_date_phrase("31/03", TODAY) == DateRange(
+        start=date(2027, 3, 31), end=date(2027, 3, 31)
+    )
+    assert parse_date_phrase("21 November", TODAY) == DateRange(start=TODAY, end=TODAY)
+    assert parse_date_phrase("20 November", TODAY) == DateRange(
+        start=date(2027, 11, 20), end=date(2027, 11, 20)
+    )
+    assert parse_date_phrase("before 31 March", TODAY) == DateRange(
+        start=None, end=date(2027, 3, 30)
+    )
+    assert parse_date_phrase("29 February", TODAY) == DateRange(
+        start=date(2028, 2, 29), end=date(2028, 2, 29)
+    )
+    assert parse_date_phrase("31/02", TODAY) is None
+    assert parse_date_phrase("31 April", TODAY) is None
+
+
+def test_punctuation_and_repeated_spaces_are_ignored():
+    assert parse_date_phrase("next 2 weeks.", TODAY) == parse_date_phrase("next 2 weeks", TODAY)
+    assert parse_date_phrase("  before   March? ", TODAY) == parse_date_phrase(
+        "before March", TODAY
+    )
+    assert parse_date_phrase("(this year)!", TODAY) == parse_date_phrase("this year", TODAY)
+    assert parse_date_phrase("?!", TODAY) is None
+
+
+def test_two_digit_financial_year_end_wraps_the_century():
+    assert parse_date_phrase("FY 2099-00", TODAY) == DateRange(
+        start=date(2099, 4, 1), end=date(2100, 3, 31)
+    )

@@ -31,6 +31,9 @@ _MONTH_PHRASE = re.compile(rf"(?:(before|by|until|till|in)\s+)?({_MONTH})(?:\s+(
 _PREFIXED = re.compile(r"(before|by|until|till)\s+(.+)")
 _SPAN = re.compile(r"(this|next|last)\s+(month|year)")
 _NEXT_N = re.compile(r"next\s+(\d{1,3})\s+(day|week|month)s?")
+_DAY_MONTH_NAME = re.compile(rf"(\d{{1,2}})(?:st|nd|rd|th)?\s+({_MONTH})")
+_DAY_MONTH_NUM = re.compile(r"(\d{1,2})/(\d{1,2})")
+_EDGES = re.compile(r"^[\W_]+|[\W_]+$")
 _YEAR_SPAN = re.compile(r"(fy|ay)\s*(\d{4})\s*-\s*(\d{2}|\d{4})")
 
 
@@ -64,7 +67,11 @@ def _span(which: str, unit: str, today: date) -> DateRange:
 
 
 def _financial_year(kind: str, start_year: int, end_text: str) -> DateRange | None:
-    end_year = int(end_text) if len(end_text) == 4 else start_year // 100 * 100 + int(end_text)
+    end_year = int(end_text)
+    if len(end_text) == 2:
+        end_year += start_year // 100 * 100
+        if end_year <= start_year:  # 2099-00 wraps into the next century
+            end_year += 100
     if end_year != start_year + 1:
         return None
     if kind == "ay":  # the assessment year follows the financial year it assesses
@@ -79,9 +86,35 @@ def _printed(text: str) -> date | None:
         return None
 
 
+def _day_month(text: str, today: date) -> date | None:
+    """A day and month with no year: its next occurrence, counting today."""
+    if m := _DAY_MONTH_NAME.fullmatch(text):
+        day, month = int(m.group(1)), _MONTHS[m.group(2)]
+    elif m := _DAY_MONTH_NUM.fullmatch(text):
+        day, month = int(m.group(1)), int(m.group(2))
+    else:
+        return None
+    for year in range(today.year, today.year + 9):  # far enough to reach a 29 February
+        try:
+            found = date(year, month, day)
+        except ValueError:
+            continue
+        if found >= today:
+            return found
+    return None
+
+
 def parse_date_phrase(phrase: str, today: date) -> DateRange | None:
-    """The span a phrase means, or `None` when code cannot read it (the caller reports it)."""
-    text = re.sub(r"\s+", " ", phrase.strip().lower())
+    """The span a phrase means, or `None` when code cannot read it (the caller reports it).
+    Never raises: a year outside what a date can hold reads as `None`."""
+    try:
+        return _parse(phrase, today)
+    except (ValueError, OverflowError):
+        return None
+
+
+def _parse(phrase: str, today: date) -> DateRange | None:
+    text = _EDGES.sub("", re.sub(r"\s+", " ", phrase.lower())).strip()
     if not text:
         return None
     if m := _YEAR_SPAN.fullmatch(text):
@@ -96,11 +129,17 @@ def parse_date_phrase(phrase: str, today: date) -> DateRange | None:
             return DateRange(start=today, end=_add_months(today, n))
         return DateRange(start=today, end=today + timedelta(days=n * (7 if unit == "week" else 1)))
     if m := _MONTH_PHRASE.fullmatch(text):
-        month = _MONTHS[m.group(2)]
-        year = int(m.group(3)) if m.group(3) else today.year + (month < today.month)
-        return _month_range(m.group(1), month, year)
+        preposition, month = m.group(1), _MONTHS[m.group(2)]
+        if m.group(3):
+            year = int(m.group(3))
+        elif preposition == "before":  # the next one whose first day is still ahead
+            year = today.year + (date(today.year, month, 1) <= today)
+        else:
+            year = today.year + (month < today.month)
+        return _month_range(preposition, month, year)
     prefix = _PREFIXED.fullmatch(text)
-    printed = _printed(prefix.group(2) if prefix else text)
+    body = prefix.group(2) if prefix else text
+    printed = _printed(body) or _day_month(body, today)
     if printed is None:
         return None
     if prefix is None:

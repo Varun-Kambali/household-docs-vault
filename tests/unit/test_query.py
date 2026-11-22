@@ -203,3 +203,21 @@ def test_the_system_text_is_built_from_the_vocabulary():
 
 def test_the_reader_names_its_model():
     assert ollama_reader([]).name == "ollama:qwen3:4b"
+
+
+def test_a_range_is_never_inverted(household):
+    # an end already past: starting today would invert it
+    q = resolve(reading(date=DateSlot(role="expiry", phrase="before March 2024")), household, TODAY)
+    assert (q.range, q.unread) == (None, ["date: before March 2024"])
+    q = resolve(
+        reading(date=DateSlot(role="due", phrase="before 1 January 2026")), household, TODAY
+    )
+    assert (q.range, q.unread) == (None, ["date: before 1 January 2026"])
+    # an end of today is the edge that still reads
+    q = resolve(reading(date=DateSlot(role="renewal", phrase="by 21 November")), household, TODAY)
+    assert q.range == DateRange(start=TODAY, end=TODAY) and q.unread == []
+    # a non-forward role keeps a past end as read: it is not inverted
+    q = resolve(
+        reading(date=DateSlot(role="purchase", phrase="before March 2024")), household, TODAY
+    )
+    assert q.range == DateRange(start=None, end=date(2024, 2, 29))

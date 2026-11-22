@@ -212,15 +212,12 @@ def resolve(reading: QueryReading, household: Household, today: date) -> Query:
     if reading.date is not None:
         role = reading.date.role
         span = parse_date_phrase(reading.date.phrase, today)
-        if span is None:
-            unread.append(f"date: {reading.date.phrase}")
-        elif (
-            role in _FORWARD_ROLES
-            and span.start is None
-            and span.end is not None
-            and span.end >= today
-        ):
+        if span is not None and role in _FORWARD_ROLES and span.start is None and span.end:
+            # a forward question looks ahead: an end only means "from today to then"
             span = DateRange(start=today, end=span.end)
+        if span is None or (span.start and span.end and span.start > span.end):
+            span = None  # never an inverted range
+            unread.append(f"date: {reading.date.phrase}")
     return Query(
         intent=reading.intent,
         people=people,
