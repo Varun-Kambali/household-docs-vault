@@ -497,25 +497,21 @@ def _synonym(text: str) -> str | None:
     return out if out != text else None
 
 
-_STYLE_WEIGHTS: dict[Style, int] = {"question": 4, "terse": 3, "typo": 2, "synonym": 3}
+_STYLE_WEIGHTS: dict[Style, int] = {"question": 4, "terse": 3, "typo": 2, "synonym": 6}
 
 
 def render(full: str, terse: str, protect: set[str], rng: random.Random) -> tuple[str, Style]:
-    """The prompt in a style drawn from the weights. A style that cannot apply (no synonym in
-    the words, no plain word to misspell) falls back to the full question."""
-    style = rng.choices(list(_STYLE_WEIGHTS), weights=list(_STYLE_WEIGHTS.values()))[0]
+    """The prompt in a style drawn from the weights among the styles that can apply to its words
+    (a synonym needs a word of the table, a typo a plain word to misspell). The synonym weight is
+    high because few prompts hold a word of the table."""
     base = rng.choice((full, terse))
-    if style == "terse":
-        return terse, "terse"
-    if style == "typo":
-        typed = _typo(base, protect, rng)
-        if typed is not None:
-            return typed, "typo"
-    if style == "synonym":
-        swapped = _synonym(base) or _synonym(full if base == terse else terse)
-        if swapped is not None:
-            return swapped, "synonym"
-    return full, "question"
+    options: dict[Style, str] = {"question": full, "terse": terse}
+    if (typed := _typo(base, protect, rng)) is not None:
+        options["typo"] = typed
+    if (swapped := _synonym(base) or _synonym(full if base == terse else terse)) is not None:
+        options["synonym"] = swapped
+    style = rng.choices(list(options), weights=[_STYLE_WEIGHTS[k] for k in options])[0]
+    return options[style], style
 
 
 # --- lookup and find -------------------------------------------------------------------------

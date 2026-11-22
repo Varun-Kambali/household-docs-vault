@@ -19,10 +19,10 @@
       "none": 20
     },
     "by_style": {
-      "typo": 38,
-      "question": 117,
-      "synonym": 5,
-      "terse": 50
+      "typo": 53,
+      "terse": 71,
+      "question": 80,
+      "synonym": 6
     },
     "by_origin": {
       "extra": 139,
@@ -58,18 +58,18 @@
       "none": 20
     },
     "by_style": {
-      "question": 115,
-      "typo": 29,
-      "terse": 64,
-      "synonym": 2
+      "question": 81,
+      "terse": 63,
+      "typo": 48,
+      "synonym": 18
     },
     "by_origin": {
-      "eval-v1": 78,
-      "extra": 132
+      "eval-v1": 73,
+      "extra": 137
     },
     "by_kind_and_origin": {
-      "lookup/eval-v1": 42,
-      "lookup/extra": 58,
+      "lookup/eval-v1": 37,
+      "lookup/extra": 63,
       "find/extra": 40,
       "find/eval-v1": 10,
       "list/eval-v1": 26,
