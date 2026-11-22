@@ -212,8 +212,8 @@ class Searcher:
         """The filters narrow the candidates; the query's words, place and type words (or the
         prompt when it has none) rank them."""
         allowed = self._candidates(query) if _filtered(query) else None
-        parts = [query.words, query.place or ""] + [TYPE_LABELS[t] for t in query.types]
-        text = " ".join(p for p in parts if p).strip() or prompt
+        base = " ".join(p for p in (query.words, query.place or "") if p).strip() or prompt
+        text = " ".join([base, *(TYPE_LABELS[t] for t in query.types)])
         keyword_hits = [
             self.keyword.search(p, limit=POOL, prefix_last=False)
             for p in (query.words, query.place or "")
