@@ -21,7 +21,7 @@ from typing import Literal, Protocol
 
 from household_vault.activity import Activity, Step
 from household_vault.config import Settings
-from household_vault.db import Item, ItemState, Store
+from household_vault.db import Item, ItemState, Job, Store
 from household_vault.doctypes import LABEL, DocType
 from household_vault.filing.cardness import is_card_photo
 from household_vault.filing.decide import Overrides, base_field, decide
@@ -37,6 +37,7 @@ from household_vault.reading.pipeline import Reading, read_document
 from household_vault.reading.render import DamagedFileError, LockedPdfError
 from household_vault.reading.source import DocumentSource
 from household_vault.reasons import Reason
+from household_vault.search.vectors import VectorIndex
 from household_vault.vaultroot import INBOX, CopyMismatch, VaultGone, VaultPathError, VaultRoot
 
 log = logging.getLogger(__name__)
@@ -154,8 +155,10 @@ class Worker:
         filer: Filer,
         cards: CardHandler,
         clock: Callable[[], datetime],
+        vectors: VectorIndex | None = None,
     ) -> None:
         self.settings = settings
+        self.vectors = vectors
         self.vault = vault
         self.store = store
         self.activity = activity
@@ -254,6 +257,10 @@ class Worker:
         job = self.store.claim_next(self.clock())
         if job is None:
             return False
+        if job.kind == "embed":
+            self._run_embed_job(job)
+            self._refresh_batch()
+            return True
         deferred = False
         failed = False
         try:
@@ -271,6 +278,23 @@ class Worker:
                 self.store.finish(job.id, "failed" if failed else "done")
         self._refresh_batch()
         return True
+
+    def _run_embed_job(self, job: Job) -> None:
+        """Run an embed job on its own. Whatever goes wrong, the item it belongs to is left as
+        it is: no held state, no error row, no change to a password waiting for a reprocess."""
+        deferred = False
+        try:
+            deferred = self._embed(job.id, job.attempts, self.store.item(job.item_id))
+        except Exception as exc:
+            log.warning("embed job %s ended badly: %s", job.id, type(exc).__name__)
+        finally:
+            self._current = None
+            self._step = None
+            if not deferred:
+                try:
+                    self.store.finish(job.id, "done")
+                except KeyError:
+                    log.warning("embed job %s was not running when it ended", job.id)
 
     def drain(self, max_seconds: float = 600.0, stop: threading.Event | None = None) -> None:
         """Scan and run jobs until nothing is left to do, or until `stop` is set (checked
@@ -294,8 +318,12 @@ class Worker:
         self.filer.recover()
         for job in self.store.running_jobs():
             self.store.finish(job.id, "done")
-            if self.store.item(job.item_id).state in ("queued", "reading"):
+            if job.kind != "embed" and self.store.item(job.item_id).state in (
+                "queued",
+                "reading",
+            ):
                 self.store.requeue(job.item_id, job.kind)
+        self._queue_missing_embeddings()
         # An upload keeps its photos in memory only and has no job while it is read, so a stop
         # leaves it `reading` with nothing to run again: the owner is asked to upload it again.
         active = self._active_ids()
@@ -303,6 +331,16 @@ class Worker:
             # Only an upload made before this start: one accepted since is being read right now.
             if item.origin == "upload" and item.id not in active and item.created_at <= started:
                 self._upload_again(item)
+
+    def _queue_missing_embeddings(self) -> None:
+        """Queue an embed job for every filed document that has no vectors yet: documents
+        filed before search had vectors, and ones whose job was cut off."""
+        vectors = self.vectors
+        if vectors is None or vectors.embedder is None or vectors.stale():
+            return
+        for _doc_id, item_id in vectors.missing():
+            if not self.store.has_open_job(item_id, "embed"):
+                self.store.enqueue(item_id, "embed")
 
     def run_forever(self, stop: threading.Event) -> None:
         self.start_up()
@@ -319,6 +357,7 @@ class Worker:
         with self.store.lock:
             rows = self.store.conn.execute(
                 "select distinct item_id from jobs where state in ('queued', 'running')"
+                " and kind != 'embed'"
             ).fetchall()
         return {r[0] for r in rows}
 
@@ -342,7 +381,7 @@ class Worker:
             ids, started = set(self._batch), self._batch_started
         with self.store.lock:
             waiting = self.store.conn.execute(
-                "select count(*) from jobs where state = 'queued'"
+                "select count(*) from jobs where state = 'queued' and kind != 'embed'"
             ).fetchone()[0]
         done = asked = 0
         for item_id in ids:
@@ -383,6 +422,23 @@ class Worker:
             if not deferred:
                 self.pending_passwords.pop(item.id, None)
         return deferred
+
+    def _embed(self, job_id: int, attempts: int, item: Item) -> bool:
+        """Embed the item's filed document. True when it was put off because Ollama is not
+        there; the document stays filed and keyword search works meanwhile."""
+        if self.vectors is None or item.document_id is None:
+            return False
+        self._current = item.original_name
+        self._step = "Indexing for search"
+        try:
+            self.vectors.add(item.document_id)
+        except ModelUnavailable:
+            wait = min(FIRST_WAIT_SECONDS * 2 ** min(attempts, 10), LONGEST_WAIT_SECONDS)
+            self.store.defer(job_id, self.clock() + timedelta(seconds=wait))
+            return True
+        except Exception as exc:  # search by meaning is extra; the filing is not at risk
+            log.warning("embedding failed for item %s: %s", item.id, type(exc).__name__)
+        return False
 
     def _defer(self, job_id: int, attempts: int, item: Item, detail: str) -> bool:
         wait = min(FIRST_WAIT_SECONDS * 2 ** min(attempts, 10), LONGEST_WAIT_SECONDS)

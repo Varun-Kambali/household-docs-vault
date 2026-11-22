@@ -114,3 +114,10 @@ def test_recordings_dir_resolves_against_the_checkout() -> None:
     assert src is not None
     s = load_settings(env={"VAULT_RECORDINGS": "./var/rec"})
     assert s.recordings_dir == src / "var" / "rec"
+
+
+def test_the_search_models_default_and_come_from_the_environment() -> None:
+    s = load_settings(env={})
+    assert (s.embed_model, s.query_model) == ("qwen3-embedding:0.6b", "qwen3:4b")
+    s = load_settings(env={"VAULT_EMBED_MODEL": "e", "VAULT_QUERY_MODEL": "q"})
+    assert (s.embed_model, s.query_model) == ("e", "q")

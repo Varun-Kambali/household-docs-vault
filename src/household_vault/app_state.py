@@ -18,6 +18,7 @@ from household_vault.filing.filer import Filer
 from household_vault.leakscan import install_log_redaction
 from household_vault.people import Household, load_household
 from household_vault.reading.engines import Engines, make_engines
+from household_vault.search.vectors import Embedder, VectorIndex, embedder_for
 from household_vault.secrets.cards import CardIntake
 from household_vault.secrets.gate import SecretsGate
 from household_vault.vaultroot import (
@@ -53,16 +54,19 @@ class AppState:
     cards: CardIntake
     worker: Worker
     actions: Actions
+    vectors: VectorIndex
 
 
 def build_app_state(
     settings: Settings,
     *,
     engines: Engines | None = None,
+    embedder: Embedder | None = None,
     clock: Callable[[], datetime] | None = None,
 ) -> AppState:
     """Make the folders, open and migrate the database, load the household file and wire the
-    parts. There is one secrets gate, shared by the actions and the card intake."""
+    parts. There is one secrets gate, shared by the actions and the card intake. Passing
+    `engines` means no real models run, so the embedder is then only the one passed."""
     install_log_redaction()  # before anything can log
     now = clock or _now
     vault = VaultRoot.from_settings(settings)
@@ -79,13 +83,27 @@ def build_app_state(
         store.set_household(load_household(settings.household_path))
     household = store.household()
     chosen = engines or make_engines(settings)
+    if embedder is None and engines is None:
+        embedder = embedder_for(settings)
+    vectors = VectorIndex(store, embedder)
     activity = Activity(store, vault, now)
     filer = Filer(vault, store, activity, household, now)
     gate = SecretsGate(vault, lambda: now().timestamp())
     cards = CardIntake(gate, vault, filer, activity, store, chosen, household)
-    worker = Worker(settings, vault, store, activity, chosen, filer, cards, now)
+    worker = Worker(settings, vault, store, activity, chosen, filer, cards, now, vectors)
     actions = Actions(worker, filer, store, activity, household, gate)
     activity.backfill_csv()  # rows a failed CSV write left behind reach the vault log
     return AppState(
-        settings, vault, store, activity, household, chosen, filer, gate, cards, worker, actions
+        settings,
+        vault,
+        store,
+        activity,
+        household,
+        chosen,
+        filer,
+        gate,
+        cards,
+        worker,
+        actions,
+        vectors,
     )
