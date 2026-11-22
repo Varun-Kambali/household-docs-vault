@@ -455,3 +455,51 @@ def test_an_answer_names_its_document_page_and_lines_when_the_value_is_on_page_t
 def test_an_empty_stored_value_is_no_field(store, bad):
     rows = make_rows(store, DocType.health_policy, {"insurer": bad}, ["Star"])
     assert compose(query(field="insurer"), rows, store, TODAY).reason == "no_field"
+
+
+# -- fix round 1: citations must be whole tokens -----------------------------------------------
+
+
+def test_a_date_on_its_own_does_not_support_a_warranty_answer(store):
+    rows = warranty_rows(
+        store,
+        date(2024, 3, 14),
+        parts=[("Motor", 2)],
+        lines=["LG Refrigerator", "Purchase date: 14/03/2024", "Thank you"],
+    )
+    a = compose(query(field="warranty_parts"), rows, store, TODAY)
+    assert a == NoAnswer("not_on_page", [rows[0].rel_path])
+
+
+def test_amounts_are_whole_number_tokens_not_pieces_of_dates_or_ids():
+    assert not locate(2025, "amount", [stored_line("Policy Date 18/02/2025")])
+    assert not locate(Decimal("18.02"), "amount", [stored_line("Dated 18.02.2025")])
+    assert not locate(123, "amount", [stored_line("Policy No: P/123")])
+    assert not locate(2025, "amount", [stored_line("Invoice date 18 Feb 2025")])
+    assert not locate(123, "amount", [stored_line("Ref P-123")])
+    assert not locate(123, "amount", [stored_line("Ref 123456")])
+    assert not locate(123, "amount", [stored_line("Ref 123A")])
+    for printed, value in (
+        ("Sum Insured: Rs. 10,00,000", 1000000),
+        ("Premium ₹ 12,450.50", Decimal("12450.50")),
+        ("Amount 31990", 31990),
+        ("INR 5,00,000/-", 500000),
+        ("Rs.1,500", 1500),
+        ("Cover 10 lakh", 1000000),
+    ):
+        assert locate(value, "amount", [stored_line(printed)]), printed
+
+
+def test_a_date_token_is_bounded_by_non_digits():
+    assert not locate(date(2025, 2, 18), "date", [stored_line("9918/02/2025")])
+    assert not locate(date(2025, 2, 18), "date", [stored_line("18/02/20255")])
+    assert locate(date(2025, 2, 18), "date", [stored_line("(18/02/2025)")])
+
+
+def test_an_identifier_matches_whole_runs_of_letters_and_digits():
+    assert locate("P12345", "identifier", [stored_line("Policy No: P-123/45")])
+    assert not locate("12345", "identifier", [stored_line("Phone 9812345000")])
+    assert not locate("12345", "identifier", [stored_line("Ref ABC12345")])
+    assert locate("12345", "identifier", [stored_line("No. 12345")])
+    assert locate("ABC123", "identifier", [stored_line("ABC123")])
+    assert not locate("490154203237518", "identifier", [stored_line("Z1XXXXXXXXXXX7518")])

@@ -155,3 +155,8 @@ def test_every_option_is_accepted_by_apply_part(household):
             if o.value == "custom":
                 continue
             apply_part(q, p.slot, o.value, TODAY)
+
+
+def test_a_custom_range_with_both_ends_empty_clears_the_date_filter(household):
+    q = list_query(role="expiry", range=DateRange(end=date(2027, 2, 28)))
+    assert apply_part(q, "when", {"start": None, "end": None}, TODAY).range is None

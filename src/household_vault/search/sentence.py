@@ -154,7 +154,8 @@ def _iso(value: object) -> date | None:
 
 def _span(value: JsonValue, today: date) -> DateRange | None:
     if isinstance(value, dict):
-        return DateRange(start=_iso(value.get("start")), end=_iso(value.get("end")))
+        start, end = _iso(value.get("start")), _iso(value.get("end"))
+        return None if start is None and end is None else DateRange(start=start, end=end)
     if value == "any":
         return None
     if isinstance(value, str) and value in _PRESETS:

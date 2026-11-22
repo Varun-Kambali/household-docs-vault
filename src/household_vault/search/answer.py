@@ -119,19 +119,47 @@ def _as_amount(value: object) -> Decimal | None:
 
 _MONTH_WORD = r"[A-Za-z]{3,9}"
 _DATE_TOKENS = re.compile(
+    r"(?<!\d)(?:"
     r"\d{4}-\d{2}-\d{2}"
     r"|\d{1,2}[/.\-]\d{1,2}[/.\-]\d{2,4}"
     rf"|\d{{1,2}}(?:st|nd|rd|th)?[ \-]{_MONTH_WORD}[ \-,]+\d{{4}}"
     rf"|{_MONTH_WORD} \d{{1,2}}(?:st|nd|rd|th)?, \d{{4}}"
+    r")(?!\d)"
 )
+# A whole number token: not joined to a letter, digit, "/", "-" or a date's dot on either side
+# ("/-" after the number is the rupee form).
 _AMOUNT_TOKENS = re.compile(
-    r"\d[\d,]*(?:\.\d+)?(?:\s*(?:lakhs?|lacs?|crores?|cr)\b)?", re.IGNORECASE
+    r"(?<![\w/\-,])(?<!\d\.)"
+    r"\d+(?:,\d+)*(?:\.\d+)?"
+    r"(?:\s*(?:lakhs?|lacs?|crores?|cr)(?!\w))?"
+    r"(?!\w)(?![/.\-]\d)(?!/(?!-))",
+    re.IGNORECASE,
 )
-_MASK_CHARS = str.maketrans({"*": "x", "•": "x", "●": "x"})
+_MASK_CHARS = str.maketrans({"*": "x", "\u2022": "x", "\u25cf": "x"})
+
+
+def _alnum_runs(text: str) -> tuple[str, list[bool], list[bool]]:
+    """The letters and digits of a line, case-folded (mask marks read as x), with, for each,
+    whether it starts a run (nothing alphanumeric right before it) and whether it ends one."""
+    chars: list[str] = []
+    starts: list[bool] = []
+    ends: list[bool] = []
+    after_gap = True
+    for raw in text.translate(_MASK_CHARS).casefold():
+        if raw.isascii() and raw.isalnum():
+            if ends:
+                ends[-1] = after_gap
+            chars.append(raw)
+            starts.append(after_gap)
+            ends.append(True)
+            after_gap = False
+        else:
+            after_gap = True
+    return "".join(chars), starts, ends
 
 
 def _alnum(text: str) -> str:
-    return re.sub(r"[^0-9a-z]", "", text.translate(_MASK_CHARS).casefold())
+    return _alnum_runs(text)[0]
 
 
 def _prints_date(want: date, text: str) -> bool:
@@ -139,32 +167,34 @@ def _prints_date(want: date, text: str) -> bool:
 
 
 def _prints_amount(want: Decimal, text: str) -> bool:
+    text = _DATE_TOKENS.sub(" ", text)  # a piece of a date is not an amount
     for m in _AMOUNT_TOKENS.finditer(text):
-        token = m.group(0).rstrip(" ,.")
-        if (got := _as_amount(token)) is not None and got == want:
+        if (got := _as_amount(m.group(0).strip())) is not None and got == want:
             return True
     return False
 
 
 def _prints_identifier(want: str, text: str) -> bool:
-    """Letters and digits only, case-folded. A masked line (Xs in front of the end of the
-    number) also matches when its length and last four agree and every other position is a
-    mask or the right character."""
-    target, line = _alnum(want), _alnum(text)
+    """Letters and digits only, case-folded, over a span that starts and ends where a run of
+    letters and digits does (so 12345 is not inside 9812345000). A masked line (Xs in front of
+    the end of the number) also matches on the same boundaries when its length and last four
+    agree and every other position is a mask or the right character."""
+    target = _alnum(want)
+    line, starts, ends = _alnum_runs(text)
     if not target:
-        return False
-    if target in line:
-        return True
-    if len(target) <= 4:
         return False
     size = len(target)
     for end in range(size, len(line) + 1):
-        window = line[end - size : end]
-        if window[-4:] != target[-4:]:
+        first = end - size
+        if not (starts[first] and ends[end - 1]):
             continue
-        head = zip(window[:-4], target[:-4], strict=True)
-        if all(a == "x" or a == b for a, b in head) and window[:-4].count("x") >= 2:
+        window = line[first:end]
+        if window == target:
             return True
+        if size > 4 and window[-4:] == target[-4:]:
+            head = zip(window[:-4], target[:-4], strict=True)
+            if all(a == "x" or a == b for a, b in head) and window[:-4].count("x") >= 2:
+                return True
     return False
 
 
@@ -320,8 +350,11 @@ def _supporting(
     doc: DocumentRow, name: str, kind: FieldKind, lines: list[StoredLine]
 ) -> list[LineRef]:
     if name == "warranty_parts" and doc.doc_type is DocType.warranty_card:
-        # A part's cover starts at the purchase date, so that line supports it too.
+        # A part has to be on the page; the purchase date line (where its cover starts) is
+        # cited with it but never supports the answer on its own.
         refs = locate(doc.fields[name], "list", lines)
+        if not refs:
+            return []
         refs += locate(doc.fields.get("purchase_date"), "date", lines)
         return sorted(set(refs), key=lambda r: (r.page, r.idx))
     return locate(doc.fields[name], kind, lines)
