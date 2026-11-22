@@ -18,6 +18,11 @@ from household_vault.filing.filer import Filer
 from household_vault.leakscan import install_log_redaction
 from household_vault.people import Household, load_household
 from household_vault.reading.engines import Engines, make_engines
+from household_vault.reading.ollama import OllamaClient
+from household_vault.reveal import MacRevealer, Revealer
+from household_vault.search.index import KeywordIndex
+from household_vault.search.query import OllamaPromptReader, PromptReader
+from household_vault.search.retrieve import Searcher
 from household_vault.search.vectors import Embedder, VectorIndex, embedder_for
 from household_vault.secrets.cards import CardIntake
 from household_vault.secrets.gate import SecretsGate
@@ -55,6 +60,9 @@ class AppState:
     worker: Worker
     actions: Actions
     vectors: VectorIndex
+    searcher: Searcher
+    prompt_reader: PromptReader | None  # None: no model reads prompts (the reading is off)
+    revealer: Revealer
 
 
 def build_app_state(
@@ -62,11 +70,14 @@ def build_app_state(
     *,
     engines: Engines | None = None,
     embedder: Embedder | None = None,
+    prompt_reader: PromptReader | None = None,
+    revealer: Revealer | None = None,
     clock: Callable[[], datetime] | None = None,
 ) -> AppState:
     """Make the folders, open and migrate the database, load the household file and wire the
     parts. There is one secrets gate, shared by the actions and the card intake. Passing
-    `engines` means no real models run, so the embedder is then only the one passed."""
+    `engines` means no real models run, so the embedder and the prompt reader are then only the
+    ones passed."""
     install_log_redaction()  # before anything can log
     now = clock or _now
     vault = VaultRoot.from_settings(settings)
@@ -85,7 +96,12 @@ def build_app_state(
     chosen = engines or make_engines(settings)
     if embedder is None and engines is None:
         embedder = embedder_for(settings)
+    if prompt_reader is None and engines is None and settings.reader == "mac":
+        prompt_reader = OllamaPromptReader(
+            OllamaClient(settings.ollama_url, timeout_s=60.0), settings.query_model
+        )
     vectors = VectorIndex(store, embedder)
+    searcher = Searcher(store, KeywordIndex(store), vectors)
     activity = Activity(store, vault, now)
     filer = Filer(vault, store, activity, household, now)
     gate = SecretsGate(vault, lambda: now().timestamp())
@@ -106,4 +122,7 @@ def build_app_state(
         worker,
         actions,
         vectors,
+        searcher,
+        prompt_reader,
+        revealer or MacRevealer(),
     )
