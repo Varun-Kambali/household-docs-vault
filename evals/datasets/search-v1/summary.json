@@ -19,18 +19,18 @@
       "none": 20
     },
     "by_style": {
-      "typo": 53,
-      "terse": 71,
-      "question": 80,
-      "synonym": 6
+      "typo": 49,
+      "terse": 68,
+      "question": 84,
+      "synonym": 9
     },
     "by_origin": {
-      "extra": 139,
-      "eval-v1": 71
+      "extra": 145,
+      "eval-v1": 65
     },
     "by_kind_and_origin": {
-      "lookup/extra": 62,
-      "lookup/eval-v1": 38,
+      "lookup/extra": 68,
+      "lookup/eval-v1": 32,
       "find/extra": 36,
       "find/eval-v1": 14,
       "list/eval-v1": 19,
@@ -58,18 +58,18 @@
       "none": 20
     },
     "by_style": {
-      "question": 81,
-      "terse": 63,
-      "typo": 48,
-      "synonym": 18
+      "question": 94,
+      "terse": 60,
+      "typo": 40,
+      "synonym": 16
     },
     "by_origin": {
-      "eval-v1": 73,
-      "extra": 137
+      "eval-v1": 67,
+      "extra": 143
     },
     "by_kind_and_origin": {
-      "lookup/eval-v1": 37,
-      "lookup/extra": 63,
+      "lookup/eval-v1": 31,
+      "lookup/extra": 69,
       "find/extra": 40,
       "find/eval-v1": 10,
       "list/eval-v1": 26,

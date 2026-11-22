@@ -20,10 +20,11 @@ from evals.search_set import (
     fits_something,
     load_questions,
     search_vault_docs,
-    status_source,
+    status_of,
     truth_value,
     write_set,
 )
+from household_vault.doctypes import DocType
 from household_vault.leakscan import scan_text
 from household_vault.people import load_household
 
@@ -110,12 +111,13 @@ def test_every_truth_box_holds_the_printed_value(
             continue
         doc = vault_docs[q.targets[0]]
         assert q.page is not None and q.box is not None, q.id
-        name = status_source(doc.doc_type, q.field or "") or q.field
+        name = q.field
         assert name is not None
         idx = doc.field_lines[name]
         line = doc.lines[idx[0]]
         assert (line.page, line.bbox) == (q.page, q.box), q.id
-        assert doc.printed[name] in line.text, q.id
+        if name in doc.printed and not isinstance(q.value, list):
+            assert doc.printed[name] in line.text, q.id
         checked += 1
     assert checked > 80
 
@@ -193,3 +195,97 @@ def test_the_summary_counts_the_documents_left_out(tmp_path: Path) -> None:
         )
         assert sums[s]["by_kind"]
     assert date(2026, 11, 20) == EVAL_TODAY
+
+
+def _label_phrases(doc_type: DocType) -> list[str]:
+    from household_vault.search.vocab import TYPE_LABELS
+
+    words = [TYPE_LABELS[doc_type].lower()]
+    if doc_type is DocType.tax_invoice:
+        words += ["invoice", "bill"]
+    return words
+
+
+def test_lookup_and_find_targets_are_everything_the_prompt_words_fit(
+    search_set: list[Question], vault_docs: dict[str, SynthDoc]
+) -> None:
+    """Recompute the fitting set from the words of the prompt, not from the generator: the type
+    noun (every type whose label holds the longest matching label phrase), the person's first
+    name, and the place, brand or product of the first target when the prompt says them."""
+    from evals.search_set import _brand_of, _has_phrase, _product_of, short_place
+    from household_vault.search.vocab import PLACE_FIELDS, TYPE_LABELS
+
+    household = load_household(EVAL_V1 / "household.json")
+    checked = 0
+    for q in search_set:
+        if q.kind not in ("lookup", "find") or q.style not in ("question", "terse"):
+            continue
+        text = q.prompt.lower()
+        first = vault_docs[q.targets[0]]
+        phrases = [p for t in vault_docs.values() for p in _label_phrases(t.doc_type)]
+        said = [p for p in set(phrases) if _has_phrase(text, p)]
+        longest = max(said, key=len)
+        types = {
+            t
+            for t in DocType
+            if t in TYPE_LABELS and any(_has_phrase(p, longest) for p in _label_phrases(t))
+        }
+        people = [p.id for p in household.people if p.name.split()[0].lower() in text]
+        place = next(
+            (
+                short_place(v)
+                for f in PLACE_FIELDS[first.doc_type]
+                if isinstance(v := first.fields.get(f), str) and short_place(v).lower() in text
+            ),
+            None,
+        )
+        brand = next((b for b in [_brand_of(first)] if b and b.lower() in text), None)
+        product = next((p for p in [_product_of(first)] if p and p in text), None)
+        fitting = []
+        for d in vault_docs.values():
+            if d.expected_ask or d.doc_type not in types:
+                continue
+            if people and not (d.owner in people or any(p in people for p in d.linked_people)):
+                continue
+            if place and not any(
+                _has_phrase(str(d.fields.get(f) or ""), place) for f in PLACE_FIELDS[d.doc_type]
+            ):
+                continue
+            if brand and not _has_phrase(
+                f"{_brand_of(d) or ''} {d.fields.get('product') or ''}", brand
+            ):
+                continue
+            if product and product not in str(d.fields.get("product") or "").lower().replace(
+                "-", " "
+            ):
+                continue
+            fitting.append(d.doc_id)
+        assert sorted(fitting) == sorted(q.targets), (q.id, q.prompt)
+        checked += 1
+    assert checked > 100
+
+
+def test_status_questions_name_the_real_field_and_carry_a_status(
+    search_set: list[Question], vault_docs: dict[str, SynthDoc]
+) -> None:
+    from household_vault.search.vocab import DATE_ROLES
+
+    seen = set()
+    for q in search_set:
+        if q.kind != "lookup":
+            assert q.status is None, q.id
+            continue
+        doc = vault_docs[q.targets[0]]
+        assert q.field is not None and not q.field.startswith("status.")
+        assert q.value == doc.fields[q.field]
+        if q.status is None:
+            continue
+        if q.field == "warranty_parts":
+            assert set(q.status) == {p["part"] for p in doc.fields["warranty_parts"]}  # type: ignore[index, union-attr]
+            seen.add("warranty")
+        else:
+            assert q.field == DATE_ROLES[doc.doc_type]["expiry"] and set(q.status) == {"valid"}
+            seen.add("valid")
+        for t in q.targets:
+            assert status_of(vault_docs[t], q.field) == q.status
+    assert seen == {"warranty", "valid"}

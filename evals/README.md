@@ -43,10 +43,14 @@ targets it and no list expects it. `summary.json` counts them as `documents_left
 
 **Question kinds** (about 210 a split, in `val.jsonl` and `test.jsonl`):
 
-- **lookup** (100): one value of one document: an identifier, a date, an amount, who issued it,
-  or a yes or no (`status.valid` from the expiry date, `status.warranty` from the purchase date
-  and the product cover), all worked out at `EVAL_TODAY` (20 Nov 2026). `field` and `value` are
-  the truth; `page` and `box` are the truth line that prints the value.
+- **lookup** (100): one value of one document: an identifier, a date, an amount or who issued
+  it. `field` is always a stored field and `value` its stored value; `page` and `box` are the
+  truth line that prints it. A "still valid" or "still under warranty" question names the real
+  field the status comes from and adds `status`: for a validity question `field` is the type's
+  expiry-role field and `status` is `{"valid": true or false}`; for a warranty question `field`
+  is `warranty_parts` and `status` maps each part's name to whether its cover (purchase date
+  plus its years) still holds. Both are worked out at `EVAL_TODAY` (20 Nov 2026); `status` is
+  null on every other question.
 - **find** (50): names a document ("Kavita's PAN card"); one target.
 - **list** (40): templates over people, areas, types, date roles, places and date phrases.
   `query` is what `resolve` returns for a perfect reading at `EVAL_TODAY`; `expected` is
@@ -55,8 +59,10 @@ targets it and no list expects it. `summary.json` counts them as `documents_left
   the type's place field).
 - **none** (20): a type, a product or a person the vault does not hold.
 
-`targets` is every filed document that fits the question's constraints. The generator adds a
-constraint (person, place, brand, product) until every target holds the same `value`, and drops
+`targets` is every filed document that fits the words the prompt uses: the type noun counts for
+every type whose label holds it ("card" is also a card statement, an Aadhaar card and a warranty
+card; "certificate" is a dozen types), plus the person, place, brand and product it names. The
+generator adds a constraint until every target holds the same `value` (and `status`), and drops
 the question when it cannot.
 
 **Styles:** `question` (a full sentence), `terse` (a few words), `typo` (one wrong letter in a

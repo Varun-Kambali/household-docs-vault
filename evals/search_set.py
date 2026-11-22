@@ -22,6 +22,7 @@ from collections import Counter
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from datetime import date
+from functools import cache
 from pathlib import Path
 from typing import Literal
 
@@ -58,7 +59,7 @@ Box = tuple[float, float, float, float]
 N_LOOKUP, N_FIND, N_LIST, N_NONE = 100, 50, 40, 20
 MAX_LIST_MEMBERS = 40
 
-# Fields whose value is a yes or no worked out from a date and EVAL_TODAY.
+# Internal ask keys for the two status wordings; the question's `field` is the real field.
 STATUS_VALID = "status.valid"
 STATUS_WARRANTY = "status.warranty"
 STATUS_TYPES = frozenset(
@@ -90,6 +91,7 @@ class Question(BaseModel):
     targets: list[str]
     field: str | None = None
     value: JsonValue = None
+    status: dict[str, bool] | None = None
     page: int | None = None
     box: Box | None = None
     query: Query | None = None
@@ -129,46 +131,40 @@ def _as_date(value: JsonValue) -> date | None:
     return None
 
 
-def status_source(doc_type: DocType, field_name: str) -> str | None:
-    """The date field a status question reads."""
-    if field_name == STATUS_VALID:
-        return DATE_ROLES[doc_type].get("expiry")
-    if field_name == STATUS_WARRANTY:
-        return "purchase_date"
+def _holds(start: date, years: int, today: date) -> bool:
+    return plus_year(start, years) >= today
+
+
+def status_of(
+    doc: SynthDoc, field_name: str | None, today: date = EVAL_TODAY
+) -> dict[str, bool] | None:
+    """For an expiry field, `{"valid": ...}`; for `warranty_parts`, each part's name to whether
+    its cover (purchase date plus its years) still holds at `today`; None for any other field."""
+    if field_name is None:
+        return None
+    expiry = DATE_ROLES[doc.doc_type].get("expiry")
+    if field_name == expiry and doc.doc_type in STATUS_TYPES:
+        end = _as_date(doc.fields.get(field_name))
+        return None if end is None else {"valid": end >= today}
+    if field_name == "warranty_parts" and doc.doc_type is DocType.warranty_card:
+        start = _as_date(doc.fields.get("purchase_date"))
+        parts = doc.fields.get("warranty_parts")
+        if start is None or not isinstance(parts, list):
+            return None
+        out: dict[str, bool] = {}
+        for part in parts:
+            if isinstance(part, dict) and isinstance(part.get("part"), str):
+                try:
+                    out[str(part["part"])] = _holds(start, int(str(part.get("years"))), today)
+                except ValueError:
+                    return None
+        return out or None
     return None
 
 
-def _warranty_end(doc: SynthDoc) -> date | None:
-    start = _as_date(doc.fields.get("purchase_date"))
-    parts = doc.fields.get("warranty_parts")
-    if start is None or not isinstance(parts, list):
-        return None
-    years: dict[str, int] = {}
-    for part in parts:
-        name = part.get("part") if isinstance(part, dict) else None
-        if isinstance(part, dict) and isinstance(name, str):
-            try:
-                years[name.lower()] = int(str(part.get("years")))
-            except ValueError:
-                continue
-    if not years:
-        return None
-    # the cover on the product itself; when no part is called that, the longest cover
-    return plus_year(start, years.get("product", max(years.values())))
-
-
-def truth_value(doc: SynthDoc, field_name: str | None, today: date = EVAL_TODAY) -> JsonValue:
-    """The truth the question asks for: a stored field, or a status worked out at `today`."""
-    if field_name is None:
-        return None
-    if field_name == STATUS_VALID:
-        source = status_source(doc.doc_type, field_name)
-        end = _as_date(doc.fields.get(source)) if source else None
-        return None if end is None else end >= today
-    if field_name == STATUS_WARRANTY:
-        end = _warranty_end(doc)
-        return None if end is None else end >= today
-    return doc.fields.get(field_name)
+def truth_value(doc: SynthDoc, field_name: str | None) -> JsonValue:
+    """The stored value of a field (None when the page prints none)."""
+    return None if field_name is None else doc.fields.get(field_name)
 
 
 def _has_phrase(text: str, phrase: str) -> bool:
@@ -246,7 +242,6 @@ PRODUCT_NOUNS = (
     "microwave oven",
 )
 _BRANDS = frozenset({"lg", "samsung", "sony", "voltas", "whirlpool"})
-NOUN_OVERRIDE = {DocType.tax_invoice: "invoice"}
 
 # Words a person types for the same thing; the fixed table of the synonym style.
 SYNONYMS: tuple[tuple[str, str], ...] = (
@@ -406,13 +401,31 @@ def _normal_text(text: str) -> str:
 
 @dataclass(frozen=True)
 class Cons:
-    """What picks a document out: its type and optional person, place, brand and product."""
+    """What picks a document out: the type noun a prompt says (every type whose label holds it)
+    and optional person, place, brand and product."""
 
-    doc_type: DocType
+    noun: str
     person: str | None = None
     place: str | None = None
     brand: str | None = None
     product: str | None = None
+
+
+def noun_for(doc_type: DocType, rng: random.Random | None = None) -> str:
+    """The noun a prompt uses for a type: its label, or invoice or bill for a purchase invoice."""
+    if doc_type is DocType.tax_invoice:
+        return "bill" if rng is not None and rng.random() < 0.3 else "invoice"
+    return TYPE_LABELS[doc_type]
+
+
+@cache
+def types_for(noun: str) -> frozenset[DocType]:
+    """Every type a noun can mean: those whose label holds it as a phrase ("card" is also a card
+    statement, an Aadhaar card, a warranty card), and a purchase invoice for invoice or bill."""
+    found = {t for t, label in TYPE_LABELS.items() if _has_phrase(label, noun)}
+    if noun in ("invoice", "bill"):
+        found.add(DocType.tax_invoice)
+    return frozenset(found)
 
 
 def _brand_of(doc: SynthDoc) -> str | None:
@@ -434,7 +447,7 @@ def _product_of(doc: SynthDoc) -> str | None:
 
 
 def fits(doc: SynthDoc, cons: Cons) -> bool:
-    if not is_filed(doc) or doc.doc_type != cons.doc_type:
+    if not is_filed(doc) or doc.doc_type not in types_for(cons.noun):
         return False
     if cons.person is not None and not _in_people(doc, [cons.person]):
         return False
@@ -451,12 +464,9 @@ def fits(doc: SynthDoc, cons: Cons) -> bool:
     return True
 
 
-def _subject(cons: Cons, household: Household, rng: random.Random) -> tuple[str, str, set[str]]:
+def _subject(cons: Cons, household: Household) -> tuple[str, str, set[str]]:
     """(subject with possessive or 'the', subject without, tokens a typo must not touch)."""
-    noun = NOUN_OVERRIDE.get(cons.doc_type, TYPE_LABELS[cons.doc_type])
-    if cons.doc_type is DocType.tax_invoice and rng.random() < 0.3:
-        noun = "bill"
-    words = [w for w in (cons.place, cons.brand, cons.product, noun) if w]
+    words = [w for w in (cons.place, cons.brand, cons.product, cons.noun) if w]
     body = " ".join(words)
     protect = {t.casefold() for w in (cons.place, cons.brand) if w for t in w.split()}
     if cons.person is None:
@@ -517,11 +527,11 @@ def render(full: str, terse: str, protect: set[str], rng: random.Random) -> tupl
 # --- lookup and find -------------------------------------------------------------------------
 
 
-def _optional(doc: SynthDoc, asked: str | None) -> dict[str, Cons]:
+def _optional(doc: SynthDoc, noun: str, asked: str | None) -> dict[str, Cons]:
     """The constraints a document can offer beyond its type, left out where the asked field
     itself would give the answer away."""
     out: dict[str, Cons] = {}
-    t = doc.doc_type
+    t = noun
     person = _constraint_person(doc)
     if person is not None:
         out["person"] = Cons(t, person=person)
@@ -543,17 +553,22 @@ def _constraint_person(doc: SynthDoc) -> str | None:
     return doc.linked_people[0] if doc.linked_people else None
 
 
-def _merge(doc_type: DocType, parts: Iterable[Cons]) -> Cons:
-    merged = Cons(doc_type)
+def _merge(noun: str, parts: Iterable[Cons]) -> Cons:
+    merged = Cons(noun)
     for p in parts:
         merged = Cons(
-            doc_type,
+            noun,
             person=p.person or merged.person,
             place=p.place or merged.place,
             brand=p.brand or merged.brand,
             product=p.product or merged.product,
         )
     return merged
+
+
+def _answer(doc: SynthDoc, field_name: str) -> str:
+    """The value and status a question reads, as text to compare across documents."""
+    return json.dumps([truth_value(doc, field_name), status_of(doc, field_name)])
 
 
 def _size(cons: Cons) -> int:
@@ -563,25 +578,25 @@ def _size(cons: Cons) -> int:
 def _targets_for(
     doc: SynthDoc,
     docs: Sequence[SynthDoc],
+    noun: str,
     asked: str | None,
     rng: random.Random,
 ) -> tuple[Cons, list[SynthDoc]] | None:
     """The smallest constraints that leave every fitting document with the same answer (a find:
     only the document itself), mostly the smallest, sometimes one more for variety."""
-    options = _optional(doc, asked)
+    options = _optional(doc, noun, asked)
     names = sorted(options)
     valid: list[tuple[Cons, list[SynthDoc]]] = []
     for size in range(len(names) + 1):
         for combo in itertools.combinations(names, size):
-            cons = _merge(doc.doc_type, (options[n] for n in combo))
+            cons = _merge(noun, (options[n] for n in combo))
             found = [d for d in docs if fits(d, cons)]
             if doc not in found:
                 continue
-            if asked is None:
-                ok = len(found) == 1
-            else:
-                ok = len({json.dumps(truth_value(d, asked)) for d in found}) == 1
-            if ok:
+            same = (
+                len(found) == 1 if asked is None else len({_answer(d, asked) for d in found}) == 1
+            )
+            if same:
                 valid.append((cons, found))
     if not valid:
         return None
@@ -602,17 +617,27 @@ def _askable_fields(doc: SynthDoc) -> list[str]:
         and (doc.doc_type, f) not in SECRET
         and f in doc.field_lines
     ]
-    if doc.doc_type in STATUS_TYPES and truth_value(doc, STATUS_VALID) is not None:
-        names.append(STATUS_VALID)
-    if doc.doc_type is DocType.warranty_card and truth_value(doc, STATUS_WARRANTY) is not None:
-        names.append(STATUS_WARRANTY)
+    for key in (STATUS_VALID, STATUS_WARRANTY):
+        if status_of(doc, _real_field(doc, key)) is not None:
+            names.append(key)
     return names
 
 
+def _real_field(doc: SynthDoc, key: str) -> str:
+    """The stored field an ask key reads: itself, or the field a status wording comes from."""
+    if key == STATUS_VALID:
+        return DATE_ROLES[doc.doc_type].get("expiry", "")
+    if key == STATUS_WARRANTY:
+        return "warranty_parts"
+    return key
+
+
 def _where(doc: SynthDoc, field_name: str) -> tuple[int | None, Box | None]:
-    """The page and box of the truth line that prints the value (for a status, the date line)."""
-    source = status_source(doc.doc_type, field_name) or field_name
-    idx = doc.field_lines.get(source)
+    """The page and box of the truth line that prints the value (a warranty with no line of its
+    own is read at its purchase date)."""
+    idx = doc.field_lines.get(field_name) or (
+        doc.field_lines.get("purchase_date") if field_name == "warranty_parts" else None
+    )
     if not idx:
         return None, None
     line = doc.lines[idx[0]]
@@ -640,21 +665,24 @@ def _document_question(
     rng: random.Random,
 ) -> Question | None:
     asked: str | None = None
+    real: str | None = None
     if kind == "lookup":
         names = _askable_fields(doc)
         if not names:
             return None
         statuses = [f for f in names if f.startswith("status.")]
-        asked = rng.choice(statuses) if statuses and rng.random() < 0.25 else rng.choice(names)
-    got = _targets_for(doc, docs, asked, rng)
+        asked = rng.choice(statuses) if statuses and rng.random() < 0.5 else rng.choice(names)
+        real = _real_field(doc, asked)
+    noun = noun_for(doc.doc_type, rng)
+    got = _targets_for(doc, docs, noun, real, rng)
     if got is None:
         return None
     cons, found = got
-    s, sn, protect = _subject(cons, household, rng)
+    s, sn, protect = _subject(cons, household)
     if asked in PLACE_LIKE and asked and asked in s.casefold():
         return None  # "the hospital on the hospital bill" reads oddly
     if asked is None:
-        full, terse = f"Where is {s}?", sn
+        terse = sn
         full = rng.choice((f"Find {s}", f"Where is {s}?", f"Show me {s}"))
     else:
         full_t, terse_t = _ask_text(asked)
@@ -662,9 +690,11 @@ def _document_question(
     prompt, style = render(full, terse, protect, rng)
     page = box = None
     value: JsonValue = None
-    if asked is not None:
-        value = truth_value(found[0], asked)
-        page, box = _where(found[0], asked)
+    status = None
+    if real is not None:
+        value = truth_value(found[0], real)
+        status = status_of(found[0], real)
+        page, box = _where(found[0], real)
     return Question(
         id=f"{split}-{kind}-{n:03d}",
         split=split,
@@ -673,8 +703,9 @@ def _document_question(
         style=style,
         prompt=prompt,
         targets=[d.doc_id for d in found],
-        field=asked,
+        field=real,
         value=value,
+        status=status,
         page=page,
         box=box,
     )
@@ -985,9 +1016,11 @@ def _none_questions(
                 [],
             )
     for who, dt in itertools.product(names, PLURAL):
-        cons = Cons(dt, person=next(p.id for p in household.people if _first(p.name) == who))
+        cons = Cons(
+            noun_for(dt), person=next(p.id for p in household.people if _first(p.name) == who)
+        )
         if not any(fits(d, cons) for d in docs):
-            s, sn, protect = _subject(cons, household, rng)
+            s, sn, protect = _subject(cons, household)
             add(_reading(people=[who], types=[dt], intent="find"), f"Find {s}", sn, protect)
     for product, dt in itertools.product(NOT_HELD_PRODUCTS, _PRODUCT_HOMES):
         noun = "invoice" if dt is DocType.tax_invoice else TYPE_LABELS[dt]
