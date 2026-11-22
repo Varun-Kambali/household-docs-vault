@@ -620,3 +620,62 @@ def vectors_vault(make_world: Callable[..., World]) -> FiledVault:
     from tests.fakes import FakeEmbedder
 
     return FiledVault(make_world(embedder=FakeEmbedder()))
+
+
+# -- search (Tasks 28 to 31) ----------------------------------------------------------------------
+
+# search-v1 val documents (the eval-v1 photos), filed through the real filer. Between them: a Croma
+# invoice and a warranty card for one LG refrigerator, a second Croma invoice, a health policy
+# owned by p1 and linked to p2 (Kavita), another owned by p4, policies expiring both inside and
+# beyond mid 2027, and invoices and warranty cards that carry no expiry field at all.
+SEARCH_DOCS = (
+    "tax_invoice-1-photo",
+    "tax_invoice-6-photo",
+    "warranty_card-1-photo",
+    "warranty_card-6-photo",
+    "extended_warranty-1-photo",
+    "health_policy-1-photo",
+    "health_policy-6-photo",
+    "life_policy-1-photo",
+    "vehicle_policy-1-photo",
+    "vehicle_policy-6-photo",
+)
+
+
+@dataclass
+class SearchWorld:
+    store: Store
+    vectors: Any
+    truth: dict[str, SynthDoc]  # filed document id to its truth record
+
+
+@pytest.fixture
+def search_world(make_world: Callable[..., World]) -> SearchWorld:
+    from tests.fakes import FakeEmbedder
+
+    world = make_world(embedder=FakeEmbedder())
+    filed = FiledVault(world)
+    by_id = {d.doc_id: d for d in _eval_docs()}
+    truth = {filed.file(doc_id).id: by_id[doc_id] for doc_id in SEARCH_DOCS}
+    return SearchWorld(world.store, world.vectors, truth)
+
+
+@pytest.fixture
+def search_store(search_world: SearchWorld) -> Store:
+    """A store with the SEARCH_DOCS filed, keyword-indexed and vectorised by `FakeEmbedder`."""
+    return search_world.store
+
+
+@pytest.fixture
+def searcher(search_world: SearchWorld) -> Any:
+    from household_vault.search.index import KeywordIndex
+    from household_vault.search.retrieve import Searcher
+
+    return Searcher(search_world.store, KeywordIndex(search_world.store), search_world.vectors)
+
+
+@pytest.fixture
+def invoice_number(search_world: SearchWorld) -> str:
+    """The invoice number printed on the LG refrigerator invoice."""
+    doc = next(d for d in search_world.truth.values() if d.doc_id == "tax_invoice-1-photo")
+    return str(doc.fields["invoice_number"])
