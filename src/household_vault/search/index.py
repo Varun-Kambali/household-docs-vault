@@ -6,6 +6,7 @@ lines masked (an IMEI, a policy number) findable.
 """
 
 import re
+from collections.abc import Collection
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal, InvalidOperation
@@ -106,14 +107,28 @@ class KeywordIndex:
                 self.add(doc_id)
             return len(ids)
 
-    def search(self, text: str, limit: int = 50, prefix_last: bool = True) -> list[KeywordHit]:
+    def search(
+        self,
+        text: str,
+        limit: int = 50,
+        prefix_last: bool = True,
+        only: Collection[str] | None = None,
+    ) -> list[KeywordHit]:
+        """Matches best first. `only` limits them to those document ids (None means all)."""
         query = _match_query(text, prefix_last)
-        if query is None:
+        if query is None or (only is not None and not only):
             return []
+        sql = (
+            "select document_id, page, idx, kind, field, bm25(search_text) as rank"
+            " from search_text where search_text match ?"
+        )
+        args: list[object] = [query]
+        if only is not None:
+            ids = list(only)
+            sql += f" and document_id in ({','.join('?' * len(ids))})"
+            args += ids
         with self.store.lock:
             rows = self.store.conn.execute(
-                "select document_id, page, idx, kind, field, bm25(search_text) as rank"
-                " from search_text where search_text match ? order by rank limit ?",
-                (query, limit),
+                sql + " order by rank limit ?", (*args, limit)
             ).fetchall()
         return [KeywordHit(r[0], r[1], r[2], r[3], r[4], -float(r[5])) for r in rows]
