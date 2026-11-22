@@ -1,0 +1,354 @@
+{
+  "doc_id": "search-x1-warranty_card-5-clean",
+  "base_id": "search-x1-warranty_card-5",
+  "doc_type": "warranty_card",
+  "person": "Suresh Rao",
+  "variant": "clean",
+  "files": [
+    "search-x1-warranty_card-5-clean.pdf"
+  ],
+  "fields": {
+    "brand": "Voltas",
+    "product": "Split Air Conditioner 1.5 Ton",
+    "model": null,
+    "serial_number": "978BVV092600",
+    "purchase_date": "2026-02-21",
+    "seller": "City Electronics Mart",
+    "seller_location": null,
+    "buyer": "Suresh Rao",
+    "warranty_parts": [
+      {
+        "part": "Compressor",
+        "years": "5"
+      },
+      {
+        "part": "PCB",
+        "years": "2"
+      },
+      {
+        "part": "Product",
+        "years": "1"
+      }
+    ]
+  },
+  "printed": {
+    "brand": "Voltas",
+    "product": "Split Air Conditioner 1.5 Ton",
+    "serial_number": "978BVV092600",
+    "purchase_date": "21/02/2026",
+    "seller": "City Electronics Mart",
+    "buyer": "Suresh Rao",
+    "warranty_parts": "Compressor - 5 years\nPCB - 2 years\nProduct - 1 year"
+  },
+  "lines": [
+    {
+      "text": "Voltas",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.030878859857482184,
+        0.21853781512605042,
+        0.07007125890736342
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty Card",
+      "page": 0,
+      "bbox": [
+        0.7579563025210083,
+        0.047505938242280284,
+        0.9327731092436975,
+        0.06840855106888362
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product details",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.14251781472684086,
+        0.21292100840336134,
+        0.15819477434679333
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.17577197149643706,
+        0.1193512605042017,
+        0.18752969121140142
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Split Air Conditioner 1.5 Ton",
+      "page": 0,
+      "bbox": [
+        0.31932773109243695,
+        0.17577197149643706,
+        0.5462521008403362,
+        0.18883610451306412
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Serial number",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.22802850356294538,
+        0.16137142857142858,
+        0.23978622327790974
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "978BVV092600",
+      "page": 0,
+      "bbox": [
+        0.31932773109243695,
+        0.22802850356294538,
+        0.43798319327731094,
+        0.24109263657957244
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Purchase details",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.29691211401425177,
+        0.22752268907563025,
+        0.31258907363420424
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date of purchase",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.33016627078384797,
+        0.18241176470588236,
+        0.34192399049881234
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "21/02/2026",
+      "page": 0,
+      "bbox": [
+        0.31932773109243695,
+        0.33016627078384797,
+        0.40342857142857147,
+        0.34323040380047504
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dealer",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.35629453681710216,
+        0.11177310924369747,
+        0.36805225653206647
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "City Electronics Mart",
+      "page": 0,
+      "bbox": [
+        0.31932773109243695,
+        0.35629453681710216,
+        0.4865042016806723,
+        0.3693586698337292
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Customer",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.4085510688836104,
+        0.13278319327731092,
+        0.4203087885985748
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Suresh Rao",
+      "page": 0,
+      "bbox": [
+        0.31932773109243695,
+        0.4085510688836104,
+        0.41272268907563026,
+        0.42161520190023755
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Warranty terms",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.4750593824228028,
+        0.2151596638655462,
+        0.49073634204275535
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Part and warranty period",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.505938242280285,
+        0.23284201680672267,
+        0.5176959619952494
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Compressor - 5 years",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.5296912114014252,
+        0.2390924369747899,
+        0.5427553444180523
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "PCB - 2 years",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.5558194774346793,
+        0.1755798319327731,
+        0.5688836104513064
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Product - 1 year",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.5819477434679335,
+        0.19425210084033614,
+        0.5950118764845606
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Warranty starts on the date of purchase shown on the original invoice.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.665083135391924,
+        0.5523344537815126,
+        0.6768408551068883
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Keep this card and the invoice. Service is refused without them.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.684085510688836,
+        0.5094521008403362,
+        0.6958432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Damage from misuse, power surges or unauthorised repair is not covered.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.7030878859857482,
+        0.5817092436974789,
+        0.7148456057007125
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4. Consumables and accessories carry no warranty.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.7220902612826603,
+        0.4152470588235294,
+        0.7338479809976247
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Authorised signature and seal",
+      "page": 0,
+      "bbox": [
+        0.7326705882352941,
+        0.9026128266033254,
+        0.9327731092436975,
+        0.9143705463182897
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "brand": [
+      0
+    ],
+    "product": [
+      4
+    ],
+    "serial_number": [
+      6
+    ],
+    "purchase_date": [
+      9
+    ],
+    "seller": [
+      11
+    ],
+    "buyer": [
+      13
+    ],
+    "warranty_parts": [
+      16,
+      17,
+      18
+    ]
+  },
+  "set_name": "search-x1",
+  "split": "test",
+  "owner": "home",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "purchases",
+  "folder": "Home/Purchases",
+  "expected_ask": []
+}

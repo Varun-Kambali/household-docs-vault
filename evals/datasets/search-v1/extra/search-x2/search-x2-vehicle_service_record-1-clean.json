@@ -1,0 +1,165 @@
+{
+  "doc_id": "search-x2-vehicle_service_record-1-clean",
+  "base_id": "search-x2-vehicle_service_record-1",
+  "doc_type": "vehicle_service_record",
+  "person": "RAVI KUMAR RAO",
+  "variant": "clean",
+  "files": [
+    "search-x2-vehicle_service_record-1-clean.pdf"
+  ],
+  "fields": {
+    "person_name": "RAVI KUMAR RAO",
+    "document_date": "2026-03-05",
+    "expiry_date": null,
+    "registration_number": "KA-82690210",
+    "odometer_km": null
+  },
+  "printed": {
+    "person_name": "RAVI KUMAR RAO",
+    "document_date": "05/03/2026",
+    "registration_number": "KA-82690210"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.10756806722689076,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "RAVI KUMAR RAO",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.4855126050420168,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.09917310924369749,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "05/03/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.4202352941176471,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Registration number",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.20340672268907564,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KA-82690210",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.4407563025210084,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Greenfield Motors Service Centre",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.46650420168067236,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Vehicle Service Invoice",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.2583310924369748,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.23990498812351543,
+        0.5212201680672268,
+        0.2516627078384798
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.25653206650831356,
+        0.5472672268907564,
+        0.2682897862232779
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "registration_number": [
+      5
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "val",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "vehicle",
+  "folder": "Ravi Kumar Rao/Vehicle",
+  "expected_ask": []
+}

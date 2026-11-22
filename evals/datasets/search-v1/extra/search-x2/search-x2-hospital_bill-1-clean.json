@@ -1,0 +1,198 @@
+{
+  "doc_id": "search-x2-hospital_bill-1-clean",
+  "base_id": "search-x2-hospital_bill-1",
+  "doc_type": "hospital_bill",
+  "person": "KAVITA RAO",
+  "variant": "clean",
+  "files": [
+    "search-x2-hospital_bill-1-clean.pdf"
+  ],
+  "fields": {
+    "patient": "KAVITA RAO",
+    "doctor": null,
+    "date": "2026-05-29",
+    "hospital": "Greenfield Polyclinic",
+    "department": null,
+    "diagnoses": null,
+    "procedures": null,
+    "allergies": null,
+    "medicines": null,
+    "tests": null,
+    "next_visit": null,
+    "amount": "96500"
+  },
+  "printed": {
+    "patient": "KAVITA RAO",
+    "date": "29/05/2026",
+    "hospital": "Greenfield Polyclinic",
+    "amount": "Rs. 96,500"
+  },
+  "lines": [
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.1143142857142857,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "KAVITA RAO",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.4407058823529412,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.09917310924369749,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "29/05/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.4202352941176471,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hospital",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.12186218487394959,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Greenfield Polyclinic",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.5024033613445378,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Total amount",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.15550252100840337,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 96,500",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.21852731591448932,
+        0.4183529411764706,
+        0.23159144893111638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Greenfield Polyclinic",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.31663025210084034,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Final Bill",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.13707226890756302,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2684085510688836,
+        0.5212201680672268,
+        0.280166270783848
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2850356294536817,
+        0.5472672268907564,
+        0.2967933491686461
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      1
+    ],
+    "date": [
+      3
+    ],
+    "hospital": [
+      5
+    ],
+    "amount": [
+      7
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "medical",
+  "folder": "Kavita Rao/Medical/Hospital stays",
+  "expected_ask": []
+}

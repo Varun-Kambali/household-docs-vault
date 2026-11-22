@@ -1,0 +1,191 @@
+{
+  "doc_id": "search-x2-relieving_letter-5-clean",
+  "base_id": "search-x2-relieving_letter-5",
+  "doc_type": "relieving_letter",
+  "person": "Ravi Rao",
+  "variant": "clean",
+  "files": [
+    "search-x2-relieving_letter-5-clean.pdf"
+  ],
+  "fields": {
+    "person_name": "Ravi Rao",
+    "document_date": "2025-11-21",
+    "expiry_date": null,
+    "employer": "Orchard Labs",
+    "designation": "Associate Manager"
+  },
+  "printed": {
+    "person_name": "Ravi Rao",
+    "document_date": "21/11/2025",
+    "employer": "Orchard Labs",
+    "designation": "Associate Manager"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.10756806722689076,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi Rao",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.4080504201680672,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.09917310924369749,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "21/11/2025",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.4202352941176471,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Employer",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.13110420168067227,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Orchard Labs",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.44541176470588234,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Designation",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.14709243697478994,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Associate Manager",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.21852731591448932,
+        0.4893109243697479,
+        0.23159144893111638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Orchard Labs",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.23114285714285715,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Relieving Letter",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.19565882352941177,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2684085510688836,
+        0.5212201680672268,
+        0.280166270783848
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2850356294536817,
+        0.5472672268907564,
+        0.2967933491686461
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "employer": [
+      5
+    ],
+    "designation": [
+      7
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "test",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "work",
+  "folder": "Ravi Kumar Rao/Work",
+  "expected_ask": []
+}

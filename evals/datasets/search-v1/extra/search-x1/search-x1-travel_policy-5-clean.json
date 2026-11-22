@@ -1,0 +1,332 @@
+{
+  "doc_id": "search-x1-travel_policy-5-clean",
+  "base_id": "search-x1-travel_policy-5",
+  "doc_type": "travel_policy",
+  "person": "Suresh Rao",
+  "variant": "clean",
+  "files": [
+    "search-x1-travel_policy-5-clean.pdf"
+  ],
+  "fields": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "product": null,
+    "policy_number": "PL/HS958966",
+    "policyholder": "Suresh Rao",
+    "insured": [
+      "Suresh Rao"
+    ],
+    "nominee": null,
+    "sum_insured": "2500000",
+    "premium": "14160",
+    "premium_frequency": null,
+    "start_date": "2026-09-10",
+    "end_date": "2027-09-09",
+    "premium_due_date": null,
+    "agent": null,
+    "claim_helpline": "1800 967 6056"
+  },
+  "printed": {
+    "insurer": "Western Ghats Life Assurance Limited",
+    "policy_number": "PL/HS958966",
+    "policyholder": "Suresh Rao",
+    "insured": "Suresh Rao",
+    "sum_insured": "Rs. 25,00,000",
+    "premium": "Rs. 14,160",
+    "start_date": "10/09/2026",
+    "end_date": "09/09/2027",
+    "claim_helpline": "1800 967 6056"
+  },
+  "lines": [
+    {
+      "text": "Insurer",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.11429915966386556,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.6443361344537815,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policy number",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.16305042016806723,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "PL/HS958966",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.4416974789915966,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Policyholder",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.1496033613445378,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Suresh Rao",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.4295294117647059,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Insured persons",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.17568067226890757,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Suresh Rao",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.23634204275534443,
+        0.19423529411764706,
+        0.2494061757719715
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Sum insured",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.26247030878859856,
+        0.15212941176470587,
+        0.2742280285035629
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 25,00,000",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.26247030878859856,
+        0.4417142857142857,
+        0.2755344418052256
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Premium",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.29097387173396677,
+        0.12773109243697478,
+        0.30273159144893114
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rs. 14,160",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.29097387173396677,
+        0.4183529411764706,
+        0.30403800475059384
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Start date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.3194774346793349,
+        0.13281344537815126,
+        0.33123515439429924
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "10/09/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.3194774346793349,
+        0.4202352941176471,
+        0.332541567695962
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "End date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.3479809976247031,
+        0.1277764705882353,
+        0.35973871733966745
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "09/09/2027",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.3479809976247031,
+        0.4202352941176471,
+        0.36104513064133015
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Claims helpline",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.37648456057007124,
+        0.16976638655462184,
+        0.3882422802850356
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1800 967 6056",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.37648456057007124,
+        0.44826890756302523,
+        0.38954869358669836
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Western Ghats Life Assurance Limited",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.5295294117647059,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Travel Insurance Certificate",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.29325378151260506,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.42636579572446553,
+        0.5212201680672268,
+        0.4381235154394299
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.44299287410926363,
+        0.5472672268907564,
+        0.454750593824228
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "insurer": [
+      1
+    ],
+    "policy_number": [
+      3
+    ],
+    "policyholder": [
+      5
+    ],
+    "insured": [
+      7
+    ],
+    "sum_insured": [
+      9
+    ],
+    "premium": [
+      11
+    ],
+    "start_date": [
+      13
+    ],
+    "end_date": [
+      15
+    ],
+    "claim_helpline": [
+      17
+    ]
+  },
+  "set_name": "search-x1",
+  "split": "test",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "insurance",
+  "folder": "Suresh Rao/Insurance",
+  "expected_ask": []
+}

@@ -1,6 +1,6 @@
 COV_MIN ?= 80
 
-.PHONY: setup visits spikes-setup finetune-setup lint test eval eval-val eval-smoke run vault docker
+.PHONY: search-set setup visits spikes-setup finetune-setup lint test eval eval-val eval-smoke run vault docker
 
 setup:
 	uv sync
@@ -39,6 +39,13 @@ eval-val:
 	@echo "make eval-val calls the local models for about 2 hours and needs Varun's yes first." >&2
 	uv run python -m evals.runner reading --split val --engines mac --record var/recordings/val
 	uv run python -m evals.runner filing --split val --recordings var/recordings/val
+
+# The search eval set: the two extra document sets (clean variant, val and test) and the
+# questions built from them and from eval-v1. Deterministic; no model.
+search-set:
+	uv run python -m vault_synth --set search-x1 --splits val,test --variants clean --out evals/datasets/search-v1/extra/search-x1
+	uv run python -m vault_synth --set search-x2 --splits val,test --variants clean --out evals/datasets/search-v1/extra/search-x2
+	uv run python -m evals.search_set
 
 # What CI runs: the committed smoke recordings, no model.
 eval-smoke:

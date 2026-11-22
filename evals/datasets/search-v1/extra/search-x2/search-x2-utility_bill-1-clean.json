@@ -1,0 +1,217 @@
+{
+  "doc_id": "search-x2-utility_bill-1-clean",
+  "base_id": "search-x2-utility_bill-1",
+  "doc_type": "utility_bill",
+  "person": "SURESH N RAO",
+  "variant": "clean",
+  "files": [
+    "search-x2-utility_bill-1-clean.pdf"
+  ],
+  "fields": {
+    "person_name": "SURESH N RAO",
+    "document_date": "2026-01-17",
+    "expiry_date": "2026-01-29",
+    "provider": "Malnad Power Supply Company",
+    "consumer_number": "CS-50437279"
+  },
+  "printed": {
+    "person_name": "SURESH N RAO",
+    "document_date": "17/01/2026",
+    "provider": "Malnad Power Supply Company",
+    "consumer_number": "CS-50437279",
+    "expiry_date": "29/01/2026"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.10756806722689076,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SURESH N RAO",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.46499159663865547,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.09917310924369749,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "17/01/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.4202352941176471,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Provider",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.12354117647058824,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Malnad Power Supply Company",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.5910924369747899,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Consumer number",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.19247058823529412,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "CS-50437279",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.21852731591448932,
+        0.4398319327731092,
+        0.23159144893111638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Due date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.24703087885985747,
+        0.12860840336134452,
+        0.25878859857482184
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "29/01/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.24703087885985747,
+        0.4202352941176471,
+        0.26009501187648454
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Malnad Power Supply Company",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.4496638655462185,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Electricity Bill",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.17609915966386555,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.29691211401425177,
+        0.5212201680672268,
+        0.30866983372921614
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.31353919239904987,
+        0.5472672268907564,
+        0.32529691211401424
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "provider": [
+      5
+    ],
+    "consumer_number": [
+      7
+    ],
+    "expiry_date": [
+      9
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "val",
+  "owner": "home",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "utilities",
+  "folder": "Home/Utilities",
+  "expected_ask": []
+}

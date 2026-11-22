@@ -1,0 +1,294 @@
+{
+  "doc_id": "search-x2-prescription-1-clean",
+  "base_id": "search-x2-prescription-1",
+  "doc_type": "prescription",
+  "person": "R K Rao",
+  "variant": "clean",
+  "files": [
+    "search-x2-prescription-1-clean.pdf"
+  ],
+  "fields": {
+    "hospital": "Lakeview Multispeciality Clinic",
+    "doctor": "Dr. Nidhi Purohit",
+    "patient": "R K Rao",
+    "date": "2026-07-15",
+    "medicines": [
+      {
+        "name": "Amoxicillin",
+        "dose": "500 mg",
+        "timing": "1-1-1",
+        "duration": "7 days"
+      },
+      {
+        "name": "Atorvastatin",
+        "dose": "10 mg",
+        "timing": "1-0-1",
+        "duration": "30 days"
+      },
+      {
+        "name": "Pantoprazole",
+        "dose": "40 mg",
+        "timing": "1-0-1",
+        "duration": "15 days"
+      },
+      {
+        "name": "Metformin",
+        "dose": "500 mg",
+        "timing": "1-0-0",
+        "duration": "15 days"
+      }
+    ],
+    "next_visit": "2027-01-18"
+  },
+  "printed": {
+    "hospital": "Lakeview Multispeciality Clinic",
+    "doctor": "Dr. Nidhi Purohit",
+    "patient": "R K Rao",
+    "date": "15/07/2026",
+    "medicines": "1. Tab Amoxicillin 500 mg  1-1-1  7 days\n2. Tab Atorvastatin 10 mg  1-0-1  30 days\n3. Tab Pantoprazole 40 mg  1-0-1  15 days\n4. Tab Metformin 500 mg  1-0-0  15 days",
+    "next_visit": "18/01/2027"
+  },
+  "lines": [
+    {
+      "text": "Lakeview Multispeciality Clinic",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.021377672209026127,
+        0.484855462184874,
+        0.043586698337292167
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rose Garden Extension, Bengaluru",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.05463182897862233,
+        0.3315966386554622,
+        0.06769596199524941
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Nidhi Purohit",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1187648456057007,
+        0.24081512605042016,
+        0.13574821852731592
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MBBS, MD (General Medicine)",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.14014251781472684,
+        0.2748319327731092,
+        0.15190023752969123
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1828978622327791,
+        0.1143142857142857,
+        0.19465558194774346
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "R K Rao",
+      "page": 0,
+      "bbox": [
+        0.16806722689075632,
+        0.1828978622327791,
+        0.2334285714285714,
+        0.19596199524940616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.6386554621848739,
+        0.1828978622327791,
+        0.6706016806722689,
+        0.19465558194774346
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "15/07/2026",
+      "page": 0,
+      "bbox": [
+        0.7058823529411765,
+        0.1828978622327791,
+        0.7899831932773109,
+        0.19596199524940616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Age/Sex: 34 / M",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.20902612826603326,
+        0.17484873949579832,
+        0.22078384798099762
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rx",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.26128266033254155,
+        0.11448067226890757,
+        0.29002375296912114
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicine, dose, timing, duration",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.2755344418052256,
+        0.3647949579831933,
+        0.28729216152019005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Amoxicillin 500 mg  1-1-1  7 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.30403800475059384,
+        0.48107563025210087,
+        0.31840855106888366
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Atorvastatin 10 mg  1-0-1  30 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.334916864608076,
+        0.49139159663865545,
+        0.34928741092636584
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Tab Pantoprazole 40 mg  1-0-1  15 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.3657957244655582,
+        0.5027058823529412,
+        0.380166270783848
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "4. Tab Metformin 500 mg  1-0-0  15 days",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.39667458432304037,
+        0.4862336134453781,
+        0.4110451306413302
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.46318289786223277,
+        0.48104201680672276,
+        0.47624703087885983
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit: 18/01/2027",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.49643705463182897,
+        0.2532285714285714,
+        0.5108076009501188
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Signature",
+      "page": 0,
+      "bbox": [
+        0.8680336134453782,
+        0.8788598574821853,
+        0.9327731092436975,
+        0.8906175771971496
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "hospital": [
+      0
+    ],
+    "doctor": [
+      2
+    ],
+    "patient": [
+      5
+    ],
+    "date": [
+      7
+    ],
+    "medicines": [
+      11,
+      12,
+      13,
+      14
+    ],
+    "next_visit": [
+      16
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "val",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "medical",
+  "folder": "Ravi Kumar Rao/Medical/Reports",
+  "expected_ask": []
+}

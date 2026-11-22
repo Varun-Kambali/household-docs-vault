@@ -1,0 +1,192 @@
+{
+  "doc_id": "search-x2-aadhaar-1-clean",
+  "base_id": "search-x2-aadhaar-1",
+  "doc_type": "aadhaar",
+  "person": "Kavita R Rao",
+  "variant": "clean",
+  "files": [
+    "search-x2-aadhaar-1-clean.pdf"
+  ],
+  "fields": {
+    "holder": "Kavita R Rao",
+    "date_of_birth": "1965-11-13",
+    "address": "No. 65, 17th Cross, Green Park Colony, Hyderabad, Telangana - 500674",
+    "number": "2912 0494 9612"
+  },
+  "printed": {
+    "holder": "Kavita R Rao",
+    "date_of_birth": "13/11/1965",
+    "address": "No. 65, 17th Cross\nGreen Park Colony\nHyderabad, Telangana - 500674",
+    "number": "2912 0494 9612"
+  },
+  "lines": [
+    {
+      "text": "Government of India",
+      "page": 0,
+      "bbox": [
+        0.36224333333333336,
+        0.09473684210526316,
+        0.6377566666666666,
+        0.14394736842105263
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "ಭಾರತ ಸರ್ಕಾರ",
+      "page": 0,
+      "bbox": [
+        0.42811,
+        0.15789473684210525,
+        0.57189,
+        0.20763157894736844
+      ],
+      "lang": "kn"
+    },
+    {
+      "text": "PHOTO",
+      "page": 0,
+      "bbox": [
+        0.10907000000000001,
+        0.4473684210526316,
+        0.17426333333333335,
+        0.4792105263157895
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Kavita R Rao",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.2894736842105263,
+        0.42919999999999997,
+        0.33289473684210524
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "DOB: 13/11/1965",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.4368421052631579,
+        0.42954,
+        0.47157894736842104
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Female",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.48947368421052634,
+        0.34168000000000004,
+        0.5242105263157895
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "No. 65, 17th Cross",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.5631578947368421,
+        0.41395,
+        0.5921052631578947
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Green Park Colony",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.6026315789473684,
+        0.4167166666666667,
+        0.631578947368421
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hyderabad, Telangana - 500674",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.6421052631578947,
+        0.51495,
+        0.6710526315789473
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Address:",
+      "page": 0,
+      "bbox": [
+        0.275,
+        0.5263157894736842,
+        0.33419000000000004,
+        0.5523684210526316
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2912 0494 9612",
+      "page": 0,
+      "bbox": [
+        0.35544000000000003,
+        0.8210526315789474,
+        0.64456,
+        0.8905263157894736
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "SPECIMEN",
+      "page": 0,
+      "bbox": [
+        0.686835,
+        0.3157894736842105,
+        0.913165,
+        0.3910526315789474
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only. Not a real Aadhaar.",
+      "page": 0,
+      "bbox": [
+        0.32176666666666665,
+        0.9263157894736842,
+        0.6782333333333334,
+        0.9494736842105264
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "holder": [
+      3
+    ],
+    "date_of_birth": [
+      4
+    ],
+    "address": [
+      6,
+      7,
+      8
+    ],
+    "number": [
+      10
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "val",
+  "owner": "p2",
+  "linked_people": [
+    "p2"
+  ],
+  "area": "identity",
+  "folder": "Kavita Rao/Identity",
+  "expected_ask": []
+}

@@ -27,7 +27,15 @@ from vault_synth.forms import FORM_SPECS
 from vault_synth.household import HOUSEHOLD, CastMember, draw_cast
 from vault_synth.model import SynthDoc
 from vault_synth.photo import to_photo
-from vault_synth.sets import LOCKABLE, SETS, SetSpec, locked_password, lowest_base, split_of
+from vault_synth.sets import (
+    LOCKABLE,
+    SETS,
+    SetSpec,
+    base_prefix,
+    locked_password,
+    lowest_base,
+    split_of,
+)
 from vault_synth.sheet import Sheet, Truth
 from vault_synth.templates import (
     aadhaar,
@@ -71,6 +79,7 @@ HAND_DRAWN = frozenset(t for t in TEMPLATES if t not in FORM_SPECS)
 DPI = 200
 LIBRARIES = ("faker", "reportlab", "pillow", "pypdfium2")
 ALL_SPLITS = ("train", "val", "test")
+VARIANTS = ("clean", "photo", "scan", "locked")
 
 
 @dataclass
@@ -101,6 +110,8 @@ def _forced(doc_type: DocType, n: int, spec: SetSpec) -> tuple[bool, str | None]
 
     Fixed per base number, so a base draws the same whichever subset is generated.
     """
+    if spec.outsider_rate == spec.ambiguous_rate == spec.missing_required_rate == 0:
+        return False, None  # a set that asks nothing guarantees no asking document
     split = split_of(n)
     if split == "train" or lowest_base(split, bases_per_type(doc_type, spec)) != n:
         return False, None
@@ -217,6 +228,7 @@ def generate(
     *,
     splits: Collection[str] = ALL_SPLITS,
     types: Collection[DocType] | None = None,
+    variants: Collection[str] = VARIANTS,
     spec: SetSpec | None = None,
 ) -> list[SynthDoc]:
     if set_name == "spike-v0":
@@ -233,7 +245,7 @@ def generate(
         for n in range(1, bases_per_type(doc_type, spec) + 1):
             if split_of(n) not in splits:
                 continue
-            docs += _make_base(doc_type, n, spec, out)
+            docs += _make_base(doc_type, n, spec, out, variants)
     for d in docs:
         # ground truth has no OCR confidence; leaving it out keeps the truth files small. The
         # locked PDF's password is derived by `locked_password`, never written down.
@@ -262,8 +274,10 @@ def generate(
     return docs
 
 
-def _make_base(doc_type: DocType, n: int, spec: SetSpec, out: Path) -> list[SynthDoc]:
-    base_id = f"{doc_type.value}-{n}"
+def _make_base(
+    doc_type: DocType, n: int, spec: SetSpec, out: Path, variants: Collection[str]
+) -> list[SynthDoc]:
+    base_id = f"{base_prefix(spec)}{doc_type.value}-{n}"
     clean = assert_safe_path(out / f"{base_id}-clean.pdf")
     clean_back = assert_safe_path(out / f"{base_id}-clean-back.pdf")
     base = _build(doc_type, n, spec, clean, clean_back, None)
@@ -304,9 +318,10 @@ def _make_base(doc_type: DocType, n: int, spec: SetSpec, out: Path) -> list[Synt
     made = [doc("clean", clean_files, clean_lines)]
     kinds: list[Literal["photo", "scan"]] = ["photo", "scan"]
     for kind in kinds:
-        files, lines = _treat(kind, base, base_id, out)
-        made.append(doc(kind, files, lines))
-    if doc_type in LOCKABLE:
+        if kind in variants:
+            files, lines = _treat(kind, base, base_id, out)
+            made.append(doc(kind, files, lines))
+    if doc_type in LOCKABLE and "locked" in variants:
         password = locked_password(base_id)
         locked = assert_safe_path(out / f"{base_id}-locked.pdf")
         # the same page again from the same seed, now behind a password
@@ -319,9 +334,10 @@ def main(argv: list[str] | None = None) -> None:
     p = argparse.ArgumentParser(prog="vault_synth")
     p.add_argument("--set", dest="set_name", default="eval-v1")
     p.add_argument("--splits", default=",".join(ALL_SPLITS))
+    p.add_argument("--variants", default=",".join(VARIANTS))
     p.add_argument("--out", type=Path, required=True)
     a = p.parse_args(argv)
-    docs = generate(a.set_name, a.out, splits=a.splits.split(","))
+    docs = generate(a.set_name, a.out, splits=a.splits.split(","), variants=a.variants.split(","))
     print(f"wrote {len(docs)} documents to {a.out}")
 
 

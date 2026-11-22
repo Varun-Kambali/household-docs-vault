@@ -1,0 +1,411 @@
+{
+  "doc_id": "search-x2-discharge_summary-1-clean",
+  "base_id": "search-x2-discharge_summary-1",
+  "doc_type": "discharge_summary",
+  "person": "Ravi K Rao",
+  "variant": "clean",
+  "files": [
+    "search-x2-discharge_summary-1-clean.pdf"
+  ],
+  "fields": {
+    "patient": "Ravi K Rao",
+    "doctor": "Dr. Triya Dass",
+    "date": "2026-10-02",
+    "hospital": "Greenfield Polyclinic",
+    "department": "Orthopaedics",
+    "diagnoses": [
+      "Viral fever",
+      "Type 2 diabetes mellitus"
+    ],
+    "procedures": [
+      "Minor wound repair",
+      "Endoscopy"
+    ],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicines": [
+      {
+        "name": "Pantoprazole",
+        "dose": "40 mg",
+        "timing": "1-0-1",
+        "duration": "10 days"
+      },
+      {
+        "name": "Paracetamol",
+        "dose": "650 mg",
+        "timing": "1-0-0",
+        "duration": "1 month"
+      }
+    ],
+    "tests": null,
+    "next_visit": "2026-12-03",
+    "amount": null
+  },
+  "printed": {
+    "patient": "Ravi K Rao",
+    "date": "02/10/2026",
+    "hospital": "Greenfield Polyclinic",
+    "doctor": "Dr. Triya Dass",
+    "department": "Orthopaedics",
+    "diagnoses": "Viral fever\nType 2 diabetes mellitus",
+    "procedures": "Minor wound repair\nEndoscopy",
+    "allergies": "Penicillin",
+    "medicines": "1. Tab Pantoprazole 40 mg  1-0-1  10 days\n2. Tab Paracetamol 650 mg  1-0-0  1 month",
+    "next_visit": "03/12/2026"
+  },
+  "lines": [
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.1143142857142857,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Ravi K Rao",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.4248571428571428,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.09917310924369749,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "02/10/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.4202352941176471,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Hospital",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.12186218487394959,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Greenfield Polyclinic",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.5024033613445378,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Doctor",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.21852731591448932,
+        0.11177310924369747,
+        0.23028503562945368
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Triya Dass",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.21852731591448932,
+        0.44915966386554623,
+        0.23159144893111638
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Department",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.24703087885985747,
+        0.1462453781512605,
+        0.25878859857482184
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Orthopaedics",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.24703087885985747,
+        0.44447058823529406,
+        0.26009501187648454
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Diagnoses",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.2755344418052256,
+        0.13868235294117648,
+        0.28729216152019005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Viral fever",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.29334916864608074,
+        0.18211764705882352,
+        0.30641330166270786
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Type 2 diabetes mellitus",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.31235154394299286,
+        0.2951260504201681,
+        0.3254156769596199
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Procedures",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.33847980997624705,
+        0.14456638655462184,
+        0.35023752969121136
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Minor wound repair",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.35629453681710216,
+        0.25678991596638656,
+        0.3693586698337292
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Endoscopy",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.3752969121140142,
+        0.19142857142857145,
+        0.38836104513064135
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Allergies",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.4014251781472684,
+        0.12522016806722688,
+        0.4131828978622328
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Penicillin",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.4192399049881235,
+        0.17463865546218488,
+        0.4323040380047506
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicines on discharge",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.44536817102137766,
+        0.2261109243697479,
+        0.457125890736342
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Pantoprazole 40 mg  1-0-1  10 days",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.46318289786223277,
+        0.432436974789916,
+        0.47624703087885983
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Paracetamol 650 mg  1-0-0  1 month",
+      "page": 0,
+      "bbox": [
+        0.10084033613445378,
+        0.4821852731591449,
+        0.43989915966386556,
+        0.49524940617577196
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.5083135391923991,
+        0.12857815126050418,
+        0.5200712589073634
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "03/12/2026",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.5083135391923991,
+        0.4202352941176471,
+        0.5213776722090261
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Greenfield Polyclinic",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.023752969121140142,
+        0.31663025210084034,
+        0.04334916864608076
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Discharge Summary",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.2346672268907563,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.5581947743467933,
+        0.5212201680672268,
+        0.5699524940617577
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.5748218527315915,
+        0.5472672268907564,
+        0.5865795724465558
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "patient": [
+      1
+    ],
+    "date": [
+      3
+    ],
+    "hospital": [
+      5
+    ],
+    "doctor": [
+      7
+    ],
+    "department": [
+      9
+    ],
+    "diagnoses": [
+      11,
+      12
+    ],
+    "procedures": [
+      14,
+      15
+    ],
+    "allergies": [
+      17
+    ],
+    "medicines": [
+      19,
+      20
+    ],
+    "next_visit": [
+      22
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "val",
+  "owner": "p1",
+  "linked_people": [
+    "p1"
+  ],
+  "area": "medical",
+  "folder": "Ravi Kumar Rao/Medical/Hospital stays",
+  "expected_ask": []
+}

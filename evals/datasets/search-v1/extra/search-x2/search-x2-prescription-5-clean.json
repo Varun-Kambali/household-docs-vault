@@ -1,0 +1,276 @@
+{
+  "doc_id": "search-x2-prescription-5-clean",
+  "base_id": "search-x2-prescription-5",
+  "doc_type": "prescription",
+  "person": "Suresh Rao",
+  "variant": "clean",
+  "files": [
+    "search-x2-prescription-5-clean.pdf"
+  ],
+  "fields": {
+    "hospital": "Greenfield Polyclinic",
+    "doctor": "Dr. Irya Chada",
+    "patient": "Suresh Rao",
+    "date": "2026-10-12",
+    "medicines": [
+      {
+        "name": "Metformin",
+        "dose": "850 mg",
+        "timing": "1-0-1",
+        "duration": "3 months"
+      },
+      {
+        "name": "Amoxicillin",
+        "dose": "500 mg",
+        "timing": "1-0-1",
+        "duration": "3 months"
+      },
+      {
+        "name": "Paracetamol",
+        "dose": "650 mg",
+        "timing": "1-1-1",
+        "duration": "3 months"
+      }
+    ],
+    "next_visit": "2027-01-25"
+  },
+  "printed": {
+    "hospital": "Greenfield Polyclinic",
+    "doctor": "Dr. Irya Chada",
+    "patient": "Suresh Rao",
+    "date": "12/10/2026",
+    "medicines": "1. Tab Metformin 850 mg  1-0-1  3 months\n2. Tab Amoxicillin 500 mg  1-0-1  3 months\n3. Tab Paracetamol 650 mg  1-1-1  3 months",
+    "next_visit": "25/01/2027"
+  },
+  "lines": [
+    {
+      "text": "Greenfield Polyclinic",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.021377672209026127,
+        0.3498840336134454,
+        0.043586698337292167
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Lakeview Layout, Chennai",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.05463182897862233,
+        0.2643361344537815,
+        0.06769596199524941
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Dr. Irya Chada",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1187648456057007,
+        0.2153613445378151,
+        0.13574821852731592
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "MBBS, MD (General Medicine)",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.14014251781472684,
+        0.2748319327731092,
+        0.15190023752969123
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Patient",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1828978622327791,
+        0.1143142857142857,
+        0.19465558194774346
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Suresh Rao",
+      "page": 0,
+      "bbox": [
+        0.16806722689075632,
+        0.1828978622327791,
+        0.26146218487394957,
+        0.19596199524940616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.6386554621848739,
+        0.1828978622327791,
+        0.6706016806722689,
+        0.19465558194774346
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "12/10/2026",
+      "page": 0,
+      "bbox": [
+        0.7058823529411765,
+        0.1828978622327791,
+        0.7899831932773109,
+        0.19596199524940616
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Age/Sex: 55 / M",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.20902612826603326,
+        0.17484873949579832,
+        0.22078384798099762
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Rx",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.26128266033254155,
+        0.11448067226890757,
+        0.29002375296912114
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Medicine, dose, timing, duration",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.2755344418052256,
+        0.3647949579831933,
+        0.28729216152019005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "1. Tab Metformin 850 mg  1-0-1  3 months",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.30403800475059384,
+        0.49752941176470583,
+        0.31840855106888366
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "2. Tab Amoxicillin 500 mg  1-0-1  3 months",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.334916864608076,
+        0.5026504201680673,
+        0.34928741092636584
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "3. Tab Paracetamol 650 mg  1-1-1  3 months",
+      "page": 0,
+      "bbox": [
+        0.15126050420168066,
+        0.3657957244655582,
+        0.5191226890756302,
+        0.380166270783848
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Advice: plenty of fluids, light walk daily, avoid fried food.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.4323040380047506,
+        0.48104201680672276,
+        0.44536817102137766
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Next visit: 25/01/2027",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.4655581947743468,
+        0.2532285714285714,
+        0.4799287410926366
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Signature",
+      "page": 0,
+      "bbox": [
+        0.8680336134453782,
+        0.8788598574821853,
+        0.9327731092436975,
+        0.8906175771971496
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "hospital": [
+      0
+    ],
+    "doctor": [
+      2
+    ],
+    "patient": [
+      5
+    ],
+    "date": [
+      7
+    ],
+    "medicines": [
+      11,
+      12,
+      13
+    ],
+    "next_visit": [
+      15
+    ]
+  },
+  "set_name": "search-x2",
+  "split": "test",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "medical",
+  "folder": "Suresh Rao/Medical/Reports",
+  "expected_ask": []
+}

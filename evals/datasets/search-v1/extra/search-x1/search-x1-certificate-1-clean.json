@@ -1,0 +1,154 @@
+{
+  "doc_id": "search-x1-certificate-1-clean",
+  "base_id": "search-x1-certificate-1",
+  "doc_type": "certificate",
+  "person": "Suresh Rao",
+  "variant": "clean",
+  "files": [
+    "search-x1-certificate-1-clean.pdf"
+  ],
+  "fields": {
+    "person_name": "Suresh Rao",
+    "document_date": "2025-12-05",
+    "expiry_date": null,
+    "issuer": null,
+    "credential_id": "CR-48396480"
+  },
+  "printed": {
+    "person_name": "Suresh Rao",
+    "document_date": "05/12/2025",
+    "credential_id": "CR-48396480"
+  },
+  "lines": [
+    {
+      "text": "Name",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.1330166270783848,
+        0.10756806722689076,
+        0.14477434679334916
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Suresh Rao",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.1330166270783848,
+        0.4295294117647059,
+        0.14608076009501186
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Date",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.16152019002375298,
+        0.09917310924369749,
+        0.17327790973871735
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "05/12/2025",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.16152019002375298,
+        0.4202352941176471,
+        0.17458432304038005
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Credential id",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.19002375296912113,
+        0.15212941176470587,
+        0.20178147268408553
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "CR-48396480",
+      "page": 0,
+      "bbox": [
+        0.33613445378151263,
+        0.19002375296912113,
+        0.4407563025210084,
+        0.20308788598574823
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Certificate of Completion",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.057007125890736345,
+        0.26962689075630253,
+        0.07137767220902613
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "This document is computer generated and valid without a signature.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.23990498812351543,
+        0.5212201680672268,
+        0.2516627078384798
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Keep it safe; you may be asked for it when you claim, renew or transfer.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.25653206650831356,
+        0.5472672268907564,
+        0.2682897862232779
+      ],
+      "lang": "en"
+    },
+    {
+      "text": "Specimen data for software testing only.",
+      "page": 0,
+      "bbox": [
+        0.06722689075630252,
+        0.9501187648456056,
+        0.3063663865546219,
+        0.9605700712589073
+      ],
+      "lang": "en"
+    }
+  ],
+  "field_lines": {
+    "person_name": [
+      1
+    ],
+    "document_date": [
+      3
+    ],
+    "credential_id": [
+      5
+    ]
+  },
+  "set_name": "search-x1",
+  "split": "val",
+  "owner": "p4",
+  "linked_people": [
+    "p4"
+  ],
+  "area": "education",
+  "folder": "Suresh Rao/Education",
+  "expected_ask": []
+}

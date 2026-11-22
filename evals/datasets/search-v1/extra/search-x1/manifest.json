@@ -1,0 +1,968 @@
+{
+  "set": "search-x1",
+  "seed": 11,
+  "spec": {
+    "name": "search-x1",
+    "seed": 11,
+    "per_type_hand": 10,
+    "per_type_form": 5,
+    "absent_rate": 0.15,
+    "missing_required_rate": 0.0,
+    "outsider_rate": 0.0,
+    "ambiguous_rate": 0.0
+  },
+  "libraries": {
+    "faker": "40.54.0",
+    "reportlab": "5.1.0",
+    "pillow": "13.0.0",
+    "pypdfium2": "5.15.2"
+  },
+  "documents": [
+    {
+      "doc_id": "search-x1-health_policy-1-clean",
+      "doc_type": "health_policy",
+      "split": "val",
+      "files": [
+        "search-x1-health_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-health_policy-5-clean",
+      "doc_type": "health_policy",
+      "split": "test",
+      "files": [
+        "search-x1-health_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-health_policy-6-clean",
+      "doc_type": "health_policy",
+      "split": "val",
+      "files": [
+        "search-x1-health_policy-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-health_policy-10-clean",
+      "doc_type": "health_policy",
+      "split": "test",
+      "files": [
+        "search-x1-health_policy-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-vehicle_policy-1-clean",
+      "doc_type": "vehicle_policy",
+      "split": "val",
+      "files": [
+        "search-x1-vehicle_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-vehicle_policy-5-clean",
+      "doc_type": "vehicle_policy",
+      "split": "test",
+      "files": [
+        "search-x1-vehicle_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-vehicle_policy-6-clean",
+      "doc_type": "vehicle_policy",
+      "split": "val",
+      "files": [
+        "search-x1-vehicle_policy-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-vehicle_policy-10-clean",
+      "doc_type": "vehicle_policy",
+      "split": "test",
+      "files": [
+        "search-x1-vehicle_policy-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-warranty_card-1-clean",
+      "doc_type": "warranty_card",
+      "split": "val",
+      "files": [
+        "search-x1-warranty_card-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-warranty_card-5-clean",
+      "doc_type": "warranty_card",
+      "split": "test",
+      "files": [
+        "search-x1-warranty_card-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-warranty_card-6-clean",
+      "doc_type": "warranty_card",
+      "split": "val",
+      "files": [
+        "search-x1-warranty_card-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-warranty_card-10-clean",
+      "doc_type": "warranty_card",
+      "split": "test",
+      "files": [
+        "search-x1-warranty_card-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-tax_invoice-1-clean",
+      "doc_type": "tax_invoice",
+      "split": "val",
+      "files": [
+        "search-x1-tax_invoice-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-tax_invoice-5-clean",
+      "doc_type": "tax_invoice",
+      "split": "test",
+      "files": [
+        "search-x1-tax_invoice-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-tax_invoice-6-clean",
+      "doc_type": "tax_invoice",
+      "split": "val",
+      "files": [
+        "search-x1-tax_invoice-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-tax_invoice-10-clean",
+      "doc_type": "tax_invoice",
+      "split": "test",
+      "files": [
+        "search-x1-tax_invoice-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-aadhaar-1-clean",
+      "doc_type": "aadhaar",
+      "split": "val",
+      "files": [
+        "search-x1-aadhaar-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-aadhaar-5-clean",
+      "doc_type": "aadhaar",
+      "split": "test",
+      "files": [
+        "search-x1-aadhaar-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-aadhaar-6-clean",
+      "doc_type": "aadhaar",
+      "split": "val",
+      "files": [
+        "search-x1-aadhaar-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-aadhaar-10-clean",
+      "doc_type": "aadhaar",
+      "split": "test",
+      "files": [
+        "search-x1-aadhaar-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-pan-1-clean",
+      "doc_type": "pan",
+      "split": "val",
+      "files": [
+        "search-x1-pan-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-pan-5-clean",
+      "doc_type": "pan",
+      "split": "test",
+      "files": [
+        "search-x1-pan-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-pan-6-clean",
+      "doc_type": "pan",
+      "split": "val",
+      "files": [
+        "search-x1-pan-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-pan-10-clean",
+      "doc_type": "pan",
+      "split": "test",
+      "files": [
+        "search-x1-pan-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-card_front-1-clean",
+      "doc_type": "card_front",
+      "split": "val",
+      "files": [
+        "search-x1-card_front-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-card_front-5-clean",
+      "doc_type": "card_front",
+      "split": "test",
+      "files": [
+        "search-x1-card_front-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-card_front-6-clean",
+      "doc_type": "card_front",
+      "split": "val",
+      "files": [
+        "search-x1-card_front-6-clean.pdf",
+        "search-x1-card_front-6-clean-back.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-card_front-10-clean",
+      "doc_type": "card_front",
+      "split": "test",
+      "files": [
+        "search-x1-card_front-10-clean.pdf",
+        "search-x1-card_front-10-clean-back.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-prescription-1-clean",
+      "doc_type": "prescription",
+      "split": "val",
+      "files": [
+        "search-x1-prescription-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-prescription-5-clean",
+      "doc_type": "prescription",
+      "split": "test",
+      "files": [
+        "search-x1-prescription-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-prescription-6-clean",
+      "doc_type": "prescription",
+      "split": "val",
+      "files": [
+        "search-x1-prescription-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-prescription-10-clean",
+      "doc_type": "prescription",
+      "split": "test",
+      "files": [
+        "search-x1-prescription-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-lab_report-1-clean",
+      "doc_type": "lab_report",
+      "split": "val",
+      "files": [
+        "search-x1-lab_report-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-lab_report-5-clean",
+      "doc_type": "lab_report",
+      "split": "test",
+      "files": [
+        "search-x1-lab_report-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-lab_report-6-clean",
+      "doc_type": "lab_report",
+      "split": "val",
+      "files": [
+        "search-x1-lab_report-6-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-lab_report-10-clean",
+      "doc_type": "lab_report",
+      "split": "test",
+      "files": [
+        "search-x1-lab_report-10-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-life_policy-1-clean",
+      "doc_type": "life_policy",
+      "split": "val",
+      "files": [
+        "search-x1-life_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-life_policy-5-clean",
+      "doc_type": "life_policy",
+      "split": "test",
+      "files": [
+        "search-x1-life_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-home_policy-1-clean",
+      "doc_type": "home_policy",
+      "split": "val",
+      "files": [
+        "search-x1-home_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-home_policy-5-clean",
+      "doc_type": "home_policy",
+      "split": "test",
+      "files": [
+        "search-x1-home_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-travel_policy-1-clean",
+      "doc_type": "travel_policy",
+      "split": "val",
+      "files": [
+        "search-x1-travel_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-travel_policy-5-clean",
+      "doc_type": "travel_policy",
+      "split": "test",
+      "files": [
+        "search-x1-travel_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-gadget_policy-1-clean",
+      "doc_type": "gadget_policy",
+      "split": "val",
+      "files": [
+        "search-x1-gadget_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-gadget_policy-5-clean",
+      "doc_type": "gadget_policy",
+      "split": "test",
+      "files": [
+        "search-x1-gadget_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-accident_policy-1-clean",
+      "doc_type": "accident_policy",
+      "split": "val",
+      "files": [
+        "search-x1-accident_policy-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-accident_policy-5-clean",
+      "doc_type": "accident_policy",
+      "split": "test",
+      "files": [
+        "search-x1-accident_policy-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-extended_warranty-1-clean",
+      "doc_type": "extended_warranty",
+      "split": "val",
+      "files": [
+        "search-x1-extended_warranty-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-extended_warranty-5-clean",
+      "doc_type": "extended_warranty",
+      "split": "test",
+      "files": [
+        "search-x1-extended_warranty-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-amc-1-clean",
+      "doc_type": "amc",
+      "split": "val",
+      "files": [
+        "search-x1-amc-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-amc-5-clean",
+      "doc_type": "amc",
+      "split": "test",
+      "files": [
+        "search-x1-amc-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-appliance_service_record-1-clean",
+      "doc_type": "appliance_service_record",
+      "split": "val",
+      "files": [
+        "search-x1-appliance_service_record-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-appliance_service_record-5-clean",
+      "doc_type": "appliance_service_record",
+      "split": "test",
+      "files": [
+        "search-x1-appliance_service_record-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-passport-1-clean",
+      "doc_type": "passport",
+      "split": "val",
+      "files": [
+        "search-x1-passport-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-passport-5-clean",
+      "doc_type": "passport",
+      "split": "test",
+      "files": [
+        "search-x1-passport-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-voter_id-1-clean",
+      "doc_type": "voter_id",
+      "split": "val",
+      "files": [
+        "search-x1-voter_id-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-voter_id-5-clean",
+      "doc_type": "voter_id",
+      "split": "test",
+      "files": [
+        "search-x1-voter_id-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-driving_licence-1-clean",
+      "doc_type": "driving_licence",
+      "split": "val",
+      "files": [
+        "search-x1-driving_licence-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-driving_licence-5-clean",
+      "doc_type": "driving_licence",
+      "split": "test",
+      "files": [
+        "search-x1-driving_licence-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-birth_certificate-1-clean",
+      "doc_type": "birth_certificate",
+      "split": "val",
+      "files": [
+        "search-x1-birth_certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-birth_certificate-5-clean",
+      "doc_type": "birth_certificate",
+      "split": "test",
+      "files": [
+        "search-x1-birth_certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-marriage_certificate-1-clean",
+      "doc_type": "marriage_certificate",
+      "split": "val",
+      "files": [
+        "search-x1-marriage_certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-marriage_certificate-5-clean",
+      "doc_type": "marriage_certificate",
+      "split": "test",
+      "files": [
+        "search-x1-marriage_certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-card_statement-1-clean",
+      "doc_type": "card_statement",
+      "split": "val",
+      "files": [
+        "search-x1-card_statement-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-card_statement-5-clean",
+      "doc_type": "card_statement",
+      "split": "test",
+      "files": [
+        "search-x1-card_statement-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-card_welcome_letter-1-clean",
+      "doc_type": "card_welcome_letter",
+      "split": "val",
+      "files": [
+        "search-x1-card_welcome_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-card_welcome_letter-5-clean",
+      "doc_type": "card_welcome_letter",
+      "split": "test",
+      "files": [
+        "search-x1-card_welcome_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-scan_photo-1-clean",
+      "doc_type": "scan_photo",
+      "split": "val",
+      "files": [
+        "search-x1-scan_photo-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-scan_photo-5-clean",
+      "doc_type": "scan_photo",
+      "split": "test",
+      "files": [
+        "search-x1-scan_photo-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-scan_report-1-clean",
+      "doc_type": "scan_report",
+      "split": "val",
+      "files": [
+        "search-x1-scan_report-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-scan_report-5-clean",
+      "doc_type": "scan_report",
+      "split": "test",
+      "files": [
+        "search-x1-scan_report-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-discharge_summary-1-clean",
+      "doc_type": "discharge_summary",
+      "split": "val",
+      "files": [
+        "search-x1-discharge_summary-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-discharge_summary-5-clean",
+      "doc_type": "discharge_summary",
+      "split": "test",
+      "files": [
+        "search-x1-discharge_summary-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-hospital_bill-1-clean",
+      "doc_type": "hospital_bill",
+      "split": "val",
+      "files": [
+        "search-x1-hospital_bill-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-hospital_bill-5-clean",
+      "doc_type": "hospital_bill",
+      "split": "test",
+      "files": [
+        "search-x1-hospital_bill-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-sale_deed-1-clean",
+      "doc_type": "sale_deed",
+      "split": "val",
+      "files": [
+        "search-x1-sale_deed-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-sale_deed-5-clean",
+      "doc_type": "sale_deed",
+      "split": "test",
+      "files": [
+        "search-x1-sale_deed-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-rent_agreement-1-clean",
+      "doc_type": "rent_agreement",
+      "split": "val",
+      "files": [
+        "search-x1-rent_agreement-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-rent_agreement-5-clean",
+      "doc_type": "rent_agreement",
+      "split": "test",
+      "files": [
+        "search-x1-rent_agreement-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-khata-1-clean",
+      "doc_type": "khata",
+      "split": "val",
+      "files": [
+        "search-x1-khata-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-khata-5-clean",
+      "doc_type": "khata",
+      "split": "test",
+      "files": [
+        "search-x1-khata-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-property_tax_receipt-1-clean",
+      "doc_type": "property_tax_receipt",
+      "split": "val",
+      "files": [
+        "search-x1-property_tax_receipt-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-property_tax_receipt-5-clean",
+      "doc_type": "property_tax_receipt",
+      "split": "test",
+      "files": [
+        "search-x1-property_tax_receipt-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-encumbrance_certificate-1-clean",
+      "doc_type": "encumbrance_certificate",
+      "split": "val",
+      "files": [
+        "search-x1-encumbrance_certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-encumbrance_certificate-5-clean",
+      "doc_type": "encumbrance_certificate",
+      "split": "test",
+      "files": [
+        "search-x1-encumbrance_certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-utility_bill-1-clean",
+      "doc_type": "utility_bill",
+      "split": "val",
+      "files": [
+        "search-x1-utility_bill-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-utility_bill-5-clean",
+      "doc_type": "utility_bill",
+      "split": "test",
+      "files": [
+        "search-x1-utility_bill-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-registration_certificate-1-clean",
+      "doc_type": "registration_certificate",
+      "split": "val",
+      "files": [
+        "search-x1-registration_certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-registration_certificate-5-clean",
+      "doc_type": "registration_certificate",
+      "split": "test",
+      "files": [
+        "search-x1-registration_certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-puc_certificate-1-clean",
+      "doc_type": "puc_certificate",
+      "split": "val",
+      "files": [
+        "search-x1-puc_certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-puc_certificate-5-clean",
+      "doc_type": "puc_certificate",
+      "split": "test",
+      "files": [
+        "search-x1-puc_certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-fastag-1-clean",
+      "doc_type": "fastag",
+      "split": "val",
+      "files": [
+        "search-x1-fastag-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-fastag-5-clean",
+      "doc_type": "fastag",
+      "split": "test",
+      "files": [
+        "search-x1-fastag-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-vehicle_service_record-1-clean",
+      "doc_type": "vehicle_service_record",
+      "split": "val",
+      "files": [
+        "search-x1-vehicle_service_record-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-vehicle_service_record-5-clean",
+      "doc_type": "vehicle_service_record",
+      "split": "test",
+      "files": [
+        "search-x1-vehicle_service_record-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-payslip-1-clean",
+      "doc_type": "payslip",
+      "split": "val",
+      "files": [
+        "search-x1-payslip-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-payslip-5-clean",
+      "doc_type": "payslip",
+      "split": "test",
+      "files": [
+        "search-x1-payslip-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-offer_letter-1-clean",
+      "doc_type": "offer_letter",
+      "split": "val",
+      "files": [
+        "search-x1-offer_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-offer_letter-5-clean",
+      "doc_type": "offer_letter",
+      "split": "test",
+      "files": [
+        "search-x1-offer_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-appointment_letter-1-clean",
+      "doc_type": "appointment_letter",
+      "split": "val",
+      "files": [
+        "search-x1-appointment_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-appointment_letter-5-clean",
+      "doc_type": "appointment_letter",
+      "split": "test",
+      "files": [
+        "search-x1-appointment_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-appraisal_letter-1-clean",
+      "doc_type": "appraisal_letter",
+      "split": "val",
+      "files": [
+        "search-x1-appraisal_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-appraisal_letter-5-clean",
+      "doc_type": "appraisal_letter",
+      "split": "test",
+      "files": [
+        "search-x1-appraisal_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-relieving_letter-1-clean",
+      "doc_type": "relieving_letter",
+      "split": "val",
+      "files": [
+        "search-x1-relieving_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-relieving_letter-5-clean",
+      "doc_type": "relieving_letter",
+      "split": "test",
+      "files": [
+        "search-x1-relieving_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-experience_letter-1-clean",
+      "doc_type": "experience_letter",
+      "split": "val",
+      "files": [
+        "search-x1-experience_letter-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-experience_letter-5-clean",
+      "doc_type": "experience_letter",
+      "split": "test",
+      "files": [
+        "search-x1-experience_letter-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-certificate-1-clean",
+      "doc_type": "certificate",
+      "split": "val",
+      "files": [
+        "search-x1-certificate-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-certificate-5-clean",
+      "doc_type": "certificate",
+      "split": "test",
+      "files": [
+        "search-x1-certificate-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-marksheet-1-clean",
+      "doc_type": "marksheet",
+      "split": "val",
+      "files": [
+        "search-x1-marksheet-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-marksheet-5-clean",
+      "doc_type": "marksheet",
+      "split": "test",
+      "files": [
+        "search-x1-marksheet-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-degree-1-clean",
+      "doc_type": "degree",
+      "split": "val",
+      "files": [
+        "search-x1-degree-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-degree-5-clean",
+      "doc_type": "degree",
+      "split": "test",
+      "files": [
+        "search-x1-degree-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-form_16-1-clean",
+      "doc_type": "form_16",
+      "split": "val",
+      "files": [
+        "search-x1-form_16-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-form_16-5-clean",
+      "doc_type": "form_16",
+      "split": "test",
+      "files": [
+        "search-x1-form_16-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-itr_acknowledgement-1-clean",
+      "doc_type": "itr_acknowledgement",
+      "split": "val",
+      "files": [
+        "search-x1-itr_acknowledgement-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-itr_acknowledgement-5-clean",
+      "doc_type": "itr_acknowledgement",
+      "split": "test",
+      "files": [
+        "search-x1-itr_acknowledgement-5-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-tax_proof-1-clean",
+      "doc_type": "tax_proof",
+      "split": "val",
+      "files": [
+        "search-x1-tax_proof-1-clean.pdf"
+      ]
+    },
+    {
+      "doc_id": "search-x1-tax_proof-5-clean",
+      "doc_type": "tax_proof",
+      "split": "test",
+      "files": [
+        "search-x1-tax_proof-5-clean.pdf"
+      ]
+    }
+  ]
+}

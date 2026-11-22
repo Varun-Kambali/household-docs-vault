@@ -1,0 +1,39 @@
+{
+  "people": [
+    {
+      "id": "p1",
+      "name": "Ravi Kumar Rao",
+      "aliases": [
+        "RAVI KUMAR RAO",
+        "Ravi K Rao",
+        "R K Rao",
+        "Ravi Rao"
+      ]
+    },
+    {
+      "id": "p2",
+      "name": "Kavita Rao",
+      "aliases": [
+        "KAVITA RAO",
+        "Kavita R Rao",
+        "Mrs Kavita Rao"
+      ]
+    },
+    {
+      "id": "p3",
+      "name": "Kiran Rao",
+      "aliases": [
+        "KIRAN RAO",
+        "Master Kiran Rao"
+      ]
+    },
+    {
+      "id": "p4",
+      "name": "Suresh Rao",
+      "aliases": [
+        "SURESH N RAO",
+        "S N Rao"
+      ]
+    }
+  ]
+}

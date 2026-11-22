@@ -22,6 +22,55 @@ divisible by 5 are `test`, those with remainder 1 are `val`, the rest are `train
 Prompts, cues and thresholds are tuned on `val` only. The `test` split is scored once, at the end
 of M2, and that run is the committed baseline.
 
+## The search set
+
+`evals/datasets/search-v1` scores search (M3) on a synthetic vault. Build it with
+`make search-set`; the files are deterministic and a test rebuilds them byte for byte.
+
+**The vault of a split** holds the split's eval-v1 documents in the photo variant (a card with
+a back lists both files, as the filing eval drops them) and the same split of two extra sets,
+`search-x1` (seed 11) and `search-x2` (seed 12). The extra sets use eval-v1's per-type counts,
+the clean variant only, and outsider, unclear-name and missing-field rates of 0, so each of
+their documents files. That makes a vault about three times the eval-v1 documents. The eval-v1
+ones are filed from their recorded readings, so questions about them measure reading and search
+together; the extra ones are filed from oracle readings, so those measure search alone. Results
+report the two origins apart. Only the extra sets' `val` and `test` documents are committed
+(`extra/`).
+
+**Only filed documents are asked about.** An eval-v1 document whose truth expects a question
+(an outsider, unclear initials, a missing required field) is in the vault, but no question
+targets it and no list expects it. `summary.json` counts them as `documents_left_out`.
+
+**Question kinds** (about 210 a split, in `val.jsonl` and `test.jsonl`):
+
+- **lookup** (100): one value of one document: an identifier, a date, an amount or who issued
+  it. `field` is always a stored field and `value` its stored value; `page` and `box` are the
+  truth line that prints it. A "still valid" or "still under warranty" question names the real
+  field the status comes from and adds `status`: for a validity question `field` is the type's
+  expiry-role field and `status` is `{"valid": true or false}`; for a warranty question `field`
+  is `warranty_parts` and `status` maps each part's name to whether its cover (purchase date
+  plus its years) still holds. Both are worked out at `EVAL_TODAY` (20 Nov 2026); `status` is
+  null on every other question.
+- **find** (50): names a document ("Kavita's PAN card"); one target.
+- **list** (40): templates over people, areas, types, date roles, places and date phrases.
+  `query` is what `resolve` returns for a perfect reading at `EVAL_TODAY`; `expected` is
+  recomputed from truth fields by `apply_query` (people match the owner or a linked person; areas
+  expand to types; the range applies to the role's date field; a place is a contained phrase of
+  the type's place field).
+- **none** (20): a type, a product or a person the vault does not hold.
+
+`targets` is every filed document that fits the words the prompt uses: the type noun counts for
+every type whose label holds it ("card" is also a card statement, an Aadhaar card and a warranty
+card; "certificate" is a dozen types), plus the person, place, brand and product it names. The
+generator adds a constraint until every target holds the same `value` (and `status`), and drops
+the question when it cannot.
+
+**Styles:** `question` (a full sentence), `terse` (a few words), `typo` (one wrong letter in a
+word that is not a name, place or brand) and `synonym` (fridge, TV, car, mobile, mediclaim for
+the plain term). `origin` is `eval-v1` when any target or expected document is eval-v1.
+
+Search tuning uses `val` only; `test` is run once, at the end of M3.
+
 ## Metrics
 
 Per document, the reading eval records booleans and numbers, never a field value or raw model

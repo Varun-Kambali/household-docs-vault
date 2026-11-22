@@ -23,7 +23,14 @@ class SetSpec:
     ambiguous_rate: float  # the first person is printed as initials that fit two people
 
 
-SETS: dict[str, SetSpec] = {"eval-v1": SetSpec("eval-v1", 7, 10, 5, 0.15, 0.03, 0.05, 0.03)}
+# search-x1 and search-x2 add documents to the search eval's vault. They follow eval-v1's counts
+# and clean variant, and ask nothing: no outsider, no unclear name, no missing required field, so
+# every one of their documents files.
+SETS: dict[str, SetSpec] = {
+    "eval-v1": SetSpec("eval-v1", 7, 10, 5, 0.15, 0.03, 0.05, 0.03),
+    "search-x1": SetSpec("search-x1", 11, 10, 5, 0.15, 0.0, 0.0, 0.0),
+    "search-x2": SetSpec("search-x2", 12, 10, 5, 0.15, 0.0, 0.0, 0.0),
+}
 
 # Types that also arrive locked: the insurance area plus card statements.
 LOCKABLE: frozenset[DocType] = frozenset(
@@ -38,6 +45,12 @@ def split_of(n: int) -> Split:
     if n % 5 == 1:
         return "val"
     return "train"
+
+
+def base_prefix(spec: SetSpec) -> str:
+    """What starts a base id. eval-v1 keeps the bare `<type>-<n>`; every other set names itself,
+    so documents of two sets never share an id."""
+    return "" if spec.name == "eval-v1" else f"{spec.name}-"
 
 
 def locked_password(base_id: str) -> str:
