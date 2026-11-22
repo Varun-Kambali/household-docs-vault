@@ -314,3 +314,26 @@ class FakeEmbedder:
         if self.fail is not None:
             raise self.fail
         return self._vec(text)
+
+
+class FakePromptReader:
+    """Answers a prompt reading from a table: a string, or a list of strings used one call at a
+    time (the last repeats). Keeps every prompt it was sent and counts the calls. No model runs."""
+
+    name = "fake-prompt-reader"
+
+    def __init__(self, answers: dict[str, str | list[str]], fail: Exception | None = None) -> None:
+        self.answers = answers
+        self.fail = fail
+        self.prompts: list[str] = []
+        self.calls = 0
+
+    def read(self, prompt: str) -> str:
+        self.calls += 1
+        self.prompts.append(prompt)
+        if self.fail is not None:
+            raise self.fail
+        answer = self.answers[prompt]
+        if isinstance(answer, str):
+            return answer
+        return answer[min(self.prompts.count(prompt), len(answer)) - 1]
