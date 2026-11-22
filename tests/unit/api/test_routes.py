@@ -716,6 +716,8 @@ def test_the_worker_asks_about_raw_card_bytes_in_place(settings, tmp_path, clock
 _ROUTES_WITH_BYTES = {
     ("GET", "/v1/documents/{doc_id}/file"): "document_file refuses a card sha",
     ("GET", "/v1/items/{item_id}/file"): "item_file refuses a card item or sha",
+    ("GET", "/v1/documents/{doc_id}/pages/{page}.png"): "draws the filed copy; refuses a card sha",
+    ("GET", "/v1/items/{item_id}/pages/{page}.png"): "draws the file; refuses a card item or sha",
 }
 _ROUTES_WITHOUT_BYTES = {
     ("GET", "/healthz"), ("GET", "/v1/activity"), ("GET", "/v1/inbox/progress"),
@@ -724,7 +726,9 @@ _ROUTES_WITHOUT_BYTES = {
     ("POST", "/v1/needs-a-look/{item_id}/undo"), ("POST", "/v1/documents/{doc_id}/undo"),
     ("POST", "/v1/items/{item_id}/retry"), ("GET", "/v1/documents/{doc_id}"),
     ("POST", "/v1/cards"), ("POST", "/v1/secrets/create"), ("POST", "/v1/secrets/unlock"),
-    ("GET", "/v1/emergency-sheet"),
+    ("GET", "/v1/emergency-sheet"), ("POST", "/v1/search"), ("POST", "/v1/search/list"),
+    ("GET", "/v1/people"), ("GET", "/v1/documents/{doc_id}/pages/{page}/lines"),
+    ("GET", "/v1/items/{item_id}/pages/{page}/lines"), ("POST", "/v1/documents/{doc_id}/reveal"),
 }  # fmt: skip
 _FRAMEWORK_PATHS = {"/openapi.json", "/docs", "/docs/oauth2-redirect", "/redoc"}
 _FILER_ENTRIES = {

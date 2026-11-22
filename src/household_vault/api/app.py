@@ -46,6 +46,8 @@ from household_vault.api.models import (
     QuestionOut,
     UnlockIn,
 )
+from household_vault.api.pages import add_page_routes
+from household_vault.api.search import add_search_routes, drive_path
 from household_vault.app_state import AppState
 from household_vault.db import Item
 from household_vault.emergency import sheet_html
@@ -56,6 +58,8 @@ from household_vault.filing.records import DocumentRecord
 from household_vault.logging_setup import configure
 from household_vault.reading.ollama import ModelUnavailable
 from household_vault.reasons import Reason
+from household_vault.schemas import SCHEMAS
+from household_vault.schemas._coerce import field_kind
 from household_vault.secrets.cards import CardUploadError
 from household_vault.secrets.mask import MaskError
 from household_vault.secrets.store import SecretsLocked
@@ -338,6 +342,13 @@ def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
             raise HTTPException(404, "That document is not in the vault.")
         return doc
 
+    def field_kinds_of(doc: Any) -> dict[str, str]:
+        schema = SCHEMAS.get(doc.doc_type)
+        return {
+            name: field_kind(schema, name) if schema and name in schema.model_fields else "text"
+            for name in doc.fields
+        }
+
     def serve(rel: str | None) -> Response:
         if rel is None or _is_private(rel):
             raise HTTPException(404, "That file is not available.")
@@ -446,6 +457,12 @@ def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
 
     # -- routes --------------------------------------------------------------------------------
 
+    # Registered on the app itself, so every route shows in `app.routes` for the card-photo check.
+    add_search_routes(app, state)
+    add_page_routes(
+        app, state, known_document, known_item, lambda: _detail(423, CARD_PHOTO_PRIVATE)
+    )
+
     @app.get("/healthz")
     def healthz() -> Health:
         return Health(status="ok", version=__version__, reader=settings.reader)
@@ -533,6 +550,10 @@ def create_app(state: AppState, *, start_worker: bool = True) -> FastAPI:
             fields=doc.fields,
             issues=doc.issues,
             created_at=doc.created_at,
+            drive_path=drive_path(settings.drive_prefix, doc.rel_path),
+            people=[p for p, _ in state.store.people_of(doc.id)],
+            field_kinds=field_kinds_of(doc),
+            page_count=max([ln.page for ln in state.store.lines_of(doc.id)], default=0) + 1,
         )
 
     @app.get("/v1/documents/{doc_id}/file")

@@ -121,3 +121,10 @@ def test_the_search_models_default_and_come_from_the_environment() -> None:
     assert (s.embed_model, s.query_model) == ("qwen3-embedding:0.6b", "qwen3:4b")
     s = load_settings(env={"VAULT_EMBED_MODEL": "e", "VAULT_QUERY_MODEL": "q"})
     assert (s.embed_model, s.query_model) == ("e", "q")
+
+
+def test_the_drive_path_prefix_has_a_default_and_an_override() -> None:
+    assert load_settings(env={}).drive_prefix == "My Drive/Family Vault"
+    assert load_settings(env={"VAULT_DRIVE_PREFIX": "My Drive/Vault"}).drive_prefix == (
+        "My Drive/Vault"
+    )
