@@ -41,7 +41,7 @@ def _last_day(year: int, month: int) -> date:
     return date(year, month, calendar.monthrange(year, month)[1])
 
 
-def _add_months(day: date, months: int) -> date:
+def add_months(day: date, months: int) -> date:
     index = day.year * 12 + day.month - 1 + months
     year, month = divmod(index, 12)
     month += 1
@@ -62,7 +62,7 @@ def _span(which: str, unit: str, today: date) -> DateRange:
     if unit == "year":
         year = today.year + step
         return DateRange(start=date(year, 1, 1), end=date(year, 12, 31))
-    first = _add_months(today.replace(day=1), step)
+    first = add_months(today.replace(day=1), step)
     return DateRange(start=first, end=_last_day(first.year, first.month))
 
 
@@ -126,7 +126,7 @@ def _parse(phrase: str, today: date) -> DateRange | None:
         if n == 0:
             return None
         if unit == "month":
-            return DateRange(start=today, end=_add_months(today, n))
+            return DateRange(start=today, end=add_months(today, n))
         return DateRange(start=today, end=today + timedelta(days=n * (7 if unit == "week" else 1)))
     if m := _MONTH_PHRASE.fullmatch(text):
         preposition, month = m.group(1), _MONTHS[m.group(2)]
