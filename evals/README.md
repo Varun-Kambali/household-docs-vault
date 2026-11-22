@@ -118,6 +118,64 @@ The filing eval adds, from the real worker:
   come back to the same path.
 - **Files left in Inbox**: files that are neither held nor a card asked about in place. Must be 0.
 
+## Search metrics
+
+`python -m evals.runner search` builds a vault of a split (the eval-v1 documents in the photo
+variant replayed from their recorded readings through the real worker and filer, a card with a
+back uploaded as the filing eval does, then the extra documents from oracle recordings), asks
+every `search-v1` question of the split, and scores what the app returns. "Today" is 20 Nov 2026
+(`EVAL_TODAY`). Each question runs twice: the quick search (keywords and vectors, no prompt
+reading) and the full search as the route runs it (read the prompt, resolve it, list or look
+up, compose the answer or the sentence); each is timed. Every metric is also split by `origin`
+(`eval-v1`, `extra`) and the summary carries the number of questions behind each rate under `n`.
+A rate over no questions is null.
+
+- **top1**, **top3**: over lookups and finds, a target is the first row, or among the first
+  three rows, of the full search. **quick_top3** is the same for the quick search.
+- **answer_correct**: over lookups, the answer's field is the question's field and its value
+  equals the truth after normalising by the field's kind (dates and amounts by value, a list as
+  a multiset of items, text as the reading eval does). For a status question the status the
+  answer text states must also equal the question's `status`. A decline, or a prompt read as
+  anything but a lookup, counts as wrong.
+- **citation_accuracy**: over the answers given, the answer's document is one of the targets and
+  one of its cited lines is on the truth page and overlaps the truth box with IoU 0.5 or more.
+- **list_reading**: over lists, the resolved `Query` equals the truth on intent, people, types
+  after area expansion (types plus the types of the areas), role, range and place.
+- **list_precision**, **list_recall**: over lists, the rows of the full search against `expected`,
+  averaged over the questions.
+- **declined_when_none**: over none questions, the share the app declines. **declined_when_answerable**:
+  over lookups and finds, the share it declines (lower is better). A question is declined when
+  the lookup answer is a "No direct answer", a person in the prompt is not in the household, no
+  row comes back, or the top row has no filter behind it and thin evidence (the weak-match rule
+  of `compose`: fused score under `MIN_FUSED` and fewer than `MIN_KEYWORD` matching lines).
+- **seconds_quick**, **seconds_full**: the median and 95th percentile of the wall time of each
+  search, with the first question left out and reported as `cold_first_seconds` (the model
+  loading). They mean something only on a live run with the Mac otherwise idle; on a replay
+  they are the cost of the code alone.
+- **secrets_found**: `scan_outputs` over the vault, the database (the search tables included)
+  and the logs after the run. Must be 0.
+- **readings_missing**: prompts whose reading was off or not recorded.
+
+The rows hold booleans, numbers and the question's own synthetic prompt, and a `cause` for each
+miss: `reading misread` (the prompt read as another intent or field), `retrieval miss` (the
+target was not the top row, or a list's rows are not the expected ones), `weak match declined`,
+`field not on the type`, `no located line`, `list slot wrong` (with the slots under `slots`),
+`wrong value`, `reading off` and, for a none question, `not declined`.
+
+Prompt readings and vectors are recorded like the readings: `RecordedPromptReader` keys a
+reading by the SHA-256 of the prompt (and stores the hash of the reading prompt, so a changed
+prompt needs a new recording), `RecordedEmbedder` keys a float16 vector by the SHA-256 of the
+text (a query's key includes the model's task line). `--record DIR` calls the local models and
+writes there; `--replay DIR` needs no model.
+
+The smoke part of `make eval-smoke` uses `evals/recordings/search-v1/smoke/`: the 22 smoke
+documents as the vault (photos go in first, so a clean copy or a scan of a document already filed
+is held as a possible copy), the val lookups and finds whose every target is a smoke photo, and
+ten list prompts written for that vault (`questions.jsonl`). Changing the chunking, the reading
+prompt or the question set makes these recordings stale: record them again with
+`python -m evals.runner search --split val --smoke --recordings evals/recordings/eval-v1/smoke
+--record evals/recordings/search-v1/smoke` after deleting the folder.
+
 ## How the filing eval is built
 
 Each variant gets its own fresh vault, so the variants of one base never meet and are never
@@ -177,7 +235,8 @@ All are `val` documents:
 `evals/thresholds.toml` has `[smoke.min]` and `[smoke.max]`. Each rate is the value measured on
 the committed smoke recordings less 2 points (the two Needs-a-look shares: plus 2 points); silent
 misfiles, wrong merges, secrets, stored CVVs and files left in Inbox are exactly 0. They guard
-against regressions and are never tuned on `test`.
+against regressions and are never tuned on `test`. `[search_smoke.min]` and `[search_smoke.max]`
+do the same for the search metrics, with question counts as floors.
 
 ## Commands
 
@@ -185,6 +244,8 @@ against regressions and are never tuned on `test`.
 make eval-smoke     # what CI runs: committed recordings, no model, a few seconds
 make eval-val       # real models on val, recorded under var/recordings/val (about 2 hours)
 make eval           # real models on test, recorded under evals/recordings/eval-v1/test (about 2 hours)
+make eval-search-val  # the search eval on val with the local models (needs VAL_RECORDINGS)
+make eval-search      # the search eval on test, run once (needs the owner's yes)
 ```
 
 `make eval` and `make eval-val` call Apple Vision and the local Ollama models. Run them only with
