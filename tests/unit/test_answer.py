@@ -79,7 +79,7 @@ def warranty_rows(store, purchase_date, parts, lines=None, **kwargs):
 def test_a_warranty_with_parts_answers_part_by_part(store):
     rows = warranty_rows(store, date(2024, 3, 14), parts=[("Compressor", 10), ("Comprehensive", 1)])
     a = compose(query(field="warranty_parts"), rows, store, date(2026, 11, 20))
-    assert a.text == "Compressor: yes, until 14 Mar 2034. Comprehensive: ended 14 Mar 2025."
+    assert a.text == "Compressor: yes, until 13 Mar 2034. Comprehensive: ended 13 Mar 2025."
     assert a.field == "warranty_parts"
     assert a.value == [{"part": "Compressor", "years": 10}, {"part": "Comprehensive", "years": 1}]
     assert not a.masked and a.document_id == "d1" and a.lines
@@ -87,22 +87,22 @@ def test_a_warranty_with_parts_answers_part_by_part(store):
 
 def test_a_part_still_holds_on_its_end_day(store):
     rows = warranty_rows(store, date(2024, 3, 14), parts=[("Comprehensive", 1)])
-    on_the_day = compose(query(field="warranty_parts"), rows, store, date(2025, 3, 14))
-    after = compose(query(field="warranty_parts"), rows, store, date(2025, 3, 15))
-    assert on_the_day.text == "Comprehensive: yes, until 14 Mar 2025."
-    assert after.text == "Comprehensive: ended 14 Mar 2025."
+    on_the_day = compose(query(field="warranty_parts"), rows, store, date(2025, 3, 13))
+    after = compose(query(field="warranty_parts"), rows, store, date(2025, 3, 14))
+    assert on_the_day.text == "Comprehensive: yes, until 13 Mar 2025."
+    assert after.text == "Comprehensive: ended 13 Mar 2025."
 
 
-def test_a_part_end_is_a_whole_year_on_the_same_day_a_leap_day_to_the_28th(store):
+def test_a_part_ends_the_day_before_its_anniversary_a_leap_day_anniversary_on_the_28th(store):
     rows = warranty_rows(store, date(2024, 2, 29), parts=[("Panel", 1)])
     a = compose(query(field="warranty_parts"), rows, store, date(2026, 1, 1))
-    assert a.text == "Panel: ended 28 Feb 2025."
+    assert a.text == "Panel: ended 27 Feb 2025."
 
 
 def test_a_part_with_a_fraction_of_a_year_counts_whole_months(store):
     rows = warranty_rows(store, date(2024, 3, 14), parts=[("Motor", 1.5), ("Panel", 0.5)])
     a = compose(query(field="warranty_parts"), rows, store, date(2026, 1, 1))
-    assert a.text == "Motor: ended 14 Sep 2025. Panel: ended 14 Sep 2024."
+    assert a.text == "Motor: ended 13 Sep 2025. Panel: ended 13 Sep 2024."
 
 
 def test_a_warranty_without_a_purchase_date_has_no_field_to_answer_from(store):
@@ -127,6 +127,37 @@ def test_a_warranty_with_no_part_on_the_page_cites_nothing_and_gives_no_answer(s
         store, date(2024, 3, 14), parts=[("Motor", 2)], lines=["LG Refrigerator", "Thank you"]
     )
     assert compose(query(field="warranty_parts"), rows, store, TODAY).reason == "not_on_page"
+
+
+def test_the_app_and_the_eval_agree_on_every_part_around_its_anniversary(store):
+    from datetime import timedelta
+    from types import SimpleNamespace
+
+    starts = [date(2024, 2, 29), date(2023, 2, 28), date(2024, 3, 1), date(2025, 12, 31),
+              date(2024, 3, 14), date(2020, 2, 29)]  # fmt: skip
+    n = 0
+    for start in starts:
+        for years in (1, 2, 4):
+            rows = warranty_rows(store, start, [("Part", years)], doc_id=f"w{n}")
+            n += 1
+            truth = SimpleNamespace(
+                doc_type=DocType.warranty_card,
+                fields={
+                    "purchase_date": start.isoformat(),
+                    "warranty_parts": [{"part": "Part", "years": years}],
+                },
+            )
+            anniversary = (
+                date(start.year + years, 3, 1)
+                if (start.month, start.day) == (2, 29)
+                else date(start.year + years, start.month, start.day)
+            )
+            for offset in range(-3, 4):
+                today = anniversary + timedelta(days=offset)
+                said = compose(query(field="warranty_parts"), rows, store, today).text
+                assert (": yes" in said) == status_of(truth, "warranty_parts", today)["Part"], (
+                    start, years, today, said,
+                )  # fmt: skip
 
 
 # -- validity ----------------------------------------------------------------------------------

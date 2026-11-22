@@ -9,7 +9,7 @@ depend on the Mac's locale.
 import re
 from collections.abc import Sequence
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
 from difflib import SequenceMatcher
 from typing import Any, Literal
@@ -249,9 +249,11 @@ def _ends(end: date, today: date) -> str:
 
 
 def _part_end(start: date, years: Decimal) -> date:
-    """The purchase date plus the part's years: a whole year lands on the same day (29 Feb on
-    28 Feb), a fraction counts as whole months."""
-    return add_months(start, int((years * 12).to_integral_value(ROUND_HALF_UP)))
+    """The last covered day: the purchase date plus the part's years, less one day, the way
+    the policies print their ends. A fraction counts as whole months; an anniversary on 29 Feb
+    falls on 28 Feb in a year without one."""
+    months = int((years * 12).to_integral_value(ROUND_HALF_UP))
+    return add_months(start, months) - timedelta(days=1)
 
 
 def _warranty_text(doc: DocumentRow, today: date) -> str | None:
