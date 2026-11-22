@@ -226,14 +226,76 @@ def test_reveal_refuses_a_card_photo_and_an_unknown_document(
 
 
 def test_the_mac_revealer_runs_open_without_a_shell(monkeypatch, tmp_path):
+    import subprocess
+
     from household_vault.reveal import MacRevealer
 
     seen = {}
 
     def fake_run(args, **kwargs):
         seen["args"], seen["kwargs"] = args, kwargs
+        return subprocess.CompletedProcess(args, 0)
 
     monkeypatch.setattr("household_vault.reveal.subprocess.run", fake_run)
     MacRevealer().reveal(tmp_path / "a b.pdf")
     assert seen["args"] == ["open", "-R", str(tmp_path / "a b.pdf")]
     assert not seen["kwargs"].get("shell")
+
+
+@pytest.mark.parametrize("page", ["99999999999999999999", "-1", "10001"])
+@pytest.mark.parametrize("tail", ["pages/{page}.png", "pages/{page}/lines"])
+def test_a_page_number_out_of_range_is_a_422_on_every_page_route(
+    search_client, photo_doc, waiting_item, page, tail
+):
+    for base in (f"/v1/documents/{photo_doc.id}", f"/v1/items/{waiting_item.id}"):
+        r = search_client.get(f"{base}/{tail.format(page=page)}")
+        assert r.status_code == 422, (base, tail, page)
+
+
+def test_reveal_of_a_file_gone_from_drive_is_a_404(
+    search_client, search_state, filed_ids, fake_revealer
+):
+    doc = search_state.store.document(filed_ids[0])
+    search_state.vault.unlink(doc.rel_path)
+    r = search_client.post(f"/v1/documents/{doc.id}/reveal")
+    assert r.status_code == 404 and r.json()["detail"] == "That file is not available."
+    assert fake_revealer.paths == []
+
+
+def test_a_revealer_that_fails_is_a_409_without_the_path(
+    search_client, search_state, filed_ids, fake_revealer
+):
+    from household_vault.reveal import RevealFailed
+
+    def fail(path):
+        raise RevealFailed(str(path))
+
+    fake_revealer.reveal = fail
+    r = search_client.post(f"/v1/documents/{filed_ids[0]}/reveal")
+    doc = search_state.store.document(filed_ids[0])
+    assert r.status_code == 409 and doc.rel_path not in r.text
+    assert str(search_state.vault.root) not in r.text
+
+
+def test_the_mac_revealer_times_out_and_reports_a_bad_exit(monkeypatch, tmp_path):
+    import subprocess
+
+    from household_vault.reveal import MacRevealer, RevealFailed
+
+    seen = {}
+
+    def slow(args, **kwargs):
+        seen.update(kwargs)
+        raise subprocess.TimeoutExpired(args, kwargs["timeout"])
+
+    monkeypatch.setattr("household_vault.reveal.subprocess.run", slow)
+    with pytest.raises(RevealFailed):
+        MacRevealer().reveal(tmp_path / "a.pdf")
+    assert seen["timeout"] == 5
+
+    monkeypatch.setattr(
+        "household_vault.reveal.subprocess.run",
+        lambda args, **kw: subprocess.CompletedProcess(args, 1),
+    )
+    with pytest.raises(RevealFailed):
+        MacRevealer().reveal(tmp_path / "a.pdf")

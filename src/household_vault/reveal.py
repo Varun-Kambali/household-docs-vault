@@ -4,6 +4,13 @@ import subprocess
 from pathlib import Path
 from typing import Protocol
 
+TIMEOUT_SECONDS = 5
+
+
+class RevealFailed(Exception):
+    """Finder did not open: `open` timed out, could not run or exited with an error. The message
+    never reaches a response."""
+
 
 class Revealer(Protocol):
     def reveal(self, path: Path) -> None: ...
@@ -14,4 +21,9 @@ class MacRevealer:
     string."""
 
     def reveal(self, path: Path) -> None:
-        subprocess.run(["open", "-R", str(path)], check=False, timeout=10)
+        try:
+            done = subprocess.run(["open", "-R", str(path)], check=False, timeout=TIMEOUT_SECONDS)
+        except (subprocess.TimeoutExpired, OSError):
+            raise RevealFailed("open did not finish") from None
+        if done.returncode != 0:
+            raise RevealFailed("open failed")

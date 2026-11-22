@@ -8,7 +8,7 @@ from collections.abc import Callable
 from pathlib import PurePosixPath
 from typing import Annotated, Any
 
-from fastapi import FastAPI, HTTPException, Query, Request, Response
+from fastapi import FastAPI, HTTPException, Path, Query, Request, Response
 from fastapi.responses import JSONResponse
 
 from household_vault.api.models import LineOut, PageLinesOut
@@ -18,6 +18,7 @@ from household_vault.intake.sniff import FileKind, sniff
 from household_vault.pages import NoSuchPage, render_png
 from household_vault.reading.ocr import EngineUnavailable
 from household_vault.reading.render import DamagedFileError, LockedPdfError
+from household_vault.reveal import RevealFailed
 from household_vault.vaultroot import SECRETS_FILE, VaultPathError
 
 NOT_HERE = "Show in folder works on the Mac itself, so the Drive path was copied instead."
@@ -26,6 +27,10 @@ CANNOT_DRAW = "That page cannot be drawn."
 _MAC_HOSTS = ("localhost", "127.0.0.1", "[::1]")
 _DRAWABLE = (FileKind.pdf, FileKind.jpeg, FileKind.png, FileKind.heic)
 
+NOT_OPENED = "Show in folder did not work. Open the Drive path instead."
+NO_FILE = "That file is not available."
+
+PageNo = Annotated[int, Path(ge=0, le=10_000)]
 Width = Annotated[int, Query(ge=320, le=2000)]
 
 
@@ -97,28 +102,28 @@ def add_page_routes(
         return PageLinesOut(page=page, lines=out)
 
     @app.get("/v1/documents/{doc_id}/pages/{page}.png", response_model=None)
-    def document_page(doc_id: str, page: int, width: Width = 1200) -> Response:
+    def document_page(doc_id: str, page: PageNo, width: Width = 1200) -> Response:
         doc = known_document(doc_id)
         if is_card_photo(state.store, doc.sha256):
             return card_private()
         return drawn(doc.rel_path, page, width)
 
     @app.get("/v1/documents/{doc_id}/pages/{page}/lines", response_model=None)
-    def document_lines(doc_id: str, page: int) -> PageLinesOut | JSONResponse:
+    def document_lines(doc_id: str, page: PageNo) -> PageLinesOut | JSONResponse:
         doc = known_document(doc_id)
         if is_card_photo(state.store, doc.sha256):
             return card_private()
         return lines_of_document(doc.id, page)
 
     @app.get("/v1/items/{item_id}/pages/{page}.png", response_model=None)
-    def item_page(item_id: int, page: int, width: Width = 1200) -> Response:
+    def item_page(item_id: int, page: PageNo, width: Width = 1200) -> Response:
         item = known_item(item_id)
         if shares_card_photo(state.store, item):
             return card_private()
         return drawn(item.rel_path, page, width)
 
     @app.get("/v1/items/{item_id}/pages/{page}/lines", response_model=None)
-    def item_lines(item_id: int, page: int) -> PageLinesOut | JSONResponse:
+    def item_lines(item_id: int, page: PageNo) -> PageLinesOut | JSONResponse:
         item = known_item(item_id)
         if shares_card_photo(state.store, item):
             return card_private()
@@ -133,5 +138,14 @@ def add_page_routes(
             return JSONResponse(status_code=409, content={"detail": NOT_HERE})
         if _private(doc.rel_path):
             raise HTTPException(404, NO_PAGE)
-        state.revealer.reveal(state.vault.path(doc.rel_path))
+        try:
+            if not state.vault.exists(doc.rel_path):
+                raise HTTPException(404, NO_FILE)
+            target = state.vault.path(doc.rel_path)
+        except VaultPathError:
+            raise HTTPException(404, NO_FILE) from None
+        try:
+            state.revealer.reveal(target)
+        except RevealFailed:
+            return JSONResponse(status_code=409, content={"detail": NOT_OPENED})
         return Response(status_code=204)
