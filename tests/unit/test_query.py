@@ -424,3 +424,10 @@ def test_a_date_neither_the_model_nor_the_prompt_can_read_stays_unread(household
     slot = DateSlot(role="expiry", phrase="before Diwali")
     q = resolve(reading(date=slot), household, TODAY, "expiring before Diwali")
     assert (q.range, q.unread) == (None, ["date: before Diwali"])
+
+
+def test_a_type_word_narrows_the_models_area_when_it_holds_that_type(household):
+    q = resolve(reading(areas=[Area.tax]), household, TODAY, "Form 16s for this year")
+    assert (q.types, q.areas, q.backstop_conflicts) == ([DocType.form_16], [], 0)
+    q = resolve(reading(areas=[Area.insurance]), household, TODAY, "Form 16s for this year")
+    assert (q.types, q.areas, q.backstop_conflicts) == ([], [Area.insurance], 1)

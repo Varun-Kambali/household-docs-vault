@@ -378,7 +378,12 @@ def resolve(reading: QueryReading, household: Household, today: date, prompt: st
         ):
             conflicts += 1
         found_types = _scan_types(prompt)
-        if found_types and not reading.types and not reading.areas:
+        if (
+            found_types
+            and not reading.types
+            and all(AREA[t] in reading.areas or not reading.areas for t in found_types)
+        ):
+            # nothing named, or only the area that holds the type the prompt names
             types = found_types
         elif found_types and set(found_types) != set(reading.types):
             conflicts += 1
