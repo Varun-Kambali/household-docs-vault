@@ -372,7 +372,8 @@ def weak_match(query: Query, rows: Sequence[Row]) -> bool:
         return False
     if query.words.strip() and not any(r.word_hit or r.vector >= MIN_VECTOR for r in rows):
         return True
-    top = rows[0]
+    # the row an answer would come from: the best one that passes the person and type filters
+    top = next((r for r in rows if _fits(query, r)), rows[0])
     return not _filtered(query) and top.score < MIN_FUSED and len(top.lines) < MIN_KEYWORD
 
 

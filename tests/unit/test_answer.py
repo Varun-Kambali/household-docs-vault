@@ -1,3 +1,4 @@
+import dataclasses
 from datetime import date
 from decimal import Decimal
 
@@ -719,3 +720,14 @@ def test_an_unknown_person_leaves_a_find_and_a_list_alone(store):
     rows = _life_policy_rows(store)
     assert compose(query(intent="find", unread=["person: Anil"]), rows, store, TODAY) is None
     assert compose(query(intent="list", unread=["person: Anil"]), rows, store, TODAY) is None
+
+
+def test_weak_evidence_is_judged_on_the_row_the_answer_comes_from(store):
+    policy, pan = _kavita_policy_and_suresh_pan(store)
+    thin = dataclasses.replace(policy[0], score=0.0, lines=[])
+    solid = pan[0]  # score 0.05
+    # no filter: the answer comes from the first row, which is thin
+    assert answer_module.weak_match(query(field="number"), [thin, solid])
+    # a person filter: the answer comes from Suresh's row, which carries evidence
+    assert not answer_module.weak_match(query(field="number", people=["p1"]), [thin, solid])
+    assert not answer_module.weak_match(query(field="number"), [solid, thin])
