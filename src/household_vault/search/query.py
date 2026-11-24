@@ -12,7 +12,7 @@ import re
 from datetime import date
 from typing import Annotated, Literal, Protocol
 
-from pydantic import AfterValidator, BaseModel, ConfigDict, ValidationError, WithJsonSchema
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, ValidationError, WithJsonSchema
 
 from household_vault.doctypes import AREA, Area, DocType
 from household_vault.people import Household, match_person, normalise_name
@@ -76,7 +76,8 @@ class Query(BaseModel):
     place: str | None = None
     words: str = ""
     unread: list[str] = []  # parts code could not resolve, such as "person: Anil"
-    backstop_conflicts: int = 0  # slots where the prompt's own words and the model disagreed
+    # slots where the prompt's own words and the model disagreed; never part of the stored form
+    backstop_conflicts: int = Field(default=0, exclude=True)
 
 
 def _system_text_v1() -> str:
