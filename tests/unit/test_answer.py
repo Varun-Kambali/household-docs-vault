@@ -679,3 +679,43 @@ def test_no_filter_still_answers_from_the_top_row(store):
     policy, pan = _kavita_policy_and_suresh_pan(store)
     got = compose(query(field="policy_number"), [*policy, *pan], store, TODAY)
     assert isinstance(got, Answer) and got.document_id == "life"
+
+
+# -- a person the household does not hold declines, never answers from another member -----------
+
+
+def _life_policy_rows(store):
+    return make_rows(
+        store,
+        DocType.life_policy,
+        {"policyholder": "Kavita Rao", "policy_number": "PL/NY304449"},
+        ["Life policy", "Policy number PL/NY304449"],
+        doc_id="life",
+        owner="p2",
+    )
+
+
+def test_an_unknown_person_declines_a_lookup_and_keeps_the_closest_files(store):
+    rows = _life_policy_rows(store)
+    asked = query(field="policy_number", types=[DocType.life_policy], unread=["person: Anil"])
+    got = compose(asked, rows, store, TODAY)
+    assert got == NoAnswer("unknown_person", [rows[0].rel_path])
+
+
+def test_a_known_person_still_answers_the_same_lookup(store):
+    rows = _life_policy_rows(store)
+    asked = query(field="policy_number", types=[DocType.life_policy], people=["p2"])
+    got = compose(asked, rows, store, TODAY)
+    assert isinstance(got, Answer) and got.value == "PL/NY304449"
+
+
+def test_an_unread_date_alone_does_not_decline_a_lookup(store):
+    rows = _life_policy_rows(store)
+    asked = query(field="policy_number", types=[DocType.life_policy], unread=["date: Diwali"])
+    assert isinstance(compose(asked, rows, store, TODAY), Answer)
+
+
+def test_an_unknown_person_leaves_a_find_and_a_list_alone(store):
+    rows = _life_policy_rows(store)
+    assert compose(query(intent="find", unread=["person: Anil"]), rows, store, TODAY) is None
+    assert compose(query(intent="list", unread=["person: Anil"]), rows, store, TODAY) is None

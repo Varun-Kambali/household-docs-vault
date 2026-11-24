@@ -73,7 +73,7 @@ class Answer:
 
 @dataclass(frozen=True)
 class NoAnswer:
-    reason: Literal["no_documents", "weak_match", "no_field", "not_on_page"]
+    reason: Literal["no_documents", "unknown_person", "weak_match", "no_field", "not_on_page"]
     closest: list[str]  # paths of the closest files
 
 
@@ -387,13 +387,18 @@ def compose(
     query: Query, rows: Sequence[Row], store: Store, today: date
 ) -> Answer | NoAnswer | None:
     """The answer to a lookup, read from the top row's stored fields; `None` for a list, or a
-    find or a lookup that names no field and has evidence (they show rows only).
+    find or a lookup that names no field and has evidence (they show rows only). A lookup that
+    names a person the household does not hold is declined.
 
     Weak evidence (`weak_match`) is declined with the closest files, for a find as well.
     """
     if query.intent == "list":
         return None
     closest = [r.rel_path for r in rows[:3]]
+    if query.intent == "lookup" and any(u.startswith("person:") for u in query.unread):
+        # a person the household does not hold: an empty person filter would answer from
+        # whoever's document ranks first, which is another member's value
+        return NoAnswer("unknown_person", closest)
     if weak_match(query, rows):
         return NoAnswer("weak_match", closest)
     if query.intent != "lookup" or query.field is None:

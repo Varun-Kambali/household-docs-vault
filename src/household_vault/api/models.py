@@ -214,7 +214,7 @@ class AnswerOut(BaseModel):
 
 
 class NoAnswerOut(BaseModel):
-    reason: Literal["no_documents", "weak_match", "no_field", "not_on_page"]
+    reason: Literal["no_documents", "unknown_person", "weak_match", "no_field", "not_on_page"]
     closest: list[str]
 
 

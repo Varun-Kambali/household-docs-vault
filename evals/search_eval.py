@@ -594,6 +594,7 @@ def _lookup_cause(q: Question, res: Result, ids: Sequence[str]) -> str | None:
     if isinstance(outcome, NoAnswer):
         return {
             "weak_match": "weak match declined",
+            "unknown_person": "unknown person",
             "no_field": "field not on the type",
             "not_on_page": "no located line",
         }.get(outcome.reason, "retrieval miss")
