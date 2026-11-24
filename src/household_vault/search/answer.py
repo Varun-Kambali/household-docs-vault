@@ -25,7 +25,7 @@ from household_vault.schemas._coerce import field_kind, parse_amount, parse_date
 from household_vault.search.dates import add_months
 from household_vault.search.query import Query
 from household_vault.search.retrieve import LineRef, Row
-from household_vault.search.vocab import DATE_ROLES, MASKED_FIELDS
+from household_vault.search.vocab import DATE_ROLES, MASKED_FIELDS, field_for
 
 # A top row with no filter behind it is declined when its fused score is under MIN_FUSED (a
 # reciprocal-rank score; one ranking's first place scores about 0.016, so this wants two
@@ -381,8 +381,8 @@ def compose(
     schema = SCHEMAS.get(doc.doc_type) if doc is not None else None
     if doc is None or schema is None:
         return NoAnswer("no_documents", closest)
-    name = query.field
-    if name not in schema.model_fields or doc.fields.get(name) in (None, "", []):
+    name = field_for(doc.doc_type, query.field, schema.model_fields)
+    if name is None or doc.fields.get(name) in (None, "", []):
         return NoAnswer("no_field", closest)
     kind = field_kind(schema, name)
     text = _text_of(doc, name, kind, today)

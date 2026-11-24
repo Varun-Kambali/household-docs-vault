@@ -503,3 +503,67 @@ def test_an_identifier_matches_whole_runs_of_letters_and_digits():
     assert locate("12345", "identifier", [stored_line("No. 12345")])
     assert locate("ABC123", "identifier", [stored_line("ABC123")])
     assert not locate("490154203237518", "identifier", [stored_line("Z1XXXXXXXXXXX7518")])
+
+
+# -- a field asked by another name -------------------------------------------------------------
+
+
+def test_an_expiry_asked_of_a_policy_is_read_from_its_end_date(store):
+    rows = policy_rows(store, date(2027, 3, 31))
+    a = compose(query(field="expiry_date"), rows, store, TODAY)
+    assert isinstance(a, Answer)
+    assert (a.field, a.value, a.text) == ("end_date", "2027-03-31", "Yes, until 31 Mar 2027.")
+
+
+def test_a_passport_asked_for_its_end_date_answers_from_the_expiry_date(store):
+    rows = make_rows(
+        store,
+        DocType.passport,
+        {"holder": "Ravi Kumar", "number": "K1234567", "expiry_date": "2030-05-01"},
+        ["Passport", "Date of expiry 01/05/2030"],
+    )
+    a = compose(query(field="end_date"), rows, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "expiry_date" and a.value == "2030-05-01"
+
+
+def test_a_pan_asked_for_its_policy_number_is_not_guessed_from_another_kind_of_field(store):
+    rows = make_rows(
+        store,
+        DocType.pan,
+        {"holder": "Ravi Kumar", "number": "ABCDE1234F", "date_of_birth": "1980-01-01"},
+        ["Permanent Account Number", "ABCDE1234F", "Ravi Kumar"],
+    )
+    assert compose(query(field="invoice_date"), rows, store, TODAY).reason == "no_field"
+    # an identifier asked under another name is the type's own identifier
+    a = compose(query(field="certificate_number"), rows, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "number"
+    a = compose(query(field="policy_number"), rows, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "number"
+
+
+def test_a_policyholder_and_a_holder_are_the_types_own_name_field(store):
+    policy = make_rows(
+        store,
+        DocType.health_policy,
+        {"insurer": "Star Health", "policyholder": "Ravi Kumar", "end_date": "2027-03-31"},
+        ["Star Health", "Policyholder: Ravi Kumar"],
+    )
+    a = compose(query(field="holder"), policy, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "policyholder"
+    card = make_rows(
+        store,
+        DocType.card_statement,
+        {"bank": "Nilgiri Bank", "holder": "Ravi Kumar", "last4": "1234"},
+        ["Nilgiri Bank", "Ravi Kumar", "Card ending 1234"],
+        doc_id="d2",
+    )
+    a = compose(query(field="number"), card, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "last4"
+
+
+def test_a_field_the_type_holds_is_never_remapped(store):
+    rows = policy_rows(
+        store, date(2027, 3, 31), lines=["Star Health", "Policy No P/123", "Ends 31/03/2027"]
+    )
+    a = compose(query(field="policy_number"), rows, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "policy_number"

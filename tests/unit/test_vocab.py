@@ -51,3 +51,11 @@ def test_masked_fields_are_the_id_numbers():
     }
     assert {f for _, f in MASKED_FIELDS} == {"number"}
     assert all(AREA[t] is Area.identity for t, _ in MASKED_FIELDS)
+
+
+def test_every_alias_target_is_a_field_of_its_type():
+    from household_vault.search.vocab import PRIMARY_ID, PRIMARY_NAME
+
+    for table in (PRIMARY_ID, PRIMARY_NAME):
+        for doc_type, name in table.items():
+            assert name in SCHEMAS[doc_type].model_fields, (doc_type, name)
