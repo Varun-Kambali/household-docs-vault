@@ -61,7 +61,7 @@ from household_vault.reading.source import DocumentSource, document_key
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import field_kind, parse_amount, parse_date
 from household_vault.scoring import IOU_MIN, iou, normalise
-from household_vault.search.answer import MIN_FUSED, MIN_KEYWORD, Answer, NoAnswer, compose
+from household_vault.search.answer import Answer, NoAnswer, compose, weak_match
 from household_vault.search.query import PROMPT_READ_V1, PromptReader, Query, read_prompt, resolve
 from household_vault.search.retrieve import Rows
 from household_vault.search.sentence import sentence
@@ -567,15 +567,9 @@ def query_differences(got: Query, want: Query) -> list[str]:
     return out
 
 
-def _filtered(query: Query) -> bool:
-    return bool(
-        query.people or query.types or query.areas or query.place or query.range is not None
-    )
-
-
 def declined(res: Result) -> bool:
-    """The app gave no answer: a lookup's NoAnswer, a person it could not read, no rows, or a
-    top row with no filter behind it and thin evidence (the rule `compose` applies)."""
+    """The app gave no answer: a NoAnswer, a person it could not read, no rows, or thin evidence
+    (the `weak_match` rule `compose` applies)."""
     if isinstance(res.outcome, NoAnswer):
         return True
     query = res.query
@@ -583,13 +577,7 @@ def declined(res: Result) -> bool:
         return True
     if not res.rows:
         return True
-    top = res.rows[0]
-    return (
-        query is not None
-        and not _filtered(query)
-        and top.score < MIN_FUSED
-        and len(top.lines) < MIN_KEYWORD
-    )
+    return query is not None and weak_match(query, res.rows)
 
 
 def _lookup_cause(q: Question, res: Result, ids: Sequence[str]) -> str | None:

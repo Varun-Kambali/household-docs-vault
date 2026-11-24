@@ -567,3 +567,63 @@ def test_a_field_the_type_holds_is_never_remapped(store):
     )
     a = compose(query(field="policy_number"), rows, store, TODAY)
     assert isinstance(a, Answer) and a.field == "policy_number"
+
+
+# -- weak evidence -----------------------------------------------------------------------------
+
+
+def with_evidence(rows, **changes):
+    return [Row(**{**rows[0].__dict__, **changes}), *rows[1:]]
+
+
+def test_residual_words_with_no_match_decline_even_when_a_filter_found_the_row(store):
+    rows = policy_rows(store, date(2027, 3, 31), score=0.0)
+    named = {"types": [DocType.health_policy], "words": "inverter"}
+    a = compose(query(field="end_date", **named), rows, store, TODAY)
+    assert a == NoAnswer("weak_match", [rows[0].rel_path])
+    # a filter-only row with no residual words is still a real candidate
+    assert isinstance(
+        compose(query(field="end_date", types=[DocType.health_policy]), rows, store, TODAY), Answer
+    )
+
+
+def test_a_keyword_hit_or_a_vector_score_on_the_words_is_evidence(store):
+    rows = policy_rows(store, date(2027, 3, 31), score=0.0)
+    named = {"types": [DocType.health_policy], "words": "Star"}
+    hit = with_evidence(rows, word_hit=True)
+    assert isinstance(compose(query(field="end_date", **named), hit, store, TODAY), Answer)
+    near = with_evidence(rows, vector=answer_module.MIN_VECTOR)
+    assert isinstance(compose(query(field="end_date", **named), near, store, TODAY), Answer)
+    far = with_evidence(rows, vector=answer_module.MIN_VECTOR - 0.01)
+    assert compose(query(field="end_date", **named), far, store, TODAY).reason == "weak_match"
+
+
+def test_evidence_on_any_candidate_is_enough(store):
+    rows = policy_rows(store, date(2027, 3, 31), score=0.0)
+    second = policy_rows(store, date(2027, 4, 30), doc_id="d2")
+    second = with_evidence(second, word_hit=True)
+    named = {"types": [DocType.health_policy], "words": "Star"}
+    got = compose(query(field="end_date", **named), [*rows, *second], store, TODAY)
+    assert isinstance(got, Answer)
+
+
+def test_a_find_with_residual_words_and_no_match_is_declined_with_the_closest_files(store):
+    rows = policy_rows(store, date(2027, 3, 31), score=0.0)
+    found = query(intent="find", types=[DocType.health_policy], words="inverter")
+    assert compose(found, rows, store, TODAY) == NoAnswer("weak_match", [rows[0].rel_path])
+    plain = query(intent="find", types=[DocType.health_policy])
+    assert compose(plain, rows, store, TODAY) is None
+    good = with_evidence(rows, word_hit=True)
+    assert compose(found, good, store, TODAY) is None
+
+
+def test_a_person_and_a_type_with_no_words_still_answer(store):
+    rows = make_rows(
+        store,
+        DocType.pan,
+        {"holder": "Kavita Rao", "number": "ABCDE1234F"},
+        ["Permanent Account Number", "ABCDE1234F"],
+        score=0.0,
+    )
+    a = compose(query(field="number", people=["p2"], types=[DocType.pan]), rows, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "number"

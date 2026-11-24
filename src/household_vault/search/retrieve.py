@@ -9,7 +9,7 @@ place fields.
 """
 
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date
 
 from pydantic import JsonValue
@@ -52,6 +52,8 @@ class Row:
     date: date | None  # the role's date (the document date by default); None when it has none
     score: float
     lines: list[LineRef]
+    vector: float = 0.0  # the best cosine of the document's chunks to a query vector
+    word_hit: bool = False  # the query's residual words matched a line or a field by keyword
 
 
 Rows = list[Row]
@@ -211,13 +213,22 @@ class Searcher:
         only = None if allowed is None else set(allowed)  # rank inside the candidates
         base = " ".join(p for p in (query.words, query.place or "") if p).strip() or prompt
         text = " ".join([base, *(TYPE_LABELS[t] for t in query.types)])
+        word_hits = (
+            self.keyword.search(query.words, limit=POOL, prefix_last=False, only=only)
+            if query.words.strip()
+            else []
+        )
         keyword_hits = [
-            self.keyword.search(p, limit=POOL, prefix_last=False, only=only)
+            word_hits
+            if p == query.words
+            else self.keyword.search(p, limit=POOL, prefix_last=False, only=only)
             for p in (query.words, query.place or "")
             if p.strip()
         ] or [self.keyword.search(prompt, limit=POOL, prefix_last=False, only=only)]
         vec = self.vectors.search(text, limit=POOL, only=only)
         rankings = [_ids(hits) for hits in keyword_hits] + [_ids(vec)]
+        best: dict[str, float] = {}
+        votes = [vec]
         if allowed is not None:
             # The reading may have named the wrong person or type. The prompt's own keyword and
             # vector matches, unfiltered, vote too, so a misread filter cannot remove the
@@ -226,7 +237,15 @@ class Searcher:
             quick_vec = self.vectors.search(prompt, limit=POOL)
             keyword_hits = [*keyword_hits, quick_kw]
             rankings += [_ids(quick_kw)[:UNFILTERED_VOTES], _ids(quick_vec)[:UNFILTERED_VOTES]]
-        rows = self._fuse(rankings, keyword_hits, query.role, limit)
+            votes.append(quick_vec)
+        for hits in votes:
+            for h in hits:
+                best[h.document_id] = max(best.get(h.document_id, -1.0), h.score)
+        found = {h.document_id for h in word_hits}
+        rows = [
+            replace(r, vector=best.get(r.document_id, 0.0), word_hit=r.document_id in found)
+            for r in self._fuse(rankings, keyword_hits, query.role, limit)
+        ]
         if allowed is not None and len(rows) < limit:
             # The filters named documents the rankings did not reach: they still answer.
             seen = {r.document_id for r in rows}

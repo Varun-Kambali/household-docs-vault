@@ -251,6 +251,10 @@ def test_declined_follows_the_apps_weak_evidence_rule():
     assert declined(Result(Query(intent="find"), [top], None, []))  # no filter, score under 0.02
     assert not declined(Result(Query(intent="find", people=["p1"]), [top], None, []))
     assert declined(Result(Query(intent="find"), [], None, []))
+    words = Query(intent="find", people=["p1"], words="inverter")
+    assert declined(Result(words, [top], None, []))  # residual words, nothing matches them
+    matched = Row(**{**top.__dict__, "word_hit": True})
+    assert not declined(Result(words, [matched], None, []))
     assert declined(Result(Query(intent="find", unread=["person: Anil"]), [top], None, []))
     assert not declined(
         Result(Query(intent="find", people=["p1"], unread=["date: soon"]), [top], None, [])
