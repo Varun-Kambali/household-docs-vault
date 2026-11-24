@@ -384,7 +384,7 @@ def test_a_type_word_is_not_used_when_the_model_named_an_area_or_a_type(househol
 
 
 def test_a_type_word_must_be_a_whole_word(household):
-    assert resolve(reading(), household, TODAY, "passports and more").types == []
+    assert resolve(reading(), household, TODAY, "passportz and more").types == []
     assert resolve(reading(), household, TODAY, "the mediclaim policy").types == [
         DocType.health_policy
     ]
@@ -393,3 +393,34 @@ def test_a_type_word_must_be_a_whole_word(household):
 def test_without_a_prompt_there_is_no_backstop(household):
     q = resolve(reading(), household, TODAY)
     assert (q.people, q.types, q.range, q.backstop_conflicts) == ([], [], None, 0)
+
+
+def test_a_plural_type_word_counts(household):
+    assert resolve(reading(), household, TODAY, "invoices from this year").types == [
+        DocType.tax_invoice
+    ]
+    assert resolve(reading(), household, TODAY, "my payslips").types == [DocType.payslip]
+
+
+def test_a_date_the_model_wrote_that_code_cannot_read_is_read_from_the_prompt(household):
+    slot = DateSlot(role="expiry", phrase="expiring before January 2027")
+    q = resolve(
+        reading(date=slot),
+        household,
+        TODAY,
+        "expiring before January 2027",
+    )
+    assert (q.range, q.unread, q.backstop_conflicts) == (
+        DateRange(start=TODAY, end=date(2026, 12, 31)),
+        [],
+        0,
+    )
+    slot = DateSlot(role="expiry", phrase="in the next 6 months")
+    q = resolve(reading(date=slot), household, TODAY, "what expires in the next 6 months")
+    assert q.range == DateRange(start=TODAY, end=date(2027, 5, 21))
+
+
+def test_a_date_neither_the_model_nor_the_prompt_can_read_stays_unread(household):
+    slot = DateSlot(role="expiry", phrase="before Diwali")
+    q = resolve(reading(date=slot), household, TODAY, "expiring before Diwali")
+    assert (q.range, q.unread) == (None, ["date: before Diwali"])

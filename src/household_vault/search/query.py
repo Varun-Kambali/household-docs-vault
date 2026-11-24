@@ -338,7 +338,7 @@ def _scan_types(prompt: str) -> list[DocType]:
     )
     found: list[DocType] = []
     for phrase, doc_type in phrases:
-        pattern = rf"(?<!\w){re.escape(phrase)}(?!\w)"
+        pattern = rf"(?<!\w){re.escape(phrase)}(?:s|es)?(?!\w)"
         if re.search(pattern, text):
             text = re.sub(pattern, " ", text)
             if doc_type not in found:
@@ -363,6 +363,14 @@ def resolve(reading: QueryReading, household: Household, today: date, prompt: st
         scanned = _scan_date(prompt, today)
         if scanned is not None and slot is None:
             slot = scanned[0]
+        elif (
+            scanned is not None
+            and slot is not None
+            and parse_date_phrase(slot.phrase, today) is None
+        ):
+            # the model copied words code cannot read ("expiring before June"): keep its role and
+            # read the date from the prompt itself
+            slot = DateSlot(role=slot.role, phrase=scanned[0].phrase)
         elif (
             scanned is not None
             and slot is not None
