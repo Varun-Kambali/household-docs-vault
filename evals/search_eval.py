@@ -11,11 +11,13 @@ is `EVAL_TODAY`. Metric definitions: `evals/README.md`.
 from __future__ import annotations
 
 import hashlib
+import itertools
 import json
 import math
 import re
 import shutil
 import time
+import uuid
 from collections import Counter
 from collections.abc import Callable, Collection, Mapping, Sequence
 from dataclasses import asdict, dataclass, field
@@ -23,6 +25,7 @@ from datetime import date
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
+from unittest import mock
 
 import numpy as np
 from pydantic import JsonValue
@@ -47,6 +50,7 @@ from household_vault.app_state import AppState, build_app_state
 from household_vault.config import load_settings
 from household_vault.db import Item, ItemState
 from household_vault.doctypes import AREA, DocType
+from household_vault.filing import filer
 from household_vault.leakscan import scan_outputs, waiting_original_paths
 from household_vault.people import load_household, normalise_name
 from household_vault.reading.engines import Engines
@@ -110,9 +114,14 @@ def _stamp(folder: Path, role: str, model: str, digest: str | None, *, write: bo
     have = body.get(role)
     if isinstance(have, dict):
         same_digest = digest is None or have.get("digest") in (None, digest)
-        if have.get("model") != model or not same_digest:
+        if have.get("model") != model:
             raise RecordingMismatch(
                 f"{folder} holds {role} recordings made with {have.get('model')}, not {model}"
+            )
+        if not same_digest:
+            raise RecordingMismatch(
+                f"{folder} holds {role} recordings made with another build of {model} "
+                "(the model was pulled again since)"
             )
         return
     if write:
@@ -304,10 +313,30 @@ def _items(state: AppState) -> list[Item]:
     return state.store.items(_ALL_STATES)
 
 
+class _Counted:
+    """Stands in for `uuid` in the filer: ids that come from a counter (hashed, so they read like
+    any id), so two builds of one vault have the same ids and so the same order among documents
+    that rank alike."""
+
+    def __init__(self) -> None:
+        self._n = itertools.count(1)
+
+    def uuid4(self) -> uuid.UUID:
+        digest = hashlib.sha256(f"doc-{next(self._n)}".encode()).digest()
+        return uuid.UUID(bytes=digest[:16])
+
+
 def _build(
     docs: Sequence[SynthDoc], recordings: Path, root: Path, embedder: Embedder
 ) -> tuple[AppState, dict[str, str], list[_Entry]]:
     """The vault over docs, and the map from each filed truth document id to its database id."""
+    with mock.patch.object(filer, "uuid", _Counted()):
+        return _build_vault(docs, recordings, root, embedder)
+
+
+def _build_vault(
+    docs: Sequence[SynthDoc], recordings: Path, root: Path, embedder: Embedder
+) -> tuple[AppState, dict[str, str], list[_Entry]]:
     entries = [
         _Entry(d, files, document_key(files))
         for d in docs

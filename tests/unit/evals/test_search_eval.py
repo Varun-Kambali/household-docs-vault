@@ -359,7 +359,10 @@ def status_question(doc: SynthDoc, field: str) -> Question:
 def judged_answer(q: Question, doc: SynthDoc, value: Any, text: str) -> SearchRow:
     page, box = _where(doc, q.field)
     answer = an_answer("db-1", q.field, value, text, [LineRef(page, 0, box)])
-    res = Result(Query(intent="lookup", field=q.field), [], answer, [])
+    top = Row(
+        "db-1", doc.doc_type, "p1", ["p1"], "insurance", "x", date(2026, 1, 1), {}, None, 0.5, []
+    )
+    res = Result(Query(intent="lookup", field=q.field), [top], answer, [])
     return judge(q, res, {doc.doc_id: doc}, {"db-1": doc.doc_id})
 
 
@@ -369,7 +372,7 @@ def test_a_wrong_value_is_a_wrong_answer(smoke_docs):
     right = judged_answer(q, doc, doc.fields["policy_number"], "x")
     wrong = judged_answer(q, doc, str(doc.fields["policy_number"]) + "9", "x")
     assert (right.answer_correct, wrong.answer_correct) == (True, False)
-    assert wrong.cause == "wrong value" or wrong.cause is not None
+    assert wrong.cause == "wrong value"
 
 
 def test_a_validity_answer_must_state_the_right_status(smoke_docs):
@@ -488,3 +491,49 @@ def test_val_results_never_default_to_the_committed_folder():
     assert results_folder("test").parts[-2:] == ("evals", "results")
     args = _parser().parse_args(["search", "--split", "val", "--recordings", "r", "--replay", "x"])
     assert args.results is None
+
+
+def _replay_args(folder: Path, results: Path) -> list[str]:
+    reading = str(EVAL_V1.parent.parent / "recordings" / "eval-v1" / "smoke")
+    return [
+        "search", "--split", "val", "--smoke", "--recordings", reading,
+        "--replay", str(folder), "--results", str(results),
+    ]  # fmt: skip
+
+
+def test_a_replay_refuses_a_model_that_was_pulled_again(tmp_path, monkeypatch, capsys):
+    from evals import runner
+
+    folder = copy_smoke(tmp_path)
+    manifest = json.loads((folder / "manifest.json").read_text())
+    tags = {name: body["digest"] for name, body in (
+        (manifest[r]["model"], manifest[r]) for r in ("prompt_reader", "embedder")
+    )}  # fmt: skip
+    monkeypatch.setattr(runner.OllamaClient, "tags", lambda self: dict(tags))
+    assert main(_replay_args(folder, tmp_path / "ok")) == 0
+    for name in tags:
+        monkeypatch.setattr(
+            runner.OllamaClient, "tags", lambda self, n=name: {**tags, n: "another-digest"}
+        )
+        assert main(_replay_args(folder, tmp_path / "bad")) == 1
+        assert "pulled again" in capsys.readouterr().out
+
+    # Ollama off: the manifest alone is checked, as in CI
+    def off(self):
+        raise ModelUnavailable("off")
+
+    monkeypatch.setattr(runner.OllamaClient, "tags", off)
+    assert main(_replay_args(folder, tmp_path / "off")) == 0
+
+
+def test_two_builds_of_one_vault_give_the_same_document_ids(tmp_path, smoke_docs):
+    recordings = EVAL_V1.parent.parent / "recordings" / "eval-v1" / "smoke"
+    found = []
+    for n in range(2):
+        state, _, _ = _build(smoke_docs, recordings, tmp_path / str(n), RecordedEmbedder(SMOKE_DIR))
+        try:
+            rows = state.store.conn.execute("select id from documents order by id")
+            found.append([r[0] for r in rows])
+        finally:
+            state.store.conn.close()
+    assert found[0] == found[1] and found[0]

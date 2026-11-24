@@ -352,8 +352,24 @@ def _search(args: argparse.Namespace) -> int:
         }
     else:
         replay = Path(args.replay)
-        reader = RecordedPromptReader(replay, expect=settings.query_model)
-        embedder = RecordedEmbedder(replay, expect=settings.embed_model)
+        try:
+            tags = OllamaClient(settings.ollama_url, timeout_s=5.0).tags()
+        except (ModelUnavailable, ModelError):
+            tags = {}  # no Ollama to ask: the manifest alone is checked
+        try:
+            reader = RecordedPromptReader(
+                replay,
+                expect=settings.query_model,
+                expect_digest=tags.get(settings.query_model),
+            )
+            embedder = RecordedEmbedder(
+                replay,
+                expect=settings.embed_model,
+                expect_digest=tags.get(settings.embed_model),
+            )
+        except SearchEvalError as exc:
+            print(f"search: {exc}")
+            return 1
         models = {
             "prompt_reader": settings.query_model,
             "embedder": embedder.name,
