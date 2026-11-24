@@ -117,29 +117,35 @@ PROMPT_READ_V1 = _system_text_v1()
 def _system_text_v2() -> str:
     by_area: dict[Area, list[str]] = {}
     for t, words in TYPE_WORDS.items():
-        by_area.setdefault(AREA[t], []).append(f"{t.value} ({words[0]})" if words else t.value)
-    types = "\n".join(f"{a.value}: {', '.join(items)}" for a, items in by_area.items())
+        by_area.setdefault(AREA[t], []).append(
+            f"{t.value} ({', '.join(words[:2])})" if words else t.value
+        )
+    types = "\n".join(f"{a.value}: {'; '.join(items)}" for a, items in by_area.items())
     fields = ", ".join(FIELD_LABELS)
     return (
         "Read one question about a family's filed documents into JSON. Copy people, place and "
         "time words exactly as written; never work out a date.\n\n"
         "intent:\n"
-        "- lookup: wants one value of one document. Cues: is, when, what is the X of, how much, "
-        'who, which doctor, "still valid", "when does it expire".\n'
-        "- list: wants several documents. Cues: which, what, all, any, a plural noun (policies, "
-        'bills, cards), or a date range with no single document ("expiring before June").\n'
-        "- find: wants the document itself. Cues: show me, where is, open, or a document name "
-        "with a person or shop.\n\n"
+        "- lookup: wants one value of one document, such as a number, a date, a name, an "
+        "amount, a doctor, a hospital or a shop. Cues: is, when, what is the X of, how much, "
+        'who, which doctor, which shop, "still valid", "when does it expire". Always set field.\n'
+        "- list: wants several documents. Cues: which, what, all, any, show me or list with a "
+        'plural noun or a group ("policies", "bills", "education documents"), "expiring '
+        'before June", "renewals this year".\n'
+        "- find: wants one document itself and no value from it. Cues: where is, open, or one "
+        "document's name with a person or shop.\n\n"
         'people: names or relations as written ("Ravi", "my wife", "everyone"). A shop, insurer '
         "or hospital is a place, not a person. Empty when none.\n"
-        "types: type ids from the list below for a kind of document the question names. Empty "
-        "when unsure.\n"
+        "types: the type ids of the kind of document the question names, from the list below. "
+        'Empty when none is named ("anything from Croma").\n'
         'areas: only for a whole group ("insurance papers", "tax documents") with no single '
         "type named. Never fill both for the same words.\n"
         'field: for a lookup, one id from the field list; null otherwise. "still valid", '
-        '"expire", "valid till" use expiry_date; "still under warranty" uses warranty_parts.\n'
-        'date: a time condition. phrase is the time words as written ("before March", '
-        '"this year", "FY 2025-26", "next 6 months"). role is what the date is about:\n'
+        '"expire", "valid till" use expiry_date; "still under warranty" uses warranty_parts; '
+        '"document date" uses document_date; "number" on an ID card uses number.\n'
+        "date: null unless the question puts a time condition on the documents. Then phrase is "
+        'the time words as written ("before March", "this year", "FY 2025-26", "next 6 months"), '
+        "never a document name, and role is what the date is about:\n"
         '- expiry: expire, valid till ("insurance expiring before June")\n'
         '- renewal: renew ("renewals this year")\n'
         '- due: due, pay by ("premium due next month")\n'
@@ -147,12 +153,33 @@ def _system_text_v2() -> str:
         '"bills from last year")\n'
         '- issue: issued ("licences issued in 2020")\n'
         "- document: dated, this year's, last month's, for FY, for any other kind of document "
-        '("scan reports from last month", "Form 16 for FY 2025-26")\n'
+        '("certificates for last year", "scan reports from last month", "Form 16 for FY '
+        '2025-26")\n'
         "place: a shop, insurer, hospital or other place named, as written. null when none.\n"
         'words: other words worth searching for, such as a product or brand ("fridge", "LG"). '
-        "Not a person, a place, a date or a document type.\n\n"
-        f"Document types by area (id and a word people use):\n{types}\n\n"
-        f"Fields (use the id): {fields}"
+        "Empty when there are none; never a person, a place, a date or a document type.\n\n"
+        f"Document types by area (id and words people use):\n{types}\n\n"
+        f"Fields (use the id): {fields}\n\n"
+        "Examples:\n"
+        'Which of Meera\'s insurance papers expire before June? -> {"intent":"list",'
+        '"people":["Meera"],"types":[],"areas":["insurance"],"field":null,'
+        '"date":{"role":"expiry","phrase":"before June"},"place":null,"words":""}\n'
+        'Invoices from Croma this year -> {"intent":"list","people":[],"types":["tax_invoice"],'
+        '"areas":[],"field":null,"date":{"role":"purchase","phrase":"this year"},'
+        '"place":"Croma","words":""}\n'
+        'List all of Dev\'s marksheets -> {"intent":"list","people":["Dev"],'
+        '"types":["marksheet"],"areas":[],"field":null,"date":null,"place":null,"words":""}\n'
+        'Is Anu\'s passport still valid? -> {"intent":"lookup","people":["Anu"],'
+        '"types":["passport"],"areas":[],"field":"expiry_date","date":null,"place":null,'
+        '"words":""}\n'
+        'Which doctor is on Vik\'s prescription? -> {"intent":"lookup","people":["Vik"],'
+        '"types":["prescription"],"areas":[],"field":"doctor","date":null,"place":null,'
+        '"words":""}\n'
+        'Show me Asha\'s work documents -> {"intent":"list","people":["Asha"],"types":[],'
+        '"areas":["work"],"field":null,"date":null,"place":null,"words":""}\n'
+        'Show me the Sony TV warranty -> {"intent":"find","people":[],'
+        '"types":["warranty_card"],"areas":[],"field":null,"date":null,"place":null,'
+        '"words":"Sony TV"}'
     )
 
 

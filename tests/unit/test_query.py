@@ -272,8 +272,10 @@ def test_the_current_reading_prompt_is_v2_and_v1_is_kept():
     assert "Document types (type: words people use)" in PROMPT_READ_V1
 
 
-def test_v2_is_shorter_and_names_every_type_area_field_and_role_once_in_its_lists():
-    assert len(PROMPT_READ_V2) < len(PROMPT_READ_V1)
+def test_v2_has_a_shorter_vocabulary_and_names_every_type_area_field_and_role_once_in_its_lists():
+    vocab_v1 = PROMPT_READ_V1.split("Document types (type: words people use):")[1]
+    vocab_v2 = PROMPT_READ_V2.split("Document types by area")[1].split("Examples:")[0]
+    assert len(vocab_v2) < len(vocab_v1) * 0.7
     for t in TYPE_WORDS:
         assert t.value in PROMPT_READ_V2
     for area in AREA_LABELS:
