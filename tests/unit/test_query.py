@@ -534,3 +534,27 @@ def test_a_longer_phrase_without_a_household_name_stays_unread(household):
 def test_a_name_only_part_of_a_word_is_not_a_household_name(household):
     q = resolve(reading(people=["Sureshwar Traders"]), household, TODAY)
     assert (q.people, q.unread) == ([], ["person: Sureshwar Traders"])
+
+
+# -- articles and stray words in the people slot -------------------------------------------------
+
+
+def test_a_leading_article_is_stripped_before_a_person_is_looked_up(household):
+    assert resolve(reading(people=["the Kavita"]), household, TODAY).people == ["p2"]
+    assert resolve(reading(people=["our Suresh"]), household, TODAY).people == ["p4"]
+
+
+def test_a_phrase_left_empty_after_stripping_is_dropped_not_unread(household):
+    for phrase in ("the", "a", "an", "our", "The"):
+        q = resolve(reading(people=[phrase]), household, TODAY)
+        assert (q.people, q.unread) == ([], []), phrase
+
+
+def test_the_unread_name_is_shown_without_its_article(household):
+    q = resolve(reading(people=["the Anil"]), household, TODAY)
+    assert q.unread == ["person: Anil"]
+
+
+def test_my_alone_still_means_everyone(household):
+    q = resolve(reading(people=["my"]), household, TODAY)
+    assert (q.people, q.unread) == ([], [])

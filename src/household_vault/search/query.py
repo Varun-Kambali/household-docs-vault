@@ -249,6 +249,15 @@ _POSSESSIVE = re.compile(r"['\u2019]s$")
 _EVERYONE = {"everyone", "all", "family", "us", "me", "my", "i"}
 _HOME = {"home", "house"}
 _FORWARD_ROLES = {"expiry", "renewal", "due"}
+_DETERMINERS = {"the", "a", "an", "our", "my"}
+
+
+def _without_determiners(phrase: str) -> str:
+    """The phrase without the articles and determiners it begins with."""
+    tokens = phrase.split()
+    while tokens and tokens[0].strip("'\u2019").lower() in _DETERMINERS:
+        tokens.pop(0)
+    return " ".join(tokens)
 
 
 def _first_word_owner(phrase: str, household: Household) -> str | None:
@@ -503,6 +512,16 @@ def resolve(reading: QueryReading, household: Household, today: date, prompt: st
             if pid not in people:
                 people.append(pid)
         elif not no_filter:
+            phrase = _without_determiners(phrase)
+            if not phrase:
+                continue  # only an article was copied: nothing was named
+            pid, no_filter = _person(phrase, household)
+            if pid is not None:
+                if pid not in people:
+                    people.append(pid)
+                continue
+            if no_filter:
+                continue
             named, rest = _name_and_rest(phrase, household)
             if not named:
                 unread.append(f"person: {phrase}")
