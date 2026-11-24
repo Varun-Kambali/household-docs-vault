@@ -294,6 +294,14 @@ def _words(prompt: str) -> list[str]:
     return [_POSSESSIVE.sub("", w.strip("'\u2019-/")) for w in _WORD.findall(prompt.lower())]
 
 
+def _inside(phrase: str, outer: str) -> bool:
+    """Whether the words of `phrase` appear in a row inside the words of `outer`."""
+    want, words = _words(phrase), _words(outer)
+    return bool(want) and any(
+        words[i : i + len(want)] == want for i in range(len(words) - len(want) + 1)
+    )
+
+
 def _scan_people(prompt: str, household: Household) -> list[str]:
     """Household names and aliases in the prompt, longest phrase first, each word used once."""
     words = _words(prompt)
@@ -312,6 +320,18 @@ def _scan_people(prompt: str, household: Household) -> list[str]:
     return found
 
 
+def _nearest_role(lowered: str, phrase: str) -> DateRole:
+    """The role of the cue word closest to the date phrase; the document date with no cue."""
+    at = lowered.find(phrase)
+    best: tuple[int, DateRole] | None = None
+    for role, cue in _ROLE_WORDS:
+        for m in cue.finditer(lowered):
+            gap = m.start() if at < 0 else max(at - m.end(), m.start() - (at + len(phrase)), 0)
+            if best is None or gap < best[0]:
+                best = (gap, role)
+    return best[1] if best else "document"
+
+
 def _scan_date(prompt: str, today: date) -> tuple[DateSlot, DateRange] | None:
     """The first date phrase code can read in the prompt (longest span first), with the role
     its cue words give. A bare "may" is the verb, not the month."""
@@ -325,7 +345,7 @@ def _scan_date(prompt: str, today: date) -> tuple[DateSlot, DateRange] | None:
             span = parse_date_phrase(phrase, today)
             if span is None or (span.start and span.end and span.start > span.end):
                 continue
-            role = next((r for r, cue in _ROLE_WORDS if cue.search(lowered)), "document")
+            role = _nearest_role(lowered, phrase)
             return DateSlot(role=role, phrase=phrase), span
     return None
 
@@ -370,8 +390,10 @@ def resolve(reading: QueryReading, household: Household, today: date, prompt: st
             and parse_date_phrase(slot.phrase, today) is None
         ):
             # the model copied words code cannot read ("expiring before June"): keep its role and
-            # read the date from the prompt itself
-            slot = DateSlot(role=slot.role, phrase=scanned[0].phrase)
+            # read the date from the prompt itself, but only from words inside the model's own
+            # phrase; a second date elsewhere in the prompt is not the one it meant
+            if _inside(scanned[0].phrase, slot.phrase):
+                slot = DateSlot(role=slot.role, phrase=scanned[0].phrase)
         elif (
             scanned is not None
             and slot is not None

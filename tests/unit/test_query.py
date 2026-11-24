@@ -426,6 +426,24 @@ def test_a_date_neither_the_model_nor_the_prompt_can_read_stays_unread(household
     assert (q.range, q.unread) == (None, ["date: before Diwali"])
 
 
+def test_a_second_readable_date_does_not_replace_the_unreadable_phrase(household):
+    slot = DateSlot(role="expiry", phrase="before Diwali")
+    q = resolve(
+        reading(intent="list", date=slot),
+        household,
+        TODAY,
+        "Croma bills from March expiring before Diwali",
+    )
+    assert (q.range, q.unread) == (None, ["date: before Diwali"])
+
+
+def test_the_role_cue_nearest_the_date_phrase_gives_the_role(household):
+    q = resolve(reading(), household, TODAY, "expiring policies bought last year")
+    assert q.role == "purchase"
+    q = resolve(reading(), household, TODAY, "policies expiring before March, bought last year")
+    assert q.role == "expiry"
+
+
 def test_a_type_word_narrows_the_models_area_when_it_holds_that_type(household):
     q = resolve(reading(areas=[Area.tax]), household, TODAY, "Form 16s for this year")
     assert (q.types, q.areas, q.backstop_conflicts) == ([DocType.form_16], [], 0)
