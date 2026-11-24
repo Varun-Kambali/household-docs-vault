@@ -12,9 +12,9 @@ import re
 from datetime import date
 from typing import Annotated, Literal, Protocol
 
-from pydantic import AfterValidator, BaseModel, ConfigDict, ValidationError, WithJsonSchema
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, ValidationError, WithJsonSchema
 
-from household_vault.doctypes import Area, DocType
+from household_vault.doctypes import AREA, Area, DocType
 from household_vault.people import Household, match_person, normalise_name
 from household_vault.reading.engines import prefill_for
 from household_vault.reading.ollama import ModelError, ModelUnavailable, OllamaClient
@@ -62,7 +62,11 @@ class QueryReading(BaseModel):
 
 
 class Query(BaseModel):
-    """A reading with people and dates worked out by code. Also the list route's body."""
+    """A reading with people and dates worked out by code. Also the list route's body.
+
+    `backstop_conflicts` is for the eval only: it is left out of every serialised form, so the
+    API and the app never show it.
+    """
 
     model_config = ConfigDict(frozen=True)
 
@@ -76,9 +80,11 @@ class Query(BaseModel):
     place: str | None = None
     words: str = ""
     unread: list[str] = []  # parts code could not resolve, such as "person: Anil"
+    # slots where the prompt's own words and the model disagreed; never part of the stored form
+    backstop_conflicts: int = Field(default=0, exclude=True)
 
 
-def _system_text() -> str:
+def _system_text_v1() -> str:
     types = "\n".join(
         f"- {t.value}: {', '.join(words)}" for t, words in TYPE_WORDS.items() if words
     )
@@ -111,7 +117,80 @@ def _system_text() -> str:
     )
 
 
-PROMPT_READ_V1 = _system_text()
+PROMPT_READ_V1 = _system_text_v1()
+
+
+def _system_text_v2() -> str:
+    by_area: dict[Area, list[str]] = {}
+    for t, words in TYPE_WORDS.items():
+        by_area.setdefault(AREA[t], []).append(
+            f"{t.value} ({', '.join(words[:2])})" if words else t.value
+        )
+    types = "\n".join(f"{a.value}: {'; '.join(items)}" for a, items in by_area.items())
+    fields = ", ".join(FIELD_LABELS)
+    return (
+        "Read one question about a family's filed documents into JSON. Copy people, place and "
+        "time words exactly as written; never work out a date.\n\n"
+        "intent:\n"
+        "- lookup: wants one value of one document, such as a number, a date, a name, an "
+        "amount, a doctor, a hospital or a shop. Cues: is, when, what is the X of, how much, "
+        'who, which doctor, which shop, "still valid", "when does it expire". Always set field.\n'
+        "- list: wants several documents. Cues: which, what, all, any, show me or list with a "
+        'plural noun or a group ("policies", "bills", "education documents"), "expiring '
+        'before June", "renewals this year".\n'
+        "- find: wants one document itself and no value from it. Cues: where is, open, or one "
+        "document's name with a person or shop.\n\n"
+        'people: names or relations as written ("Ravi", "my wife", "everyone"). A shop, insurer '
+        "or hospital is a place, not a person. Empty when none.\n"
+        "types: the type ids of the kind of document the question names, from the list below. "
+        'Empty when none is named ("anything from Croma").\n'
+        'areas: only for a whole group ("insurance papers", "tax documents") with no single '
+        "type named. Never fill both for the same words.\n"
+        'field: for a lookup, one id from the field list; null otherwise. "still valid", '
+        '"expire", "valid till" use expiry_date; "still under warranty" uses warranty_parts; '
+        '"document date" uses document_date; "number" on an ID card uses number.\n'
+        "date: null unless the question puts a time condition on the documents. Then phrase is "
+        'the time words as written ("before March", "this year", "FY 2025-26", "next 6 months"), '
+        "never a document name, and role is what the date is about:\n"
+        '- expiry: expire, valid till ("insurance expiring before June")\n'
+        '- renewal: renew ("renewals this year")\n'
+        '- due: due, pay by ("premium due next month")\n'
+        '- purchase: bought, purchased, or a bill or invoice from a period ("bought last year", '
+        '"bills from last year")\n'
+        '- issue: issued ("licences issued in 2020")\n'
+        "- document: dated, this year's, last month's, for FY, for any other kind of document "
+        '("certificates for last year", "scan reports from last month", "Form 16 for FY '
+        '2025-26")\n'
+        "place: a shop, insurer, hospital or other place named, as written. null when none.\n"
+        'words: other words worth searching for, such as a product or brand ("fridge", "LG"). '
+        "Empty when there are none; never a person, a place, a date or a document type.\n\n"
+        f"Document types by area (id and words people use):\n{types}\n\n"
+        f"Fields (use the id): {fields}\n\n"
+        "Examples:\n"
+        'Which of Meera\'s insurance papers expire before June? -> {"intent":"list",'
+        '"people":["Meera"],"types":[],"areas":["insurance"],"field":null,'
+        '"date":{"role":"expiry","phrase":"before June"},"place":null,"words":""}\n'
+        'Invoices from Croma this year -> {"intent":"list","people":[],"types":["tax_invoice"],'
+        '"areas":[],"field":null,"date":{"role":"purchase","phrase":"this year"},'
+        '"place":"Croma","words":""}\n'
+        'List all of Dev\'s marksheets -> {"intent":"list","people":["Dev"],'
+        '"types":["marksheet"],"areas":[],"field":null,"date":null,"place":null,"words":""}\n'
+        'Is Anu\'s passport still valid? -> {"intent":"lookup","people":["Anu"],'
+        '"types":["passport"],"areas":[],"field":"expiry_date","date":null,"place":null,'
+        '"words":""}\n'
+        'Which doctor is on Vik\'s prescription? -> {"intent":"lookup","people":["Vik"],'
+        '"types":["prescription"],"areas":[],"field":"doctor","date":null,"place":null,'
+        '"words":""}\n'
+        'Show me Asha\'s work documents -> {"intent":"list","people":["Asha"],"types":[],'
+        '"areas":["work"],"field":null,"date":null,"place":null,"words":""}\n'
+        'Show me the Sony TV warranty -> {"intent":"find","people":[],'
+        '"types":["warranty_card"],"areas":[],"field":null,"date":null,"place":null,'
+        '"words":"Sony TV"}'
+    )
+
+
+PROMPT_READ_V2 = _system_text_v2()
+PROMPT_READ = PROMPT_READ_V2  # the prompt the app and the eval use
 
 
 class PromptReader(Protocol):
@@ -123,15 +202,16 @@ class PromptReader(Protocol):
 
 
 class OllamaPromptReader:
-    def __init__(self, client: OllamaClient, model: str) -> None:
+    def __init__(self, client: OllamaClient, model: str, system: str = PROMPT_READ) -> None:
         self._client = client
         self._model = model
+        self._system = system
         self.name = f"ollama:{model}"
 
     def read(self, prompt: str) -> str:
         return self._client.chat_json(
             self._model,
-            PROMPT_READ_V1,
+            self._system,
             prompt,
             [],
             QueryReading.model_json_schema(),
@@ -197,9 +277,208 @@ def _person(phrase: str, household: Household) -> tuple[str | None, bool]:
     return pid, False
 
 
-def resolve(reading: QueryReading, household: Household, today: date) -> Query:
+def _selected(types: list[DocType], areas: list[Area]) -> set[DocType]:
+    return set(types) | {t for t, area in AREA.items() if area in areas}
+
+
+_ROLE_WORDS: tuple[tuple[DateRole, re.Pattern[str]], ...] = (
+    ("expiry", re.compile(r"\bexpir\w*|\bvalid (?:till|until|upto|up to)\b")),
+    ("renewal", re.compile(r"\brenew\w*")),
+    ("due", re.compile(r"\bdue\b|\bpay by\b")),
+    ("purchase", re.compile(r"\bbought\b|\bpurchase[ds]?\b")),
+    ("issue", re.compile(r"\bissued\b")),
+    ("document", re.compile(r"\bdated\b|\bthis year's\b|\bfor fy\b")),
+)
+_WORD = re.compile(r"[\w'\u2019/-]+")
+_MAX_NAME_WORDS = 3
+_MAX_DATE_WORDS = 6
+
+
+def _words(prompt: str) -> list[str]:
+    return [_POSSESSIVE.sub("", w.strip("'\u2019-/")) for w in _WORD.findall(prompt.lower())]
+
+
+def _inside(phrase: str, outer: str) -> bool:
+    """Whether the words of `phrase` appear in a row inside the words of `outer`."""
+    want, words = _words(phrase), _words(outer)
+    return bool(want) and any(
+        words[i : i + len(want)] == want for i in range(len(words) - len(want) + 1)
+    )
+
+
+def _occupied(prompt_words: list[str], *texts: str | None) -> set[int]:
+    """Word positions of the prompt that lie inside a run of words the model copied into a
+    slot (its place or its words)."""
+    taken: set[int] = set()
+    for text in texts:
+        want = _words(text) if text else []
+        for i in range(len(prompt_words) - len(want) + 1) if want else ():
+            if prompt_words[i : i + len(want)] == want:
+                taken.update(range(i, i + len(want)))
+    return taken
+
+
+def _scan_people(prompt: str, household: Household, skip: set[int] | None = None) -> list[str]:
+    """Household names and aliases in the prompt, longest phrase first, each word used once.
+    Words in `skip` (inside the model's place) are not names."""
+    words = _words(prompt)
+    used = [i in (skip or set()) for i in range(len(words))]
+    found: list[str] = []
+    for size in range(min(_MAX_NAME_WORDS, len(words)), 0, -1):
+        for start in range(len(words) - size + 1):
+            phrase = " ".join(words[start : start + size])
+            if any(used[start : start + size]) or phrase in _EVERYONE | _HOME:
+                continue
+            pid, _ = _person(phrase, household)
+            if pid is not None and pid != "home":
+                used[start : start + size] = [True] * size
+                if pid not in found:
+                    found.append(pid)
+    return found
+
+
+def _nearest_role(lowered: str, phrase: str) -> DateRole:
+    """The role of the cue word closest to the date phrase; the document date with no cue."""
+    at = lowered.find(phrase)
+    best: tuple[int, DateRole] | None = None
+    for role, cue in _ROLE_WORDS:
+        for m in cue.finditer(lowered):
+            gap = m.start() if at < 0 else max(at - m.end(), m.start() - (at + len(phrase)), 0)
+            if best is None or gap < best[0]:
+                best = (gap, role)
+    return best[1] if best else "document"
+
+
+def _scan_date(prompt: str, today: date) -> tuple[DateSlot, DateRange] | None:
+    """The first date phrase code can read in the prompt (longest span first), with the role
+    its cue words give. A bare "may" is the verb, not the month."""
+    words = _words(prompt)
+    lowered = prompt.lower().replace("\u2019", "'")
+    for size in range(min(_MAX_DATE_WORDS, len(words)), 0, -1):
+        for start in range(len(words) - size + 1):
+            phrase = " ".join(words[start : start + size])
+            if phrase == "may":
+                continue
+            span = parse_date_phrase(phrase, today)
+            if span is None or (span.start and span.end and span.start > span.end):
+                continue
+            role = _nearest_role(lowered, phrase)
+            return DateSlot(role=role, phrase=phrase), span
+    return None
+
+
+_NO_PLURAL_UNDER = 4  # a short code (pan, dl, rc, ec, amc) is never made plural
+_CARD_AFTER = {"warranty", "guarantee", "service"}
+
+
+def _plurals(word: str, alone: bool) -> set[str]:
+    """The word and its plural forms: -s, -ies after a consonant and y, -es after s, x, z, ch
+    or sh. Nothing for a short code standing alone (a phrase's last word, as in "form 16", may
+    take an s)."""
+    forms = {word}
+    if alone and len(word) < _NO_PLURAL_UNDER:
+        return forms
+    if word.endswith("y") and word[-2] not in "aeiou":
+        forms.add(word[:-1] + "ies")
+    elif word.endswith(("s", "x", "z", "ch", "sh")):
+        forms.add(word + "es")
+    else:
+        forms.add(word + "s")
+    return forms
+
+
+def _scan_types(prompt: str, skip: set[int] | None = None) -> list[DocType]:
+    """Types whose words appear whole in the prompt, the longest phrase first and no word used
+    twice, so "extended warranty" does not also count as "warranty". Words in `skip` (inside
+    the model's place or words) are not type words, and a bare "card" next to "warranty",
+    "guarantee", "service" or another matched type word is part of that name."""
+    words = _words(prompt)
+    taken = set(skip or ())
+    phrases = sorted(
+        ((tuple(w.split()), t) for t, ws in TYPE_WORDS.items() for w in ws),
+        key=lambda p: len(" ".join(p[0])),
+        reverse=True,
+    )
+    found: list[DocType] = []
+
+    def match(phrase: tuple[str, ...], start: int) -> bool:
+        end = start + len(phrase)
+        if end > len(words) or any(i in taken for i in range(start, end)):
+            return False
+        return list(phrase[:-1]) == words[start : end - 1] and words[end - 1] in _plurals(
+            phrase[-1], len(phrase) == 1
+        )
+
+    bare_card: DocType | None = None
+    for phrase, doc_type in phrases:
+        if phrase == ("card",):
+            bare_card = doc_type
+            continue
+        for start in range(len(words)):
+            if match(phrase, start):
+                taken.update(range(start, start + len(phrase)))
+                if doc_type not in found:
+                    found.append(doc_type)
+    if bare_card is not None:
+        for start in range(len(words)):
+            before = start - 1
+            if match(("card",), start) and (
+                before < 0 or (words[before] not in _CARD_AFTER and before not in taken)
+            ):
+                found.append(bare_card)
+                break
+    return found
+
+
+def resolve(reading: QueryReading, household: Household, today: date, prompt: str = "") -> Query:
+    """Work out people and dates. With the prompt text, code fills the closed-class slots the
+    model left empty (a household name, a date phrase, a document type word). The model's own
+    slot always wins; a slot where the prompt says something else is counted as a conflict."""
+    conflicts = 0
+    slot = reading.date
+    types = reading.types
+    backstop_people: list[str] = []
+    if prompt:
+        prompt_words = _words(prompt)
+        seen = _scan_people(prompt, household, _occupied(prompt_words, reading.place))
+        if not reading.people:
+            backstop_people = seen
+        elif seen and set(seen) != {_person(p, household)[0] for p in reading.people}:
+            conflicts += 1
+        scanned = _scan_date(prompt, today)
+        if scanned is not None and slot is None:
+            slot = scanned[0]
+        elif (
+            scanned is not None
+            and slot is not None
+            and parse_date_phrase(slot.phrase, today) is None
+        ):
+            # the model copied words code cannot read ("expiring before June"): keep its role and
+            # read the date from the prompt itself, but only from words inside the model's own
+            # phrase; a second date elsewhere in the prompt is not the one it meant
+            if _inside(scanned[0].phrase, slot.phrase):
+                slot = DateSlot(role=slot.role, phrase=scanned[0].phrase)
+        elif (
+            scanned is not None
+            and slot is not None
+            and parse_date_phrase(slot.phrase, today) != scanned[1]
+        ):
+            conflicts += 1
+        found_types = _scan_types(prompt, _occupied(prompt_words, reading.place, reading.words))
+        if (
+            found_types
+            and not reading.types
+            and all(AREA[t] in reading.areas or not reading.areas for t in found_types)
+        ):
+            # nothing named, or only the area that holds the type the prompt names
+            types = found_types
+        elif found_types and set(found_types) != set(reading.types):
+            conflicts += 1
+    # A listed type beats its area: the model often names both, and the union would widen the
+    # question to the whole area.
+    areas = [a for a in reading.areas if not any(AREA[t] is a for t in types)]
     unread: list[str] = []
-    people: list[str] = []
+    people: list[str] = list(backstop_people)
     for phrase in reading.people:
         pid, no_filter = _person(phrase, household)
         if pid is not None:
@@ -209,24 +488,32 @@ def resolve(reading: QueryReading, household: Household, today: date) -> Query:
             unread.append(f"person: {phrase}")
     role: DateRole | None = None
     span: DateRange | None = None
-    if reading.date is not None:
-        role = reading.date.role
-        span = parse_date_phrase(reading.date.phrase, today)
+    if slot is not None:
+        role = slot.role
+        selected = _selected(types, areas)
+        if (
+            role not in (None, "document")
+            and selected
+            and not any(role in DATE_ROLES[t] for t in selected)
+        ):
+            role = "document"  # none of the types has a date of that kind
+        span = parse_date_phrase(slot.phrase, today)
         if span is not None and role in _FORWARD_ROLES and span.start is None and span.end:
             # a forward question looks ahead: an end only means "from today to then"
             span = DateRange(start=today, end=span.end)
         if span is None or (span.start and span.end and span.start > span.end):
             span = None  # never an inverted range
-            unread.append(f"date: {reading.date.phrase}")
+            unread.append(f"date: {slot.phrase}")
     return Query(
         intent=reading.intent,
         people=people,
-        types=reading.types,
-        areas=reading.areas,
+        types=types,
+        areas=areas,
         field=reading.field,
         role=role,
         range=span,
         place=reading.place,
         words=reading.words,
         unread=unread,
+        backstop_conflicts=conflicts,
     )

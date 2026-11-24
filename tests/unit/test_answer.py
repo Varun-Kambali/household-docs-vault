@@ -38,8 +38,9 @@ def make_rows(
     lines: list[str],
     doc_id: str = "d1",
     score: float = 0.05,
+    owner: str = "p1",
 ) -> list[Row]:
-    add_doc(store, doc_id, doc_type.value, fields, lines)
+    add_doc(store, doc_id, doc_type.value, fields, lines, owner=owner)
     doc = store.document(doc_id)
     return [
         Row(
@@ -503,3 +504,178 @@ def test_an_identifier_matches_whole_runs_of_letters_and_digits():
     assert locate("12345", "identifier", [stored_line("No. 12345")])
     assert locate("ABC123", "identifier", [stored_line("ABC123")])
     assert not locate("490154203237518", "identifier", [stored_line("Z1XXXXXXXXXXX7518")])
+
+
+# -- a field asked by another name -------------------------------------------------------------
+
+
+def test_an_expiry_asked_of_a_policy_is_read_from_its_end_date(store):
+    rows = policy_rows(store, date(2027, 3, 31))
+    a = compose(query(field="expiry_date"), rows, store, TODAY)
+    assert isinstance(a, Answer)
+    assert (a.field, a.value, a.text) == ("end_date", "2027-03-31", "Yes, until 31 Mar 2027.")
+
+
+def test_a_passport_asked_for_its_end_date_answers_from_the_expiry_date(store):
+    rows = make_rows(
+        store,
+        DocType.passport,
+        {"holder": "Ravi Kumar", "number": "K1234567", "expiry_date": "2030-05-01"},
+        ["Passport", "Date of expiry 01/05/2030"],
+    )
+    a = compose(query(field="end_date"), rows, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "expiry_date" and a.value == "2030-05-01"
+
+
+def test_a_pan_asked_for_its_policy_number_is_not_guessed_from_another_kind_of_field(store):
+    rows = make_rows(
+        store,
+        DocType.pan,
+        {"holder": "Ravi Kumar", "number": "ABCDE1234F", "date_of_birth": "1980-01-01"},
+        ["Permanent Account Number", "ABCDE1234F", "Ravi Kumar"],
+    )
+    assert compose(query(field="invoice_date"), rows, store, TODAY).reason == "no_field"
+    # an identifier asked under another name is the type's own identifier
+    a = compose(query(field="certificate_number"), rows, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "number"
+    a = compose(query(field="policy_number"), rows, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "number"
+
+
+def test_a_policyholder_and_a_holder_are_the_types_own_name_field(store):
+    policy = make_rows(
+        store,
+        DocType.health_policy,
+        {"insurer": "Star Health", "policyholder": "Ravi Kumar", "end_date": "2027-03-31"},
+        ["Star Health", "Policyholder: Ravi Kumar"],
+    )
+    a = compose(query(field="holder"), policy, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "policyholder"
+    card = make_rows(
+        store,
+        DocType.card_statement,
+        {"bank": "Nilgiri Bank", "holder": "Ravi Kumar", "last4": "1234"},
+        ["Nilgiri Bank", "Ravi Kumar", "Card ending 1234"],
+        doc_id="d2",
+    )
+    a = compose(query(field="number"), card, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "last4"
+
+
+def test_a_field_the_type_holds_is_never_remapped(store):
+    rows = policy_rows(
+        store, date(2027, 3, 31), lines=["Star Health", "Policy No P/123", "Ends 31/03/2027"]
+    )
+    a = compose(query(field="policy_number"), rows, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "policy_number"
+
+
+# -- weak evidence -----------------------------------------------------------------------------
+
+
+def with_evidence(rows, **changes):
+    return [Row(**{**rows[0].__dict__, **changes}), *rows[1:]]
+
+
+def test_residual_words_with_no_match_decline_even_when_a_filter_found_the_row(store):
+    rows = policy_rows(store, date(2027, 3, 31), score=0.0)
+    named = {"types": [DocType.health_policy], "words": "inverter"}
+    a = compose(query(field="end_date", **named), rows, store, TODAY)
+    assert a == NoAnswer("weak_match", [rows[0].rel_path])
+    # a filter-only row with no residual words is still a real candidate
+    assert isinstance(
+        compose(query(field="end_date", types=[DocType.health_policy]), rows, store, TODAY), Answer
+    )
+
+
+def test_a_keyword_hit_or_a_vector_score_on_the_words_is_evidence(store):
+    rows = policy_rows(store, date(2027, 3, 31), score=0.0)
+    named = {"types": [DocType.health_policy], "words": "Star"}
+    hit = with_evidence(rows, word_hit=True)
+    assert isinstance(compose(query(field="end_date", **named), hit, store, TODAY), Answer)
+    near = with_evidence(rows, vector=answer_module.MIN_VECTOR)
+    assert isinstance(compose(query(field="end_date", **named), near, store, TODAY), Answer)
+    far = with_evidence(rows, vector=answer_module.MIN_VECTOR - 0.01)
+    assert compose(query(field="end_date", **named), far, store, TODAY).reason == "weak_match"
+
+
+def test_evidence_on_any_candidate_is_enough(store):
+    rows = policy_rows(store, date(2027, 3, 31), score=0.0)
+    second = policy_rows(store, date(2027, 4, 30), doc_id="d2")
+    second = with_evidence(second, word_hit=True)
+    named = {"types": [DocType.health_policy], "words": "Star"}
+    got = compose(query(field="end_date", **named), [*rows, *second], store, TODAY)
+    assert isinstance(got, Answer)
+
+
+def test_a_find_with_residual_words_and_no_match_is_declined_with_the_closest_files(store):
+    rows = policy_rows(store, date(2027, 3, 31), score=0.0)
+    found = query(intent="find", types=[DocType.health_policy], words="inverter")
+    assert compose(found, rows, store, TODAY) == NoAnswer("weak_match", [rows[0].rel_path])
+    plain = query(intent="find", types=[DocType.health_policy])
+    assert compose(plain, rows, store, TODAY) is None
+    good = with_evidence(rows, word_hit=True)
+    assert compose(found, good, store, TODAY) is None
+
+
+def test_a_person_and_a_type_with_no_words_still_answer(store):
+    rows = make_rows(
+        store,
+        DocType.pan,
+        {"holder": "Kavita Rao", "number": "ABCDE1234F"},
+        ["Permanent Account Number", "ABCDE1234F"],
+        score=0.0,
+        owner="p2",
+    )
+    a = compose(query(field="number", people=["p2"], types=[DocType.pan]), rows, store, TODAY)
+    assert isinstance(a, Answer) and a.field == "number"
+
+
+# -- an answer comes from a row that passes the query's own filters -----------------------------
+
+
+def _kavita_policy_and_suresh_pan(store):
+    policy = make_rows(
+        store,
+        DocType.life_policy,
+        {"policyholder": "Kavita Rao", "policy_number": "PL/NY304449"},
+        ["Life policy", "Policy number PL/NY304449"],
+        doc_id="life",
+        owner="p2",
+    )
+    pan = make_rows(
+        store,
+        DocType.pan,
+        {"holder": "Suresh Rao", "number": "ABCDE1234F"},
+        ["Permanent Account Number", "ABCDE1234F"],
+        doc_id="pan",
+        owner="p1",
+    )
+    return policy, pan
+
+
+def test_a_type_nobody_holds_declines_instead_of_answering_from_another_type(store):
+    policy, pan = _kavita_policy_and_suresh_pan(store)
+    asked = query(field="number", people=["p2"], types=[DocType.passport])
+    got = compose(asked, [*policy, *pan], store, TODAY)
+    assert got == NoAnswer("no_documents", [policy[0].rel_path, pan[0].rel_path])
+
+
+def test_a_person_without_that_type_declines_even_if_another_person_has_it(store):
+    policy, pan = _kavita_policy_and_suresh_pan(store)
+    asked = query(field="number", people=["p2"], types=[DocType.pan])
+    got = compose(asked, [*policy, *pan], store, TODAY)
+    assert isinstance(got, NoAnswer) and got.reason == "no_documents"
+
+
+def test_the_answer_comes_from_the_filtered_document_when_it_is_not_first(store):
+    policy, pan = _kavita_policy_and_suresh_pan(store)
+    asked = query(field="number", people=["p1"], types=[DocType.pan])
+    got = compose(asked, [*policy, *pan], store, TODAY)
+    assert isinstance(got, Answer) and got.document_id == "pan" and got.value == "ABCDE1234F"
+
+
+def test_no_filter_still_answers_from_the_top_row(store):
+    policy, pan = _kavita_policy_and_suresh_pan(store)
+    got = compose(query(field="policy_number"), [*policy, *pan], store, TODAY)
+    assert isinstance(got, Answer) and got.document_id == "life"

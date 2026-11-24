@@ -9,7 +9,7 @@ place fields.
 """
 
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date
 
 from pydantic import JsonValue
@@ -29,6 +29,7 @@ from household_vault.search.vocab import (
 )
 
 POOL = 500  # hits taken from each ranking before fusing
+UNFILTERED_VOTES = 5  # documents of the unfiltered rankings that vote in a filtered lookup
 
 
 @dataclass(frozen=True)
@@ -51,6 +52,8 @@ class Row:
     date: date | None  # the role's date (the document date by default); None when it has none
     score: float
     lines: list[LineRef]
+    vector: float = 0.0  # the best cosine of the document's chunks to a query vector
+    word_hit: bool = False  # the query's residual words matched a line or a field by keyword
 
 
 Rows = list[Row]
@@ -97,8 +100,9 @@ def _filtered(query: Query) -> bool:
     )
 
 
-def _first_seen(ids: Iterable[str]) -> list[str]:
-    return list(dict.fromkeys(ids))
+def _ids(hits: Sequence[KeywordHit] | Sequence[VectorHit]) -> list[str]:
+    """The documents of a ranking, best first, each once."""
+    return list(dict.fromkeys(h.document_id for h in hits))
 
 
 class Searcher:
@@ -176,26 +180,20 @@ class Searcher:
 
     def _fuse(
         self,
+        rankings: Sequence[Sequence[str]],
         keyword_hits: Sequence[Sequence[KeywordHit]],
-        vector_hits: Sequence[VectorHit],
-        allowed: dict[str, DocumentRow] | None,
         role: str | None,
         limit: int,
     ) -> Rows:
-        def ok(doc_id: str) -> bool:
-            return allowed is None or doc_id in allowed
-
-        rankings = [
-            _first_seen(h.document_id for h in hits if ok(h.document_id)) for hits in keyword_hits
-        ]
-        rankings.append(_first_seen(h.document_id for h in vector_hits if ok(h.document_id)))
+        """One row per document, fused over the rankings. The keyword hits give each row the
+        lines that matched."""
         by_doc: dict[str, list[KeywordHit]] = {}
         for hits in keyword_hits:
             for h in hits:
                 by_doc.setdefault(h.document_id, []).append(h)
         rows: Rows = []
         for doc_id, score in rrf(rankings)[:limit]:
-            doc = allowed[doc_id] if allowed is not None else self.store.document(doc_id)
+            doc = self.store.document(doc_id)
             if doc is not None:
                 rows.append(self._row(doc, score, by_doc.get(doc_id, []), role))
         return rows
@@ -206,7 +204,7 @@ class Searcher:
         """Keywords (the last word as a prefix) and vectors, fused. Runs no model."""
         kw = self.keyword.search(text, limit=POOL)
         vec = self.vectors.search(text, limit=POOL)
-        return self._fuse([kw], vec, None, None, limit)
+        return self._fuse([_ids(kw), _ids(vec)], [kw], None, limit)
 
     def lookup(self, query: Query, prompt: str, limit: int = 20) -> Rows:
         """The filters narrow the candidates; the query's words, place and type words (or the
@@ -215,13 +213,42 @@ class Searcher:
         only = None if allowed is None else set(allowed)  # rank inside the candidates
         base = " ".join(p for p in (query.words, query.place or "") if p).strip() or prompt
         text = " ".join([base, *(TYPE_LABELS[t] for t in query.types)])
+        word_hits = (
+            self.keyword.search(query.words, limit=POOL, prefix_last=False, only=only)
+            if query.words.strip()
+            else []
+        )
         keyword_hits = [
-            self.keyword.search(p, limit=POOL, prefix_last=False, only=only)
+            word_hits
+            if p == query.words
+            else self.keyword.search(p, limit=POOL, prefix_last=False, only=only)
             for p in (query.words, query.place or "")
             if p.strip()
         ] or [self.keyword.search(prompt, limit=POOL, prefix_last=False, only=only)]
         vec = self.vectors.search(text, limit=POOL, only=only)
-        rows = self._fuse(keyword_hits, vec, allowed, query.role, limit)
+        rankings = [_ids(hits) for hits in keyword_hits] + [_ids(vec)]
+        # `vector` keeps the best of two cosines for a document: its chunks against the query's
+        # words and type labels, and against the whole prompt. MIN_VECTOR is therefore a floor
+        # on the better of the two, not on one fixed query text.
+        best: dict[str, float] = {}
+        votes = [vec]
+        if allowed is not None:
+            # The reading may have named the wrong person or type. The prompt's own keyword and
+            # vector matches, unfiltered, vote too, so a misread filter cannot remove the
+            # document they find. Only their first documents vote, so the filter still leads.
+            quick_kw = self.keyword.search(prompt, limit=POOL)
+            quick_vec = self.vectors.search(prompt, limit=POOL)
+            keyword_hits = [*keyword_hits, quick_kw]
+            rankings += [_ids(quick_kw)[:UNFILTERED_VOTES], _ids(quick_vec)[:UNFILTERED_VOTES]]
+            votes.append(quick_vec)
+        for hits in votes:
+            for h in hits:
+                best[h.document_id] = max(best.get(h.document_id, -1.0), h.score)
+        found = {h.document_id for h in word_hits}
+        rows = [
+            replace(r, vector=best.get(r.document_id, 0.0), word_hit=r.document_id in found)
+            for r in self._fuse(rankings, keyword_hits, query.role, limit)
+        ]
         if allowed is not None and len(rows) < limit:
             # The filters named documents the rankings did not reach: they still answer.
             seen = {r.document_id for r in rows}

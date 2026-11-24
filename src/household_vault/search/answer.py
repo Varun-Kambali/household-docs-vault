@@ -25,13 +25,16 @@ from household_vault.schemas._coerce import field_kind, parse_amount, parse_date
 from household_vault.search.dates import add_months
 from household_vault.search.query import Query
 from household_vault.search.retrieve import LineRef, Row
-from household_vault.search.vocab import DATE_ROLES, MASKED_FIELDS
+from household_vault.search.vocab import DATE_ROLES, MASKED_FIELDS, field_for
 
 # A top row with no filter behind it is declined when its fused score is under MIN_FUSED (a
 # reciprocal-rank score; one ranking's first place scores about 0.016, so this wants two
-# rankings to agree) and fewer than MIN_KEYWORD of its lines matched the words. Tuned on val.
+# rankings to agree) and fewer than MIN_KEYWORD of its lines matched the words. A query with
+# residual words (a product, a brand) is declined when no row matches them: no keyword hit on
+# the words and no vector score of MIN_VECTOR or more. Tuned on val.
 MIN_FUSED = 0.02
 MIN_KEYWORD = 1
+MIN_VECTOR = 0.62
 
 NEAR_SPELLING = 0.85
 
@@ -360,29 +363,54 @@ def _supporting(
     return locate(doc.fields[name], kind, lines)
 
 
+def weak_match(query: Query, rows: Sequence[Row]) -> bool:
+    """Whether the rows are too thin to answer from. A query with residual words needs a row
+    that matches them (a keyword hit or a vector score of MIN_VECTOR or more). A query with no
+    filter behind it also needs a top row with some evidence. A row the filters found is a real
+    candidate on its own only when the query has no residual words."""
+    if not rows:
+        return False
+    if query.words.strip() and not any(r.word_hit or r.vector >= MIN_VECTOR for r in rows):
+        return True
+    top = rows[0]
+    return not _filtered(query) and top.score < MIN_FUSED and len(top.lines) < MIN_KEYWORD
+
+
+def _fits(query: Query, row: Row) -> bool:
+    """Whether a row passes the query's person and type filters (an empty filter passes all)."""
+    if query.people and not set(query.people) & set(row.people):
+        return False
+    return not query.types or row.doc_type in query.types
+
+
 def compose(
     query: Query, rows: Sequence[Row], store: Store, today: date
 ) -> Answer | NoAnswer | None:
-    """The answer to a lookup, read from the top row's stored fields; `None` for a find, a list
-    or a lookup that names no field (they show rows only).
+    """The answer to a lookup, read from the top row's stored fields; `None` for a list, or a
+    find or a lookup that names no field and has evidence (they show rows only).
 
-    A top row that no filter found and whose evidence is thin is declined. A row the filters
-    found is a real candidate even at score 0.
+    Weak evidence (`weak_match`) is declined with the closest files, for a find as well.
     """
+    if query.intent == "list":
+        return None
+    closest = [r.rel_path for r in rows[:3]]
+    if weak_match(query, rows):
+        return NoAnswer("weak_match", closest)
     if query.intent != "lookup" or query.field is None:
         return None
     if not rows:
         return NoAnswer("no_documents", [])
-    top = rows[0]
-    closest = [r.rel_path for r in rows[:3]]
-    if not _filtered(query) and top.score < MIN_FUSED and len(top.lines) < MIN_KEYWORD:
-        return NoAnswer("weak_match", closest)
+    # The unfiltered votes may put a document the reading excluded on top; an answer comes from
+    # the best row that passes the person and type filters, or there is none.
+    top = next((r for r in rows if _fits(query, r)), None)
+    if top is None:
+        return NoAnswer("no_documents", closest)
     doc = store.document(top.document_id)
     schema = SCHEMAS.get(doc.doc_type) if doc is not None else None
     if doc is None or schema is None:
         return NoAnswer("no_documents", closest)
-    name = query.field
-    if name not in schema.model_fields or doc.fields.get(name) in (None, "", []):
+    name = field_for(doc.doc_type, query.field, schema.model_fields)
+    if name is None or doc.fields.get(name) in (None, "", []):
         return NoAnswer("no_field", closest)
     kind = field_kind(schema, name)
     text = _text_of(doc, name, kind, today)

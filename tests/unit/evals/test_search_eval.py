@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 from vault_synth.model import SynthDoc
 
-from evals.runner import _parser, main, results_folder
+from evals.runner import _parser, _query_model, main, results_folder
 from evals.search_eval import (
     SMOKE_DIR,
     RecordedEmbedder,
@@ -27,6 +27,7 @@ from evals.search_eval import (
     smoke_questions,
     stated_status,
     summarise_search,
+    write_smoke_questions,
 )
 from evals.search_set import (
     EVAL_TODAY,
@@ -251,6 +252,10 @@ def test_declined_follows_the_apps_weak_evidence_rule():
     assert declined(Result(Query(intent="find"), [top], None, []))  # no filter, score under 0.02
     assert not declined(Result(Query(intent="find", people=["p1"]), [top], None, []))
     assert declined(Result(Query(intent="find"), [], None, []))
+    words = Query(intent="find", people=["p1"], words="inverter")
+    assert declined(Result(words, [top], None, []))  # residual words, nothing matches them
+    matched = Row(**{**top.__dict__, "word_hit": True})
+    assert not declined(Result(words, [matched], None, []))
     assert declined(Result(Query(intent="find", unread=["person: Anil"]), [top], None, []))
     assert not declined(
         Result(Query(intent="find", people=["p1"], unread=["date: soon"]), [top], None, [])
@@ -342,8 +347,10 @@ def test_the_committed_smoke_recordings_hold_no_real_shaped_number():
         assert scan_text(text, allow_test_cards=True) == []
 
 
-def test_the_committed_smoke_questions_are_what_the_builder_makes(smoke_docs):
-    assert load_smoke_questions() == smoke_questions(smoke_docs)
+def test_the_committed_smoke_questions_are_what_the_builder_makes(tmp_path):
+    write_smoke_questions(tmp_path)
+    committed = (SMOKE_DIR / "questions.jsonl").read_bytes()
+    assert committed == (tmp_path / "questions.jsonl").read_bytes()
 
 
 # -- fix round 1 ----------------------------------------------------------------------------------
@@ -359,7 +366,10 @@ def status_question(doc: SynthDoc, field: str) -> Question:
 def judged_answer(q: Question, doc: SynthDoc, value: Any, text: str) -> SearchRow:
     page, box = _where(doc, q.field)
     answer = an_answer("db-1", q.field, value, text, [LineRef(page, 0, box)])
-    res = Result(Query(intent="lookup", field=q.field), [], answer, [])
+    top = Row(
+        "db-1", doc.doc_type, "p1", ["p1"], "insurance", "x", date(2026, 1, 1), {}, None, 0.5, []
+    )
+    res = Result(Query(intent="lookup", field=q.field), [top], answer, [])
     return judge(q, res, {doc.doc_id: doc}, {"db-1": doc.doc_id})
 
 
@@ -369,7 +379,7 @@ def test_a_wrong_value_is_a_wrong_answer(smoke_docs):
     right = judged_answer(q, doc, doc.fields["policy_number"], "x")
     wrong = judged_answer(q, doc, str(doc.fields["policy_number"]) + "9", "x")
     assert (right.answer_correct, wrong.answer_correct) == (True, False)
-    assert wrong.cause == "wrong value" or wrong.cause is not None
+    assert wrong.cause == "wrong value"
 
 
 def test_a_validity_answer_must_state_the_right_status(smoke_docs):
@@ -488,3 +498,88 @@ def test_val_results_never_default_to_the_committed_folder():
     assert results_folder("test").parts[-2:] == ("evals", "results")
     args = _parser().parse_args(["search", "--split", "val", "--recordings", "r", "--replay", "x"])
     assert args.results is None
+
+
+def _replay_args(folder: Path, results: Path) -> list[str]:
+    reading = str(EVAL_V1.parent.parent / "recordings" / "eval-v1" / "smoke")
+    return [
+        "search", "--split", "val", "--smoke", "--recordings", reading,
+        "--replay", str(folder), "--results", str(results),
+    ]  # fmt: skip
+
+
+def test_a_replay_refuses_a_model_that_was_pulled_again(tmp_path, monkeypatch, capsys):
+    from evals import runner
+
+    folder = copy_smoke(tmp_path)
+    manifest = json.loads((folder / "manifest.json").read_text())
+    tags = {name: body["digest"] for name, body in (
+        (manifest[r]["model"], manifest[r]) for r in ("prompt_reader", "embedder")
+    )}  # fmt: skip
+    monkeypatch.setattr(runner.OllamaClient, "tags", lambda self: dict(tags))
+    assert main(_replay_args(folder, tmp_path / "ok")) == 0
+    for name in tags:
+        monkeypatch.setattr(
+            runner.OllamaClient, "tags", lambda self, n=name: {**tags, n: "another-digest"}
+        )
+        assert main(_replay_args(folder, tmp_path / "bad")) == 1
+        assert "pulled again" in capsys.readouterr().out
+
+    # Ollama off: the manifest alone is checked, as in CI
+    def off(self):
+        raise ModelUnavailable("off")
+
+    monkeypatch.setattr(runner.OllamaClient, "tags", off)
+    assert main(_replay_args(folder, tmp_path / "off")) == 0
+
+
+def test_two_builds_of_one_vault_give_the_same_document_ids(tmp_path, smoke_docs):
+    recordings = EVAL_V1.parent.parent / "recordings" / "eval-v1" / "smoke"
+    found = []
+    for n in range(2):
+        state, _, _ = _build(smoke_docs, recordings, tmp_path / str(n), RecordedEmbedder(SMOKE_DIR))
+        try:
+            rows = state.store.conn.execute("select id from documents order by id")
+            found.append([r[0] for r in rows])
+        finally:
+            state.store.conn.close()
+    assert found[0] == found[1] and found[0]
+
+
+def test_a_reader_replays_recordings_made_under_the_reading_prompt_it_is_given(tmp_path):
+    from household_vault.search.query import PROMPT_READ, PROMPT_READ_V1
+
+    live = FakePromptReader({"hello": "{}"})
+    old = RecordedPromptReader(tmp_path, tmp_path, live=live, system=PROMPT_READ_V1)
+    assert old.read("hello") == "{}"
+    assert RecordedPromptReader(tmp_path, system=PROMPT_READ_V1).read("hello") == "{}"
+    with pytest.raises(ModelUnavailable):  # the current prompt is not the one it was made under
+        RecordedPromptReader(tmp_path).read("hello")
+    assert (
+        RecordedPromptReader(tmp_path).system
+        == RecordedPromptReader(tmp_path, system=PROMPT_READ).system
+    )
+
+
+def test_the_search_runner_names_a_reading_prompt_version():
+    args = _parser().parse_args(
+        ["search", "--split", "val", "--recordings", "r", "--replay", "x", "--prompt", "v1"]
+    )
+    assert args.prompt == "v1"
+    default = _parser().parse_args(
+        ["search", "--split", "val", "--recordings", "r", "--replay", "x"]
+    )
+    assert default.prompt == "v2"
+
+
+def test_the_summary_totals_the_backstop_conflicts():
+    rows = [row_with(backstop_conflicts=2), row_with(), row_with(backstop_conflicts=1)]
+    assert summarise_search(rows)["backstop_conflicts"] == 3
+
+
+def test_the_search_runner_takes_the_reading_model_from_a_switch_or_the_config():
+    base = ["search", "--split", "val", "--recordings", "r", "--replay", "x"]
+    default = _parser().parse_args(base)
+    named = _parser().parse_args([*base, "--query-model", "qwen3:8b"])
+    assert _query_model(default, "qwen3:4b") == "qwen3:4b"
+    assert _query_model(named, "qwen3:4b") == "qwen3:8b"

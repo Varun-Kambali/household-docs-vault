@@ -48,22 +48,22 @@ inbox_left = 0
 # These are regression guards on code that still changes, not targets.
 
 [search_smoke.min]
-# measured: top1 0.9, top3 0.9, answer_correct 0.7143, citation_accuracy 1, list_reading 0.1,
-# list_precision 0.25, list_recall 0.3
-top1 = 0.88
-top3 = 0.88
-answer_correct = 0.6943
+# measured: top1 1, top3 1, answer_correct 1, citation_accuracy 1, list_reading 0.5,
+# list_precision 0.7354, list_recall 0.8667
+top1 = 0.98
+top3 = 0.98
+answer_correct = 0.98
 citation_accuracy = 0.98
-list_reading = 0.08
-list_precision = 0.23
-list_recall = 0.28
+list_reading = 0.48
+list_precision = 0.7154
+list_recall = 0.8467
 lookups = 7
 finds = 3
 lists = 10
 
 [search_smoke.max]
-# measured: declined_when_answerable 0.2
-declined_when_answerable = 0.22
+# measured: declined_when_answerable 0.3
+declined_when_answerable = 0.32
 readings_missing = 0
 vectors_missing = 0
 expected_filed_but_not = 4

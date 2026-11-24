@@ -44,9 +44,9 @@ def test_a_quick_search_runs_no_model(search_client, spy_reader):
 
 
 def test_a_full_search_reads_the_prompt(search_client, spy_reader):
-    out = post(search_client, "Croma invoice").json()
+    out = post(search_client, "Croma").json()
     assert spy_reader.calls == 1 and out["reading"] == "on"
-    assert out["query"]["intent"] == "find" and out["query"]["words"] == "Croma invoice"
+    assert out["query"]["intent"] == "find" and out["query"]["words"] == "Croma"
     assert out["sentence"] is None and out["answer"] is None and out["no_answer"] is None
     assert out["rows"] and out["rows"][0]["drive_path"].startswith("My Drive/Family Vault/")
 
@@ -162,3 +162,8 @@ def test_rows_and_documents_carry_the_drive_path(search_client, filed_ids):
 def test_people_lists_the_household(search_client):
     people = search_client.get("/v1/people").json()
     assert {"id": "p1", "name": "Ravi Kumar Rao"} in people and len(people) >= 4
+
+
+def test_the_prompt_text_fills_a_person_the_model_left_out(search_client):
+    out = post(search_client, "Kavita Rao policies").json()
+    assert out["query"]["people"] == ["p2"]

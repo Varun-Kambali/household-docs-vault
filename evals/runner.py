@@ -54,7 +54,7 @@ from household_vault.reading.engines import Engines, make_engines
 from household_vault.reading.ollama import ModelError, ModelUnavailable, OllamaClient
 from household_vault.reading.prompt import PROMPT_V4
 from household_vault.reading.recorded import recorded_engines
-from household_vault.search.query import PROMPT_READ_V1, OllamaPromptReader
+from household_vault.search.query import PROMPT_READ_V1, PROMPT_READ_V2, OllamaPromptReader
 from household_vault.search.vectors import OllamaEmbedder
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -310,9 +310,20 @@ def results_folder(split: str, given: str | None = None) -> Path:
     return ROOT / "var" / "results-val" if split == "val" else RESULTS
 
 
+READING_PROMPTS = {"v1": PROMPT_READ_V1, "v2": PROMPT_READ_V2}
+
+
+def _query_model(args: argparse.Namespace, configured: str) -> str:
+    """The model that reads prompts: the `--query-model` switch, else the config's. The app's
+    default does not change."""
+    return str(args.query_model or configured)
+
+
 def _search(args: argparse.Namespace) -> int:
     recordings = Path(args.recordings)
+    system = READING_PROMPTS[args.prompt]
     settings = load_settings()
+    settings = settings.model_copy(update={"query_model": _query_model(args, settings.query_model)})
     if args.smoke:
         docs = smoke_documents()
         questions = (
@@ -333,9 +344,10 @@ def _search(args: argparse.Namespace) -> int:
         reader = RecordedPromptReader(
             record,
             record,
-            live=OllamaPromptReader(client, settings.query_model),
+            live=OllamaPromptReader(client, settings.query_model, system),
             model=settings.query_model,
             digest=tags.get(settings.query_model),
+            system=system,
         )
         embedder = RecordedEmbedder(
             record,
@@ -352,8 +364,25 @@ def _search(args: argparse.Namespace) -> int:
         }
     else:
         replay = Path(args.replay)
-        reader = RecordedPromptReader(replay, expect=settings.query_model)
-        embedder = RecordedEmbedder(replay, expect=settings.embed_model)
+        try:
+            tags = OllamaClient(settings.ollama_url, timeout_s=5.0).tags()
+        except (ModelUnavailable, ModelError):
+            tags = {}  # no Ollama to ask: the manifest alone is checked
+        try:
+            reader = RecordedPromptReader(
+                replay,
+                expect=settings.query_model,
+                expect_digest=tags.get(settings.query_model),
+                system=system,
+            )
+            embedder = RecordedEmbedder(
+                replay,
+                expect=settings.embed_model,
+                expect_digest=tags.get(settings.embed_model),
+            )
+        except SearchEvalError as exc:
+            print(f"search: {exc}")
+            return 1
         models = {
             "prompt_reader": settings.query_model,
             "embedder": embedder.name,
@@ -386,7 +415,7 @@ def _search(args: argparse.Namespace) -> int:
                 "eval_v1": dataset_info(SET_DIR),
             },
             "models": models,
-            "reading_prompt_sha256": hashlib.sha256(PROMPT_READ_V1.encode()).hexdigest(),
+            "reading_prompt_sha256": hashlib.sha256(system.encode()).hexdigest(),
             "today": EVAL_TODAY.isoformat(),
         },
     )
@@ -521,6 +550,16 @@ def _parser() -> argparse.ArgumentParser:
     which.add_argument("--record", help="call the local models and record into this folder")
     which.add_argument("--replay", help="replay the search recordings in this folder")
     search.add_argument("--smoke", action="store_true", help="the smoke documents and questions")
+    search.add_argument(
+        "--prompt",
+        choices=sorted(READING_PROMPTS),
+        default="v2",
+        help="the reading prompt of the recordings (v1 is the untuned one)",
+    )
+    search.add_argument(
+        "--query-model",
+        help="the model that reads prompts (default: the config's query_model)",
+    )
     search.add_argument("--results", help="default: var/results-val for val, evals/results")
     search.set_defaults(run=_search)
     return parser

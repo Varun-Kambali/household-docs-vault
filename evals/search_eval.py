@@ -11,11 +11,13 @@ is `EVAL_TODAY`. Metric definitions: `evals/README.md`.
 from __future__ import annotations
 
 import hashlib
+import itertools
 import json
 import math
 import re
 import shutil
 import time
+import uuid
 from collections import Counter
 from collections.abc import Callable, Collection, Mapping, Sequence
 from dataclasses import asdict, dataclass, field
@@ -23,6 +25,7 @@ from datetime import date
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
+from unittest import mock
 
 import numpy as np
 from pydantic import JsonValue
@@ -47,6 +50,7 @@ from household_vault.app_state import AppState, build_app_state
 from household_vault.config import load_settings
 from household_vault.db import Item, ItemState
 from household_vault.doctypes import AREA, DocType
+from household_vault.filing import filer
 from household_vault.leakscan import scan_outputs, waiting_original_paths
 from household_vault.people import load_household, normalise_name
 from household_vault.reading.engines import Engines
@@ -57,8 +61,8 @@ from household_vault.reading.source import DocumentSource, document_key
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import field_kind, parse_amount, parse_date
 from household_vault.scoring import IOU_MIN, iou, normalise
-from household_vault.search.answer import MIN_FUSED, MIN_KEYWORD, Answer, NoAnswer, compose
-from household_vault.search.query import PROMPT_READ_V1, PromptReader, Query, read_prompt, resolve
+from household_vault.search.answer import Answer, NoAnswer, compose, weak_match
+from household_vault.search.query import PROMPT_READ, PromptReader, Query, read_prompt, resolve
 from household_vault.search.retrieve import Rows
 from household_vault.search.sentence import sentence
 from household_vault.search.vectors import QUERY_TASK, Embedder, Vectors
@@ -110,9 +114,14 @@ def _stamp(folder: Path, role: str, model: str, digest: str | None, *, write: bo
     have = body.get(role)
     if isinstance(have, dict):
         same_digest = digest is None or have.get("digest") in (None, digest)
-        if have.get("model") != model or not same_digest:
+        if have.get("model") != model:
             raise RecordingMismatch(
                 f"{folder} holds {role} recordings made with {have.get('model')}, not {model}"
+            )
+        if not same_digest:
+            raise RecordingMismatch(
+                f"{folder} holds {role} recordings made with another build of {model} "
+                "(the model was pulled again since)"
             )
         return
     if write:
@@ -144,6 +153,7 @@ class RecordedPromptReader:
         digest: str | None = None,
         expect: str | None = None,
         expect_digest: str | None = None,
+        system: str = PROMPT_READ,
     ) -> None:
         if record_to is not None and live is None:
             raise ValueError("recording needs a live reader")
@@ -155,7 +165,7 @@ class RecordedPromptReader:
             _expect(folder, "prompt_reader", expect, expect_digest)
         if record_to is not None and live is not None:
             _stamp(record_to, "prompt_reader", model or live.name, digest, write=True)
-        self.system = _sha(PROMPT_READ_V1)
+        self.system = _sha(system)
 
     def _load(self, prompt: str) -> str | None:
         path = self.folder / f"{_sha(prompt)}.json"
@@ -304,10 +314,30 @@ def _items(state: AppState) -> list[Item]:
     return state.store.items(_ALL_STATES)
 
 
+class _Counted:
+    """Stands in for `uuid` in the filer: ids that come from a counter (hashed, so they read like
+    any id), so two builds of one vault have the same ids and so the same order among documents
+    that rank alike."""
+
+    def __init__(self) -> None:
+        self._n = itertools.count(1)
+
+    def uuid4(self) -> uuid.UUID:
+        digest = hashlib.sha256(f"doc-{next(self._n)}".encode()).digest()
+        return uuid.UUID(bytes=digest[:16])
+
+
 def _build(
     docs: Sequence[SynthDoc], recordings: Path, root: Path, embedder: Embedder
 ) -> tuple[AppState, dict[str, str], list[_Entry]]:
     """The vault over docs, and the map from each filed truth document id to its database id."""
+    with mock.patch.object(filer, "uuid", _Counted()):
+        return _build_vault(docs, recordings, root, embedder)
+
+
+def _build_vault(
+    docs: Sequence[SynthDoc], recordings: Path, root: Path, embedder: Embedder
+) -> tuple[AppState, dict[str, str], list[_Entry]]:
     entries = [
         _Entry(d, files, document_key(files))
         for d in docs
@@ -430,6 +460,7 @@ class SearchRow:
     list_recall: float | None = None
     declined: bool | None = None
     reading_off: bool = False
+    backstop_conflicts: int = 0
     cause: str | None = None
     slots: list[str] = field(default_factory=list)
     seconds_quick: float = 0.0
@@ -538,15 +569,9 @@ def query_differences(got: Query, want: Query) -> list[str]:
     return out
 
 
-def _filtered(query: Query) -> bool:
-    return bool(
-        query.people or query.types or query.areas or query.place or query.range is not None
-    )
-
-
 def declined(res: Result) -> bool:
-    """The app gave no answer: a lookup's NoAnswer, a person it could not read, no rows, or a
-    top row with no filter behind it and thin evidence (the rule `compose` applies)."""
+    """The app gave no answer: a NoAnswer, a person it could not read, no rows, or thin evidence
+    (the `weak_match` rule `compose` applies)."""
     if isinstance(res.outcome, NoAnswer):
         return True
     query = res.query
@@ -554,13 +579,7 @@ def declined(res: Result) -> bool:
         return True
     if not res.rows:
         return True
-    top = res.rows[0]
-    return (
-        query is not None
-        and not _filtered(query)
-        and top.score < MIN_FUSED
-        and len(top.lines) < MIN_KEYWORD
-    )
+    return query is not None and weak_match(query, res.rows)
 
 
 def _lookup_cause(q: Question, res: Result, ids: Sequence[str]) -> str | None:
@@ -590,6 +609,7 @@ def judge(
     """The numbers for one question. `truth` is the vault's documents by id and `back` maps a
     database document id to its truth id."""
     row = SearchRow(q.id, q.kind, q.origin, q.style, q.prompt, reading_off=res.query is None)
+    row.backstop_conflicts = res.query.backstop_conflicts if res.query else 0
     ids = [back.get(r.document_id, r.document_id) for r in res.rows]
     quick = [back.get(r.document_id, r.document_id) for r in res.quick]
     targets = set(q.targets)
@@ -641,7 +661,7 @@ def _full(
         parsed = read_prompt(prompt, reader)
     except ModelUnavailable:
         return None, state.searcher.quick(prompt), None
-    query = resolve(parsed, state.household, today)
+    query = resolve(parsed, state.household, today, prompt)
     if query.intent == "list":
         rows = state.searcher.list(query)
         sentence(query, state.household, today)
@@ -754,6 +774,7 @@ def summarise_search(
         lambda r: r.declined if r.kind in ("lookup", "find") else None,
     )
     out["readings_missing"] = sum(1 for r in rows if r.reading_off)
+    out["backstop_conflicts"] = sum(r.backstop_conflicts for r in rows)
     warm = list(rows[1:])
     picks: dict[str, Callable[[SearchRow], float]] = {
         "seconds_quick": lambda r: r.seconds_quick,

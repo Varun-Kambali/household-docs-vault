@@ -5,6 +5,7 @@ The reading model for a prompt sees only these words, never a document, so every
 the fixed vocabulary it can ask for.
 """
 
+from collections.abc import Collection
 from typing import Literal, cast
 
 from household_vault.doctypes import AREA, Area, DocType
@@ -411,3 +412,60 @@ KEY_FIELDS: dict[DocType, tuple[str, ...]] = {
 MASKED_FIELDS: frozenset[tuple[DocType, str]] = frozenset(
     (t, "number") for t in (_D.aadhaar, _D.pan, _D.passport, _D.voter_id, _D.driving_licence)
 )
+
+
+# A question names a field by what people say ("expiry date", "number"), which is not always the
+# name a type stores it under. `field_for` maps an asked name to the type's own: first the date
+# fields by role, then the type's main identifier and main person name.
+# The plain "number" a person asks for. A specific kind (an invoice number, a serial number, a
+# registration number) is a different thing and is never mapped to another type's identifier.
+_ID_FIELDS = frozenset({"number", "policy_number", "certificate_number", "last4"})
+_NAME_FIELDS = frozenset({"holder", "policyholder", "insured", "person_name", "patient"})
+
+PRIMARY_ID: dict[DocType, str] = {
+    **{t: "policy_number" for t in _POLICIES},
+    _D.tax_invoice: "invoice_number",
+    _D.warranty_card: "serial_number",
+    **{t: "number" for t in (_D.aadhaar, _D.pan, _D.card_front, *_IDENTITY_DATED)},
+    _D.registration_certificate: "registration_number",
+    _D.sale_deed: "registration_number",
+    _D.puc_certificate: "certificate_number",
+    _D.encumbrance_certificate: "certificate_number",
+    _D.fastag: "tag_id",
+    _D.khata: "khata_number",
+    _D.property_tax_receipt: "receipt_number",
+    _D.utility_bill: "consumer_number",
+    _D.certificate: "credential_id",
+    _D.marksheet: "roll_number",
+    _D.degree: "roll_number",
+    _D.itr_acknowledgement: "acknowledgement_number",
+    _D.card_statement: "last4",
+    _D.card_welcome_letter: "last4",
+}
+PRIMARY_NAME: dict[DocType, str] = {
+    **{t: "policyholder" for t in _POLICIES},
+    **{
+        t: "holder"
+        for t in (_D.aadhaar, _D.pan, _D.card_front, _D.card_statement, _D.card_welcome_letter)
+    },
+    **{t: "holder" for t in _IDENTITY_DATED},
+    **{t: "patient" for t in (*_MEDICAL_DATED, _D.scan_photo)},
+    **{t: "person_name" for t in AREA if AREA[t] in _LIGHT_AREAS},
+}
+
+_ROLE_ORDER: tuple[DateRole, ...] = ("expiry", "renewal", "due", "purchase", "issue")
+
+
+def field_for(doc_type: DocType, asked: str, stored: Collection[str]) -> str | None:
+    """The name this type stores what `asked` names under, or None. A name the type holds is
+    returned as it is. `stored` is the type's field names."""
+    if asked in stored:
+        return asked
+    roles = {r for per_type in DATE_ROLES.values() for r, f in per_type.items() if f == asked}
+    own = DATE_ROLES[doc_type]
+    for role in _ROLE_ORDER:
+        if role in roles and own.get(role) in stored:
+            return own[role]
+    table = PRIMARY_ID if asked in _ID_FIELDS else PRIMARY_NAME if asked in _NAME_FIELDS else {}
+    target = table.get(doc_type)
+    return target if target in stored else None
