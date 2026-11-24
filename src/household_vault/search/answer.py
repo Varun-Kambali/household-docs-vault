@@ -34,7 +34,7 @@ from household_vault.search.vocab import DATE_ROLES, MASKED_FIELDS, field_for
 # the words and no vector score of MIN_VECTOR or more. Tuned on val.
 MIN_FUSED = 0.02
 MIN_KEYWORD = 1
-MIN_VECTOR = 0.6
+MIN_VECTOR = 0.62
 
 NEAR_SPELLING = 0.85
 
