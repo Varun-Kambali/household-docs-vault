@@ -27,6 +27,7 @@ from evals.search_eval import (
     smoke_questions,
     stated_status,
     summarise_search,
+    write_smoke_questions,
 )
 from evals.search_set import (
     EVAL_TODAY,
@@ -346,8 +347,10 @@ def test_the_committed_smoke_recordings_hold_no_real_shaped_number():
         assert scan_text(text, allow_test_cards=True) == []
 
 
-def test_the_committed_smoke_questions_are_what_the_builder_makes(smoke_docs):
-    assert load_smoke_questions() == smoke_questions(smoke_docs)
+def test_the_committed_smoke_questions_are_what_the_builder_makes(tmp_path):
+    write_smoke_questions(tmp_path)
+    committed = (SMOKE_DIR / "questions.jsonl").read_bytes()
+    assert committed == (tmp_path / "questions.jsonl").read_bytes()
 
 
 # -- fix round 1 ----------------------------------------------------------------------------------

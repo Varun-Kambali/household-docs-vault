@@ -227,6 +227,9 @@ class Searcher:
         ] or [self.keyword.search(prompt, limit=POOL, prefix_last=False, only=only)]
         vec = self.vectors.search(text, limit=POOL, only=only)
         rankings = [_ids(hits) for hits in keyword_hits] + [_ids(vec)]
+        # `vector` keeps the best of two cosines for a document: its chunks against the query's
+        # words and type labels, and against the whole prompt. MIN_VECTOR is therefore a floor
+        # on the better of the two, not on one fixed query text.
         best: dict[str, float] = {}
         votes = [vec]
         if allowed is not None:

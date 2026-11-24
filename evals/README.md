@@ -148,6 +148,8 @@ A rate over no questions is null.
   the lookup answer is a "No direct answer", a person in the prompt is not in the household, no
   row comes back, or the top row has no filter behind it and thin evidence (the weak-match rule
   of `compose`: fused score under `MIN_FUSED` and fewer than `MIN_KEYWORD` matching lines).
+  Both metrics follow the weak-match rule as it stands (`weak_match`, shared with the app), so
+  results from before that rule changed are not comparable.
 - **seconds_quick**, **seconds_full**: the median and 95th percentile of the wall time of each
   search, with the first question left out and reported as `cold_first_seconds` (the model
   loading). They mean something only on a live run with the Mac otherwise idle; on a replay

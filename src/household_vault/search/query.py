@@ -62,7 +62,11 @@ class QueryReading(BaseModel):
 
 
 class Query(BaseModel):
-    """A reading with people and dates worked out by code. Also the list route's body."""
+    """A reading with people and dates worked out by code. Also the list route's body.
+
+    `backstop_conflicts` is for the eval only: it is left out of every serialised form, so the
+    API and the app never show it.
+    """
 
     model_config = ConfigDict(frozen=True)
 
@@ -302,10 +306,23 @@ def _inside(phrase: str, outer: str) -> bool:
     )
 
 
-def _scan_people(prompt: str, household: Household) -> list[str]:
-    """Household names and aliases in the prompt, longest phrase first, each word used once."""
+def _occupied(prompt_words: list[str], *texts: str | None) -> set[int]:
+    """Word positions of the prompt that lie inside a run of words the model copied into a
+    slot (its place or its words)."""
+    taken: set[int] = set()
+    for text in texts:
+        want = _words(text) if text else []
+        for i in range(len(prompt_words) - len(want) + 1) if want else ():
+            if prompt_words[i : i + len(want)] == want:
+                taken.update(range(i, i + len(want)))
+    return taken
+
+
+def _scan_people(prompt: str, household: Household, skip: set[int] | None = None) -> list[str]:
+    """Household names and aliases in the prompt, longest phrase first, each word used once.
+    Words in `skip` (inside the model's place) are not names."""
     words = _words(prompt)
-    used = [False] * len(words)
+    used = [i in (skip or set()) for i in range(len(words))]
     found: list[str] = []
     for size in range(min(_MAX_NAME_WORDS, len(words)), 0, -1):
         for start in range(len(words) - size + 1):
@@ -350,20 +367,66 @@ def _scan_date(prompt: str, today: date) -> tuple[DateSlot, DateRange] | None:
     return None
 
 
-def _scan_types(prompt: str) -> list[DocType]:
-    """Types whose words appear whole in the prompt, the longest phrase first so that
-    "extended warranty" does not also count as "warranty"."""
-    text = " ".join(_words(prompt))
+_NO_PLURAL_UNDER = 4  # a short code (pan, dl, rc, ec, amc) is never made plural
+_CARD_AFTER = {"warranty", "guarantee", "service"}
+
+
+def _plurals(word: str, alone: bool) -> set[str]:
+    """The word and its plural forms: -s, -ies after a consonant and y, -es after s, x, z, ch
+    or sh. Nothing for a short code standing alone (a phrase's last word, as in "form 16", may
+    take an s)."""
+    forms = {word}
+    if alone and len(word) < _NO_PLURAL_UNDER:
+        return forms
+    if word.endswith("y") and word[-2] not in "aeiou":
+        forms.add(word[:-1] + "ies")
+    elif word.endswith(("s", "x", "z", "ch", "sh")):
+        forms.add(word + "es")
+    else:
+        forms.add(word + "s")
+    return forms
+
+
+def _scan_types(prompt: str, skip: set[int] | None = None) -> list[DocType]:
+    """Types whose words appear whole in the prompt, the longest phrase first and no word used
+    twice, so "extended warranty" does not also count as "warranty". Words in `skip` (inside
+    the model's place or words) are not type words, and a bare "card" next to "warranty",
+    "guarantee", "service" or another matched type word is part of that name."""
+    words = _words(prompt)
+    taken = set(skip or ())
     phrases = sorted(
-        ((w, t) for t, ws in TYPE_WORDS.items() for w in ws), key=lambda p: len(p[0]), reverse=True
+        ((tuple(w.split()), t) for t, ws in TYPE_WORDS.items() for w in ws),
+        key=lambda p: len(" ".join(p[0])),
+        reverse=True,
     )
     found: list[DocType] = []
+
+    def match(phrase: tuple[str, ...], start: int) -> bool:
+        end = start + len(phrase)
+        if end > len(words) or any(i in taken for i in range(start, end)):
+            return False
+        return list(phrase[:-1]) == words[start : end - 1] and words[end - 1] in _plurals(
+            phrase[-1], len(phrase) == 1
+        )
+
+    bare_card: DocType | None = None
     for phrase, doc_type in phrases:
-        pattern = rf"(?<!\w){re.escape(phrase)}(?:s|es)?(?!\w)"
-        if re.search(pattern, text):
-            text = re.sub(pattern, " ", text)
-            if doc_type not in found:
-                found.append(doc_type)
+        if phrase == ("card",):
+            bare_card = doc_type
+            continue
+        for start in range(len(words)):
+            if match(phrase, start):
+                taken.update(range(start, start + len(phrase)))
+                if doc_type not in found:
+                    found.append(doc_type)
+    if bare_card is not None:
+        for start in range(len(words)):
+            before = start - 1
+            if match(("card",), start) and (
+                before < 0 or (words[before] not in _CARD_AFTER and before not in taken)
+            ):
+                found.append(bare_card)
+                break
     return found
 
 
@@ -376,7 +439,8 @@ def resolve(reading: QueryReading, household: Household, today: date, prompt: st
     types = reading.types
     backstop_people: list[str] = []
     if prompt:
-        seen = _scan_people(prompt, household)
+        prompt_words = _words(prompt)
+        seen = _scan_people(prompt, household, _occupied(prompt_words, reading.place))
         if not reading.people:
             backstop_people = seen
         elif seen and set(seen) != {_person(p, household)[0] for p in reading.people}:
@@ -400,7 +464,7 @@ def resolve(reading: QueryReading, household: Household, today: date, prompt: st
             and parse_date_phrase(slot.phrase, today) != scanned[1]
         ):
             conflicts += 1
-        found_types = _scan_types(prompt)
+        found_types = _scan_types(prompt, _occupied(prompt_words, reading.place, reading.words))
         if (
             found_types
             and not reading.types

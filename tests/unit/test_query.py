@@ -449,3 +449,55 @@ def test_a_type_word_narrows_the_models_area_when_it_holds_that_type(household):
     assert (q.types, q.areas, q.backstop_conflicts) == ([DocType.form_16], [], 0)
     q = resolve(reading(areas=[Area.insurance]), household, TODAY, "Form 16s for this year")
     assert (q.types, q.areas, q.backstop_conflicts) == ([], [Area.insurance], 1)
+
+
+@pytest.mark.parametrize(
+    ("prompt", "place", "types"),
+    [
+        ("documents from Epic Electronics", "Epic Electronics", []),
+        ("papers from DL Motors", "DL Motors", []),
+        ("Pan Asia Traders invoices", "Pan Asia Traders", [DocType.tax_invoice]),
+        ("Degree College fee receipts", "Degree College", [DocType.tax_invoice]),
+        (
+            "Vijaya Digital World Sony warranty card",
+            "Vijaya Digital World",
+            [DocType.warranty_card],
+        ),
+    ],
+)
+def test_a_type_word_inside_the_models_place_is_not_a_type(household, prompt, place, types):
+    q = resolve(reading(place=place), household, TODAY, prompt)
+    assert q.types == types
+
+
+def test_a_type_word_inside_the_models_words_is_not_a_type(household):
+    q = resolve(reading(words="Epic"), household, TODAY, "Epic bills")
+    assert q.types == [DocType.tax_invoice]
+
+
+def test_a_warranty_card_is_a_warranty_card_and_not_also_a_card(household):
+    for prompt in ("Sony warranty card", "the guarantee card", "service card for the TV"):
+        assert DocType.card_front not in resolve(reading(), household, TODAY, prompt).types
+    assert resolve(reading(), household, TODAY, "Sony warranty card").types == [
+        DocType.warranty_card
+    ]
+    assert resolve(reading(), household, TODAY, "my PAN card").types == [DocType.pan]
+    assert resolve(reading(), household, TODAY, "my credit card").types == [DocType.card_front]
+    assert resolve(reading(), household, TODAY, "my card").types == [DocType.card_front]
+
+
+def test_a_household_first_name_inside_the_models_place_is_not_a_person(household):
+    q = resolve(reading(place="Kiran Electronics"), household, TODAY, "Kiran Electronics bills")
+    assert q.people == []
+
+
+def test_plurals_are_made_per_word(household):
+    q = resolve(reading(), household, TODAY, "Kavita warranties")
+    assert (q.people, q.types) == (["p2"], [DocType.warranty_card])
+    got = resolve(reading(), household, TODAY, "licences and receipts").types
+    assert set(got) == {DocType.driving_licence, DocType.tax_invoice}
+
+
+def test_a_short_code_is_never_pluralised(household):
+    for prompt in ("pans", "rcs", "ecs", "dls"):
+        assert resolve(reading(), household, TODAY, prompt).types == []
