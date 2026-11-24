@@ -145,7 +145,8 @@ A rate over no questions is null.
   averaged over the questions.
 - **declined_when_none**: over none questions, the share the app declines. **declined_when_answerable**:
   over lookups and finds, the share it declines (lower is better). A question is declined when
-  the lookup answer is a "No direct answer", a person in the prompt is not in the household, no
+  the lookup answer is a "No direct answer" (a lookup naming a person who is not in the household
+  gets one, reason `unknown_person`; a find or list that names one counts as declined here), no
   row comes back, or the top row has no filter behind it and thin evidence (the weak-match rule
   of `compose`: fused score under `MIN_FUSED` and fewer than `MIN_KEYWORD` matching lines).
   Both metrics follow the weak-match rule as it stands (`weak_match`, shared with the app), so
