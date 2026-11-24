@@ -662,7 +662,7 @@ def _full(
         parsed = read_prompt(prompt, reader)
     except ModelUnavailable:
         return None, state.searcher.quick(prompt), None
-    query = resolve(parsed, state.household, today, prompt)
+    query = resolve(parsed, state.household, today, prompt, state.searcher.place_values())
     if query.intent == "list":
         rows = state.searcher.list(query)
         sentence(query, state.household, today)

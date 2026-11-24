@@ -9,6 +9,7 @@ document, and never works out a date.
 from __future__ import annotations
 
 import re
+from collections.abc import Sequence
 from datetime import date
 from typing import Annotated, Literal, Protocol
 
@@ -350,6 +351,23 @@ def _people_spans(
     return found, [m and i not in (skip or set()) for i, m in enumerate(mine)]
 
 
+def _stored_place(phrase: str, places: Sequence[str]) -> bool:
+    """Whether the phrase is a stored place: one word only when it is a whole stored value
+    (a lone first name inside "Anil Diagnostics" may still be a person), several words when
+    they appear whole and in a row inside a stored value."""
+    want = _words(phrase)
+    if not want:
+        return False
+    if len(want) == 1:
+        return any(_words(v) == want for v in places)
+    return any(_inside(phrase, v) for v in places)
+
+
+def _place_positions(prompt_words: list[str], places: Sequence[str]) -> set[int]:
+    """Word positions of the prompt that lie inside a whole stored place value."""
+    return _occupied(prompt_words, *places)
+
+
 def _scan_people(prompt: str, household: Household, skip: set[int] | None = None) -> list[str]:
     """Household names and aliases in the prompt. Words in `skip` (inside the model's place)
     are not names."""
@@ -456,17 +474,26 @@ def _scan_types(prompt: str, skip: set[int] | None = None) -> list[DocType]:
     return found
 
 
-def resolve(reading: QueryReading, household: Household, today: date, prompt: str = "") -> Query:
+def resolve(
+    reading: QueryReading,
+    household: Household,
+    today: date,
+    prompt: str = "",
+    places: Sequence[str] = (),
+) -> Query:
     """Work out people and dates. With the prompt text, code fills the closed-class slots the
     model left empty (a household name, a date phrase, a document type word). The model's own
-    slot always wins; a slot where the prompt says something else is counted as a conflict."""
+    slot always wins; a slot where the prompt says something else is counted as a conflict.
+    `places` are the place values stored in the vault: a person phrase that is one of them is
+    a place, and a stored place found in the prompt is never read as a name or a type."""
     conflicts = 0
     slot = reading.date
     types = reading.types
     backstop_people: list[str] = []
     if prompt:
         prompt_words = _words(prompt)
-        seen = _scan_people(prompt, household, _occupied(prompt_words, reading.place))
+        stored = _place_positions(prompt_words, places)
+        seen = _scan_people(prompt, household, _occupied(prompt_words, reading.place) | stored)
         if not reading.people:
             backstop_people = seen
         elif seen and set(seen) != {_person(p, household)[0] for p in reading.people}:
@@ -490,7 +517,9 @@ def resolve(reading: QueryReading, household: Household, today: date, prompt: st
             and parse_date_phrase(slot.phrase, today) != scanned[1]
         ):
             conflicts += 1
-        found_types = _scan_types(prompt, _occupied(prompt_words, reading.place, reading.words))
+        found_types = _scan_types(
+            prompt, _occupied(prompt_words, reading.place, reading.words) | stored
+        )
         if (
             found_types
             and not reading.types
@@ -521,6 +550,12 @@ def resolve(reading: QueryReading, household: Household, today: date, prompt: st
                     people.append(pid)
                 continue
             if no_filter:
+                continue
+            if _stored_place(phrase, places):
+                if place is None or not place.strip():
+                    place = phrase
+                elif not _inside(phrase, place):
+                    words = f"{words} {phrase}".strip()
                 continue
             named, rest = _name_and_rest(phrase, household)
             if not named:

@@ -558,3 +558,72 @@ def test_the_unread_name_is_shown_without_its_article(household):
 def test_my_alone_still_means_everyone(household):
     q = resolve(reading(people=["my"]), household, TODAY)
     assert (q.people, q.unread) == ([], [])
+
+
+# -- a person phrase that is really a stored place -----------------------------------------------
+
+PLACES = ["Kaveri Systems Pvt Ltd", "Anil Diagnostics", "Epic Electronics", "Croma"]
+
+
+def test_a_phrase_inside_a_stored_place_moves_to_place_and_is_not_unread(household):
+    q = resolve(reading(people=["Kaveri Systems"]), household, TODAY, places=PLACES)
+    assert (q.people, q.unread, q.place) == ([], [], "Kaveri Systems")
+
+
+def test_a_stored_place_that_holds_a_household_name_is_still_a_place(household):
+    q = resolve(
+        reading(people=["Suresh Sangeetha"]),
+        household,
+        TODAY,
+        places=["Suresh Sangeetha Mobiles"],
+    )
+    assert (q.people, q.unread, q.place) == ([], [], "Suresh Sangeetha")
+
+
+def test_a_person_phrase_that_is_a_stored_place_goes_to_words_when_place_is_filled(household):
+    q = resolve(
+        reading(people=["the Kaveri Systems"], place="Croma"), household, TODAY, places=PLACES
+    )
+    assert (q.unread, q.place, q.words) == ([], "Croma", "x Kaveri Systems")
+
+
+def test_a_lone_word_of_a_stored_place_stays_unread_but_a_whole_value_moves(household):
+    places = [*PLACES, "Anil Diagnostics"]
+    assert resolve(reading(people=["Anil"]), household, TODAY, places=places).unread == [
+        "person: Anil"
+    ]
+    q = resolve(reading(people=["Anil Diagnostics"]), household, TODAY, places=places)
+    assert (q.unread, q.place) == ([], "Anil Diagnostics")
+    q = resolve(reading(people=["Croma"]), household, TODAY, places=places)
+    assert (q.unread, q.place) == ([], "Croma")
+
+
+def test_a_place_never_matches_part_of_a_word(household):
+    q = resolve(reading(people=["Epic Electron"]), household, TODAY, places=PLACES)
+    assert q.unread == ["person: Epic Electron"]
+
+
+def test_no_places_means_the_old_behaviour(household):
+    q = resolve(reading(people=["Kaveri Systems"]), household, TODAY)
+    assert q.unread == ["person: Kaveri Systems"]
+
+
+def test_the_scanners_skip_a_stored_place_found_in_the_prompt_with_the_place_empty(household):
+    prompt = "documents from Epic Electronics"
+    q = resolve(reading(), household, TODAY, prompt, places=PLACES)
+    assert q.types == []
+    q = resolve(reading(), household, TODAY, prompt)  # without the stored places it reads voter id
+    assert q.types != []
+
+
+def test_the_scanners_skip_a_stored_place_found_in_the_prompt_with_a_wrong_place(household):
+    prompt = "documents from Epic Electronics"
+    q = resolve(reading(place="Croma"), household, TODAY, prompt, places=PLACES)
+    assert q.types == []
+
+
+def test_the_people_scan_skips_a_stored_place_found_in_the_prompt(household):
+    places = ["Suresh Sangeetha Mobiles"]
+    prompt = "invoice from Suresh Sangeetha Mobiles"
+    assert resolve(reading(), household, TODAY, prompt, places=places).people == []
+    assert resolve(reading(), household, TODAY, prompt).people == ["p4"]

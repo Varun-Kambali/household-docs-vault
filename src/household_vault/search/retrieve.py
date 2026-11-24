@@ -121,6 +121,17 @@ class Searcher:
             if doc is not None:
                 yield doc
 
+    def place_values(self) -> list[str]:
+        """The distinct place values stored in the vault (an insurer, shop, employer, hospital
+        and so on), sorted. Built once per search by the caller of `resolve`."""
+        found = {
+            v.strip()
+            for doc in self._documents()
+            for v in (doc.fields.get(f) for f in PLACE_FIELDS[doc.doc_type])
+            if isinstance(v, str) and v.strip()
+        }
+        return sorted(found)
+
     def _matches(self, doc: DocumentRow, people: list[str], query: Query) -> bool:
         if query.people and not set(query.people) & set(people):
             return False
