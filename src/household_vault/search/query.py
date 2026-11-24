@@ -76,6 +76,7 @@ class Query(BaseModel):
     place: str | None = None
     words: str = ""
     unread: list[str] = []  # parts code could not resolve, such as "person: Anil"
+    backstop_conflicts: int = 0  # slots where the prompt's own words and the model disagreed
 
 
 def _system_text_v1() -> str:
@@ -275,12 +276,109 @@ def _selected(types: list[DocType], areas: list[Area]) -> set[DocType]:
     return set(types) | {t for t, area in AREA.items() if area in areas}
 
 
-def resolve(reading: QueryReading, household: Household, today: date) -> Query:
+_ROLE_WORDS: tuple[tuple[DateRole, re.Pattern[str]], ...] = (
+    ("expiry", re.compile(r"\bexpir\w*|\bvalid (?:till|until|upto|up to)\b")),
+    ("renewal", re.compile(r"\brenew\w*")),
+    ("due", re.compile(r"\bdue\b|\bpay by\b")),
+    ("purchase", re.compile(r"\bbought\b|\bpurchase[ds]?\b")),
+    ("issue", re.compile(r"\bissued\b")),
+    ("document", re.compile(r"\bdated\b|\bthis year's\b|\bfor fy\b")),
+)
+_WORD = re.compile(r"[\w'\u2019/-]+")
+_MAX_NAME_WORDS = 3
+_MAX_DATE_WORDS = 6
+
+
+def _words(prompt: str) -> list[str]:
+    return [_POSSESSIVE.sub("", w.strip("'\u2019-/")) for w in _WORD.findall(prompt.lower())]
+
+
+def _scan_people(prompt: str, household: Household) -> list[str]:
+    """Household names and aliases in the prompt, longest phrase first, each word used once."""
+    words = _words(prompt)
+    used = [False] * len(words)
+    found: list[str] = []
+    for size in range(min(_MAX_NAME_WORDS, len(words)), 0, -1):
+        for start in range(len(words) - size + 1):
+            phrase = " ".join(words[start : start + size])
+            if any(used[start : start + size]) or phrase in _EVERYONE | _HOME:
+                continue
+            pid, _ = _person(phrase, household)
+            if pid is not None and pid != "home":
+                used[start : start + size] = [True] * size
+                if pid not in found:
+                    found.append(pid)
+    return found
+
+
+def _scan_date(prompt: str, today: date) -> tuple[DateSlot, DateRange] | None:
+    """The first date phrase code can read in the prompt (longest span first), with the role
+    its cue words give. A bare "may" is the verb, not the month."""
+    words = _words(prompt)
+    lowered = prompt.lower().replace("\u2019", "'")
+    for size in range(min(_MAX_DATE_WORDS, len(words)), 0, -1):
+        for start in range(len(words) - size + 1):
+            phrase = " ".join(words[start : start + size])
+            if phrase == "may":
+                continue
+            span = parse_date_phrase(phrase, today)
+            if span is None or (span.start and span.end and span.start > span.end):
+                continue
+            role = next((r for r, cue in _ROLE_WORDS if cue.search(lowered)), "document")
+            return DateSlot(role=role, phrase=phrase), span
+    return None
+
+
+def _scan_types(prompt: str) -> list[DocType]:
+    """Types whose words appear whole in the prompt, the longest phrase first so that
+    "extended warranty" does not also count as "warranty"."""
+    text = " ".join(_words(prompt))
+    phrases = sorted(
+        ((w, t) for t, ws in TYPE_WORDS.items() for w in ws), key=lambda p: len(p[0]), reverse=True
+    )
+    found: list[DocType] = []
+    for phrase, doc_type in phrases:
+        pattern = rf"(?<!\w){re.escape(phrase)}(?!\w)"
+        if re.search(pattern, text):
+            text = re.sub(pattern, " ", text)
+            if doc_type not in found:
+                found.append(doc_type)
+    return found
+
+
+def resolve(reading: QueryReading, household: Household, today: date, prompt: str = "") -> Query:
+    """Work out people and dates. With the prompt text, code fills the closed-class slots the
+    model left empty (a household name, a date phrase, a document type word). The model's own
+    slot always wins; a slot where the prompt says something else is counted as a conflict."""
+    conflicts = 0
+    slot = reading.date
+    types = reading.types
+    backstop_people: list[str] = []
+    if prompt:
+        seen = _scan_people(prompt, household)
+        if not reading.people:
+            backstop_people = seen
+        elif seen and set(seen) != {_person(p, household)[0] for p in reading.people}:
+            conflicts += 1
+        scanned = _scan_date(prompt, today)
+        if scanned is not None and slot is None:
+            slot = scanned[0]
+        elif (
+            scanned is not None
+            and slot is not None
+            and parse_date_phrase(slot.phrase, today) != scanned[1]
+        ):
+            conflicts += 1
+        found_types = _scan_types(prompt)
+        if found_types and not reading.types and not reading.areas:
+            types = found_types
+        elif found_types and set(found_types) != set(reading.types):
+            conflicts += 1
     # A listed type beats its area: the model often names both, and the union would widen the
     # question to the whole area.
-    areas = [a for a in reading.areas if not any(AREA[t] is a for t in reading.types)]
+    areas = [a for a in reading.areas if not any(AREA[t] is a for t in types)]
     unread: list[str] = []
-    people: list[str] = []
+    people: list[str] = list(backstop_people)
     for phrase in reading.people:
         pid, no_filter = _person(phrase, household)
         if pid is not None:
@@ -290,26 +388,26 @@ def resolve(reading: QueryReading, household: Household, today: date) -> Query:
             unread.append(f"person: {phrase}")
     role: DateRole | None = None
     span: DateRange | None = None
-    if reading.date is not None:
-        role = reading.date.role
-        selected = _selected(reading.types, areas)
+    if slot is not None:
+        role = slot.role
+        selected = _selected(types, areas)
         if (
             role not in (None, "document")
             and selected
             and not any(role in DATE_ROLES[t] for t in selected)
         ):
             role = "document"  # none of the types has a date of that kind
-        span = parse_date_phrase(reading.date.phrase, today)
+        span = parse_date_phrase(slot.phrase, today)
         if span is not None and role in _FORWARD_ROLES and span.start is None and span.end:
             # a forward question looks ahead: an end only means "from today to then"
             span = DateRange(start=today, end=span.end)
         if span is None or (span.start and span.end and span.start > span.end):
             span = None  # never an inverted range
-            unread.append(f"date: {reading.date.phrase}")
+            unread.append(f"date: {slot.phrase}")
     return Query(
         intent=reading.intent,
         people=people,
-        types=reading.types,
+        types=types,
         areas=areas,
         field=reading.field,
         role=role,
@@ -317,4 +415,5 @@ def resolve(reading: QueryReading, household: Household, today: date) -> Query:
         place=reading.place,
         words=reading.words,
         unread=unread,
+        backstop_conflicts=conflicts,
     )

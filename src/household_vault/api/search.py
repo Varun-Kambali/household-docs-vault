@@ -108,7 +108,7 @@ def add_search_routes(app: FastAPI, state: AppState) -> None:
             except ModelUnavailable:
                 reading = "off"
             else:
-                query = resolve(parsed, state.household, today())
+                query = resolve(parsed, state.household, today(), prompt)
                 if query.intent == "list":
                     return SearchOut(
                         rows=rows_out(state.searcher.list(query)),

@@ -567,3 +567,8 @@ def test_the_search_runner_names_a_reading_prompt_version():
         ["search", "--split", "val", "--recordings", "r", "--replay", "x"]
     )
     assert default.prompt == "v2"
+
+
+def test_the_summary_totals_the_backstop_conflicts():
+    rows = [row_with(backstop_conflicts=2), row_with(), row_with(backstop_conflicts=1)]
+    assert summarise_search(rows)["backstop_conflicts"] == 3

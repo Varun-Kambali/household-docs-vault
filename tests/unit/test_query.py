@@ -295,3 +295,101 @@ def test_v2_has_an_intent_guide_and_a_role_guide_with_an_example_each():
     for word in ("expire", "valid till", "renew", "due", "pay by", "bought", "purchased", "issued"):
         assert word in PROMPT_READ_V2
     assert "dated" in PROMPT_READ_V2 and "FY" in PROMPT_READ_V2
+
+
+# -- the backstop: slots the model left empty, read from the prompt by code ----------------------
+
+
+def test_a_household_name_in_the_prompt_fills_an_empty_people_slot(household):
+    q = resolve(reading(intent="find", types=[DocType.pan]), household, TODAY, "Kavita's PAN")
+    assert (q.people, q.backstop_conflicts) == (["p2"], 0)
+
+
+def test_a_full_name_and_an_alias_are_found_in_the_prompt(household):
+    assert resolve(reading(), household, TODAY, "policies of Ravi K Rao").people == ["p1"]
+    assert resolve(reading(), household, TODAY, "S N Rao passport").people == ["p4"]
+
+
+def test_everyone_words_and_home_are_not_names_for_the_backstop(household):
+    q = resolve(reading(), household, TODAY, "all my house insurance papers")
+    assert q.people == []
+
+
+def test_the_models_people_win_and_a_different_name_is_counted(household):
+    q = resolve(reading(people=["Ravi"]), household, TODAY, "Kavita's PAN")
+    assert (q.people, q.backstop_conflicts) == (["p1"], 1)
+
+
+def test_the_models_people_and_the_prompt_agreeing_is_not_a_conflict(household):
+    q = resolve(reading(people=["Kavita"]), household, TODAY, "Kavita's PAN")
+    assert (q.people, q.backstop_conflicts) == (["p2"], 0)
+
+
+def test_a_name_the_household_does_not_hold_is_not_invented_by_the_backstop(household):
+    q = resolve(reading(), household, TODAY, "Anil's policy")
+    assert (q.people, q.unread) == ([], [])
+
+
+def test_a_date_phrase_in_the_prompt_fills_an_empty_date_slot(household):
+    q = resolve(reading(intent="list"), household, TODAY, "which policies expire before March")
+    assert (q.role, q.range) == ("expiry", DateRange(start=TODAY, end=date(2027, 2, 28)))
+
+
+def test_the_backstop_role_comes_from_a_small_word_map(household):
+    def role(prompt: str):
+        return resolve(reading(), household, TODAY, prompt).role
+
+    assert role("valid till December") == "expiry"
+    assert role("what renews in March") == "renewal"
+    assert role("premiums due next month") == "due"
+    assert role("bought last year") == "purchase"
+    assert role("licences issued in March 2020") == "issue"
+    assert role("certificates dated last year") == "document"
+    assert role("this year's bills") == "document"
+
+
+def test_a_date_with_no_role_word_is_the_document_date(household):
+    q = resolve(reading(), household, TODAY, "bills for FY 2025-26")
+    assert (q.role, q.range) == (
+        "document",
+        DateRange(start=date(2025, 4, 1), end=date(2026, 3, 31)),
+    )
+
+
+def test_the_word_may_alone_is_not_a_date(household):
+    assert resolve(reading(), household, TODAY, "may I see the passport").range is None
+
+
+def test_the_models_date_wins_and_a_different_span_is_counted(household):
+    slot = DateSlot(role="expiry", phrase="before June")
+    q = resolve(reading(date=slot), household, TODAY, "expiring before March")
+    assert (q.range, q.backstop_conflicts) == (DateRange(start=TODAY, end=date(2027, 5, 31)), 1)
+
+
+def test_a_prompt_with_no_date_leaves_the_slot_empty(household):
+    q = resolve(reading(), household, TODAY, "Ravi's passport number")
+    assert (q.role, q.range, q.unread) == (None, None, [])
+
+
+def test_a_type_word_in_the_prompt_fills_empty_types_and_areas(household):
+    q = resolve(reading(), household, TODAY, "when does the passport expire")
+    assert q.types == [DocType.passport]
+
+
+def test_a_type_word_is_not_used_when_the_model_named_an_area_or_a_type(household):
+    q = resolve(reading(areas=[Area.insurance]), household, TODAY, "my passport")
+    assert (q.types, q.areas, q.backstop_conflicts) == ([], [Area.insurance], 1)
+    q = resolve(reading(types=[DocType.pan]), household, TODAY, "my passport")
+    assert (q.types, q.backstop_conflicts) == ([DocType.pan], 1)
+
+
+def test_a_type_word_must_be_a_whole_word(household):
+    assert resolve(reading(), household, TODAY, "passports and more").types == []
+    assert resolve(reading(), household, TODAY, "the mediclaim policy").types == [
+        DocType.health_policy
+    ]
+
+
+def test_without_a_prompt_there_is_no_backstop(household):
+    q = resolve(reading(), household, TODAY)
+    assert (q.people, q.types, q.range, q.backstop_conflicts) == ([], [], None, 0)

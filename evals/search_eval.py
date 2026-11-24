@@ -460,6 +460,7 @@ class SearchRow:
     list_recall: float | None = None
     declined: bool | None = None
     reading_off: bool = False
+    backstop_conflicts: int = 0
     cause: str | None = None
     slots: list[str] = field(default_factory=list)
     seconds_quick: float = 0.0
@@ -608,6 +609,7 @@ def judge(
     """The numbers for one question. `truth` is the vault's documents by id and `back` maps a
     database document id to its truth id."""
     row = SearchRow(q.id, q.kind, q.origin, q.style, q.prompt, reading_off=res.query is None)
+    row.backstop_conflicts = res.query.backstop_conflicts if res.query else 0
     ids = [back.get(r.document_id, r.document_id) for r in res.rows]
     quick = [back.get(r.document_id, r.document_id) for r in res.quick]
     targets = set(q.targets)
@@ -659,7 +661,7 @@ def _full(
         parsed = read_prompt(prompt, reader)
     except ModelUnavailable:
         return None, state.searcher.quick(prompt), None
-    query = resolve(parsed, state.household, today)
+    query = resolve(parsed, state.household, today, prompt)
     if query.intent == "list":
         rows = state.searcher.list(query)
         sentence(query, state.household, today)
@@ -772,6 +774,7 @@ def summarise_search(
         lambda r: r.declined if r.kind in ("lookup", "find") else None,
     )
     out["readings_missing"] = sum(1 for r in rows if r.reading_off)
+    out["backstop_conflicts"] = sum(r.backstop_conflicts for r in rows)
     warm = list(rows[1:])
     picks: dict[str, Callable[[SearchRow], float]] = {
         "seconds_quick": lambda r: r.seconds_quick,
