@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 from vault_synth.model import SynthDoc
 
-from evals.runner import _parser, main, results_folder
+from evals.runner import _parser, _query_model, main, results_folder
 from evals.search_eval import (
     SMOKE_DIR,
     RecordedEmbedder,
@@ -575,3 +575,11 @@ def test_the_search_runner_names_a_reading_prompt_version():
 def test_the_summary_totals_the_backstop_conflicts():
     rows = [row_with(backstop_conflicts=2), row_with(), row_with(backstop_conflicts=1)]
     assert summarise_search(rows)["backstop_conflicts"] == 3
+
+
+def test_the_search_runner_takes_the_reading_model_from_a_switch_or_the_config():
+    base = ["search", "--split", "val", "--recordings", "r", "--replay", "x"]
+    default = _parser().parse_args(base)
+    named = _parser().parse_args([*base, "--query-model", "qwen3:8b"])
+    assert _query_model(default, "qwen3:4b") == "qwen3:4b"
+    assert _query_model(named, "qwen3:4b") == "qwen3:8b"

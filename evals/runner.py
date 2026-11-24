@@ -313,10 +313,17 @@ def results_folder(split: str, given: str | None = None) -> Path:
 READING_PROMPTS = {"v1": PROMPT_READ_V1, "v2": PROMPT_READ_V2}
 
 
+def _query_model(args: argparse.Namespace, configured: str) -> str:
+    """The model that reads prompts: the `--query-model` switch, else the config's. The app's
+    default does not change."""
+    return str(args.query_model or configured)
+
+
 def _search(args: argparse.Namespace) -> int:
     recordings = Path(args.recordings)
     system = READING_PROMPTS[args.prompt]
     settings = load_settings()
+    settings = settings.model_copy(update={"query_model": _query_model(args, settings.query_model)})
     if args.smoke:
         docs = smoke_documents()
         questions = (
@@ -548,6 +555,10 @@ def _parser() -> argparse.ArgumentParser:
         choices=sorted(READING_PROMPTS),
         default="v2",
         help="the reading prompt of the recordings (v1 is the untuned one)",
+    )
+    search.add_argument(
+        "--query-model",
+        help="the model that reads prompts (default: the config's query_model)",
     )
     search.add_argument("--results", help="default: var/results-val for val, evals/results")
     search.set_defaults(run=_search)
