@@ -152,6 +152,9 @@ A rate over no questions is null.
   search, with the first question left out and reported as `cold_first_seconds` (the model
   loading). They mean something only on a live run with the Mac otherwise idle; on a replay
   they are the cost of the code alone.
+- **backstop_conflicts**: the number of slots where the words of the prompt (a household name, a
+  date phrase, a document type word) and the reading model disagreed. The model's slot is kept;
+  code fills only a slot the model left empty or wrote in words it could not read.
 - **secrets_found**: `scan_outputs` over the vault, the database (the search tables included)
   and the logs after the run. Must be 0.
 - **readings_missing**: prompts whose reading was off or not recorded. **vectors_missing**: query
