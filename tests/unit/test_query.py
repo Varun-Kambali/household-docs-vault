@@ -115,7 +115,7 @@ def test_the_rest_of_the_reading_passes_through(household):
         reading(
             intent="lookup",
             types=[DocType.vehicle_policy],
-            areas=[Area.insurance],
+            areas=[Area.property],
             field="policy_number",
             place="Croma",
             words="car",
@@ -126,7 +126,7 @@ def test_the_rest_of_the_reading_passes_through(household):
     assert (q.intent, q.types, q.areas, q.field, q.place, q.words) == (
         "lookup",
         [DocType.vehicle_policy],
-        [Area.insurance],
+        [Area.property],
         "policy_number",
         "Croma",
         "car",
@@ -221,3 +221,45 @@ def test_a_range_is_never_inverted(household):
         reading(date=DateSlot(role="purchase", phrase="before March 2024")), household, TODAY
     )
     assert q.range == DateRange(start=None, end=date(2024, 2, 29))
+
+
+def test_a_listed_type_beats_its_area(household):
+    q = resolve(
+        reading(
+            intent="list",
+            types=[DocType.form_16],
+            areas=[Area.tax, Area.insurance],
+        ),
+        household,
+        TODAY,
+    )
+    assert q.types == [DocType.form_16] and q.areas == [Area.insurance]
+    both = resolve(reading(types=[DocType.passport], areas=[Area.identity]), household, TODAY)
+    assert both.types == [DocType.passport] and both.areas == []
+    # a type outside the area leaves the area alone; areas alone are kept
+    assert resolve(reading(types=[DocType.passport], areas=[Area.tax]), household, TODAY).areas == [
+        Area.tax
+    ]
+    assert resolve(reading(areas=[Area.tax]), household, TODAY).areas == [Area.tax]
+
+
+def test_a_role_no_selected_type_has_falls_back_to_the_document_date(household):
+    phrase = DateSlot(role="expiry", phrase="this year")
+    invoices = resolve(
+        reading(intent="list", types=[DocType.tax_invoice], date=phrase), household, TODAY
+    )
+    assert invoices.role == "document" and invoices.range is not None
+    area = resolve(reading(intent="list", areas=[Area.cards], date=phrase), household, TODAY)
+    assert area.role == "document"  # no card type has an expiry date role
+    policies = resolve(
+        reading(intent="list", types=[DocType.health_policy], date=phrase), household, TODAY
+    )
+    assert policies.role == "expiry"
+    anything = resolve(reading(intent="list", date=phrase), household, TODAY)
+    assert anything.role == "expiry"  # no type named: the role stays as read
+    mixed = resolve(
+        reading(intent="list", types=[DocType.tax_invoice, DocType.passport], date=phrase),
+        household,
+        TODAY,
+    )
+    assert mixed.role == "expiry"  # one selected type has it

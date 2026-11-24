@@ -14,7 +14,7 @@ from typing import Annotated, Literal, Protocol
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, ValidationError, WithJsonSchema
 
-from household_vault.doctypes import Area, DocType
+from household_vault.doctypes import AREA, Area, DocType
 from household_vault.people import Household, match_person, normalise_name
 from household_vault.reading.engines import prefill_for
 from household_vault.reading.ollama import ModelError, ModelUnavailable, OllamaClient
@@ -197,7 +197,14 @@ def _person(phrase: str, household: Household) -> tuple[str | None, bool]:
     return pid, False
 
 
+def _selected(types: list[DocType], areas: list[Area]) -> set[DocType]:
+    return set(types) | {t for t, area in AREA.items() if area in areas}
+
+
 def resolve(reading: QueryReading, household: Household, today: date) -> Query:
+    # A listed type beats its area: the model often names both, and the union would widen the
+    # question to the whole area.
+    areas = [a for a in reading.areas if not any(AREA[t] is a for t in reading.types)]
     unread: list[str] = []
     people: list[str] = []
     for phrase in reading.people:
@@ -211,6 +218,13 @@ def resolve(reading: QueryReading, household: Household, today: date) -> Query:
     span: DateRange | None = None
     if reading.date is not None:
         role = reading.date.role
+        selected = _selected(reading.types, areas)
+        if (
+            role not in (None, "document")
+            and selected
+            and not any(role in DATE_ROLES[t] for t in selected)
+        ):
+            role = "document"  # none of the types has a date of that kind
         span = parse_date_phrase(reading.date.phrase, today)
         if span is not None and role in _FORWARD_ROLES and span.start is None and span.end:
             # a forward question looks ahead: an end only means "from today to then"
@@ -222,7 +236,7 @@ def resolve(reading: QueryReading, household: Household, today: date) -> Query:
         intent=reading.intent,
         people=people,
         types=reading.types,
-        areas=reading.areas,
+        areas=areas,
         field=reading.field,
         role=role,
         range=span,
