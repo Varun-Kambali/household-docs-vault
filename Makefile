@@ -1,6 +1,6 @@
 COV_MIN ?= 80
 
-.PHONY: search-set setup visits spikes-setup finetune-setup lint test eval eval-val eval-smoke run vault docker
+.PHONY: eval-search-val eval-search search-set setup visits spikes-setup finetune-setup lint test eval eval-val eval-smoke run vault docker
 
 setup:
 	uv sync
@@ -46,6 +46,19 @@ search-set:
 	uv run python -m vault_synth --set search-x1 --splits val,test --variants clean --out evals/datasets/search-v1/extra/search-x1
 	uv run python -m vault_synth --set search-x2 --splits val,test --variants clean --out evals/datasets/search-v1/extra/search-x2
 	uv run python -m evals.search_set
+
+# The search eval on val, with the local models (qwen3:4b reads prompts, qwen3-embedding:0.6b
+# makes vectors). VAL_RECORDINGS is the folder of val reading recordings (never committed). The
+# readings and vectors are recorded under var/ and the results go to var/results-val.
+VAL_RECORDINGS ?= var/recordings/val
+eval-search-val:
+	@echo "make eval-search-val calls the local models and needs Varun's yes first." >&2
+	uv run python -m evals.runner search --split val --recordings $(VAL_RECORDINGS) --record var/recordings/search-val --results var/results-val
+
+# The search eval on test: run once, at the end of M3.
+eval-search:
+	@echo "make eval-search calls the local models and needs Varun's yes first." >&2
+	uv run python -m evals.runner search --split test --recordings evals/recordings/eval-v1/test --record var/recordings/search-test
 
 # What CI runs: the committed smoke recordings, no model.
 eval-smoke:

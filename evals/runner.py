@@ -3,17 +3,22 @@
     python -m evals.runner reading --split S --engines mac|recorded --record DIR
                                    [--resume] [--limit N]
     python -m evals.runner filing --split S --recordings DIR
-    python -m evals.runner smoke [--recordings DIR]
+    python -m evals.runner smoke [--recordings DIR] [--search-recordings DIR]
+    python -m evals.runner search --split S --recordings DIR (--record DIR | --replay DIR)
+                                  [--smoke] [--results DIR]
 
 `reading` and `filing` write `evals/results/<date>_<kind>_<split>_<commit>.json` and, for the
 `test` split, rewrite `evals/results/summary.md`. `smoke` replays the committed recordings of the
 smoke documents with no model, writes nothing and returns 1 when a number is below its
-threshold in `evals/thresholds.toml`.
+threshold in `evals/thresholds.toml`; it includes the search eval on the same documents.
+`search` scores the `search-v1` questions of a split: with `--record` it calls the local models
+and records their answers, with `--replay` it needs no model.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import tempfile
@@ -31,11 +36,26 @@ from evals.reading_eval import (
     write_results,
 )
 from evals.recordings import load_smoke
+from evals.search_eval import (
+    SMOKE_DIR,
+    RecordedEmbedder,
+    RecordedPromptReader,
+    SearchEvalError,
+    load_smoke_questions,
+    row_dicts,
+    run_search,
+    smoke_documents,
+    summarise_search,
+    write_smoke_questions,
+)
+from evals.search_set import EVAL_TODAY, SEARCH_DIR
 from household_vault.config import load_settings
 from household_vault.reading.engines import Engines, make_engines
 from household_vault.reading.ollama import ModelError, ModelUnavailable, OllamaClient
 from household_vault.reading.prompt import PROMPT_V4
 from household_vault.reading.recorded import recorded_engines
+from household_vault.search.query import PROMPT_READ_V1, OllamaPromptReader
+from household_vault.search.vectors import OllamaEmbedder
 
 ROOT = Path(__file__).resolve().parents[1]
 SET_DIR = ROOT / "evals" / "datasets" / "eval-v1"
@@ -180,6 +200,67 @@ def check_smoke(metrics: Mapping[str, float], thresholds: Mapping[str, Any]) -> 
     return misses
 
 
+def search_metrics(summary: Mapping[str, Any]) -> dict[str, float]:
+    """The numbers the `[search_smoke]` thresholds are written against."""
+
+    def overall(name: str) -> float:
+        value = summary[name]["all"]
+        return 0.0 if value is None else float(value)
+
+    kinds = summary["kinds"]
+    return {
+        "top1": overall("top1"),
+        "top3": overall("top3"),
+        "answer_correct": overall("answer_correct"),
+        "citation_accuracy": overall("citation_accuracy"),
+        "list_reading": overall("list_reading"),
+        "list_precision": overall("list_precision"),
+        "list_recall": overall("list_recall"),
+        "declined_when_answerable": overall("declined_when_answerable"),
+        "lookups": kinds.get("lookup", 0),
+        "finds": kinds.get("find", 0),
+        "lists": kinds.get("list", 0),
+        "readings_missing": summary["readings_missing"],
+        "vectors_missing": summary["vectors_missing"],
+        "expected_filed_but_not": summary["expected_filed_but_not"],
+        "secrets_found": summary["secrets_found"],
+    }
+
+
+def check_search_smoke(metrics: Mapping[str, float], thresholds: Mapping[str, Any]) -> list[str]:
+    """One line for every search metric that misses its threshold."""
+    section = thresholds["search_smoke"]
+    misses: list[str] = []
+    for name, floor in section["min"].items():
+        if metrics[name] < floor:
+            misses.append(f"search {name}: {metrics[name]:.4g} is below the minimum {floor:.4g}")
+    for name, ceiling in section["max"].items():
+        if metrics[name] > ceiling:
+            misses.append(f"search {name}: {metrics[name]:.4g} is above the maximum {ceiling:.4g}")
+    return misses
+
+
+def _smoke_search(
+    reading_recordings: Path, search_recordings: Path
+) -> tuple[dict[str, float], list[str]]:
+    docs = smoke_documents()
+    settings = load_settings()
+    facts: dict[str, Any] = {}
+    with tempfile.TemporaryDirectory(prefix="vault-search-smoke-") as work:
+        rows = run_search(
+            "val",
+            RecordedPromptReader(search_recordings, expect=settings.query_model),
+            RecordedEmbedder(search_recordings, expect=settings.embed_model),
+            reading_recordings,
+            Path(work),
+            docs=docs,
+            questions=load_smoke_questions(search_recordings),
+            facts=facts,
+        )
+    metrics = search_metrics(summarise_search(rows, facts))
+    return metrics, [f"search: {h}" for h in facts["secret_hits"]]
+
+
 def _smoke(args: argparse.Namespace) -> int:
     recordings = Path(args.recordings)
     ids = load_smoke(SET_DIR)
@@ -199,15 +280,120 @@ def _smoke(args: argparse.Namespace) -> int:
         print(f"smoke: {exc} (a smoke document has no recording in {recordings})")
         return 1
     metrics = smoke_metrics(summarise_reading(rows), filing)
-    misses = check_smoke(metrics, load_thresholds())
+    thresholds = load_thresholds()
+    misses = check_smoke(metrics, thresholds)
+    leaks = list(filing["secret_hits"])
+    try:
+        found, search_leaks = _smoke_search(recordings, Path(args.search_recordings))
+    except (SearchEvalError, ModelUnavailable) as exc:
+        misses.append(f"search: {exc}")
+    else:
+        misses += check_search_smoke(found, thresholds)
+        leaks += search_leaks
+        metrics = {**metrics, **{f"search_{k}": v for k, v in found.items()}}
     for name, value in metrics.items():
         print(f"{name}: {value:.4g}")
     if misses:
         print("\nsmoke run failed:")
-        for line in (*misses, *filing["secret_hits"]):
+        for line in (*misses, *leaks):
             print(f"  {line}")
         return 1
     print(f"\nsmoke run passed on {len(ids)} documents")
+    return 0
+
+
+def results_folder(split: str, given: str | None = None) -> Path:
+    """Where a search run writes: val numbers stay out of git, so val never defaults to the
+    committed results folder."""
+    if given:
+        return Path(given)
+    return ROOT / "var" / "results-val" if split == "val" else RESULTS
+
+
+def _search(args: argparse.Namespace) -> int:
+    recordings = Path(args.recordings)
+    settings = load_settings()
+    if args.smoke:
+        docs = smoke_documents()
+        questions = (
+            write_smoke_questions(Path(args.record))
+            if args.record and not (Path(args.record) / "questions.jsonl").exists()
+            else load_smoke_questions(Path(args.record or args.replay))
+        )
+    else:
+        docs, questions = None, None
+    models: dict[str, Any]
+    if args.record:
+        record = Path(args.record)
+        client = OllamaClient(settings.ollama_url, timeout_s=120.0)
+        try:
+            tags = client.tags()
+        except (ModelUnavailable, ModelError):
+            tags = {}
+        reader = RecordedPromptReader(
+            record,
+            record,
+            live=OllamaPromptReader(client, settings.query_model),
+            model=settings.query_model,
+            digest=tags.get(settings.query_model),
+        )
+        embedder = RecordedEmbedder(
+            record,
+            record,
+            live=OllamaEmbedder(client, settings.embed_model),
+            model=settings.embed_model,
+            digest=tags.get(settings.embed_model),
+        )
+        models = {
+            "prompt_reader": settings.query_model,
+            "embedder": settings.embed_model,
+            "digests": {m: tags.get(m) for m in (settings.query_model, settings.embed_model)},
+            "live": True,
+        }
+    else:
+        replay = Path(args.replay)
+        reader = RecordedPromptReader(replay, expect=settings.query_model)
+        embedder = RecordedEmbedder(replay, expect=settings.embed_model)
+        models = {
+            "prompt_reader": settings.query_model,
+            "embedder": embedder.name,
+            "live": False,
+        }
+    facts: dict[str, Any] = {}
+    with tempfile.TemporaryDirectory(prefix="vault-search-") as work:
+        rows = run_search(
+            args.split,
+            reader,
+            embedder,
+            recordings,
+            Path(work),
+            docs=docs,
+            questions=questions,
+            facts=facts,
+        )
+    summary = summarise_search(rows, facts)
+    questions_file = SEARCH_DIR / f"{args.split}.jsonl"
+    path = write_results(
+        results_folder(args.split, args.results),
+        "search_smoke" if args.smoke else "search",
+        args.split,
+        summary,
+        row_dicts(rows),
+        extra={
+            "dataset": {
+                "name": "search-v1",
+                "questions_sha256": hashlib.sha256(questions_file.read_bytes()).hexdigest(),
+                "eval_v1": dataset_info(SET_DIR),
+            },
+            "models": models,
+            "reading_prompt_sha256": hashlib.sha256(PROMPT_READ_V1.encode()).hexdigest(),
+            "today": EVAL_TODAY.isoformat(),
+        },
+    )
+    for name in ("top1", "top3", "answer_correct", "citation_accuracy", "list_reading"):
+        print(f"{name}: {summary[name]['all']}")
+    print(f"secrets_found: {summary['secrets_found']}")
+    print(f"Wrote {path}")
     return 0
 
 
@@ -325,7 +511,18 @@ def _parser() -> argparse.ArgumentParser:
 
     smoke = sub.add_parser("smoke", help="the CI check: committed recordings, no model")
     smoke.add_argument("--recordings", default=str(SMOKE_RECORDINGS))
+    smoke.add_argument("--search-recordings", default=str(SMOKE_DIR))
     smoke.set_defaults(run=_smoke)
+
+    search = sub.add_parser("search", help="score the search-v1 questions of a split")
+    search.add_argument("--split", required=True, choices=["val", "test"])
+    search.add_argument("--recordings", required=True, help="the eval-v1 reading recordings")
+    which = search.add_mutually_exclusive_group(required=True)
+    which.add_argument("--record", help="call the local models and record into this folder")
+    which.add_argument("--replay", help="replay the search recordings in this folder")
+    search.add_argument("--smoke", action="store_true", help="the smoke documents and questions")
+    search.add_argument("--results", help="default: var/results-val for val, evals/results")
+    search.set_defaults(run=_search)
     return parser
 
 

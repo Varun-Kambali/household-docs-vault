@@ -36,3 +36,35 @@ wrong_merges = 0
 secrets_found = 0
 cvv_stored = 0
 inbox_left = 0
+
+# The search part of `make eval-smoke`: the `search-v1` val questions about the 22 smoke documents
+# (seven lookups, three finds) and ten list prompts written for that small vault, answered from
+# the committed readings and vectors in evals/recordings/search-v1/smoke/, no model. They were
+# recorded live with qwen3:4b (prompt reading) and qwen3-embedding:0.6b (vectors). Each rate is
+# the value measured on a replay of these recordings less 2 points (the declined share: plus 2
+# points); counts are floors so that a rate over nothing cannot pass; secrets, missing readings
+# and missing vectors are exactly 0. `expected_filed_but_not` is the four copies of a filed
+# photo that the vault holds as possible copies, which is the point of putting them there.
+# These are regression guards on code that still changes, not targets.
+
+[search_smoke.min]
+# measured: top1 0.9, top3 0.9, answer_correct 0.7143, citation_accuracy 1, list_reading 0.1,
+# list_precision 0.25, list_recall 0.3
+top1 = 0.88
+top3 = 0.88
+answer_correct = 0.6943
+citation_accuracy = 0.98
+list_reading = 0.08
+list_precision = 0.23
+list_recall = 0.28
+lookups = 7
+finds = 3
+lists = 10
+
+[search_smoke.max]
+# measured: declined_when_answerable 0.2
+declined_when_answerable = 0.22
+readings_missing = 0
+vectors_missing = 0
+expected_filed_but_not = 4
+secrets_found = 0
