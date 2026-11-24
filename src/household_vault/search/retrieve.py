@@ -20,7 +20,7 @@ from household_vault.people import normalise_name
 from household_vault.search.dates import DateRange
 from household_vault.search.index import KeywordHit, KeywordIndex
 from household_vault.search.query import Query
-from household_vault.search.vectors import VectorIndex
+from household_vault.search.vectors import VectorHit, VectorIndex
 from household_vault.search.vocab import (
     DATE_ROLES,
     KEY_FIELDS,
@@ -98,8 +98,9 @@ def _filtered(query: Query) -> bool:
     )
 
 
-def _first_seen(ids: Iterable[str]) -> list[str]:
-    return list(dict.fromkeys(ids))
+def _ids(hits: Sequence[KeywordHit] | Sequence[VectorHit]) -> list[str]:
+    """The documents of a ranking, best first, each once."""
+    return list(dict.fromkeys(h.document_id for h in hits))
 
 
 class Searcher:
@@ -201,8 +202,7 @@ class Searcher:
         """Keywords (the last word as a prefix) and vectors, fused. Runs no model."""
         kw = self.keyword.search(text, limit=POOL)
         vec = self.vectors.search(text, limit=POOL)
-        rankings = [_first_seen(h.document_id for h in hits) for hits in (kw, vec)]
-        return self._fuse(rankings, [kw], None, limit)
+        return self._fuse([_ids(kw), _ids(vec)], [kw], None, limit)
 
     def lookup(self, query: Query, prompt: str, limit: int = 20) -> Rows:
         """The filters narrow the candidates; the query's words, place and type words (or the
@@ -217,7 +217,7 @@ class Searcher:
             if p.strip()
         ] or [self.keyword.search(prompt, limit=POOL, prefix_last=False, only=only)]
         vec = self.vectors.search(text, limit=POOL, only=only)
-        rankings = [_first_seen(h.document_id for h in hits) for hits in (*keyword_hits, vec)]
+        rankings = [_ids(hits) for hits in keyword_hits] + [_ids(vec)]
         if allowed is not None:
             # The reading may have named the wrong person or type. The prompt's own keyword and
             # vector matches, unfiltered, vote too, so a misread filter cannot remove the
@@ -225,10 +225,7 @@ class Searcher:
             quick_kw = self.keyword.search(prompt, limit=POOL)
             quick_vec = self.vectors.search(prompt, limit=POOL)
             keyword_hits = [*keyword_hits, quick_kw]
-            rankings += [
-                _first_seen(h.document_id for h in hits)[:UNFILTERED_VOTES]
-                for hits in (quick_kw, quick_vec)
-            ]
+            rankings += [_ids(quick_kw)[:UNFILTERED_VOTES], _ids(quick_vec)[:UNFILTERED_VOTES]]
         rows = self._fuse(rankings, keyword_hits, query.role, limit)
         if allowed is not None and len(rows) < limit:
             # The filters named documents the rankings did not reach: they still answer.
