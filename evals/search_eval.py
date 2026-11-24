@@ -88,6 +88,45 @@ def _write(path: Path, data: bytes) -> None:
     temp.replace(path)
 
 
+class RecordingMismatch(SearchEvalError):
+    """A recordings folder was made by another model than the run expects."""
+
+
+MANIFEST = "manifest.json"
+
+
+def _manifest(folder: Path) -> dict[str, Any]:
+    try:
+        body = json.loads((folder / MANIFEST).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return body if isinstance(body, dict) else {}
+
+
+def _stamp(folder: Path, role: str, model: str, digest: str | None, *, write: bool) -> None:
+    """Write the model a folder's recordings were made with, or refuse a folder that already
+    names another model (or another digest, when both are known)."""
+    body = _manifest(folder)
+    have = body.get(role)
+    if isinstance(have, dict):
+        same_digest = digest is None or have.get("digest") in (None, digest)
+        if have.get("model") != model or not same_digest:
+            raise RecordingMismatch(
+                f"{folder} holds {role} recordings made with {have.get('model')}, not {model}"
+            )
+        return
+    if write:
+        body[role] = {"model": model, "digest": digest}
+        _write(folder / MANIFEST, (json.dumps(body, indent=1) + "\n").encode())
+
+
+def _expect(folder: Path, role: str, model: str, digest: str | None) -> None:
+    have = _manifest(folder).get(role)
+    if not isinstance(have, dict):
+        raise RecordingMismatch(f"{folder} has no record of the model that made its {role}")
+    _stamp(folder, role, model, digest, write=False)
+
+
 class RecordedPromptReader:
     """Replays the model's JSON for a prompt, keyed by the SHA-256 of the prompt. With `live` it
     asks the real reader for a prompt with no recording, and with `record_to` it writes what the
@@ -101,6 +140,10 @@ class RecordedPromptReader:
         *,
         live: PromptReader | None = None,
         name: str = "recorded-prompt-reader",
+        model: str | None = None,
+        digest: str | None = None,
+        expect: str | None = None,
+        expect_digest: str | None = None,
     ) -> None:
         if record_to is not None and live is None:
             raise ValueError("recording needs a live reader")
@@ -108,6 +151,10 @@ class RecordedPromptReader:
         self.record_to = record_to
         self.live = live
         self.name = live.name if live is not None else name
+        if expect is not None:
+            _expect(folder, "prompt_reader", expect, expect_digest)
+        if record_to is not None and live is not None:
+            _stamp(record_to, "prompt_reader", model or live.name, digest, write=True)
         self.system = _sha(PROMPT_READ_V1)
 
     def _load(self, prompt: str) -> str | None:
@@ -116,9 +163,10 @@ class RecordedPromptReader:
             body = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             return None
-        if body.get("system_sha256") != self.system:
+        if not isinstance(body, dict) or body.get("system_sha256") != self.system:
             return None
-        return str(body["raw"])
+        raw = body.get("raw")
+        return raw if isinstance(raw, str) else None
 
     def read(self, prompt: str) -> str:
         found = self._load(prompt)
@@ -145,13 +193,24 @@ class RecordedEmbedder:
         *,
         live: Embedder | None = None,
         name: str | None = None,
+        model: str | None = None,
+        digest: str | None = None,
+        expect: str | None = None,
+        expect_digest: str | None = None,
     ) -> None:
         if record_to is not None and live is None:
             raise ValueError("recording needs a live embedder")
         self.folder = folder
         self.record_to = record_to
         self.live = live
-        self.name = live.name if live is not None else (name or load_settings(env={}).embed_model)
+        self.name = (
+            live.name if live is not None else (name or expect or load_settings(env={}).embed_model)
+        )
+        self.missing_queries = 0  # query vectors that were not there (search drops to keywords)
+        if expect is not None:
+            _expect(folder, "embedder", expect, expect_digest)
+        if record_to is not None and live is not None:
+            _stamp(record_to, "embedder", model or live.name, digest, write=True)
 
     def _path(self, key: str) -> Path:
         return self.folder / f"{key}.npy"
@@ -159,7 +218,7 @@ class RecordedEmbedder:
     def _get(self, key: str) -> Vectors | None:
         try:
             return np.load(self._path(key)).astype(np.float32)  # type: ignore[no-any-return]
-        except (OSError, ValueError):
+        except (OSError, ValueError, EOFError):
             return None
 
     def _put(self, key: str, vec: Vectors) -> Vectors:
@@ -191,6 +250,7 @@ class RecordedEmbedder:
         if found is not None:
             return found
         if self.live is None:
+            self.missing_queries += 1
             raise ModelUnavailable("no recording of this query")
         return self._put(key, self.live.embed_query(text))
 
@@ -632,6 +692,7 @@ def run_search(
                     "secrets_found": len(hits),
                     "secret_hits": hits[:20],
                     "waiting_originals_skipped": skipped,
+                    "vectors_missing": getattr(embedder, "missing_queries", 0),
                 }
             )
     finally:

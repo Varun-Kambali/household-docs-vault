@@ -48,7 +48,7 @@ from evals.search_eval import (
     summarise_search,
     write_smoke_questions,
 )
-from evals.search_set import SEARCH_DIR
+from evals.search_set import EVAL_TODAY, SEARCH_DIR
 from household_vault.config import load_settings
 from household_vault.reading.engines import Engines, make_engines
 from household_vault.reading.ollama import ModelError, ModelUnavailable, OllamaClient
@@ -221,6 +221,7 @@ def search_metrics(summary: Mapping[str, Any]) -> dict[str, float]:
         "finds": kinds.get("find", 0),
         "lists": kinds.get("list", 0),
         "readings_missing": summary["readings_missing"],
+        "vectors_missing": summary["vectors_missing"],
         "expected_filed_but_not": summary["expected_filed_but_not"],
         "secrets_found": summary["secrets_found"],
     }
@@ -243,12 +244,13 @@ def _smoke_search(
     reading_recordings: Path, search_recordings: Path
 ) -> tuple[dict[str, float], list[str]]:
     docs = smoke_documents()
+    settings = load_settings()
     facts: dict[str, Any] = {}
     with tempfile.TemporaryDirectory(prefix="vault-search-smoke-") as work:
         rows = run_search(
             "val",
-            RecordedPromptReader(search_recordings),
-            RecordedEmbedder(search_recordings),
+            RecordedPromptReader(search_recordings, expect=settings.query_model),
+            RecordedEmbedder(search_recordings, expect=settings.embed_model),
             reading_recordings,
             Path(work),
             docs=docs,
@@ -300,6 +302,14 @@ def _smoke(args: argparse.Namespace) -> int:
     return 0
 
 
+def results_folder(split: str, given: str | None = None) -> Path:
+    """Where a search run writes: val numbers stay out of git, so val never defaults to the
+    committed results folder."""
+    if given:
+        return Path(given)
+    return ROOT / "var" / "results-val" if split == "val" else RESULTS
+
+
 def _search(args: argparse.Namespace) -> int:
     recordings = Path(args.recordings)
     settings = load_settings()
@@ -316,16 +326,24 @@ def _search(args: argparse.Namespace) -> int:
     if args.record:
         record = Path(args.record)
         client = OllamaClient(settings.ollama_url, timeout_s=120.0)
-        reader = RecordedPromptReader(
-            record, record, live=OllamaPromptReader(client, settings.query_model)
-        )
-        embedder = RecordedEmbedder(
-            record, record, live=OllamaEmbedder(client, settings.embed_model)
-        )
         try:
             tags = client.tags()
         except (ModelUnavailable, ModelError):
             tags = {}
+        reader = RecordedPromptReader(
+            record,
+            record,
+            live=OllamaPromptReader(client, settings.query_model),
+            model=settings.query_model,
+            digest=tags.get(settings.query_model),
+        )
+        embedder = RecordedEmbedder(
+            record,
+            record,
+            live=OllamaEmbedder(client, settings.embed_model),
+            model=settings.embed_model,
+            digest=tags.get(settings.embed_model),
+        )
         models = {
             "prompt_reader": settings.query_model,
             "embedder": settings.embed_model,
@@ -334,8 +352,8 @@ def _search(args: argparse.Namespace) -> int:
         }
     else:
         replay = Path(args.replay)
-        reader = RecordedPromptReader(replay)
-        embedder = RecordedEmbedder(replay)
+        reader = RecordedPromptReader(replay, expect=settings.query_model)
+        embedder = RecordedEmbedder(replay, expect=settings.embed_model)
         models = {
             "prompt_reader": settings.query_model,
             "embedder": embedder.name,
@@ -356,7 +374,7 @@ def _search(args: argparse.Namespace) -> int:
     summary = summarise_search(rows, facts)
     questions_file = SEARCH_DIR / f"{args.split}.jsonl"
     path = write_results(
-        Path(args.results),
+        results_folder(args.split, args.results),
         "search_smoke" if args.smoke else "search",
         args.split,
         summary,
@@ -369,7 +387,7 @@ def _search(args: argparse.Namespace) -> int:
             },
             "models": models,
             "reading_prompt_sha256": hashlib.sha256(PROMPT_READ_V1.encode()).hexdigest(),
-            "today": "2026-11-20",
+            "today": EVAL_TODAY.isoformat(),
         },
     )
     for name in ("top1", "top3", "answer_correct", "citation_accuracy", "list_reading"):
@@ -503,7 +521,7 @@ def _parser() -> argparse.ArgumentParser:
     which.add_argument("--record", help="call the local models and record into this folder")
     which.add_argument("--replay", help="replay the search recordings in this folder")
     search.add_argument("--smoke", action="store_true", help="the smoke documents and questions")
-    search.add_argument("--results", default=str(RESULTS))
+    search.add_argument("--results", help="default: var/results-val for val, evals/results")
     search.set_defaults(run=_search)
     return parser
 

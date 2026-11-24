@@ -154,7 +154,8 @@ A rate over no questions is null.
   they are the cost of the code alone.
 - **secrets_found**: `scan_outputs` over the vault, the database (the search tables included)
   and the logs after the run. Must be 0.
-- **readings_missing**: prompts whose reading was off or not recorded.
+- **readings_missing**: prompts whose reading was off or not recorded. **vectors_missing**: query
+  vectors that were not recorded (search then falls back to keywords). Both must be 0 on a replay.
 
 The rows hold booleans, numbers and the question's own synthetic prompt, and a `cause` for each
 miss: `reading misread` (the prompt read as another intent or field), `retrieval miss` (the
@@ -165,7 +166,9 @@ target was not the top row, or a list's rows are not the expected ones), `weak m
 Prompt readings and vectors are recorded like the readings: `RecordedPromptReader` keys a
 reading by the SHA-256 of the prompt (and stores the hash of the reading prompt, so a changed
 prompt needs a new recording), `RecordedEmbedder` keys a float16 vector by the SHA-256 of the
-text (a query's key includes the model's task line). `--record DIR` calls the local models and
+text (a query's key includes the model's task line). Each recordings folder holds a
+`manifest.json` with the name and digest of the reading model and the embedding model that made
+it; a replay refuses a folder made by another model, and `--record` refuses to add to one. `--record DIR` calls the local models and
 writes there; `--replay DIR` needs no model.
 
 The smoke part of `make eval-smoke` uses `evals/recordings/search-v1/smoke/`: the 22 smoke

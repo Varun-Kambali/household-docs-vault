@@ -8,13 +8,15 @@ import numpy as np
 import pytest
 from vault_synth.model import SynthDoc
 
-from evals.runner import main
+from evals.runner import _parser, main, results_folder
 from evals.search_eval import (
     SMOKE_DIR,
     RecordedEmbedder,
     RecordedPromptReader,
+    RecordingMismatch,
     Result,
     SearchRow,
+    _build,
     declined,
     judge,
     load_smoke_questions,
@@ -299,6 +301,7 @@ def test_the_smoke_questions_are_val_lookups_and_finds_about_smoke_photos_and_te
 def copy_smoke(tmp_path: Path) -> Path:
     import shutil
 
+    tmp_path.mkdir(parents=True, exist_ok=True)
     folder = tmp_path / "search-smoke"
     shutil.copytree(SMOKE_DIR, folder)
     return folder
@@ -341,3 +344,147 @@ def test_the_committed_smoke_recordings_hold_no_real_shaped_number():
 
 def test_the_committed_smoke_questions_are_what_the_builder_makes(smoke_docs):
     assert load_smoke_questions() == smoke_questions(smoke_docs)
+
+
+# -- fix round 1 ----------------------------------------------------------------------------------
+
+
+def status_question(doc: SynthDoc, field: str) -> Question:
+    from evals.search_set import status_of
+
+    q = lookup_question(doc, field)
+    return q.model_copy(update={"status": status_of(doc, field)})
+
+
+def judged_answer(q: Question, doc: SynthDoc, value: Any, text: str) -> SearchRow:
+    page, box = _where(doc, q.field)
+    answer = an_answer("db-1", q.field, value, text, [LineRef(page, 0, box)])
+    res = Result(Query(intent="lookup", field=q.field), [], answer, [])
+    return judge(q, res, {doc.doc_id: doc}, {"db-1": doc.doc_id})
+
+
+def test_a_wrong_value_is_a_wrong_answer(smoke_docs):
+    doc = next(d for d in smoke_docs if d.doc_id == "health_policy-1-photo")
+    q = lookup_question(doc, "policy_number")
+    right = judged_answer(q, doc, doc.fields["policy_number"], "x")
+    wrong = judged_answer(q, doc, str(doc.fields["policy_number"]) + "9", "x")
+    assert (right.answer_correct, wrong.answer_correct) == (True, False)
+    assert wrong.cause == "wrong value" or wrong.cause is not None
+
+
+def test_a_validity_answer_must_state_the_right_status(smoke_docs):
+    doc = next(d for d in smoke_docs if d.doc_id == "vehicle_policy-1-photo")
+    q = status_question(doc, "end_date")
+    assert q.status is not None
+    valid = q.status["valid"]
+    said = {True: "Yes, until 3 Mar 2027.", False: "Ended 3 Mar 2026."}
+    value = doc.fields["end_date"]
+    assert judged_answer(q, doc, value, said[valid]).answer_correct is True
+    assert judged_answer(q, doc, value, said[not valid]).answer_correct is False
+
+
+def test_a_warranty_answer_must_state_every_part_right(smoke_docs):
+    doc = next(d for d in smoke_docs if d.doc_id == "warranty_card-1-photo")
+    q = status_question(doc, "warranty_parts")
+    assert q.status
+    value = doc.fields["warranty_parts"]
+
+    def text(flip: bool) -> str:
+        return " ".join(
+            f"{name}: " + ("yes, until 3 Mar 2031." if ok != flip else "ended 3 Mar 2020.")
+            for name, ok in q.status.items()
+        )
+
+    assert judged_answer(q, doc, value, text(False)).answer_correct is True
+    assert judged_answer(q, doc, value, text(True)).answer_correct is False
+
+
+def test_held_copies_are_exactly_the_four_variants_of_filed_photos(tmp_path, smoke_docs):
+    state, ids, entries = _build(
+        smoke_docs,
+        EVAL_V1.parent.parent / "recordings" / "eval-v1" / "smoke",
+        tmp_path,
+        RecordedEmbedder(SMOKE_DIR),
+    )
+    try:
+        held = {
+            e.doc.doc_id
+            for e in entries
+            for i in state.store.items(["asked"])
+            if i.sha256 == e.key and "possible_copy" in [r.value for r in i.reasons]
+        }
+        unfiled = {e.doc.doc_id for e in entries if not e.doc.expected_ask} - set(ids)
+    finally:
+        state.store.conn.close()
+    expected = {
+        "health_policy-1-clean",
+        "tax_invoice-1-scan",
+        "aadhaar-1-scan",
+        "card_statement-1-locked",
+    }
+    assert held == expected and unfiled == expected
+
+
+def test_a_folder_made_by_another_model_is_refused(tmp_path):
+    live = FakePromptReader({"hello": "{}"})
+    RecordedPromptReader(tmp_path, tmp_path, live=live, model="qwen3:4b", digest="aaa")
+    RecordedEmbedder(tmp_path, tmp_path, live=FakeEmbedder(), model="emb", digest="bbb")
+    assert RecordedPromptReader(tmp_path, expect="qwen3:4b").name
+    assert RecordedEmbedder(tmp_path, expect="emb").name == "emb"
+    with pytest.raises(RecordingMismatch):
+        RecordedPromptReader(tmp_path, expect="qwen3:1.7b")
+    with pytest.raises(RecordingMismatch):
+        RecordedEmbedder(tmp_path, expect="other-embed")
+    with pytest.raises(RecordingMismatch):
+        RecordedPromptReader(tmp_path, expect="qwen3:4b", expect_digest="zzz")
+    with pytest.raises(RecordingMismatch):  # recording again over another model's folder
+        RecordedPromptReader(tmp_path, tmp_path, live=live, model="qwen3:1.7b")
+    with pytest.raises(RecordingMismatch):  # no manifest at all
+        RecordedPromptReader(tmp_path / "empty", expect="qwen3:4b")
+
+
+def test_the_smoke_fails_when_the_recordings_are_from_another_model(tmp_path, capsys):
+    folder = copy_smoke(tmp_path)
+    manifest = json.loads((folder / "manifest.json").read_text())
+    manifest["embedder"]["model"] = "some-other-embedding-model"
+    (folder / "manifest.json").write_text(json.dumps(manifest))
+    assert main(["smoke", "--search-recordings", str(folder)]) == 1
+    assert "some-other-embedding-model" in capsys.readouterr().out
+
+
+def test_missing_query_vectors_are_counted_and_fail_the_smoke(tmp_path, capsys):
+    embedder = RecordedEmbedder(tmp_path, name="x")
+    with pytest.raises(ModelUnavailable):
+        embedder.embed_query("never recorded")
+    assert embedder.missing_queries == 1
+    folder = copy_smoke(tmp_path / "s")
+    q = load_smoke_questions(folder)[0]
+    from evals.search_eval import _sha
+    from household_vault.search.vectors import QUERY_TASK
+
+    (folder / f"{_sha(f'{QUERY_TASK}' + chr(10) + q.prompt)}.npy").unlink()
+    assert main(["smoke", "--search-recordings", str(folder)]) == 1
+    assert "vectors_missing" in capsys.readouterr().out
+
+
+def test_damaged_recordings_count_as_missing(tmp_path):
+    reader = RecordedPromptReader(tmp_path)
+    from evals.search_eval import _sha
+
+    for body in (json.dumps({"system_sha256": reader.system}), "[1]", '{"raw": 5}', "{"):
+        (tmp_path / f"{_sha('p')}.json").write_text(body)
+        with pytest.raises(ModelUnavailable):
+            reader.read("p")
+    embedder = RecordedEmbedder(tmp_path, name="x")
+    from household_vault.search.vectors import QUERY_TASK
+
+    (tmp_path / f"{_sha(QUERY_TASK + chr(10) + 'p')}.npy").write_bytes(b"\x93NUMPY")
+    with pytest.raises(ModelUnavailable):
+        embedder.embed_query("p")
+
+
+def test_val_results_never_default_to_the_committed_folder():
+    assert results_folder("val").parts[-2:] == ("var", "results-val")
+    assert results_folder("test").parts[-2:] == ("evals", "results")
+    args = _parser().parse_args(["search", "--split", "val", "--recordings", "r", "--replay", "x"])
+    assert args.results is None

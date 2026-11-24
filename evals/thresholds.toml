@@ -65,5 +65,6 @@ lists = 10
 # measured: declined_when_answerable 0.2
 declined_when_answerable = 0.22
 readings_missing = 0
+vectors_missing = 0
 expected_filed_but_not = 4
 secrets_found = 0
