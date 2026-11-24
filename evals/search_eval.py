@@ -62,7 +62,7 @@ from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import field_kind, parse_amount, parse_date
 from household_vault.scoring import IOU_MIN, iou, normalise
 from household_vault.search.answer import Answer, NoAnswer, compose, weak_match
-from household_vault.search.query import PROMPT_READ_V1, PromptReader, Query, read_prompt, resolve
+from household_vault.search.query import PROMPT_READ, PromptReader, Query, read_prompt, resolve
 from household_vault.search.retrieve import Rows
 from household_vault.search.sentence import sentence
 from household_vault.search.vectors import QUERY_TASK, Embedder, Vectors
@@ -153,6 +153,7 @@ class RecordedPromptReader:
         digest: str | None = None,
         expect: str | None = None,
         expect_digest: str | None = None,
+        system: str = PROMPT_READ,
     ) -> None:
         if record_to is not None and live is None:
             raise ValueError("recording needs a live reader")
@@ -164,7 +165,7 @@ class RecordedPromptReader:
             _expect(folder, "prompt_reader", expect, expect_digest)
         if record_to is not None and live is not None:
             _stamp(record_to, "prompt_reader", model or live.name, digest, write=True)
-        self.system = _sha(PROMPT_READ_V1)
+        self.system = _sha(system)
 
     def _load(self, prompt: str) -> str | None:
         path = self.folder / f"{_sha(prompt)}.json"

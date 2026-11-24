@@ -541,3 +541,29 @@ def test_two_builds_of_one_vault_give_the_same_document_ids(tmp_path, smoke_docs
         finally:
             state.store.conn.close()
     assert found[0] == found[1] and found[0]
+
+
+def test_a_reader_replays_recordings_made_under_the_reading_prompt_it_is_given(tmp_path):
+    from household_vault.search.query import PROMPT_READ, PROMPT_READ_V1
+
+    live = FakePromptReader({"hello": "{}"})
+    old = RecordedPromptReader(tmp_path, tmp_path, live=live, system=PROMPT_READ_V1)
+    assert old.read("hello") == "{}"
+    assert RecordedPromptReader(tmp_path, system=PROMPT_READ_V1).read("hello") == "{}"
+    with pytest.raises(ModelUnavailable):  # the current prompt is not the one it was made under
+        RecordedPromptReader(tmp_path).read("hello")
+    assert (
+        RecordedPromptReader(tmp_path).system
+        == RecordedPromptReader(tmp_path, system=PROMPT_READ).system
+    )
+
+
+def test_the_search_runner_names_a_reading_prompt_version():
+    args = _parser().parse_args(
+        ["search", "--split", "val", "--recordings", "r", "--replay", "x", "--prompt", "v1"]
+    )
+    assert args.prompt == "v1"
+    default = _parser().parse_args(
+        ["search", "--split", "val", "--recordings", "r", "--replay", "x"]
+    )
+    assert default.prompt == "v2"

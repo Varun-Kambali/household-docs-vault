@@ -78,7 +78,7 @@ class Query(BaseModel):
     unread: list[str] = []  # parts code could not resolve, such as "person: Anil"
 
 
-def _system_text() -> str:
+def _system_text_v1() -> str:
     types = "\n".join(
         f"- {t.value}: {', '.join(words)}" for t, words in TYPE_WORDS.items() if words
     )
@@ -111,7 +111,53 @@ def _system_text() -> str:
     )
 
 
-PROMPT_READ_V1 = _system_text()
+PROMPT_READ_V1 = _system_text_v1()
+
+
+def _system_text_v2() -> str:
+    by_area: dict[Area, list[str]] = {}
+    for t, words in TYPE_WORDS.items():
+        by_area.setdefault(AREA[t], []).append(f"{t.value} ({words[0]})" if words else t.value)
+    types = "\n".join(f"{a.value}: {', '.join(items)}" for a, items in by_area.items())
+    fields = ", ".join(FIELD_LABELS)
+    return (
+        "Read one question about a family's filed documents into JSON. Copy people, place and "
+        "time words exactly as written; never work out a date.\n\n"
+        "intent:\n"
+        "- lookup: wants one value of one document. Cues: is, when, what is the X of, how much, "
+        'who, which doctor, "still valid", "when does it expire".\n'
+        "- list: wants several documents. Cues: which, what, all, any, a plural noun (policies, "
+        'bills, cards), or a date range with no single document ("expiring before June").\n'
+        "- find: wants the document itself. Cues: show me, where is, open, or a document name "
+        "with a person or shop.\n\n"
+        'people: names or relations as written ("Ravi", "my wife", "everyone"). A shop, insurer '
+        "or hospital is a place, not a person. Empty when none.\n"
+        "types: type ids from the list below for a kind of document the question names. Empty "
+        "when unsure.\n"
+        'areas: only for a whole group ("insurance papers", "tax documents") with no single '
+        "type named. Never fill both for the same words.\n"
+        'field: for a lookup, one id from the field list; null otherwise. "still valid", '
+        '"expire", "valid till" use expiry_date; "still under warranty" uses warranty_parts.\n'
+        'date: a time condition. phrase is the time words as written ("before March", '
+        '"this year", "FY 2025-26", "next 6 months"). role is what the date is about:\n'
+        '- expiry: expire, valid till ("insurance expiring before June")\n'
+        '- renewal: renew ("renewals this year")\n'
+        '- due: due, pay by ("premium due next month")\n'
+        '- purchase: bought, purchased, or a bill or invoice from a period ("bought last year", '
+        '"bills from last year")\n'
+        '- issue: issued ("licences issued in 2020")\n'
+        "- document: dated, this year's, last month's, for FY, for any other kind of document "
+        '("scan reports from last month", "Form 16 for FY 2025-26")\n'
+        "place: a shop, insurer, hospital or other place named, as written. null when none.\n"
+        'words: other words worth searching for, such as a product or brand ("fridge", "LG"). '
+        "Not a person, a place, a date or a document type.\n\n"
+        f"Document types by area (id and a word people use):\n{types}\n\n"
+        f"Fields (use the id): {fields}"
+    )
+
+
+PROMPT_READ_V2 = _system_text_v2()
+PROMPT_READ = PROMPT_READ_V2  # the prompt the app and the eval use
 
 
 class PromptReader(Protocol):
@@ -123,15 +169,16 @@ class PromptReader(Protocol):
 
 
 class OllamaPromptReader:
-    def __init__(self, client: OllamaClient, model: str) -> None:
+    def __init__(self, client: OllamaClient, model: str, system: str = PROMPT_READ) -> None:
         self._client = client
         self._model = model
+        self._system = system
         self.name = f"ollama:{model}"
 
     def read(self, prompt: str) -> str:
         return self._client.chat_json(
             self._model,
-            PROMPT_READ_V1,
+            self._system,
             prompt,
             [],
             QueryReading.model_json_schema(),

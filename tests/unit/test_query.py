@@ -10,7 +10,9 @@ from household_vault.doctypes import Area, DocType
 from household_vault.reading.ollama import ModelError, ModelUnavailable, OllamaClient
 from household_vault.search.dates import DateRange
 from household_vault.search.query import (
+    PROMPT_READ,
     PROMPT_READ_V1,
+    PROMPT_READ_V2,
     DateSlot,
     OllamaPromptReader,
     QueryReading,
@@ -182,7 +184,7 @@ def test_the_reading_call_holds_only_the_prompt_and_the_vocabulary():
     body = sent[0]
     messages = body["messages"]
     assert [m["role"] for m in messages] == ["system", "user"]
-    assert messages[0]["content"] == PROMPT_READ_V1 and messages[1]["content"] == "x"
+    assert messages[0]["content"] == PROMPT_READ and messages[1]["content"] == "x"
     assert "images" not in messages[1]
     assert body["options"]["num_ctx"] == 4096 and body["options"]["num_predict"] == 400
     assert body["format"] == QueryReading.model_json_schema()
@@ -263,3 +265,31 @@ def test_a_role_no_selected_type_has_falls_back_to_the_document_date(household):
         TODAY,
     )
     assert mixed.role == "expiry"  # one selected type has it
+
+
+def test_the_current_reading_prompt_is_v2_and_v1_is_kept():
+    assert PROMPT_READ is PROMPT_READ_V2 and PROMPT_READ_V1 != PROMPT_READ_V2
+    assert "Document types (type: words people use)" in PROMPT_READ_V1
+
+
+def test_v2_is_shorter_and_names_every_type_area_field_and_role_once_in_its_lists():
+    assert len(PROMPT_READ_V2) < len(PROMPT_READ_V1)
+    for t in TYPE_WORDS:
+        assert t.value in PROMPT_READ_V2
+    for area in AREA_LABELS:
+        assert f"{area.value}:" in PROMPT_READ_V2
+    fields = PROMPT_READ_V2.split("Fields (use the id):")[1].split("\n")[0]
+    assert [f.strip() for f in fields.split(",")] == list(FIELD_LABELS)
+    for role in {r for per_type in DATE_ROLES.values() for r in per_type}:
+        assert f"- {role}:" in PROMPT_READ_V2
+    assert "never work out a date" in PROMPT_READ_V2
+
+
+def test_v2_has_an_intent_guide_and_a_role_guide_with_an_example_each():
+    for cue in ("which", "what", "all", "any", "show me", "where is", "open", "is", "when"):
+        assert cue in PROMPT_READ_V2
+    for intent in ("lookup", "list", "find"):
+        assert f"- {intent}:" in PROMPT_READ_V2
+    for word in ("expire", "valid till", "renew", "due", "pay by", "bought", "purchased", "issued"):
+        assert word in PROMPT_READ_V2
+    assert "dated" in PROMPT_READ_V2 and "FY" in PROMPT_READ_V2
