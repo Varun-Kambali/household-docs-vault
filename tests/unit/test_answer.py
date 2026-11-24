@@ -38,8 +38,9 @@ def make_rows(
     lines: list[str],
     doc_id: str = "d1",
     score: float = 0.05,
+    owner: str = "p1",
 ) -> list[Row]:
-    add_doc(store, doc_id, doc_type.value, fields, lines)
+    add_doc(store, doc_id, doc_type.value, fields, lines, owner=owner)
     doc = store.document(doc_id)
     return [
         Row(
@@ -624,6 +625,57 @@ def test_a_person_and_a_type_with_no_words_still_answer(store):
         {"holder": "Kavita Rao", "number": "ABCDE1234F"},
         ["Permanent Account Number", "ABCDE1234F"],
         score=0.0,
+        owner="p2",
     )
     a = compose(query(field="number", people=["p2"], types=[DocType.pan]), rows, store, TODAY)
     assert isinstance(a, Answer) and a.field == "number"
+
+
+# -- an answer comes from a row that passes the query's own filters -----------------------------
+
+
+def _kavita_policy_and_suresh_pan(store):
+    policy = make_rows(
+        store,
+        DocType.life_policy,
+        {"policyholder": "Kavita Rao", "policy_number": "PL/NY304449"},
+        ["Life policy", "Policy number PL/NY304449"],
+        doc_id="life",
+        owner="p2",
+    )
+    pan = make_rows(
+        store,
+        DocType.pan,
+        {"holder": "Suresh Rao", "number": "ABCDE1234F"},
+        ["Permanent Account Number", "ABCDE1234F"],
+        doc_id="pan",
+        owner="p1",
+    )
+    return policy, pan
+
+
+def test_a_type_nobody_holds_declines_instead_of_answering_from_another_type(store):
+    policy, pan = _kavita_policy_and_suresh_pan(store)
+    asked = query(field="number", people=["p2"], types=[DocType.passport])
+    got = compose(asked, [*policy, *pan], store, TODAY)
+    assert got == NoAnswer("no_documents", [policy[0].rel_path, pan[0].rel_path])
+
+
+def test_a_person_without_that_type_declines_even_if_another_person_has_it(store):
+    policy, pan = _kavita_policy_and_suresh_pan(store)
+    asked = query(field="number", people=["p2"], types=[DocType.pan])
+    got = compose(asked, [*policy, *pan], store, TODAY)
+    assert isinstance(got, NoAnswer) and got.reason == "no_documents"
+
+
+def test_the_answer_comes_from_the_filtered_document_when_it_is_not_first(store):
+    policy, pan = _kavita_policy_and_suresh_pan(store)
+    asked = query(field="number", people=["p1"], types=[DocType.pan])
+    got = compose(asked, [*policy, *pan], store, TODAY)
+    assert isinstance(got, Answer) and got.document_id == "pan" and got.value == "ABCDE1234F"
+
+
+def test_no_filter_still_answers_from_the_top_row(store):
+    policy, pan = _kavita_policy_and_suresh_pan(store)
+    got = compose(query(field="policy_number"), [*policy, *pan], store, TODAY)
+    assert isinstance(got, Answer) and got.document_id == "life"

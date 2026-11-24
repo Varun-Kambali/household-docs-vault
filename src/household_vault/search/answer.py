@@ -376,6 +376,13 @@ def weak_match(query: Query, rows: Sequence[Row]) -> bool:
     return not _filtered(query) and top.score < MIN_FUSED and len(top.lines) < MIN_KEYWORD
 
 
+def _fits(query: Query, row: Row) -> bool:
+    """Whether a row passes the query's person and type filters (an empty filter passes all)."""
+    if query.people and not set(query.people) & set(row.people):
+        return False
+    return not query.types or row.doc_type in query.types
+
+
 def compose(
     query: Query, rows: Sequence[Row], store: Store, today: date
 ) -> Answer | NoAnswer | None:
@@ -393,7 +400,11 @@ def compose(
         return None
     if not rows:
         return NoAnswer("no_documents", [])
-    top = rows[0]
+    # The unfiltered votes may put a document the reading excluded on top; an answer comes from
+    # the best row that passes the person and type filters, or there is none.
+    top = next((r for r in rows if _fits(query, r)), None)
+    if top is None:
+        return NoAnswer("no_documents", closest)
     doc = store.document(top.document_id)
     schema = SCHEMAS.get(doc.doc_type) if doc is not None else None
     if doc is None or schema is None:
