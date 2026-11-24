@@ -501,3 +501,36 @@ def test_plurals_are_made_per_word(household):
 def test_a_short_code_is_never_pluralised(household):
     for prompt in ("pans", "rcs", "ecs", "dls"):
         assert resolve(reading(), household, TODAY, prompt).types == []
+
+
+# -- the model's people slot holds a household name inside a longer phrase -----------------------
+
+
+def test_a_household_name_inside_a_longer_phrase_is_that_person_and_the_rest_a_place(household):
+    q = resolve(reading(people=["Suresh City Electronics Mart"]), household, TODAY)
+    assert (q.people, q.unread, q.place) == (["p4"], [], "City Electronics Mart")
+    assert q.backstop_conflicts == 1
+
+
+def test_the_rest_of_the_phrase_goes_to_words_when_the_place_is_filled(household):
+    q = resolve(
+        reading(people=["Suresh Sangeetha"], place="Sangeetha Mobiles", words="phone"),
+        household,
+        TODAY,
+    )
+    assert (q.people, q.unread, q.place, q.words) == (
+        ["p4"],
+        [],
+        "Sangeetha Mobiles",
+        "phone Sangeetha",
+    )
+
+
+def test_a_longer_phrase_without_a_household_name_stays_unread(household):
+    q = resolve(reading(people=["Anil Electronics Mart"]), household, TODAY)
+    assert (q.people, q.unread, q.place) == ([], ["person: Anil Electronics Mart"], None)
+
+
+def test_a_name_only_part_of_a_word_is_not_a_household_name(household):
+    q = resolve(reading(people=["Sureshwar Traders"]), household, TODAY)
+    assert (q.people, q.unread) == ([], ["person: Sureshwar Traders"])

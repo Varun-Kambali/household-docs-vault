@@ -318,11 +318,14 @@ def _occupied(prompt_words: list[str], *texts: str | None) -> set[int]:
     return taken
 
 
-def _scan_people(prompt: str, household: Household, skip: set[int] | None = None) -> list[str]:
-    """Household names and aliases in the prompt, longest phrase first, each word used once.
-    Words in `skip` (inside the model's place) are not names."""
-    words = _words(prompt)
+def _people_spans(
+    words: list[str], household: Household, skip: set[int] | None = None
+) -> tuple[list[str], list[bool]]:
+    """Household names and aliases among `words`, longest phrase first, each word used once.
+    Returns the person ids found and which word positions they used (words in `skip` are
+    never names)."""
     used = [i in (skip or set()) for i in range(len(words))]
+    mine = list(used)
     found: list[str] = []
     for size in range(min(_MAX_NAME_WORDS, len(words)), 0, -1):
         for start in range(len(words) - size + 1):
@@ -332,9 +335,23 @@ def _scan_people(prompt: str, household: Household, skip: set[int] | None = None
             pid, _ = _person(phrase, household)
             if pid is not None and pid != "home":
                 used[start : start + size] = [True] * size
+                mine[start : start + size] = [True] * size
                 if pid not in found:
                     found.append(pid)
-    return found
+    return found, [m and i not in (skip or set()) for i, m in enumerate(mine)]
+
+
+def _scan_people(prompt: str, household: Household, skip: set[int] | None = None) -> list[str]:
+    """Household names and aliases in the prompt. Words in `skip` (inside the model's place)
+    are not names."""
+    return _people_spans(_words(prompt), household, skip)[0]
+
+
+def _name_and_rest(phrase: str, household: Household) -> tuple[list[str], str]:
+    """A household name or alias inside a longer phrase: the person ids and the words left."""
+    tokens = _WORD.findall(phrase)
+    found, named = _people_spans(_words(phrase), household)
+    return found, " ".join(t for t, hit in zip(tokens, named, strict=True) if not hit)
 
 
 def _nearest_role(lowered: str, phrase: str) -> DateRole:
@@ -479,13 +496,24 @@ def resolve(reading: QueryReading, household: Household, today: date, prompt: st
     areas = [a for a in reading.areas if not any(AREA[t] is a for t in types)]
     unread: list[str] = []
     people: list[str] = list(backstop_people)
+    place, words = reading.place, reading.words
     for phrase in reading.people:
         pid, no_filter = _person(phrase, household)
         if pid is not None:
             if pid not in people:
                 people.append(pid)
         elif not no_filter:
-            unread.append(f"person: {phrase}")
+            named, rest = _name_and_rest(phrase, household)
+            if not named:
+                unread.append(f"person: {phrase}")
+                continue
+            # the model put a name and other words (a shop, an employer) in one person slot
+            conflicts += 1
+            people.extend(p for p in named if p not in people)
+            if rest and (place is None or not place.strip()):
+                place = rest
+            elif rest:
+                words = f"{words} {rest}".strip()
     role: DateRole | None = None
     span: DateRange | None = None
     if slot is not None:
@@ -512,8 +540,8 @@ def resolve(reading: QueryReading, household: Household, today: date, prompt: st
         field=reading.field,
         role=role,
         range=span,
-        place=reading.place,
-        words=reading.words,
+        place=place,
+        words=words,
         unread=unread,
         backstop_conflicts=conflicts,
     )
