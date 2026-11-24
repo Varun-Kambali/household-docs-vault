@@ -28,7 +28,7 @@ def test_rrf_scores_by_rank_and_keeps_every_document_once():
 
 def test_filters_keep_the_person_owner_or_linked_and_the_type(search_store, searcher):
     rows = searcher.lookup(query(people=["p2"], types=[DocType.health_policy]), "Kavita health")
-    assert rows and all(r.doc_type is DocType.health_policy and "p2" in r.people for r in rows)
+    assert rows and rows[0].doc_type is DocType.health_policy and "p2" in rows[0].people
 
 
 def test_a_person_filter_matches_the_owner_too(searcher):
@@ -262,8 +262,8 @@ def test_a_narrow_filter_ranks_its_documents_when_a_common_word_fills_the_pool(
     wanted = {d.id for d in search_store.documents_of_type(DocType.vehicle_policy)}
     assert not wanted & unfiltered  # the pool alone would lose them
     rows = only.lookup(query(types=[DocType.vehicle_policy], words="policy"), "policy")
-    assert {r.document_id for r in rows} == wanted
-    assert all(r.score > 0 for r in rows)
+    mine = [r for r in rows if r.document_id in wanted]
+    assert {r.document_id for r in mine} == wanted and all(r.score > 0 for r in mine)
 
 
 def test_the_restriction_reaches_both_indexes(searcher, search_store):
@@ -276,3 +276,49 @@ def test_the_restriction_reaches_both_indexes(searcher, search_store):
     assert searcher.keyword.search("policy", only=[], prefix_last=False) == []
     assert searcher.vectors.search("policy", only=[]) == []
     assert searcher.keyword.search("policy", only=None, prefix_last=False)
+
+
+def _lg_warranty(search_store):
+    return next(
+        d
+        for d in search_store.documents_of_type(DocType.warranty_card)
+        if d.fields.get("brand") == "LG"
+    )
+
+
+def _someone_else(search_store, doc):
+    named = {p for p, _ in search_store.people_of(doc.id)}
+    return next(p for p in ("p1", "p2", "p4") if p not in named)
+
+
+def test_a_lookup_whose_reading_names_the_wrong_person_still_finds_the_document(
+    searcher, search_store
+):
+    """The prompt is about the LG refrigerator warranty, but the reading put another person on
+    it: the unfiltered ranking still brings the right document into the top 3."""
+    doc = _lg_warranty(search_store)
+    prompt = "LG refrigerator warranty card"
+    assert doc.id in [r.document_id for r in searcher.quick(prompt)[:3]]
+    wrong = query(
+        people=[_someone_else(search_store, doc)],
+        types=[DocType.warranty_card],
+        words="LG refrigerator",
+    )
+    assert doc.id not in searcher._candidates(wrong)  # the misread filter removes it
+    rows = searcher.lookup(wrong, prompt)
+    assert doc.id in [r.document_id for r in rows[:3]]
+
+
+def test_a_correct_reading_still_ranks_the_filtered_document_first(searcher, search_store):
+    doc = _lg_warranty(search_store)
+    right = query(people=["home"], types=[DocType.warranty_card], words="LG refrigerator")
+    rows = searcher.lookup(right, "LG refrigerator warranty card")
+    assert rows[0].document_id == doc.id
+
+
+def test_a_list_keeps_its_filters_hard(searcher, search_store):
+    doc = _lg_warranty(search_store)
+    wrong = query(
+        intent="list", people=[_someone_else(search_store, doc)], types=[DocType.warranty_card]
+    )
+    assert doc.id not in [r.document_id for r in searcher.list(wrong)]

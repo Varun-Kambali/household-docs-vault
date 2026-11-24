@@ -20,7 +20,7 @@ from household_vault.people import normalise_name
 from household_vault.search.dates import DateRange
 from household_vault.search.index import KeywordHit, KeywordIndex
 from household_vault.search.query import Query
-from household_vault.search.vectors import VectorHit, VectorIndex
+from household_vault.search.vectors import VectorIndex
 from household_vault.search.vocab import (
     DATE_ROLES,
     KEY_FIELDS,
@@ -29,6 +29,7 @@ from household_vault.search.vocab import (
 )
 
 POOL = 500  # hits taken from each ranking before fusing
+UNFILTERED_VOTES = 5  # documents of the unfiltered rankings that vote in a filtered lookup
 
 
 @dataclass(frozen=True)
@@ -176,26 +177,20 @@ class Searcher:
 
     def _fuse(
         self,
+        rankings: Sequence[Sequence[str]],
         keyword_hits: Sequence[Sequence[KeywordHit]],
-        vector_hits: Sequence[VectorHit],
-        allowed: dict[str, DocumentRow] | None,
         role: str | None,
         limit: int,
     ) -> Rows:
-        def ok(doc_id: str) -> bool:
-            return allowed is None or doc_id in allowed
-
-        rankings = [
-            _first_seen(h.document_id for h in hits if ok(h.document_id)) for hits in keyword_hits
-        ]
-        rankings.append(_first_seen(h.document_id for h in vector_hits if ok(h.document_id)))
+        """One row per document, fused over the rankings. The keyword hits give each row the
+        lines that matched."""
         by_doc: dict[str, list[KeywordHit]] = {}
         for hits in keyword_hits:
             for h in hits:
                 by_doc.setdefault(h.document_id, []).append(h)
         rows: Rows = []
         for doc_id, score in rrf(rankings)[:limit]:
-            doc = allowed[doc_id] if allowed is not None else self.store.document(doc_id)
+            doc = self.store.document(doc_id)
             if doc is not None:
                 rows.append(self._row(doc, score, by_doc.get(doc_id, []), role))
         return rows
@@ -206,7 +201,8 @@ class Searcher:
         """Keywords (the last word as a prefix) and vectors, fused. Runs no model."""
         kw = self.keyword.search(text, limit=POOL)
         vec = self.vectors.search(text, limit=POOL)
-        return self._fuse([kw], vec, None, None, limit)
+        rankings = [_first_seen(h.document_id for h in hits) for hits in (kw, vec)]
+        return self._fuse(rankings, [kw], None, limit)
 
     def lookup(self, query: Query, prompt: str, limit: int = 20) -> Rows:
         """The filters narrow the candidates; the query's words, place and type words (or the
@@ -221,7 +217,19 @@ class Searcher:
             if p.strip()
         ] or [self.keyword.search(prompt, limit=POOL, prefix_last=False, only=only)]
         vec = self.vectors.search(text, limit=POOL, only=only)
-        rows = self._fuse(keyword_hits, vec, allowed, query.role, limit)
+        rankings = [_first_seen(h.document_id for h in hits) for hits in (*keyword_hits, vec)]
+        if allowed is not None:
+            # The reading may have named the wrong person or type. The prompt's own keyword and
+            # vector matches, unfiltered, vote too, so a misread filter cannot remove the
+            # document they find. Only their first documents vote, so the filter still leads.
+            quick_kw = self.keyword.search(prompt, limit=POOL)
+            quick_vec = self.vectors.search(prompt, limit=POOL)
+            keyword_hits = [*keyword_hits, quick_kw]
+            rankings += [
+                _first_seen(h.document_id for h in hits)[:UNFILTERED_VOTES]
+                for hits in (quick_kw, quick_vec)
+            ]
+        rows = self._fuse(rankings, keyword_hits, query.role, limit)
         if allowed is not None and len(rows) < limit:
             # The filters named documents the rankings did not reach: they still answer.
             seen = {r.document_id for r in rows}
