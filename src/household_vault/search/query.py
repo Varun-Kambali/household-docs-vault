@@ -709,10 +709,10 @@ def resolve(
             # a date range after a type word and no question: "insurance expiring by December"
             intent, field = "list", None
             conflicts += 1
-            named = [Area(w) for w in prompt_words if w in {a.value for a in Area}]
-            if named and not _scan_types(prompt):
+            group_areas = [Area(w) for w in prompt_words if w in {a.value for a in Area}]
+            if group_areas and not _scan_types(prompt):
                 # only the group is named ("insurance"): the model's one type is a guess
-                types, areas = [], named[:1]
+                types, areas = [], group_areas[:1]
         elif (
             nouns
             and not QUESTION_WORDS & set(prompt_words)
