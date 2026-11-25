@@ -24,6 +24,7 @@ from household_vault.search.vocab import (
     AREA_LABELS,
     DATE_ROLES,
     FIELD_LABELS,
+    GENERIC_WORDS,
     TYPE_WORDS,
     DateRole,
 )
@@ -503,9 +504,6 @@ def _scan_types(prompt: str, skip: set[int] | None = None) -> list[DocType]:
     return _match_types(_words(prompt), skip)[0]
 
 
-_GENERIC = {"policy", "policies", "insurance", "document", "documents", "papers", "paper"}
-
-
 def _without_type_words(phrase: str) -> tuple[str, set[DocType]]:
     """The phrase without its type words (and generic ones such as "policy"), and the types
     those words name: "Tungabhadra life insurance policy" gives "Tungabhadra" and life_policy."""
@@ -515,7 +513,7 @@ def _without_type_words(phrase: str) -> tuple[str, set[DocType]]:
     kept = [
         _POSSESSIVE.sub("", t.strip("'\u2019-/"))
         for i, (t, w) in enumerate(zip(tokens, words, strict=True))
-        if i not in taken and w not in _GENERIC
+        if i not in taken and w not in GENERIC_WORDS
     ]
     return " ".join(k for k in kept if k), set(found)
 
@@ -524,6 +522,8 @@ def _place_of(phrase: str, places: Places, types: Collection[DocType], prompt: s
     """The phrase as a stored place, or None. Type words are dropped first, and the types they
     name count with the query's own."""
     stripped, named = _without_type_words(phrase)
+    if len(_words(stripped)) < len(_words(phrase)) and _stored_place(phrase, places, types):
+        return phrase  # stripping cut it short, but the whole phrase is a stored place
     if not stripped:
         return None
     lone = _words(stripped)

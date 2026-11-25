@@ -727,3 +727,24 @@ def test_a_household_name_plus_a_stored_place_still_reads_both(household):
         places={"Sangeetha Mobiles": {DocType.tax_invoice}},
     )
     assert (q.people, q.unread, q.place) == (["p4"], [], "Sangeetha Mobiles")
+
+
+# -- a stored place that holds type words stays whole (Task 31c) ---------------------------------
+
+
+def test_a_stored_place_with_type_words_is_not_cut_down(household):
+    places = {"Life Insurance Corporation": {DocType.life_policy}}
+    q = resolve(
+        reading(people=["Life Insurance Corporation"]),
+        household,
+        TODAY,
+        "Life Insurance Corporation policy number",
+        places=places,
+    )
+    assert (q.people, q.unread, q.place) == ([], [], "Life Insurance Corporation")
+
+
+def test_generic_words_live_in_the_vocabulary():
+    from household_vault.search import vocab
+
+    assert "policy" in vocab.GENERIC_WORDS and "documents" in vocab.GENERIC_WORDS

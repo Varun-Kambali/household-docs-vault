@@ -128,6 +128,12 @@ TYPE_WORDS: dict[DocType, tuple[str, ...]] = {
     _D.visit_recording: ("doctor recording", "visit recording"),
 }
 
+# Words that go with a type name without naming a type ("policy", "documents"); they are
+# dropped from a phrase before it is tested as a person or a place.
+GENERIC_WORDS: frozenset[str] = frozenset(
+    {"policy", "policies", "insurance", "document", "documents", "papers", "paper"}
+)
+
 _AREA_NAMES: dict[Area, str] = {
     Area.insurance: "insurance",
     Area.purchases: "purchases",
