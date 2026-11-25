@@ -36,7 +36,16 @@ export function SearchScreen({ q, focusTick }: { q: string; focusTick: number })
   )
 }
 
-export function InboxScreen({ waiting, error }: { waiting: number | null; error: string | null }) {
+// onChanged is for the Inbox list to call when an answer changes it (Task 36), so the sidebar
+// number is read again then and not on every move between screens.
+export function InboxScreen({
+  waiting,
+  error,
+}: {
+  waiting: number | null
+  error: string | null
+  onChanged: () => void
+}) {
   const known = waiting !== null
   return (
     <>

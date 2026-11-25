@@ -153,6 +153,18 @@ describe('the Inbox count', () => {
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
   })
 
+  test('is read once on start and not again when moving between screens', async () => {
+    answerWith(1)
+    open('/')
+    const user = userEvent.setup()
+    render(<App />)
+    await screen.findByRole('link', { name: 'Inbox 1' })
+    await user.click(screen.getByRole('link', { name: /Inbox/ }))
+    await user.click(screen.getByRole('link', { name: 'Tax' }))
+    await user.click(screen.getByRole('link', { name: 'Search' }))
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
   test('shows no number when the count cannot be read', async () => {
     answerWith('down')
     open('/')
