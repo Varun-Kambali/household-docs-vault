@@ -28,6 +28,9 @@ from household_vault.search.vocab import (
     GENERIC_WORDS,
     LIST_CUE_WORDS,
     LIST_OPENERS,
+    PLURAL_TYPE_GROUPS,
+    QUESTION_WORDS,
+    ROLE_NOUNS,
     TYPE_WORDS,
     DateRole,
 )
@@ -684,14 +687,32 @@ def resolve(
     # question to the whole area.
     areas = [a for a in reading.areas if not any(AREA[t] is a for t in types)]
     intent = reading.intent
-    if prompt and intent != "list" and reading.field is None:
+    field = reading.field
+    noun_role: DateRole | None = None
+    if prompt and intent != "list":
         prompt_words = _words(prompt)
-        if _list_cue(
-            prompt_words,
-            _place_positions(prompt_words, places) | _occupied(prompt_words, reading.place),
-        ):
+        taken = _place_positions(prompt_words, places) | _occupied(prompt_words, reading.place)
+        nouns = [w for i, w in enumerate(prompt_words) if w in ROLE_NOUNS and i not in taken]
+        if field is None and _list_cue(prompt_words, taken):
             intent = "list"  # the prompt asks for many documents and the model did not
             conflicts += 1
+            group = next((g for w, g in PLURAL_TYPE_GROUPS.items() if w in prompt_words), ())
+            if group and set(types) <= set(group):
+                types = list(group)
+        elif (
+            nouns
+            and not QUESTION_WORDS & set(prompt_words)
+            and (field is None or field.endswith("_date"))
+        ):
+            # a plural noun for a kind of date and no question: "Suresh purchases" lists the
+            # documents with such a date, it asks for no date
+            intent, field = "list", None
+            conflicts += 1
+            if nouns[0] in {a.value for a in Area}:
+                if not types and not areas:
+                    areas = [Area(nouns[0])]
+            else:
+                noun_role = ROLE_NOUNS[nouns[0]]
     unread: list[str] = []
     people: list[str] = list(backstop_people)
     place, words = reading.place, reading.words
@@ -732,7 +753,7 @@ def resolve(
                 place = rest_place
             elif rest_place:
                 words = f"{words} {rest_place}".strip()
-    role: DateRole | None = None
+    role: DateRole | None = noun_role
     span: DateRange | None = None
     if slot is not None:
         role = slot.role
@@ -755,7 +776,7 @@ def resolve(
         people=people,
         types=types,
         areas=areas,
-        field=reading.field,
+        field=field,
         role=role,
         range=span,
         place=place,

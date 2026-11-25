@@ -497,7 +497,7 @@ def test_a_household_first_name_inside_the_models_place_is_not_a_person(househol
 
 def test_plurals_are_made_per_word(household):
     q = resolve(reading(), household, TODAY, "Kavita warranties")
-    assert (q.people, q.types) == (["p2"], [DocType.warranty_card])
+    assert (q.people, set(q.types)) == (["p2"], {DocType.warranty_card, DocType.extended_warranty})
     got = resolve(reading(), household, TODAY, "licences and receipts").types
     assert set(got) == {DocType.driving_licence, DocType.tax_invoice}
 
@@ -795,3 +795,57 @@ def test_a_list_cue_with_no_find_cue_makes_the_intent_a_list(
 def test_a_find_cue_a_field_or_a_singular_keeps_the_models_intent(household, prompt, intent, extra):
     q = resolve(reading(intent=intent, **extra), household, TODAY, prompt)
     assert q.intent == intent
+
+
+# -- a plural type or role word as the whole object (Task 31c, L2) -------------------------------
+
+
+def test_a_plural_role_noun_that_names_an_area_makes_a_list_of_that_area(household):
+    q = resolve(
+        reading(intent="lookup", people=["Suresh"], field="purchase_date", words="purchases"),
+        household,
+        TODAY,
+        "Suresh purchases",
+    )
+    assert (q.intent, q.field, q.people, q.types, q.areas) == (
+        "list",
+        None,
+        ["p4"],
+        [],
+        [Area.purchases],
+    )
+
+
+def test_a_plural_role_noun_with_no_area_sets_the_role_and_leaves_types_open(household):
+    q = resolve(
+        reading(intent="lookup", people=["Kavita"], field="expiry_date"),
+        household,
+        TODAY,
+        "Kavita expiries",
+    )
+    assert (q.intent, q.field, q.role, q.types, q.areas) == ("list", None, "expiry", [], [])
+
+
+def test_the_plural_of_warranty_means_every_kind_of_warranty(household):
+    q = resolve(
+        reading(intent="lookup", people=["Kavita"], types=[DocType.warranty_card]),
+        household,
+        TODAY,
+        "Kavita warranties",
+    )
+    assert q.intent == "list"
+    assert set(q.types) == {DocType.warranty_card, DocType.extended_warranty}
+
+
+@pytest.mark.parametrize(
+    "prompt, field",
+    [
+        ("When was Suresh's purchase?", "purchase_date"),
+        ("What is the purchase date of Suresh's purchases?", "purchase_date"),
+        ("Suresh purchase date", "purchase_date"),
+        ("Kavita's warranty", None),
+    ],
+)
+def test_a_question_word_a_singular_or_an_asked_value_keeps_a_lookup(household, prompt, field):
+    q = resolve(reading(intent="lookup", people=["Suresh"], field=field), household, TODAY, prompt)
+    assert q.intent == "lookup"

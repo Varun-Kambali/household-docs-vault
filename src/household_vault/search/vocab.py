@@ -153,6 +153,34 @@ FIND_CUES: tuple[tuple[str, ...], ...] = (
     ("where", "are"),
 )
 
+# Words that start a question about one value, so a prompt holding one is no plain list.
+QUESTION_WORDS: frozenset[str] = frozenset(
+    {
+        "when",
+        "what",
+        "which",
+        "who",
+        "whom",
+        "whose",
+        "where",
+        "why",
+        "how",
+        "is",
+        "are",
+        "was",
+        "does",
+        "do",
+        "did",
+        "can",
+        "will",
+    }
+)
+# A plural that stands for every kind of a thing ("warranties" are warranty cards and
+# extended warranties).
+PLURAL_TYPE_GROUPS: dict[str, tuple[DocType, ...]] = {
+    "warranties": (_D.warranty_card, _D.extended_warranty),
+}
+
 _AREA_NAMES: dict[Area, str] = {
     Area.insurance: "insurance",
     Area.purchases: "purchases",
@@ -260,6 +288,16 @@ FIELD_LABELS: dict[str, str] = {
 }
 
 DateRole = Literal["expiry", "renewal", "due", "purchase", "issue", "document"]
+
+
+# A plural noun for a kind of date, standing as the object of a prompt ("Suresh purchases"): a
+# list of the documents with that kind of date. A word that is also a folder area's name asks
+# for that area.
+ROLE_NOUNS: dict[str, DateRole] = {
+    "purchases": "purchase",
+    "renewals": "renewal",
+    "expiries": "expiry",
+}
 
 _POLICIES = (
     _D.life_policy,
