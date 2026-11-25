@@ -153,3 +153,26 @@ def test_create_app_serves_the_app_only_when_given_a_build(
     finally:
         state.gate.lock()
         state.store.conn.close()
+
+
+def test_a_path_the_filesystem_rejects_is_a_404_not_a_500(client_with_dist):
+    response = client_with_dist.get("/%00")
+    assert response.status_code == 404
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/..%2f..%2fetc/passwd",
+        "/%2e%2e/outside.txt",
+        "/..%2foutside.txt",
+        "/assets/..%2f..%2foutside.txt",
+    ],
+)
+def test_a_path_traversal_serves_nothing_outside_the_build(client_with_dist, path):
+    response = client_with_dist.get(path)
+    assert "not for the web" not in response.text
+    assert "root:" not in response.text
+    assert response.status_code in (404, 200)
+    if response.status_code == 200:
+        assert response.text.startswith("<!doctype html>")

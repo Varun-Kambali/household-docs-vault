@@ -55,8 +55,13 @@ def add_web_routes(app: FastAPI, dist: Path | None) -> None:
     def web(path: str) -> Response:
         if _is_api_path(path):
             raise HTTPException(status_code=404, detail="Not found.")
-        target = (root / path).resolve()
-        if path and target.is_relative_to(root) and target.is_file():
+        try:
+            target = (root / path).resolve()
+            is_file = bool(path) and target.is_relative_to(root) and target.is_file()
+        except (ValueError, OSError):
+            # A NUL byte or a name the filesystem refuses is not a file of the build.
+            raise HTTPException(status_code=404, detail="Not found.") from None
+        if is_file:
             hashed = target.parent.name == "assets"
             return FileResponse(
                 target,
