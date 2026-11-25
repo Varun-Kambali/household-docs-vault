@@ -128,6 +128,88 @@ TYPE_WORDS: dict[DocType, tuple[str, ...]] = {
     _D.visit_recording: ("doctor recording", "visit recording"),
 }
 
+# Words that go with a type name without naming a type ("policy", "documents"); they are
+# dropped from a phrase before it is tested as a person or a place.
+GENERIC_WORDS: frozenset[str] = frozenset(
+    {"policy", "policies", "insurance", "document", "documents", "papers", "paper"}
+)
+
+# The plurals of those generic words: "insurance policies" asks for many documents.
+PLURAL_GENERIC_WORDS: frozenset[str] = frozenset({"policies", "documents", "papers"})
+
+# General English words that ask for many documents at once, and the opening phrases of a
+# question about several. A cue word of six letters or more also matches with one typo.
+LIST_CUE_WORDS: frozenset[str] = frozenset(
+    {"documents", "docs", "papers", "files", "records", "everything", "list"}
+)
+# These ask for many documents only when a cue word or a type word follows them in the same noun
+# phrase ("all of Ravi's documents", "every warranty"), never on their own ("all details").
+LIST_QUANTIFIERS: frozenset[str] = frozenset({"all", "every", "any"})
+# Words that may stand between a quantifier and the word it quantifies.
+NOUN_PHRASE_FILLER: frozenset[str] = frozenset(
+    {"of", "the", "our", "my", "your", "his", "her", "their", "these", "those"}
+)
+LIST_OPENERS: tuple[tuple[str, ...], ...] = (
+    ("what", "do", "we", "have"),
+    ("which",),
+)
+# A prompt that opens with one of these is a question about one thing, so it is no plain list.
+# "Which" or "what" followed by one of them asks for one value too.
+AUX_OPENERS: frozenset[str] = frozenset(
+    {
+        "is",
+        "are",
+        "was",
+        "were",
+        "has",
+        "have",
+        "had",
+        "does",
+        "do",
+        "did",
+        "can",
+        "will",
+        "should",
+    }
+)
+
+# Words that ask for one particular document: they keep the model's find or lookup.
+FIND_CUES: tuple[tuple[str, ...], ...] = (
+    ("show", "me"),
+    ("find",),
+    ("open",),
+    ("where", "is"),
+    ("where", "are"),
+)
+
+# Words that start a question about one value, so a prompt holding one is no plain list.
+QUESTION_WORDS: frozenset[str] = frozenset(
+    {
+        "when",
+        "what",
+        "which",
+        "who",
+        "whom",
+        "whose",
+        "where",
+        "why",
+        "how",
+        "is",
+        "are",
+        "was",
+        "does",
+        "do",
+        "did",
+        "can",
+        "will",
+    }
+)
+# A plural that stands for every kind of a thing ("warranties" are warranty cards and
+# extended warranties).
+PLURAL_TYPE_GROUPS: dict[str, tuple[DocType, ...]] = {
+    "warranties": (_D.warranty_card, _D.extended_warranty),
+}
+
 _AREA_NAMES: dict[Area, str] = {
     Area.insurance: "insurance",
     Area.purchases: "purchases",
@@ -235,6 +317,16 @@ FIELD_LABELS: dict[str, str] = {
 }
 
 DateRole = Literal["expiry", "renewal", "due", "purchase", "issue", "document"]
+
+
+# A plural noun for a kind of date, standing as the object of a prompt ("Suresh purchases"): a
+# list of the documents with that kind of date. A word that is also a folder area's name asks
+# for that area.
+ROLE_NOUNS: dict[str, DateRole] = {
+    "purchases": "purchase",
+    "renewals": "renewal",
+    "expiries": "expiry",
+}
 
 _POLICIES = (
     _D.life_policy,

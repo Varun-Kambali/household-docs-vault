@@ -445,9 +445,13 @@ def test_the_role_cue_nearest_the_date_phrase_gives_the_role(household):
 
 
 def test_a_type_word_narrows_the_models_area_when_it_holds_that_type(household):
-    q = resolve(reading(areas=[Area.tax]), household, TODAY, "Form 16s for this year")
+    q = resolve(
+        reading(intent="list", areas=[Area.tax]), household, TODAY, "Form 16s for this year"
+    )
     assert (q.types, q.areas, q.backstop_conflicts) == ([DocType.form_16], [], 0)
-    q = resolve(reading(areas=[Area.insurance]), household, TODAY, "Form 16s for this year")
+    q = resolve(
+        reading(intent="list", areas=[Area.insurance]), household, TODAY, "Form 16s for this year"
+    )
     assert (q.types, q.areas, q.backstop_conflicts) == ([], [Area.insurance], 1)
 
 
@@ -493,7 +497,7 @@ def test_a_household_first_name_inside_the_models_place_is_not_a_person(househol
 
 def test_plurals_are_made_per_word(household):
     q = resolve(reading(), household, TODAY, "Kavita warranties")
-    assert (q.people, q.types) == (["p2"], [DocType.warranty_card])
+    assert (q.people, set(q.types)) == (["p2"], {DocType.warranty_card, DocType.extended_warranty})
     got = resolve(reading(), household, TODAY, "licences and receipts").types
     assert set(got) == {DocType.driving_licence, DocType.tax_invoice}
 
@@ -727,3 +731,181 @@ def test_a_household_name_plus_a_stored_place_still_reads_both(household):
         places={"Sangeetha Mobiles": {DocType.tax_invoice}},
     )
     assert (q.people, q.unread, q.place) == (["p4"], [], "Sangeetha Mobiles")
+
+
+# -- a stored place that holds type words stays whole (Task 31c) ---------------------------------
+
+
+def test_a_stored_place_with_type_words_is_not_cut_down(household):
+    places = {"Life Insurance Corporation": {DocType.life_policy}}
+    q = resolve(
+        reading(people=["Life Insurance Corporation"]),
+        household,
+        TODAY,
+        "Life Insurance Corporation policy number",
+        places=places,
+    )
+    assert (q.people, q.unread, q.place) == ([], [], "Life Insurance Corporation")
+
+
+def test_generic_words_live_in_the_vocabulary():
+    from household_vault.search import vocab
+
+    assert "policy" in vocab.GENERIC_WORDS and "documents" in vocab.GENERIC_WORDS
+
+
+# -- an intent backstop from closed list cues (Task 31c, L1) -------------------------------------
+
+
+@pytest.mark.parametrize(
+    "prompt, model_intent, extra",
+    [
+        ("documents Orchard Labs", "find", {"place": "Orchard Labs"}),
+        ("What do we have from Hill Park Medical?", "lookup", {"place": "Hill Park Medical"}),
+        ("docuents Nilgiri Bank", "find", {"place": "Nilgiri Bank"}),
+        ("Kavita warranties", "lookup", {"people": ["Kavita"]}),
+        ("everything from Croma", "find", {"place": "Croma"}),
+        ("all papers for Ravi", "find", {"people": ["Ravi"]}),
+        ("which bills came from Croma", "find", {"place": "Croma"}),
+    ],
+)
+def test_a_list_cue_with_no_find_cue_makes_the_intent_a_list(
+    household, prompt, model_intent, extra
+):
+    q = resolve(reading(intent=model_intent, **extra), household, TODAY, prompt)
+    assert q.intent == "list"
+    assert q.backstop_conflicts >= 1
+
+
+@pytest.mark.parametrize(
+    "prompt, intent, extra",
+    [
+        ("Show me the documents for Kavita's car", "find", {}),
+        ("find the papers from Croma", "find", {}),
+        ("open all the files", "find", {}),
+        ("where is the document for the fridge", "find", {}),
+        ("When does Kavita's car insurance expire?", "lookup", {"field": "expiry_date"}),
+        ("What are the documents number on Ravi's PAN", "lookup", {"field": "number"}),
+        ("Kavita's warranty card", "find", {}),
+        ("Sony TV warranty", "find", {}),
+        ("Suresh vehicle service record", "find", {}),
+        ("Which shop issued the Nimbus television contract?", "lookup", {}),
+    ],
+)
+def test_a_find_cue_a_field_or_a_singular_keeps_the_models_intent(household, prompt, intent, extra):
+    q = resolve(reading(intent=intent, **extra), household, TODAY, prompt)
+    assert q.intent == intent
+
+
+# -- a plural type or role word as the whole object (Task 31c, L2) -------------------------------
+
+
+def test_a_plural_role_noun_that_names_an_area_makes_a_list_of_that_area(household):
+    q = resolve(
+        reading(intent="lookup", people=["Suresh"], field="purchase_date", words="purchases"),
+        household,
+        TODAY,
+        "Suresh purchases",
+    )
+    assert (q.intent, q.field, q.people, q.types, q.areas) == (
+        "list",
+        None,
+        ["p4"],
+        [],
+        [Area.purchases],
+    )
+
+
+def test_a_plural_role_noun_with_no_area_sets_the_role_and_leaves_types_open(household):
+    q = resolve(
+        reading(intent="lookup", people=["Kavita"], field="expiry_date"),
+        household,
+        TODAY,
+        "Kavita expiries",
+    )
+    assert (q.intent, q.field, q.role, q.types, q.areas) == ("list", None, "expiry", [], [])
+
+
+def test_the_plural_of_warranty_means_every_kind_of_warranty(household):
+    q = resolve(
+        reading(intent="lookup", people=["Kavita"], types=[DocType.warranty_card]),
+        household,
+        TODAY,
+        "Kavita warranties",
+    )
+    assert q.intent == "list"
+    assert set(q.types) == {DocType.warranty_card, DocType.extended_warranty}
+
+
+@pytest.mark.parametrize(
+    "prompt, field",
+    [
+        ("When was Suresh's purchase?", "purchase_date"),
+        ("What is the purchase date of Suresh's purchases?", "purchase_date"),
+        ("Suresh purchase date", "purchase_date"),
+        ("Kavita's warranty", None),
+    ],
+)
+def test_a_question_word_a_singular_or_an_asked_value_keeps_a_lookup(household, prompt, field):
+    q = resolve(reading(intent="lookup", people=["Suresh"], field=field), household, TODAY, prompt)
+    assert q.intent == "lookup"
+
+
+# -- a date range after a type word, with no question (Task 31c, L3) -----------------------------
+
+
+def test_a_date_range_after_a_type_word_with_no_question_makes_a_list(household):
+    q = resolve(
+        reading(
+            intent="lookup",
+            people=["Suresh"],
+            types=[DocType.life_policy],
+            date=DateSlot(role="expiry", phrase="by December"),
+        ),
+        household,
+        TODAY,
+        "Suresh insurance expiring by December",
+    )
+    assert (q.intent, q.field) == ("list", None)
+    assert q.range is not None
+    # only the group word "insurance" is written: the model's single type is a guess
+    assert (q.types, q.areas) == ([], [Area.insurance])
+
+
+def test_a_named_type_stays_when_a_date_range_makes_a_list(household):
+    q = resolve(
+        reading(
+            intent="lookup",
+            people=["Suresh"],
+            types=[DocType.health_policy],
+            date=DateSlot(role="expiry", phrase="by December"),
+        ),
+        household,
+        TODAY,
+        "Suresh mediclaim expiring by December",
+    )
+    assert (q.intent, q.types, q.areas) == ("list", [DocType.health_policy], [])
+
+
+@pytest.mark.parametrize(
+    "prompt",
+    [
+        "When does Suresh's life insurance expire by December?",
+        "What is the expiry of Suresh's life insurance this year?",
+        "Is Suresh's life insurance valid till December?",
+    ],
+)
+def test_a_question_word_keeps_a_lookup_with_a_date(household, prompt):
+    q = resolve(
+        reading(
+            intent="lookup",
+            people=["Suresh"],
+            types=[DocType.life_policy],
+            field="expiry_date",
+            date=DateSlot(role="expiry", phrase="by December"),
+        ),
+        household,
+        TODAY,
+        prompt,
+    )
+    assert q.intent == "lookup"
