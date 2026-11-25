@@ -48,7 +48,7 @@ from household_vault.api.models import (
 )
 from household_vault.api.pages import add_page_routes
 from household_vault.api.search import add_search_routes, drive_path
-from household_vault.api.web import add_web_routes, default_dist
+from household_vault.api.web import add_web_routes
 from household_vault.app_state import AppState
 from household_vault.db import Item
 from household_vault.emergency import sheet_html
@@ -630,5 +630,5 @@ def create_app(
         return HTMLResponse(sheet_html(state.vault.root, state.worker.clock().date()))
 
     # Last, so that no API route is shadowed by the app's catch-all.
-    add_web_routes(app, web_dist if web_dist is not None else default_dist())
+    add_web_routes(app, web_dist)
     return app

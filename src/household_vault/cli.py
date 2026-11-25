@@ -99,12 +99,13 @@ def _run(app: bool) -> None:
     import uvicorn
 
     from household_vault.api.app import create_app
+    from household_vault.api.web import default_dist
     from household_vault.app_state import build_app_state
     from household_vault.logging_setup import add_console
 
     settings = _settings(app)
     state = build_app_state(settings)
-    api = create_app(state)
+    api = create_app(state, web_dist=default_dist())
     add_console()
     # The access log is off: it would carry the id of every document the owner opens.
     uvicorn.run(api, host=settings.host, port=settings.port, access_log=False, log_config=None)

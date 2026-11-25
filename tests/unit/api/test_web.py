@@ -127,3 +127,29 @@ def test_the_web_apps_areas_match_the_vaults_areas_in_order():
     listed = re.findall(r"id: '(\w+)', label: '([^']+)'", source)
     assert [a for a, _ in listed] == [a.value for a in Area]
     assert [label for _, label in listed] == [AREA_LABELS[a].capitalize() for a in Area]
+
+
+def test_default_dist_follows_the_environment_and_needs_a_built_page(dist, tmp_path, monkeypatch):
+    from household_vault.api.web import default_dist
+
+    monkeypatch.setenv("VAULT_WEB_DIST", str(dist))
+    assert default_dist() == dist
+    monkeypatch.setenv("VAULT_WEB_DIST", str(tmp_path / "nothing"))
+    assert default_dist() is None
+
+
+def test_create_app_serves_the_app_only_when_given_a_build(
+    settings, tmp_path, clock, dist, monkeypatch
+):
+    """A build lying in the working tree must not change the API a test builds."""
+    monkeypatch.setenv("VAULT_WEB_DIST", str(dist))
+    people = tmp_path / "household.json"
+    people.write_text(HOUSEHOLD.model_dump_json())
+    ready = settings.model_copy(update={"household_path": people, "settle_seconds": 0.0})
+    state = build_app_state(ready, engines=Engines(TruthPages(), TruthModels()), clock=clock)
+    try:
+        client = TestClient(create_app(state, start_worker=False), base_url="http://localhost")
+        assert client.get("/inbox").status_code == 404
+    finally:
+        state.gate.lock()
+        state.store.conn.close()

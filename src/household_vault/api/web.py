@@ -25,8 +25,10 @@ _HASHED = "public, max-age=31536000, immutable"
 
 
 def default_dist() -> Path | None:
-    """`VAULT_WEB_DIST` if set (the image sets it), else `web/dist` beside `src/` in a checkout.
-    None when there is no build, and the API then runs alone."""
+    """Where `vault run` finds the build: `VAULT_WEB_DIST` if set (the image sets it), else
+    `web/dist` beside `src/` in a checkout. None when there is no build, and the API then runs
+    alone. `create_app` serves the app only when it is given a folder, so tests never pick up a
+    build that happens to be lying in the working tree."""
     named = os.environ.get("VAULT_WEB_DIST")
     folder = Path(named) if named else Path(__file__).resolve().parents[3] / "web" / "dist"
     return folder if (folder / "index.html").is_file() else None
