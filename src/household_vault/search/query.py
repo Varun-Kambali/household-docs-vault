@@ -9,7 +9,7 @@ document, and never works out a date.
 from __future__ import annotations
 
 import re
-from collections.abc import Sequence
+from collections.abc import Collection, Mapping, Sequence
 from datetime import date
 from typing import Annotated, Literal, Protocol
 
@@ -351,19 +351,42 @@ def _people_spans(
     return found, [m and i not in (skip or set()) for i, m in enumerate(mine)]
 
 
-def _stored_place(phrase: str, places: Sequence[str]) -> bool:
-    """Whether the phrase is a stored place: one word only when it is a whole stored value
-    (a lone first name inside "Anil Diagnostics" may still be a person), several words when
-    they appear whole and in a row inside a stored value."""
+Places = Mapping[str, Collection[DocType]]
+
+
+def _as_places(places: Places | Sequence[str]) -> Places:
+    """Stored place values with the document types each is stored on (none known for a bare
+    list of values)."""
+    if isinstance(places, Mapping):
+        return places
+    return {v: frozenset() for v in places}
+
+
+def _stored_place(
+    phrase: str,
+    places: Places,
+    types: Collection[DocType] = (),
+    possessive: bool = False,
+) -> bool:
+    """Whether the phrase is a stored place. Several words match when they appear whole and in a
+    row inside a stored value; a lone word that is a whole value matches. A lone word that is
+    only one word of a longer value ("Anil" in "Anil Diagnostics") may still be a person, so it
+    matches only when the query names a type the value is stored on, or, with no type named,
+    when the prompt does not write it as a possessive."""
     want = _words(phrase)
     if not want:
         return False
-    if len(want) == 1:
-        return any(_words(v) == want for v in places)
-    return any(_inside(phrase, v) for v in places)
+    if len(want) > 1:
+        return any(_inside(phrase, v) for v in places)
+    if any(_words(v) == want for v in places):
+        return True
+    holders = [v for v in places if want[0] in _words(v)]
+    if types:
+        return any(set(types) & set(places[v]) for v in holders)
+    return bool(holders) and not possessive
 
 
-def _place_positions(prompt_words: list[str], places: Sequence[str]) -> set[int]:
+def _place_positions(prompt_words: list[str], places: Collection[str]) -> set[int]:
     """Word positions of the prompt that lie inside a whole stored place value."""
     return _occupied(prompt_words, *places)
 
@@ -431,12 +454,12 @@ def _plurals(word: str, alone: bool) -> set[str]:
     return forms
 
 
-def _scan_types(prompt: str, skip: set[int] | None = None) -> list[DocType]:
+def _match_types(words: list[str], skip: set[int] | None = None) -> tuple[list[DocType], set[int]]:
     """Types whose words appear whole in the prompt, the longest phrase first and no word used
     twice, so "extended warranty" does not also count as "warranty". Words in `skip` (inside
     the model's place or words) are not type words, and a bare "card" next to "warranty",
-    "guarantee", "service" or another matched type word is part of that name."""
-    words = _words(prompt)
+    "guarantee", "service" or another matched type word is part of that name. Also returns the
+    word positions the matches used."""
     taken = set(skip or ())
     phrases = sorted(
         ((tuple(w.split()), t) for t, ws in TYPE_WORDS.items() for w in ws),
@@ -470,8 +493,45 @@ def _scan_types(prompt: str, skip: set[int] | None = None) -> list[DocType]:
                 before < 0 or (words[before] not in _CARD_AFTER and before not in taken)
             ):
                 found.append(bare_card)
+                taken.add(start)
                 break
-    return found
+    return found, taken
+
+
+def _scan_types(prompt: str, skip: set[int] | None = None) -> list[DocType]:
+    """Types whose words appear whole in the prompt (see `_match_types`)."""
+    return _match_types(_words(prompt), skip)[0]
+
+
+_GENERIC = {"policy", "policies", "insurance", "document", "documents", "papers", "paper"}
+
+
+def _without_type_words(phrase: str) -> tuple[str, set[DocType]]:
+    """The phrase without its type words (and generic ones such as "policy"), and the types
+    those words name: "Tungabhadra life insurance policy" gives "Tungabhadra" and life_policy."""
+    tokens = _WORD.findall(phrase)
+    words = _words(phrase)
+    found, taken = _match_types(words)
+    kept = [
+        _POSSESSIVE.sub("", t.strip("'\u2019-/"))
+        for i, (t, w) in enumerate(zip(tokens, words, strict=True))
+        if i not in taken and w not in _GENERIC
+    ]
+    return " ".join(k for k in kept if k), set(found)
+
+
+def _place_of(phrase: str, places: Places, types: Collection[DocType], prompt: str) -> str | None:
+    """The phrase as a stored place, or None. Type words are dropped first, and the types they
+    name count with the query's own."""
+    stripped, named = _without_type_words(phrase)
+    if not stripped:
+        return None
+    lone = _words(stripped)
+    possessive = len(lone) == 1 and bool(
+        re.search(rf"\b{re.escape(lone[0])}['\u2019]s\b", prompt.lower())
+        or _POSSESSIVE.search(phrase.strip().lower())
+    )
+    return stripped if _stored_place(stripped, places, {*types, *named}, possessive) else None
 
 
 def resolve(
@@ -479,7 +539,7 @@ def resolve(
     household: Household,
     today: date,
     prompt: str = "",
-    places: Sequence[str] = (),
+    places: Places | Sequence[str] = (),
 ) -> Query:
     """Work out people and dates. With the prompt text, code fills the closed-class slots the
     model left empty (a household name, a date phrase, a document type word). The model's own
@@ -487,6 +547,7 @@ def resolve(
     `places` are the place values stored in the vault: a person phrase that is one of them is
     a place, and a stored place found in the prompt is never read as a name or a type."""
     conflicts = 0
+    places = _as_places(places)
     slot = reading.date
     types = reading.types
     backstop_people: list[str] = []
@@ -551,23 +612,27 @@ def resolve(
                 continue
             if no_filter:
                 continue
-            if _stored_place(phrase, places):
+            as_place = _place_of(phrase, places, types, prompt)
+            if as_place is not None:
                 if place is None or not place.strip():
-                    place = phrase
-                elif not _inside(phrase, place):
-                    words = f"{words} {phrase}".strip()
+                    place = as_place
+                elif not _inside(as_place, place):
+                    words = f"{words} {as_place}".strip()
                 continue
             named, rest = _name_and_rest(phrase, household)
-            if not named:
+            rest_place = _place_of(rest, places, types, prompt) if rest else None
+            if not named or (rest and rest_place is None):
+                # nobody named, or the other words are not a stored place (an outsider's
+                # surname): leave the whole phrase unread so a lookup declines
                 unread.append(f"person: {phrase}")
                 continue
             # the model put a name and other words (a shop, an employer) in one person slot
             conflicts += 1
             people.extend(p for p in named if p not in people)
-            if rest and (place is None or not place.strip()):
-                place = rest
-            elif rest:
-                words = f"{words} {rest}".strip()
+            if rest_place and (place is None or not place.strip()):
+                place = rest_place
+            elif rest_place:
+                words = f"{words} {rest_place}".strip()
     role: DateRole | None = None
     span: DateRange | None = None
     if slot is not None:

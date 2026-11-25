@@ -121,16 +121,17 @@ class Searcher:
             if doc is not None:
                 yield doc
 
-    def place_values(self) -> list[str]:
+    def place_values(self) -> dict[str, frozenset[DocType]]:
         """The distinct place values stored in the vault (an insurer, shop, employer, hospital
-        and so on), sorted. Built once per search by the caller of `resolve`."""
-        found = {
-            v.strip()
-            for doc in self._documents()
-            for v in (doc.fields.get(f) for f in PLACE_FIELDS[doc.doc_type])
-            if isinstance(v, str) and v.strip()
-        }
-        return sorted(found)
+        and so on), sorted, each with the document types it is stored on. Built once per search
+        by the caller of `resolve`."""
+        found: dict[str, set[DocType]] = {}
+        for doc in self._documents():
+            for field in PLACE_FIELDS[doc.doc_type]:
+                value = doc.fields.get(field)
+                if isinstance(value, str) and value.strip():
+                    found.setdefault(value.strip(), set()).add(doc.doc_type)
+        return {v: frozenset(found[v]) for v in sorted(found)}
 
     def _matches(self, doc: DocumentRow, people: list[str], query: Query) -> bool:
         if query.people and not set(query.people) & set(people):

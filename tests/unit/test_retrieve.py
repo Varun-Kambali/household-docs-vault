@@ -334,4 +334,7 @@ def test_place_values_are_the_distinct_stored_places(store):
     )
     add_doc(store, "d", "tax_invoice", {"invoice_number": "A2"}, ["x"])
     searcher = _keyword_only(store)
-    assert searcher.place_values() == ["Anil Diagnostics", "Epic Electronics"]
+    assert searcher.place_values() == {
+        "Anil Diagnostics": frozenset({DocType.scan_report}),
+        "Epic Electronics": frozenset({DocType.tax_invoice}),
+    }

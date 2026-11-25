@@ -507,7 +507,12 @@ def test_a_short_code_is_never_pluralised(household):
 
 
 def test_a_household_name_inside_a_longer_phrase_is_that_person_and_the_rest_a_place(household):
-    q = resolve(reading(people=["Suresh City Electronics Mart"]), household, TODAY)
+    q = resolve(
+        reading(people=["Suresh City Electronics Mart"]),
+        household,
+        TODAY,
+        places=["City Electronics Mart"],
+    )
     assert (q.people, q.unread, q.place) == (["p4"], [], "City Electronics Mart")
     assert q.backstop_conflicts == 1
 
@@ -517,6 +522,7 @@ def test_the_rest_of_the_phrase_goes_to_words_when_the_place_is_filled(household
         reading(people=["Suresh Sangeetha"], place="Sangeetha Mobiles", words="phone"),
         household,
         TODAY,
+        places=["Sangeetha Mobiles"],
     )
     assert (q.people, q.unread, q.place, q.words) == (
         ["p4"],
@@ -587,11 +593,14 @@ def test_a_person_phrase_that_is_a_stored_place_goes_to_words_when_place_is_fill
     assert (q.unread, q.place, q.words) == ([], "Croma", "x Kaveri Systems")
 
 
-def test_a_lone_word_of_a_stored_place_stays_unread_but_a_whole_value_moves(household):
+def test_a_lone_word_of_a_stored_place_stays_unread_as_a_possessive_but_a_whole_value_moves(
+    household,
+):
     places = [*PLACES, "Anil Diagnostics"]
-    assert resolve(reading(people=["Anil"]), household, TODAY, places=places).unread == [
-        "person: Anil"
-    ]
+    possessive = resolve(
+        reading(people=["Anil"]), household, TODAY, "Anil's documents", places=places
+    )
+    assert possessive.unread == ["person: Anil"]
     q = resolve(reading(people=["Anil Diagnostics"]), household, TODAY, places=places)
     assert (q.unread, q.place) == ([], "Anil Diagnostics")
     q = resolve(reading(people=["Croma"]), household, TODAY, places=places)
@@ -627,3 +636,94 @@ def test_the_people_scan_skips_a_stored_place_found_in_the_prompt(household):
     prompt = "invoice from Suresh Sangeetha Mobiles"
     assert resolve(reading(), household, TODAY, prompt, places=places).people == []
     assert resolve(reading(), household, TODAY, prompt).people == ["p4"]
+
+
+# -- a brand word in the people slot (fix round 3, I1) -------------------------------------------
+
+INSURER = "Tungabhadra Insurance Company Limited"
+BRANDS = {
+    INSURER: {DocType.gadget_policy, DocType.life_policy},
+    "Anil Diagnostics": {DocType.lab_report},
+    "Suresh Sangeetha Mobiles": {DocType.tax_invoice},
+}
+
+
+def test_a_brand_word_of_a_stored_insurer_moves_to_place_when_the_query_names_its_type(household):
+    prompt = "What is the sum insured on the Tungabhadra gadget insurance policy?"
+    q = resolve(reading(people=["the Tungabhadra"]), household, TODAY, prompt, places=BRANDS)
+    assert (q.people, q.unread, q.place) == ([], [], "Tungabhadra")
+    assert q.types == [DocType.gadget_policy]
+
+
+def test_a_brand_with_type_words_moves_to_place(household):
+    prompt = "next premium due on the Tungabhadra life insurance policy"
+    q = resolve(
+        reading(people=["Tungabhadra life insurance policy"]),
+        household,
+        TODAY,
+        prompt,
+        places=BRANDS,
+    )
+    assert (q.people, q.unread, q.place) == ([], [], "Tungabhadra")
+
+
+def test_a_brand_word_with_no_type_named_moves_to_place_unless_possessive(household):
+    prompt = "Tungabhadra policy expiry"
+    q = resolve(reading(people=["Tungabhadra"]), household, TODAY, prompt, places=BRANDS)
+    assert (q.unread, q.place) == ([], "Tungabhadra")
+    prompt = "Tungabhadra's documents"
+    q = resolve(reading(people=["Tungabhadra"]), household, TODAY, prompt, places=BRANDS)
+    assert q.unread == ["person: Tungabhadra"]
+
+
+def test_a_brand_word_stored_only_on_other_types_stays_unread(household):
+    prompt = "Anil life insurance policy"
+    q = resolve(reading(people=["Anil"]), household, TODAY, prompt, places=BRANDS)
+    assert (q.unread, q.place) == (["person: Anil"], None)
+    prompt = "Anil's documents"
+    q = resolve(reading(people=["Anil"]), household, TODAY, prompt, places=BRANDS)
+    assert q.unread == ["person: Anil"]
+
+
+def test_a_brand_word_with_a_matching_type_is_a_place(household):
+    prompt = "Anil Diagnostics reports"
+    q = resolve(reading(people=["Anil Diagnostics"]), household, TODAY, prompt, places=BRANDS)
+    assert (q.unread, q.place) == ([], "Anil Diagnostics")
+    prompt = "Anil lab report"
+    q = resolve(
+        reading(people=["Anil"], types=[DocType.lab_report]),
+        household,
+        TODAY,
+        prompt,
+        places=BRANDS,
+    )
+    assert (q.unread, q.place) == ([], "Anil")
+
+
+# -- an outsider's surname after a household name (fix round 3, Minor 3) -------------------------
+
+
+def test_a_household_name_with_an_outsiders_surname_stays_unread(household):
+    prompt = "Suresh Kumar's PAN number"
+    q = resolve(reading(people=["Suresh Kumar"]), household, TODAY, prompt, places=BRANDS)
+    assert (q.people, q.unread) == ([], ["person: Suresh Kumar"])
+
+
+def test_a_household_name_plus_a_stored_place_still_reads_both(household):
+    places = {"City Electronics Mart": {DocType.warranty_card}}
+    q = resolve(
+        reading(people=["Suresh City Electronics Mart"]),
+        household,
+        TODAY,
+        "Suresh City Electronics Mart warranty card brand",
+        places=places,
+    )
+    assert (q.people, q.unread, q.place) == (["p4"], [], "City Electronics Mart")
+    q = resolve(
+        reading(people=["Suresh Sangeetha Mobiles"]),
+        household,
+        TODAY,
+        "Suresh Sangeetha Mobiles invoice model",
+        places={"Sangeetha Mobiles": {DocType.tax_invoice}},
+    )
+    assert (q.people, q.unread, q.place) == (["p4"], [], "Sangeetha Mobiles")
