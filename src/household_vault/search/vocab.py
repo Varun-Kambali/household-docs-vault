@@ -134,16 +134,45 @@ GENERIC_WORDS: frozenset[str] = frozenset(
     {"policy", "policies", "insurance", "document", "documents", "papers", "paper"}
 )
 
+# The plurals of those generic words: "insurance policies" asks for many documents.
+PLURAL_GENERIC_WORDS: frozenset[str] = frozenset({"policies", "documents", "papers"})
+
 # General English words that ask for many documents at once, and the opening phrases of a
 # question about several. A cue word of six letters or more also matches with one typo.
 LIST_CUE_WORDS: frozenset[str] = frozenset(
-    {"documents", "docs", "papers", "files", "records", "everything", "all", "every", "any", "list"}
+    {"documents", "docs", "papers", "files", "records", "everything", "list"}
+)
+# These ask for many documents only when a cue word or a type word follows them in the same noun
+# phrase ("all of Ravi's documents", "every warranty"), never on their own ("all details").
+LIST_QUANTIFIERS: frozenset[str] = frozenset({"all", "every", "any"})
+# Words that may stand between a quantifier and the word it quantifies.
+NOUN_PHRASE_FILLER: frozenset[str] = frozenset(
+    {"of", "the", "our", "my", "your", "his", "her", "their", "these", "those"}
 )
 LIST_OPENERS: tuple[tuple[str, ...], ...] = (
     ("what", "do", "we", "have"),
     ("which",),
-    ("what", "are"),
 )
+# A prompt that opens with one of these is a question about one thing, so it is no plain list.
+# "Which" or "what" followed by one of them asks for one value too.
+AUX_OPENERS: frozenset[str] = frozenset(
+    {
+        "is",
+        "are",
+        "was",
+        "were",
+        "has",
+        "have",
+        "had",
+        "does",
+        "do",
+        "did",
+        "can",
+        "will",
+        "should",
+    }
+)
+
 # Words that ask for one particular document: they keep the model's find or lookup.
 FIND_CUES: tuple[tuple[str, ...], ...] = (
     ("show", "me"),

@@ -22,12 +22,16 @@ from household_vault.reading.ollama import ModelError, ModelUnavailable, OllamaC
 from household_vault.search.dates import DateRange, parse_date_phrase
 from household_vault.search.vocab import (
     AREA_LABELS,
+    AUX_OPENERS,
     DATE_ROLES,
     FIELD_LABELS,
     FIND_CUES,
     GENERIC_WORDS,
     LIST_CUE_WORDS,
     LIST_OPENERS,
+    LIST_QUANTIFIERS,
+    NOUN_PHRASE_FILLER,
+    PLURAL_GENERIC_WORDS,
     PLURAL_TYPE_GROUPS,
     QUESTION_WORDS,
     ROLE_NOUNS,
@@ -546,50 +550,106 @@ def _has_phrase(words: list[str], phrases: Sequence[tuple[str, ...]], anywhere: 
     return False
 
 
-def _plural_type_hit(words: list[str], skip: set[int]) -> bool:
-    """Whether a type word stands in its plural form ("warranties", "bills") outside `skip`."""
+def _plural_type_at(words: list[str], start: int, skip: set[int]) -> bool:
+    """Whether a type word stands in its plural form ("warranties", "bills") from `start`."""
     for t_words in TYPE_WORDS.values():
         for text in t_words:
             phrase = text.split()
             last = phrase[-1]
             plural = _plurals(last, len(phrase) == 1) - {last}
             size = len(phrase)
-            for start in range(len(words) - size + 1):
-                span = range(start, start + size)
-                if (
-                    not any(i in skip for i in span)
-                    and words[start : start + size - 1] == phrase[:-1]
-                    and words[start + size - 1] in plural
-                ):
-                    return True
+            span = range(start, start + size)
+            if (
+                start + size <= len(words)
+                and not any(i in skip for i in span)
+                and words[start : start + size - 1] == phrase[:-1]
+                and words[start + size - 1] in plural
+            ):
+                return True
     return False
 
 
-def _asks_for_one_value(words: list[str]) -> bool:
-    """ "Which shop issued ..." asks for one value; "which bills" and "which of" ask for a list."""
+def _plural_type_hit(words: list[str], skip: set[int]) -> bool:
+    """Whether a type word stands in its plural form anywhere outside `skip`."""
+    return any(_plural_type_at(words, start, skip) for start in range(len(words)))
+
+
+def _is_plural_word(words: list[str], i: int, skip: set[int]) -> bool:
+    """Whether the word is a cue word, a role noun, a generic word or a type word in the plural."""
+    word = words[i]
     return (
-        len(words) > 1
-        and words[0] == "which"
-        and not words[1].endswith("s")
-        and words[1] not in ("of", "do")
+        any(_is_cue_word(word, cue) for cue in LIST_CUE_WORDS)
+        or word in ROLE_NOUNS
+        or word in PLURAL_GENERIC_WORDS
+        or _plural_type_at(words, i, skip)
     )
 
 
-def _list_cue(words: list[str], skip: set[int]) -> bool:
+def _asks_for_one_value(words: list[str]) -> bool:
+    """ "Which shop issued ..." and "Which is Kiran's school" ask for one value; "which bills" and
+    "which of" ask for a list. Only a known plural word makes a plural."""
+    return (
+        len(words) > 1
+        and words[0] in ("which", "what")
+        and (words[1] in AUX_OPENERS or (words[1] != "of" and not _is_plural_word(words, 1, set())))
+    )
+
+
+def _quantified(words: list[str], tokens: list[str], skip: set[int]) -> bool:
+    """Whether "all", "every" or "any" is followed, in the same noun phrase, by a cue word or a
+    type word. "the", "of", "our" and possessives ("Ravi's") do not end the phrase."""
+    for i, word in enumerate(words):
+        if word not in LIST_QUANTIFIERS or i in skip:
+            continue
+        j = i + 1
+        while j < len(words) and (
+            words[j] in NOUN_PHRASE_FILLER or tokens[j].endswith(("'s", "\u2019s"))
+        ):
+            j += 1
+        if (
+            j < len(words)
+            and j not in skip
+            and (_is_plural_word(words, j, skip) or j in _match_types(words, skip)[1])
+        ):
+            return True
+    return False
+
+
+def _opens_with_question(words: list[str]) -> bool:
+    """Whether the prompt opens with an auxiliary, as a yes or no question does."""
+    return bool(words) and words[0] in AUX_OPENERS
+
+
+def _list_cue(words: list[str], tokens: list[str], skip: set[int]) -> bool:
     """Whether the prompt asks for many documents and for no one in particular: a list cue word,
-    a plural type word or an opening phrase, with none of the find cues."""
-    if _has_phrase(words, FIND_CUES, anywhere=True):
+    a plural type word or an opening phrase, with none of the find cues, and not as a question
+    about one thing."""
+    if _has_phrase(words, FIND_CUES, anywhere=True) or _opens_with_question(words):
         return False
     return (
         any(
-            _is_cue_word(w, cue)
+            _is_cue_word(w, cue) or w in PLURAL_GENERIC_WORDS
             for i, w in enumerate(words)
             if i not in skip
             for cue in LIST_CUE_WORDS
         )
+        or _quantified(words, tokens, skip)
         or _plural_type_hit(words, skip)
-        or (_has_phrase(words, LIST_OPENERS, anywhere=False) and not _asks_for_one_value(words))
+        or (
+            _has_phrase(words, LIST_OPENERS, anywhere=False)
+            and (words[:4] == ["what", "do", "we", "have"] or not _asks_for_one_value(words))
+        )
     )
+
+
+def _has_field_label(words: list[str]) -> bool:
+    """Whether the prompt holds the label of a field ("amount", "number", "expiry date")."""
+    for label in FIELD_LABELS.values():
+        parts = label.lower().split()
+        size = len(parts)
+        if any(words[i : i + size] == parts for i in range(len(words) - size + 1)):
+            return True
+    return False
 
 
 def _scan_types(prompt: str, skip: set[int] | None = None) -> list[DocType]:
@@ -691,33 +751,33 @@ def resolve(
     noun_role: DateRole | None = None
     if prompt and intent != "list":
         prompt_words = _words(prompt)
+        tokens = _WORD.findall(prompt.lower())
         taken = _place_positions(prompt_words, places) | _occupied(prompt_words, reading.place)
         nouns = [w for i, w in enumerate(prompt_words) if w in ROLE_NOUNS and i not in taken]
-        if field is None and _list_cue(prompt_words, taken):
+        question = bool(QUESTION_WORDS & set(prompt_words)) or _opens_with_question(prompt_words)
+        group = next((g for w, g in PLURAL_TYPE_GROUPS.items() if w in prompt_words), ())
+        if field is None and _list_cue(prompt_words, tokens, taken):
             intent = "list"  # the prompt asks for many documents and the model did not
             conflicts += 1
-            group = next((g for w, g in PLURAL_TYPE_GROUPS.items() if w in prompt_words), ())
             if group and set(types) <= set(group):
                 types = list(group)
         elif (
             intent == "lookup"
+            and field is None
             and (types or reading.areas)
             and slot is not None
             and parse_date_phrase(slot.phrase, today) is not None
-            and not QUESTION_WORDS & set(prompt_words)
+            and not question
+            and not _has_field_label(prompt_words)
         ):
             # a date range after a type word and no question: "insurance expiring by December"
-            intent, field = "list", None
+            intent = "list"
             conflicts += 1
             group_areas = [Area(w) for w in prompt_words if w in {a.value for a in Area}]
             if group_areas and not _scan_types(prompt):
                 # only the group is named ("insurance"): the model's one type is a guess
                 types, areas = [], group_areas[:1]
-        elif (
-            nouns
-            and not QUESTION_WORDS & set(prompt_words)
-            and (field is None or field.endswith("_date"))
-        ):
+        elif nouns and not question and (field is None or field.endswith("_date")):
             # a plural noun for a kind of date and no question: "Suresh purchases" lists the
             # documents with such a date, it asks for no date
             intent, field = "list", None
@@ -727,6 +787,18 @@ def resolve(
                     areas = [Area(nouns[0])]
             else:
                 noun_role = ROLE_NOUNS[nouns[0]]
+        elif (
+            intent == "lookup"
+            and field is not None
+            and field.endswith("_date")
+            and not question
+            and _plural_type_hit(prompt_words, taken)
+        ):
+            # a plural type word and a date field with no question: "Kavita warranties"
+            intent, field = "list", None
+            conflicts += 1
+            if group and set(types) <= set(group):
+                types = list(group)
     unread: list[str] = []
     people: list[str] = list(backstop_people)
     place, words = reading.place, reading.words

@@ -134,6 +134,7 @@ LISTS = [
     # Minor 1: a plural type word with a date field and no question
     ("Kavita invoices", "lookup", {"field": "purchase_date"}),
     ("Kavita warranties", "lookup", {"field": "expiry_date"}),
+    ("listing of Ravi's policies", "find", {}),
     # What are, with a plural thing after it
     ("What are Suresh's policies?", "lookup", {}),
 ]
@@ -144,12 +145,6 @@ KNOWN_LIMITS = [
         "find",
         {},
         marks=pytest.mark.xfail(reason="known limit: a cue word under six letters never fuzzes"),
-    ),
-    pytest.param(
-        "listing of Ravi's policies",
-        "find",
-        {},
-        marks=pytest.mark.xfail(reason="known limit: 'listing' is not a cue word"),
     ),
 ]
 
