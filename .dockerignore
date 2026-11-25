@@ -21,4 +21,3 @@ evals
 web/node_modules
 web/dist
 web/coverage
-web/.hallmark

@@ -8,4 +8,4 @@
 - Doubt on a field: the amber "Not sure:" line under that field's value.
 - "Show in folder" is a secondary button in the inspector.
 - Keyboard: arrow keys or J and K move between pages; Tab moves through the fields; Escape returns to the results.
-- Under 768 px the inspector moves below the page.
+- Under 60rem the inspector moves below the page.
