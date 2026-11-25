@@ -26,14 +26,11 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     coverage: {
       provider: 'v8',
-      // The app's logic, not its markup. Each file has to reach the thresholds on its own, so a
-      // well-covered file cannot cover for another.
-      include: [
-        'src/api/client.ts',
-        'src/app/route.ts',
-        'src/app/areas.ts',
-        'src/app/useInboxCount.ts',
-      ],
+      // Every source file, so none can fall below the gate unseen. Each file has to reach the
+      // thresholds on its own, so a well-covered file cannot cover for another. Left out: the
+      // types generated from the API, the tests, and the mount in main.tsx.
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: ['src/api/schema.d.ts', 'src/**/*.test.{ts,tsx}', 'src/test/**', 'src/main.tsx'],
       reporter: ['text'],
       thresholds: { perFile: true, statements: 80, branches: 80, functions: 80, lines: 80 },
     },
