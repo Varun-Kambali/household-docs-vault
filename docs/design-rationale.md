@@ -50,6 +50,7 @@ All colours are in OKLCH. Its lightness channel matches what the eye sees, so st
 
 - **Radius:** 6 for controls and 10 for panels, both close to macOS. No pills: a pill shape says "badge", and the app has no decorative badges.
 - **Buttons:** one primary button per screen at most, so the next step is never in doubt. Labels say verb plus object ("Open page", "File it").
+- **Sidebar:** it holds Search, Inbox and my twelve areas as one-click lists, as Finder's source list does. That way browsing an area needs no typing and no model, and it still works when a prompt is misread. The waiting count sits beside Inbox as plain text ("Inbox 3"), never a badge. Under 60rem it folds into a top bar with a Menu button.
 - **Lists:** rows, not cards. A card per row is a box doing the job that space can do. Panels are one level deep and never nested.
 - **Status:** always an icon plus words. The Inbox count is plain text beside its name, not a red dot.
 - **States:** every control has all of them (default, hover, focus-visible, active, disabled, loading, error, empty), because a control that only has a hover state feels broken the first time it is used from the keyboard.
