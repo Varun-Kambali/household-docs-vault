@@ -124,7 +124,9 @@ export function App() {
       </nav>
       <main id="main" ref={main} className="main">
         {route.name === 'search' && <SearchScreen q={route.q} focusTick={focusTick} />}
-        {route.name === 'inbox' && <InboxScreen waiting={waiting} error={waitingError} onChanged={refresh} />}
+        {route.name === 'inbox' && (
+          <InboxScreen waiting={waiting} error={waitingError} onChanged={refresh} />
+        )}
         {route.name === 'area' && <AreaScreen area={route.area} />}
         {route.name === 'doc' && <DocScreen id={route.id} />}
         {route.name === 'notfound' && <NotFoundScreen />}
