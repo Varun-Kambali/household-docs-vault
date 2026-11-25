@@ -40,6 +40,11 @@ ul {
   list-style: none;
 }
 
+h1,
+h2 {
+  text-wrap: balance;
+}
+
 h1 {
   font-size: var(--text-title);
   line-height: var(--text-title-line);

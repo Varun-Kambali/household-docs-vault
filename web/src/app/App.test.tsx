@@ -162,6 +162,34 @@ describe('the Inbox count', () => {
   })
 })
 
+describe('the Inbox screen', () => {
+  test('waits, then says how many files need an answer', async () => {
+    answerWith(2)
+    open('/inbox')
+    render(<App />)
+    expect(screen.getByRole('status')).toHaveTextContent('Loading the Inbox')
+    expect(await screen.findByText('2 waiting for an answer.')).toBeInTheDocument()
+  })
+
+  test('says so when nothing is waiting', async () => {
+    answerWith(0)
+    open('/inbox')
+    render(<App />)
+    expect(
+      await screen.findByText('Nothing waiting. New files are read as they arrive.'),
+    ).toBeInTheDocument()
+  })
+
+  test('shows the reason when the list cannot be read', async () => {
+    answerWith('down')
+    open('/inbox')
+    render(<App />)
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'The vault is not answering. Check that it is running.',
+    )
+  })
+})
+
 describe('search on /', () => {
   test('?q= fills the box, and typing keeps the address in step', async () => {
     open('/?q=kavita')

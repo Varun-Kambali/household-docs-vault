@@ -36,13 +36,16 @@ export function SearchScreen({ q, focusTick }: { q: string; focusTick: number })
   )
 }
 
-export function InboxScreen({ waiting }: { waiting: number | null }) {
+export function InboxScreen({ waiting, error }: { waiting: number | null; error: string | null }) {
   const known = waiting !== null
   return (
     <>
       <h1 tabIndex={-1}>Inbox</h1>
       <Region
-        state={known && waiting > 0 ? 'full' : known ? 'empty' : 'loading'}
+        state={
+          error !== null ? 'error' : known && waiting > 0 ? 'full' : known ? 'empty' : 'loading'
+        }
+        error={error ?? undefined}
         what="the Inbox"
         empty="Nothing waiting. New files are read as they arrive."
       >
