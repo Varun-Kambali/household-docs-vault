@@ -700,6 +700,20 @@ def resolve(
             if group and set(types) <= set(group):
                 types = list(group)
         elif (
+            intent == "lookup"
+            and (types or reading.areas)
+            and slot is not None
+            and parse_date_phrase(slot.phrase, today) is not None
+            and not QUESTION_WORDS & set(prompt_words)
+        ):
+            # a date range after a type word and no question: "insurance expiring by December"
+            intent, field = "list", None
+            conflicts += 1
+            named = [Area(w) for w in prompt_words if w in {a.value for a in Area}]
+            if named and not _scan_types(prompt):
+                # only the group is named ("insurance"): the model's one type is a guess
+                types, areas = [], named[:1]
+        elif (
             nouns
             and not QUESTION_WORDS & set(prompt_words)
             and (field is None or field.endswith("_date"))

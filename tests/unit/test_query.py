@@ -849,3 +849,65 @@ def test_the_plural_of_warranty_means_every_kind_of_warranty(household):
 def test_a_question_word_a_singular_or_an_asked_value_keeps_a_lookup(household, prompt, field):
     q = resolve(reading(intent="lookup", people=["Suresh"], field=field), household, TODAY, prompt)
     assert q.intent == "lookup"
+
+
+# -- a date range after a type word, with no question (Task 31c, L3) -----------------------------
+
+
+def test_a_date_range_after_a_type_word_with_no_question_makes_a_list(household):
+    q = resolve(
+        reading(
+            intent="lookup",
+            people=["Suresh"],
+            types=[DocType.life_policy],
+            field="expiry_date",
+            date=DateSlot(role="expiry", phrase="by December"),
+        ),
+        household,
+        TODAY,
+        "Suresh insurance expiring by December",
+    )
+    assert (q.intent, q.field) == ("list", None)
+    assert q.range is not None
+    # only the group word "insurance" is written: the model's single type is a guess
+    assert (q.types, q.areas) == ([], [Area.insurance])
+
+
+def test_a_named_type_stays_when_a_date_range_makes_a_list(household):
+    q = resolve(
+        reading(
+            intent="lookup",
+            people=["Suresh"],
+            types=[DocType.health_policy],
+            field="expiry_date",
+            date=DateSlot(role="expiry", phrase="by December"),
+        ),
+        household,
+        TODAY,
+        "Suresh mediclaim expiring by December",
+    )
+    assert (q.intent, q.types, q.areas) == ("list", [DocType.health_policy], [])
+
+
+@pytest.mark.parametrize(
+    "prompt",
+    [
+        "When does Suresh's life insurance expire by December?",
+        "What is the expiry of Suresh's life insurance this year?",
+        "Is Suresh's life insurance valid till December?",
+    ],
+)
+def test_a_question_word_keeps_a_lookup_with_a_date(household, prompt):
+    q = resolve(
+        reading(
+            intent="lookup",
+            people=["Suresh"],
+            types=[DocType.life_policy],
+            field="expiry_date",
+            date=DateSlot(role="expiry", phrase="by December"),
+        ),
+        household,
+        TODAY,
+        prompt,
+    )
+    assert q.intent == "lookup"
