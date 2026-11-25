@@ -45,6 +45,11 @@ describe('api', () => {
     expect(await api<{ id: number }[]>('/v1/needs-a-look')).toEqual([{ id: 3 }])
   })
 
+  test('an answer with no body (204) comes back as undefined, not a parse error', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 204 })))
+    expect(await api('/v1/documents/a/reveal', { method: 'POST' })).toBeUndefined()
+  })
+
   test('sends a JSON body with its header', async () => {
     const fetchMock = vi
       .fn<(url: string, init?: RequestInit) => Promise<Response>>()
