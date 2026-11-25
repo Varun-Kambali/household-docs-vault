@@ -24,7 +24,10 @@ from household_vault.search.vocab import (
     AREA_LABELS,
     DATE_ROLES,
     FIELD_LABELS,
+    FIND_CUES,
     GENERIC_WORDS,
+    LIST_CUE_WORDS,
+    LIST_OPENERS,
     TYPE_WORDS,
     DateRole,
 )
@@ -499,6 +502,93 @@ def _match_types(words: list[str], skip: set[int] | None = None) -> tuple[list[D
     return found, taken
 
 
+_FUZZY_FROM = 6  # a cue word this long may carry one typo; shorter ones never do
+
+
+def _one_edit(a: str, b: str) -> bool:
+    """Whether the two words differ by one insertion, deletion, substitution or swap."""
+    if a == b:
+        return True
+    if abs(len(a) - len(b)) > 1:
+        return False
+    if len(a) == len(b):
+        diff = [i for i in range(len(a)) if a[i] != b[i]]
+        return len(diff) == 1 or (
+            len(diff) == 2
+            and diff[1] == diff[0] + 1
+            and a[diff[0]] == b[diff[1]]
+            and a[diff[1]] == b[diff[0]]
+        )
+    short, long = sorted((a, b), key=len)
+    return any(long[:i] + long[i + 1 :] == short for i in range(len(long)))
+
+
+def _is_cue_word(word: str, cue: str) -> bool:
+    """The cue word, or it with one typo. The singular of a plural cue ("record" for "records")
+    is a different word, not a typo."""
+    if word == cue:
+        return True
+    if len(cue) < _FUZZY_FROM or len(word) < _FUZZY_FROM - 1 or cue in (word + "s", word[:-1]):
+        return False
+    return _one_edit(word, cue)
+
+
+def _has_phrase(words: list[str], phrases: Sequence[tuple[str, ...]], anywhere: bool) -> bool:
+    """Whether the words hold one of the phrases (at the start only unless `anywhere`)."""
+    for phrase in phrases:
+        size = len(phrase)
+        starts = range(len(words) - size + 1) if anywhere else range(min(1, len(words) - size + 1))
+        if any(tuple(words[i : i + size]) == phrase for i in starts):
+            return True
+    return False
+
+
+def _plural_type_hit(words: list[str], skip: set[int]) -> bool:
+    """Whether a type word stands in its plural form ("warranties", "bills") outside `skip`."""
+    for t_words in TYPE_WORDS.values():
+        for text in t_words:
+            phrase = text.split()
+            last = phrase[-1]
+            plural = _plurals(last, len(phrase) == 1) - {last}
+            size = len(phrase)
+            for start in range(len(words) - size + 1):
+                span = range(start, start + size)
+                if (
+                    not any(i in skip for i in span)
+                    and words[start : start + size - 1] == phrase[:-1]
+                    and words[start + size - 1] in plural
+                ):
+                    return True
+    return False
+
+
+def _asks_for_one_value(words: list[str]) -> bool:
+    """ "Which shop issued ..." asks for one value; "which bills" and "which of" ask for a list."""
+    return (
+        len(words) > 1
+        and words[0] == "which"
+        and not words[1].endswith("s")
+        and words[1] not in ("of", "do")
+    )
+
+
+def _list_cue(words: list[str], skip: set[int]) -> bool:
+    """Whether the prompt asks for many documents and for no one in particular: a list cue word,
+    a plural type word or an opening phrase, with none of the find cues."""
+    if _has_phrase(words, FIND_CUES, anywhere=True):
+        return False
+    return (
+        any(
+            _is_cue_word(w, cue)
+            for i, w in enumerate(words)
+            if i not in skip
+            for cue in LIST_CUE_WORDS
+        )
+        or _plural_type_hit(words, skip)
+        or (_has_phrase(words, LIST_OPENERS, anywhere=False) and not _asks_for_one_value(words))
+    )
+
+
 def _scan_types(prompt: str, skip: set[int] | None = None) -> list[DocType]:
     """Types whose words appear whole in the prompt (see `_match_types`)."""
     return _match_types(_words(prompt), skip)[0]
@@ -593,6 +683,15 @@ def resolve(
     # A listed type beats its area: the model often names both, and the union would widen the
     # question to the whole area.
     areas = [a for a in reading.areas if not any(AREA[t] is a for t in types)]
+    intent = reading.intent
+    if prompt and intent != "list" and reading.field is None:
+        prompt_words = _words(prompt)
+        if _list_cue(
+            prompt_words,
+            _place_positions(prompt_words, places) | _occupied(prompt_words, reading.place),
+        ):
+            intent = "list"  # the prompt asks for many documents and the model did not
+            conflicts += 1
     unread: list[str] = []
     people: list[str] = list(backstop_people)
     place, words = reading.place, reading.words
@@ -652,7 +751,7 @@ def resolve(
             span = None  # never an inverted range
             unread.append(f"date: {slot.phrase}")
     return Query(
-        intent=reading.intent,
+        intent=intent,
         people=people,
         types=types,
         areas=areas,

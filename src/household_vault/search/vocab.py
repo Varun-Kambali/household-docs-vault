@@ -134,6 +134,25 @@ GENERIC_WORDS: frozenset[str] = frozenset(
     {"policy", "policies", "insurance", "document", "documents", "papers", "paper"}
 )
 
+# General English words that ask for many documents at once, and the opening phrases of a
+# question about several. A cue word of six letters or more also matches with one typo.
+LIST_CUE_WORDS: frozenset[str] = frozenset(
+    {"documents", "docs", "papers", "files", "records", "everything", "all", "every", "any", "list"}
+)
+LIST_OPENERS: tuple[tuple[str, ...], ...] = (
+    ("what", "do", "we", "have"),
+    ("which",),
+    ("what", "are"),
+)
+# Words that ask for one particular document: they keep the model's find or lookup.
+FIND_CUES: tuple[tuple[str, ...], ...] = (
+    ("show", "me"),
+    ("find",),
+    ("open",),
+    ("where", "is"),
+    ("where", "are"),
+)
+
 _AREA_NAMES: dict[Area, str] = {
     Area.insurance: "insurance",
     Area.purchases: "purchases",

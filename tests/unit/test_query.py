@@ -445,9 +445,13 @@ def test_the_role_cue_nearest_the_date_phrase_gives_the_role(household):
 
 
 def test_a_type_word_narrows_the_models_area_when_it_holds_that_type(household):
-    q = resolve(reading(areas=[Area.tax]), household, TODAY, "Form 16s for this year")
+    q = resolve(
+        reading(intent="list", areas=[Area.tax]), household, TODAY, "Form 16s for this year"
+    )
     assert (q.types, q.areas, q.backstop_conflicts) == ([DocType.form_16], [], 0)
-    q = resolve(reading(areas=[Area.insurance]), household, TODAY, "Form 16s for this year")
+    q = resolve(
+        reading(intent="list", areas=[Area.insurance]), household, TODAY, "Form 16s for this year"
+    )
     assert (q.types, q.areas, q.backstop_conflicts) == ([], [Area.insurance], 1)
 
 
@@ -748,3 +752,46 @@ def test_generic_words_live_in_the_vocabulary():
     from household_vault.search import vocab
 
     assert "policy" in vocab.GENERIC_WORDS and "documents" in vocab.GENERIC_WORDS
+
+
+# -- an intent backstop from closed list cues (Task 31c, L1) -------------------------------------
+
+
+@pytest.mark.parametrize(
+    "prompt, model_intent, extra",
+    [
+        ("documents Orchard Labs", "find", {"place": "Orchard Labs"}),
+        ("What do we have from Hill Park Medical?", "lookup", {"place": "Hill Park Medical"}),
+        ("docuents Nilgiri Bank", "find", {"place": "Nilgiri Bank"}),
+        ("Kavita warranties", "lookup", {"people": ["Kavita"]}),
+        ("everything from Croma", "find", {"place": "Croma"}),
+        ("all papers for Ravi", "find", {"people": ["Ravi"]}),
+        ("which bills came from Croma", "find", {"place": "Croma"}),
+    ],
+)
+def test_a_list_cue_with_no_find_cue_makes_the_intent_a_list(
+    household, prompt, model_intent, extra
+):
+    q = resolve(reading(intent=model_intent, **extra), household, TODAY, prompt)
+    assert q.intent == "list"
+    assert q.backstop_conflicts >= 1
+
+
+@pytest.mark.parametrize(
+    "prompt, intent, extra",
+    [
+        ("Show me the documents for Kavita's car", "find", {}),
+        ("find the papers from Croma", "find", {}),
+        ("open all the files", "find", {}),
+        ("where is the document for the fridge", "find", {}),
+        ("When does Kavita's car insurance expire?", "lookup", {"field": "expiry_date"}),
+        ("What are the documents number on Ravi's PAN", "lookup", {"field": "number"}),
+        ("Kavita's warranty card", "find", {}),
+        ("Sony TV warranty", "find", {}),
+        ("Suresh vehicle service record", "find", {}),
+        ("Which shop issued the Nimbus television contract?", "lookup", {}),
+    ],
+)
+def test_a_find_cue_a_field_or_a_singular_keeps_the_models_intent(household, prompt, intent, extra):
+    q = resolve(reading(intent=intent, **extra), household, TODAY, prompt)
+    assert q.intent == intent
