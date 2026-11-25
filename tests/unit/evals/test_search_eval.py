@@ -583,3 +583,22 @@ def test_the_search_runner_takes_the_reading_model_from_a_switch_or_the_config()
     named = _parser().parse_args([*base, "--query-model", "qwen3:8b"])
     assert _query_model(default, "qwen3:4b") == "qwen3:4b"
     assert _query_model(named, "qwen3:4b") == "qwen3:8b"
+
+
+def test_an_unknown_person_decline_names_its_cause(smoke_docs):
+    doc = next(d for d in smoke_docs if d.doc_id == "health_policy-1-photo")
+    q = lookup_question(doc, "policy_number")
+    truth, back = {doc.doc_id: doc}, {"db-1": doc.doc_id}
+    row_of_doc = Row(
+        "db-1", doc.doc_type, "p1", ["p1"], "insurance", "x", date(2026, 1, 1), {}, None, 0.0, []
+    )
+    query = Query(intent="lookup", field="policy_number", unread=["person: Anil"])
+    res = Result(query, [row_of_doc], NoAnswer("unknown_person", []), [])
+    row = judge(q, res, truth, back)
+    assert (row.answered, row.declined, row.cause) == (False, True, "unknown person")
+
+
+def test_the_api_carries_the_unknown_person_reason():
+    from household_vault.api.models import NoAnswerOut
+
+    assert NoAnswerOut(reason="unknown_person", closest=[]).reason == "unknown_person"

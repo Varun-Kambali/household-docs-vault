@@ -375,11 +375,29 @@ def _search(args: argparse.Namespace) -> int:
                 expect_digest=tags.get(settings.query_model),
                 system=system,
             )
-            embedder = RecordedEmbedder(
-                replay,
-                expect=settings.embed_model,
-                expect_digest=tags.get(settings.embed_model),
-            )
+            if args.fill_vectors:
+                # only the embedding model runs, and only for vectors the folder lacks; the
+                # folder's manifest must name this very build of it
+                embed_digest = tags.get(settings.embed_model)
+                if embed_digest is None:
+                    print("search: --fill-vectors needs Ollama and the embedding model's digest")
+                    return 1
+                embedder = RecordedEmbedder(
+                    replay,
+                    replay,
+                    live=OllamaEmbedder(
+                        OllamaClient(settings.ollama_url, timeout_s=120.0), settings.embed_model
+                    ),
+                    model=settings.embed_model,
+                    digest=embed_digest,
+                    require_digest=True,
+                )
+            else:
+                embedder = RecordedEmbedder(
+                    replay,
+                    expect=settings.embed_model,
+                    expect_digest=tags.get(settings.embed_model),
+                )
         except SearchEvalError as exc:
             print(f"search: {exc}")
             return 1
@@ -559,6 +577,14 @@ def _parser() -> argparse.ArgumentParser:
     search.add_argument(
         "--query-model",
         help="the model that reads prompts (default: the config's query_model)",
+    )
+    search.add_argument(
+        "--fill-vectors",
+        action="store_true",
+        help=(
+            "with --replay: embed and record the vectors the folder lacks, query or document "
+            "(no reading model; the folder must record the embedding model's digest)"
+        ),
     )
     search.add_argument("--results", help="default: var/results-val for val, evals/results")
     search.set_defaults(run=_search)

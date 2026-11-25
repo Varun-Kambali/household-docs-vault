@@ -322,3 +322,19 @@ def test_a_list_keeps_its_filters_hard(searcher, search_store):
         intent="list", people=[_someone_else(search_store, doc)], types=[DocType.warranty_card]
     )
     assert doc.id not in [r.document_id for r in searcher.list(wrong)]
+
+
+def test_place_values_are_the_distinct_stored_places(store):
+    from tests.conftest import add_doc
+
+    add_doc(store, "a", "scan_report", {"hospital": "Anil Diagnostics"}, ["Scan"])
+    add_doc(store, "b", "scan_report", {"hospital": "Anil Diagnostics"}, ["Scan"])
+    add_doc(
+        store, "c", "tax_invoice", {"seller": "Epic Electronics", "invoice_number": "A1"}, ["x"]
+    )
+    add_doc(store, "d", "tax_invoice", {"invoice_number": "A2"}, ["x"])
+    searcher = _keyword_only(store)
+    assert searcher.place_values() == {
+        "Anil Diagnostics": frozenset({DocType.scan_report}),
+        "Epic Electronics": frozenset({DocType.tax_invoice}),
+    }

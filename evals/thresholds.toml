@@ -62,8 +62,8 @@ finds = 3
 lists = 10
 
 [search_smoke.max]
-# measured: declined_when_answerable 0.3
-declined_when_answerable = 0.32
+# measured: declined_when_answerable 0
+declined_when_answerable = 0.02
 readings_missing = 0
 vectors_missing = 0
 expected_filed_but_not = 4

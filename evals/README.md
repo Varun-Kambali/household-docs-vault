@@ -145,7 +145,8 @@ A rate over no questions is null.
   averaged over the questions.
 - **declined_when_none**: over none questions, the share the app declines. **declined_when_answerable**:
   over lookups and finds, the share it declines (lower is better). A question is declined when
-  the lookup answer is a "No direct answer", a person in the prompt is not in the household, no
+  the lookup answer is a "No direct answer" (a lookup naming a person who is not in the household
+  gets one, reason `unknown_person`; a find or list that names one counts as declined here), no
   row comes back, or the top row has no filter behind it and thin evidence (the weak-match rule
   of `compose`: fused score under `MIN_FUSED` and fewer than `MIN_KEYWORD` matching lines).
   Both metrics follow the weak-match rule as it stands (`weak_match`, shared with the app), so
@@ -174,7 +175,9 @@ prompt needs a new recording), `RecordedEmbedder` keys a float16 vector by the S
 text (a query's key includes the model's task line). Each recordings folder holds a
 `manifest.json` with the name and digest of the reading model and the embedding model that made
 it; a replay refuses a folder made by another model, and `--record` refuses to add to one. `--record DIR` calls the local models and
-writes there; `--replay DIR` needs no model.
+writes there; `--replay DIR` needs no model. `--replay DIR --fill-vectors` records the vectors the folder
+lacks, query or document, with the local embedding model only (never the reading model); it
+refuses a folder that does not record the embedding model's digest.
 
 The smoke part of `make eval-smoke` uses `evals/recordings/search-v1/smoke/`: the 22 smoke
 documents as the vault (photos go in first, so a clean copy or a scan of a document already filed

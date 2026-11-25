@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import ClassVar
 
 from vault_synth.sets import load_set
 
@@ -233,3 +234,96 @@ def test_the_committed_smoke_recordings_are_real_ones_with_honest_thresholds():
     assert all(v < 1.0 for v in thresholds["min"].values() if isinstance(v, float))
     zeros = ("silent_misfiles_per_100", "wrong_merges", "secrets_found", "cvv_stored", "inbox_left")
     assert all(thresholds["max"][name] == 0 for name in zeros)
+
+
+# -- --fill-vectors: record only the vectors a replay lacks --------------------------------------
+
+
+class _FakeClient:
+    digest = "ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d"
+    asked: ClassVar[list[str]] = []
+
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+    def tags(self):
+        return {
+            "qwen3-embedding:0.6b": self.digest,
+            "qwen3:4b": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+        }
+
+    def embed(self, model, texts):
+        type(self).asked.extend(texts)
+        return [[0.1] * 1024 for _ in texts]
+
+    def chat_json(self, *args, **kwargs):  # the reading model must never be called
+        raise AssertionError("the reading model was called")
+
+
+def _smoke_copy(tmp_path: Path) -> Path:
+    import shutil
+
+    from evals.search_eval import SMOKE_DIR
+
+    folder = tmp_path / "smoke"
+    shutil.copytree(SMOKE_DIR, folder)
+    victim = next(folder.glob("*.npy"))
+    victim.unlink()
+    return folder
+
+
+def _fill(folder: Path) -> int:
+    from evals.runner import SMOKE_RECORDINGS
+
+    return main(
+        [
+            "search", "--split", "val", "--smoke", "--recordings", str(SMOKE_RECORDINGS),
+            "--replay", str(folder), "--fill-vectors", "--results", str(folder.parent / "res"),
+        ]
+    )  # fmt: skip
+
+
+def test_fill_vectors_records_only_what_is_missing(tmp_path, monkeypatch):
+    monkeypatch.setattr("evals.runner.OllamaClient", _FakeClient)
+    _FakeClient.asked = []
+    folder = _smoke_copy(tmp_path)
+    before = sorted(p.name for p in folder.glob("*.npy"))
+    assert _fill(folder) == 0
+    assert _FakeClient.asked  # the missing vector was embedded
+    after = sorted(p.name for p in folder.glob("*.npy"))
+    assert set(before) <= set(after)
+    assert not list(folder.glob("*.json.tmp"))
+
+
+def test_fill_vectors_refuses_a_changed_embedding_model(tmp_path, monkeypatch):
+    monkeypatch.setattr("evals.runner.OllamaClient", _FakeClient)
+    monkeypatch.setattr(_FakeClient, "digest", "0" * 64)
+    _FakeClient.asked = []
+    folder = _smoke_copy(tmp_path)
+    before = sorted(p.name for p in folder.glob("*.npy"))
+    assert _fill(folder) == 1
+    assert sorted(p.name for p in folder.glob("*.npy")) == before
+    assert _FakeClient.asked == []
+
+
+def test_fill_vectors_refuses_when_the_digest_is_unknown(tmp_path, monkeypatch):
+    monkeypatch.setattr("evals.runner.OllamaClient", _FakeClient)
+    monkeypatch.setattr(_FakeClient, "tags", lambda self: {})
+    folder = _smoke_copy(tmp_path)
+    assert _fill(folder) == 1
+
+
+def test_fill_vectors_refuses_a_folder_that_records_no_embedder_digest(tmp_path, monkeypatch):
+    import json
+
+    monkeypatch.setattr("evals.runner.OllamaClient", _FakeClient)
+    _FakeClient.asked = []
+    folder = _smoke_copy(tmp_path)
+    manifest = folder / "manifest.json"
+    body = json.loads(manifest.read_text())
+    body["embedder"] = {"model": body["embedder"]["model"], "digest": None}
+    manifest.write_text(json.dumps(body))
+    before = sorted(p.name for p in folder.glob("*.npy"))
+    assert _fill(folder) == 1
+    assert sorted(p.name for p in folder.glob("*.npy")) == before
+    assert _FakeClient.asked == []
