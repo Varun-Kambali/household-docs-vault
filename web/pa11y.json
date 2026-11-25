@@ -1,0 +1,171 @@
+{
+  "defaults": {
+    "runners": ["axe"],
+    "standard": "WCAG2AA",
+    "levelCapWhenNeedsReview": "warning",
+    "timeout": 30000,
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox", "--blink-settings=preferredColorScheme=1"]
+    }
+  },
+  "urls": [
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2F&view=desktop&screen=search",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2F%3Fq%3Dkavita&view=desktop&screen=search-with-prompt",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Finbox&view=desktop&screen=inbox-waiting",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element a[href=\"/inbox\"] to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/empty?to=%2Finbox&view=desktop&screen=inbox-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/down?to=%2Finbox&view=desktop&screen=inbox-error",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element [role=alert] to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Farea%2Finsurance&view=desktop&screen=area",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Fdoc%2F12%3Fpage%3D1%26lines%3D2-3&view=desktop&screen=viewer",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Fnowhere&view=desktop&screen=not-found",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2F&view=phone&screen=search",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2F%3Fq%3Dkavita&view=phone&screen=search-with-prompt",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Finbox&view=phone&screen=inbox-waiting",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/empty?to=%2Finbox&view=phone&screen=inbox-empty",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/down?to=%2Finbox&view=phone&screen=inbox-error",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element [role=alert] to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Farea%2Finsurance&view=phone&screen=area",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Fdoc%2F12%3Fpage%3D1%26lines%3D2-3&view=phone&screen=viewer",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Fnowhere&view=phone&screen=not-found",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": ["wait for element #main h1 to be visible"]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2F&view=phone&screen=menu-open",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "click element .menu-button",
+        "wait for element .sidebar[data-open=true] to be visible"
+      ]
+    }
+  ]
+}

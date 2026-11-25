@@ -75,7 +75,7 @@ See [docs/architecture.md](docs/architecture.md) for the diagram, the data flow 
 | Field filling | qwen3-vl:4b through Ollama, on the page image | [ADR 0009](docs/decisions/0009-extraction-model-and-runtime.md) |
 | Visit transcripts | Parakeet TDT 0.6B v2 (`parakeet-mlx`), medicine names checked | [ADR 0011](docs/decisions/0011-transcription-model.md) |
 | Fine-tune | PyTorch, Transformers, PEFT; merged and converted to GGUF for Ollama | [ADR 0007](docs/decisions/0007-fine-tune-in-pytorch.md), [ADR 0010](docs/decisions/0010-fine-tune-path.md) |
-| Frontend | React, TypeScript, Vite | [set when M3 starts] |
+| Frontend | React, TypeScript, Vite; types generated from the API's own description | Served by the API from one origin, with no fonts or scripts from anywhere else |
 
 ## Quickstart
 
@@ -95,7 +95,7 @@ These commands work on the synthetic vault only (`VAULT_ROOT` in `.env`). The ap
 
 ```bash
 make vault        # copy twelve synthetic val documents into the synthetic Inbox
-make run          # serve the API on http://127.0.0.1:8710 and run the worker
+make run          # build the web app once, then serve it and the API on http://127.0.0.1:8710 and run the worker
 uv run vault process                          # run the worker once over Inbox and print counts
 uv run vault emergency-sheet --out sheet.html # the printable emergency sheet
 ```
@@ -107,6 +107,8 @@ curl -s localhost:8710/v1/inbox/progress   # how far the batch is
 curl -s localhost:8710/v1/activity         # what happened, newest first, with the buttons each row has
 curl -s localhost:8710/v1/needs-a-look     # the questions waiting for an answer
 ```
+
+The web app needs Node 26 (`web/.nvmrc`) to build. `make web` runs its dev server on http://127.0.0.1:5173 beside `make run`, and `make web-build` builds it again after a change.
 
 Reading needs Ollama running with the two models in `.env.example`. Without it, files wait in `Inbox` and the worker tries again.
 
@@ -123,7 +125,7 @@ make eval         # the test split on real models (needs Ollama and the two mode
 
 ## Testing
 
-`make test` · `make lint` · CI runs both, builds the Docker image, runs the app in it with the stand-in reader and takes a PDF through the API.
+`make test` · `make lint` · `make web-test` · CI runs them, a browser accessibility check on every screen, builds the Docker image, runs the app in it with the stand-in reader and takes a PDF through the API.
 
 ## Deployment
 
@@ -133,6 +135,7 @@ The app is not deployed anywhere. It runs on one Mac, and the phone reaches it o
 
 ```
 src/household_vault/   application code
+web/                   the web app (Vite, React, TypeScript)
 tests/                 fast tests, all model calls mocked
 evals/                 eval-v1, recordings, results, thresholds
 synth/                 the generator for the synthetic documents

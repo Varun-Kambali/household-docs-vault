@@ -120,3 +120,12 @@ def test_dev_vault_refuses_a_file_name_that_could_leave_the_inbox(dev_env, name)
     assert not (dev_env / "vault" / "Inbox").exists() or not list(
         (dev_env / "vault" / "Inbox").iterdir()
     )
+
+
+def test_openapi_prints_the_api_description_without_opening_anything(dev_env, capsys):
+    main(["openapi"])
+    spec = json.loads(capsys.readouterr().out)
+    assert spec["info"]["title"] == "household-docs-vault"
+    assert "/v1/search" in spec["paths"]
+    assert "/v1/needs-a-look" in spec["paths"]
+    assert not (dev_env / "v.db").exists()  # no database, no vault: the description only

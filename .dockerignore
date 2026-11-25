@@ -18,3 +18,6 @@ evals
 .mypy_cache
 .ruff_cache
 .coverage
+web/node_modules
+web/dist
+web/coverage

@@ -76,7 +76,7 @@ Scale ratio 1.2 from 16. Sentence case for every heading and button. At most thr
 
 - **Spacing scale (4-point):** `--space-1` 4, `--space-2` 8, `--space-3` 12, `--space-4` 16, `--space-5` 24, `--space-6` 32, `--space-7` 48, `--space-8` 64. Nothing outside it.
 - **Proximity:** 8 inside a group, 24 or 32 between groups.
-- **Shell:** a sidebar of 240 px (source list, as in Finder) and the main area. On widths under 768 px the sidebar becomes a top bar with the same items.
+- **Shell:** a sidebar of 240 px (source list, as in Finder) and the main area. Under 60rem the sidebar becomes a top bar with the same items.
 - **Main area:** `max-width: 1200px`, centred, padding 24 (16 on phones). The Viewer is the exception: its page canvas uses the full width.
 - **Alignment:** text is left-aligned. Only short empty-state messages are centred.
 

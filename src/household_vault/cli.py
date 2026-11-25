@@ -6,6 +6,7 @@ vault process                  run the worker once over what is in Inbox and pri
 vault emergency-sheet --out P  write the printable emergency sheet
 vault index --rebuild          index every filed document again for search
 vault dev-vault --from DIR     fill the synthetic Inbox from a dataset (development only)
+vault openapi                  print the API description (the web app's types come from it)
 """
 
 from __future__ import annotations
@@ -47,6 +48,8 @@ def _parser() -> argparse.ArgumentParser:
     index.add_argument("--rebuild", action="store_true", required=True, help="index it all again")
     index.add_argument("--app", action="store_true", help="use the real vault from the app config")
 
+    sub.add_parser("openapi", help="print the API description as JSON")
+
     dev = sub.add_parser("dev-vault", help="fill the synthetic Inbox from a dataset")
     dev.add_argument("--from", dest="source", required=True, type=Path)
     dev.add_argument("--split", default="val", choices=["train", "val", "test"])
@@ -86,6 +89,8 @@ def main(argv: list[str] | None = None) -> None:
         _emergency_sheet(args.out, args.app)
     elif args.command == "index":
         _index(args.app)
+    elif args.command == "openapi":
+        _openapi()
     elif args.command == "dev-vault":
         _dev_vault(args.source, args.split, args.limit, args.app)
 
@@ -94,12 +99,13 @@ def _run(app: bool) -> None:
     import uvicorn
 
     from household_vault.api.app import create_app
+    from household_vault.api.web import default_dist
     from household_vault.app_state import build_app_state
     from household_vault.logging_setup import add_console
 
     settings = _settings(app)
     state = build_app_state(settings)
-    api = create_app(state)
+    api = create_app(state, web_dist=default_dist())
     add_console()
     # The access log is off: it would carry the id of every document the owner opens.
     uvicorn.run(api, host=settings.host, port=settings.port, access_log=False, log_config=None)
@@ -151,6 +157,32 @@ def _index(app: bool) -> None:
         print(f"Embedded {count} documents into {total} vectors.")
     finally:
         conn.close()
+
+
+def _openapi() -> None:
+    """Print `app.openapi()`. Routes need an app state to be built, so one is made on empty
+    folders that are removed again: this never opens the configured vault or database."""
+    import tempfile
+
+    from household_vault.api.app import create_app
+    from household_vault.app_state import build_app_state
+
+    with tempfile.TemporaryDirectory(prefix="vault-openapi-") as tmp:
+        folder = Path(tmp)
+        settings = Settings(
+            mode="dev",
+            vault_root=folder / "vault",
+            db_path=folder / "vault.db",
+            household_path=folder / "household.json",
+            log_dir=folder / "logs",
+            reader="stand-in",
+        )
+        state = build_app_state(settings)
+        try:
+            spec = create_app(state, start_worker=False, web_dist=folder / "none").openapi()
+        finally:
+            state.store.conn.close()
+    print(json.dumps(spec, indent=2, sort_keys=True))
 
 
 def _emergency_sheet(out: Path, app: bool) -> None:

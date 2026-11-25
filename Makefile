@@ -1,6 +1,6 @@
 COV_MIN ?= 80
 
-.PHONY: eval-search-val eval-search search-set setup visits spikes-setup finetune-setup lint test eval eval-val eval-smoke run vault docker
+.PHONY: web web-build web-test eval-search-val eval-search search-set setup visits spikes-setup finetune-setup lint test eval eval-val eval-smoke run vault docker
 
 setup:
 	uv sync
@@ -64,7 +64,21 @@ eval-search:
 eval-smoke:
 	uv run python -m evals.runner smoke
 
-run:
+# The web app (web/). `make run` builds it once; `make web-build` builds it again after a change.
+web/dist/index.html:
+	cd web && npm ci && npm run build
+
+web-build:
+	cd web && npm ci && npm run build
+
+# The dev server on http://127.0.0.1:5173 with hot reload; it sends API calls to `make run`.
+web:
+	cd web && npm run dev
+
+web-test:
+	cd web && npm run lint && npm run format:check && npm run typecheck && npm run types:check && npm run test:coverage
+
+run: web/dist/index.html
 	uv run vault run
 
 # Fills the synthetic Inbox with twelve val documents and writes the household file.
