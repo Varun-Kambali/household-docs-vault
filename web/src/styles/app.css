@@ -1,0 +1,247 @@
+/* The shell and the screens. Every value is a token. */
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  grid-template-areas: 'side main';
+  min-height: 100dvh;
+}
+
+.topbar {
+  display: none;
+}
+
+.skip {
+  position: absolute;
+  inset-block-start: var(--space-2);
+  inset-inline-start: var(--space-2);
+  z-index: 3;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-raised);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-control);
+  transform: translateY(-200%);
+}
+
+.skip:focus-visible {
+  transform: translateY(0);
+}
+
+/* Sidebar: Finder's source list */
+
+.sidebar {
+  grid-area: side;
+  position: sticky;
+  inset-block-start: 0;
+  align-self: start;
+  height: 100dvh;
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-3);
+  background: var(--color-sidebar);
+  border-inline-end: 1px solid var(--color-border);
+}
+
+.nav-list + .nav-list {
+  margin-block-start: var(--space-5);
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: var(--control-height);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-control);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background-color var(--dur-micro) ease-out;
+}
+
+/* The row is 40 px tall; this stretches the hit area to 44 px without changing the look. */
+.nav-link::before {
+  content: '';
+  position: absolute;
+  inset-block: calc((var(--control-height) - var(--hit-target)) / 2);
+  inset-inline: 0;
+}
+
+@media (hover: hover) {
+  .nav-link:hover {
+    background: color-mix(in oklch, var(--color-text) 6%, transparent);
+  }
+}
+
+.nav-link:active {
+  background: color-mix(in oklch, var(--color-text) 10%, transparent);
+}
+
+/* The selected row is shown by weight as well as by colour. */
+.nav-link[aria-current='page'] {
+  background: color-mix(in oklch, var(--color-primary) 12%, transparent);
+  font-weight: var(--weight-strong);
+}
+
+/* Main */
+
+.main {
+  grid-area: main;
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-5);
+}
+
+.main > h1 {
+  margin-block-end: var(--space-4);
+}
+
+.prompt {
+  display: block;
+  width: 100%;
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  background: var(--color-raised);
+  color: var(--color-text);
+  font: inherit;
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-control);
+  transition: background-color var(--dur-micro) ease-out;
+}
+
+.prompt::placeholder {
+  color: var(--color-text-muted);
+}
+
+.prompt:focus-visible {
+  outline-offset: -3px;
+}
+
+.hint {
+  margin-block-start: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+/* Buttons */
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: var(--control-height);
+  padding: 0 var(--space-4);
+  background: var(--color-raised);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: var(--weight-strong);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: background-color var(--dur-micro) ease-out;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  inset-block: calc((var(--control-height) - var(--hit-target)) / 2);
+  inset-inline: 0;
+}
+
+@media (hover: hover) {
+  .button:hover {
+    background: color-mix(in oklch, var(--color-text) 6%, var(--color-raised));
+  }
+}
+
+.button:active {
+  background: color-mix(in oklch, var(--color-text) 10%, var(--color-raised));
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Regions: loading, empty, error */
+
+.region-loading {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 30rem;
+}
+
+.skeleton {
+  display: block;
+  height: var(--space-4);
+  background: var(--color-border);
+  border-radius: var(--radius-control);
+}
+
+.skeleton-short {
+  width: 60%;
+}
+
+.region-note {
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+.region-empty {
+  padding-block: var(--space-6);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.region-error {
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-control);
+}
+
+/* Under 60rem the sidebar becomes a top bar with a menu button. */
+
+@media (max-width: 60rem) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'top'
+      'side'
+      'main';
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .topbar {
+    grid-area: top;
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-sidebar);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .brand {
+    font-weight: var(--weight-strong);
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .sidebar[data-open='false'] {
+    display: none;
+  }
+
+  .main {
+    padding: var(--space-4);
+  }
+}

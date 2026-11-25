@@ -112,3 +112,18 @@ def state_no_dist(settings, tmp_path, clock, tmp_path_factory):
     )
     state.gate.lock()
     state.store.conn.close()
+
+
+def test_the_web_apps_areas_match_the_vaults_areas_in_order():
+    """web/src/app/areas.ts lists the sidebar's twelve areas; it must follow `Area` and the
+    labels the search vocabulary uses (sentence case)."""
+    import re
+    from pathlib import Path
+
+    from household_vault.doctypes import Area
+    from household_vault.search.vocab import AREA_LABELS
+
+    source = (Path(__file__).parents[3] / "web" / "src" / "app" / "areas.ts").read_text()
+    listed = re.findall(r"id: '(\w+)', label: '([^']+)'", source)
+    assert [a for a, _ in listed] == [a.value for a in Area]
+    assert [label for _, label in listed] == [AREA_LABELS[a].capitalize() for a in Area]
