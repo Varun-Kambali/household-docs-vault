@@ -129,6 +129,33 @@ def test_the_web_apps_areas_match_the_vaults_areas_in_order():
     assert [label for _, label in listed] == [AREA_LABELS[a].capitalize() for a in Area]
 
 
+def test_the_web_apps_type_labels_and_masked_fields_match_the_vault():
+    """web/src/common/labels.ts holds the type labels a result row shows, the card types and the
+    ID fields a row masks; all of it must follow doctypes.py and the search vocabulary."""
+    import re
+    from pathlib import Path
+
+    from household_vault.doctypes import LABEL
+    from household_vault.search.vocab import MASKED_FIELDS
+
+    source = (Path(__file__).parents[3] / "web" / "src" / "common" / "labels.ts").read_text()
+    listed = dict(re.findall(r"^  (\w+): '([^']+)',$", source, flags=re.M))
+    assert listed == {t.value: label for t, label in LABEL.items()}
+    masked = re.search(r"MASKED_TYPES = \[([^\]]+)\]", source)
+    assert masked is not None
+    assert {t.strip(" '\n") for t in masked.group(1).split(",") if t.strip()} == {
+        t.value for t, field in MASKED_FIELDS if field == "number"
+    }
+    assert {f for _, f in MASKED_FIELDS} == {"number"}
+    cards = re.search(r"CARD_TYPES = \[([^\]]+)\]", source)
+    assert cards is not None
+    assert {t.strip(" '\n") for t in cards.group(1).split(",") if t.strip()} == {
+        "card_front",
+        "card_statement",
+        "card_welcome_letter",
+    }
+
+
 def test_default_dist_follows_the_environment_and_needs_a_built_page(dist, tmp_path, monkeypatch):
     from household_vault.api.web import default_dist
 
