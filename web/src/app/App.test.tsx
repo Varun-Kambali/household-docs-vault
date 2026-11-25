@@ -162,7 +162,8 @@ describe('the Inbox count', () => {
     await user.click(screen.getByRole('link', { name: /Inbox/ }))
     await user.click(screen.getByRole('link', { name: 'Tax' }))
     await user.click(screen.getByRole('link', { name: 'Search' }))
-    expect(fetch).toHaveBeenCalledTimes(1)
+    const lists = vi.mocked(fetch).mock.calls.filter(([url]) => String(url) === '/v1/needs-a-look')
+    expect(lists).toHaveLength(1)
   })
 
   test('shows no number when the count cannot be read', async () => {

@@ -9,12 +9,7 @@ export function Masked({ value, label }: { value: string; label: string }) {
   return (
     <span className="masked">
       <span className="identifier">{shown ? value : lastFour(value)}</span>
-      <button
-        type="button"
-        className="link-button"
-        aria-pressed={shown}
-        onClick={() => setShown((now) => !now)}
-      >
+      <button type="button" className="link-button" onClick={() => setShown((now) => !now)}>
         {shown ? `Hide ${label}` : `Show ${label}`}
       </button>
     </span>
