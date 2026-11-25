@@ -175,7 +175,9 @@ prompt needs a new recording), `RecordedEmbedder` keys a float16 vector by the S
 text (a query's key includes the model's task line). Each recordings folder holds a
 `manifest.json` with the name and digest of the reading model and the embedding model that made
 it; a replay refuses a folder made by another model, and `--record` refuses to add to one. `--record DIR` calls the local models and
-writes there; `--replay DIR` needs no model.
+writes there; `--replay DIR` needs no model. `--replay DIR --fill-vectors` records the vectors the folder
+lacks, query or document, with the local embedding model only (never the reading model); it
+refuses a folder that does not record the embedding model's digest.
 
 The smoke part of `make eval-smoke` uses `evals/recordings/search-v1/smoke/`: the 22 smoke
 documents as the vault (photos go in first, so a clean copy or a scan of a document already filed

@@ -390,6 +390,7 @@ def _search(args: argparse.Namespace) -> int:
                     ),
                     model=settings.embed_model,
                     digest=embed_digest,
+                    require_digest=True,
                 )
             else:
                 embedder = RecordedEmbedder(
@@ -580,7 +581,10 @@ def _parser() -> argparse.ArgumentParser:
     search.add_argument(
         "--fill-vectors",
         action="store_true",
-        help="with --replay: embed and record only the vectors the folder lacks (no reading model)",
+        help=(
+            "with --replay: embed and record the vectors the folder lacks, query or document "
+            "(no reading model; the folder must record the embedding model's digest)"
+        ),
     )
     search.add_argument("--results", help="default: var/results-val for val, evals/results")
     search.set_defaults(run=_search)

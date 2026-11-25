@@ -311,3 +311,19 @@ def test_fill_vectors_refuses_when_the_digest_is_unknown(tmp_path, monkeypatch):
     monkeypatch.setattr(_FakeClient, "tags", lambda self: {})
     folder = _smoke_copy(tmp_path)
     assert _fill(folder) == 1
+
+
+def test_fill_vectors_refuses_a_folder_that_records_no_embedder_digest(tmp_path, monkeypatch):
+    import json
+
+    monkeypatch.setattr("evals.runner.OllamaClient", _FakeClient)
+    _FakeClient.asked = []
+    folder = _smoke_copy(tmp_path)
+    manifest = folder / "manifest.json"
+    body = json.loads(manifest.read_text())
+    body["embedder"] = {"model": body["embedder"]["model"], "digest": None}
+    manifest.write_text(json.dumps(body))
+    before = sorted(p.name for p in folder.glob("*.npy"))
+    assert _fill(folder) == 1
+    assert sorted(p.name for p in folder.glob("*.npy")) == before
+    assert _FakeClient.asked == []

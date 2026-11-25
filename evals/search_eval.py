@@ -107,11 +107,22 @@ def _manifest(folder: Path) -> dict[str, Any]:
     return body if isinstance(body, dict) else {}
 
 
-def _stamp(folder: Path, role: str, model: str, digest: str | None, *, write: bool) -> None:
+def _stamp(
+    folder: Path,
+    role: str,
+    model: str,
+    digest: str | None,
+    *,
+    write: bool,
+    require_digest: bool = False,
+) -> None:
     """Write the model a folder's recordings were made with, or refuse a folder that already
-    names another model (or another digest, when both are known)."""
+    names another model (or another digest, when both are known). With `require_digest` the
+    folder must already record the digest, so nothing is added under an unstamped folder."""
     body = _manifest(folder)
     have = body.get(role)
+    if require_digest and not (isinstance(have, dict) and have.get("digest")):
+        raise RecordingMismatch(f"{folder} records no digest for its {role} model")
     if isinstance(have, dict):
         same_digest = digest is None or have.get("digest") in (None, digest)
         if have.get("model") != model:
@@ -207,6 +218,7 @@ class RecordedEmbedder:
         digest: str | None = None,
         expect: str | None = None,
         expect_digest: str | None = None,
+        require_digest: bool = False,
     ) -> None:
         if record_to is not None and live is None:
             raise ValueError("recording needs a live embedder")
@@ -220,7 +232,14 @@ class RecordedEmbedder:
         if expect is not None:
             _expect(folder, "embedder", expect, expect_digest)
         if record_to is not None and live is not None:
-            _stamp(record_to, "embedder", model or live.name, digest, write=True)
+            _stamp(
+                record_to,
+                "embedder",
+                model or live.name,
+                digest,
+                write=True,
+                require_digest=require_digest,
+            )
 
     def _path(self, key: str) -> Path:
         return self.folder / f"{key}.npy"
