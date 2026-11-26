@@ -1,0 +1,56 @@
+{
+  "area": "insurance",
+  "created_at": "2026-11-26T08:53:07.955829+05:30",
+  "date_source": "document",
+  "description": "Health policy - Niva Bupa Health Insurance Company Limited",
+  "doc_date": "2026-09-14",
+  "doc_type": "health_policy",
+  "drive_path": "My Drive/Family Vault/Ravi Kumar Rao/Insurance/2026-09-14 Health policy - Niva Bupa Health Insurance Company Limited.jpg",
+  "field_kinds": {
+    "agent": "text",
+    "claim_helpline": "identifier",
+    "end_date": "date",
+    "insured": "list",
+    "insurer": "text",
+    "nominee": "name",
+    "policy_number": "identifier",
+    "policyholder": "name",
+    "premium": "amount",
+    "premium_due_date": "date",
+    "premium_frequency": "text",
+    "product": "text",
+    "start_date": "date",
+    "sum_insured": "amount"
+  },
+  "fields": {
+    "agent": null,
+    "claim_helpline": "1800 750 3276",
+    "end_date": "2027-09-13",
+    "insured": [
+      "Ravi K Rao",
+      "KIRAN RAO",
+      "Mrs Kavita Rao"
+    ],
+    "insurer": "Niva Bupa Health Insurance Company Limited",
+    "nominee": "Robert Atwal",
+    "policy_number": "P/71/4217/7681572",
+    "policyholder": "Ravi K Rao",
+    "premium": "28910",
+    "premium_due_date": null,
+    "premium_frequency": "Annual",
+    "product": "Comprehensive Health Plan",
+    "start_date": "2026-09-14",
+    "sum_insured": null
+  },
+  "id": "doc-photo",
+  "issues": {},
+  "item_id": 6,
+  "owner": "p1",
+  "page_count": 1,
+  "people": [
+    "p1",
+    "p2",
+    "p3"
+  ],
+  "rel_path": "Ravi Kumar Rao/Insurance/2026-09-14 Health policy - Niva Bupa Health Insurance Company Limited.jpg"
+}

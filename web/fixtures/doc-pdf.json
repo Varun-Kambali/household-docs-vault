@@ -1,0 +1,52 @@
+{
+  "area": "insurance",
+  "created_at": "2026-11-26T08:53:07.795184+05:30",
+  "date_source": "document",
+  "description": "Health policy - Care Health Insurance Limited",
+  "doc_date": "2026-09-20",
+  "doc_type": "health_policy",
+  "drive_path": "My Drive/Family Vault/Suresh Rao/Insurance/2026-09-20 Health policy - Care Health Insurance Limited.pdf",
+  "field_kinds": {
+    "agent": "text",
+    "claim_helpline": "identifier",
+    "end_date": "date",
+    "insured": "list",
+    "insurer": "text",
+    "nominee": "name",
+    "policy_number": "identifier",
+    "policyholder": "name",
+    "premium": "amount",
+    "premium_due_date": "date",
+    "premium_frequency": "text",
+    "product": "text",
+    "start_date": "date",
+    "sum_insured": "amount"
+  },
+  "fields": {
+    "agent": null,
+    "claim_helpline": "1800 193 6924",
+    "end_date": "2027-09-19",
+    "insured": [
+      "Suresh Rao"
+    ],
+    "insurer": "Care Health Insurance Limited",
+    "nominee": "Yashasvi Dalal",
+    "policy_number": "P/21/2138/5675525",
+    "policyholder": "Suresh Rao",
+    "premium": "28910",
+    "premium_due_date": null,
+    "premium_frequency": "Annual",
+    "product": "Health Shield",
+    "start_date": "2026-09-20",
+    "sum_insured": "1000000"
+  },
+  "id": "doc-pdf",
+  "issues": {},
+  "item_id": 2,
+  "owner": "p4",
+  "page_count": 1,
+  "people": [
+    "p4"
+  ],
+  "rel_path": "Suresh Rao/Insurance/2026-09-20 Health policy - Care Health Insurance Limited.pdf"
+}

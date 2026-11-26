@@ -5,11 +5,15 @@
 //
 // - GET /v1/needs-a-look answers the recorded list, an empty one, or a refusal, by scenario.
 // - GET /healthz answers the recorded health reply.
-// - /__scenario/<waiting|empty|down>?to=/path picks the scenario, then goes on to the path.
+// - POST /v1/search answers the recorded quick, answer, no-answer and model-off replies; a prompt
+//   with "anil" in it is the one that gets no answer.
+// - GET /v1/people, /v1/documents/<doc-photo|doc-pdf>, its lines and its page image answer the
+//   recorded ones; Show in folder answers that it is not on the Mac.
+// - /__scenario/<waiting|empty|down|modeloff>?to=/path picks the scenario, then goes on to the path.
 // - Paths of the app answer with the app page and the CSP the API sends; any other /v1 path is 404.
 
 import { readFile } from 'node:fs/promises'
-import { createServer, type Server, type ServerResponse } from 'node:http'
+import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -30,10 +34,12 @@ const TYPES: Record<string, string> = {
   '.css': 'text/css; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.json': 'application/json',
+  '.png': 'image/png',
 }
 
-type Scenario = 'waiting' | 'empty' | 'down'
-const SCENARIOS: Scenario[] = ['waiting', 'empty', 'down']
+type Scenario = 'waiting' | 'empty' | 'down' | 'modeloff'
+const SCENARIOS: Scenario[] = ['waiting', 'empty', 'down', 'modeloff']
+const DOCS = ['doc-photo', 'doc-pdf']
 
 function send(
   response: ServerResponse,
@@ -58,7 +64,28 @@ export async function serve(options: { port?: number; dist?: string } = {}): Pro
   const refusal = JSON.stringify({ detail: 'Something went wrong. Nothing was changed.' })
   let scenario: Scenario = 'waiting'
 
-  async function answer(url: string, response: ServerResponse): Promise<void> {
+  const recorded = async (name: string): Promise<string> =>
+    readFile(path.join(FIXTURES, name), 'utf8')
+  const notFile = JSON.stringify({ detail: 'That file is not available.' })
+
+  async function readBody(request: IncomingMessage): Promise<{ prompt?: string; full?: boolean }> {
+    const chunks: Buffer[] = []
+    for await (const chunk of request) chunks.push(chunk as Buffer)
+    try {
+      return JSON.parse(Buffer.concat(chunks).toString('utf8')) as {
+        prompt?: string
+        full?: boolean
+      }
+    } catch {
+      return {}
+    }
+  }
+
+  async function answer(
+    url: string,
+    response: ServerResponse,
+    request: IncomingMessage,
+  ): Promise<void> {
     const { pathname, searchParams } = new URL(url, `http://127.0.0.1:${PORT}`)
     const picked = /^\/__scenario\/(\w+)$/.exec(pathname)?.[1] as Scenario | undefined
     if (picked !== undefined && SCENARIOS.includes(picked)) {
@@ -69,6 +96,38 @@ export async function serve(options: { port?: number; dist?: string } = {}): Pro
     if (pathname === '/v1/needs-a-look') {
       if (scenario === 'down') return send(response, 500, TYPES['.json']!, refusal)
       return send(response, 200, TYPES['.json']!, scenario === 'empty' ? '[]' : waiting)
+    }
+    if (pathname === '/v1/people')
+      return send(response, 200, TYPES['.json']!, await recorded('people.json'))
+    if (pathname === '/v1/search' && request.method === 'POST') {
+      const asked = await readBody(request)
+      const file = (asked.prompt ?? '').toLowerCase().includes('anil')
+        ? 'search-no-answer.json'
+        : scenario === 'modeloff'
+          ? 'search-model-off.json'
+          : asked.full === true
+            ? 'search-answer.json'
+            : 'search-quick.json'
+      return send(response, 200, TYPES['.json']!, await recorded(file))
+    }
+    const doc = /^\/v1\/documents\/([\w-]+)(?:\/(.*))?$/.exec(pathname)
+    if (doc !== null) {
+      const [, id = '', rest = ''] = doc
+      if (!DOCS.includes(id)) return send(response, 404, TYPES['.json']!, notFile)
+      if (rest === '') return send(response, 200, TYPES['.json']!, await recorded(`${id}.json`))
+      if (rest === 'reveal') {
+        const detail =
+          'Show in folder works on the Mac itself, so the Drive path was copied instead.'
+        return send(response, 409, TYPES['.json']!, JSON.stringify({ detail }))
+      }
+      const page = /^pages\/(\d+)(\.png|\/lines)$/.exec(rest)
+      const number = page?.[1]
+      const kind = page?.[2]
+      const name = kind === '.png' ? `${id}-page-${number}.png` : `${id}-lines-${number}.json`
+      const found =
+        page === null ? null : await readFile(path.join(FIXTURES, name)).catch(() => null)
+      if (found === null) return send(response, 404, TYPES['.json']!, notFile)
+      return send(response, 200, kind === '.png' ? TYPES['.png']! : TYPES['.json']!, found)
     }
     if (pathname.startsWith('/v1/'))
       return send(response, 404, TYPES['.json']!, '{"detail":"Not found."}')
@@ -85,7 +144,7 @@ export async function serve(options: { port?: number; dist?: string } = {}): Pro
   }
 
   const server = createServer((request, response) => {
-    answer(request.url ?? '/', response).catch((error: unknown) => {
+    answer(request.url ?? '/', response, request).catch((error: unknown) => {
       send(response, 500, 'text/plain', String(error))
     })
   })

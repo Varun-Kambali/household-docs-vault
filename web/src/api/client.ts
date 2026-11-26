@@ -52,6 +52,8 @@ async function request<T>(path: string, init: RequestInit): Promise<T> {
     const body = (await response.json().catch(() => null)) as { detail?: Detail } | null
     throw new ApiError(sentence(body?.detail), response.status)
   }
+  // 204: the request worked and there is nothing to read (Show in folder).
+  if (response.status === 204) return undefined as T
   return (await response.json()) as T
 }
 

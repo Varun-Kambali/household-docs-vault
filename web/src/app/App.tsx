@@ -128,7 +128,7 @@ export function App() {
           <InboxScreen waiting={waiting} error={waitingError} onChanged={refresh} />
         )}
         {route.name === 'area' && <AreaScreen area={route.area} />}
-        {route.name === 'doc' && <DocScreen id={route.id} />}
+        {route.name === 'doc' && <DocScreen id={route.id} page={route.page} lines={route.lines} />}
         {route.name === 'notfound' && <NotFoundScreen />}
       </main>
     </div>

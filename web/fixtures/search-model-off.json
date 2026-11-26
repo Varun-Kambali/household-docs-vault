@@ -1,0 +1,144 @@
+{
+  "answer": null,
+  "no_answer": null,
+  "query": null,
+  "reading": "off",
+  "rows": [
+    {
+      "area": "insurance",
+      "date": "2026-09-20",
+      "doc_date": "2026-09-20",
+      "doc_type": "health_policy",
+      "document_id": "doc-pdf",
+      "drive_path": "My Drive/Family Vault/Suresh Rao/Insurance/2026-09-20 Health policy - Care Health Insurance Limited.pdf",
+      "key_fields": {
+        "end_date": "2027-09-19",
+        "insurer": "Care Health Insurance Limited",
+        "policy_number": "P/21/2138/5675525"
+      },
+      "lines": [
+        {
+          "bbox": [
+            0.0672,
+            0.1781,
+            0.1496,
+            0.1899
+          ],
+          "idx": 5,
+          "page": 0
+        },
+        {
+          "bbox": [
+            0.0672,
+            0.152,
+            0.1656,
+            0.1638
+          ],
+          "idx": 3,
+          "page": 0
+        },
+        {
+          "bbox": [
+            0.0672,
+            0.0594,
+            0.3549,
+            0.0738
+          ],
+          "idx": 1,
+          "page": 0
+        },
+        {
+          "bbox": [
+            0.0672,
+            0.1164,
+            0.3048,
+            0.1321
+          ],
+          "idx": 2,
+          "page": 0
+        }
+      ],
+      "owner": "p4",
+      "people": [
+        "p4"
+      ],
+      "rel_path": "Suresh Rao/Insurance/2026-09-20 Health policy - Care Health Insurance Limited.pdf",
+      "score": 0.01639344262295082,
+      "field_kinds": {
+        "end_date": "date",
+        "insurer": "text",
+        "policy_number": "identifier"
+      }
+    },
+    {
+      "area": "insurance",
+      "date": "2026-09-14",
+      "doc_date": "2026-09-14",
+      "doc_type": "health_policy",
+      "document_id": "doc-photo",
+      "drive_path": "My Drive/Family Vault/Ravi Kumar Rao/Insurance/2026-09-14 Health policy - Niva Bupa Health Insurance Company Limited.jpg",
+      "key_fields": {
+        "end_date": "2027-09-13",
+        "insurer": "Niva Bupa Health Insurance Company Limited",
+        "policy_number": "P/71/4217/7681572"
+      },
+      "lines": [
+        {
+          "bbox": [
+            0.0721,
+            0.2003,
+            0.1546,
+            0.2123
+          ],
+          "idx": 5,
+          "page": 0
+        },
+        {
+          "bbox": [
+            0.0717,
+            0.1744,
+            0.1703,
+            0.1867
+          ],
+          "idx": 3,
+          "page": 0
+        },
+        {
+          "bbox": [
+            0.0705,
+            0.0825,
+            0.3584,
+            0.0992
+          ],
+          "idx": 1,
+          "page": 0
+        },
+        {
+          "bbox": [
+            0.0713,
+            0.1391,
+            0.3088,
+            0.1564
+          ],
+          "idx": 2,
+          "page": 0
+        }
+      ],
+      "owner": "p1",
+      "people": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "rel_path": "Ravi Kumar Rao/Insurance/2026-09-14 Health policy - Niva Bupa Health Insurance Company Limited.jpg",
+      "score": 0.016129032258064516,
+      "field_kinds": {
+        "end_date": "date",
+        "insurer": "text",
+        "policy_number": "identifier"
+      }
+    }
+  ],
+  "sentence": null,
+  "vectors": "off"
+}

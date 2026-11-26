@@ -155,6 +155,7 @@ class RowOut(BaseModel):
     drive_path: str
     doc_date: date
     key_fields: dict[str, JsonValue]
+    field_kinds: dict[str, str]
     date: date | None
     score: float
     lines: list[LineRefOut]

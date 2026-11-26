@@ -1,0 +1,23 @@
+{
+  "answer": null,
+  "no_answer": {
+    "closest": [],
+    "reason": "no_documents"
+  },
+  "query": {
+    "areas": [],
+    "field": "expiry_date",
+    "intent": "lookup",
+    "people": [],
+    "place": null,
+    "range": null,
+    "role": null,
+    "types": [],
+    "unread": [],
+    "words": "anil's policy"
+  },
+  "reading": "on",
+  "rows": [],
+  "sentence": null,
+  "vectors": "off"
+}

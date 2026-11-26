@@ -162,7 +162,8 @@ describe('the Inbox count', () => {
     await user.click(screen.getByRole('link', { name: /Inbox/ }))
     await user.click(screen.getByRole('link', { name: 'Tax' }))
     await user.click(screen.getByRole('link', { name: 'Search' }))
-    expect(fetch).toHaveBeenCalledTimes(1)
+    const lists = vi.mocked(fetch).mock.calls.filter(([url]) => String(url) === '/v1/needs-a-look')
+    expect(lists).toHaveLength(1)
   })
 
   test('shows no number when the count cannot be read', async () => {
@@ -230,10 +231,10 @@ describe('other screens', () => {
     expect(screen.getByText('Nothing filed under Utilities yet.')).toBeInTheDocument()
   })
 
-  test('the viewer names the document it was opened for', () => {
+  test('the viewer opens with its title while the document loads', () => {
     open('/doc/12?page=1&lines=2-3')
     render(<App />)
-    expect(screen.getByRole('heading', { level: 1, name: 'Document 12' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Document' })).toBeInTheDocument()
   })
 
   test('an unknown address says so and offers Search', () => {

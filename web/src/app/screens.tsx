@@ -1,40 +1,7 @@
-import { useEffect, useRef } from 'react'
-
 import { AREAS, type AreaId } from './areas.ts'
-import { navigate } from './location.ts'
 import { Region } from './Region.tsx'
-import { hrefFor } from './route.ts'
 
-export function SearchScreen({ q, focusTick }: { q: string; focusTick: number }) {
-  const box = useRef<HTMLInputElement>(null)
-  // On opening, and whenever / or Cmd+K is pressed on this screen.
-  useEffect(() => {
-    box.current?.focus()
-    // oxlint-disable-next-line react/exhaustive-effect-dependencies
-  }, [focusTick])
-  return (
-    <>
-      <h1 tabIndex={-1}>Search</h1>
-      <input
-        ref={box}
-        className="prompt"
-        type="search"
-        name="q"
-        autoComplete="off"
-        aria-label="Ask about your documents"
-        placeholder="Kavita's health policy"
-        value={q}
-        onChange={(event) =>
-          navigate(hrefFor({ name: 'search', q: event.target.value }), { replace: true })
-        }
-        onKeyDown={(event) => {
-          if (event.key === 'Escape' && q !== '') navigate('/', { replace: true })
-        }}
-      />
-      <p className="hint">Ask in a few words. Name a person, a kind of document or a date.</p>
-    </>
-  )
-}
+export { SearchPage as SearchScreen } from '../search/SearchPage.tsx'
 
 // onChanged is for the Inbox list to call when an answer changes it (Task 36), so the sidebar
 // number is read again then and not on every move between screens.
@@ -75,9 +42,7 @@ export function AreaScreen({ area }: { area: AreaId }) {
   )
 }
 
-export function DocScreen({ id }: { id: string }) {
-  return <h1 tabIndex={-1}>Document {id}</h1>
-}
+export { PageViewer as DocScreen } from '../viewer/PageViewer.tsx'
 
 export function NotFoundScreen() {
   return (
