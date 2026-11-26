@@ -140,3 +140,11 @@
     grid-column: 1 / -1;
   }
 }
+
+.sentence-range-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: end;
+  color: var(--color-doubt);
+}

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, test, vi } from 'vitest'
 
@@ -101,5 +101,92 @@ describe('the adjustable sentence', () => {
   test('says it is updating while a change is on its way', () => {
     draw({ updating: true })
     expect(screen.getByText('Updating the list')).toBeInTheDocument()
+  })
+
+  test('a kind part that is one whole area shows the area, not a list of types', () => {
+    const base = sentence()
+    const seven = [
+      'life_policy',
+      'health_policy',
+      'vehicle_policy',
+      'home_policy',
+      'travel_policy',
+      'gadget_policy',
+      'accident_policy',
+    ]
+    draw({
+      sentence: sentence({
+        parts: base.parts.map((p) =>
+          p.slot === 'what' ? { ...p, text: 'insurance documents', value: 'area:insurance' } : p,
+        ),
+      }),
+      query: fromQuery(listQuery({ types: seven as never })),
+    })
+    expect(menu('Kind of document')).toHaveDisplayValue('Insurance')
+  })
+
+  test('the kind menu groups the areas and the kinds, with all documents first on its own', () => {
+    draw()
+    const kind = menu('Kind of document')
+    const options = within(kind).getAllByRole('option')
+    expect(options[0]).toHaveTextContent('all documents')
+    expect(options[0]?.closest('optgroup')).toBeNull()
+    const areas = within(kind).getByRole('group', { name: 'Areas' })
+    expect(
+      within(areas)
+        .getAllByRole('option')
+        .map((o) => o.textContent),
+    ).toEqual(['Insurance'])
+    const kinds = within(kind).getByRole('group', { name: 'Kinds of document' })
+    expect(
+      within(kinds)
+        .getAllByRole('option')
+        .map((o) => o.textContent),
+    ).toEqual(['Health policy', 'Life policy'])
+  })
+
+  describe('the custom range', () => {
+    test('with From after To is not sent, and says so beside the dates', async () => {
+      const onChange = draw()
+      await userEvent.selectOptions(menu('When'), 'a custom range')
+      fireEvent.change(screen.getByLabelText('From'), { target: { value: '2027-02-01' } })
+      onChange.mockClear()
+      fireEvent.change(screen.getByLabelText('To'), { target: { value: '2027-01-01' } })
+      expect(onChange).not.toHaveBeenCalled()
+      const note = screen.getByText('From must be on or before To')
+      expect(note.querySelector('svg')).not.toBeNull()
+      for (const name of ['From', 'To']) {
+        const input = screen.getByLabelText(name)
+        expect(input).toHaveAttribute('aria-invalid', 'true')
+        expect(input).toHaveAttribute('aria-describedby', note.id)
+      }
+    })
+
+    test('is sent again, and the note goes, once the dates are in order', async () => {
+      const onChange = draw()
+      await userEvent.selectOptions(menu('When'), 'a custom range')
+      fireEvent.change(screen.getByLabelText('From'), { target: { value: '2027-02-01' } })
+      fireEvent.change(screen.getByLabelText('To'), { target: { value: '2027-01-01' } })
+      fireEvent.change(screen.getByLabelText('To'), { target: { value: '2027-03-01' } })
+      expect(screen.queryByText('From must be on or before To')).not.toBeInTheDocument()
+      expect(screen.getByLabelText('From')).not.toHaveAttribute('aria-invalid')
+      expect(onChange).toHaveBeenLastCalledWith({
+        slot: 'when',
+        value: { start: '2027-02-01', end: '2027-03-01' },
+      })
+    })
+
+    test('shows the query range on its own, and follows it when the query changes', () => {
+      const first = fromQuery(listQuery({ range: { start: '2026-12-01', end: '2027-01-31' } }))
+      const onChange = vi.fn<(change: PartChange) => void>()
+      const props = { sentence: sentence(), unread: [], updating: false, onChange }
+      const { rerender } = render(<Sentence {...props} query={first} />)
+      expect(screen.getByLabelText('From')).toHaveValue('2026-12-01')
+      expect(screen.getByLabelText('To')).toHaveValue('2027-01-31')
+      const second = fromQuery(listQuery({ range: { start: '2027-03-01', end: '2027-03-31' } }))
+      rerender(<Sentence {...props} query={second} />)
+      expect(screen.getByLabelText('From')).toHaveValue('2027-03-01')
+      expect(screen.getByLabelText('To')).toHaveValue('2027-03-31')
+    })
   })
 })

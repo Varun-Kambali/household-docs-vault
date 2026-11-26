@@ -3,7 +3,7 @@
 // sends the slot and the value the API offered; the API builds the new query, so no part is
 // worked out here. A custom range is two date inputs. A part the server could not read is said
 // in words beside the sentence, with an icon, never by colour alone.
-import { useState } from 'react'
+import { useId, useState } from 'react'
 
 import type { PartChange, PartOut } from '../api/types.ts'
 import type { ListQuery } from './listQuery.ts'
@@ -21,6 +21,10 @@ const CUSTOM = 'custom'
 // The value the query itself puts on a part, which is what the menu's entries are matched to.
 function valueOf(part: PartOut, query: ListQuery): unknown {
   if (part.slot === 'what') {
+    // The API names the area when the query lists exactly that area's kinds.
+    if (typeof part.value === 'string' && part.options.some((o) => o.value === part.value)) {
+      return part.value
+    }
     if (query.types.length === 1) return `type:${query.types[0]}`
     if (query.types.length === 0 && query.areas.length === 1) return `area:${query.areas[0]}`
     return query.types.length === 0 && query.areas.length === 0 ? 'all' : CURRENT
@@ -38,6 +42,43 @@ function selected(part: PartOut, query: ListQuery): string {
   const want = JSON.stringify(valueOf(part, query))
   const at = part.options.findIndex((option) => JSON.stringify(option.value) === want)
   return at === -1 ? CURRENT : String(at)
+}
+
+// "All documents" first on its own, then the areas, then the single kinds. The value of each is
+// its place in the API's list, so the order shown does not change what a pick sends.
+function KindOptions({ options }: { options: PartOut['options'] }) {
+  const at = (prefix: string) =>
+    options.flatMap((option, index) =>
+      typeof option.value === 'string' && option.value.startsWith(prefix)
+        ? [{ option, index }]
+        : [],
+    )
+  const rest = options.flatMap((option, index) =>
+    typeof option.value === 'string' && /^(area|type):/.test(option.value)
+      ? []
+      : [{ option, index }],
+  )
+  const group = (label: string, items: ReturnType<typeof at>) =>
+    items.length > 0 && (
+      <optgroup label={label}>
+        {items.map(({ option, index }) => (
+          <option key={index} value={String(index)}>
+            {option.label}
+          </option>
+        ))}
+      </optgroup>
+    )
+  return (
+    <>
+      {rest.map(({ option, index }) => (
+        <option key={index} value={String(index)}>
+          {option.label}
+        </option>
+      ))}
+      {group('Areas', at('area:'))}
+      {group('Kinds of document', at('type:'))}
+    </>
+  )
 }
 
 function Menu({
@@ -66,11 +107,15 @@ function Menu({
           {part.text}
         </option>
       )}
-      {part.options.map((option, index) => (
-        <option key={index} value={String(index)}>
-          {option.label}
-        </option>
-      ))}
+      {part.slot === 'what' ? (
+        <KindOptions options={part.options} />
+      ) : (
+        part.options.map((option, index) => (
+          <option key={index} value={String(index)}>
+            {option.label}
+          </option>
+        ))
+      )}
     </select>
   )
 }
@@ -86,21 +131,49 @@ function Range({
 }) {
   const [from, setFrom] = useState(start ?? '')
   const [to, setTo] = useState(end ?? '')
+  // The dates follow the query when it changes under them (back and forward, a new list), but not
+  // while the user is typing: their own pick comes back as the same dates.
+  const [seen, setSeen] = useState({ start, end })
+  if (seen.start !== start || seen.end !== end) {
+    setSeen({ start, end })
+    setFrom(start ?? '')
+    setTo(end ?? '')
+  }
+  const noteId = useId()
+  const inverted = from !== '' && to !== '' && from > to
   function change(nextFrom: string, nextTo: string): void {
     setFrom(nextFrom)
     setTo(nextTo)
-    if (nextFrom !== '' || nextTo !== '') onPick(nextFrom || null, nextTo || null)
+    const backwards = nextFrom !== '' && nextTo !== '' && nextFrom > nextTo
+    if (!backwards && (nextFrom !== '' || nextTo !== '')) onPick(nextFrom || null, nextTo || null)
   }
+  const flag = inverted ? { 'aria-invalid': true, 'aria-describedby': noteId } : {}
   return (
     <div className="sentence-range">
       <label>
         From
-        <input type="date" value={from} onChange={(event) => change(event.target.value, to)} />
+        <input
+          type="date"
+          value={from}
+          onChange={(event) => change(event.target.value, to)}
+          {...flag}
+        />
       </label>
       <label>
         To
-        <input type="date" value={to} onChange={(event) => change(from, event.target.value)} />
+        <input
+          type="date"
+          value={to}
+          onChange={(event) => change(from, event.target.value)}
+          {...flag}
+        />
       </label>
+      {inverted && (
+        <p className="sentence-range-note" id={noteId}>
+          <DoubtIcon />
+          From must be on or before To
+        </p>
+      )}
     </div>
   )
 }
@@ -167,7 +240,7 @@ export function Sentence({
           </>
         )}
       </p>
-      {custom && (
+      {(custom || query.from !== null || query.to !== null) && (
         <Range
           start={query.from}
           end={query.to}
