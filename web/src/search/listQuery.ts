@@ -3,6 +3,8 @@
 // comma-separated; the free-text parts (place, words, and the unread phrases, which can hold a
 // comma) are not split. `list=1` stands for a list with nothing set (every document).
 import type { QueryIn, QueryOut } from '../api/types.ts'
+import { isAreaId } from '../app/areas.ts'
+import { TYPE_LABELS } from '../common/labels.ts'
 
 export type ListQuery = {
   people: string[]
@@ -117,4 +119,36 @@ export function toQueryIn(list: ListQuery): QueryIn {
     words: list.words,
     unread: list.unread,
   }
+}
+
+// What the API accepts (QueryIn in api/models.py), so a hand-made or damaged link is turned away
+// here, in words, and not posted to come back as a validation message.
+const ROLES = ['expiry', 'renewal', 'due', 'purchase', 'issue', 'document']
+const MAX_TEXT = 300
+const MAX_ID = 64
+const MAX_LISTED = 20
+
+function isDate(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false
+  const at = new Date(`${value}T00:00:00Z`)
+  return !Number.isNaN(at.getTime()) && at.toISOString().startsWith(value)
+}
+
+// Null when the list is one the API will read; otherwise a short reason, for the log and the tests
+// (the screen says it in one plain sentence either way).
+export function listProblem(list: ListQuery): string | null {
+  if (list.people.length > MAX_LISTED || list.people.some((id) => id.length > MAX_ID)) {
+    return 'people'
+  }
+  if (list.types.some((type) => !Object.hasOwn(TYPE_LABELS, type))) return 'types'
+  if (list.areas.some((area) => !isAreaId(area))) return 'areas'
+  if (list.role !== null && !ROLES.includes(list.role)) return 'role'
+  for (const date of [list.from, list.to]) {
+    if (date !== null && !isDate(date)) return 'date'
+  }
+  const text = [list.place ?? '', list.words, ...list.unread]
+  if (text.some((value) => value.length > MAX_TEXT) || list.unread.length > MAX_LISTED) {
+    return 'text'
+  }
+  return null
 }

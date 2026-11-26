@@ -7,6 +7,7 @@ import {
   listFromParams,
   listKey,
   listParams,
+  listProblem,
   toQueryIn,
 } from './listQuery.ts'
 
@@ -95,5 +96,33 @@ describe('the list in the routes', () => {
     const area: Route = { name: 'area', area: 'rent', list: { ...EMPTY_LIST, people: ['p1'] } }
     expect(hrefFor(area)).toBe('/area/rent?people=p1')
     expect(hrefFor({ name: 'area', area: 'rent' })).toBe('/area/rent')
+  })
+})
+
+describe('a list the app can read', () => {
+  const bad = (over: Partial<typeof SAMPLE>) => listProblem({ ...SAMPLE, ...over })
+
+  test('is one whose parts are all ones the API knows', () => {
+    expect(listProblem(SAMPLE)).toBeNull()
+    expect(listProblem(EMPTY_LIST)).toBeNull()
+    expect(listProblem(areaList('rent'))).toBeNull()
+  })
+
+  test('is not one with an unknown role, kind, area or date', () => {
+    expect(bad({ role: 'bogus' })).not.toBeNull()
+    expect(bad({ types: ['health_policy', 'mystery'] })).not.toBeNull()
+    expect(bad({ areas: ['nowhere'] })).not.toBeNull()
+    expect(bad({ from: 'garbage' })).not.toBeNull()
+    expect(bad({ to: '2027-02-30' })).not.toBeNull()
+    expect(bad({ from: '2027-1-5' })).not.toBeNull()
+  })
+
+  test('is not one with a value that is too long or too many values', () => {
+    expect(bad({ place: 'x'.repeat(301) })).not.toBeNull()
+    expect(bad({ words: 'x'.repeat(301) })).not.toBeNull()
+    expect(bad({ unread: ['x'.repeat(301)] })).not.toBeNull()
+    expect(bad({ people: Array.from({ length: 21 }, (_, i) => `p${i}`) })).not.toBeNull()
+    expect(bad({ people: ['p'.repeat(65)] })).not.toBeNull()
+    expect(bad({ place: 'x'.repeat(300) })).toBeNull()
   })
 })

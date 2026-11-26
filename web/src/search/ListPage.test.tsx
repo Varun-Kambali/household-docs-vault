@@ -450,3 +450,25 @@ describe('changes still on their way', () => {
     ])
   })
 })
+
+describe('a link the app cannot read', () => {
+  const SAYS = "This link holds a list the app can't read."
+
+  test.each([
+    ['a role it does not know', '/?role=bogus'],
+    ['a date that is not one', '/?from=garbage'],
+    ['a kind it does not know', '/?types=mystery'],
+    ['a value that is far too long', `/?words=${'x'.repeat(400)}`],
+    ['an area page with a bad date', '/area/insurance?to=2027-02-30'],
+  ])('%s is said in a sentence, with a way back, and is not posted', async (_name, address) => {
+    const { calls } = api()
+    open(address)
+    render(<App />)
+    await wait(1000)
+    expect(lists(calls)).toHaveLength(0)
+    expect(searches(calls)).toHaveLength(0)
+    expect(screen.getByText(SAYS)).toBeInTheDocument()
+    expect(screen.queryByText(/String should|Input should|422/)).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Start a new search' })).toHaveAttribute('href', '/')
+  })
+})

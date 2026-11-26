@@ -16,6 +16,18 @@ export function ListPanel({
   empty: string
 }) {
   const { view } = list
+  if (list.unreadable) {
+    return (
+      <section className="list" aria-label="List">
+        <p className="region-error" role="alert">
+          This link holds a list the app can't read.
+        </p>
+        <p>
+          <a href="/">Start a new search</a>
+        </p>
+      </section>
+    )
+  }
   if (view === null) {
     return (
       <Region

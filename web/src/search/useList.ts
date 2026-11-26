@@ -8,7 +8,14 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { api, isAbort } from '../api/client.ts'
 import type { ListOut, PartChange } from '../api/types.ts'
-import { type ListQuery, fromQuery, listFromParams, listKey, toQueryIn } from './listQuery.ts'
+import {
+  type ListQuery,
+  fromQuery,
+  listFromParams,
+  listKey,
+  listProblem,
+  toQueryIn,
+} from './listQuery.ts'
 
 type Held = { key: string; out: ListOut }
 type Failure = { key: string; text: string }
@@ -17,6 +24,8 @@ export type ListState = {
   view: ListOut | null
   loading: boolean
   error: string | null
+  // The address holds a list the API would turn away; nothing was posted for it.
+  unreadable: boolean
   changeError: string | null
   updating: boolean
   change: (part: PartChange) => void
@@ -37,6 +46,7 @@ export function useList({
   onApplied: (query: ListQuery) => void
 }): ListState {
   const key = source === null ? null : listKey(source)
+  const unreadable = source !== null && listProblem(source) !== null
   const [held, setHeld] = useState<Held | null>(null)
   const [failure, setFailure] = useState<Failure | null>(null)
   const [changeError, setChangeError] = useState<string | null>(null)
@@ -61,7 +71,7 @@ export function useList({
   }, [scope])
 
   useEffect(() => {
-    if (key === null || held?.key === key) return
+    if (key === null || unreadable || held?.key === key) return
     // The query is read back from its key, which says it exactly (listQuery.test.ts), so the
     // effect follows the key and not a new object on every render.
     const query = listFromParams(new URLSearchParams(key))
@@ -81,7 +91,7 @@ export function useList({
         setFailure({ key, text: (error as Error).message })
       })
     return () => controller.abort()
-  }, [key, held?.key])
+  }, [key, unreadable, held?.key])
 
   const view = source === null ? seed : held?.key === key ? held.out : null
   useEffect(() => {
@@ -146,8 +156,9 @@ export function useList({
 
   return {
     view,
-    loading: source !== null && view === null && failure?.key !== key,
+    loading: source !== null && !unreadable && view === null && failure?.key !== key,
     error: source !== null && failure?.key === key ? failure.text : null,
+    unreadable,
     changeError,
     updating: pending > 0,
     change,
