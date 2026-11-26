@@ -108,7 +108,11 @@ def add_page_routes(
             return card_private()
         return drawn(doc.rel_path, page, width)
 
-    @app.get("/v1/documents/{doc_id}/pages/{page}/lines", response_model=None)
+    @app.get(
+        "/v1/documents/{doc_id}/pages/{page}/lines",
+        response_model=None,
+        responses={200: {"model": PageLinesOut}},
+    )
     def document_lines(doc_id: str, page: PageNo) -> PageLinesOut | JSONResponse:
         doc = known_document(doc_id)
         if is_card_photo(state.store, doc.sha256):
@@ -122,7 +126,11 @@ def add_page_routes(
             return card_private()
         return drawn(item.rel_path, page, width)
 
-    @app.get("/v1/items/{item_id}/pages/{page}/lines", response_model=None)
+    @app.get(
+        "/v1/items/{item_id}/pages/{page}/lines",
+        response_model=None,
+        responses={200: {"model": PageLinesOut}},
+    )
     def item_lines(item_id: int, page: PageNo) -> PageLinesOut | JSONResponse:
         item = known_item(item_id)
         if shares_card_photo(state.store, item):

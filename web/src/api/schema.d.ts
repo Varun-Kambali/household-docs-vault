@@ -664,6 +664,15 @@ export interface components {
       state: string
     }
     JsonValue: unknown
+    /** LineOut */
+    LineOut: {
+      /** Bbox */
+      bbox: [number, number, number, number]
+      /** Idx */
+      idx: number
+      /** Text */
+      text: string
+    }
     /** LineRefOut */
     LineRefOut: {
       /** Bbox */
@@ -716,6 +725,13 @@ export interface components {
       label: string
       /** Value */
       value: string
+    }
+    /** PageLinesOut */
+    PageLinesOut: {
+      /** Lines */
+      lines: components['schemas']['LineOut'][]
+      /** Page */
+      page: number
     }
     /** PartChange */
     PartChange: {
@@ -1147,7 +1163,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': unknown
+          'application/json': components['schemas']['PageLinesOut']
         }
       }
       /** @description Validation Error */
@@ -1346,7 +1362,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': unknown
+          'application/json': components['schemas']['PageLinesOut']
         }
       }
       /** @description Validation Error */

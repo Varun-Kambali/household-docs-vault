@@ -299,3 +299,13 @@ def test_the_mac_revealer_times_out_and_reports_a_bad_exit(monkeypatch, tmp_path
     )
     with pytest.raises(RevealFailed):
         MacRevealer().reveal(tmp_path / "a.pdf")
+
+
+def test_both_lines_routes_declare_their_reply_in_the_schema(search_client):
+    schema = search_client.app.openapi()
+    for path in (
+        "/v1/documents/{doc_id}/pages/{page}/lines",
+        "/v1/items/{item_id}/pages/{page}/lines",
+    ):
+        ok = schema["paths"][path]["get"]["responses"]["200"]
+        assert ok["content"]["application/json"]["schema"]["$ref"].endswith("/PageLinesOut")
