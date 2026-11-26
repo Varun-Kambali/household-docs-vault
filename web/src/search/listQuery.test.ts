@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 
-import { parseRoute, hrefFor } from '../app/route.ts'
+import { type Route, hrefFor, parseRoute } from '../app/route.ts'
 import {
   EMPTY_LIST,
   areaList,
@@ -89,10 +89,10 @@ describe('the list in the routes', () => {
   })
 
   test('hrefFor writes what parseRoute reads', () => {
-    const search = { name: 'search', q: '', list: SAMPLE } as const
+    const search: Route = { name: 'search', q: '', list: SAMPLE }
     const [path = '', query = ''] = hrefFor(search).split('?')
     expect(parseRoute(path, `?${query}`)).toEqual(search)
-    const area = { name: 'area', area: 'rent', list: { ...EMPTY_LIST, people: ['p1'] } } as const
+    const area: Route = { name: 'area', area: 'rent', list: { ...EMPTY_LIST, people: ['p1'] } }
     expect(hrefFor(area)).toBe('/area/rent?people=p1')
     expect(hrefFor({ name: 'area', area: 'rent' })).toBe('/area/rent')
   })
