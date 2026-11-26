@@ -28,9 +28,10 @@ export function AnswerPanel({
   const [failed, setFailed] = useState(false)
   const [ratio, setRatio] = useState<number | null>(null)
   const cited = answer.lines.filter((line) => line.page === answer.page)
-  const { texts } = useLines(answer.document_id, answer.page)
-  const idxs = cited.map((line) => line.idx)
   const card = row !== undefined && isCard(row.doc_type)
+  // A card's page is never drawn here, so its lines are not fetched either.
+  const { texts } = useLines(card ? null : answer.document_id, answer.page)
+  const idxs = cited.map((line) => line.idx)
   const id = encodeURIComponent(answer.document_id)
   return (
     <section className="answer" aria-label="Answer">

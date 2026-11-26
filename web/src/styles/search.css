@@ -258,6 +258,9 @@ a.button {
 }
 
 .viewer-page[data-size='actual'] {
+  /* Until its image loads the frame still has a width, so its height (from the ratio) is real
+     and the pages not yet near the screen stay unloaded. */
+  min-width: 20rem;
   width: max-content;
   max-width: none;
 }

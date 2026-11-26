@@ -72,11 +72,13 @@ export function useSearch(prompt: string): {
       if (fullStarted) return
       fullStarted = true
       clearTimeout(fullTimer)
-      setHeld((now) => ({ ...now, reading: text }))
+      setHeld((now) => ({ ...now, reading: text, fullError: null }))
       post(text, true, controller.signal)
         .then((out) => setHeld((now) => ({ ...now, full: { prompt: text, out }, reading: null })))
         .catch((error: unknown) => {
           if (isAbort(error)) return
+          // Enter on the same prompt asks again.
+          fullStarted = false
           setHeld((now) => ({
             ...now,
             reading: null,

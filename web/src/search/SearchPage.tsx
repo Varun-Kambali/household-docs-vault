@@ -22,7 +22,7 @@ export function SearchPage({ q, focusTick }: { q: string; focusTick: number }) {
   const box = useRef<HTMLInputElement>(null)
   const people = usePeople()
   const { state, runFull, reset } = useSearch(q)
-  const { state: revealed, reveal } = useReveal()
+  const { state: revealed, reveal, clear } = useReveal()
   // The active row belongs to the list it was chosen in; a new list starts with none.
   const [cursor, setCursor] = useState<{ list: unknown; index: number }>({ list: null, index: -1 })
 
@@ -31,6 +31,12 @@ export function SearchPage({ q, focusTick }: { q: string; focusTick: number }) {
     box.current?.focus()
     // oxlint-disable-next-line react/exhaustive-effect-dependencies
   }, [focusTick])
+
+  // A note about one prompt's file does not outlive the prompt.
+  useEffect(() => {
+    clear()
+    // oxlint-disable-next-line react/exhaustive-effect-dependencies
+  }, [q, clear])
 
   const shown = state.full ?? state.quick
   const answer = state.full?.answer ?? null
@@ -63,6 +69,7 @@ export function SearchPage({ q, focusTick }: { q: string; focusTick: number }) {
     } else if (event.key === 'Enter') {
       event.preventDefault()
       const row = rows[active]
+      // Ctrl+Enter works on the Mac too, as well as Cmd+Enter; the plan only needs Ctrl off the Mac.
       if (event.metaKey || event.ctrlKey) {
         const target = row ?? rows[0]
         if (target !== undefined) reveal(target.document_id, target.drive_path)

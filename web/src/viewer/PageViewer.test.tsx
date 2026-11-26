@@ -75,7 +75,10 @@ beforeEach(() => {
     },
   })
 })
-afterEach(() => open('/'))
+afterEach(() => {
+  vi.unstubAllGlobals()
+  open('/')
+})
 
 describe('the page viewer', () => {
   test('shows the document, loads the open page and the others as they come into view', async () => {
@@ -211,6 +214,93 @@ describe('the page viewer', () => {
     await flush()
     fireEvent.error(images()[0]!)
     expect(screen.getByText('This page cannot be shown.')).toBeInTheDocument()
+  })
+
+  test('scrolls the cited box into view once the lines arrive, smoothly unless motion is reduced', async () => {
+    open('/doc/doc-a?page=1&lines=4')
+    api()
+    const scrolled: { element: Element; options: unknown }[] = []
+    const original = Element.prototype.scrollIntoView
+    Element.prototype.scrollIntoView = function (this: Element, options?: unknown) {
+      scrolled.push({ element: this, options })
+    }
+    try {
+      render(<App />)
+      await flush()
+      const box = screen.getByRole('button', { name: 'Line 5: P/21/2138/5675525' })
+      const last = scrolled.at(-1)
+      expect(last?.element).toBe(box)
+      expect(last?.options).toEqual({ block: 'center', behavior: 'smooth' })
+    } finally {
+      Element.prototype.scrollIntoView = original
+    }
+  })
+
+  test('does not animate the scroll when the person asked for reduced motion', async () => {
+    open('/doc/doc-a?page=1&lines=4')
+    api()
+    vi.stubGlobal('matchMedia', (query: string) => ({
+      matches: query.includes('prefers-reduced-motion'),
+      media: query,
+    }))
+    const scrolled: { element: Element; options: unknown }[] = []
+    const original = Element.prototype.scrollIntoView
+    Element.prototype.scrollIntoView = function (this: Element, options?: unknown) {
+      scrolled.push({ element: this, options })
+    }
+    try {
+      render(<App />)
+      await flush()
+      const box = screen.getByRole('button', { name: 'Line 5: P/21/2138/5675525' })
+      expect(scrolled.at(-1)?.element).toBe(box)
+      expect(scrolled.at(-1)?.options).toEqual({ block: 'center', behavior: 'auto' })
+    } finally {
+      Element.prototype.scrollIntoView = original
+    }
+  })
+
+  test('at 100% the pages still load only as they come into view', async () => {
+    open('/doc/doc-a?page=1')
+    api()
+    render(<App />)
+    await flush()
+    fireEvent.click(screen.getByRole('radio', { name: '100%' }))
+    expect(images()).toHaveLength(1)
+    scrollTo(2)
+    expect(images()).toHaveLength(2)
+  })
+
+  test('Download original saves under the file own name', async () => {
+    open('/doc/doc-a?page=1')
+    api()
+    render(<App />)
+    await flush()
+    expect(screen.getByRole('link', { name: 'Download original' })).toHaveAttribute(
+      'download',
+      '2026-09-20 Health policy - Care Health.pdf',
+    )
+  })
+
+  test('shows amounts and dates the way the answer writes them, identifiers as stored', async () => {
+    open('/doc/doc-a?page=1')
+    api({
+      doc: {
+        body: document({
+          fields: {
+            sum_insured: '1000000',
+            end_date: '2027-09-19',
+            policy_number: 'P/21/2138/5675525',
+          },
+          field_kinds: { sum_insured: 'amount', end_date: 'date', policy_number: 'identifier' },
+        }),
+      },
+    })
+    render(<App />)
+    await flush()
+    expect(screen.getByText('Rs 10,00,000', { selector: 'dd' })).toBeInTheDocument()
+    expect(screen.getByText('19 Sep 2027', { selector: 'dd' })).toBeInTheDocument()
+    const id = screen.getByText('P/21/2138/5675525', { selector: 'dd' })
+    expect(id).toHaveClass('identifier')
   })
 
   test('Escape returns to the results', async () => {

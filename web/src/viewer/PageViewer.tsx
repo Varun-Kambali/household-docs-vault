@@ -8,6 +8,7 @@ import { navigate } from '../app/location.ts'
 import { Region } from '../app/Region.tsx'
 import { hrefFor } from '../app/route.ts'
 import { CARD_NOTE, isCard, isMasked, typeLabel } from '../common/labels.ts'
+import { formatField } from '../common/format.ts'
 import { Masked } from '../common/Masked.tsx'
 import { useInView } from '../common/useInView.ts'
 import { useLines } from '../common/useLines.ts'
@@ -23,10 +24,16 @@ function label(name: string): string {
   return spaced.charAt(0).toUpperCase() + spaced.slice(1)
 }
 
-function shown(value: unknown): string {
-  if (Array.isArray(value)) return value.map(shown).join(', ')
-  if (value !== null && typeof value === 'object') return JSON.stringify(value)
-  return String(value)
+function basename(path: string): string {
+  return path.slice(path.lastIndexOf('/') + 1)
+}
+
+// Smooth unless the person asked for less motion.
+function bringIntoView(element: Element | null | undefined): void {
+  const reduced =
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  element?.scrollIntoView?.({ block: 'center', behavior: reduced ? 'auto' : 'smooth' })
 }
 
 function isTyping(target: EventTarget | null): boolean {
@@ -58,6 +65,12 @@ function Page({
   const load = seen || current
   const lines = useLines(load && outlined.length > 0 ? id : null, index)
   const boxes = lines.boxes.filter((line) => outlined.includes(line.idx))
+  // The boxes only exist once the lines have been read, so the scroll to the first one waits for
+  // them (and for the image, which is already in its fixed-ratio frame).
+  const hasBoxes = boxes.length > 0
+  useEffect(() => {
+    if (current && hasBoxes) bringIntoView(ref.current?.querySelector('.outline'))
+  }, [current, hasBoxes, ref])
   return (
     <div
       ref={ref}
@@ -95,9 +108,9 @@ function Fields({ doc }: { doc: DocumentOut }) {
           <dt>{label(name)}</dt>
           <dd className={doc.field_kinds[name] === 'identifier' ? 'identifier' : undefined}>
             {isMasked(doc.doc_type, name) ? (
-              <Masked value={shown(value)} label={label(name).toLowerCase()} />
+              <Masked value={formatField(undefined, value)} label={label(name).toLowerCase()} />
             ) : (
-              shown(value)
+              formatField(doc.field_kinds[name], value)
             )}
           </dd>
         </div>
@@ -121,15 +134,16 @@ export function PageViewer({
   const root = useRef<HTMLDivElement>(null)
   const total = loaded.state === 'full' ? Math.max(loaded.doc.page_count, 1) : 1
   const current = Math.min(Math.max(page, 1), total)
+  // `lines=` counts from 0 as the API does, while `page=` counts from 1.
   const outlined = parseLines(lines)
 
   // On opening, and on a move to another page, the page (or the first cited line) comes into view.
   useEffect(() => {
     if (loaded.state !== 'full') return
-    const target =
+    bringIntoView(
       root.current?.querySelector('.outline') ??
-      root.current?.querySelector(`[data-testid="page-${current}"]`)
-    target?.scrollIntoView?.({ block: 'center' })
+        root.current?.querySelector(`[data-testid="page-${current}"]`),
+    )
   }, [loaded.state, current])
 
   useEffect(() => {
@@ -215,7 +229,7 @@ export function PageViewer({
                 <a
                   className="button"
                   href={`/v1/documents/${encodeURIComponent(loaded.doc.id)}/file`}
-                  download
+                  download={basename(loaded.doc.rel_path)}
                 >
                   Download original
                 </a>

@@ -315,6 +315,89 @@ describe('the search screen', () => {
     expect(calls.some((c) => c.path.includes('/file') || c.path.includes('secrets'))).toBe(false)
   })
 
+  test('a card answer fetches no page, no lines and no file', async () => {
+    const { calls } = api({
+      full: {
+        body: search({
+          rows: [row({ doc_type: 'card_front', key_fields: { bank: 'HDFC' } })],
+          answer: answer({ field: 'bank', text: 'HDFC', value: 'HDFC' }),
+        }),
+      },
+    })
+    start()
+    setPrompt('card bank')
+    press('Enter')
+    await wait(0)
+    expect(screen.getByRole('region', { name: 'Answer' })).toBeInTheDocument()
+    expect(screen.queryByRole('img')).not.toBeInTheDocument()
+    const paths = new Set(calls.map((c) => c.path))
+    expect(
+      [...paths].every((p) => ['/v1/search', '/v1/people', '/v1/needs-a-look'].includes(p)),
+    ).toBe(true)
+    expect(calls.some((c) => c.path.includes('/lines'))).toBe(false)
+  })
+
+  test('Enter tries a failed full search again', async () => {
+    const replies: Searches = { full: { status: 500, body: { detail: 'The model is busy.' } } }
+    const { calls } = api(replies)
+    start()
+    setPrompt('policy number')
+    press('Enter')
+    await wait(0)
+    expect(screen.getByRole('alert')).toHaveTextContent('The model is busy.')
+    delete replies.full
+    press('Enter')
+    await wait(0)
+    expect(searches(calls, true)).toHaveLength(2)
+    expect(screen.getByRole('region', { name: 'Answer' })).toBeInTheDocument()
+    expect(screen.queryByText('The model is busy.')).not.toBeInTheDocument()
+  })
+
+  test('the Drive path note goes away when the prompt changes', async () => {
+    api({ reveal: { status: 409, body: { detail: 'Not here.' } } })
+    start()
+    setPrompt('care')
+    await wait(150)
+    press('ArrowDown')
+    press('Enter', { metaKey: true })
+    await wait(0)
+    expect(screen.getByRole('status')).toHaveTextContent('Drive path copied')
+    setPrompt('care health')
+    await wait(0)
+    expect(screen.queryByText('Drive path copied')).not.toBeInTheDocument()
+  })
+
+  test('rows show amounts and dates the way the answer writes them', async () => {
+    api({
+      quick: {
+        body: search({
+          rows: [
+            row({
+              key_fields: {
+                sum_insured: '1000000',
+                end_date: '2027-09-19',
+                policy_number: 'P/21/2138/5675525',
+              },
+              field_kinds: {
+                sum_insured: 'amount',
+                end_date: 'date',
+                policy_number: 'identifier',
+              },
+            }),
+          ],
+        }),
+      },
+    })
+    start()
+    setPrompt('care')
+    await wait(150)
+    const option = screen.getByRole('option')
+    expect(option).toHaveTextContent('Rs 10,00,000')
+    expect(option).toHaveTextContent('19 Sep 2027')
+    expect(option).toHaveTextContent('P/21/2138/5675525')
+    expect(option).not.toHaveTextContent('2027-09-19')
+  })
+
   test('Escape clears the box and the results', async () => {
     api()
     start()

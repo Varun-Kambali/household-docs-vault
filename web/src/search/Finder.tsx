@@ -4,6 +4,7 @@
 import type { ReactNode } from 'react'
 
 import type { RowOut } from '../api/types.ts'
+import { formatField } from '../common/format.ts'
 import { FINDER_ID, optionId } from './finderIds.ts'
 import { CARD_NOTE, isCard, isMasked, lastFour, typeLabel } from '../common/labels.ts'
 
@@ -29,7 +30,7 @@ export function Highlight({ text, prompt }: { text: string; prompt: string }): R
 function keyText(row: RowOut): string {
   return Object.entries(row.key_fields)
     .map(([name, value]) => {
-      const text = Array.isArray(value) ? value.join(', ') : String(value)
+      const text = formatField(row.field_kinds[name], value)
       return isMasked(row.doc_type, name) ? lastFour(text) : text
     })
     .join(' · ')

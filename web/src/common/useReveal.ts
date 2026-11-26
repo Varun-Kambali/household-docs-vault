@@ -10,6 +10,7 @@ export type RevealState =
 export function useReveal(): {
   state: RevealState
   reveal: (id: string, drivePath: string) => void
+  clear: () => void
 } {
   const [state, setState] = useState<RevealState>({ kind: 'idle' })
   const reveal = useCallback((id: string, drivePath: string) => {
@@ -28,5 +29,6 @@ export function useReveal(): {
         setState({ kind: 'error', text: (error as Error).message })
       })
   }, [])
-  return { state, reveal }
+  const clear = useCallback(() => setState({ kind: 'idle' }), [])
+  return { state, reveal, clear }
 }
