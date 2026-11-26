@@ -59,4 +59,46 @@ describe('the fixture API', () => {
     expect(page.headers.get('content-security-policy')).toContain("default-src 'self'")
     expect((await fetch(`${base}/v1/nothing`)).status).toBe(404)
   })
+
+  test('answers the search routes with the recorded replies', async () => {
+    const base = await start()
+    const ask = async (prompt: string, full: boolean) =>
+      (await (
+        await fetch(`${base}/v1/search`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, full }),
+        })
+      ).json()) as {
+        rows: unknown[]
+        answer: { text: string } | null
+        no_answer: unknown
+        reading: string
+      }
+    expect((await ask('policy', false)).rows.length).toBeGreaterThan(0)
+    expect((await ask('policy number', true)).answer?.text).toMatch(/^P\//)
+    expect((await ask('anil policy', true)).no_answer).not.toBeNull()
+    await fetch(`${base}/__scenario/modeloff?to=/`, { redirect: 'manual' })
+    expect((await ask('policy', true)).reading).toBe('off')
+    const people = (await (await fetch(`${base}/v1/people`)).json()) as { name: string }[]
+    expect(people.length).toBeGreaterThan(0)
+  })
+
+  test('serves a document, its lines and its page image, and refuses an unknown one', async () => {
+    const base = await start()
+    const doc = (await (await fetch(`${base}/v1/documents/doc-photo`)).json()) as {
+      page_count: number
+    }
+    expect(doc.page_count).toBe(1)
+    const lines = (await (await fetch(`${base}/v1/documents/doc-pdf/pages/0/lines`)).json()) as {
+      lines: unknown[]
+    }
+    expect(lines.lines.length).toBeGreaterThan(0)
+    const png = await fetch(`${base}/v1/documents/doc-pdf/pages/0.png?width=900`)
+    expect(png.headers.get('content-type')).toBe('image/png')
+    expect((await fetch(`${base}/v1/documents/nope`)).status).toBe(404)
+    expect((await fetch(`${base}/v1/documents/doc-pdf/pages/9.png`)).status).toBe(404)
+    const reveal = await fetch(`${base}/v1/documents/doc-pdf/reveal`, { method: 'POST' })
+    expect(reveal.status).toBe(409)
+  })
 })

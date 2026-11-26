@@ -1,0 +1,348 @@
+/* The search screen and the viewer. Every value is a token. */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.button-primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+@media (hover: hover) {
+  .button-primary:hover {
+    background: color-mix(in oklch, var(--color-primary) 88%, var(--color-text));
+  }
+}
+
+.button-primary:active {
+  background: color-mix(in oklch, var(--color-primary) 78%, var(--color-text));
+}
+
+a.button {
+  text-decoration: none;
+}
+
+.link-button {
+  margin-inline-start: var(--space-2);
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--color-primary);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block-start: var(--space-4);
+}
+
+.reveal-note {
+  display: block;
+  margin-block-start: var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+.model-off {
+  color: var(--color-text);
+}
+
+/* Finder: one line a row */
+
+.finder {
+  margin-block-start: var(--space-3);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.finder-row {
+  display: grid;
+  grid-template-columns: 9rem 11rem minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: center;
+  min-height: var(--control-height);
+  padding: var(--space-2) var(--space-3);
+  border-block-end: 1px solid var(--color-border);
+  cursor: pointer;
+}
+
+.finder-row > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.finder-type,
+.finder-fields strong,
+.finder-row strong {
+  font-weight: var(--weight-strong);
+}
+
+.finder-type {
+  font-weight: var(--weight-regular);
+}
+
+.finder-path {
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+@media (hover: hover) {
+  .finder-row:hover {
+    background: color-mix(in oklch, var(--color-text) 6%, transparent);
+  }
+}
+
+.finder-row[data-active='true'] {
+  background: color-mix(in oklch, var(--color-primary) 12%, transparent);
+  box-shadow: inset 3px 0 0 var(--color-primary);
+}
+
+/* The Floor: under 60rem a row wraps to two lines instead of clipping. */
+@media (max-width: 60rem) {
+  .finder-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .finder-fields,
+  .finder-path {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Answer: the value is the focal point */
+
+.answer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+  gap: var(--space-5);
+  margin-block-start: var(--space-5);
+  padding-block: var(--space-4);
+  border-block: 1px solid var(--color-border);
+}
+
+.answer-value {
+  font-size: var(--text-answer);
+  line-height: var(--text-answer-line);
+  font-weight: var(--weight-strong);
+  overflow-wrap: anywhere;
+}
+
+.answer-meta {
+  margin-block-start: var(--space-1);
+  color: var(--color-text-muted);
+}
+
+.answer-file {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin-block-start: var(--space-3);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+.answer-path {
+  overflow-wrap: anywhere;
+}
+
+.answer-page {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+.masked {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.masked .link-button {
+  font-size: var(--text-body);
+  font-weight: var(--weight-regular);
+}
+
+.no-answer {
+  margin-block-start: var(--space-5);
+}
+
+.no-answer-title {
+  font-size: var(--text-heading);
+  line-height: var(--text-heading-line);
+  font-weight: var(--weight-strong);
+}
+
+.no-answer-reason {
+  margin-block-start: var(--space-1);
+}
+
+.no-answer .hint {
+  margin-block-start: var(--space-3);
+}
+
+@media (max-width: 60rem) {
+  .answer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* A page drawn as an image, with its outlines on top */
+
+.page-frame {
+  position: relative;
+  width: 100%;
+  min-height: var(--space-8);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-border);
+}
+
+.page-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.outline {
+  position: absolute;
+  padding: 0;
+  background: var(--color-cite-fill);
+  border: 0;
+  outline: 2px solid var(--color-cite);
+  outline-offset: 2px;
+  cursor: pointer;
+}
+
+.outline:focus-visible {
+  outline-width: 3px;
+  outline-color: var(--color-focus);
+}
+
+/* Viewer */
+
+.viewer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.viewer-pages {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-canvas);
+  justify-items: center;
+  overflow-x: auto;
+}
+
+.viewer-page {
+  max-width: 100%;
+  background: var(--color-bg);
+  aspect-ratio: 1 / 1.414;
+}
+
+.viewer-page[data-size='actual'] {
+  width: max-content;
+  max-width: none;
+}
+
+.viewer-page[data-size='actual'] img {
+  width: auto;
+  max-width: none;
+}
+
+.inspector {
+  position: sticky;
+  inset-block-start: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+}
+
+.inspector-path {
+  overflow-wrap: anywhere;
+  font-weight: var(--weight-strong);
+}
+
+.size-control {
+  display: inline-flex;
+  margin-block-start: var(--space-3);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-control);
+}
+
+.size-option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-height);
+  padding: 0 var(--space-3);
+  cursor: pointer;
+}
+
+.size-option + .size-option {
+  border-inline-start: 1px solid var(--color-control-border);
+}
+
+.size-option input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.size-option:has(input:checked) {
+  background: color-mix(in oklch, var(--color-primary) 12%, transparent);
+  font-weight: var(--weight-strong);
+}
+
+.size-option:has(input:focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.fields {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
+}
+
+.field dt {
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+.field dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 60rem) {
+  .viewer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .inspector {
+    position: static;
+  }
+}
