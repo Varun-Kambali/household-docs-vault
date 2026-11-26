@@ -7,6 +7,7 @@ import { useState } from 'react'
 
 import type { PartChange, PartOut } from '../api/types.ts'
 import type { ListQuery } from './listQuery.ts'
+import { unreadWords } from './unread.ts'
 
 const NAMES: Record<string, string> = {
   what: 'Kind of document',
@@ -104,9 +105,6 @@ function Range({
   )
 }
 
-// The API says what kind of part it could not read before the words ("date: before Diwali").
-const words = (phrase: string): string => phrase.replace(/^[a-z]+: /, '')
-
 function DoubtIcon() {
   return (
     <svg className="doubt-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
@@ -179,7 +177,7 @@ export function Sentence({
       {unread.length > 0 && (
         <p className="sentence-doubt">
           <DoubtIcon />
-          {`Couldn't read: ${unread.map(words).join(', ')}`}
+          {`Couldn't read: ${unread.map(unreadWords).join(', ')}`}
         </p>
       )}
       {updating && <output className="region-note">Updating the list</output>}
