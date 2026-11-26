@@ -7,7 +7,7 @@ from typing import Literal
 
 from pydantic import JsonValue
 
-from household_vault.doctypes import Area, DocType
+from household_vault.doctypes import AREA, Area, DocType
 from household_vault.people import Household
 from household_vault.search.answer import format_date
 from household_vault.search.dates import DateRange, add_months, parse_date_phrase
@@ -63,12 +63,32 @@ def _joined(names: list[str]) -> str:
     return ", ".join(names[:-1]) + f" and {names[-1]}"
 
 
+def _whole_area(query: Query) -> Area | None:
+    """The area whose types are exactly the query's types, when the model listed them all."""
+    if len(query.types) < 2 or query.areas:
+        return None
+    areas = {AREA.get(t) for t in query.types}
+    area = areas.pop()
+    if area is None or areas:
+        return None
+    every = {t for t, a in AREA.items() if a == area}
+    return area if every == set(query.types) else None
+
+
 def _what(query: Query) -> str:
+    whole = _whole_area(query)
+    if whole is not None:
+        return f"{AREA_LABELS[whole]} documents"
     if query.types:
         return _joined([_plural(TYPE_LABELS[t]) for t in query.types])
     if query.areas:
         return _joined([f"{AREA_LABELS[a]} documents" for a in query.areas])
     return "documents"
+
+
+def _what_value(query: Query) -> JsonValue:
+    whole = _whole_area(query)
+    return f"area:{whole.value}" if whole is not None else None
 
 
 def _who(query: Query, household: Household) -> str:
@@ -122,7 +142,7 @@ def _when_options(today: date) -> list[Option]:
 def sentence(query: Query, household: Household, today: date) -> Sentence:
     role: DateRole = query.role or "document"
     parts = [
-        Part("what", _what(query), None, _what_options()),
+        Part("what", _what(query), _what_value(query), _what_options()),
         Part(
             "who",
             _who(query, household),

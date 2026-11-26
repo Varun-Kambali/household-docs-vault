@@ -57,6 +57,20 @@ def test_what_names_the_types_or_the_areas(household):
     assert part(two, "what").text == "PAN cards and passports"
 
 
+def test_types_that_are_exactly_one_areas_types_read_as_that_area(household):
+    from household_vault.doctypes import AREA
+
+    insurance = [t for t, a in AREA.items() if a == Area.insurance]
+    s = sentence(list_query(types=insurance), household, TODAY)
+    assert part(s, "what").text == "insurance documents"
+    assert part(s, "what").value == "area:insurance"
+    # one type short of the area, or one over, is still a list of types
+    short = sentence(list_query(types=insurance[:2]), household, TODAY)
+    assert part(short, "what").value is None
+    over = sentence(list_query(types=[*insurance, DocType.pan]), household, TODAY)
+    assert part(over, "what").value is None
+
+
 def test_when_reads_each_shape_of_range(household):
     def when(**kw):
         return part(sentence(list_query(**kw), household, TODAY), "when").text

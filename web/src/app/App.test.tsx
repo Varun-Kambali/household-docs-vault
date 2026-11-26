@@ -3,20 +3,31 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
 import { App } from './App.tsx'
+import { listOut, listQuery } from '../test/api.ts'
 import { AREAS } from './areas.ts'
 
 function answerWith(waiting: number | 'down'): void {
   vi.stubGlobal(
     'fetch',
-    vi.fn(() =>
-      waiting === 'down'
-        ? Promise.reject(new TypeError('Failed to fetch'))
-        : Promise.resolve(
-            new Response(JSON.stringify(Array.from({ length: waiting }, (_, id) => ({ id }))), {
-              status: 200,
-              headers: { 'Content-Type': 'application/json' },
-            }),
-          ),
+    vi.fn((url: string) =>
+      url === '/v1/search/list'
+        ? Promise.resolve(
+            new Response(
+              JSON.stringify(listOut({ rows: [], query: listQuery({ areas: ['utilities'] }) })),
+              {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+              },
+            ),
+          )
+        : waiting === 'down'
+          ? Promise.reject(new TypeError('Failed to fetch'))
+          : Promise.resolve(
+              new Response(JSON.stringify(Array.from({ length: waiting }, (_, id) => ({ id }))), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+              }),
+            ),
     ),
   )
 }
@@ -224,11 +235,11 @@ describe('search on /', () => {
 })
 
 describe('other screens', () => {
-  test('an area shows its title and an empty list', () => {
+  test('an area shows its title and an empty list', async () => {
     open('/area/utilities')
     render(<App />)
     expect(screen.getByRole('heading', { level: 1, name: 'Utilities' })).toBeInTheDocument()
-    expect(screen.getByText('Nothing filed under Utilities yet.')).toBeInTheDocument()
+    expect(await screen.findByText('Nothing filed under Utilities yet.')).toBeInTheDocument()
   })
 
   test('the viewer opens with its title while the document loads', () => {

@@ -4,9 +4,9 @@
 import type { ReactNode } from 'react'
 
 import type { RowOut } from '../api/types.ts'
-import { formatField } from '../common/format.ts'
 import { FINDER_ID, optionId } from './finderIds.ts'
-import { CARD_NOTE, isCard, isMasked, lastFour, typeLabel } from '../common/labels.ts'
+import { CARD_NOTE, isCard, typeLabel } from '../common/labels.ts'
+import { keyText } from './rowText.ts'
 
 function words(prompt: string): string[] {
   return prompt
@@ -25,15 +25,6 @@ export function Highlight({ text, prompt }: { text: string; prompt: string }): R
   return text
     .split(pattern)
     .map((part, index) => (index % 2 === 1 ? <strong key={index}>{part}</strong> : part))
-}
-
-function keyText(row: RowOut): string {
-  return Object.entries(row.key_fields)
-    .map(([name, value]) => {
-      const text = formatField(row.field_kinds[name], value)
-      return isMasked(row.doc_type, name) ? lastFour(text) : text
-    })
-    .join(' · ')
 }
 
 export function Finder({

@@ -53,7 +53,10 @@
         "width": 1440,
         "height": 900
       },
-      "actions": ["wait for element #main h1 to be visible"]
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .list-rows to be visible"
+      ]
     },
     {
       "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Fnowhere&view=desktop&screen=not-found",
@@ -109,7 +112,10 @@
         "height": 812,
         "isMobile": true
       },
-      "actions": ["wait for element #main h1 to be visible"]
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .list-rows to be visible"
+      ]
     },
     {
       "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Fnowhere&view=phone&screen=not-found",
@@ -250,6 +256,106 @@
       "actions": [
         "wait for element #main h1 to be visible",
         "wait for element .outline to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2F%3Fq%3Dhealth%20policies%20that%20expire&view=desktop&screen=list-prompt",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .sentence to be visible",
+        "wait for element .list-rows to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2F%3Fq%3Dhealth%20policies%20that%20expire%20before%20Diwali&view=desktop&screen=list-unread",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .sentence-doubt to be visible",
+        "wait for element .list-rows to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2F%3Fpeople%3Dp4%26types%3Dhealth_policy%26role%3Dexpiry%26from%3D2026-11-26%26to%3D2027-11-26&view=desktop&screen=list-changed",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .sentence to be visible",
+        "wait for element .list-rows to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Farea%2Frent&view=desktop&screen=area-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .sentence to be visible",
+        "wait for element .region-empty to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2F%3Fq%3Dhealth%20policies%20that%20expire&view=phone&screen=list-prompt",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .sentence to be visible",
+        "wait for element .list-rows to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2F%3Fq%3Dhealth%20policies%20that%20expire%20before%20Diwali&view=phone&screen=list-unread",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .sentence-doubt to be visible",
+        "wait for element .list-rows to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2F%3Fpeople%3Dp4%26types%3Dhealth_policy%26role%3Dexpiry%26from%3D2026-11-26%26to%3D2027-11-26&view=phone&screen=list-changed",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .sentence to be visible",
+        "wait for element .list-rows to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Farea%2Frent&view=phone&screen=area-empty",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .sentence to be visible",
+        "wait for element .region-empty to be visible"
       ]
     }
   ]

@@ -151,7 +151,7 @@ def add_search_routes(app: FastAPI, state: AppState) -> None:
             vectors=vectors(),
         )
 
-    @app.post("/v1/search/list", response_model=None)
+    @app.post("/v1/search/list", response_model=None, responses={200: {"model": ListOut}})
     def search_list(body: ListIn) -> ListOut | JSONResponse:
         query: Query = body.query.to_query()
         if body.change is not None:

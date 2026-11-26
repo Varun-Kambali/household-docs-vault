@@ -2,10 +2,35 @@
 // a request is rejected with an abort when its signal fires, as a real fetch would be.
 import { vi } from 'vitest'
 
-import type { AnswerOut, DocumentOut, NoAnswerOut, RowOut, SearchOut } from '../api/types.ts'
+import type {
+  AnswerOut,
+  DocumentOut,
+  ListOut,
+  NoAnswerOut,
+  QueryOut,
+  RowOut,
+  SearchOut,
+  SentenceOut,
+} from '../api/types.ts'
 
 export type Call = { method: string; path: string; body: unknown; signal: AbortSignal | null }
-export type Reply = { status?: number; body?: unknown } | 'hang'
+export type Reply = { status?: number; body?: unknown } | 'hang' | Promise<Reply>
+
+// A reply that is a promise is held until the test resolves it, so a test can move on while a
+// request is still on its way.
+function settle(reply: Reply): Promise<Response> {
+  if (reply instanceof Promise) return reply.then(settle)
+  if (reply === 'hang') return new Promise<Response>(() => undefined)
+  const status = reply.status ?? 200
+  return Promise.resolve(
+    status === 204
+      ? new Response(null, { status })
+      : new Response(JSON.stringify(reply.body ?? {}), {
+          status,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+  )
+}
 
 export function stubApi(handler: (call: Call) => Reply | undefined) {
   const calls: Call[] = []
@@ -27,15 +52,7 @@ export function stubApi(handler: (call: Call) => Reply | undefined) {
           )
         })
       }
-      const status = reply.status ?? 200
-      return Promise.resolve(
-        status === 204
-          ? new Response(null, { status })
-          : new Response(JSON.stringify(reply.body ?? {}), {
-              status,
-              headers: { 'Content-Type': 'application/json' },
-            }),
-      )
+      return settle(reply)
     },
   )
   vi.stubGlobal('fetch', fetchMock)
@@ -115,6 +132,87 @@ export function document(over: Partial<DocumentOut> = {}): DocumentOut {
     people: ['p2'],
     field_kinds: { insurer: 'text', policy_number: 'identifier' },
     page_count: 2,
+    ...over,
+  }
+}
+
+export function choice(value: unknown, label: string) {
+  return { value, label } as { value: never; label: string }
+}
+
+// The sentence the API writes for a list of expiring health policies, with every menu it offers.
+export function sentence(over: Partial<SentenceOut> = {}): SentenceOut {
+  return {
+    text: 'Showing Health policies for everyone that expire any time',
+    parts: [
+      {
+        slot: 'what',
+        text: 'Health policies',
+        value: null,
+        options: [
+          choice('all', 'all documents'),
+          choice('area:insurance', 'Insurance'),
+          choice('type:health_policy', 'Health policy'),
+          choice('type:life_policy', 'Life policy'),
+        ],
+      },
+      {
+        slot: 'who',
+        text: 'everyone',
+        value: [],
+        options: [
+          choice([], 'everyone'),
+          choice('p1', 'Ravi Kumar Rao'),
+          choice('p2', 'Kavita Rao'),
+        ],
+      },
+      {
+        slot: 'verb',
+        text: 'expire',
+        value: 'expiry',
+        options: [
+          choice('expiry', 'expire'),
+          choice('renewal', 'renew'),
+          choice('document', 'are dated'),
+        ],
+      },
+      {
+        slot: 'when',
+        text: 'any time',
+        value: null,
+        options: [
+          choice('any', 'any time'),
+          choice('next_30', 'next 30 days'),
+          choice('before:2027-01-01', 'before 1 Jan 2027'),
+          choice('custom', 'a custom range'),
+        ],
+      },
+    ],
+    ...over,
+  }
+}
+
+export function listQuery(over: Partial<QueryOut> = {}): QueryOut {
+  return {
+    intent: 'list',
+    people: [],
+    types: ['health_policy'],
+    areas: [],
+    field: null,
+    role: 'expiry',
+    range: null,
+    place: null,
+    words: '',
+    unread: [],
+    ...over,
+  }
+}
+
+export function listOut(over: Partial<ListOut> = {}): ListOut {
+  return {
+    rows: [row({ document_id: 'doc-a', date: '2026-09-20' })],
+    sentence: sentence(),
+    query: listQuery(),
     ...over,
   }
 }

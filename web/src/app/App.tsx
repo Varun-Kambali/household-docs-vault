@@ -123,11 +123,13 @@ export function App() {
         </ul>
       </nav>
       <main id="main" ref={main} className="main">
-        {route.name === 'search' && <SearchScreen q={route.q} focusTick={focusTick} />}
+        {route.name === 'search' && (
+          <SearchScreen q={route.q} list={route.list} focusTick={focusTick} />
+        )}
         {route.name === 'inbox' && (
           <InboxScreen waiting={waiting} error={waitingError} onChanged={refresh} />
         )}
-        {route.name === 'area' && <AreaScreen area={route.area} />}
+        {route.name === 'area' && <AreaScreen area={route.area} list={route.list} />}
         {route.name === 'doc' && <DocScreen id={route.id} page={route.page} lines={route.lines} />}
         {route.name === 'notfound' && <NotFoundScreen />}
       </main>

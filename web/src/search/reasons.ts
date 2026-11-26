@@ -1,10 +1,11 @@
 import type { NoAnswerOut } from '../api/types.ts'
+import { unreadWords } from './unread.ts'
 
 export function reasonSentence(reason: NoAnswerOut['reason'], unread: string[]): string {
   switch (reason) {
     case 'unknown_person':
       return unread[0] !== undefined
-        ? `No one called ${unread[0]} is in the household.`
+        ? `No one called ${unreadWords(unread[0])} is in the household.`
         : 'No one by that name is in the household.'
     case 'weak_match':
       return 'Nothing matches closely enough to answer from.'
