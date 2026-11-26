@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
 import { App } from '../app/App.tsx'
+import type { QueryOut } from '../api/types.ts'
 import { navigate } from '../app/location.ts'
 import {
   PEOPLE,
@@ -496,8 +497,7 @@ describe('back and forward', () => {
   function echo() {
     return api({
       list: (call) => {
-        const q = (call.body as { query: { people: string[]; role: string | null; range: never } })
-          .query
+        const { query: q } = call.body as { query: Pick<QueryOut, 'people' | 'role' | 'range'> }
         return { body: listOut({ query: listQuery({ ...q, types: ['health_policy'] }) }) }
       },
     })
