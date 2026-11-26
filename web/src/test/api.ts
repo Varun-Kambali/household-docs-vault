@@ -14,7 +14,23 @@ import type {
 } from '../api/types.ts'
 
 export type Call = { method: string; path: string; body: unknown; signal: AbortSignal | null }
-export type Reply = { status?: number; body?: unknown } | 'hang'
+export type Reply = { status?: number; body?: unknown } | 'hang' | Promise<Reply>
+
+// A reply that is a promise is held until the test resolves it, so a test can move on while a
+// request is still on its way.
+function settle(reply: Reply): Promise<Response> {
+  if (reply instanceof Promise) return reply.then(settle)
+  if (reply === 'hang') return new Promise<Response>(() => undefined)
+  const status = reply.status ?? 200
+  return Promise.resolve(
+    status === 204
+      ? new Response(null, { status })
+      : new Response(JSON.stringify(reply.body ?? {}), {
+          status,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+  )
+}
 
 export function stubApi(handler: (call: Call) => Reply | undefined) {
   const calls: Call[] = []
@@ -36,15 +52,7 @@ export function stubApi(handler: (call: Call) => Reply | undefined) {
           )
         })
       }
-      const status = reply.status ?? 200
-      return Promise.resolve(
-        status === 204
-          ? new Response(null, { status })
-          : new Response(JSON.stringify(reply.body ?? {}), {
-              status,
-              headers: { 'Content-Type': 'application/json' },
-            }),
-      )
+      return settle(reply)
     },
   )
   vi.stubGlobal('fetch', fetchMock)

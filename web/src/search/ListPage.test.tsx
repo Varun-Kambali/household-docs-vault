@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
 import { App } from '../app/App.tsx'
+import { navigate } from '../app/location.ts'
 import {
   PEOPLE,
   listOut,
@@ -371,5 +372,81 @@ describe('an area page', () => {
     render(<App />)
     await wait(0)
     expect(lists(calls)[0]?.body).toMatchObject({ query: { people: ['p2'], areas: ['insurance'] } })
+  })
+})
+
+function deferred<T>() {
+  let resolve!: (value: T) => void
+  const promise = new Promise<T>((done) => {
+    resolve = done
+  })
+  return { promise, resolve }
+}
+
+const isChange = (call: Call) => (call.body as { change?: unknown }).change !== undefined
+
+describe('changes still on their way', () => {
+  const late = () =>
+    listOut({
+      rows: [row({ document_id: 'late', rel_path: 'Late/Old list.pdf' })],
+      query: listQuery({ people: ['p2'] }),
+    })
+
+  test('a reply that comes after a new prompt is dropped, and the address stays on the prompt', async () => {
+    const held = deferred<Reply>()
+    api({ list: (call) => (isChange(call) ? held.promise : undefined) })
+    await askForList()
+    choose('Person', 'Kavita Rao')
+    await wait(0)
+    fireEvent.change(box(), { target: { value: 'tax' } })
+    await wait(150)
+    held.resolve({ body: late() })
+    await wait(0)
+    expect(window.location.search).toBe('?q=tax')
+    expect(screen.queryByText(/Old list/)).not.toBeInTheDocument()
+    expect(screen.queryByRole('list', { name: 'Documents' })).not.toBeInTheDocument()
+  })
+
+  test('a reply that comes after moving to another list is dropped', async () => {
+    const held = deferred<Reply>()
+    api({ list: (call) => (isChange(call) ? held.promise : undefined) })
+    await askForList()
+    choose('Person', 'Kavita Rao')
+    await wait(0)
+    act(() => navigate('/area/rent'))
+    await wait(0)
+    held.resolve({ body: late() })
+    await wait(0)
+    expect(window.location.pathname).toBe('/area/rent')
+    expect(window.location.search).toBe('')
+    expect(screen.queryByText(/Old list/)).not.toBeInTheDocument()
+  })
+
+  test('picks on the same part collapse to the last one, so the queue stays small', async () => {
+    const first = deferred<Reply>()
+    let posted = 0
+    const { calls } = api({
+      list: (call) => (isChange(call) && posted++ === 0 ? first.promise : undefined),
+    })
+    await askForList()
+    for (let i = 0; i < 10; i += 1) {
+      choose('Person', i % 2 === 0 ? 'Kavita Rao' : 'Ravi Kumar Rao')
+      choose('Which date', i % 2 === 0 ? 'renew' : 'are dated')
+    }
+    choose('Person', 'everyone')
+    await wait(0)
+    first.resolve({ body: listOut() })
+    await wait(0)
+    await wait(0)
+    await wait(0)
+    const changes = lists(calls)
+      .map((c) => (c.body as { change?: { slot: string; value: unknown } }).change)
+      .filter((c) => c !== undefined)
+    // the first pick was already on its way; behind it, one change per part
+    expect(changes).toEqual([
+      { slot: 'who', value: 'p2' },
+      { slot: 'verb', value: 'document' },
+      { slot: 'who', value: [] },
+    ])
   })
 })

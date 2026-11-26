@@ -44,7 +44,8 @@ export function useList({
   const epoch = useRef(0)
   const own = useRef<string | null>(null)
   const latest = useRef<ListQuery | null>(null)
-  const tail = useRef<Promise<void>>(Promise.resolve())
+  const queue = useRef(new Map<string, PartChange>())
+  const running = useRef(false)
   const applied = useRef(onApplied)
   useEffect(() => {
     applied.current = onApplied
@@ -54,6 +55,7 @@ export function useList({
   useEffect(() => {
     if (own.current !== scope) {
       epoch.current += 1
+      queue.current.clear()
       setChangeError(null)
     }
   }, [scope])
@@ -86,30 +88,61 @@ export function useList({
     latest.current = view === null ? null : fromQuery(view.query)
   }, [view])
 
-  const change = useCallback((part: PartChange) => {
-    const mine = epoch.current
-    setPending((n) => n + 1)
-    setChangeError(null)
-    tail.current = tail.current.then(async () => {
-      try {
-        if (mine !== epoch.current || latest.current === null) return
-        const out = await api<ListOut>('/v1/search/list', {
-          method: 'POST',
-          body: JSON.stringify({ query: toQueryIn(latest.current), change: part }),
-        })
-        if (mine !== epoch.current) return
-        const query = fromQuery(out.query)
-        latest.current = query
-        own.current = listKey(query)
-        setHeld({ key: own.current, out })
-        applied.current(query)
-      } catch (error) {
-        if (mine === epoch.current) setChangeError((error as Error).message)
-      } finally {
-        setPending((n) => n - 1)
+  // The screen going away drops what is still on its way, as going to another list does.
+  useEffect(
+    () => () => {
+      epoch.current += 1
+      queue.current.clear()
+    },
+    [],
+  )
+
+  // Changes wait here, at most one for each part (a later pick of the same part replaces the
+  // earlier one, which nobody is waiting to see), and are sent one at a time, each on the list
+  // the one before it made.
+  const drain = useCallback(async () => {
+    if (running.current) return
+    running.current = true
+    try {
+      for (;;) {
+        const next = queue.current.entries().next()
+        if (next.done === true) break
+        const [slot, part] = next.value
+        queue.current.delete(slot)
+        const mine = epoch.current
+        if (latest.current === null) continue
+        try {
+          const out = await api<ListOut>('/v1/search/list', {
+            method: 'POST',
+            body: JSON.stringify({ query: toQueryIn(latest.current), change: part }),
+          })
+          if (mine !== epoch.current) continue
+          const query = fromQuery(out.query)
+          latest.current = query
+          own.current = listKey(query)
+          setHeld({ key: own.current, out })
+          applied.current(query)
+        } catch (error) {
+          if (mine === epoch.current) setChangeError((error as Error).message)
+        }
+        setPending(queue.current.size + 1)
       }
-    })
+    } finally {
+      running.current = false
+      setPending(0)
+    }
   }, [])
+
+  const change = useCallback(
+    (part: PartChange) => {
+      queue.current.delete(part.slot)
+      queue.current.set(part.slot, part)
+      setChangeError(null)
+      setPending(queue.current.size + (running.current ? 1 : 0))
+      void drain()
+    },
+    [drain],
+  )
 
   return {
     view,
