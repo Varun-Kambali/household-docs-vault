@@ -65,7 +65,12 @@
         "p4"
       ],
       "rel_path": "Suresh Rao/Insurance/2026-09-20 Health policy - Care Health Insurance Limited.pdf",
-      "score": 0.03278688524590164
+      "score": 0.03278688524590164,
+      "field_kinds": {
+        "end_date": "date",
+        "insurer": "text",
+        "policy_number": "identifier"
+      }
     },
     {
       "area": "insurance",
@@ -98,7 +103,12 @@
         "p3"
       ],
       "rel_path": "Ravi Kumar Rao/Insurance/2026-09-14 Health policy - Niva Bupa Health Insurance Company Limited.jpg",
-      "score": 0.03225806451612903
+      "score": 0.03225806451612903,
+      "field_kinds": {
+        "end_date": "date",
+        "insurer": "text",
+        "policy_number": "identifier"
+      }
     }
   ],
   "sentence": null,

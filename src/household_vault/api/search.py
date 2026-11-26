@@ -2,6 +2,7 @@
 logs, stores or echoes a prompt: it lives in the request and is gone.
 """
 
+from collections.abc import Iterable
 from datetime import date
 
 from fastapi import FastAPI
@@ -23,7 +24,10 @@ from household_vault.api.models import (
     SentenceOut,
 )
 from household_vault.app_state import AppState
+from household_vault.doctypes import DocType
 from household_vault.reading.ollama import ModelUnavailable
+from household_vault.schemas import SCHEMAS
+from household_vault.schemas._coerce import field_kind
 from household_vault.search.answer import Answer, NoAnswer, compose
 from household_vault.search.query import Query, read_prompt, resolve
 from household_vault.search.retrieve import LineRef, Row
@@ -40,6 +44,14 @@ def line_out(ref: LineRef) -> LineRefOut:
     return LineRefOut(page=ref.page, idx=ref.idx, bbox=ref.bbox)
 
 
+def kinds_of(doc_type: DocType, names: Iterable[str]) -> dict[str, str]:
+    schema = SCHEMAS.get(doc_type)
+    return {
+        name: field_kind(schema, name) if schema and name in schema.model_fields else "text"
+        for name in names
+    }
+
+
 def row_out(row: Row, prefix: str) -> RowOut:
     return RowOut(
         document_id=row.document_id,
@@ -51,6 +63,7 @@ def row_out(row: Row, prefix: str) -> RowOut:
         drive_path=drive_path(prefix, row.rel_path),
         doc_date=row.doc_date,
         key_fields=row.key_fields,
+        field_kinds=kinds_of(row.doc_type, row.key_fields),
         date=row.date,
         score=row.score,
         lines=[line_out(r) for r in row.lines],

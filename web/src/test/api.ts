@@ -59,6 +59,7 @@ export function row(over: Partial<RowOut> = {}): RowOut {
       'My Drive/Family Vault/Kavita Rao/Insurance/2026-09-20 Health policy - Care Health.pdf',
     doc_date: '2026-09-20',
     key_fields: { insurer: 'Care Health', policy_number: 'P/21/2138/5675525' },
+    field_kinds: { insurer: 'text', policy_number: 'identifier' },
     date: '2026-09-20',
     score: 0.03,
     lines: [{ page: 0, idx: 3, bbox: [0.07, 0.15, 0.17, 0.16] }],

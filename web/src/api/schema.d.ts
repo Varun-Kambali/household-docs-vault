@@ -892,6 +892,10 @@ export interface components {
       document_id: string
       /** Drive Path */
       drive_path: string
+      /** Field Kinds */
+      field_kinds: {
+        [key: string]: string
+      }
       /** Key Fields */
       key_fields: {
         [key: string]: components['schemas']['JsonValue']

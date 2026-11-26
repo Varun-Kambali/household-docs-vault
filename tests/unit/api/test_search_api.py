@@ -167,3 +167,10 @@ def test_people_lists_the_household(search_client):
 def test_the_prompt_text_fills_a_person_the_model_left_out(search_client):
     out = post(search_client, "Kavita Rao policies").json()
     assert out["query"]["people"] == ["p2"]
+
+
+def test_rows_carry_the_kind_of_each_key_field(search_client):
+    rows = post(search_client, "Croma", full=False).json()["rows"]
+    assert rows
+    for row in rows:
+        assert set(row["field_kinds"]) >= set(row["key_fields"])
