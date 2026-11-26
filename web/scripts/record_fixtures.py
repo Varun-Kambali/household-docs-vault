@@ -53,6 +53,22 @@ class _Reader:
     def read(self, prompt: str) -> str:
         if self.off:
             raise ModelUnavailable("off")
+        text = prompt.lower()
+        if "expire" in text or "diwali" in text:
+            # A list: health policies by their expiry. "Diwali" is a date the code cannot read.
+            phrase = "before Diwali" if "diwali" in text else "next 12 months"
+            return json.dumps(
+                {
+                    "intent": "list",
+                    "people": [],
+                    "types": ["health_policy"],
+                    "areas": [],
+                    "field": None,
+                    "date": {"role": "expiry", "phrase": phrase},
+                    "place": None,
+                    "words": "",
+                }
+            )
         known = "anil" not in prompt.lower()
         return json.dumps(
             {
@@ -66,6 +82,22 @@ class _Reader:
                 "words": "" if known else prompt,
             }
         )
+
+
+def _area(area: str) -> dict[str, Any]:
+    """The query an area page sends: its area and nothing else."""
+    return {
+        "intent": "list",
+        "people": [],
+        "types": [],
+        "areas": [area],
+        "field": None,
+        "role": None,
+        "range": None,
+        "place": None,
+        "words": "",
+        "unread": [],
+    }
 
 
 def _small_png(data: bytes) -> bytes:
@@ -119,6 +151,17 @@ def main() -> None:
             def post(prompt: str, full: bool) -> dict[str, Any]:
                 return client.post("/v1/search", json={"prompt": prompt, "full": full}).json()
 
+            listed = post("health policies that expire", True)
+            unread = post("health policies that expire before Diwali", True)
+            by_person = client.post(
+                "/v1/search/list",
+                json={
+                    "query": listed["query"],
+                    "change": {"slot": "who", "value": "p4"},
+                },
+            ).json()
+            area = client.post("/v1/search/list", json={"query": _area("insurance")}).json()
+            area_empty = client.post("/v1/search/list", json={"query": _area("rent")}).json()
             quick = post("policy", False)
             answer = post("policy number", True)
             declined = post("anil's policy", True)
@@ -141,6 +184,11 @@ def main() -> None:
                 "search-answer.json": answer,
                 "search-no-answer.json": declined,
                 "search-model-off.json": off,
+                "search-list.json": listed,
+                "search-list-unread.json": unread,
+                "list-changed.json": by_person,
+                "list-area.json": area,
+                "list-area-empty.json": area_empty,
             }
             pngs: dict[str, bytes] = {}
             for alias, doc_id in real.items():

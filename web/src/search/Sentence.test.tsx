@@ -93,6 +93,11 @@ describe('the adjustable sentence', () => {
     expect(screen.getByText("Couldn't read: before Diwali")).toBeInTheDocument()
   })
 
+  test('leaves out the kind the server puts before the words it could not read', () => {
+    draw({ unread: ['date: before Diwali', 'person: Anil'] })
+    expect(screen.getByText("Couldn't read: before Diwali, Anil")).toBeInTheDocument()
+  })
+
   test('says it is updating while a change is on its way', () => {
     draw({ updating: true })
     expect(screen.getByText('Updating the list')).toBeInTheDocument()

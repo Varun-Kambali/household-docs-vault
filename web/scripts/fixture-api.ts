@@ -7,6 +7,9 @@
 // - GET /healthz answers the recorded health reply.
 // - POST /v1/search answers the recorded quick, answer, no-answer and model-off replies; a prompt
 //   with "anil" in it is the one that gets no answer.
+// - POST /v1/search/list answers the recorded lists: the area lists (an empty one for rent), the
+//   list a change makes, and the list a linked address names. A full search for a prompt with
+//   "expire" in it reads as a list; with "diwali" too, a list with a part it could not read.
 // - GET /v1/people, /v1/documents/<doc-photo|doc-pdf>, its lines and its page image answer the
 //   recorded ones; Show in folder answers that it is not on the Mac.
 // - /__scenario/<waiting|empty|down|modeloff>?to=/path picks the scenario, then goes on to the path.
@@ -68,14 +71,13 @@ export async function serve(options: { port?: number; dist?: string } = {}): Pro
     readFile(path.join(FIXTURES, name), 'utf8')
   const notFile = JSON.stringify({ detail: 'That file is not available.' })
 
-  async function readBody(request: IncomingMessage): Promise<{ prompt?: string; full?: boolean }> {
+  type Body = { prompt?: string; full?: boolean; change?: unknown; query?: { areas?: string[] } }
+
+  async function readBody(request: IncomingMessage): Promise<Body> {
     const chunks: Buffer[] = []
     for await (const chunk of request) chunks.push(chunk as Buffer)
     try {
-      return JSON.parse(Buffer.concat(chunks).toString('utf8')) as {
-        prompt?: string
-        full?: boolean
-      }
+      return JSON.parse(Buffer.concat(chunks).toString('utf8')) as Body
     } catch {
       return {}
     }
@@ -99,15 +101,33 @@ export async function serve(options: { port?: number; dist?: string } = {}): Pro
     }
     if (pathname === '/v1/people')
       return send(response, 200, TYPES['.json']!, await recorded('people.json'))
+    if (pathname === '/v1/search/list' && request.method === 'POST') {
+      const asked = await readBody(request)
+      const areas = asked.query?.areas ?? []
+      const file =
+        asked.change !== undefined
+          ? 'list-changed.json'
+          : areas.includes('rent')
+            ? 'list-area-empty.json'
+            : areas.length > 0
+              ? 'list-area.json'
+              : 'search-list.json'
+      return send(response, 200, TYPES['.json']!, await recorded(file))
+    }
     if (pathname === '/v1/search' && request.method === 'POST') {
       const asked = await readBody(request)
-      const file = (asked.prompt ?? '').toLowerCase().includes('anil')
+      const prompt = (asked.prompt ?? '').toLowerCase()
+      const file = prompt.includes('anil')
         ? 'search-no-answer.json'
-        : scenario === 'modeloff'
-          ? 'search-model-off.json'
-          : asked.full === true
-            ? 'search-answer.json'
-            : 'search-quick.json'
+        : asked.full === true && prompt.includes('expire')
+          ? prompt.includes('diwali')
+            ? 'search-list-unread.json'
+            : 'search-list.json'
+          : scenario === 'modeloff'
+            ? 'search-model-off.json'
+            : asked.full === true
+              ? 'search-answer.json'
+              : 'search-quick.json'
       return send(response, 200, TYPES['.json']!, await recorded(file))
     }
     const doc = /^\/v1\/documents\/([\w-]+)(?:\/(.*))?$/.exec(pathname)

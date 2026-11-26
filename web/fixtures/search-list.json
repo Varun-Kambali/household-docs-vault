@@ -1,0 +1,465 @@
+{
+  "answer": null,
+  "no_answer": null,
+  "query": {
+    "areas": [],
+    "field": null,
+    "intent": "list",
+    "people": [],
+    "place": null,
+    "range": {
+      "end": "2027-11-26",
+      "start": "2026-11-26"
+    },
+    "role": "expiry",
+    "types": [
+      "health_policy"
+    ],
+    "unread": [],
+    "words": ""
+  },
+  "reading": "on",
+  "rows": [
+    {
+      "area": "insurance",
+      "date": "2027-09-13",
+      "doc_date": "2026-09-14",
+      "doc_type": "health_policy",
+      "document_id": "doc-photo",
+      "drive_path": "My Drive/Family Vault/Ravi Kumar Rao/Insurance/2026-09-14 Health policy - Niva Bupa Health Insurance Company Limited.jpg",
+      "field_kinds": {
+        "end_date": "date",
+        "insurer": "text",
+        "policy_number": "identifier"
+      },
+      "key_fields": {
+        "end_date": "2027-09-13",
+        "insurer": "Niva Bupa Health Insurance Company Limited",
+        "policy_number": "P/71/4217/7681572"
+      },
+      "lines": [],
+      "owner": "p1",
+      "people": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "rel_path": "Ravi Kumar Rao/Insurance/2026-09-14 Health policy - Niva Bupa Health Insurance Company Limited.jpg",
+      "score": 0.0
+    },
+    {
+      "area": "insurance",
+      "date": "2027-09-19",
+      "doc_date": "2026-09-20",
+      "doc_type": "health_policy",
+      "document_id": "doc-pdf",
+      "drive_path": "My Drive/Family Vault/Suresh Rao/Insurance/2026-09-20 Health policy - Care Health Insurance Limited.pdf",
+      "field_kinds": {
+        "end_date": "date",
+        "insurer": "text",
+        "policy_number": "identifier"
+      },
+      "key_fields": {
+        "end_date": "2027-09-19",
+        "insurer": "Care Health Insurance Limited",
+        "policy_number": "P/21/2138/5675525"
+      },
+      "lines": [],
+      "owner": "p4",
+      "people": [
+        "p4"
+      ],
+      "rel_path": "Suresh Rao/Insurance/2026-09-20 Health policy - Care Health Insurance Limited.pdf",
+      "score": 0.0
+    }
+  ],
+  "sentence": {
+    "parts": [
+      {
+        "options": [
+          {
+            "label": "all documents",
+            "value": "all"
+          },
+          {
+            "label": "insurance",
+            "value": "area:insurance"
+          },
+          {
+            "label": "purchases",
+            "value": "area:purchases"
+          },
+          {
+            "label": "identity",
+            "value": "area:identity"
+          },
+          {
+            "label": "vehicle",
+            "value": "area:vehicle"
+          },
+          {
+            "label": "work",
+            "value": "area:work"
+          },
+          {
+            "label": "education",
+            "value": "area:education"
+          },
+          {
+            "label": "tax",
+            "value": "area:tax"
+          },
+          {
+            "label": "cards",
+            "value": "area:cards"
+          },
+          {
+            "label": "medical",
+            "value": "area:medical"
+          },
+          {
+            "label": "property",
+            "value": "area:property"
+          },
+          {
+            "label": "rent",
+            "value": "area:rent"
+          },
+          {
+            "label": "utilities",
+            "value": "area:utilities"
+          },
+          {
+            "label": "life insurance policy",
+            "value": "type:life_policy"
+          },
+          {
+            "label": "health insurance policy",
+            "value": "type:health_policy"
+          },
+          {
+            "label": "vehicle insurance policy",
+            "value": "type:vehicle_policy"
+          },
+          {
+            "label": "home insurance policy",
+            "value": "type:home_policy"
+          },
+          {
+            "label": "travel insurance policy",
+            "value": "type:travel_policy"
+          },
+          {
+            "label": "gadget insurance policy",
+            "value": "type:gadget_policy"
+          },
+          {
+            "label": "accident insurance policy",
+            "value": "type:accident_policy"
+          },
+          {
+            "label": "purchase invoice",
+            "value": "type:tax_invoice"
+          },
+          {
+            "label": "warranty card",
+            "value": "type:warranty_card"
+          },
+          {
+            "label": "extended warranty",
+            "value": "type:extended_warranty"
+          },
+          {
+            "label": "annual maintenance contract",
+            "value": "type:amc"
+          },
+          {
+            "label": "appliance service record",
+            "value": "type:appliance_service_record"
+          },
+          {
+            "label": "Aadhaar card",
+            "value": "type:aadhaar"
+          },
+          {
+            "label": "PAN card",
+            "value": "type:pan"
+          },
+          {
+            "label": "passport",
+            "value": "type:passport"
+          },
+          {
+            "label": "voter ID",
+            "value": "type:voter_id"
+          },
+          {
+            "label": "driving licence",
+            "value": "type:driving_licence"
+          },
+          {
+            "label": "birth certificate",
+            "value": "type:birth_certificate"
+          },
+          {
+            "label": "marriage certificate",
+            "value": "type:marriage_certificate"
+          },
+          {
+            "label": "sale deed",
+            "value": "type:sale_deed"
+          },
+          {
+            "label": "rent agreement",
+            "value": "type:rent_agreement"
+          },
+          {
+            "label": "khata",
+            "value": "type:khata"
+          },
+          {
+            "label": "property tax receipt",
+            "value": "type:property_tax_receipt"
+          },
+          {
+            "label": "encumbrance certificate",
+            "value": "type:encumbrance_certificate"
+          },
+          {
+            "label": "utility bill",
+            "value": "type:utility_bill"
+          },
+          {
+            "label": "vehicle registration certificate",
+            "value": "type:registration_certificate"
+          },
+          {
+            "label": "pollution certificate",
+            "value": "type:puc_certificate"
+          },
+          {
+            "label": "FASTag",
+            "value": "type:fastag"
+          },
+          {
+            "label": "vehicle service record",
+            "value": "type:vehicle_service_record"
+          },
+          {
+            "label": "payslip",
+            "value": "type:payslip"
+          },
+          {
+            "label": "offer letter",
+            "value": "type:offer_letter"
+          },
+          {
+            "label": "appointment letter",
+            "value": "type:appointment_letter"
+          },
+          {
+            "label": "appraisal letter",
+            "value": "type:appraisal_letter"
+          },
+          {
+            "label": "relieving letter",
+            "value": "type:relieving_letter"
+          },
+          {
+            "label": "experience letter",
+            "value": "type:experience_letter"
+          },
+          {
+            "label": "certificate",
+            "value": "type:certificate"
+          },
+          {
+            "label": "marksheet",
+            "value": "type:marksheet"
+          },
+          {
+            "label": "degree certificate",
+            "value": "type:degree"
+          },
+          {
+            "label": "Form 16",
+            "value": "type:form_16"
+          },
+          {
+            "label": "income tax return acknowledgement",
+            "value": "type:itr_acknowledgement"
+          },
+          {
+            "label": "tax saving proof",
+            "value": "type:tax_proof"
+          },
+          {
+            "label": "card",
+            "value": "type:card_front"
+          },
+          {
+            "label": "card statement",
+            "value": "type:card_statement"
+          },
+          {
+            "label": "card welcome letter",
+            "value": "type:card_welcome_letter"
+          },
+          {
+            "label": "prescription",
+            "value": "type:prescription"
+          },
+          {
+            "label": "lab report",
+            "value": "type:lab_report"
+          },
+          {
+            "label": "scan image",
+            "value": "type:scan_photo"
+          },
+          {
+            "label": "scan report",
+            "value": "type:scan_report"
+          },
+          {
+            "label": "discharge summary",
+            "value": "type:discharge_summary"
+          },
+          {
+            "label": "hospital bill",
+            "value": "type:hospital_bill"
+          },
+          {
+            "label": "doctor visit recording",
+            "value": "type:visit_recording"
+          },
+          {
+            "label": "other document",
+            "value": "type:other"
+          }
+        ],
+        "slot": "what",
+        "text": "health insurance policies",
+        "value": null
+      },
+      {
+        "options": [
+          {
+            "label": "everyone",
+            "value": []
+          },
+          {
+            "label": "Ravi Kumar Rao",
+            "value": "p1"
+          },
+          {
+            "label": "Kavita Rao",
+            "value": "p2"
+          },
+          {
+            "label": "Kiran Rao",
+            "value": "p3"
+          },
+          {
+            "label": "Suresh Rao",
+            "value": "p4"
+          }
+        ],
+        "slot": "who",
+        "text": "everyone",
+        "value": []
+      },
+      {
+        "options": [
+          {
+            "label": "expire",
+            "value": "expiry"
+          },
+          {
+            "label": "renew",
+            "value": "renewal"
+          },
+          {
+            "label": "fall due",
+            "value": "due"
+          },
+          {
+            "label": "were bought",
+            "value": "purchase"
+          },
+          {
+            "label": "were issued",
+            "value": "issue"
+          },
+          {
+            "label": "are dated",
+            "value": "document"
+          }
+        ],
+        "slot": "verb",
+        "text": "expire",
+        "value": "expiry"
+      },
+      {
+        "options": [
+          {
+            "label": "any time",
+            "value": "any"
+          },
+          {
+            "label": "next 30 days",
+            "value": "next_30"
+          },
+          {
+            "label": "next 60 days",
+            "value": "next_60"
+          },
+          {
+            "label": "this month",
+            "value": "this_month"
+          },
+          {
+            "label": "this year",
+            "value": "this_year"
+          },
+          {
+            "label": "before 1 Dec 2026",
+            "value": "before:2026-12-01"
+          },
+          {
+            "label": "before 1 Jan 2027",
+            "value": "before:2027-01-01"
+          },
+          {
+            "label": "before 1 Feb 2027",
+            "value": "before:2027-02-01"
+          },
+          {
+            "label": "before 1 Mar 2027",
+            "value": "before:2027-03-01"
+          },
+          {
+            "label": "before 1 Apr 2027",
+            "value": "before:2027-04-01"
+          },
+          {
+            "label": "before 1 May 2027",
+            "value": "before:2027-05-01"
+          },
+          {
+            "label": "a custom range",
+            "value": "custom"
+          }
+        ],
+        "slot": "when",
+        "text": "between 26 Nov 2026 and 26 Nov 2027",
+        "value": {
+          "end": "2027-11-26",
+          "start": "2026-11-26"
+        }
+      }
+    ],
+    "text": "Showing health insurance policies for everyone that expire between 26 Nov 2026 and 26 Nov 2027"
+  },
+  "vectors": "off"
+}
