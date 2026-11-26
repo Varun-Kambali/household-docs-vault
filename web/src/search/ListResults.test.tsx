@@ -21,6 +21,18 @@ describe('the rows of a list', () => {
     expect(screen.getByText('2 documents')).toBeInTheDocument()
   })
 
+  test('say when the API stopped at its 500-row limit', () => {
+    const many = Array.from({ length: 500 }, (_, i) => row({ document_id: `d${i}` }))
+    draw(many)
+    expect(screen.getByText('Showing the first 500 documents')).toBeInTheDocument()
+    expect(screen.queryByText('500 documents')).not.toBeInTheDocument()
+  })
+
+  test('say the plain count just under the limit', () => {
+    draw(Array.from({ length: 499 }, (_, i) => row({ document_id: `d${i}` })))
+    expect(screen.getByText('499 documents')).toBeInTheDocument()
+  })
+
   test('say one document in the singular', () => {
     draw()
     expect(screen.getByText('1 document')).toBeInTheDocument()

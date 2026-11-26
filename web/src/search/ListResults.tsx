@@ -9,6 +9,9 @@ import { keyText } from './rowText.ts'
 import { openRow } from './openAt.ts'
 import { orderRows } from './order.ts'
 
+// The API stops a list at this many rows (the default limit of Searcher.list in search/retrieve.py).
+export const LIST_LIMIT = 500
+
 export function ListResults({
   rows,
   role,
@@ -22,7 +25,9 @@ export function ListResults({
   return (
     <>
       <p className="list-count">
-        {rows.length} {rows.length === 1 ? 'document' : 'documents'}
+        {rows.length >= LIST_LIMIT
+          ? `Showing the first ${LIST_LIMIT} documents`
+          : `${rows.length} ${rows.length === 1 ? 'document' : 'documents'}`}
       </p>
       <ul className="list-rows" aria-label="Documents">
         {ordered.map((row) => {
