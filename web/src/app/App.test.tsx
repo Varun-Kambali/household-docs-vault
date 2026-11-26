@@ -231,10 +231,10 @@ describe('other screens', () => {
     expect(screen.getByText('Nothing filed under Utilities yet.')).toBeInTheDocument()
   })
 
-  test('the viewer names the document it was opened for', () => {
+  test('the viewer opens with its title while the document loads', () => {
     open('/doc/12?page=1&lines=2-3')
     render(<App />)
-    expect(screen.getByRole('heading', { level: 1, name: 'Document 12' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Document' })).toBeInTheDocument()
   })
 
   test('an unknown address says so and offers Search', () => {

@@ -42,9 +42,7 @@ export function AreaScreen({ area }: { area: AreaId }) {
   )
 }
 
-export function DocScreen({ id }: { id: string }) {
-  return <h1 tabIndex={-1}>Document {id}</h1>
-}
+export { PageViewer as DocScreen } from '../viewer/PageViewer.tsx'
 
 export function NotFoundScreen() {
   return (
