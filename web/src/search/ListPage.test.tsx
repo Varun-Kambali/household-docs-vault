@@ -472,3 +472,64 @@ describe('a link the app cannot read', () => {
     expect(screen.getByRole('link', { name: 'Start a new search' })).toHaveAttribute('href', '/')
   })
 })
+
+describe('a link with both a prompt and list params', () => {
+  test('the list params win: the list is posted, the prompt is only kept in the address', async () => {
+    const { calls } = api()
+    open('/?q=health+policies&people=p2&types=health_policy&role=expiry')
+    render(<App />)
+    await wait(1000)
+    expect(searches(calls)).toHaveLength(0)
+    expect(lists(calls)).toHaveLength(1)
+    expect(lists(calls)[0]?.body).toMatchObject({ query: { people: ['p2'] } })
+    expect(window.location.search).toBe(
+      '?q=health+policies&people=p2&types=health_policy&role=expiry',
+    )
+    // pressing Enter in the box does not run the prompt either
+    fireEvent.keyDown(box(), { key: 'Enter' })
+    await wait(1000)
+    expect(searches(calls)).toHaveLength(0)
+  })
+})
+
+describe('back and forward', () => {
+  function echo() {
+    return api({
+      list: (call) => {
+        const q = (call.body as { query: { people: string[]; role: string | null; range: never } })
+          .query
+        return { body: listOut({ query: listQuery({ ...q, types: ['health_policy'] }) }) }
+      },
+    })
+  }
+
+  function go(address: string): void {
+    window.history.pushState(null, '', address)
+    act(() => {
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    })
+  }
+
+  test('the dates and the selects follow the address', async () => {
+    echo()
+    open('/?people=p2&types=health_policy&role=expiry&from=2026-12-01&to=2027-01-31')
+    render(<App />)
+    await wait(0)
+    expect(screen.getByLabelText('From')).toHaveValue('2026-12-01')
+    expect(menu('Person')).toHaveDisplayValue('Kavita Rao')
+    expect(menu('Which date')).toHaveDisplayValue('expire')
+    go('/?people=p1&types=health_policy&role=renewal&from=2027-03-01&to=2027-03-31')
+    await wait(0)
+    expect(screen.getByLabelText('From')).toHaveValue('2027-03-01')
+    expect(screen.getByLabelText('To')).toHaveValue('2027-03-31')
+    expect(menu('Person')).toHaveDisplayValue('Ravi Kumar Rao')
+    expect(menu('Which date')).toHaveDisplayValue('renew')
+    go('/?people=p2&types=health_policy&role=expiry&from=2026-12-01&to=2027-01-31')
+    await wait(0)
+    expect(screen.getByLabelText('From')).toHaveValue('2026-12-01')
+    expect(menu('Person')).toHaveDisplayValue('Kavita Rao')
+    go('/?people=p1&types=health_policy&role=renewal')
+    await wait(0)
+    expect(screen.queryByLabelText('From')).not.toBeInTheDocument()
+  })
+})

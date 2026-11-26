@@ -32,7 +32,9 @@ export function SearchPage({
 }) {
   const box = useRef<HTMLInputElement>(null)
   const people = usePeople()
-  const { state, runFull, reset } = useSearch(q)
+  // A list in the address wins over a prompt beside it: the prompt stays in the box and the
+  // address, but is not searched.
+  const { state, runFull, reset } = useSearch(list !== undefined ? '' : q)
   const { state: revealed, reveal, clear } = useReveal()
   // The active row belongs to the list it was chosen in; a new list starts with none.
   const [cursor, setCursor] = useState<{ list: unknown; index: number }>({ list: null, index: -1 })
@@ -101,7 +103,7 @@ export function SearchPage({
         const target = row ?? rows[0]
         if (target !== undefined) reveal(target.document_id, target.drive_path)
       } else if (row !== undefined) open(row)
-      else if (prompt !== '') runFull()
+      else if (prompt !== '' && list === undefined) runFull()
     }
   }
 
