@@ -2,12 +2,13 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, test, vi } from 'vitest'
 
+import type { PartChange } from '../api/types.ts'
 import { listQuery, sentence } from '../test/api.ts'
 import { fromQuery } from './listQuery.ts'
 import { Sentence } from './Sentence.tsx'
 
 function draw(over: Partial<Parameters<typeof Sentence>[0]> = {}) {
-  const onChange = vi.fn()
+  const onChange = vi.fn<(change: PartChange) => void>()
   const props = {
     sentence: sentence(),
     query: fromQuery(listQuery()),

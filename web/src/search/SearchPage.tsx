@@ -1,8 +1,8 @@
 // The Search screen: the box, the quick finder under it, and (when the full search lands) the
 // answer beside its page. Results are a function of the prompt, which lives in the address.
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 
-import type { RowOut } from '../api/types.ts'
+import type { ListOut, RowOut } from '../api/types.ts'
 import { navigate } from '../app/location.ts'
 import { hrefFor } from '../app/route.ts'
 import { Region } from '../app/Region.tsx'
@@ -11,14 +11,25 @@ import { useReveal } from '../common/useReveal.ts'
 import { AnswerPanel } from './AnswerPanel.tsx'
 import { Finder } from './Finder.tsx'
 import { FINDER_ID, optionId } from './finderIds.ts'
+import { ListPanel } from './ListPanel.tsx'
+import { type ListQuery, listKey } from './listQuery.ts'
 import { NoAnswer } from './NoAnswer.tsx'
 import { openRow } from './openAt.ts'
+import { useList } from './useList.ts'
 import { useSearch } from './useSearch.ts'
 
 export const MODEL_OFF =
   "Reading prompts needs the local model, which isn't running. Showing keyword matches."
 
-export function SearchPage({ q, focusTick }: { q: string; focusTick: number }) {
+export function SearchPage({
+  q,
+  list,
+  focusTick,
+}: {
+  q: string
+  list?: ListQuery
+  focusTick: number
+}) {
   const box = useRef<HTMLInputElement>(null)
   const people = usePeople()
   const { state, runFull, reset } = useSearch(q)
@@ -38,13 +49,29 @@ export function SearchPage({ q, focusTick }: { q: string; focusTick: number }) {
     // oxlint-disable-next-line react/exhaustive-effect-dependencies
   }, [q, clear])
 
+  // A prompt the model read as a list shows as a list, with its sentence to adjust. A list in the
+  // address (a changed or linked one) is fetched by its own query and the model is not asked.
+  const seed = useMemo<ListOut | null>(() => {
+    const full = state.full
+    if (full?.query?.intent !== 'list' || !full.sentence) return null
+    return { rows: full.rows, sentence: full.sentence, query: full.query }
+  }, [state.full])
+  const listing = list !== undefined || seed !== null
+  const listState = useList({
+    source: list ?? null,
+    scope: list !== undefined ? listKey(list) : `q:${q.trim()}`,
+    seed: list !== undefined ? null : seed,
+    onApplied: (query) => navigate(hrefFor({ name: 'search', q: '', list: query })),
+  })
+
   const shown = state.full ?? state.quick
   const answer = state.full?.answer ?? null
   const none = state.full?.no_answer ?? null
   const closest = none !== null ? new Set(none.closest) : null
   const all = shown?.rows ?? []
-  const rows =
-    closest !== null && all.some((r) => closest.has(r.rel_path))
+  const rows = listing
+    ? []
+    : closest !== null && all.some((r) => closest.has(r.rel_path))
       ? all.filter((r) => closest.has(r.rel_path))
       : all
   const prompt = q.trim()
@@ -79,10 +106,10 @@ export function SearchPage({ q, focusTick }: { q: string; focusTick: number }) {
   }
 
   const rowOf = (id: string): RowOut | undefined => all.find((r) => r.document_id === id)
-  const list =
+  const phase =
     state.error !== null
       ? 'error'
-      : prompt === ''
+      : prompt === '' && !listing
         ? 'idle'
         : shown === null
           ? 'loading'
@@ -111,7 +138,7 @@ export function SearchPage({ q, focusTick }: { q: string; focusTick: number }) {
         onKeyDown={onKeyDown}
       />
       {off && <p className="hint model-off">{MODEL_OFF}</p>}
-      {list === 'idle' && (
+      {phase === 'idle' && (
         <p className="hint">Ask in a few words. Name a person, a kind of document or a date.</p>
       )}
       {state.fullError !== null && (
@@ -120,7 +147,7 @@ export function SearchPage({ q, focusTick }: { q: string; focusTick: number }) {
         </p>
       )}
       {state.reading && <output className="region-note">Reading your question</output>}
-      {answer !== null && (
+      {!listing && answer !== null && (
         <AnswerPanel
           key={`${answer.document_id}-${answer.field}-${answer.text}`}
           answer={answer}
@@ -128,21 +155,22 @@ export function SearchPage({ q, focusTick }: { q: string; focusTick: number }) {
           onReveal={(row) => reveal(row.document_id, row.drive_path)}
         />
       )}
-      {none !== null && (
+      {!listing && none !== null && (
         <NoAnswer
           reason={none.reason}
           unread={state.full?.query?.unread ?? []}
           hasRows={rows.length > 0}
         />
       )}
-      {list !== 'idle' && (
+      {listing && <ListPanel list={listState} people={people} empty="No documents match this." />}
+      {!listing && phase !== 'idle' && (
         <Region
           state={
-            list === 'error'
+            phase === 'error'
               ? 'error'
-              : list === 'loading'
+              : phase === 'loading'
                 ? 'loading'
-                : list === 'empty'
+                : phase === 'empty'
                   ? 'empty'
                   : 'full'
           }

@@ -1,0 +1,142 @@
+/* Lists: the sentence over them and their rows. Every value is a token. */
+
+.list {
+  margin-block-start: var(--space-4);
+}
+
+.sentence-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-body);
+  line-height: var(--text-body-line);
+}
+
+.sentence-select,
+.sentence-range input {
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  background: var(--color-raised);
+  color: var(--color-text);
+  font: inherit;
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-control);
+}
+
+.sentence-select {
+  max-width: 100%;
+  cursor: pointer;
+}
+
+.sentence-range {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-block-start: var(--space-3);
+}
+
+.sentence-range label {
+  display: grid;
+  gap: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+.sentence-range input {
+  color: var(--color-text);
+  font-size: var(--text-body);
+  line-height: var(--text-body-line);
+}
+
+.sentence-doubt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-block-start: var(--space-3);
+  color: var(--color-doubt);
+}
+
+.doubt-icon {
+  flex: none;
+}
+
+.list > .region-note,
+.sentence > .region-note {
+  display: block;
+  margin-block-start: var(--space-2);
+}
+
+.list > .region-error {
+  margin-block-start: var(--space-3);
+}
+
+.list > .region-empty {
+  padding-block: var(--space-6);
+}
+
+.list-count {
+  margin-block-start: var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+.list-rows {
+  margin-block-start: var(--space-2);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.list-row {
+  display: grid;
+  grid-template-columns: 7rem 9rem 11rem minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: center;
+  min-height: var(--control-height);
+  padding: var(--space-2) var(--space-3);
+  border-block-end: 1px solid var(--color-border);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.list-row > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.list-date {
+  font-variant-numeric: tabular-nums;
+}
+
+.list-fields {
+  font-variant-numeric: tabular-nums;
+}
+
+.list-path {
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+@media (hover: hover) {
+  .list-row:hover {
+    background: color-mix(in oklch, var(--color-text) 6%, transparent);
+  }
+}
+
+/* The Floor: under 60rem a row wraps to lines instead of clipping. */
+@media (max-width: 60rem) {
+  .list-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .list-people,
+  .list-fields,
+  .list-path {
+    grid-column: 1 / -1;
+  }
+}
