@@ -16,11 +16,4 @@ export type QueryIn = Schemas['QueryIn']
 export type SentenceOut = Schemas['SentenceOut']
 export type PartOut = Schemas['PartOut']
 export type PartChange = Schemas['PartChange']
-
-// What POST /v1/search/list answers. The route has no response model of its own, so the shape is
-// written here: the rows, the sentence over them, and the query that made both.
-export type ListOut = {
-  rows: RowOut[]
-  sentence: SentenceOut
-  query: QueryOut
-}
+export type ListOut = Schemas['ListOut']

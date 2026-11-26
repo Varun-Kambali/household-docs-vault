@@ -687,6 +687,13 @@ export interface components {
       change?: components['schemas']['PartChange'] | null
       query: components['schemas']['QueryIn']
     }
+    /** ListOut */
+    ListOut: {
+      query: components['schemas']['Query']
+      /** Rows */
+      rows: components['schemas']['RowOut'][]
+      sentence: components['schemas']['SentenceOut']
+    }
     /** MasterPasswordIn */
     MasterPasswordIn: {
       /** Master Password */
@@ -1637,7 +1644,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': unknown
+          'application/json': components['schemas']['ListOut']
         }
       }
       /** @description Validation Error */
