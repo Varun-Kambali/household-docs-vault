@@ -409,6 +409,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/v1/secrets/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Secrets Status */
+    get: operations['secrets_status_v1_secrets_status_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/v1/secrets/unlock': {
     parameters: {
       query?: never
@@ -436,6 +453,8 @@ export interface components {
       actions: string[]
       /** Detail */
       detail: string
+      /** Document Id */
+      document_id?: string | null
       /** File */
       file: string | null
       /** Id */
@@ -946,6 +965,13 @@ export interface components {
        * @enum {string}
        */
       vectors: 'on' | 'off' | 'stale'
+    }
+    /** SecretsStatusOut */
+    SecretsStatusOut: {
+      /** Exists */
+      exists: boolean
+      /** Unlocked */
+      unlocked: boolean
     }
     /** SentenceOut */
     SentenceOut: {
@@ -1689,6 +1715,26 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  secrets_status_v1_secrets_status_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SecretsStatusOut']
         }
       }
     }
