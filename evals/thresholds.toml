@@ -57,9 +57,12 @@ citation_accuracy = 0.98
 list_reading = 0.48
 list_precision = 0.6954
 list_recall = 0.7467
+# measured: declined_when_none 1 (7 none questions, replayed 2026-11-27)
+declined_when_none = 0.98
 lookups = 7
 finds = 3
 lists = 10
+nones = 7
 
 [search_smoke.max]
 # measured: declined_when_answerable 0

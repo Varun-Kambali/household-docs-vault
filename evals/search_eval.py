@@ -71,6 +71,17 @@ from household_vault.vaultroot import INBOX
 ORIGINS = ("eval-v1", "extra")
 SMOKE_DIR = Path(__file__).resolve().parent / "recordings" / "search-v1" / "smoke"
 N_SMOKE_LISTS = 10
+# val none questions that name a household member or a document type of the smoke vault; the
+# vault holds nothing that fits any of them
+SMOKE_NONE_IDS = (
+    "val-none-001",
+    "val-none-004",
+    "val-none-007",
+    "val-none-011",
+    "val-none-015",
+    "val-none-017",
+    "val-none-020",
+)
 _ALL_STATES: tuple[ItemState, ...] = ("queued", "reading", "filed", "asked", "held")
 
 
@@ -848,8 +859,8 @@ def smoke_documents() -> list[SynthDoc]:
 
 
 def smoke_questions(docs: Sequence[SynthDoc]) -> list[Question]:
-    """The val lookups and finds whose every target is a smoke photo, then ten list prompts
-    written for this small vault."""
+    """The val lookups and finds whose every target is a smoke photo, ten list prompts
+    written for this small vault, then a few val none questions (`SMOKE_NONE_IDS`)."""
     ids = {d.doc_id for d in docs}
     household = load_household(EVAL_V1 / "household.json")
     about = [
@@ -858,7 +869,8 @@ def smoke_questions(docs: Sequence[SynthDoc]) -> list[Question]:
         if q.kind in ("lookup", "find") and q.targets and set(q.targets) <= ids
     ]
     lists = _list_questions(docs, household, "val", EVAL_TODAY, SET_SEED)[:N_SMOKE_LISTS]
-    return [*about, *lists]
+    nones = [q for q in load_questions("val") if q.id in SMOKE_NONE_IDS]
+    return [*about, *lists, *nones]
 
 
 def write_smoke_questions(folder: Path = SMOKE_DIR) -> list[Question]:

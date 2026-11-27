@@ -19,6 +19,7 @@ from evals.search_eval import (
     _build,
     declined,
     judge,
+    load_questions,
     load_smoke_questions,
     query_differences,
     run_search,
@@ -310,13 +311,16 @@ def test_a_recorded_embedder_replays_float16_vectors_exactly(tmp_path):
     assert replay.name == "fake-embed"
 
 
-def test_the_smoke_questions_are_val_lookups_and_finds_about_smoke_photos_and_ten_lists(smoke_docs):
+def test_the_smoke_questions_are_lookups_finds_nones_and_ten_lists_about_smoke_photos(smoke_docs):
     qs = smoke_questions(smoke_docs)
     ids = {d.doc_id for d in smoke_docs}
     assert sum(q.kind == "list" for q in qs) == 10
-    about = [q for q in qs if q.kind != "list"]
+    about = [q for q in qs if q.kind not in ("list", "none")]
     assert about and all(set(q.targets) <= ids for q in about)
     assert {q.kind for q in about} <= {"lookup", "find"}
+    nones = [q for q in qs if q.kind == "none"]
+    val_nones = {q.id: q for q in load_questions("val") if q.kind == "none"}
+    assert nones and all(val_nones[q.id] == q and not q.targets for q in nones)  # none are new
     assert json.loads((EVAL_V1 / "smoke.json").read_text())["split"] == "val"
 
 
