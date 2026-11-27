@@ -88,7 +88,7 @@ function UnlockForm({
       )}
       <div className="actions">
         <button type="submit" className="button button-primary" disabled={busy}>
-          Unlock
+          Open the PDF
         </button>
         <button type="button" className="button" onClick={onClose}>
           Cancel

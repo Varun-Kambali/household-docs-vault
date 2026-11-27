@@ -47,9 +47,9 @@ export function Activity({
   return (
     <section aria-labelledby="activity-title" className="inbox-section">
       <h2 id="activity-title">Activity</h2>
-      {refusal !== null && (
+      {(refusal ?? (entries !== null ? error : null)) !== null && (
         <p className="region-error" role="alert">
-          {refusal}
+          {refusal ?? error}
         </p>
       )}
       <Region

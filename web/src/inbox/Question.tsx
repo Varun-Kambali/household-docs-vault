@@ -224,7 +224,7 @@ export function Question({
           <div className="actions">
             {kind === 'unlock' ? (
               <button type="button" className="button button-primary" onClick={onUnlock}>
-                Unlock
+                Enter the password
               </button>
             ) : (
               <button type="submit" className="button button-primary" disabled={!ready || busy}>

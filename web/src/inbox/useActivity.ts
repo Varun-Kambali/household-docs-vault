@@ -12,7 +12,6 @@ export type ActivityState = {
   error: string | null
   hasMore: boolean
   more: () => void
-  reload: () => void
 }
 
 export function useActivity(version: number): ActivityState {
@@ -21,7 +20,6 @@ export function useActivity(version: number): ActivityState {
   // Whether the last older page came back full; null until one has been read.
   const [olderFull, setOlderFull] = useState<boolean | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [round, setRound] = useState(0)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -34,9 +32,9 @@ export function useActivity(version: number): ActivityState {
         if (!isAbort(reason)) setError((reason as Error).message)
       })
     return () => controller.abort()
-    // `round` only asks for another read.
+    // `version` only asks for another read.
     // oxlint-disable-next-line react/exhaustive-effect-dependencies
-  }, [version, round])
+  }, [version])
 
   const entries = head === null ? null : [...head, ...older.filter((e) => e.id < minId(head))]
   const oldest = entries?.at(-1)?.id
@@ -56,7 +54,6 @@ export function useActivity(version: number): ActivityState {
     error,
     hasMore: olderFull ?? head?.length === PAGE,
     more: loadMore,
-    reload: useCallback(() => setRound((n) => n + 1), []),
   }
 }
 

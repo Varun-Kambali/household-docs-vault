@@ -59,6 +59,11 @@ export function InboxPage({ onChanged }: { onChanged: () => void }) {
         <h2 id="needs-title" tabIndex={-1}>
           Needs a look
         </h2>
+        {error !== null && items !== null && (
+          <p className="region-error" role="alert">
+            {error}
+          </p>
+        )}
         <Region
           state={state}
           what="the Inbox"

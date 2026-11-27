@@ -116,7 +116,40 @@ describe('InboxPage', () => {
     server([lockedItem()])
     const user = userEvent.setup()
     render(<InboxPage onChanged={vi.fn<() => void>()} />)
-    await user.click(await screen.findByRole('button', { name: 'Unlock' }))
+    await user.click(await screen.findByRole('button', { name: 'Enter the password' }))
     expect(screen.getByRole('dialog', { name: 'Unlock this PDF' })).toBeInTheDocument()
+  })
+
+  test('a refused re-read keeps the file on screen and says why', async () => {
+    let listed = 0
+    server([waitingItem()], (call) =>
+      call.path === '/v1/needs-a-look' && ++listed > 1
+        ? { status: 500, body: { detail: 'Something went wrong. Nothing was changed.' } }
+        : undefined,
+    )
+    const user = userEvent.setup()
+    render(<InboxPage onChanged={vi.fn<() => void>()} />)
+    await user.click(await screen.findByRole('button', { name: 'Upload a card' }))
+    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    await user.click(screen.getByRole('radio', { name: 'Home' }))
+    await user.click(screen.getByRole('button', { name: 'File it' }))
+    expect((await screen.findAllByRole('alert'))[0]).toHaveTextContent('Something went wrong')
+  })
+
+  test('Undo on the line saying where the file went sends it back and the line goes', async () => {
+    const now = new Date().toISOString()
+    server([waitingItem()], (call) =>
+      call.path.startsWith('/v1/activity')
+        ? { body: [activityEntry({ item_id: 7, time: now })] }
+        : undefined,
+    )
+    const user = userEvent.setup()
+    render(<InboxPage onChanged={vi.fn<() => void>()} />)
+    await user.click(await screen.findByRole('radio', { name: 'Home' }))
+    await user.click(screen.getByRole('button', { name: 'File it' }))
+    expect(await screen.findByText('Filed in Kavita Rao / Health')).toBeInTheDocument()
+    const line = screen.getByText('Filed in Kavita Rao / Health').closest('output')!
+    await user.click(within(line).getByRole('button', { name: 'Undo' }))
+    await vi.waitFor(() => expect(screen.queryByText('Filed in Kavita Rao / Health')).toBeNull())
   })
 })

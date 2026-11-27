@@ -232,7 +232,7 @@ describe('NeedsALook', () => {
     const user = userEvent.setup()
     show([lockedItem()])
     expect(screen.queryByRole('radio')).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Unlock' }))
+    await user.click(screen.getByRole('button', { name: 'Enter the password' }))
     expect(screen.getByRole('dialog', { name: 'Unlock this PDF' })).toBeInTheDocument()
   })
 

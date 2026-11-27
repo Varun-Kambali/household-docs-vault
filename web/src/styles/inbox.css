@@ -6,6 +6,7 @@
 
 .inbox-section > h2 {
   margin-block-end: var(--space-3);
+  text-wrap: balance;
 }
 
 .inbox-section > h2:focus-visible {
@@ -160,6 +161,15 @@
   }
 }
 
+.choice:active {
+  background: color-mix(in oklch, var(--color-text) 10%, transparent);
+}
+
+.choice:has(input:disabled) {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .choice:has(input:focus-visible) {
   outline: 2px solid var(--color-focus);
   outline-offset: -2px;
@@ -200,6 +210,10 @@
 .button-danger {
   color: var(--color-danger);
   border-color: var(--color-danger);
+}
+
+.link-button:active {
+  color: color-mix(in oklch, var(--color-primary) 78%, var(--color-text));
 }
 
 .question > .hint {
@@ -272,7 +286,8 @@
 /* Dialogs: a focused step for a password */
 
 .dialog {
-  width: min(32rem, calc(100vw - var(--space-6)));
+  width: calc(100% - var(--space-6));
+  max-width: 32rem;
   max-height: calc(100dvh - var(--space-6));
   padding: 0;
   background: var(--color-raised);

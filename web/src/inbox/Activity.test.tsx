@@ -159,4 +159,43 @@ describe('Activity', () => {
     )
     expect(await screen.findByRole('alert')).toHaveTextContent('Something went wrong')
   })
+
+  test('a refused Show older says why and keeps what is shown', async () => {
+    const page = Array.from({ length: 20 }, (_, i) =>
+      activityEntry({ id: 50 - i, item_id: null, actions: [], document_id: null }),
+    )
+    stubApi((call) =>
+      call.path.includes('before')
+        ? { status: 500, body: { detail: 'Something went wrong. Nothing was changed.' } }
+        : { body: page },
+    )
+    const user = userEvent.setup()
+    render(<Activity version={0} onChanged={vi.fn<() => void>()} onShow={vi.fn<() => void>()} />)
+    await user.click(await screen.findByRole('button', { name: 'Show older' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('Something went wrong')
+    expect(screen.getAllByRole('listitem')).toHaveLength(20)
+  })
+
+  test('older pages stay when the first page is read again', async () => {
+    const head = (top: number) =>
+      Array.from({ length: 20 }, (_, i) =>
+        activityEntry({ id: top - i, item_id: null, actions: [], document_id: null }),
+      )
+    let first = 0
+    stubApi((call) => {
+      if (call.path.includes('before')) {
+        return { body: [activityEntry({ id: 5, item_id: null, actions: [], document_id: null })] }
+      }
+      return { body: head(first++ === 0 ? 50 : 52) }
+    })
+    const user = userEvent.setup()
+    const { rerender } = render(
+      <Activity version={0} onChanged={vi.fn<() => void>()} onShow={vi.fn<() => void>()} />,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Show older' }))
+    expect(await screen.findAllByRole('listitem')).toHaveLength(21)
+    rerender(<Activity version={1} onChanged={vi.fn<() => void>()} onShow={vi.fn<() => void>()} />)
+    await vi.waitFor(() => expect(screen.getAllByRole('listitem')).toHaveLength(21))
+    expect(screen.queryByRole('button', { name: 'Show older' })).not.toBeInTheDocument()
+  })
 })
