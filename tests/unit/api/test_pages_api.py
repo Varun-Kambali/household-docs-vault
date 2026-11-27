@@ -87,12 +87,12 @@ def test_a_photo_has_one_page(search_client, photo_doc):
 
 
 def test_a_rotated_photo_page_matches_the_reading_frame(search_client, search_state, photo_doc):
-    # The stored boxes were measured on the image `open_image` returns, so the page is that
-    # image, not a differently turned one.
+    # The stored boxes were measured on the image `open_image` returns (upright, the rotation
+    # tag applied), so the page is that image: 400 x 200 stored with tag 6 is 200 x 400.
     overwrite(search_state, photo_doc, jpeg((400, 200), orientation=6))
     r = search_client.get(f"/v1/documents/{photo_doc.id}/pages/0.png", params={"width": 400})
     width, height = png_size(r.content)
-    assert abs(width / height - 400 / 200) < 0.01
+    assert abs(width / height - 200 / 400) < 0.01
 
 
 def test_card_pages_come_from_the_masked_copy_and_raw_card_bytes_are_refused(
