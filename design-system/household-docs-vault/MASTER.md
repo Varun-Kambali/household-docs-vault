@@ -78,6 +78,7 @@ Scale ratio 1.2 from 16. Sentence case for every heading and button. At most thr
 - **Proximity:** 8 inside a group, 24 or 32 between groups.
 - **Shell:** a sidebar of 240 px (source list, as in Finder) and the main area. Under 60rem the sidebar becomes a top bar with the same items.
 - **Main area:** `max-width: 1200px`, centred, padding 24 (16 on phones). The Viewer is the exception: its page canvas uses the full width.
+- **Inbox widths:** `--measure-bar` 30rem (the progress bar), `--question-width` 26rem (the question beside the page image), `--dialog-width` 32rem (a password dialog), `--activity-time-width` 8rem and `--activity-step-width` 7rem (the first two columns of an activity row). The 60rem breakpoint stays a literal, as media queries cannot read tokens.
 - **Alignment:** text is left-aligned. Only short empty-state messages are centred.
 
 ## Components

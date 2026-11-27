@@ -63,6 +63,11 @@
   --container-max: 75rem; /* 1200 px */
   --control-height: 2.5rem; /* 40 px; the hit target is 44 px */
   --hit-target: 2.75rem;
+  --measure-bar: 30rem; /* the Inbox progress bar */
+  --question-width: 26rem; /* the question beside the page image */
+  --dialog-width: 32rem; /* a password dialog */
+  --activity-time-width: 8rem; /* an activity row: when */
+  --activity-step-width: 7rem; /* an activity row: step */
 
   /* Motion */
   --dur-micro: 150ms;

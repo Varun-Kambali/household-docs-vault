@@ -22,7 +22,7 @@
 .progress {
   display: grid;
   gap: var(--space-2);
-  max-width: 30rem;
+  max-width: var(--measure-bar);
   margin-block-end: var(--space-4);
 }
 
@@ -57,7 +57,7 @@
 
 .inbox-item {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--question-width));
   gap: var(--space-5);
   align-items: start;
 }
@@ -251,7 +251,7 @@
 
 .activity-row {
   display: grid;
-  grid-template-columns: 8rem 7rem minmax(0, 1fr) auto;
+  grid-template-columns: var(--activity-time-width) var(--activity-step-width) minmax(0, 1fr) auto;
   gap: var(--space-3);
   align-items: start;
   padding: var(--space-3);
@@ -287,7 +287,7 @@
 
 .dialog {
   width: calc(100% - var(--space-6));
-  max-width: 32rem;
+  max-width: var(--dialog-width);
   max-height: calc(100dvh - var(--space-6));
   padding: 0;
   background: var(--color-raised);

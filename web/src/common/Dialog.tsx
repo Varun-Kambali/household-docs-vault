@@ -1,6 +1,7 @@
 // A native <dialog> for the steps that ask for a password: a focused step, closed by Escape, with
-// the focus put back on the button that opened it, and on its first field again when content loads in. Its contents exist only while it is open, so
-// whatever was typed in it is gone when it closes.
+// the focus put back on the button that opened it. Content that loads in after it opened gets the
+// focus too. Its contents exist only while it is open, so whatever was typed in it is gone when
+// it closes.
 import { useEffect, useId, useRef, type ReactNode } from 'react'
 
 const FIELDS = 'input:not([type=hidden]), select, textarea, button'
