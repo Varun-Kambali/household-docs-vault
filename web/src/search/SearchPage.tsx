@@ -23,6 +23,9 @@ import { useSearch } from './useSearch.ts'
 
 export const KEYWORD_ONLY = "Searching by keyword only: the local model isn't running."
 
+export const INDEX_STALE =
+  'The search index was made with another model. Searching by keyword until it is rebuilt.'
+
 export const MODEL_OFF =
   "Reading prompts needs the local model, which isn't running. Showing keyword matches."
 
@@ -165,7 +168,9 @@ export function SearchPage({
         onKeyDown={onKeyDown}
       />
       {off && <p className="hint model-off">{MODEL_OFF}</p>}
-      {keywordOnly && <p className="hint model-off">{KEYWORD_ONLY}</p>}
+      {keywordOnly && (
+        <p className="hint model-off">{shown?.vectors === 'stale' ? INDEX_STALE : KEYWORD_ONLY}</p>
+      )}
       {phase === 'idle' && (
         <p className="hint">Ask in a few words. Name a person, a kind of document or a date.</p>
       )}

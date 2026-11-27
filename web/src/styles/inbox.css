@@ -342,6 +342,13 @@
   transition: background-color var(--dur-micro) ease-out;
 }
 
+/* The Floor: on a phone the file button is a 44 px target like every other control. */
+@media (max-width: 60rem) {
+  .file-input::file-selector-button {
+    height: var(--hit-target);
+  }
+}
+
 .file-input:hover::file-selector-button {
   background: color-mix(in oklch, var(--color-text) 6%, var(--color-raised));
 }

@@ -551,6 +551,22 @@ describe('what the audit fixed on the search screen', () => {
     ).toBeInTheDocument()
   })
 
+  test('a stale index gets its own line, not the model-off one', async () => {
+    api({
+      quick: { body: search({ vectors: 'stale' }) },
+      full: { body: search({ vectors: 'stale' }) },
+    })
+    start()
+    setPrompt('care')
+    await wait(150)
+    expect(
+      screen.getByText(
+        'The search index was made with another model. Searching by keyword until it is rebuilt.',
+      ),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/isn't running/)).not.toBeInTheDocument()
+  })
+
   test('the keyword line does not repeat beside the model-off line', async () => {
     api({ quick: { body: search({ vectors: 'off', reading: 'off' }) } })
     start()
