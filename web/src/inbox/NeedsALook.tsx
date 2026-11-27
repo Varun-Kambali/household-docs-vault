@@ -193,10 +193,10 @@ export function NeedsALook({
         open={unlocking}
         item={here}
         onClose={() => setUnlocking(false)}
-        onDone={() => {
+        onDone={(unlocked) => {
           setUnlocking(false)
-          refocus([here.id])
-          onAnswered([here])
+          refocus([unlocked.id])
+          onAnswered([unlocked])
           onChanged()
         }}
       />

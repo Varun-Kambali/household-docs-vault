@@ -19,11 +19,16 @@ export function UnlockDialog({
   open: boolean
   item: Item
   onClose: () => void
-  onDone: () => void
+  onDone: (item: Item) => void
 }) {
+  // The file the dialog was opened for stays the target while it is open, even if the list under
+  // it is read again and another file comes first.
+  const [opened, setOpened] = useState<Item | null>(null)
+  if (open && opened === null) setOpened(item)
+  if (!open && opened !== null) setOpened(null)
   return (
     <Dialog open={open} title="Unlock this PDF" onClose={onClose}>
-      <UnlockForm item={item} onClose={onClose} onDone={onDone} />
+      <UnlockForm item={opened ?? item} onClose={onClose} onDone={onDone} />
     </Dialog>
   )
 }
@@ -35,7 +40,7 @@ function UnlockForm({
 }: {
   item: Item
   onClose: () => void
-  onDone: () => void
+  onDone: (item: Item) => void
 }) {
   const [password, setPassword] = useState('')
   const [save, setSave] = useState(false)
@@ -59,7 +64,7 @@ function UnlockForm({
         method: 'POST',
         body: JSON.stringify(body),
       })
-      onDone()
+      onDone(item)
     } catch (reason) {
       setProblem((reason as Error).message)
     } finally {

@@ -41,9 +41,7 @@ describe('UnlockDialog', () => {
     open()
     await user.type(screen.getByLabelText('PDF password'), PDF_PW)
     await user.click(screen.getByRole('button', { name: 'Open the PDF' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent(
-      'That password did not open the PDF',
-    )
+    expect(await screen.findByRole('alert')).toHaveTextContent('That password did not open the PDF')
     expect(screen.getByLabelText('PDF password')).toHaveValue('')
     expect(calls).toHaveLength(1)
     expect(calls[0]?.method).toBe('POST')
@@ -67,6 +65,61 @@ describe('UnlockDialog', () => {
     await user.click(screen.getByRole('button', { name: 'Open the PDF' }))
     expect(calls[0]?.body).toEqual({ password: PDF_PW, save: true, master_password: MASTER_PW })
     expect(onDone).toHaveBeenCalledTimes(1)
+  })
+
+  test('the master password is cleared after a refusal and after success', async () => {
+    let refuse = true
+    stubApi(() =>
+      refuse
+        ? {
+            status: 423,
+            body: { detail: 'The secrets file could not be opened. Check the master password.' },
+          }
+        : { body: { id: 3, state: 'queued' } },
+    )
+    const user = userEvent.setup()
+    open()
+    await user.type(screen.getByLabelText('PDF password'), PDF_PW)
+    await user.click(screen.getByRole('checkbox', { name: 'Save it in Secrets.kdbx' }))
+    await user.type(screen.getByLabelText('Master password'), MASTER_PW)
+    await user.click(screen.getByRole('button', { name: 'Open the PDF' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('could not be opened')
+    expect(screen.getByLabelText('PDF password')).toHaveValue('')
+    expect(screen.getByLabelText('Master password')).toHaveValue('')
+    refuse = false
+    await user.type(screen.getByLabelText('PDF password'), PDF_PW)
+    await user.type(screen.getByLabelText('Master password'), MASTER_PW)
+    await user.click(screen.getByRole('button', { name: 'Open the PDF' }))
+    expect(screen.getByLabelText('PDF password')).toHaveValue('')
+    expect(screen.getByLabelText('Master password')).toHaveValue('')
+  })
+
+  test('the password goes to the file the dialog was opened for, not the current one', async () => {
+    const { calls } = stubApi(() => ({ body: { id: 3, state: 'queued' } }))
+    const user = userEvent.setup()
+    const onDone = vi.fn<() => void>()
+    const onClose = vi.fn<() => void>()
+    const { rerender } = render(
+      <UnlockDialog
+        open
+        item={{ id: 3, name: 'policy-locked.pdf' }}
+        onClose={onClose}
+        onDone={onDone}
+      />,
+    )
+    await user.type(screen.getByLabelText('PDF password'), PDF_PW)
+    // The list was read again while the dialog was open, and another file is now first.
+    rerender(
+      <UnlockDialog
+        open
+        item={{ id: 4, name: 'other-locked.pdf' }}
+        onClose={onClose}
+        onDone={onDone}
+      />,
+    )
+    expect(screen.getByText(/policy-locked\.pdf/)).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Open the PDF' }))
+    expect(calls.map((c) => c.path)).toEqual(['/v1/needs-a-look/3/unlock'])
   })
 
   test('does not send an empty password', async () => {
