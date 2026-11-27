@@ -73,7 +73,9 @@ function SecretsForm({ onClose, onDone }: { onClose: () => void; onDone: () => v
     <Region state={state} what="the secrets file" error={read.error ?? undefined}>
       {done !== null || status?.unlocked === true ? (
         <>
-          <p role="status">{done ?? 'Secrets.kdbx is open. It locks itself after 10 minutes.'}</p>
+          <output className="dialog-result">
+            {done ?? 'Secrets.kdbx is open. It locks itself after 10 minutes.'}
+          </output>
           <div className="actions">
             <button type="button" className="button button-primary" onClick={onClose}>
               Done

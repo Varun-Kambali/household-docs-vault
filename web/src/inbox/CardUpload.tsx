@@ -92,7 +92,7 @@ function CardForm({ onClose, onDone }: { onClose: () => void; onDone: () => void
           {problem}
         </p>
       )}
-      {result !== null && <p role="status">{result}</p>}
+      {result !== null && <output className="dialog-result">{result}</output>}
       <div className="actions">
         <button type="submit" className="button button-primary" disabled={busy}>
           Upload the card
