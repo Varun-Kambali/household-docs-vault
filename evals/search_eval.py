@@ -45,6 +45,7 @@ from evals.search_set import (
     load_questions,
     origin_of,
     search_vault_docs,
+    wants_status,
 )
 from household_vault.app_state import AppState, build_app_state
 from household_vault.config import load_settings
@@ -66,7 +67,6 @@ from household_vault.search.query import (
     PROMPT_READ,
     PromptReader,
     Query,
-    asks_status,
     read_prompt,
     resolve,
 )
@@ -571,7 +571,7 @@ def _answer_right(q: Question, answer: Answer, truth: Mapping[str, SynthDoc]) ->
     if not same_value(kind, q.value, answer.value):
         return False
     # only a prompt that asks whether the document still holds wants the status in the answer
-    return q.status is None or not asks_status(q.prompt) or _status_matches(q.status, answer.text)
+    return q.status is None or not wants_status(q.prompt) or _status_matches(q.status, answer.text)
 
 
 def _cited(

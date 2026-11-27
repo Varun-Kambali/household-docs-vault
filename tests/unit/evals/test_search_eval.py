@@ -39,6 +39,7 @@ from evals.search_set import (
     _list_drafts,
     _list_questions,
     _where,
+    wants_status,
 )
 from household_vault.doctypes import AREA, Area, DocType
 from household_vault.leakscan import scan_outputs, scan_text
@@ -691,3 +692,53 @@ def test_a_date_question_is_right_with_the_plain_date_and_a_status_question_need
     assert right("When does the policy expire?", "Yes, until 31 Mar 2027.")
     assert right("Is the policy still valid?", "Yes, until 31 Mar 2027.")
     assert not right("Is the policy still valid?", "31 Mar 2027")
+
+
+# -- the eval decides which questions ask for a status on its own ---------------------------------
+
+
+@pytest.mark.parametrize(
+    "prompt",
+    [
+        "When does the PAN card expire?",
+        "Kavita's car insurance expiry date",
+        "When does the cover on the health policy end?",
+        "Which insurer issued the AC warranty card?",
+    ],
+)
+def test_a_date_question_needs_only_the_date(prompt):
+    assert wants_status(prompt) is False
+
+
+@pytest.mark.parametrize(
+    "prompt",
+    [
+        "Is Kavita's car insurance still valid?",
+        "Is the AC still under warranty?",
+        "the passport still valid",
+        "the AC under warranty",
+        "Is it still valid?",
+        "Is the passport still valod?",
+    ],
+)
+def test_a_status_question_needs_the_status_wording(prompt):
+    assert wants_status(prompt) is True
+
+
+def test_the_eval_decides_on_its_own_without_the_app_classifier():
+    import ast
+    import inspect
+
+    import evals.search_eval as search_eval
+    import evals.search_set as search_set
+
+    assert not hasattr(search_eval, "asks_status")
+    names = {
+        n.id
+        for n in ast.walk(ast.parse(inspect.getsource(search_set.wants_status)))
+        if isinstance(n, ast.Name)
+    }
+    assert "household_vault" not in names and "asks_status" not in names
+    tree = ast.parse(Path(search_eval.__file__).read_text())
+    imported = {a.name for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) for a in n.names}
+    assert "asks_status" not in imported
