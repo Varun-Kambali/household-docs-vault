@@ -100,3 +100,14 @@ def test_the_vision_model_gets_the_upright_photo():
         assert img.size == (800, 500)
     untagged = _fill_images(DocumentSource(Kind.png, data=plain.getvalue()), None)
     assert untagged == [plain.getvalue()]
+
+
+def test_a_turned_photo_goes_back_as_a_high_quality_jpeg_not_a_png():
+    out = upright_bytes(photo(6, "JPEG"))
+    with Image.open(io.BytesIO(out)) as img:
+        assert img.format == "JPEG" and img.size == (800, 500)
+        assert img.getexif().get(ORIENTATION, 1) == 1
+        assert all(c > 240 for c in img.getpixel((5, 5)))  # the white block, top left
+        assert all(c < 15 for c in img.getpixel((795, 495)))  # the black block, bottom right
+        quant = img.quantization[0]
+        assert max(quant) <= 16  # the standard table scaled for quality 92 tops out at 16

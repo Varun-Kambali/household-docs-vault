@@ -57,15 +57,18 @@ _ORIENTATION = 0x0112
 
 
 def upright_bytes(data: bytes) -> bytes:
-    """The photo as it is shown: bytes carrying a rotation tag come back as PNG with the
-    rotation applied and no tag, every other file unchanged (so a reading recorded for it
-    stays valid). Bytes that are not an image come back as they are."""
+    """The photo as it is shown: bytes carrying a rotation tag come back as a high-quality JPEG
+    with the rotation applied and no tag (a PNG of a 12 MP photo is several times larger).
+    Every other file comes back unchanged, so a reading recorded for it stays valid. Bytes that
+    are not an image come back as they are."""
     try:
         with Image.open(io.BytesIO(data)) as img:
             if img.getexif().get(_ORIENTATION, 1) in (0, 1):
                 return data
             out = io.BytesIO()
-            ImageOps.exif_transpose(img).convert("RGB").save(out, format="PNG")
+            ImageOps.exif_transpose(img).convert("RGB").save(
+                out, format="JPEG", quality=95, subsampling=0
+            )
             return out.getvalue()
     except (UnidentifiedImageError, OSError, SyntaxError, ValueError):
         return data
