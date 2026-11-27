@@ -50,6 +50,16 @@ describe('api', () => {
     expect(await api('/v1/documents/a/reveal', { method: 'POST' })).toBeUndefined()
   })
 
+  test('sends a form as it is, so the browser sets the multipart header', async () => {
+    const fetchMock = vi
+      .fn<(url: string, init?: RequestInit) => Promise<Response>>()
+      .mockResolvedValue(reply(200, {}))
+    vi.stubGlobal('fetch', fetchMock)
+    await api('/v1/cards', { method: 'POST', body: new FormData() })
+    const init = fetchMock.mock.calls[0]![1] as RequestInit
+    expect(new Headers(init.headers).has('Content-Type')).toBe(false)
+  })
+
   test('sends a JSON body with its header', async () => {
     const fetchMock = vi
       .fn<(url: string, init?: RequestInit) => Promise<Response>>()

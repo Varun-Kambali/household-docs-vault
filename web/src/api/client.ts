@@ -33,7 +33,9 @@ function isAbort(error: unknown): boolean {
 
 export function api<T>(path: string, init?: RequestInit & { signal?: AbortSignal }): Promise<T> {
   const headers = new Headers(init?.headers)
-  if (init?.body !== undefined && !headers.has('Content-Type')) {
+  // A form (a card upload) is left to the browser, which writes its boundary into the header.
+  const isForm = init?.body instanceof FormData
+  if (init?.body !== undefined && !isForm && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json')
   }
   return request<T>(path, { ...init, headers })
