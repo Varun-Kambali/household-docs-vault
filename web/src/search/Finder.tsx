@@ -6,7 +6,7 @@ import type { ReactNode } from 'react'
 import type { RowOut } from '../api/types.ts'
 import { FINDER_ID, optionId } from './finderIds.ts'
 import { CARD_NOTE, isCard, typeLabel } from '../common/labels.ts'
-import { keyText } from './rowText.ts'
+import { keyParts } from './rowText.ts'
 
 function words(prompt: string): string[] {
   return prompt
@@ -46,7 +46,7 @@ export function Finder({
     <ul id={FINDER_ID} className="finder" role="listbox" aria-label="Matching files">
       {rows.map((row, index) => {
         const names = row.people.map((id) => people.get(id)).filter((name) => name !== undefined)
-        const detail = isCard(row.doc_type) ? CARD_NOTE : keyText(row)
+        const detail = isCard(row.doc_type) ? [CARD_NOTE] : keyParts(row)
         return (
           // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
           <li
@@ -66,7 +66,18 @@ export function Finder({
               <Highlight text={names.join(', ')} prompt={prompt} />
             </span>
             <span className="finder-fields">
-              <Highlight text={detail} prompt={prompt} />
+              {detail.map((part) => {
+                const text = typeof part === 'string' ? part : part.text
+                const mono = typeof part !== 'string' && part.identifier
+                return (
+                  <span
+                    key={typeof part === 'string' ? part : part.name}
+                    className={mono ? 'key-part identifier' : 'key-part'}
+                  >
+                    <Highlight text={text} prompt={prompt} />
+                  </span>
+                )
+              })}
             </span>
             <span className="finder-path" title={row.rel_path}>
               <Highlight text={row.rel_path} prompt={prompt} />

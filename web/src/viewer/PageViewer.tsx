@@ -100,13 +100,13 @@ function Page({
   )
 }
 
-function Fields({ doc }: { doc: DocumentOut }) {
+function Fields({ doc, answered }: { doc: DocumentOut; answered: string | undefined }) {
   const entries = Object.entries(doc.fields).filter(([, value]) => value !== null && value !== '')
   if (entries.length === 0) return <p className="hint">No fields were read from this file.</p>
   return (
     <dl className="fields">
       {entries.map(([name, value]) => (
-        <div key={name} className="field">
+        <div key={name} className="field" aria-current={name === answered ? 'true' : undefined}>
           <dt>{label(name)}</dt>
           <dd className={doc.field_kinds[name] === 'identifier' ? 'identifier' : undefined}>
             {isMasked(doc.doc_type, name) ? (
@@ -125,10 +125,12 @@ export function PageViewer({
   id,
   page,
   lines,
+  field,
 }: {
   id: string
   page: number
   lines: string | null
+  field?: string
 }) {
   const loaded = useDocument(id)
   const { state: revealed, reveal } = useReveal()
@@ -198,6 +200,7 @@ export function PageViewer({
               ))}
             </div>
             <aside className="inspector" aria-label="About this file">
+              <h2 className="inspector-title">{typeLabel(loaded.doc.doc_type)}</h2>
               <p className="inspector-path">{loaded.doc.rel_path}</p>
               <p className="hint">
                 Page {current} of {total}
@@ -245,7 +248,7 @@ export function PageViewer({
                   {revealed.text}
                 </p>
               )}
-              <Fields doc={loaded.doc} />
+              <Fields doc={loaded.doc} answered={field} />
             </aside>
           </div>
         )}

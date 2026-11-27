@@ -203,7 +203,9 @@ describe('the search screen', () => {
     press('Enter')
     await wait(0)
     fireEvent.click(screen.getByRole('button', { name: 'Open at page' }))
-    expect(window.location.pathname + window.location.search).toBe('/doc/doc-a?page=1&lines=3')
+    expect(window.location.pathname + window.location.search).toBe(
+      '/doc/doc-a?page=1&lines=3&field=policy_number',
+    )
   })
 
   test('an ID number is masked until Show is pressed', async () => {
@@ -398,6 +400,7 @@ describe('the search screen', () => {
     expect(option).toHaveTextContent('Rs 10,00,000')
     expect(option).toHaveTextContent('19 Sep 2027')
     expect(option).toHaveTextContent('P/21/2138/5675525')
+    expect(option.textContent).not.toContain('\u00b7')
     expect(option).not.toHaveTextContent('2027-09-19')
   })
 

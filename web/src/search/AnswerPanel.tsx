@@ -59,7 +59,7 @@ export function AnswerPanel({
           <button
             type="button"
             className="button button-primary"
-            onClick={() => navigate(openAt(answer.document_id, answer.page, idxs))}
+            onClick={() => navigate(openAt(answer.document_id, answer.page, idxs, answer.field))}
           >
             Open at page
           </button>
@@ -95,7 +95,9 @@ export function AnswerPanel({
                   bbox: line.bbox,
                   text: texts.get(line.idx),
                 }))}
-                onOpen={(idx) => navigate(openAt(answer.document_id, answer.page, [idx]))}
+                onOpen={(idx) =>
+                  navigate(openAt(answer.document_id, answer.page, [idx], answer.field))
+                }
               />
             </div>
           )}

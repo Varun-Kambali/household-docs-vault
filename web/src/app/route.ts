@@ -5,7 +5,8 @@ import { type AreaId, isAreaId } from './areas.ts'
 export type Route =
   // A search is a prompt, or (once a list has been narrowed, or linked to) the list's own query.
   | { name: 'search'; q: string; list?: ListQuery }
-  | { name: 'doc'; id: string; page: number; lines: string | null }
+  // `field` is the stored field an answer came from, marked in the viewer's list.
+  | { name: 'doc'; id: string; page: number; lines: string | null; field?: string }
   | { name: 'inbox' }
   | { name: 'area'; area: AreaId; list?: ListQuery }
   | { name: 'notfound' }
@@ -21,11 +22,13 @@ export function parseRoute(pathname: string, search: string): Route {
   if (parts.length === 1 && head === 'inbox') return { name: 'inbox' }
   if (parts.length === 2 && head === 'doc' && tail !== undefined) {
     const page = Number(params.get('page'))
+    const field = params.get('field')
     return {
       name: 'doc',
       id: tail,
       page: Number.isInteger(page) && page > 0 ? page : 0,
       lines: params.get('lines'),
+      ...(field !== null && /^[a-z][a-z0-9_]{0,63}$/.test(field) && { field }),
     }
   }
   if (parts.length === 2 && head === 'area' && tail !== undefined && isAreaId(tail)) {
@@ -52,6 +55,7 @@ export function hrefFor(route: Route): string {
       const query = new URLSearchParams()
       if (route.page > 0) query.set('page', String(route.page))
       if (route.lines !== null) query.set('lines', route.lines)
+      if (route.field !== undefined) query.set('field', route.field)
       return `/doc/${encodeURIComponent(route.id)}${query.size > 0 ? `?${query.toString()}` : ''}`
     }
     case 'notfound':

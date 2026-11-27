@@ -141,7 +141,9 @@ export function App() {
         )}
         {route.name === 'inbox' && <InboxScreen onChanged={refresh} />}
         {route.name === 'area' && <AreaScreen area={route.area} list={route.list} />}
-        {route.name === 'doc' && <DocScreen id={route.id} page={route.page} lines={route.lines} />}
+        {route.name === 'doc' && (
+          <DocScreen id={route.id} page={route.page} lines={route.lines} field={route.field} />
+        )}
         {route.name === 'notfound' && <NotFoundScreen />}
       </main>
     </div>

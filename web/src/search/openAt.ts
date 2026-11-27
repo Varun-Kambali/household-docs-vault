@@ -2,12 +2,18 @@
 // to outline on it.
 import { hrefFor } from '../app/route.ts'
 
-export function openAt(documentId: string, page: number, lineIdxs: number[]): string {
+export function openAt(
+  documentId: string,
+  page: number,
+  lineIdxs: number[],
+  field?: string,
+): string {
   return hrefFor({
     name: 'doc',
     id: documentId,
     page: page + 1,
     lines: lineIdxs.length > 0 ? lineIdxs.join(',') : null,
+    ...(field !== undefined && { field }),
   })
 }
 
