@@ -61,7 +61,10 @@ describe('SecretsDialog', () => {
   test('with a locked file, asks once and unlocks; a wrong password is cleared', async () => {
     const { calls } = stubApi((call) =>
       call.method === 'POST'
-        ? { status: 423, body: { detail: 'The secrets file could not be opened. Check the master password.' } }
+        ? {
+            status: 423,
+            body: { detail: 'The secrets file could not be opened. Check the master password.' },
+          }
         : status(true, false)(call),
     )
     const user = userEvent.setup()

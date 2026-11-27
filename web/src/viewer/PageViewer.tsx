@@ -7,6 +7,7 @@ import type { DocumentOut } from '../api/types.ts'
 import { navigate } from '../app/location.ts'
 import { Region } from '../app/Region.tsx'
 import { hrefFor } from '../app/route.ts'
+import { FIELD_LABELS } from '../common/fieldLabels.ts'
 import { CARD_NOTE, isCard, isMasked, typeLabel } from '../common/labels.ts'
 import { formatField } from '../common/format.ts'
 import { Masked } from '../common/Masked.tsx'
@@ -20,7 +21,7 @@ import { useDocument } from './useDocument.ts'
 type Size = 'fit' | 'actual'
 
 function label(name: string): string {
-  const spaced = name.replace(/_/g, ' ')
+  const spaced = FIELD_LABELS[name] ?? name.replace(/_/g, ' ')
   return spaced.charAt(0).toUpperCase() + spaced.slice(1)
 }
 
@@ -226,13 +227,15 @@ export function PageViewer({
                 >
                   Show in folder
                 </button>
-                <a
-                  className="button"
-                  href={`/v1/documents/${encodeURIComponent(loaded.doc.id)}/file`}
-                  download={basename(loaded.doc.rel_path)}
-                >
-                  Download original
-                </a>
+                {!isCard(loaded.doc.doc_type) && (
+                  <a
+                    className="button"
+                    href={`/v1/documents/${encodeURIComponent(loaded.doc.id)}/file`}
+                    download={basename(loaded.doc.rel_path)}
+                  >
+                    Download original
+                  </a>
+                )}
               </div>
               {revealed.kind === 'ok' && <output className="reveal-note">{revealed.text}</output>}
               {revealed.kind === 'error' && (

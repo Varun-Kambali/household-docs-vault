@@ -185,6 +185,36 @@ describe('the page viewer', () => {
     expect(screen.getByText('2345 6789 0123')).toBeInTheDocument()
   })
 
+  test("field names are the vault's own labels, with a fallback for any other", async () => {
+    open('/doc/doc-a?page=1')
+    api({
+      doc: {
+        body: document({
+          doc_type: 'card_statement',
+          fields: { last4: '4242', bank: 'HDFC', odd_thing: 'x' },
+          field_kinds: {},
+        }),
+      },
+    })
+    render(<App />)
+    await flush()
+    expect(screen.getByText('Last four digits', { selector: 'dt' })).toBeInTheDocument()
+    expect(screen.getByText('Bank', { selector: 'dt' })).toBeInTheDocument()
+    expect(screen.getByText('Odd thing', { selector: 'dt' })).toBeInTheDocument()
+  })
+
+  test('a card does not offer Download original, as the server refuses its raw bytes', async () => {
+    for (const docType of ['card_front', 'card_statement', 'card_welcome_letter']) {
+      open('/doc/doc-a?page=1')
+      api({ doc: { body: document({ doc_type: docType, fields: { bank: 'HDFC' } }) } })
+      const view = render(<App />)
+      await flush()
+      expect(screen.getByRole('button', { name: 'Show in folder' })).toBeInTheDocument()
+      expect(screen.queryByRole('link', { name: 'Download original' })).not.toBeInTheDocument()
+      view.unmount()
+    }
+  })
+
   test('a card says where its number is kept', async () => {
     open('/doc/doc-a?page=1')
     api({ doc: { body: document({ doc_type: 'card_front', fields: { bank: 'HDFC' } }) } })

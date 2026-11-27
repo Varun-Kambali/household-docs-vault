@@ -135,7 +135,9 @@ export function Question({
           submit()
         }}
       >
-        <h2 id={`${groupName}-title`} tabIndex={-1}>{question.text}</h2>
+        <h2 id={`${groupName}-title`} tabIndex={-1}>
+          {question.text}
+        </h2>
         <dl className="read">
           <div>
             <dt>File</dt>

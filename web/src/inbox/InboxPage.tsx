@@ -33,12 +33,7 @@ export function InboxPage({ onChanged }: { onChanged: () => void }) {
   )
   const close = useCallback(() => setDialog(null), [])
 
-  const state =
-    error !== null && items === null
-      ? 'error'
-      : items === null
-        ? 'loading'
-        : 'full'
+  const state = error !== null && items === null ? 'error' : items === null ? 'loading' : 'full'
 
   return (
     <>
@@ -62,11 +57,7 @@ export function InboxPage({ onChanged }: { onChanged: () => void }) {
             {error}
           </p>
         )}
-        <Region
-          state={state}
-          what="the Inbox"
-          error={error ?? undefined}
-        >
+        <Region state={state} what="the Inbox" error={error ?? undefined}>
           <NeedsALook
             items={items ?? []}
             focus={focus}

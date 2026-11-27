@@ -61,13 +61,20 @@ describe('CardUpload', () => {
   })
 
   test('the password is cleared once sent, even when the upload is refused', async () => {
-    stubApi(() => ({ status: 422, body: { detail: 'That photo could not be used. Upload a clearer, straighter photo of the card.' } }))
+    stubApi(() => ({
+      status: 422,
+      body: {
+        detail: 'That photo could not be used. Upload a clearer, straighter photo of the card.',
+      },
+    }))
     const user = userEvent.setup()
     show()
     await user.upload(screen.getByLabelText('Front of the card'), photo('front.jpg'))
     await user.type(screen.getByLabelText('Master password'), MASTER_PW)
     await user.click(screen.getByRole('button', { name: 'Upload the card' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('That photo could not be used. Upload a clearer')
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'That photo could not be used. Upload a clearer',
+    )
     expect(screen.getByLabelText('Master password')).toHaveValue('')
   })
 

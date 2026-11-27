@@ -89,7 +89,13 @@ describe('Activity', () => {
     stubApi((call) =>
       call.path.startsWith('/v1/activity')
         ? { body: [activityEntry()] }
-        : { status: 409, body: { detail: 'A file with that name is already in Inbox. Move or rename it, then try Undo again.' } },
+        : {
+            status: 409,
+            body: {
+              detail:
+                'A file with that name is already in Inbox. Move or rename it, then try Undo again.',
+            },
+          },
     )
     const user = userEvent.setup()
     render(

@@ -156,6 +156,19 @@ def test_the_web_apps_type_labels_and_masked_fields_match_the_vault():
     }
 
 
+def test_the_web_apps_field_labels_match_the_search_vocabulary():
+    """web/src/common/fieldLabels.ts names the stored fields in the viewer; it must follow
+    FIELD_LABELS."""
+    import re
+    from pathlib import Path
+
+    from household_vault.search.vocab import FIELD_LABELS
+
+    source = (Path(__file__).parents[3] / "web" / "src" / "common" / "fieldLabels.ts").read_text()
+    listed = dict(re.findall(r"^  (\w+): '([^']+)',$", source, flags=re.M))
+    assert listed == FIELD_LABELS
+
+
 def test_default_dist_follows_the_environment_and_needs_a_built_page(dist, tmp_path, monkeypatch):
     from household_vault.api.web import default_dist
 
