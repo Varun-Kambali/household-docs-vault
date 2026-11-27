@@ -74,3 +74,10 @@ def add_web_routes(app: FastAPI, dist: Path | None) -> None:
         if "." in path.rsplit("/", 1)[-1] or ".." in path.split("/"):
             raise HTTPException(status_code=404, detail="Not found.")
         return page()
+
+    @app.api_route(
+        "/{path:path}", methods=["POST", "PUT", "PATCH", "DELETE"], include_in_schema=False
+    )
+    def no_such_route(path: str) -> Response:
+        # Nothing but a GET reaches the app, and every real route is registered before this one.
+        raise HTTPException(status_code=404, detail="Not found.")
