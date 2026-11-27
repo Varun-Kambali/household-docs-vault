@@ -55,8 +55,7 @@ async function request<T>(path: string, init: RequestInit): Promise<T> {
   }
   if (!response.ok) {
     const body = (await response.json().catch(() => null)) as
-      | ({ detail?: Detail } & Record<string, unknown>)
-      | null
+      ({ detail?: Detail } & Record<string, unknown>) | null
     const { detail, ...rest } = body ?? {}
     throw new ApiError(sentence(detail), response.status, rest)
   }
