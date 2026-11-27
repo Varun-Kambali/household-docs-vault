@@ -386,3 +386,82 @@ def test_a_possessive_brand_or_insurer_is_no_person(search_store, searcher):
     assert unread("What is the policy number on Care's health policy?") == []
     assert unread("Suresh's policy number") == []
     assert unread("Meera's PAN card number") == ["person: Meera"]
+
+
+def _add_keyed_docs(search_store):
+    """A phone invoice and a policy whose keys sit in their own field rows, apart from the
+    words around them. Synthetic values."""
+    add_doc(
+        search_store,
+        "keyed-inv",
+        "tax_invoice",
+        {"serial_number": "490154203237518", "seller": "Zed Mobiles"},
+        ["Tax Invoice", "IMEI: XXXXXXXXXXX7518"],
+    )
+    add_doc(
+        search_store,
+        "keyed-pol",
+        "health_policy",
+        {"policy_number": "P/21/2138/5675525", "insurer": "Zed Care"},
+        ["Health policy schedule"],
+    )
+    index = KeywordIndex(search_store)
+    index.add("keyed-inv")
+    index.add("keyed-pol")
+
+
+def _top3_keys(rows, search_store):
+    out = []
+    for r in rows[:3]:
+        fields = search_store.document(r.document_id).fields
+        out += [fields.get("serial_number"), fields.get("policy_number")]
+    return out
+
+
+@pytest.mark.parametrize(
+    "prompt,call",
+    [
+        ("invoice IMEI 490154203237518", "full"),
+        ("IMEI 490154203237518", "quick"),
+        ("IMEI 490154203237518", "full"),
+    ],
+)
+def test_an_exact_number_finds_its_document_whatever_words_surround_it(
+    prompt, call, searcher, search_store
+):
+    _add_keyed_docs(search_store)
+    rows = searcher.quick(prompt) if call == "quick" else searcher.lookup(query(), prompt)
+    assert "490154203237518" in _top3_keys(rows, search_store)
+
+
+def test_a_policy_number_typed_with_words_finds_its_policy(searcher, search_store):
+    _add_keyed_docs(search_store)
+    prompt = "policy P/21/2138/5675525"
+    assert "P/21/2138/5675525" in _top3_keys(searcher.quick(prompt), search_store)
+    assert "P/21/2138/5675525" in _top3_keys(searcher.lookup(query(), prompt), search_store)
+
+
+@pytest.mark.parametrize(
+    "text,expected",
+    [
+        ("IMEI 490154203237518", ["490154203237518"]),
+        ("policy P/21/2138/5675525?", ["P/21/2138/5675525"]),
+        ("AB12CD34EF", ["AB12CD34EF"]),
+        ("invoice 123456 from 2026-11-24", []),
+        ("serial abcdefghij", []),
+        ("my card \u2022\u2022\u2022\u2022 7518", []),
+    ],
+)
+def test_identifier_shaped_tokens(text, expected):
+    from household_vault.search.retrieve import identifier_tokens
+
+    assert identifier_tokens(text) == expected
+
+
+def test_a_prompt_with_no_identifier_ranks_as_before(searcher, search_store, monkeypatch):
+    _add_keyed_docs(search_store)
+    prompts = ["Croma refrigerator", "invoice from 2026-11-24"]
+    with_it = [[r.document_id for r in searcher.quick(p)] for p in prompts]
+    monkeypatch.setattr(searcher, "_identifier_hits", lambda *a, **k: [])
+    without = [[r.document_id for r in searcher.quick(p)] for p in prompts]
+    assert with_it == without
