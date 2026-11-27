@@ -26,7 +26,7 @@ async function tick(ms: number): Promise<void> {
 }
 
 describe('Progress', () => {
-  test('progress polls while work is queued and stops when idle', async () => {
+  test('progress polls every 2 s while work is queued and slows down when idle', async () => {
     const replies: ProgressOut[] = [
       idle({ waiting: 2, current: 'a.pdf', step: 'read', total_in_batch: 3, done_in_batch: 0 }),
       idle({ waiting: 1, current: 'b.pdf', step: 'read', total_in_batch: 3, done_in_batch: 1 }),
@@ -44,9 +44,71 @@ describe('Progress', () => {
     expect(screen.getByText('Reading 2 of 3')).toBeInTheDocument()
     await tick(2000)
     expect(calls).toHaveLength(3)
-    await tick(20000)
-    expect(calls).toHaveLength(3)
     expect(screen.getByText('Read 3 of 3')).toBeInTheDocument()
+    // Idle: it looks again every 10 s, in case a file was dropped.
+    await tick(9999)
+    expect(calls).toHaveLength(3)
+    await tick(1)
+    expect(calls).toHaveLength(4)
+  })
+
+  test('a file dropped while idle is noticed: idle, then busy, then idle again', async () => {
+    const replies: ProgressOut[] = [
+      idle(),
+      idle({ waiting: 1, current: 'new.pdf', step: 'read', total_in_batch: 1, done_in_batch: 0 }),
+      idle({ total_in_batch: 1, done_in_batch: 1 }),
+    ]
+    const { calls } = stubApi(() => ({ body: replies[Math.min(calls.length - 1, 2)] }))
+    render(<Host />)
+    await tick(0)
+    expect(calls).toHaveLength(1)
+    await tick(10000)
+    expect(calls).toHaveLength(2)
+    expect(screen.getByText('Reading 1 of 1')).toBeInTheDocument()
+    const busyVersion = Number(screen.getByTestId('version').textContent)
+    expect(busyVersion).toBeGreaterThan(0)
+    await tick(2000)
+    expect(calls).toHaveLength(3)
+    expect(screen.getByText('Read 1 of 1')).toBeInTheDocument()
+    expect(Number(screen.getByTestId('version').textContent)).toBeGreaterThan(busyVersion)
+    await tick(10000)
+    expect(calls).toHaveLength(4)
+  })
+
+  test('new work that finished between two idle looks still refreshes the lists', async () => {
+    const replies: ProgressOut[] = [idle(), idle({ total_in_batch: 1, done_in_batch: 1 })]
+    const { calls } = stubApi(() => ({ body: replies[Math.min(calls.length - 1, 1)] }))
+    render(<Host />)
+    await tick(0)
+    expect(screen.getByTestId('version')).toHaveTextContent('0')
+    await tick(10000)
+    expect(screen.getByTestId('version')).toHaveTextContent('1')
+    await tick(10000)
+    expect(screen.getByTestId('version')).toHaveTextContent('1')
+  })
+
+  test('a hidden page does not poll, and reading starts again when it is shown', async () => {
+    const { calls } = stubApi(() => ({ body: idle() }))
+    const hidden = vi.spyOn(document, 'hidden', 'get')
+    hidden.mockReturnValue(false)
+    render(<Host />)
+    await tick(0)
+    expect(calls).toHaveLength(1)
+    hidden.mockReturnValue(true)
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'))
+    })
+    await tick(60000)
+    expect(calls).toHaveLength(1)
+    hidden.mockReturnValue(false)
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'))
+    })
+    await tick(0)
+    expect(calls).toHaveLength(2)
+    await tick(10000)
+    expect(calls).toHaveLength(3)
+    hidden.mockRestore()
   })
 
   test('shows nothing when no batch has run, and no moving parts', async () => {
