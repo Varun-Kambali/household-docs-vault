@@ -49,7 +49,7 @@ def test_a_page_comes_back_as_a_png_of_the_asked_width(search_client, photo_doc)
     r = search_client.get(f"/v1/documents/{photo_doc.id}/pages/0.png", params={"width": 800})
     assert r.status_code == 200 and r.headers["content-type"] == "image/png"
     assert png_size(r.content)[0] == 800
-    assert r.headers["cache-control"] == "private, max-age=300"
+    assert r.headers["cache-control"] == "no-store"
     assert r.headers["x-content-type-options"] == "nosniff"
     default = search_client.get(f"/v1/documents/{photo_doc.id}/pages/0.png")
     assert png_size(default.content)[0] == 1200
@@ -87,12 +87,12 @@ def test_a_photo_has_one_page(search_client, photo_doc):
 
 
 def test_a_rotated_photo_page_matches_the_reading_frame(search_client, search_state, photo_doc):
-    # The stored boxes were measured on the image `open_image` returns, so the page is that
-    # image, not a differently turned one.
+    # The stored boxes were measured on the image `open_image` returns (upright, the rotation
+    # tag applied), so the page is that image: 400 x 200 stored with tag 6 is 200 x 400.
     overwrite(search_state, photo_doc, jpeg((400, 200), orientation=6))
     r = search_client.get(f"/v1/documents/{photo_doc.id}/pages/0.png", params={"width": 400})
     width, height = png_size(r.content)
-    assert abs(width / height - 400 / 200) < 0.01
+    assert abs(width / height - 200 / 400) < 0.01
 
 
 def test_card_pages_come_from_the_masked_copy_and_raw_card_bytes_are_refused(
@@ -309,3 +309,17 @@ def test_both_lines_routes_declare_their_reply_in_the_schema(search_client):
     ):
         ok = schema["paths"][path]["get"]["responses"]["200"]
         assert ok["content"]["application/json"]["schema"]["$ref"].endswith("/PageLinesOut")
+
+
+def test_page_images_and_lines_are_never_kept_by_the_browser(
+    search_client, photo_doc, waiting_item
+):
+    """An ID page must not land in the browser's disk cache."""
+    for path in (
+        f"/v1/documents/{photo_doc.id}/pages/0.png",
+        f"/v1/documents/{photo_doc.id}/pages/0/lines",
+        f"/v1/items/{waiting_item.id}/pages/0.png",
+        f"/v1/items/{waiting_item.id}/pages/0/lines",
+    ):
+        r = search_client.get(path)
+        assert r.status_code == 200 and r.headers["cache-control"] == "no-store", path

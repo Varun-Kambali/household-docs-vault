@@ -45,6 +45,7 @@ from evals.search_set import (
     load_questions,
     origin_of,
     search_vault_docs,
+    wants_status,
 )
 from household_vault.app_state import AppState, build_app_state
 from household_vault.config import load_settings
@@ -61,16 +62,33 @@ from household_vault.reading.source import DocumentSource, document_key
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import field_kind, parse_amount, parse_date
 from household_vault.scoring import IOU_MIN, iou, normalise
-from household_vault.search.answer import Answer, NoAnswer, compose, weak_match
-from household_vault.search.query import PROMPT_READ, PromptReader, Query, read_prompt, resolve
-from household_vault.search.retrieve import Rows
+from household_vault.search.answer import Answer, NoAnswer, compose
+from household_vault.search.query import (
+    PROMPT_READ,
+    PromptReader,
+    Query,
+    read_prompt,
+    resolve,
+)
+from household_vault.search.retrieve import Rows, Searcher
 from household_vault.search.sentence import sentence
-from household_vault.search.vectors import QUERY_TASK, Embedder, Vectors
+from household_vault.search.vectors import QUERY_TASK, Embedder, VectorIndex, Vectors
 from household_vault.vaultroot import INBOX
 
 ORIGINS = ("eval-v1", "extra")
 SMOKE_DIR = Path(__file__).resolve().parent / "recordings" / "search-v1" / "smoke"
 N_SMOKE_LISTS = 10
+# val none questions that name a household member or a document type of the smoke vault; the
+# vault holds nothing that fits any of them
+SMOKE_NONE_IDS = (
+    "val-none-001",
+    "val-none-004",
+    "val-none-007",
+    "val-none-011",
+    "val-none-015",
+    "val-none-017",
+    "val-none-020",
+)
 _ALL_STATES: tuple[ItemState, ...] = ("queued", "reading", "filed", "asked", "held")
 
 
@@ -457,6 +475,7 @@ class Result:
     rows: Rows
     outcome: Answer | NoAnswer | None
     quick: Rows
+    quick_off: Rows | None = None  # the quick search with no vectors (keywords only)
 
 
 @dataclass
@@ -471,6 +490,8 @@ class SearchRow:
     top1: bool | None = None
     top3: bool | None = None
     quick_top3: bool | None = None
+    quick_off_top1: bool | None = None  # keyword-only quick search: Ollama off or vectors stale
+    quick_off_top3: bool | None = None
     answered: bool | None = None
     answer_correct: bool | None = None
     citation_ok: bool | None = None
@@ -549,7 +570,8 @@ def _answer_right(q: Question, answer: Answer, truth: Mapping[str, SynthDoc]) ->
     kind = field_kind(schema, q.field) if q.field in schema.model_fields else "text"
     if not same_value(kind, q.value, answer.value):
         return False
-    return q.status is None or _status_matches(q.status, answer.text)
+    # only a prompt that asks whether the document still holds wants the status in the answer
+    return q.status is None or not wants_status(q.prompt) or _status_matches(q.status, answer.text)
 
 
 def _cited(
@@ -589,16 +611,16 @@ def query_differences(got: Query, want: Query) -> list[str]:
 
 
 def declined(res: Result) -> bool:
-    """The app gave no answer: a NoAnswer, a person it could not read, no rows, or thin evidence
-    (the `weak_match` rule `compose` applies)."""
-    if isinstance(res.outcome, NoAnswer):
+    """The app gave no answer: what the route returns, a `NoAnswer` or no rows. A list has no
+    outcome, so a person it could not read counts, as the list sentence shows it."""
+    if isinstance(res.outcome, NoAnswer) or not res.rows:
         return True
     query = res.query
-    if query is not None and any(u.startswith("person:") for u in query.unread):
-        return True
-    if not res.rows:
-        return True
-    return query is not None and weak_match(query, res.rows)
+    return (
+        query is not None
+        and query.intent == "list"
+        and any(u.startswith("person:") for u in query.unread)
+    )
 
 
 def _lookup_cause(q: Question, res: Result, ids: Sequence[str]) -> str | None:
@@ -638,6 +660,10 @@ def judge(
         row.top3 = any(i in targets for i in ids[:3])
         row.quick_top3 = any(i in targets for i in quick[:3])
         row.declined = declined(res)
+        if res.quick_off is not None:
+            off = [back.get(r.document_id, r.document_id) for r in res.quick_off]
+            row.quick_off_top1 = bool(off) and off[0] in targets
+            row.quick_off_top3 = any(i in targets for i in off[:3])
         if not row.top1:
             row.cause = "reading off" if res.query is None else "retrieval miss"
             if res.query is not None and q.kind == "find" and res.query.intent == "list":
@@ -709,6 +735,7 @@ def run_search(
     back = {v: k for k, v in ids.items()}
     truth = {d.doc_id: d for d in vault_docs}
     rows: list[SearchRow] = []
+    keyword_only = Searcher(state.store, state.searcher.keyword, VectorIndex(state.store, None))
     try:
         for q in asked:
             t0 = time.perf_counter()
@@ -716,7 +743,8 @@ def run_search(
             t1 = time.perf_counter()
             query, found, outcome = _full(state, q.prompt, reader, EVAL_TODAY)
             t2 = time.perf_counter()
-            row = judge(q, Result(query, found, outcome, quick), truth, back)
+            off = keyword_only.quick(q.prompt)
+            row = judge(q, Result(query, found, outcome, quick, off), truth, back)
             row.seconds_quick, row.seconds_full = t1 - t0, t2 - t1
             rows.append(row)
         hits, skipped = _scan(state, entries)
@@ -733,6 +761,7 @@ def run_search(
                     "secret_hits": hits[:20],
                     "waiting_originals_skipped": skipped,
                     "vectors_missing": getattr(embedder, "missing_queries", 0),
+                    "seen_in_val": seen_in_val(rows, split),
                 }
             )
     finally:
@@ -760,6 +789,8 @@ _METRICS = (
     "top1",
     "top3",
     "quick_top3",
+    "quick_off_top1",
+    "quick_off_top3",
     "answer_correct",
     "citation_ok",
     "list_reading",
@@ -821,6 +852,27 @@ def summarise_search(
     return out
 
 
+def _norm_prompt(prompt: str) -> str:
+    return " ".join(prompt.lower().split())
+
+
+def seen_in_val(rows: Sequence[SearchRow], split: str) -> dict[str, Any] | None:
+    """The test questions whose prompt also stands in val, so their readings were tuned on:
+    which they are (found by comparing prompts, not listed by hand) and how they scored. None
+    for val itself. For ADR 0021: the test numbers hold these apart."""
+    if split == "val":
+        return None
+    val = {_norm_prompt(q.prompt) for q in load_questions("val")}
+    seen = [r for r in rows if _norm_prompt(r.prompt) in val]
+    return {
+        "n": len(seen),
+        "ids": [r.id for r in seen],
+        "top1": _mean([r.top1 for r in seen])[0],
+        "answer_correct": _mean([r.answer_correct for r in seen])[0],
+        "declined": _mean([r.declined for r in seen])[0],
+    }
+
+
 def row_dicts(rows: Sequence[SearchRow]) -> list[dict[str, Any]]:
     return [asdict(r) for r in rows]
 
@@ -837,8 +889,8 @@ def smoke_documents() -> list[SynthDoc]:
 
 
 def smoke_questions(docs: Sequence[SynthDoc]) -> list[Question]:
-    """The val lookups and finds whose every target is a smoke photo, then ten list prompts
-    written for this small vault."""
+    """The val lookups and finds whose every target is a smoke photo, ten list prompts
+    written for this small vault, then a few val none questions (`SMOKE_NONE_IDS`)."""
     ids = {d.doc_id for d in docs}
     household = load_household(EVAL_V1 / "household.json")
     about = [
@@ -847,7 +899,8 @@ def smoke_questions(docs: Sequence[SynthDoc]) -> list[Question]:
         if q.kind in ("lookup", "find") and q.targets and set(q.targets) <= ids
     ]
     lists = _list_questions(docs, household, "val", EVAL_TODAY, SET_SEED)[:N_SMOKE_LISTS]
-    return [*about, *lists]
+    nones = [q for q in load_questions("val") if q.id in SMOKE_NONE_IDS]
+    return [*about, *lists, *nones]
 
 
 def write_smoke_questions(folder: Path = SMOKE_DIR) -> list[Question]:

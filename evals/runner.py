@@ -41,6 +41,7 @@ from evals.search_eval import (
     RecordedEmbedder,
     RecordedPromptReader,
     SearchEvalError,
+    _manifest,
     load_smoke_questions,
     row_dicts,
     run_search,
@@ -213,13 +214,17 @@ def search_metrics(summary: Mapping[str, Any]) -> dict[str, float]:
         "top3": overall("top3"),
         "answer_correct": overall("answer_correct"),
         "citation_accuracy": overall("citation_accuracy"),
+        "quick_off_top1": overall("quick_off_top1"),
+        "quick_off_top3": overall("quick_off_top3"),
         "list_reading": overall("list_reading"),
         "list_precision": overall("list_precision"),
         "list_recall": overall("list_recall"),
         "declined_when_answerable": overall("declined_when_answerable"),
+        "declined_when_none": overall("declined_when_none"),
         "lookups": kinds.get("lookup", 0),
         "finds": kinds.get("find", 0),
         "lists": kinds.get("list", 0),
+        "nones": kinds.get("none", 0),
         "readings_missing": summary["readings_missing"],
         "vectors_missing": summary["vectors_missing"],
         "expected_filed_but_not": summary["expected_filed_but_not"],
@@ -401,9 +406,15 @@ def _search(args: argparse.Namespace) -> int:
         except SearchEvalError as exc:
             print(f"search: {exc}")
             return 1
+        stamped = {role: _manifest(replay).get(role) for role in ("prompt_reader", "embedder")}
         models = {
             "prompt_reader": settings.query_model,
             "embedder": embedder.name,
+            "digests": {
+                body["model"]: body.get("digest")
+                for body in stamped.values()
+                if isinstance(body, dict) and "model" in body
+            },
             "live": False,
         }
     facts: dict[str, Any] = {}

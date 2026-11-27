@@ -9,6 +9,7 @@ from household_vault.search.index import KeywordIndex
 from household_vault.search.query import Query
 from household_vault.search.retrieve import Searcher, rrf
 from household_vault.search.vectors import VectorIndex
+from tests.conftest import add_doc
 
 
 def query(**fields) -> Query:
@@ -338,3 +339,50 @@ def test_place_values_are_the_distinct_stored_places(store):
         "Anil Diagnostics": frozenset({DocType.scan_report}),
         "Epic Electronics": frozenset({DocType.tax_invoice}),
     }
+
+
+def test_quick_finds_a_natural_prompt_with_the_vectors_off(search_world):
+    searcher = Searcher(
+        search_world.store, KeywordIndex(search_world.store), VectorIndex(search_world.store, None)
+    )
+    rows = searcher.quick("Kavita health policy")
+    assert rows and rows[0].doc_type is DocType.health_policy
+    assert "p2" in rows[0].people
+    assert searcher.quick("LG refrigerator invoice")[0].doc_type is DocType.tax_invoice
+
+
+def test_an_identifier_is_found_whole_or_by_its_last_four(search_store, searcher):
+    imei = "35" + "".join(str((i * 7 + 3) % 10) for i in range(13))  # synthetic, 15 digits
+    add_doc(search_store, "imei-inv", "tax_invoice", {"serial_number": imei}, ["IMEI: masked"])
+    KeywordIndex(search_store).add("imei-inv")
+    for typed in (imei, f"•••• {imei[-4:]}", imei[-4:]):
+        top3 = [r.document_id for r in searcher.quick(typed, limit=3)]
+        assert "imei-inv" in top3, typed
+
+
+def test_a_possessive_brand_or_insurer_is_no_person(search_store, searcher):
+    from vault_synth.household import HOUSEHOLD
+
+    from household_vault.search.query import QueryReading, resolve
+
+    add_doc(search_store, "sam", "warranty_card", {"brand": "Samsung", "product": "Washer"}, ["x"])
+    add_doc(
+        search_store,
+        "care",
+        "health_policy",
+        {"insurer": "Care Health Insurance Limited", "policy_number": "P1"},
+        ["x"],
+    )
+    places = searcher.place_values()
+    today = date(2026, 11, 21)
+
+    def unread(prompt: str, **kw) -> list[str]:
+        base = {"intent": "lookup", "people": [], "types": [], "areas": [], "field": None}
+        reading = QueryReading(**{**base, "date": None, "place": None, "words": "", **kw})
+        return resolve(reading, HOUSEHOLD, today, prompt, places).unread
+
+    assert unread("What is the invoice date on Samsung's invoice?") == []
+    assert unread("Find LG's invoice") == []
+    assert unread("What is the policy number on Care's health policy?") == []
+    assert unread("Suresh's policy number") == []
+    assert unread("Meera's PAN card number") == ["person: Meera"]

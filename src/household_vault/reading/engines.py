@@ -7,7 +7,7 @@ import json
 from dataclasses import dataclass
 from typing import Protocol
 
-from PIL import Image, UnidentifiedImageError
+from PIL import Image, ImageOps, UnidentifiedImageError
 
 from household_vault.config import ConfigError, Settings
 from household_vault.doctypes import DocType
@@ -53,13 +53,35 @@ class Engines:
     models: Models
 
 
+_ORIENTATION = 0x0112
+
+
+def upright_bytes(data: bytes) -> bytes:
+    """The photo as it is shown: bytes carrying a rotation tag come back as a high-quality JPEG
+    with the rotation applied and no tag (a PNG of a 12 MP photo is several times larger).
+    Every other file comes back unchanged, so a reading recorded for it stays valid. Bytes that
+    are not an image come back as they are."""
+    try:
+        with Image.open(io.BytesIO(data)) as img:
+            if img.getexif().get(_ORIENTATION, 1) in (0, 1):
+                return data
+            out = io.BytesIO()
+            ImageOps.exif_transpose(img).convert("RGB").save(
+                out, format="JPEG", quality=95, subsampling=0
+            )
+            return out.getvalue()
+    except (UnidentifiedImageError, OSError, SyntaxError, ValueError):
+        return data
+
+
 def open_image(data: bytes, kind: FileKind) -> Image.Image:
-    """An RGB image from photo bytes (HEIC goes through sips first)."""
+    """An upright RGB image from photo bytes (HEIC goes through sips first). The EXIF rotation
+    tag is applied, so OCR, the vision model, the viewer and the card mask all see one frame."""
     if kind is FileKind.heic:
         data = heic_to_png(data)
     try:
         with Image.open(io.BytesIO(data)) as img:
-            return img.convert("RGB")
+            return ImageOps.exif_transpose(img).convert("RGB")
     except (UnidentifiedImageError, OSError, SyntaxError, ValueError) as exc:
         raise DamagedFileError("the photo could not be read") from exc
 

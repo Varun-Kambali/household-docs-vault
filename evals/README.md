@@ -182,7 +182,9 @@ refuses a folder that does not record the embedding model's digest.
 The smoke part of `make eval-smoke` uses `evals/recordings/search-v1/smoke/`: the 22 smoke
 documents as the vault (photos go in first, so a clean copy or a scan of a document already filed
 is held as a possible copy), the val lookups and finds whose every target is a smoke photo, and
-ten list prompts written for that vault (`questions.jsonl`). Changing the chunking, the reading
+ten list prompts written for that vault and seven val none questions (`SMOKE_NONE_IDS`)
+(`questions.jsonl`). The none questions' readings were copied from a val recording and their
+query vectors filled with `--fill-vectors`; no reading model was called. Changing the chunking, the reading
 prompt or the question set makes these recordings stale: record them again with
 `python -m evals.runner search --split val --smoke --recordings evals/recordings/eval-v1/smoke
 --record evals/recordings/search-v1/smoke` after deleting the folder.

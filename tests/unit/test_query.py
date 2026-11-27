@@ -326,8 +326,9 @@ def test_the_models_people_and_the_prompt_agreeing_is_not_a_conflict(household):
 
 
 def test_a_name_the_household_does_not_hold_is_not_invented_by_the_backstop(household):
+    # no person is invented from it, but the sentence shows the name was not read
     q = resolve(reading(), household, TODAY, "Anil's policy")
-    assert (q.people, q.unread) == ([], [])
+    assert (q.people, q.unread) == ([], ["person: Anil"])
 
 
 def test_a_date_phrase_in_the_prompt_fills_an_empty_date_slot(household):
@@ -909,3 +910,82 @@ def test_a_question_word_keeps_a_lookup_with_a_date(household, prompt):
         prompt,
     )
     assert q.intent == "lookup"
+
+
+# -- an outsider's name the model dropped ------------------------------------------------------
+
+
+def test_a_possessive_outsider_the_model_dropped_is_unread(household):
+    lookup = reading(intent="lookup", types=[DocType.pan], field="number")
+    q = resolve(lookup, household, TODAY, "Meera's PAN card number")
+    assert q.unread == ["person: Meera"] and q.people == []
+
+
+def test_a_possessive_household_member_is_not_unread(household):
+    lookup = reading(intent="lookup", types=[DocType.pan], field="number")
+    q = resolve(lookup, household, TODAY, "Kavita's PAN card number")
+    assert q.unread == [] and len(q.people) == 1
+
+
+def test_a_possessive_stored_place_is_not_a_person(household):
+    q = resolve(reading(), household, TODAY, "Croma's invoice", places=["Croma"])
+    assert q.unread == []
+
+
+def test_a_possessive_the_model_put_in_people_is_not_read_twice(household):
+    q = resolve(reading(people=["Meera"]), household, TODAY, "Meera's PAN card number")
+    assert q.unread == ["person: Meera"]
+
+
+def test_a_lowercase_or_vocabulary_possessive_is_not_a_name(household):
+    assert resolve(reading(), household, TODAY, "Today's PAN card").unread == []
+    assert resolve(reading(), household, TODAY, "the Insurance's policy number").unread == []
+
+
+# -- a month inside a place name is not a date -------------------------------------------------
+
+STORED = ["Jan Aushadhi Kendra", "Sleeva Medicity", "Mar Sleeva Medicity"]
+
+
+@pytest.mark.parametrize(
+    "prompt",
+    ["Jan Aushadhi Kendra bills", "bills from Jan Aushadhi Kendra", "Mar Sleeva Medicity bills"],
+)
+def test_a_month_inside_a_stored_place_is_not_a_date(household, prompt):
+    q = resolve(reading(), household, TODAY, prompt, places=STORED)
+    assert q.range is None and q.role is None and q.unread == []
+
+
+def test_a_month_inside_the_models_place_is_not_a_date(household):
+    q = resolve(reading(place="Jan Aushadhi"), household, TODAY, "Jan Aushadhi bills")
+    assert q.range is None
+
+
+def test_a_bare_short_month_needs_a_cue(household):
+    assert resolve(reading(), household, TODAY, "Jan Aushadhi bills").range is None
+    in_jan = resolve(reading(), household, TODAY, "bills in Jan")
+    assert in_jan.range == DateRange(start=date(2027, 1, 1), end=date(2027, 1, 31))
+    before = resolve(reading(), household, TODAY, "policies expiring before Mar")
+    assert before.range is not None
+
+
+@pytest.mark.parametrize(
+    ("prompt", "status"),
+    [
+        ("When does Suresh's Western Ghats home insurance policy expire?", False),
+        ("Ravi passport expiry date", False),
+        ("What is the expiry date on Kavita's licence?", False),
+        ("Is Ravi's vehicle insurance policy still valid?", True),
+        ("Ravi home insurance policy still valid", True),
+        ("Is the LG fridge under warranty?", True),
+        ("Is Kiran's passport expired", True),
+        ("Does Suresh's car insurance cover run till 2027?", True),
+    ],
+)
+def test_a_status_question_is_marked_and_a_when_question_is_not(household, prompt, status):
+    q = resolve(reading(intent="lookup", field="end_date"), household, TODAY, prompt)
+    assert q.status is status
+
+
+def test_a_query_with_no_prompt_leaves_the_status_open(household):
+    assert resolve(reading(intent="lookup", field="end_date"), household, TODAY).status is None

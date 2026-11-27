@@ -174,3 +174,25 @@ def test_rows_carry_the_kind_of_each_key_field(search_client):
     assert rows
     for row in rows:
         assert set(row["field_kinds"]) >= set(row["key_fields"])
+
+
+def test_a_who_change_on_a_held_unknown_person_lists_again(search_client):
+    held = Query(intent="list", types=[DocType.health_policy], unread=["person: Meera"])
+    r = search_client.post(
+        "/v1/search/list",
+        json={
+            "query": held.model_dump(mode="json"),
+            "change": {"slot": "who", "value": "p4"},
+        },
+    )
+    assert r.status_code == 200
+    assert r.json()["query"]["unread"] == []
+    assert r.json()["rows"]
+
+
+def test_a_crafted_before_date_is_a_422(search_client):
+    r = search_client.post(
+        "/v1/search/list",
+        json={"query": a_list_query(), "change": {"slot": "when", "value": "before:0001-01-01"}},
+    )
+    assert r.status_code == 422

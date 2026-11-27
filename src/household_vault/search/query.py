@@ -94,6 +94,9 @@ class Query(BaseModel):
     unread: list[str] = []  # parts code could not resolve, such as "person: Anil"
     # slots where the prompt's own words and the model disagreed; never part of the stored form
     backstop_conflicts: int = Field(default=0, exclude=True)
+    # whether the prompt asks if a document still holds ("Is it still valid?"), not for a date
+    # ("When does it expire?"). Never serialised; None means unknown, which answers as a status.
+    status: bool | None = Field(default=None, exclude=True)
 
 
 def _system_text_v1() -> str:
@@ -365,6 +368,22 @@ def _people_spans(
 Places = Mapping[str, Collection[DocType]]
 
 
+class PlaceValues(dict[str, frozenset[DocType]]):
+    """Stored place values with the types each is stored on, plus `vault_words`: every word of
+    a stored place value or of a stored product, brand, model, seller or insurer value. A
+    possessive word among them ("Samsung's") is a thing in the vault, not a person."""
+
+    vault_words: frozenset[str] = frozenset()
+
+    def __init__(
+        self,
+        values: Mapping[str, Collection[DocType]] | None = None,
+        vault_words: Collection[str] = (),
+    ) -> None:
+        super().__init__({k: frozenset(v) for k, v in (values or {}).items()})
+        self.vault_words = frozenset(vault_words)
+
+
 def _as_places(places: Places | Sequence[str]) -> Places:
     """Stored place values with the document types each is stored on (none known for a bare
     list of values)."""
@@ -427,15 +446,39 @@ def _nearest_role(lowered: str, phrase: str) -> DateRole:
     return best[1] if best else "document"
 
 
-def _scan_date(prompt: str, today: date) -> tuple[DateSlot, DateRange] | None:
+_SHORT_MONTHS = frozenset(
+    {"jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}
+)
+_MONTH_CUES = frozenset(
+    {"in", "before", "by", "until", "till", "this", "next", "from", "after", "since", "during"}
+    | {"of", "on"}
+)
+
+
+def _bare_short_month_without_cue(words: list[str], start: int) -> bool:
+    """A lone three-letter month ("jan") with no cue word before it and no day or year after
+    it: more likely the start of a name than a date."""
+    if words[start] not in _SHORT_MONTHS:
+        return False
+    before = words[start - 1] if start else ""
+    after = words[start + 1] if start + 1 < len(words) else ""
+    return before not in _MONTH_CUES and not after.isdigit()
+
+
+def _scan_date(
+    prompt: str, today: date, skip: set[int] | None = None
+) -> tuple[DateSlot, DateRange] | None:
     """The first date phrase code can read in the prompt (longest span first), with the role
-    its cue words give. A bare "may" is the verb, not the month."""
+    its cue words give. A bare "may" is the verb, not the month. Words in `skip` (inside a
+    place) are never part of a date."""
     words = _words(prompt)
     lowered = prompt.lower().replace("\u2019", "'")
     for size in range(min(_MAX_DATE_WORDS, len(words)), 0, -1):
         for start in range(len(words) - size + 1):
+            if skip and skip & set(range(start, start + size)):
+                continue
             phrase = " ".join(words[start : start + size])
-            if phrase == "may":
+            if phrase == "may" or (size == 1 and _bare_short_month_without_cue(words, start)):
                 continue
             span = parse_date_phrase(phrase, today)
             if span is None or (span.start and span.end and span.start > span.end):
@@ -615,6 +658,27 @@ def _quantified(words: list[str], tokens: list[str], skip: set[int]) -> bool:
     return False
 
 
+_STATUS_WORDS = frozenset({"valid", "expired", "active", "lapsed"})
+
+
+def _asks_status(words: list[str]) -> bool:
+    """Whether the prompt asks if something still holds: a yes or no question (it opens with an
+    auxiliary), or it says "valid", "expired" or "under warranty". A "when" question asks for
+    the date itself."""
+    if words and words[0] in AUX_OPENERS:
+        return True
+    if _STATUS_WORDS & set(words):
+        return True
+    return any(
+        words[i] in ("under", "in") and words[i + 1] == "warranty" for i in range(len(words) - 1)
+    )
+
+
+def asks_status(prompt: str) -> bool:
+    """`_asks_status` for a prompt as written."""
+    return _asks_status(_words(prompt))
+
+
 def _opens_with_question(words: list[str]) -> bool:
     """Whether the prompt opens with an auxiliary, as a yes or no question does."""
     return bool(words) and words[0] in AUX_OPENERS
@@ -687,6 +751,91 @@ def _place_of(phrase: str, places: Places, types: Collection[DocType], prompt: s
     return stripped if _stored_place(stripped, places, {*types, *named}, possessive) else None
 
 
+_CAPITAL_POSSESSIVE = re.compile(r"^[A-Z][\w-]*['\u2019]s$")
+_MONTH_WORDS = frozenset(
+    [
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "sept",
+        "oct",
+        "nov",
+        "dec",
+        "today",
+        "tomorrow",
+        "yesterday",
+        "week",
+        "month",
+        "year",
+    ]
+)
+
+
+def _vocabulary_words() -> frozenset[str]:
+    """Every word the closed vocabulary uses: type, area, field, cue and month words."""
+    words: set[str] = set(_MONTH_WORDS) | GENERIC_WORDS | PLURAL_GENERIC_WORDS | LIST_CUE_WORDS
+    words |= AUX_OPENERS | QUESTION_WORDS | NOUN_PHRASE_FILLER | set(ROLE_NOUNS)
+    for group in (*TYPE_WORDS.values(), *FIELD_LABELS.values(), *AREA_LABELS.values()):
+        for phrase in [group] if isinstance(group, str) else group:
+            words.update(phrase.lower().split())
+    words.update(a.value for a in Area)
+    for cue in (*FIND_CUES, *LIST_OPENERS):
+        words.update(cue)
+    return frozenset(words)
+
+
+_VOCABULARY = _vocabulary_words()
+
+
+def _dropped_outsiders(
+    prompt: str,
+    reading: QueryReading,
+    household: Household,
+    stored: set[int],
+    said: Sequence[str],
+    vault_words: Collection[str] = (),
+) -> list[str]:
+    """Capitalised words written as a possessive ("Meera's") that are no household name, no
+    stored or model place, no vocabulary word, no word of a stored place, product, brand, model,
+    seller or insurer value and no name the model already put in `people`.
+    The model sometimes leaves an outsider out of its people slot; code must not then answer
+    from another member's document."""
+    tokens = _WORD.findall(prompt)
+    words = _words(prompt)
+    skip = stored | _occupied(words, reading.place)
+    seen = {w for phrase in said for w in _words(phrase)}
+    found: list[str] = []
+    for i, (token, word) in enumerate(zip(tokens, words, strict=True)):
+        if i in skip or word in seen or not _CAPITAL_POSSESSIVE.match(token):
+            continue
+        if (
+            word in _VOCABULARY
+            or word in vault_words
+            or _scan_people(word, household)
+            or _scan_types(word)
+        ):
+            continue
+        found.append(f"person: {_POSSESSIVE.sub('', token)}")
+    return found
+
+
 def resolve(
     reading: QueryReading,
     household: Household,
@@ -712,7 +861,7 @@ def resolve(
             backstop_people = seen
         elif seen and set(seen) != {_person(p, household)[0] for p in reading.people}:
             conflicts += 1
-        scanned = _scan_date(prompt, today)
+        scanned = _scan_date(prompt, today, _occupied(prompt_words, reading.place) | stored)
         if scanned is not None and slot is None:
             slot = scanned[0]
         elif (
@@ -839,6 +988,17 @@ def resolve(
                 place = rest_place
             elif rest_place:
                 words = f"{words} {rest_place}".strip()
+    if prompt:
+        for phrase in _dropped_outsiders(
+            prompt,
+            reading,
+            household,
+            _place_positions(_words(prompt), places),
+            reading.people,
+            getattr(places, "vault_words", ()),
+        ):
+            if phrase not in unread:
+                unread.append(phrase)
     role: DateRole | None = noun_role
     span: DateRange | None = None
     if slot is not None:
@@ -869,4 +1029,5 @@ def resolve(
         words=words,
         unread=unread,
         backstop_conflicts=conflicts,
+        status=_asks_status(_words(prompt)) if prompt else None,
     )
