@@ -244,3 +244,45 @@ def test_item_lengths_are_bounded(search_client):
         json={"query": q, "change": {"slot": "place", "value": "x" * 301}},
     )
     assert r.status_code == 422
+
+
+def _with_check_digit(body: str) -> str:
+    from household_vault.checks import luhn_valid
+
+    return next(body + str(d) for d in range(10) if luhn_valid(body + str(d)))
+
+
+def _prompts_seen(client, spy_reader, text: str) -> str:
+    post(client, text)
+    return " ".join(str(p) for p in spy_reader.prompts)
+
+
+def test_an_imei_stays_whole_in_a_prompt(search_client, spy_reader):
+    imei = "490154203237518"  # the published example IMEI: 15 digits, Luhn-valid, not a card
+    assert imei in _prompts_seen(search_client, spy_reader, f"invoice IMEI {imei}")
+
+
+def test_a_long_policy_number_is_not_masked(search_client, spy_reader):
+    policy = _with_check_digit("9" + "2468013579" * 1 + "135")  # Luhn-valid, no card brand
+    assert policy in _prompts_seen(search_client, spy_reader, f"policy {policy}")
+
+
+def test_dotted_and_slashed_card_numbers_are_masked(search_client, spy_reader):
+    from household_vault.checks import TEST_CARD_NUMBERS
+
+    number = "4111111111111111"
+    assert number in TEST_CARD_NUMBERS
+    for sep in (".", "/"):
+        text = sep.join(number[i : i + 4] for i in range(0, 16, 4))
+        spy_reader.prompts.clear()
+        seen = _prompts_seen(search_client, spy_reader, f"card {text} bill")
+        assert text not in seen and number[:12] not in seen and number[-4:] in seen
+
+
+def test_each_brand_range_is_masked(search_client, spy_reader):
+    from household_vault.checks import TEST_CARD_NUMBERS
+
+    for number in sorted(TEST_CARD_NUMBERS):
+        spy_reader.prompts.clear()
+        seen = _prompts_seen(search_client, spy_reader, f"card {number}")
+        assert number not in seen and number[-4:] in seen
