@@ -31,7 +31,7 @@ from household_vault.reading.ollama import ModelUnavailable
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import field_kind
 from household_vault.search.answer import Answer, NoAnswer, compose
-from household_vault.search.query import Query, read_prompt, resolve
+from household_vault.search.query import Query, asks_status, read_prompt, resolve
 from household_vault.search.retrieve import LineRef, Row
 from household_vault.search.sentence import Sentence, apply_part, render, sentence
 
@@ -195,6 +195,7 @@ def add_search_routes(app: FastAPI, state: AppState) -> None:
                     query = apply_part(query, body.change.slot, body.change.value, today())
                 except ValueError:
                     return JSONResponse(status_code=422, content={"detail": BAD_CHANGE})
+            query = query.model_copy(update={"status": asks_status(prompt)})
             return full_out(query, prompt)
         reading = "on" if state.prompt_reader is not None else "off"
         if body.full and state.prompt_reader is not None:

@@ -308,3 +308,28 @@ def test_a_crafted_before_date_is_a_422(search_client):
         json={"query": a_list_query(), "change": {"slot": "when", "value": "before:0001-01-01"}},
     )
     assert r.status_code == 422
+
+
+def test_a_sentence_change_keeps_an_expiry_question_a_plain_date(search_client, spy_reader):
+    prompt = "When does Suresh's health policy expire?"
+    spy_reader.answers[prompt] = json.dumps(
+        {**FIND, "intent": "lookup", "types": ["health_policy"], "field": "end_date"}
+    )
+    first = post(search_client, prompt).json()
+    held = first["query"]
+    for who in ("p1", "p2", "p3", "p4"):
+        r = search_client.post(
+            "/v1/search",
+            json={
+                "prompt": prompt,
+                "full": True,
+                "query": held,
+                "change": {"slot": "who", "value": who},
+            },
+        )
+        assert r.status_code == 200, r.text
+        answer = r.json()["answer"]
+        if answer is not None:
+            assert not answer["text"].startswith("Yes, until")
+            return
+    raise AssertionError("no who value answered")
