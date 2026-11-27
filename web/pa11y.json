@@ -25,7 +25,8 @@
       },
       "actions": [
         "wait for element #main h1 to be visible",
-        "wait for element a[href=\"/inbox\"] to be visible"
+        "wait for element .activity-row to be visible",
+        "wait for element .question to be visible"
       ]
     },
     {
@@ -34,7 +35,10 @@
         "width": 1440,
         "height": 900
       },
-      "actions": ["wait for element #main h1 to be visible"]
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible"
+      ]
     },
     {
       "url": "http://127.0.0.1:4173/__scenario/down?to=%2Finbox&view=desktop&screen=inbox-error",
@@ -82,7 +86,11 @@
         "height": 812,
         "isMobile": true
       },
-      "actions": ["wait for element #main h1 to be visible"]
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "wait for element .question to be visible"
+      ]
     },
     {
       "url": "http://127.0.0.1:4173/__scenario/empty?to=%2Finbox&view=phone&screen=inbox-empty",
@@ -91,7 +99,10 @@
         "height": 812,
         "isMobile": true
       },
-      "actions": ["wait for element #main h1 to be visible"]
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible"
+      ]
     },
     {
       "url": "http://127.0.0.1:4173/__scenario/down?to=%2Finbox&view=phone&screen=inbox-error",
@@ -356,6 +367,137 @@
         "wait for element #main h1 to be visible",
         "wait for element .sentence to be visible",
         "wait for element .region-empty to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/one?to=%2Finbox&view=desktop&screen=inbox-one",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "wait for element .question to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/group?to=%2Finbox&view=desktop&screen=inbox-group",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "wait for element .same to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Finbox&view=desktop&screen=inbox-unlock",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "click element .question .button-primary",
+        "wait for element dialog[open] to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Finbox&view=desktop&screen=inbox-secrets",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "click element .inbox-tools .button:nth-child(2)",
+        "wait for element dialog[open] input to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Finbox&view=desktop&screen=inbox-card",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "click element .inbox-tools .button:nth-child(1)",
+        "wait for element dialog[open] input to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/one?to=%2Finbox&view=phone&screen=inbox-one",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "wait for element .question to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/group?to=%2Finbox&view=phone&screen=inbox-group",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "wait for element .same to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Finbox&view=phone&screen=inbox-unlock",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "click element .question .button-primary",
+        "wait for element dialog[open] to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Finbox&view=phone&screen=inbox-secrets",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "click element .inbox-tools .button:nth-child(2)",
+        "wait for element dialog[open] input to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Finbox&view=phone&screen=inbox-card",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "isMobile": true
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "click element .inbox-tools .button:nth-child(1)",
+        "wait for element dialog[open] input to be visible"
       ]
     }
   ]
