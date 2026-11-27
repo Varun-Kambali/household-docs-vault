@@ -38,9 +38,7 @@ export function InboxPage({ onChanged }: { onChanged: () => void }) {
       ? 'error'
       : items === null
         ? 'loading'
-        : items.length === 0
-          ? 'empty'
-          : 'full'
+        : 'full'
 
   return (
     <>
@@ -67,7 +65,6 @@ export function InboxPage({ onChanged }: { onChanged: () => void }) {
         <Region
           state={state}
           what="the Inbox"
-          empty="Nothing waiting. New files are read as they arrive."
           error={error ?? undefined}
         >
           <NeedsALook

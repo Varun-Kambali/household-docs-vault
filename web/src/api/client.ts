@@ -7,11 +7,14 @@ const UNREACHABLE = 'The vault is not answering. Check that it is running.'
 
 export class ApiError extends Error {
   readonly status: number
+  // The rest of the refusal's body (a partly refused answer-many lists `answered` and `refused`).
+  readonly body: Record<string, unknown>
 
-  constructor(message: string, status: number) {
+  constructor(message: string, status: number, body: Record<string, unknown> = {}) {
     super(message)
     this.name = 'ApiError'
     this.status = status
+    this.body = body
   }
 }
 
@@ -51,8 +54,11 @@ async function request<T>(path: string, init: RequestInit): Promise<T> {
     throw new ApiError(UNREACHABLE, 0)
   }
   if (!response.ok) {
-    const body = (await response.json().catch(() => null)) as { detail?: Detail } | null
-    throw new ApiError(sentence(body?.detail), response.status)
+    const body = (await response.json().catch(() => null)) as
+      | ({ detail?: Detail } & Record<string, unknown>)
+      | null
+    const { detail, ...rest } = body ?? {}
+    throw new ApiError(sentence(detail), response.status, rest)
   }
   // 204: the request worked and there is nothing to read (Show in folder).
   if (response.status === 204) return undefined as T

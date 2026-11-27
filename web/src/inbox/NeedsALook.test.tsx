@@ -121,21 +121,83 @@ describe('NeedsALook', () => {
     expect(screen.queryByText(/more files? ask the same thing/)).not.toBeInTheDocument()
   })
 
-  test('says which files were refused when only some could be answered', async () => {
+  test('a partly refused answer-many reports the answered files, re-reads and names the refused', async () => {
     stubApi(() => ({
       status: 409,
       body: {
-        detail: 'Some files could not be answered.',
+        detail: '1 of 2 files were not answered',
         answered: [7],
-        refused: { '8': 'changed' },
+        refused: { '8': 'That file is not in the list any more' },
       },
     }))
     const user = userEvent.setup()
-    show([waitingItem(), SECOND])
+    const { onAnswered, onChanged } = show([waitingItem(), SECOND])
     await user.click(screen.getByRole('checkbox', { name: 'prescription-2.pdf' }))
     await user.click(screen.getByRole('radio', { name: 'Home' }))
     await user.click(screen.getByRole('button', { name: 'Answer all' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('Some files could not be answered.')
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Not answered: prescription-2.pdf (That file is not in the list any more).',
+    )
+    expect(onAnswered).toHaveBeenCalledWith([{ id: 7, name: 'prescription-1.pdf' }])
+    expect(onChanged).toHaveBeenCalled()
+  })
+
+  test('a refused answer re-reads the list, so a stale file is not left on screen', async () => {
+    stubApi(() => ({
+      status: 409,
+      body: { detail: 'That file is not in the list any more' },
+    }))
+    const user = userEvent.setup()
+    const { onAnswered, onChanged } = show([waitingItem()])
+    await user.click(screen.getByRole('radio', { name: 'Home' }))
+    await user.click(screen.getByRole('button', { name: 'File it' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('not in the list any more')
+    expect(onAnswered).not.toHaveBeenCalled()
+    expect(onChanged).toHaveBeenCalled()
+  })
+
+  test('the button says what the chosen answer does', async () => {
+    stubApi(() => OK)
+    const user = userEvent.setup()
+    show([
+      waitingItem({
+        reasons: ['duplicate'],
+        question: {
+          reason: 'duplicate',
+          text: 'This is the same file as a.pdf. Discard this copy, or keep both?',
+          answer_kind: 'copy',
+          options: [
+            { value: 'discard', label: 'Discard this copy' },
+            { value: 'keep_both', label: 'Keep both' },
+          ],
+          field: null,
+        },
+      }),
+    ])
+    await user.click(screen.getByRole('radio', { name: 'Discard this copy' }))
+    expect(screen.getByRole('button', { name: 'Discard it' })).toBeEnabled()
+    await user.click(screen.getByRole('radio', { name: 'Keep both' }))
+    expect(screen.getByRole('button', { name: 'File it' })).toBeEnabled()
+  })
+
+  test('answering moves focus to the next file question, or to the empty sentence', async () => {
+    stubApi(() => OK)
+    const user = userEvent.setup()
+    const { rerender, onChanged, onAnswered } = show([waitingItem(), SECOND])
+    await user.click(screen.getByRole('radio', { name: 'Home' }))
+    await user.click(screen.getByRole('button', { name: 'File it' }))
+    const heading = await screen.findByRole('heading', { level: 2 })
+    expect(screen.getByRole('img', { name: /prescription-2\.pdf/ })).toBeInTheDocument()
+    expect(heading).toHaveFocus()
+    // The list is read again and the answered file is gone: the last one is answered too.
+    rerender(
+      <NeedsALook items={[SECOND]} focus={null} onChanged={onChanged} onAnswered={onAnswered} />,
+    )
+    await user.click(screen.getByRole('radio', { name: 'Home' }))
+    await user.click(screen.getByRole('button', { name: 'File it' }))
+    rerender(<NeedsALook items={[]} focus={null} onChanged={onChanged} onAnswered={onAnswered} />)
+    const empty = screen.getByText('Nothing waiting. New files are read as they arrive.')
+    expect(empty).toHaveFocus()
   })
 
   test('discarding the only copy asks to confirm first', async () => {
@@ -265,6 +327,15 @@ describe('NeedsALook', () => {
     const note = screen.getByText(/^Not sure:/)
     expect(note).toHaveTextContent('Not sure: the name on it.')
     expect(note.closest('.doubt')?.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  test('a locked PDF says why its page is not shown', () => {
+    stubApi(() => OK)
+    show([lockedItem()])
+    fireEvent.error(screen.getByRole('img'))
+    expect(
+      screen.getByText('This PDF is locked. Its pages show once you enter the password.'),
+    ).toBeInTheDocument()
   })
 
   test('a page that cannot be drawn says so', () => {

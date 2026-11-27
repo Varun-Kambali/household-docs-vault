@@ -92,11 +92,12 @@ export function Question({
   const radios = kind !== 'field' && kind !== 'unlock'
   const ready = kind === 'field' ? text.trim() !== '' : value !== null
   const doubt = doubtOf(item.reasons)
-  // "Try again" and "Discard" say what they do; every other answer files the document.
   const label =
     kind === 'discard' || (kind === 'retry' && value === 'retry')
       ? (question.options.find((o) => o.value === value)?.label ?? 'File it')
-      : 'File it'
+      : kind === 'copy' && value === 'discard'
+        ? 'Discard it'
+        : 'File it'
   const several = chosen.size > 0 && kind === 'person'
 
   function submit(): void {
@@ -134,7 +135,7 @@ export function Question({
           submit()
         }}
       >
-        <h2 id={`${groupName}-title`}>{question.text}</h2>
+        <h2 id={`${groupName}-title`} tabIndex={-1}>{question.text}</h2>
         <dl className="read">
           <div>
             <dt>File</dt>
