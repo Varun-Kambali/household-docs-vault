@@ -193,7 +193,7 @@ describe('the search screen', () => {
     const outline = screen.getByRole('button', { name: 'Line 4: Policy Number' })
     fireEvent.click(outline)
     expect(window.location.pathname).toBe('/doc/doc-a')
-    expect(window.location.search).toBe('?page=1&lines=3')
+    expect(window.location.search).toBe('?page=1&lines=3&field=policy_number')
   })
 
   test('Open at page opens the viewer at the answer page and its lines', async () => {
