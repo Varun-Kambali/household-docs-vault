@@ -101,4 +101,43 @@ describe('the fixture API', () => {
     const reveal = await fetch(`${base}/v1/documents/doc-pdf/reveal`, { method: 'POST' })
     expect(reveal.status).toBe(409)
   })
+
+  test('scenarios give one file, or several that ask the same thing', async () => {
+    const base = await start()
+    const count = async (): Promise<number> =>
+      ((await (await fetch(`${base}/v1/needs-a-look`)).json()) as unknown[]).length
+    await fetch(`${base}/__scenario/one?to=/inbox`, { redirect: 'manual' })
+    expect(await count()).toBe(1)
+    await fetch(`${base}/__scenario/group?to=/inbox`, { redirect: 'manual' })
+    const group = (await (await fetch(`${base}/v1/needs-a-look`)).json()) as {
+      question: { text: string }
+    }[]
+    expect(group.length).toBeGreaterThan(1)
+    expect(new Set(group.map((g) => g.question.text)).size).toBe(1)
+  })
+
+  test('serves the activity, the batch, the secrets status and a waiting file page', async () => {
+    const base = await start()
+    const log = (await (await fetch(`${base}/v1/activity?limit=20`)).json()) as { id: number }[]
+    expect(log.length).toBeGreaterThan(0)
+    expect(await (await fetch(`${base}/v1/activity?limit=20&before=1`)).json()).toEqual([])
+    const batch = (await (await fetch(`${base}/v1/inbox/progress`)).json()) as {
+      total_in_batch: number
+    }
+    expect(batch.total_in_batch).toBeGreaterThan(0)
+    const status = (await (await fetch(`${base}/v1/secrets/status`)).json()) as object
+    expect(Object.keys(status).sort()).toEqual(['exists', 'unlocked'])
+    const png = await fetch(`${base}/v1/items/4/pages/0.png?width=900`)
+    expect(png.headers.get('content-type')).toBe('image/png')
+  })
+
+  test('answers what the Inbox posts, so the screen can be used without the vault', async () => {
+    const base = await start()
+    const post = (route: string) => fetch(`${base}${route}`, { method: 'POST', body: '{}' })
+    expect((await post('/v1/needs-a-look/4/answer')).status).toBe(200)
+    expect((await post('/v1/needs-a-look/answer-many')).status).toBe(200)
+    expect((await post('/v1/needs-a-look/4/unlock')).status).toBe(409)
+    expect((await post('/v1/secrets/create')).status).toBe(200)
+    expect((await post('/v1/cards')).status).toBe(200)
+  })
 })

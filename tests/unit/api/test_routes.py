@@ -85,6 +85,14 @@ def test_activity_offers_the_right_actions(client, state, filed_doc, duplicate_i
     assert set(acts[duplicate_item.rel_path]) >= {"discard", "keep_both"}
 
 
+def test_activity_names_the_document_an_open_action_opens(client, filed_doc, duplicate_item):
+    entries = client.get("/v1/activity").json()
+    opens = {e["item_id"]: e["document_id"] for e in entries if "open" in e["actions"]}
+    assert opens[filed_doc.item_id] == filed_doc.id
+    assert opens[duplicate_item.id] is None  # not filed: its pages open from the item
+    assert all(e["document_id"] is None for e in entries if "open" not in e["actions"])
+
+
 def test_activity_offers_unlock_and_retry(client, state, locked_item, filed_doc):
     state.actions.undo_document(filed_doc.id)
     entries = client.get("/v1/activity").json()
@@ -726,6 +734,7 @@ _ROUTES_WITHOUT_BYTES = {
     ("POST", "/v1/needs-a-look/{item_id}/undo"), ("POST", "/v1/documents/{doc_id}/undo"),
     ("POST", "/v1/items/{item_id}/retry"), ("GET", "/v1/documents/{doc_id}"),
     ("POST", "/v1/cards"), ("POST", "/v1/secrets/create"), ("POST", "/v1/secrets/unlock"),
+    ("GET", "/v1/secrets/status"),
     ("GET", "/v1/emergency-sheet"), ("POST", "/v1/search"), ("POST", "/v1/search/list"),
     ("GET", "/v1/people"), ("GET", "/v1/documents/{doc_id}/pages/{page}/lines"),
     ("GET", "/v1/items/{item_id}/pages/{page}/lines"), ("POST", "/v1/documents/{doc_id}/reveal"),

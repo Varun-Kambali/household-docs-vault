@@ -1,0 +1,342 @@
+/* The Inbox screen, its dialogs and the activity list. Every value is a token. */
+
+.inbox-section {
+  margin-block-start: var(--space-6);
+}
+
+.inbox-section > h2 {
+  margin-block-end: var(--space-3);
+  text-wrap: balance;
+}
+
+.inbox-section > h2:focus-visible {
+  outline: none;
+}
+
+.inbox-tools {
+  margin-block-start: 0;
+}
+
+/* Progress: a plain bar with words. It only changes value; it never moves by itself. */
+
+.progress {
+  display: grid;
+  gap: var(--space-2);
+  max-width: var(--measure-bar);
+  margin-block-end: var(--space-4);
+}
+
+.progress progress {
+  width: 100%;
+  height: var(--space-2);
+  appearance: none;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.progress progress::-webkit-progress-bar {
+  background: var(--color-border);
+}
+
+.progress progress::-webkit-progress-value {
+  background: var(--color-primary);
+}
+
+.progress progress::-moz-progress-bar {
+  background: var(--color-primary);
+}
+
+.progress-file {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* One file at a time: the page on the canvas, the question beside it */
+
+.inbox-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--question-width));
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.inbox-page {
+  display: grid;
+  place-items: start center;
+  min-height: var(--space-8);
+  padding: var(--space-4);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-border);
+}
+
+.inbox-page img {
+  display: block;
+  max-width: 100%;
+  max-height: 70dvh;
+  height: auto;
+  object-fit: contain;
+}
+
+.question {
+  padding: var(--space-4);
+  background: var(--color-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+}
+
+.question h2 {
+  margin-block-end: var(--space-3);
+}
+
+.read {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+
+.read dt {
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+.read dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.doubt {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-block-end: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-doubt-bg);
+  color: var(--color-doubt);
+  border-radius: var(--radius-control);
+}
+
+.doubt svg {
+  flex: none;
+  margin-block-start: var(--space-1);
+}
+
+.choices {
+  display: grid;
+  margin-block-end: var(--space-3);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--hit-target);
+  padding: var(--space-2) var(--space-3);
+  border-block-end: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background-color var(--dur-micro) ease-out;
+}
+
+.choice input,
+.check-row input {
+  flex: none;
+  width: var(--space-4);
+  height: var(--space-4);
+  margin: 0;
+  accent-color: var(--color-primary);
+}
+
+.choice[data-checked='true'] {
+  background: color-mix(in oklch, var(--color-primary) 12%, transparent);
+  font-weight: var(--weight-strong);
+}
+
+@media (hover: hover) {
+  .choice:hover {
+    background: color-mix(in oklch, var(--color-text) 6%, transparent);
+  }
+}
+
+.choice:active {
+  background: color-mix(in oklch, var(--color-text) 10%, transparent);
+}
+
+.choice:has(input:disabled) {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.choice:has(input:focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
+}
+
+.same {
+  margin: 0 0 var(--space-3);
+  padding: 0;
+  border: 0;
+}
+
+.same legend {
+  padding: 0;
+  margin-block-end: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--hit-target);
+}
+
+.field-row {
+  display: grid;
+  gap: var(--space-1);
+  margin-block-end: var(--space-3);
+}
+
+.confirm {
+  margin: 0;
+  padding: var(--space-3) 0 0;
+  border: 0;
+  border-block-start: 1px solid var(--color-border);
+}
+
+.button-danger {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.link-button:active {
+  color: color-mix(in oklch, var(--color-primary) 78%, var(--color-text));
+}
+
+.question > .hint {
+  margin-block-start: var(--space-3);
+}
+
+/* After an answer: where the file went */
+
+.notices {
+  display: grid;
+  gap: var(--space-2);
+  margin-block-end: var(--space-4);
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+}
+
+.notice svg {
+  flex: none;
+  color: var(--color-success);
+}
+
+/* Activity: a row each, newest first */
+
+.activity {
+  border-block-start: 1px solid var(--color-border);
+}
+
+.activity-row {
+  display: grid;
+  grid-template-columns: var(--activity-time-width) var(--activity-step-width) minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-3);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.activity-time {
+  color: var(--color-text-muted);
+}
+
+.activity-step {
+  font-weight: var(--weight-strong);
+}
+
+.activity-detail {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.activity-file {
+  display: block;
+  margin-block-start: 0;
+}
+
+.activity-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
+/* Dialogs: a focused step for a password */
+
+.dialog {
+  width: calc(100% - var(--space-6));
+  max-width: var(--dialog-width);
+  max-height: calc(100dvh - var(--space-6));
+  padding: 0;
+  background: var(--color-raised);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-float);
+}
+
+.dialog::backdrop {
+  background: color-mix(in oklch, var(--color-bg) 70%, transparent);
+}
+
+.dialog-body {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.dialog-form {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.dialog-form .actions,
+.dialog-body .actions {
+  margin-block-start: var(--space-2);
+}
+
+.dialog-result {
+  display: block;
+}
+
+@media (max-width: 60rem) {
+  .inbox-item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .activity-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .activity-detail,
+  .activity-actions {
+    grid-column: 1 / -1;
+  }
+
+  .activity-actions {
+    justify-content: flex-start;
+  }
+}

@@ -7,6 +7,7 @@ import './styles/base.css'
 import './styles/app.css'
 import './styles/search.css'
 import './styles/list.css'
+import './styles/inbox.css'
 
 const root = document.getElementById('root')
 if (root === null) throw new Error('index.html has no #root')

@@ -3,10 +3,13 @@
 import { vi } from 'vitest'
 
 import type {
+  ActivityOut,
   AnswerOut,
   DocumentOut,
   ListOut,
+  NeedsALookOut,
   NoAnswerOut,
+  ProgressOut,
   QueryOut,
   RowOut,
   SearchOut,
@@ -213,6 +216,74 @@ export function listOut(over: Partial<ListOut> = {}): ListOut {
     rows: [row({ document_id: 'doc-a', date: '2026-09-20' })],
     sentence: sentence(),
     query: listQuery(),
+    ...over,
+  }
+}
+
+// The Inbox: a file waiting on "Whose is it?", with the people as the API sends them.
+export function waitingItem(over: Partial<NeedsALookOut> = {}): NeedsALookOut {
+  return {
+    id: 7,
+    name: 'prescription-1.pdf',
+    file: 'Needs a look/prescription-1.pdf',
+    reasons: ['person_unknown'],
+    question: {
+      reason: 'person_unknown',
+      text: 'Prescription with no name I know on it. Whose is it?',
+      answer_kind: 'person',
+      options: [
+        { value: 'p1', label: 'Ravi Kumar Rao' },
+        { value: 'p2', label: 'Kavita Rao' },
+        { value: 'home', label: 'Home' },
+      ],
+      field: null,
+    },
+    since: '2026-11-26T08:53:07+05:30',
+    ...over,
+  }
+}
+
+export function lockedItem(over: Partial<NeedsALookOut> = {}): NeedsALookOut {
+  return waitingItem({
+    id: 3,
+    name: 'policy-locked.pdf',
+    file: 'Needs a look/policy-locked.pdf',
+    reasons: ['locked'],
+    question: {
+      reason: 'locked',
+      text: 'This PDF is locked. Unlock it with its password to read it.',
+      answer_kind: 'unlock',
+      options: [{ value: 'unlock', label: 'Unlock' }],
+      field: null,
+    },
+    ...over,
+  })
+}
+
+export function activityEntry(over: Partial<ActivityOut> = {}): ActivityOut {
+  return {
+    id: 10,
+    time: '2026-11-26T08:53:07+05:30',
+    item_id: 7,
+    step: 'filed',
+    outcome: 'filed',
+    file: 'Kavita Rao/Health/2026-09-20 Prescription.pdf',
+    detail: 'Filed as Prescription',
+    actions: ['open', 'undo'],
+    document_id: 'doc-a',
+    ...over,
+  }
+}
+
+export function idle(over: Partial<ProgressOut> = {}): ProgressOut {
+  return {
+    waiting: 0,
+    current: null,
+    step: null,
+    total_in_batch: 0,
+    done_in_batch: 0,
+    asked_in_batch: 0,
+    batch_started_at: null,
     ...over,
   }
 }

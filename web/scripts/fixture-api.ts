@@ -3,7 +3,11 @@
 // scripts/record_fixtures.py recorded from the synthetic dev vault; nothing here reads a real
 // document or calls a model.
 //
-// - GET /v1/needs-a-look answers the recorded list, an empty one, or a refusal, by scenario.
+// - GET /v1/needs-a-look answers the recorded list (a locked PDF and two copies), one file, three
+//   files that ask the same question, an empty list, or a refusal, by scenario.
+// - GET /v1/activity, /v1/inbox/progress, /v1/secrets/status and /v1/items/<id>/pages/0.png answer
+//   the recorded replies; what the Inbox posts is answered with a plain success, except Unlock,
+//   which says the password did not open the file.
 // - GET /healthz answers the recorded health reply.
 // - POST /v1/search answers the recorded quick, answer, no-answer and model-off replies; a prompt
 //   with "anil" in it is the one that gets no answer.
@@ -12,7 +16,7 @@
 //   "expire" in it reads as a list; with "diwali" too, a list with a part it could not read.
 // - GET /v1/people, /v1/documents/<doc-photo|doc-pdf>, its lines and its page image answer the
 //   recorded ones; Show in folder answers that it is not on the Mac.
-// - /__scenario/<waiting|empty|down|modeloff>?to=/path picks the scenario, then goes on to the path.
+// - /__scenario/<waiting|one|group|empty|down|modeloff>?to=/path picks the scenario, then goes on to the path.
 // - Paths of the app answer with the app page and the CSP the API sends; any other /v1 path is 404.
 
 import { readFile } from 'node:fs/promises'
@@ -40,8 +44,8 @@ const TYPES: Record<string, string> = {
   '.png': 'image/png',
 }
 
-type Scenario = 'waiting' | 'empty' | 'down' | 'modeloff'
-const SCENARIOS: Scenario[] = ['waiting', 'empty', 'down', 'modeloff']
+type Scenario = 'waiting' | 'one' | 'group' | 'empty' | 'down' | 'modeloff'
+const SCENARIOS: Scenario[] = ['waiting', 'one', 'group', 'empty', 'down', 'modeloff']
 const DOCS = ['doc-photo', 'doc-pdf']
 
 function send(
@@ -62,7 +66,12 @@ function safeTarget(to: string | null): string {
 
 export async function serve(options: { port?: number; dist?: string } = {}): Promise<Server> {
   const DIST = options.dist ?? BUILT
-  const waiting = await readFile(path.join(FIXTURES, 'needs-a-look.json'), 'utf8')
+  const lists: Record<string, string> = {
+    waiting: await readFile(path.join(FIXTURES, 'needs-a-look.json'), 'utf8'),
+    one: await readFile(path.join(FIXTURES, 'needs-a-look-one.json'), 'utf8'),
+    group: await readFile(path.join(FIXTURES, 'needs-a-look-group.json'), 'utf8'),
+    empty: '[]',
+  }
   const health = await readFile(path.join(FIXTURES, 'healthz.json'), 'utf8')
   const refusal = JSON.stringify({ detail: 'Something went wrong. Nothing was changed.' })
   let scenario: Scenario = 'waiting'
@@ -97,8 +106,23 @@ export async function serve(options: { port?: number; dist?: string } = {}): Pro
     if (pathname === '/healthz') return send(response, 200, TYPES['.json']!, health)
     if (pathname === '/v1/needs-a-look') {
       if (scenario === 'down') return send(response, 500, TYPES['.json']!, refusal)
-      return send(response, 200, TYPES['.json']!, scenario === 'empty' ? '[]' : waiting)
+      return send(response, 200, TYPES['.json']!, lists[scenario] ?? lists.waiting!)
     }
+    if (pathname === '/v1/activity') {
+      const older = searchParams.has('before')
+      return send(response, 200, TYPES['.json']!, older ? '[]' : await recorded('activity.json'))
+    }
+    if (pathname === '/v1/inbox/progress')
+      return send(response, 200, TYPES['.json']!, await recorded('progress.json'))
+    if (pathname === '/v1/secrets/status')
+      return send(response, 200, TYPES['.json']!, await recorded('secrets-status-none.json'))
+    if (/^\/v1\/items\/\d+\/pages\/0\.png$/.test(pathname))
+      return send(
+        response,
+        200,
+        TYPES['.png']!,
+        await readFile(path.join(FIXTURES, 'item-page-0.png')),
+      )
     if (pathname === '/v1/people')
       return send(response, 200, TYPES['.json']!, await recorded('people.json'))
     if (pathname === '/v1/search/list' && request.method === 'POST') {
@@ -148,6 +172,16 @@ export async function serve(options: { port?: number; dist?: string } = {}): Pro
         page === null ? null : await readFile(path.join(FIXTURES, name)).catch(() => null)
       if (found === null) return send(response, 404, TYPES['.json']!, notFile)
       return send(response, 200, kind === '.png' ? TYPES['.png']! : TYPES['.json']!, found)
+    }
+    if (request.method === 'POST' && pathname.startsWith('/v1/')) {
+      await readBody(request)
+      if (pathname.endsWith('/unlock') && pathname.includes('needs-a-look')) {
+        const detail = 'That password did not open the file.'
+        return send(response, 409, TYPES['.json']!, JSON.stringify({ detail }))
+      }
+      const card = pathname === '/v1/cards'
+      const reply = card ? { status: 'asked', item_id: 4 } : { id: 4, state: 'queued' }
+      return send(response, 200, TYPES['.json']!, JSON.stringify(reply))
     }
     if (pathname.startsWith('/v1/'))
       return send(response, 404, TYPES['.json']!, '{"detail":"Not found."}')

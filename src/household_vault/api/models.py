@@ -46,6 +46,8 @@ class ActivityOut(BaseModel):
     file: str | None
     detail: str
     actions: list[str]
+    # Set with `open` on a filed item: the document the viewer opens.
+    document_id: str | None = None
 
 
 class ProgressOut(BaseModel):
@@ -89,6 +91,11 @@ class UnlockIn(Strict):
 
 class MasterPasswordIn(Strict):
     master_password: str
+
+
+class SecretsStatusOut(BaseModel):
+    exists: bool
+    unlocked: bool
 
 
 class ItemOut(BaseModel):

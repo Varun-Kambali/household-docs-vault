@@ -44,6 +44,7 @@ from household_vault.api.models import (
     OptionOut,
     ProgressOut,
     QuestionOut,
+    SecretsStatusOut,
     UnlockIn,
 )
 from household_vault.api.pages import add_page_routes
@@ -439,9 +440,13 @@ def create_app(
 
     def activity_out(entry: ActivityEntry, newest: dict[int, int]) -> ActivityOut:
         actions: list[str] = []
+        document_id: str | None = None
         if entry.item_id is not None and newest.get(entry.item_id) == entry.id:
             try:
-                actions = actions_of(state.store.item(entry.item_id))
+                item = state.store.item(entry.item_id)
+                actions = actions_of(item)
+                if "open" in actions and item.state == "filed":
+                    document_id = item.document_id  # what the viewer opens
             except KeyError:
                 actions = []
         return ActivityOut(
@@ -453,6 +458,7 @@ def create_app(
             file=entry.file,
             detail=entry.detail,
             actions=actions,
+            document_id=document_id,
         )
 
     def item_out(item: Item) -> ItemOut:
@@ -604,6 +610,13 @@ def create_app(
             return CardOut(status=result.state, item_id=result.id)
         finally:
             await form.close()  # drop the parsed parts, memory-backed or not
+
+    @app.get("/v1/secrets/status")
+    def secrets_status() -> SecretsStatusOut:
+        # Two booleans and nothing else: no path, count or time.
+        return SecretsStatusOut(
+            exists=state.vault.exists(SECRETS_FILE), unlocked=state.gate.is_open()
+        )
 
     @app.post("/v1/secrets/create")
     def secrets_create(body: MasterPasswordIn) -> dict[str, str]:
