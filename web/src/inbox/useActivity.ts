@@ -14,18 +14,38 @@ export type ActivityState = {
   more: () => void
 }
 
-export function useActivity(version: number): ActivityState {
-  const [head, setHead] = useState<ActivityOut[] | null>(null)
-  const [older, setOlder] = useState<ActivityOut[]>([])
+type Held = {
+  head: ActivityOut[] | null
+  // Older pages, kept across a re-read of the head while the head still reaches them.
+  older: ActivityOut[]
   // Whether the last older page came back full; null until one has been read.
-  const [olderFull, setOlderFull] = useState<boolean | null>(null)
+  olderFull: boolean | null
+}
+
+const NONE: Held = { head: null, older: [], olderFull: null }
+
+// What a re-read of the head does to what is held. The entries the old head showed that the new
+// head no longer does join the older ones; but if more than a page arrived meanwhile, nothing
+// ties the new head to the old ones, and showing them would hide the entries in between, so they
+// are dropped and "Show older" starts again from the head.
+function merged(held: Held, page: ActivityOut[]): Held {
+  if (held.head === null) return { ...NONE, head: page }
+  const least = minId(page)
+  const joined = page.length < PAGE || maxId(held.head) >= least - 1
+  if (!joined) return { head: page, older: [], olderFull: null }
+  const pool = [...held.head, ...held.older].filter((e) => e.id < least)
+  return { head: page, older: pool, olderFull: held.olderFull }
+}
+
+export function useActivity(version: number): ActivityState {
+  const [held, setHeld] = useState<Held>(NONE)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const controller = new AbortController()
     api<ActivityOut[]>(`/v1/activity?limit=${PAGE}`, { signal: controller.signal })
       .then((page) => {
-        setHead(page)
+        setHeld((now) => merged(now, page))
         setError(null)
       })
       .catch((reason: unknown) => {
@@ -36,16 +56,20 @@ export function useActivity(version: number): ActivityState {
     // oxlint-disable-next-line react/exhaustive-effect-dependencies
   }, [version])
 
-  const entries = head === null ? null : [...head, ...older.filter((e) => e.id < minId(head))]
+  const { head, older, olderFull } = held
+  const entries = head === null ? null : [...head, ...older]
   const oldest = entries?.at(-1)?.id
 
   const loadMore = useCallback(() => {
     if (oldest === undefined) return
     api<ActivityOut[]>(`/v1/activity?limit=${PAGE}&before=${oldest}`)
-      .then((page) => {
-        setOlder((have) => [...have, ...page])
-        setOlderFull(page.length === PAGE)
-      })
+      .then((page) =>
+        setHeld((now) => ({
+          ...now,
+          older: [...now.older, ...page],
+          olderFull: page.length === PAGE,
+        })),
+      )
       .catch((reason: unknown) => setError((reason as Error).message))
   }, [oldest])
 
@@ -55,6 +79,10 @@ export function useActivity(version: number): ActivityState {
     hasMore: olderFull ?? head?.length === PAGE,
     more: loadMore,
   }
+}
+
+function maxId(entries: ActivityOut[]): number {
+  return entries.reduce((most, e) => Math.max(most, e.id), Number.NEGATIVE_INFINITY)
 }
 
 function minId(entries: ActivityOut[]): number {
