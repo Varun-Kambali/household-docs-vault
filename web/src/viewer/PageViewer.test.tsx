@@ -357,3 +357,11 @@ describe('the page viewer', () => {
 function pageBody(): HTMLElement {
   return window.document.body
 }
+
+test('the title is the kind of document', async () => {
+  open('/doc/doc-a?page=1')
+  api()
+  render(<App />)
+  await flush()
+  expect(window.document.title).toBe('Health policy - Household vault')
+})

@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
@@ -58,13 +58,15 @@ describe('the shell', () => {
   test('focuses the search box on /', () => {
     open('/')
     render(<App />)
-    expect(screen.getByRole('searchbox', { name: 'Ask about your documents' })).toHaveFocus()
+    expect(screen.getByRole('combobox', { name: 'Ask about your documents' })).toHaveFocus()
   })
 
   test('does not take focus on other screens', () => {
     open('/inbox')
     render(<App />)
-    expect(screen.queryByRole('searchbox')).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('combobox', { name: 'Ask about your documents' }),
+    ).not.toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 1, name: 'Inbox' })).toBeInTheDocument()
   })
 
@@ -73,7 +75,7 @@ describe('the shell', () => {
     const user = userEvent.setup()
     render(<App />)
     await user.keyboard('/')
-    expect(screen.getByRole('searchbox')).toHaveFocus()
+    expect(screen.getByRole('combobox')).toHaveFocus()
     expect(window.location.pathname).toBe('/')
   })
 
@@ -103,7 +105,7 @@ describe('the shell', () => {
     await user.click(screen.getByRole('link', { name: 'Inbox' }))
     expect(screen.getByRole('heading', { level: 1, name: 'Inbox' })).toBeInTheDocument()
     window.history.back()
-    expect(await screen.findByRole('searchbox')).toBeInTheDocument()
+    expect(await screen.findByRole('combobox')).toBeInTheDocument()
   })
 
   test('the menu button opens and closes the list of places', async () => {
@@ -228,7 +230,7 @@ describe('search on /', () => {
     open('/?q=kavita')
     const user = userEvent.setup()
     render(<App />)
-    const box = screen.getByRole('searchbox')
+    const box = screen.getByRole('combobox')
     expect(box).toHaveValue('kavita')
     await user.type(box, 's policy')
     expect(new URLSearchParams(window.location.search).get('q')).toBe('kavitas policy')
@@ -270,5 +272,45 @@ describe('other screens', () => {
     await user.tab()
     expect(screen.getByRole('link', { name: 'Skip to the page' })).toHaveFocus()
     expect(screen.getByRole('main')).toHaveAttribute('id', 'main')
+  })
+})
+
+describe('the page title', () => {
+  test('says where you are on every screen', async () => {
+    open('/')
+    render(<App />)
+    expect(document.title).toBe('Search - Household vault')
+    await act(async () => {
+      window.history.pushState(null, '', '/area/utilities')
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    })
+    expect(document.title).toBe('Utilities - Household vault')
+    await act(async () => {
+      window.history.pushState(null, '', '/nowhere')
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    })
+    expect(document.title).toBe('Page not found - Household vault')
+  })
+
+  test('the Inbox carries the number waiting', async () => {
+    stubApi((call) =>
+      call.path === '/v1/needs-a-look'
+        ? { body: [1, 2, 3].map((id) => waitingItem({ id })) }
+        : call.path === '/v1/inbox/progress'
+          ? { body: idle() }
+          : call.path === '/v1/secrets/status'
+            ? { body: { exists: true, unlocked: false } }
+            : { body: [] },
+    )
+    open('/inbox')
+    render(<App />)
+    await screen.findByRole('link', { name: 'Inbox 3' })
+    expect(document.title).toBe('Inbox (3) - Household vault')
+  })
+
+  test('a search shows its prompt, with a card number masked', () => {
+    open('/?q=policy')
+    render(<App />)
+    expect(document.title).toBe('policy - Household vault')
   })
 })

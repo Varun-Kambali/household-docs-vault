@@ -58,7 +58,7 @@ afterEach(() => {
   open('/')
 })
 
-const box = () => screen.getByRole('searchbox', { name: 'Ask about your documents' })
+const box = () => screen.getByRole('combobox', { name: 'Ask about your documents' })
 const menu = (name: string) => screen.getByRole('combobox', { name })
 const rowsShown = () =>
   within(screen.getByRole('list', { name: 'Documents' }))
@@ -316,7 +316,9 @@ describe('an area page', () => {
       },
     })
     expect(rowsShown()).toHaveLength(1)
-    expect(screen.queryByRole('searchbox')).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('combobox', { name: 'Ask about your documents' }),
+    ).not.toBeInTheDocument()
   })
 
   test('an empty area says nothing is filed under it', async () => {

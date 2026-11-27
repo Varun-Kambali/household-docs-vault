@@ -11,6 +11,7 @@ import { FIELD_LABELS } from '../common/fieldLabels.ts'
 import { CARD_NOTE, isCard, isMasked, typeLabel } from '../common/labels.ts'
 import { formatField } from '../common/format.ts'
 import { Masked } from '../common/Masked.tsx'
+import { usePageTitle } from '../common/usePageTitle.ts'
 import { useInView } from '../common/useInView.ts'
 import { useLines } from '../common/useLines.ts'
 import { useReveal } from '../common/useReveal.ts'
@@ -167,6 +168,7 @@ export function PageViewer({
   }, [current, total, id])
 
   const title = loaded.state === 'full' ? typeLabel(loaded.doc.doc_type) : 'Document'
+  usePageTitle(title)
   return (
     <>
       <h1 tabIndex={-1}>{title}</h1>

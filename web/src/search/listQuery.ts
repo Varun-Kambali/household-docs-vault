@@ -3,7 +3,8 @@
 // comma-separated; the free-text parts (place, words, and the unread phrases, which can hold a
 // comma) are not split. `list=1` stands for a list with nothing set (every document).
 import type { QueryIn, QueryOut } from '../api/types.ts'
-import { isAreaId } from '../app/areas.ts'
+import { AREAS, isAreaId } from '../app/areas.ts'
+import { maskCards } from '../common/maskCards.ts'
 import { TYPE_LABELS } from '../common/labels.ts'
 
 export type ListQuery = {
@@ -61,8 +62,8 @@ export function listParams(list: ListQuery): URLSearchParams {
   if (list.from !== null) params.set('from', list.from)
   if (list.to !== null) params.set('to', list.to)
   if (list.place !== null) params.set('place', list.place)
-  if (list.words !== '') params.set('words', list.words)
-  for (const phrase of list.unread) params.append('unread', phrase)
+  if (list.words !== '') params.set('words', maskCards(list.words))
+  for (const phrase of list.unread) params.append('unread', maskCards(phrase))
   if (params.size === 0) params.set('list', '1')
   return params
 }
@@ -140,8 +141,13 @@ export function listProblem(list: ListQuery): string | null {
   if (list.people.length > MAX_LISTED || list.people.some((id) => id.length > MAX_ID)) {
     return 'people'
   }
-  if (list.types.some((type) => !Object.hasOwn(TYPE_LABELS, type))) return 'types'
-  if (list.areas.some((area) => !isAreaId(area))) return 'areas'
+  const kinds = Object.keys(TYPE_LABELS).length
+  if (list.types.length > kinds || list.types.some((type) => !Object.hasOwn(TYPE_LABELS, type))) {
+    return 'types'
+  }
+  if (list.areas.length > AREAS.length || list.areas.some((area) => !isAreaId(area))) {
+    return 'areas'
+  }
   if (list.role !== null && !ROLES.includes(list.role)) return 'role'
   for (const date of [list.from, list.to]) {
     if (date !== null && !isDate(date)) return 'date'

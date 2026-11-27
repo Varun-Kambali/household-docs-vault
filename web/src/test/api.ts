@@ -287,3 +287,19 @@ export function idle(over: Partial<ProgressOut> = {}): ProgressOut {
     ...over,
   }
 }
+
+// A card-like number for a test, built here from its prefix with a Luhn check digit, so no number
+// is written into a fixture. It is only ever put into a prompt to see it masked.
+export function testCard(prefix = '411111', length = 16): string {
+  const body = prefix.padEnd(length - 1, '1')
+  let sum = 0
+  for (let i = 0; i < body.length; i += 1) {
+    let n = Number(body[body.length - 1 - i])
+    if (i % 2 === 0) {
+      n *= 2
+      if (n > 9) n -= 9
+    }
+    sum += n
+  }
+  return body + String((10 - (sum % 10)) % 10)
+}

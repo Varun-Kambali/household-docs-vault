@@ -7,9 +7,12 @@ import {
   PEOPLE,
   answer,
   noAnswer,
+  listQuery,
   row,
   search,
+  sentence,
   stubApi,
+  testCard,
   type Call,
   type Reply,
 } from '../test/api.ts'
@@ -85,7 +88,7 @@ function press(key: string, modifiers: { metaKey?: boolean; ctrlKey?: boolean } 
   fireEvent.keyDown(box(), { key, ...modifiers })
 }
 
-const box = () => screen.getByRole('searchbox', { name: 'Ask about your documents' })
+const box = () => screen.getByRole('combobox', { name: 'Ask about your documents' })
 
 describe('the search screen', () => {
   test('typing waits 150 ms, aborts the stale request and shows rows', async () => {
@@ -496,5 +499,131 @@ describe('the finder keyboard', () => {
     press('Enter', { ctrlKey: true })
     await wait(0)
     expect(screen.getByRole('alert')).toHaveTextContent('That file is not available.')
+  })
+})
+
+describe('what the audit fixed on the search screen', () => {
+  test('a card number typed into the box keeps only its last four in the address', async () => {
+    api()
+    start()
+    const card = testCard()
+    setPrompt(`bill ${card}`)
+    expect(window.location.search).not.toContain(card)
+    expect(decodeURIComponent(window.location.search)).toContain(card.slice(-4))
+  })
+
+  test('the box is a combobox that names its list', async () => {
+    api()
+    start()
+    setPrompt('care')
+    await wait(150)
+    expect(box()).toHaveAttribute('role', 'combobox')
+    expect(box()).toHaveAttribute('aria-autocomplete', 'list')
+    expect(box()).toHaveAttribute('aria-expanded', 'true')
+    setPrompt('')
+    expect(box()).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  test('Enter right after a keystroke never opens the old prompt row', async () => {
+    api({ quick: { body: search() } })
+    start()
+    setPrompt('care')
+    await wait(150)
+    press('ArrowDown')
+    setPrompt('carx')
+    press('Enter')
+    expect(window.location.pathname).toBe('/')
+  })
+
+  test('one quiet line says when search is by keyword only', async () => {
+    api({
+      quick: { body: search({ vectors: 'off' }) },
+      full: { body: search({ vectors: 'off' }) },
+    })
+    start()
+    setPrompt('care')
+    await wait(150)
+    expect(
+      screen.getByText("Searching by keyword only: the local model isn't running."),
+    ).toBeInTheDocument()
+  })
+
+  test('the keyword line does not repeat beside the model-off line', async () => {
+    api({ quick: { body: search({ vectors: 'off', reading: 'off' }) } })
+    start()
+    setPrompt('care')
+    await wait(150)
+    expect(screen.getAllByText(/keyword/i)).toHaveLength(1)
+  })
+
+  test('a find that gets no_answer shows the same notice and the closest files', async () => {
+    api({
+      full: {
+        body: search({
+          query: listQuery({ intent: 'find', unread: ['Meera'] }),
+          rows: [row(), row({ document_id: 'doc-b', rel_path: 'Other/File.pdf' })],
+          no_answer: noAnswer({ reason: 'unknown_person', closest: [row().rel_path] }),
+        }),
+      },
+    })
+    start()
+    setPrompt('meera policy')
+    press('Enter')
+    await wait(0)
+    expect(screen.getByText('No direct answer.')).toBeInTheDocument()
+    expect(screen.getByText('No one called Meera is in the household.')).toBeInTheDocument()
+    expect(screen.getAllByRole('option')).toHaveLength(1)
+  })
+
+  test('a lookup shows what it understood and a changed part runs it again', async () => {
+    const lookup = listQuery({ intent: 'lookup', field: 'policy_number', words: 'care' })
+    const { calls } = api({
+      full: { body: search({ answer: answer(), query: lookup, sentence: sentence() }) },
+    })
+    start()
+    setPrompt('policy number')
+    press('Enter')
+    await wait(0)
+    const panel = screen.getByRole('region', { name: 'Answer' })
+    const who = within(panel).getByRole('combobox', { name: 'Person' })
+    fireEvent.change(who, { target: { value: '2' } })
+    await wait(0)
+    const again = searches(calls, true)[1]
+    expect(again?.body).toMatchObject({
+      prompt: 'policy number',
+      full: true,
+      query: { intent: 'lookup', field: 'policy_number' },
+      change: { slot: 'who', value: 'p2' },
+    })
+  })
+
+  test('a failed change says so and keeps the answer', async () => {
+    const lookup = listQuery({ intent: 'lookup', field: 'policy_number' })
+    let count = 0
+    stubApi((call: Call): Reply | undefined => {
+      if (call.path === '/v1/needs-a-look') return { body: [] }
+      if (call.path === '/v1/people') return { body: PEOPLE }
+      if (call.path.endsWith('/lines')) return { body: LINES }
+      if (call.path.endsWith('.png')) return { status: 404 }
+      if (call.path === '/v1/search') {
+        const body = call.body as { full: boolean; change?: unknown }
+        if (!body.full) return { body: search() }
+        count += 1
+        return count === 1
+          ? { body: search({ answer: answer(), query: lookup, sentence: sentence() }) }
+          : { status: 422, body: { detail: 'That change is not one the sentence offers.' } }
+      }
+      return undefined
+    })
+    start()
+    setPrompt('policy number')
+    press('Enter')
+    await wait(0)
+    fireEvent.change(screen.getByRole('combobox', { name: 'Person' }), { target: { value: '2' } })
+    await wait(0)
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'That change is not one the sentence offers.',
+    )
+    expect(screen.getByRole('region', { name: 'Answer' })).toBeInTheDocument()
   })
 })
