@@ -967,3 +967,25 @@ def test_a_bare_short_month_needs_a_cue(household):
     assert in_jan.range == DateRange(start=date(2027, 1, 1), end=date(2027, 1, 31))
     before = resolve(reading(), household, TODAY, "policies expiring before Mar")
     assert before.range is not None
+
+
+@pytest.mark.parametrize(
+    ("prompt", "status"),
+    [
+        ("When does Suresh's Western Ghats home insurance policy expire?", False),
+        ("Ravi passport expiry date", False),
+        ("What is the expiry date on Kavita's licence?", False),
+        ("Is Ravi's vehicle insurance policy still valid?", True),
+        ("Ravi home insurance policy still valid", True),
+        ("Is the LG fridge under warranty?", True),
+        ("Is Kiran's passport expired", True),
+        ("Does Suresh's car insurance cover run till 2027?", True),
+    ],
+)
+def test_a_status_question_is_marked_and_a_when_question_is_not(household, prompt, status):
+    q = resolve(reading(intent="lookup", field="end_date"), household, TODAY, prompt)
+    assert q.status is status
+
+
+def test_a_query_with_no_prompt_leaves_the_status_open(household):
+    assert resolve(reading(intent="lookup", field="end_date"), household, TODAY).status is None

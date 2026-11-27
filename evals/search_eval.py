@@ -62,7 +62,14 @@ from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import field_kind, parse_amount, parse_date
 from household_vault.scoring import IOU_MIN, iou, normalise
 from household_vault.search.answer import Answer, NoAnswer, compose
-from household_vault.search.query import PROMPT_READ, PromptReader, Query, read_prompt, resolve
+from household_vault.search.query import (
+    PROMPT_READ,
+    PromptReader,
+    Query,
+    asks_status,
+    read_prompt,
+    resolve,
+)
 from household_vault.search.retrieve import Rows, Searcher
 from household_vault.search.sentence import sentence
 from household_vault.search.vectors import QUERY_TASK, Embedder, VectorIndex, Vectors
@@ -563,7 +570,8 @@ def _answer_right(q: Question, answer: Answer, truth: Mapping[str, SynthDoc]) ->
     kind = field_kind(schema, q.field) if q.field in schema.model_fields else "text"
     if not same_value(kind, q.value, answer.value):
         return False
-    return q.status is None or _status_matches(q.status, answer.text)
+    # only a prompt that asks whether the document still holds wants the status in the answer
+    return q.status is None or not asks_status(q.prompt) or _status_matches(q.status, answer.text)
 
 
 def _cited(

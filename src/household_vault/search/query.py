@@ -94,6 +94,9 @@ class Query(BaseModel):
     unread: list[str] = []  # parts code could not resolve, such as "person: Anil"
     # slots where the prompt's own words and the model disagreed; never part of the stored form
     backstop_conflicts: int = Field(default=0, exclude=True)
+    # whether the prompt asks if a document still holds ("Is it still valid?"), not for a date
+    # ("When does it expire?"). Never serialised; None means unknown, which answers as a status.
+    status: bool | None = Field(default=None, exclude=True)
 
 
 def _system_text_v1() -> str:
@@ -639,6 +642,27 @@ def _quantified(words: list[str], tokens: list[str], skip: set[int]) -> bool:
     return False
 
 
+_STATUS_WORDS = frozenset({"valid", "expired", "active", "lapsed"})
+
+
+def _asks_status(words: list[str]) -> bool:
+    """Whether the prompt asks if something still holds: a yes or no question (it opens with an
+    auxiliary), or it says "valid", "expired" or "under warranty". A "when" question asks for
+    the date itself."""
+    if words and words[0] in AUX_OPENERS:
+        return True
+    if _STATUS_WORDS & set(words):
+        return True
+    return any(
+        words[i] in ("under", "in") and words[i + 1] == "warranty" for i in range(len(words) - 1)
+    )
+
+
+def asks_status(prompt: str) -> bool:
+    """`_asks_status` for a prompt as written (the search eval judges answers with it)."""
+    return _asks_status(_words(prompt))
+
+
 def _opens_with_question(words: list[str]) -> bool:
     """Whether the prompt opens with an auxiliary, as a yes or no question does."""
     return bool(words) and words[0] in AUX_OPENERS
@@ -977,4 +1001,5 @@ def resolve(
         words=words,
         unread=unread,
         backstop_conflicts=conflicts,
+        status=_asks_status(_words(prompt)) if prompt else None,
     )

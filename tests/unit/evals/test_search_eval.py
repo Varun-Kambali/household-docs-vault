@@ -382,7 +382,8 @@ def status_question(doc: SynthDoc, field: str) -> Question:
     from evals.search_set import status_of
 
     q = lookup_question(doc, field)
-    return q.model_copy(update={"status": status_of(doc, field)})
+    asked = "Is it still valid?"  # only a status question wants the status in the answer
+    return q.model_copy(update={"status": status_of(doc, field), "prompt": asked})
 
 
 def judged_answer(q: Question, doc: SynthDoc, value: Any, text: str) -> SearchRow:
@@ -669,3 +670,24 @@ def test_five_test_prompts_are_in_val_verbatim():
     rows = [SearchRow(q.id, q.kind, q.origin, q.style, q.prompt) for q in load_questions("test")]
     report = seen_in_val(rows, "test")
     assert report is not None and report["n"] == 5
+
+
+def test_a_date_question_is_right_with_the_plain_date_and_a_status_question_needs_the_wording(
+    smoke_docs,
+):
+    doc = next(d for d in smoke_docs if d.doc_id == "health_policy-1-photo")
+    end = doc.fields["end_date"]
+    base = lookup_question(doc, "end_date")
+    box = base.box or (0.0, 0.0, 1.0, 1.0)
+    truth, back = {doc.doc_id: doc}, {"db-1": doc.doc_id}
+
+    def right(prompt: str, text: str) -> bool:
+        q = base.model_copy(update={"prompt": prompt, "status": {"valid": True}})
+        answer = an_answer("db-1", "end_date", end, text, [LineRef(base.page or 0, 0, box)])
+        res = Result(Query(intent="lookup", field="end_date"), [], answer, [])
+        return bool(judge(q, res, truth, back).answer_correct)
+
+    assert right("When does the policy expire?", "31 Mar 2027")
+    assert right("When does the policy expire?", "Yes, until 31 Mar 2027.")
+    assert right("Is the policy still valid?", "Yes, until 31 Mar 2027.")
+    assert not right("Is the policy still valid?", "31 Mar 2027")

@@ -764,3 +764,13 @@ def test_the_residual_words_gate_tests_the_row_the_answer_comes_from(store):
     # when the fitting row carries the evidence itself, it answers
     backed = dataclasses.replace(fits, word_hit=True)
     assert not answer_module.weak_match(asked, [other, backed])
+
+
+def test_a_when_question_gets_the_plain_date_and_a_status_question_keeps_the_wording(store):
+    rows = policy_rows(store, date(2027, 3, 31))
+    plain = compose(query(field="end_date", status=False), rows, store, TODAY)
+    assert plain.text == "31 Mar 2027" and plain.value == "2027-03-31"
+    status = compose(query(field="end_date", status=True), rows, store, TODAY)
+    assert status.text == "Yes, until 31 Mar 2027."
+    ended = compose(query(field="end_date", status=False), rows, store, date(2028, 1, 1))
+    assert ended.text == "31 Mar 2027"

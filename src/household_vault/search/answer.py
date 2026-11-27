@@ -323,14 +323,16 @@ def _where_bought(fields: dict[str, Any]) -> str:
     return text
 
 
-def _text_of(doc: DocumentRow, name: str, kind: FieldKind, today: date) -> str | None:
+def _text_of(
+    doc: DocumentRow, name: str, kind: FieldKind, today: date, status: bool = True
+) -> str | None:
     value = doc.fields[name]
     if kind == "date":
         day = _as_date(value)
         if day is None:
             return None
         expiry = DATE_ROLES[doc.doc_type].get("expiry")
-        if name == expiry and doc.doc_type in STATUS_TYPES:
+        if status and name == expiry and doc.doc_type in STATUS_TYPES:
             return (
                 f"Yes, until {format_date(day)}."
                 if day >= today
@@ -424,7 +426,7 @@ def compose(
     if name is None or doc.fields.get(name) in (None, "", []):
         return NoAnswer("no_field", closest)
     kind = field_kind(schema, name)
-    text = _text_of(doc, name, kind, today)
+    text = _text_of(doc, name, kind, today, query.status is not False)
     if text is None:
         return NoAnswer("no_field", closest)
     refs = _supporting(doc, name, kind, store.lines_of(doc.id))
