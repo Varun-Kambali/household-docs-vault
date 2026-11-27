@@ -90,7 +90,7 @@ describe('FilingNotice', () => {
     stubApi((call) =>
       call.path.startsWith('/v1/activity')
         ? { body: [fresh()] }
-        : { status: 409, body: { detail: 'The filed copy moved. Nothing was changed.' } },
+        : { status: 409, body: { detail: 'A file with that name is already in Inbox. Move or rename it, then try Undo again.' } },
     )
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
     render(
@@ -102,7 +102,7 @@ describe('FilingNotice', () => {
       />,
     )
     await user.click(await screen.findByRole('button', { name: 'Undo' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('The filed copy moved')
+    expect(await screen.findByRole('alert')).toHaveTextContent('already in Inbox')
   })
 
   test('shows nothing when no file was answered', () => {

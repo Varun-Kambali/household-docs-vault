@@ -54,7 +54,7 @@ describe('SecretsDialog', () => {
   test('with a locked file, asks once and unlocks; a wrong password is cleared', async () => {
     const { calls } = stubApi((call) =>
       call.method === 'POST'
-        ? { status: 423, body: { detail: 'That master password did not open the file.' } }
+        ? { status: 423, body: { detail: 'The secrets file could not be opened. Check the master password.' } }
         : status(true, false)(call),
     )
     const user = userEvent.setup()
@@ -62,7 +62,7 @@ describe('SecretsDialog', () => {
     await user.type(await screen.findByLabelText('Master password'), MASTER_PW)
     expect(screen.queryByLabelText('Type it again')).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Unlock Secrets.kdbx' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('did not open the file')
+    expect(await screen.findByRole('alert')).toHaveTextContent('could not be opened')
     expect(screen.getByLabelText('Master password')).toHaveValue('')
     expect(calls.find((c) => c.method === 'POST')?.path).toBe('/v1/secrets/unlock')
   })

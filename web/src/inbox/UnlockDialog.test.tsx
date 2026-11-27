@@ -35,14 +35,14 @@ describe('UnlockDialog', () => {
   test('the unlock password is cleared after submit and never sent in a URL', async () => {
     const { calls } = stubApi(() => ({
       status: 409,
-      body: { detail: 'That password did not open the file.' },
+      body: { detail: 'That password did not open the PDF' },
     }))
     const user = userEvent.setup()
     open()
     await user.type(screen.getByLabelText('PDF password'), PDF_PW)
     await user.click(screen.getByRole('button', { name: 'Open the PDF' }))
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      'That password did not open the file.',
+      'That password did not open the PDF',
     )
     expect(screen.getByLabelText('PDF password')).toHaveValue('')
     expect(calls).toHaveLength(1)

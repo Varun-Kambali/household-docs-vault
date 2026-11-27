@@ -89,7 +89,7 @@ describe('Activity', () => {
     stubApi((call) =>
       call.path.startsWith('/v1/activity')
         ? { body: [activityEntry()] }
-        : { status: 409, body: { detail: 'The filed copy moved. Nothing was changed.' } },
+        : { status: 409, body: { detail: 'A file with that name is already in Inbox. Move or rename it, then try Undo again.' } },
     )
     const user = userEvent.setup()
     render(
@@ -100,7 +100,7 @@ describe('Activity', () => {
       />,
     )
     await user.click(await screen.findByRole('button', { name: 'Undo' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('The filed copy moved')
+    expect(await screen.findByRole('alert')).toHaveTextContent('already in Inbox')
   })
 
   test('Show older pages with before, and is gone when a page comes back short', async () => {
