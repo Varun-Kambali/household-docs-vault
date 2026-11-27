@@ -1,5 +1,5 @@
 // A native <dialog> for the steps that ask for a password: a focused step, closed by Escape, with
-// the focus put back on the button that opened it. Its contents exist only while it is open, so
+// the focus put back on the button that opened it, and on its first field again when content loads in. Its contents exist only while it is open, so
 // whatever was typed in it is gone when it closes.
 import { useEffect, useId, useRef, type ReactNode } from 'react'
 
@@ -27,7 +27,16 @@ export function Dialog({
     if (typeof dialog.showModal === 'function') dialog.showModal()
     else dialog.setAttribute('open', '')
     dialog.querySelector<HTMLElement>(FIELDS)?.focus()
+    // Contents that load after it opened (a status read, say) get the focus when they appear,
+    // unless the person is already on one of them.
+    const watcher = new MutationObserver(() => {
+      const on = document.activeElement
+      if (on !== null && on !== dialog && dialog.contains(on)) return
+      dialog.querySelector<HTMLElement>(FIELDS)?.focus()
+    })
+    watcher.observe(dialog, { childList: true, subtree: true })
     return () => {
+      watcher.disconnect()
       if (typeof dialog.close === 'function') dialog.close()
       else dialog.removeAttribute('open')
       const back = opener?.isConnected ? opener : document.querySelector<HTMLElement>('main h1')

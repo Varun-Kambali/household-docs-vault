@@ -23,6 +23,12 @@ function sentForm(fetchMock: ReturnType<typeof stubApi>['fetchMock']): FormData 
 }
 
 describe('CardUpload', () => {
+  test('focus is on the first field when it opens', () => {
+    stubApi(() => undefined)
+    show()
+    expect(screen.getByLabelText('Front of the card')).toHaveFocus()
+  })
+
   test('card upload posts front, back and master password and shows the result', async () => {
     const { fetchMock } = stubApi(() => ({ body: { status: 'filed', document_id: 'doc-x' } }))
     const user = userEvent.setup()

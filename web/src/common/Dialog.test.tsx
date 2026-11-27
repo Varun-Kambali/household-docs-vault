@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { describe, expect, test } from 'vitest'
 
 import { Dialog } from './Dialog.tsx'
@@ -50,5 +50,46 @@ describe('Dialog', () => {
     await user.keyboard('{Escape}')
     await user.click(screen.getByRole('button', { name: 'Open it' }))
     expect(screen.getByRole('textbox')).toHaveValue('')
+  })
+
+  test('a field that appears after it opened (loaded content) takes the focus', async () => {
+    function Late() {
+      const [ready, setReady] = useState(false)
+      useEffect(() => {
+        const timer = setTimeout(() => setReady(true), 20)
+        return () => clearTimeout(timer)
+      }, [])
+      return ready ? <input aria-label="Late field" /> : <p>Loading</p>
+    }
+    render(
+      <Dialog open title="Ask me" onClose={() => undefined}>
+        <Late />
+      </Dialog>,
+    )
+    await waitFor(() => expect(screen.getByLabelText('Late field')).toHaveFocus())
+  })
+
+  test('a field the person already moved to is not taken from them', async () => {
+    const user = userEvent.setup()
+    function Two() {
+      const [more, setMore] = useState(false)
+      return (
+        <>
+          <input aria-label="First" />
+          <button type="button" onClick={() => setMore(true)}>
+            More
+          </button>
+          {more && <input aria-label="Added" />}
+        </>
+      )
+    }
+    render(
+      <Dialog open title="Ask me" onClose={() => undefined}>
+        <Two />
+      </Dialog>,
+    )
+    await user.click(screen.getByRole('button', { name: 'More' }))
+    await new Promise((resolve) => setTimeout(resolve, 10))
+    expect(screen.getByRole('button', { name: 'More' })).toHaveFocus()
   })
 })

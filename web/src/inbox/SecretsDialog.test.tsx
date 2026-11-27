@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, test, vi } from 'vitest'
 
@@ -38,6 +38,13 @@ describe('SecretsDialog', () => {
     expect(await screen.findByText('Secrets.kdbx is made and open.')).toBeInTheDocument()
     expect(onDone).toHaveBeenCalled()
     expect(JSON.stringify(calls.map((c) => c.path))).not.toContain(MASTER_PW)
+  })
+
+  test('focus goes to the master password field once the status is read', async () => {
+    stubApi(status(true, false))
+    show()
+    const field = await screen.findByLabelText('Master password')
+    await waitFor(() => expect(field).toHaveFocus())
   })
 
   test('two different passwords are turned away before anything is sent', async () => {
