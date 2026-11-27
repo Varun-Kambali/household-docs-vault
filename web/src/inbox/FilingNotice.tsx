@@ -125,6 +125,21 @@ function Line({
   if (note.kind === 'again') return null
   return (
     <output className="notice">
+      {note.kind === 'filed' && (
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      )}
       <span>
         {note.kind === 'filing' && `Filing ${pending.name}`}
         {note.kind === 'filed' &&

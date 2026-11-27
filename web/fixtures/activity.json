@@ -1,0 +1,193 @@
+[
+  {
+    "actions": [
+      "open",
+      "undo",
+      "answer"
+    ],
+    "detail": "Prescription with no name I know on it. Whose is it?",
+    "document_id": null,
+    "file": "Needs a look/prescription-1-scan.pdf",
+    "id": 16,
+    "item_id": 4,
+    "outcome": "needs_a_look",
+    "step": "needs_a_look",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Read as Prescription in 0.0 s",
+    "document_id": null,
+    "file": "Inbox/prescription-1-scan.pdf",
+    "id": 15,
+    "item_id": 4,
+    "outcome": "prescription",
+    "step": "read",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Checked: ok",
+    "document_id": null,
+    "file": "Inbox/prescription-1-scan.pdf",
+    "id": 14,
+    "item_id": 4,
+    "outcome": "ok",
+    "step": "checked",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [
+      "open",
+      "undo",
+      "answer"
+    ],
+    "detail": "Prescription with no name I know on it. Whose is it?",
+    "document_id": null,
+    "file": "Needs a look/prescription-1-photo.jpg",
+    "id": 13,
+    "item_id": 3,
+    "outcome": "needs_a_look",
+    "step": "needs_a_look",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Read as Prescription in 0.0 s",
+    "document_id": null,
+    "file": "Inbox/prescription-1-photo.jpg",
+    "id": 12,
+    "item_id": 3,
+    "outcome": "prescription",
+    "step": "read",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Checked: ok",
+    "document_id": null,
+    "file": "Inbox/prescription-1-photo.jpg",
+    "id": 11,
+    "item_id": 3,
+    "outcome": "ok",
+    "step": "checked",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [
+      "open",
+      "undo",
+      "answer"
+    ],
+    "detail": "Prescription with no name I know on it. Whose is it?",
+    "document_id": null,
+    "file": "Needs a look/prescription-1-clean.pdf",
+    "id": 10,
+    "item_id": 2,
+    "outcome": "needs_a_look",
+    "step": "needs_a_look",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Read as Prescription in 0.0 s",
+    "document_id": null,
+    "file": "Inbox/prescription-1-clean.pdf",
+    "id": 9,
+    "item_id": 2,
+    "outcome": "prescription",
+    "step": "read",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Checked: ok",
+    "document_id": null,
+    "file": "Inbox/prescription-1-clean.pdf",
+    "id": 8,
+    "item_id": 2,
+    "outcome": "ok",
+    "step": "checked",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Found prescription-1-scan.pdf in Inbox",
+    "document_id": null,
+    "file": "Inbox/prescription-1-scan.pdf",
+    "id": 7,
+    "item_id": 4,
+    "outcome": "new",
+    "step": "noticed",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Found prescription-1-photo.jpg in Inbox",
+    "document_id": null,
+    "file": "Inbox/prescription-1-photo.jpg",
+    "id": 6,
+    "item_id": 3,
+    "outcome": "new",
+    "step": "noticed",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Found prescription-1-clean.pdf in Inbox",
+    "document_id": null,
+    "file": "Inbox/prescription-1-clean.pdf",
+    "id": 5,
+    "item_id": 2,
+    "outcome": "new",
+    "step": "noticed",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [
+      "open",
+      "undo"
+    ],
+    "detail": "Filed as Health policy - Care Health Insurance Limited",
+    "document_id": "25039b42b7564608a6bcf9b3fa7ee8e5",
+    "file": "Suresh Rao/Insurance/2026-09-20 Health policy - Care Health Insurance Limited.pdf",
+    "id": 4,
+    "item_id": 1,
+    "outcome": "filed",
+    "step": "filed",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Read as Health policy in 0.1 s",
+    "document_id": null,
+    "file": "Inbox/health_policy-1-clean.pdf",
+    "id": 3,
+    "item_id": 1,
+    "outcome": "health_policy",
+    "step": "read",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Checked: ok",
+    "document_id": null,
+    "file": "Inbox/health_policy-1-clean.pdf",
+    "id": 2,
+    "item_id": 1,
+    "outcome": "ok",
+    "step": "checked",
+    "time": "2026-11-27T09:09:46+05:30"
+  },
+  {
+    "actions": [],
+    "detail": "Found health_policy-1-clean.pdf in Inbox",
+    "document_id": null,
+    "file": "Inbox/health_policy-1-clean.pdf",
+    "id": 1,
+    "item_id": 1,
+    "outcome": "new",
+    "step": "noticed",
+    "time": "2026-11-27T09:09:46+05:30"
+  }
+]
