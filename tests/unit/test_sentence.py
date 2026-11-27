@@ -174,3 +174,15 @@ def test_every_option_is_accepted_by_apply_part(household):
 def test_a_custom_range_with_both_ends_empty_clears_the_date_filter(household):
     q = list_query(role="expiry", range=DateRange(end=date(2027, 2, 28)))
     assert apply_part(q, "when", {"start": None, "end": None}, TODAY).range is None
+
+
+def test_a_who_change_drops_the_unread_person_and_a_when_change_the_unread_date(household):
+    q = list_query(unread=["person: Meera", "date: sometime", "words: x"])
+    assert apply_part(q, "who", "p2", TODAY).unread == ["date: sometime", "words: x"]
+    assert apply_part(q, "when", "any", TODAY).unread == ["person: Meera", "words: x"]
+    assert apply_part(q, "verb", "expiry", TODAY).unread == q.unread
+
+
+def test_a_crafted_date_far_before_the_calendar_is_a_value_error(household):
+    with pytest.raises(ValueError):
+        apply_part(list_query(), "when", "before:0001-01-01", TODAY)

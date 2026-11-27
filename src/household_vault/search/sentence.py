@@ -185,7 +185,10 @@ def _span(value: JsonValue, today: date) -> DateRange | None:
     if isinstance(value, str) and value.startswith("before:"):
         first = _iso(value.removeprefix("before:"))
         if first is not None:
-            return DateRange(end=first - timedelta(days=1))
+            try:
+                return DateRange(end=first - timedelta(days=1))
+            except OverflowError as exc:  # date.min has no day before it
+                raise ValueError("not a date") from exc
     raise ValueError("not a way to change the dates")
 
 
@@ -196,7 +199,9 @@ def apply_part(query: Query, slot: str, value: JsonValue, today: date) -> Query:
         ids = [value] if isinstance(value, str) else value
         if not isinstance(ids, list) or not all(isinstance(i, str) for i in ids):
             raise ValueError("not a person")
-        return query.model_copy(update={"people": [str(i) for i in ids]})
+        # the person has said who they meant: an unread name no longer holds the answer back
+        unread = [u for u in query.unread if not u.startswith("person:")]
+        return query.model_copy(update={"people": [str(i) for i in ids], "unread": unread})
     if slot == "what":
         if value == "all":
             return query.model_copy(update={"types": [], "areas": []})
@@ -217,7 +222,8 @@ def apply_part(query: Query, slot: str, value: JsonValue, today: date) -> Query:
     if slot == "when":
         if value == "custom":
             return query  # the screen asks for the two dates, then sends them
-        return query.model_copy(update={"range": _span(value, today)})
+        unread = [u for u in query.unread if not u.startswith("date:")]
+        return query.model_copy(update={"range": _span(value, today), "unread": unread})
     if slot == "place":
         if value is not None and not isinstance(value, str):
             raise ValueError("not a place")

@@ -675,7 +675,7 @@ def _asks_status(words: list[str]) -> bool:
 
 
 def asks_status(prompt: str) -> bool:
-    """`_asks_status` for a prompt as written (the search eval judges answers with it)."""
+    """`_asks_status` for a prompt as written."""
     return _asks_status(_words(prompt))
 
 
