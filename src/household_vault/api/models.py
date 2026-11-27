@@ -3,9 +3,16 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, JsonValue, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    JsonValue,
+    StringConstraints,
+    field_validator,
+)
 
 from household_vault.doctypes import Area, DocType
 from household_vault.filing.questions import AnswerKind
@@ -136,6 +143,10 @@ MAX_PROMPT = 300
 class SearchIn(Strict):
     prompt: str
     full: bool = False
+    # A reading the screen already holds, with one part of its sentence changed: runs again
+    # without reading the prompt a second time.
+    query: QueryIn | None = None
+    change: PartChange | None = None
 
     @field_validator("prompt")
     @classmethod
@@ -172,7 +183,9 @@ class QueryIn(Strict):
     """A query as the screen sends it back: the same shape the search returned."""
 
     intent: Literal["lookup", "list", "find"]
-    people: list[str] = Field(default=[], max_length=20)
+    people: list[Annotated[str, StringConstraints(max_length=64)]] = Field(
+        default=[], max_length=20
+    )
     types: list[DocType] = Field(default=[], max_length=len(DocType))
     areas: list[Area] = Field(default=[], max_length=len(Area))
     field: str | None = Field(default=None, max_length=64)
@@ -180,7 +193,9 @@ class QueryIn(Strict):
     range: DateRange | None = None
     place: str | None = Field(default=None, max_length=MAX_PROMPT)
     words: str = Field(default="", max_length=MAX_PROMPT)
-    unread: list[str] = Field(default=[], max_length=20)
+    unread: list[Annotated[str, StringConstraints(max_length=MAX_PROMPT)]] = Field(
+        default=[], max_length=20
+    )
 
     def to_query(self) -> Query:
         return Query(**self.model_dump())
@@ -192,6 +207,17 @@ QueryOut = Query
 class PartChange(Strict):
     slot: str = Field(max_length=16)
     value: JsonValue = None
+
+    @field_validator("value")
+    @classmethod
+    def _bounded(cls, value: JsonValue) -> JsonValue:
+        items = value if isinstance(value, list) else [value]
+        if len(items) > 20 or any(isinstance(i, str) and len(i) > MAX_PROMPT for i in items):
+            raise ValueError("a part value is short")
+        return value
+
+
+SearchIn.model_rebuild()
 
 
 class ChoiceOut(BaseModel):

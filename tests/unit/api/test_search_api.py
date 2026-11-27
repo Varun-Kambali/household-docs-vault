@@ -174,3 +174,73 @@ def test_rows_carry_the_kind_of_each_key_field(search_client):
     assert rows
     for row in rows:
         assert set(row["field_kinds"]) >= set(row["key_fields"])
+
+
+CROMA_LOOKUP = {
+    **FIND,
+    "intent": "lookup",
+    "types": ["tax_invoice"],
+    "field": "invoice_date",
+    "words": "Croma",
+}
+
+
+def test_a_lookup_returns_its_reading_sentence(search_client, spy_reader):
+    spy_reader.answers["when was the Croma invoice"] = json.dumps(CROMA_LOOKUP)
+    out = post(search_client, "when was the Croma invoice").json()
+    assert [p["slot"] for p in out["sentence"]["parts"]][:2] == ["what", "who"]
+    assert out["sentence"]["text"].startswith("Showing ")
+
+
+def test_changing_a_lookup_part_reruns_it_without_the_model(search_client, spy_reader):
+    spy_reader.answers["when was the Croma invoice"] = json.dumps(CROMA_LOOKUP)
+    first = post(search_client, "when was the Croma invoice").json()
+    calls = spy_reader.calls
+    r = search_client.post(
+        "/v1/search",
+        json={
+            "prompt": "when was the Croma invoice",
+            "full": True,
+            "query": first["query"],
+            "change": {"slot": "who", "value": "p2"},
+        },
+    )
+    assert r.status_code == 200 and spy_reader.calls == calls
+    out = r.json()
+    assert out["query"]["people"] == ["p2"] and out["query"]["intent"] == "lookup"
+    assert out["sentence"] is not None
+    assert out["answer"] is not None or out["no_answer"] is not None
+
+
+def test_a_bad_lookup_change_is_a_422(search_client):
+    r = search_client.post(
+        "/v1/search",
+        json={
+            "prompt": "x",
+            "query": Query(intent="lookup").model_dump(mode="json"),
+            "change": {"slot": "nope", "value": 1},
+        },
+    )
+    assert r.status_code == 422
+
+
+def test_a_card_number_in_a_prompt_is_masked_before_the_models(search_client, spy_reader):
+    from household_vault.checks import TEST_CARD_NUMBERS
+
+    number = sorted(TEST_CARD_NUMBERS)[0]
+    spaced = " ".join(number[i : i + 4] for i in range(0, len(number), 4))
+    post(search_client, f"my card {spaced} bill")
+    seen = " ".join(str(p) for p in spy_reader.prompts)
+    assert number not in seen and spaced not in seen and number[-4:] in seen
+
+
+def test_item_lengths_are_bounded(search_client):
+    q = Query(intent="list").model_dump(mode="json")
+    for patch in ({"people": ["x" * 65]}, {"unread": ["x" * 301]}):
+        r = search_client.post("/v1/search/list", json={"query": {**q, **patch}})
+        assert r.status_code == 422
+    r = search_client.post(
+        "/v1/search/list",
+        json={"query": q, "change": {"slot": "place", "value": "x" * 301}},
+    )
+    assert r.status_code == 422

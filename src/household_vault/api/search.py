@@ -2,6 +2,7 @@
 logs, stores or echoes a prompt: it lives in the request and is gone.
 """
 
+import re
 from collections.abc import Iterable
 from datetime import date
 
@@ -24,6 +25,7 @@ from household_vault.api.models import (
     SentenceOut,
 )
 from household_vault.app_state import AppState
+from household_vault.checks import luhn_valid
 from household_vault.doctypes import DocType
 from household_vault.reading.ollama import ModelUnavailable
 from household_vault.schemas import SCHEMAS
@@ -34,6 +36,21 @@ from household_vault.search.retrieve import LineRef, Row
 from household_vault.search.sentence import Sentence, apply_part, render, sentence
 
 BAD_CHANGE = "That change is not one the sentence offers."
+
+
+_CARD_RUN = re.compile(r"(?<![\d])\d(?:[ -]?\d){12,18}(?![\d])")
+
+
+def mask_card_runs(text: str) -> str:
+    """A prompt is not a place for a card number: a run of 13 to 19 digits that passes Luhn
+    (spaces or dashes between digits) keeps only its last four, so neither the reading model nor
+    the embedder sees the rest. The keyword index can still match the last four."""
+
+    def hide(hit: re.Match[str]) -> str:
+        digits = re.sub(r"\D", "", hit.group())
+        return f"\u2022\u2022\u2022\u2022 {digits[-4:]}" if luhn_valid(digits) else hit.group()
+
+    return _CARD_RUN.sub(hide, text)
 
 
 def drive_path(prefix: str, rel_path: str) -> str:
@@ -111,9 +128,47 @@ def add_search_routes(app: FastAPI, state: AppState) -> None:
     def rows_out(rows: list[Row]) -> list[RowOut]:
         return [row_out(r, prefix) for r in rows]
 
-    @app.post("/v1/search")
-    def search(body: SearchIn) -> SearchOut:
-        prompt = body.prompt
+    def full_out(query: Query, prompt: str) -> SearchOut:
+        said = (
+            sentence_out(sentence(query, state.household, today()))
+            if query.intent != "find"
+            else None
+        )
+        if query.intent == "list":
+            return SearchOut(
+                rows=rows_out(state.searcher.list(query)),
+                query=QueryOut.model_validate(query),
+                sentence=said,
+                reading="on",
+                vectors=vectors(),
+            )
+        rows = state.searcher.lookup(query, prompt)
+        outcome = compose(query, rows, state.store, today())
+        return SearchOut(
+            rows=rows_out(rows),
+            query=QueryOut.model_validate(query),
+            sentence=said,
+            answer=answer_out(outcome) if isinstance(outcome, Answer) else None,
+            no_answer=(
+                NoAnswerOut(reason=outcome.reason, closest=outcome.closest)
+                if isinstance(outcome, NoAnswer)
+                else None
+            ),
+            reading="on",
+            vectors=vectors(),
+        )
+
+    @app.post("/v1/search", response_model=None, responses={200: {"model": SearchOut}})
+    def search(body: SearchIn) -> SearchOut | JSONResponse:
+        prompt = mask_card_runs(body.prompt)
+        if body.query is not None:
+            query: Query = body.query.to_query()
+            if body.change is not None:
+                try:
+                    query = apply_part(query, body.change.slot, body.change.value, today())
+                except ValueError:
+                    return JSONResponse(status_code=422, content={"detail": BAD_CHANGE})
+            return full_out(query, prompt)
         reading = "on" if state.prompt_reader is not None else "off"
         if body.full and state.prompt_reader is not None:
             try:
@@ -123,28 +178,7 @@ def add_search_routes(app: FastAPI, state: AppState) -> None:
             else:
                 places = state.searcher.place_values()
                 query = resolve(parsed, state.household, today(), prompt, places)
-                if query.intent == "list":
-                    return SearchOut(
-                        rows=rows_out(state.searcher.list(query)),
-                        query=QueryOut.model_validate(query),
-                        sentence=sentence_out(sentence(query, state.household, today())),
-                        reading="on",
-                        vectors=vectors(),
-                    )
-                rows = state.searcher.lookup(query, prompt)
-                outcome = compose(query, rows, state.store, today())
-                return SearchOut(
-                    rows=rows_out(rows),
-                    query=QueryOut.model_validate(query),
-                    answer=answer_out(outcome) if isinstance(outcome, Answer) else None,
-                    no_answer=(
-                        NoAnswerOut(reason=outcome.reason, closest=outcome.closest)
-                        if isinstance(outcome, NoAnswer)
-                        else None
-                    ),
-                    reading="on",
-                    vectors=vectors(),
-                )
+                return full_out(query, prompt)
         return SearchOut(
             rows=rows_out(state.searcher.quick(prompt)),
             reading=reading,

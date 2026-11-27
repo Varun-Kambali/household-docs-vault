@@ -939,6 +939,7 @@ export interface components {
     }
     /** SearchIn */
     SearchIn: {
+      change?: components['schemas']['PartChange'] | null
       /**
        * Full
        * @default false
@@ -946,6 +947,7 @@ export interface components {
       full: boolean
       /** Prompt */
       prompt: string
+      query?: components['schemas']['QueryIn'] | null
     }
     /** SearchOut */
     SearchOut: {
