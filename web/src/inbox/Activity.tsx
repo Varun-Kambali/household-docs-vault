@@ -7,7 +7,7 @@ import type { ActivityOut } from '../api/types.ts'
 import { navigate } from '../app/location.ts'
 import { Region } from '../app/Region.tsx'
 import { hrefFor } from '../app/route.ts'
-import { formatClock, formatDay, stepLabel } from './steps.ts'
+import { dayKey, formatClock, formatDay, stepLabel } from './steps.ts'
 import { useActivity } from './useActivity.ts'
 
 const ANSWERS = ['answer', 'unlock', 'discard', 'keep_both']
@@ -58,10 +58,10 @@ export function Activity({
         empty="Nothing has happened yet."
         error={error ?? undefined}
       >
-        {byDay(entries ?? []).map(({ day, items }) => (
-          <div key={day} className="activity-day">
-            <h3 id={`activity-${day}`}>{day}</h3>
-            <ul className="activity" aria-labelledby={`activity-${day}`}>
+        {byDay(entries ?? []).map(({ key, day, items }) => (
+          <div key={key} className="activity-day">
+            <h3 id={`activity-${key}`}>{day}</h3>
+            <ul className="activity" aria-labelledby={`activity-${key}`}>
               {items.map((entry) => (
                 <Row key={entry.id} entry={entry} post={post} onShow={onShow} />
               ))}
@@ -81,13 +81,13 @@ export function Activity({
 }
 
 // Newest first, as the log is; a new heading starts where the day changes.
-function byDay(entries: ActivityOut[]): { day: string; items: ActivityOut[] }[] {
-  const groups: { day: string; items: ActivityOut[] }[] = []
+function byDay(entries: ActivityOut[]): { key: string; day: string; items: ActivityOut[] }[] {
+  const groups: { key: string; day: string; items: ActivityOut[] }[] = []
   for (const entry of entries) {
-    const day = formatDay(entry.time)
+    const key = dayKey(entry.time)
     const last = groups.at(-1)
-    if (last?.day === day) last.items.push(entry)
-    else groups.push({ day, items: [entry] })
+    if (last?.key === key) last.items.push(entry)
+    else groups.push({ key, day: formatDay(entry.time), items: [entry] })
   }
   return groups
 }

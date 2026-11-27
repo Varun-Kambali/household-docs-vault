@@ -42,6 +42,18 @@ export function formatDay(iso: string): string {
   return Number.isNaN(at.getTime()) ? iso : DAY.format(at)
 }
 
+// The local calendar day as YYYY-MM-DD: a key and an HTML id, which cannot hold a space.
+const DAY_KEY = new Intl.DateTimeFormat('en-CA', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+})
+
+export function dayKey(iso: string): string {
+  const at = new Date(iso)
+  return Number.isNaN(at.getTime()) ? iso.replace(/\s+/g, '-') : DAY_KEY.format(at)
+}
+
 export function formatClock(iso: string): string {
   const at = new Date(iso)
   return Number.isNaN(at.getTime()) ? iso : CLOCK.format(at)

@@ -243,6 +243,26 @@ describe('Activity', () => {
     expect(document.querySelectorAll('.activity-time')).toHaveLength(3)
   })
 
+  test('each day list is named by its heading through an id with no space', async () => {
+    stubApi((call) =>
+      call.path.startsWith('/v1/activity')
+        ? {
+            body: [
+              activityEntry({ id: 2, time: '2026-11-27T09:10:00+05:30', actions: [] }),
+              activityEntry({ id: 1, time: '2026-11-26T18:00:00+05:30', actions: [] }),
+            ],
+          }
+        : undefined,
+    )
+    render(<Activity version={0} onChanged={vi.fn<() => void>()} onShow={vi.fn<() => void>()} />)
+    await screen.findAllByRole('listitem')
+    for (const list of screen.getAllByRole('list')) {
+      const id = list.getAttribute('aria-labelledby') ?? ''
+      expect(id).toMatch(/^activity-\d{4}-\d{2}-\d{2}$/)
+      expect(document.getElementById(id)).toBeInstanceOf(HTMLHeadingElement)
+    }
+  })
+
   test('a Needs a look row does not repeat the question shown above', async () => {
     stubApi((call) =>
       call.path.startsWith('/v1/activity')
