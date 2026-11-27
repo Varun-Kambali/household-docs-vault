@@ -368,6 +368,22 @@ def _people_spans(
 Places = Mapping[str, Collection[DocType]]
 
 
+class PlaceValues(dict[str, frozenset[DocType]]):
+    """Stored place values with the types each is stored on, plus `vault_words`: every word of
+    a stored place value or of a stored product, brand, model, seller or insurer value. A
+    possessive word among them ("Samsung's") is a thing in the vault, not a person."""
+
+    vault_words: frozenset[str] = frozenset()
+
+    def __init__(
+        self,
+        values: Mapping[str, Collection[DocType]] | None = None,
+        vault_words: Collection[str] = (),
+    ) -> None:
+        super().__init__({k: frozenset(v) for k, v in (values or {}).items()})
+        self.vault_words = frozenset(vault_words)
+
+
 def _as_places(places: Places | Sequence[str]) -> Places:
     """Stored place values with the document types each is stored on (none known for a bare
     list of values)."""
@@ -794,9 +810,11 @@ def _dropped_outsiders(
     household: Household,
     stored: set[int],
     said: Sequence[str],
+    vault_words: Collection[str] = (),
 ) -> list[str]:
     """Capitalised words written as a possessive ("Meera's") that are no household name, no
-    stored or model place, no vocabulary word and no name the model already put in `people`.
+    stored or model place, no vocabulary word, no word of a stored place, product, brand, model,
+    seller or insurer value and no name the model already put in `people`.
     The model sometimes leaves an outsider out of its people slot; code must not then answer
     from another member's document."""
     tokens = _WORD.findall(prompt)
@@ -807,7 +825,12 @@ def _dropped_outsiders(
     for i, (token, word) in enumerate(zip(tokens, words, strict=True)):
         if i in skip or word in seen or not _CAPITAL_POSSESSIVE.match(token):
             continue
-        if word in _VOCABULARY or _scan_people(word, household) or _scan_types(word):
+        if (
+            word in _VOCABULARY
+            or word in vault_words
+            or _scan_people(word, household)
+            or _scan_types(word)
+        ):
             continue
         found.append(f"person: {_POSSESSIVE.sub('', token)}")
     return found
@@ -967,7 +990,12 @@ def resolve(
                 words = f"{words} {rest_place}".strip()
     if prompt:
         for phrase in _dropped_outsiders(
-            prompt, reading, household, _place_positions(_words(prompt), places), reading.people
+            prompt,
+            reading,
+            household,
+            _place_positions(_words(prompt), places),
+            reading.people,
+            getattr(places, "vault_words", ()),
         ):
             if phrase not in unread:
                 unread.append(phrase)

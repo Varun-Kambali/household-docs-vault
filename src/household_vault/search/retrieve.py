@@ -19,7 +19,7 @@ from household_vault.doctypes import AREA, DocType
 from household_vault.people import normalise_name
 from household_vault.search.dates import DateRange
 from household_vault.search.index import KeywordHit, KeywordIndex
-from household_vault.search.query import Query
+from household_vault.search.query import PlaceValues, Query, _words
 from household_vault.search.vectors import VectorHit, VectorIndex
 from household_vault.search.vocab import (
     DATE_ROLES,
@@ -28,6 +28,7 @@ from household_vault.search.vocab import (
     TYPE_LABELS,
 )
 
+_THING_FIELDS = ("product", "brand", "model", "seller", "insurer")  # held words of the vault
 POOL = 500  # hits taken from each ranking before fusing
 UNFILTERED_VOTES = 5  # documents of the unfiltered rankings that vote in a filtered lookup
 
@@ -143,17 +144,23 @@ class Searcher:
             if doc is not None:
                 yield doc
 
-    def place_values(self) -> dict[str, frozenset[DocType]]:
+    def place_values(self) -> PlaceValues:
         """The distinct place values stored in the vault (an insurer, shop, employer, hospital
         and so on), sorted, each with the document types it is stored on. Built once per search
-        by the caller of `resolve`."""
+        by the caller of `resolve`. It also carries the words of the stored product, brand,
+        model, seller and insurer values."""
         found: dict[str, set[DocType]] = {}
+        words: set[str] = set()
         for doc in self._documents():
             for field in PLACE_FIELDS[doc.doc_type]:
                 value = doc.fields.get(field)
                 if isinstance(value, str) and value.strip():
                     found.setdefault(value.strip(), set()).add(doc.doc_type)
-        return {v: frozenset(found[v]) for v in sorted(found)}
+            for field in (*PLACE_FIELDS[doc.doc_type], *_THING_FIELDS):
+                value = doc.fields.get(field)
+                if isinstance(value, str):
+                    words.update(_words(value))
+        return PlaceValues({v: found[v] for v in sorted(found)}, words)
 
     def _matches(self, doc: DocumentRow, people: list[str], query: Query) -> bool:
         if query.people and not set(query.people) & set(people):
