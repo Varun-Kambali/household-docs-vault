@@ -2,7 +2,7 @@ COV_MIN ?= 80
 
 .PHONY: web web-build web-test eval-search-val eval-search search-set setup visits spikes-setup finetune-setup lint test eval eval-val eval-smoke run vault docker
 
-setup:
+setup: web/node_modules
 	uv sync
 	uv run pre-commit install
 
@@ -65,8 +65,12 @@ eval-smoke:
 	uv run python -m evals.runner smoke
 
 # The web app (web/). `make run` builds it once; `make web-build` builds it again after a change.
-web/dist/index.html:
-	cd web && npm ci && npm run build
+web/node_modules: web/package-lock.json
+	cd web && npm ci
+	touch web/node_modules
+
+web/dist/index.html: web/node_modules
+	cd web && npm run build
 
 web-build:
 	cd web && npm ci && npm run build
@@ -75,7 +79,7 @@ web-build:
 web:
 	cd web && npm run dev
 
-web-test:
+web-test: web/node_modules
 	cd web && npm run lint && npm run format:check && npm run typecheck && npm run types:check && npm run test:coverage
 
 run: web/dist/index.html
