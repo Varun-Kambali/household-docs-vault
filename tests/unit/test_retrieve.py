@@ -338,3 +338,13 @@ def test_place_values_are_the_distinct_stored_places(store):
         "Anil Diagnostics": frozenset({DocType.scan_report}),
         "Epic Electronics": frozenset({DocType.tax_invoice}),
     }
+
+
+def test_quick_finds_a_natural_prompt_with_the_vectors_off(search_world):
+    searcher = Searcher(
+        search_world.store, KeywordIndex(search_world.store), VectorIndex(search_world.store, None)
+    )
+    rows = searcher.quick("Kavita health policy")
+    assert rows and rows[0].doc_type is DocType.health_policy
+    assert "p2" in rows[0].people
+    assert searcher.quick("LG refrigerator invoice")[0].doc_type is DocType.tax_invoice

@@ -106,6 +106,28 @@ def _ids(hits: Sequence[KeywordHit] | Sequence[VectorHit]) -> list[str]:
 
 
 class Searcher:
+    def _keywords(
+        self,
+        text: str,
+        only: set[str] | None = None,
+        prefix_last: bool = True,
+        loose: bool = False,
+    ) -> list[KeywordHit]:
+        """Keyword hits for ranking: the documents with every word on one line or in one field
+        first, then, when `loose`, those holding only some of the words (best BM25 sum first).
+
+        The loose ranking is a fallback for when the vectors give nothing (Ollama off, the
+        embedding model changed): beside working vectors it is noise that pushes the right
+        document down."""
+        strict = self.keyword.search(text, limit=POOL, prefix_last=prefix_last, only=only)
+        if not loose:
+            return strict
+        more = self.keyword.search(
+            text, limit=POOL, prefix_last=prefix_last, only=only, any_word=True
+        )
+        seen = {h.document_id for h in strict}
+        return [*strict, *(h for h in more if h.document_id not in seen)]
+
     def __init__(self, store: Store, keyword: KeywordIndex, vectors: VectorIndex) -> None:
         self.store = store
         self.keyword = keyword
@@ -213,9 +235,10 @@ class Searcher:
     # -- the three entry points --------------------------------------------------------------
 
     def quick(self, text: str, limit: int = 20) -> Rows:
-        """Keywords (the last word as a prefix) and vectors, fused. Runs no model."""
-        kw = self.keyword.search(text, limit=POOL)
+        """Keywords (the last word as a prefix) and vectors, fused. Runs no model. With no vector
+        hits the keywords match any word of the text."""
         vec = self.vectors.search(text, limit=POOL)
+        kw = self._keywords(text, loose=not vec)
         return self._fuse([_ids(kw), _ids(vec)], [kw], None, limit)
 
     def lookup(self, query: Query, prompt: str, limit: int = 20) -> Rows:
@@ -230,14 +253,14 @@ class Searcher:
             if query.words.strip()
             else []
         )
+        vec = self.vectors.search(text, limit=POOL, only=only)
         keyword_hits = [
             word_hits
             if p == query.words
             else self.keyword.search(p, limit=POOL, prefix_last=False, only=only)
             for p in (query.words, query.place or "")
             if p.strip()
-        ] or [self.keyword.search(prompt, limit=POOL, prefix_last=False, only=only)]
-        vec = self.vectors.search(text, limit=POOL, only=only)
+        ] or [self._keywords(prompt, only, prefix_last=False, loose=not vec)]
         rankings = [_ids(hits) for hits in keyword_hits] + [_ids(vec)]
         # `vector` keeps the best of two cosines for a document: its chunks against the query's
         # words and type labels, and against the whole prompt. MIN_VECTOR is therefore a floor
@@ -248,8 +271,8 @@ class Searcher:
             # The reading may have named the wrong person or type. The prompt's own keyword and
             # vector matches, unfiltered, vote too, so a misread filter cannot remove the
             # document they find. Only their first documents vote, so the filter still leads.
-            quick_kw = self.keyword.search(prompt, limit=POOL)
             quick_vec = self.vectors.search(prompt, limit=POOL)
+            quick_kw = self._keywords(prompt, loose=not quick_vec)
             keyword_hits = [*keyword_hits, quick_kw]
             rankings += [_ids(quick_kw)[:UNFILTERED_VOTES], _ids(quick_vec)[:UNFILTERED_VOTES]]
             votes.append(quick_vec)

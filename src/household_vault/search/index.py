@@ -56,16 +56,29 @@ def _value_text(kind: str, value: Any) -> str:
     return str(value)
 
 
-def _match_query(text: str, prefix_last: bool) -> str | None:
+# Words that carry no search meaning of their own. Dropped from an any-word match, unless the
+# prompt holds nothing else.
+_FILLER_TEXT = (
+    "a an the of for to in on at by and or is are was were be do does did my our me i we it its "
+    "this that what which who whom whose when where how show find get give tell list all any"
+)
+_FILLER = frozenset(_FILLER_TEXT.split())
+
+
+def _match_query(text: str, prefix_last: bool, any_word: bool = False) -> str | None:
     """Every word quoted, so FTS5 operators are plain words. None when no word has a letter
-    or a digit in it."""
+    or a digit in it. With `any_word` a row needs only one of the words (filler words dropped);
+    otherwise it needs all of them."""
     words = [w for w in _CONTROL.sub(" ", text).split() if _WORD.search(w)]
+    if any_word:
+        kept = [w for w in words if w.lower().strip("'\u2019?.,!") not in _FILLER]
+        words = kept
     if not words:
         return None
     quoted = ['"' + w.replace('"', '""') + '"' for w in words]
     if prefix_last:
         quoted[-1] += "*"
-    return " ".join(quoted)
+    return (" OR " if any_word else " ").join(quoted)
 
 
 class KeywordIndex:
@@ -113,11 +126,19 @@ class KeywordIndex:
         limit: int = 50,
         prefix_last: bool = True,
         only: Collection[str] | None = None,
+        any_word: bool = False,
     ) -> list[KeywordHit]:
-        """Matches best first. `only` limits them to those document ids (None means all)."""
-        query = _match_query(text, prefix_last)
+        """Matches best first. `only` limits them to those document ids (None means all).
+
+        By default a hit holds every word in one line or field. With `any_word` a hit holds
+        at least one of them and the hits are grouped by document, the document that scores
+        best (the sum of its hits' BM25) first, so words spread over a document's lines and
+        fields still find it."""
+        query = _match_query(text, prefix_last, any_word)
         if query is None or (only is not None and not only):
             return []
+        if any_word:
+            return self._search_any(query, limit, only)
         sql = (
             "select document_id, page, idx, kind, field, bm25(search_text) as rank"
             " from search_text where search_text match ?"
@@ -132,3 +153,22 @@ class KeywordIndex:
                 sql + " order by rank limit ?", (*args, limit)
             ).fetchall()
         return [KeywordHit(r[0], r[1], r[2], r[3], r[4], -float(r[5])) for r in rows]
+
+    def _search_any(self, query: str, limit: int, only: Collection[str] | None) -> list[KeywordHit]:
+        sql = (
+            "select document_id, page, idx, kind, field, bm25(search_text) as rank"
+            " from search_text where search_text match ?"
+        )
+        args: list[object] = [query]
+        if only is not None:
+            ids = list(only)
+            sql += f" and document_id in ({','.join('?' * len(ids))})"
+            args += ids
+        with self.store.lock:
+            rows = self.store.conn.execute(sql + " order by rank", args).fetchall()
+        total: dict[str, float] = {}
+        for r in rows:
+            total[r[0]] = total.get(r[0], 0.0) - float(r[5])
+        order = {d: n for n, d in enumerate(sorted(total, key=lambda d: (-total[d], d)))}
+        rows.sort(key=lambda r: (order[r[0]], float(r[5])))
+        return [KeywordHit(r[0], r[1], r[2], r[3], r[4], -float(r[5])) for r in rows[:limit]]

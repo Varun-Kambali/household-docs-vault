@@ -193,3 +193,50 @@ def test_an_unknown_reason_does_not_break_loading(store, caplog):
         item = store.item(i)
     assert item.reasons == [Reason.person_unknown]
     assert "no_longer_a_reason" in caplog.text
+
+
+def _spread(keyword, store):
+    add_doc(store, "d1", "tax_invoice", {"seller": "Croma"}, ["LG Refrigerator", "Tax invoice"])
+    add_doc(store, "d2", "tax_invoice", {"seller": "Reliance"}, ["Samsung Television"])
+    add_doc(store, "d3", "tax_invoice", {"seller": "Croma"}, ["LG Washing Machine"])
+    for d in ("d1", "d2", "d3"):
+        keyword.add(d)
+
+
+def test_all_words_must_share_a_line_unless_any_word_is_asked_for(keyword, store):
+    _spread(keyword, store)
+    assert keyword.search("Croma refrigerator invoice") == []
+    ids = [h.document_id for h in keyword.search("Croma refrigerator invoice", any_word=True)]
+    assert ids[0] == "d1" and set(ids) == {"d1", "d3"}
+
+
+def test_any_word_ranks_documents_by_the_words_they_match_in_all_their_lines(keyword, store):
+    _spread(keyword, store)
+    ids = [h.document_id for h in keyword.search("LG refrigerator", any_word=True)]
+    assert ids == ["d1", "d3"]  # d1 matches both words, d3 only one
+
+
+def test_any_word_groups_the_hits_of_a_document_together(keyword, store):
+    _spread(keyword, store)
+    ids = [h.document_id for h in keyword.search("croma lg invoice", any_word=True)]
+    assert ids == ["d1", "d1", "d1", "d3", "d3"]  # best document first, its hits together
+
+
+def test_any_word_drops_filler_words_but_keeps_a_prompt_of_only_filler(keyword, store):
+    _spread(keyword, store)
+    assert [h.document_id for h in keyword.search("what is the Samsung", any_word=True)] == ["d2"]
+    assert keyword.search("what is the", any_word=True) == []
+
+
+def test_any_word_keeps_the_prefix_and_never_raises(keyword, store):
+    _spread(keyword, store)
+    assert {h.document_id for h in keyword.search("refrig", any_word=True)} == {"d1"}
+    assert keyword.search("refrig", any_word=True, prefix_last=False) == []
+    for text in ['"', "AND OR NEAR(", "-", "x" * 2000, "a\x00b", ""]:
+        keyword.search(text, any_word=True)
+
+
+def test_any_word_respects_only(keyword, store):
+    _spread(keyword, store)
+    hits = keyword.search("LG", any_word=True, only={"d3"})
+    assert {h.document_id for h in hits} == {"d3"}

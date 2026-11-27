@@ -619,3 +619,21 @@ def test_the_api_carries_the_unknown_person_reason():
     from household_vault.api.models import NoAnswerOut
 
     assert NoAnswerOut(reason="unknown_person", closest=[]).reason == "unknown_person"
+
+
+def test_the_keyword_only_quick_search_is_judged_apart(smoke_docs):
+    doc = next(d for d in smoke_docs if d.doc_id == "health_policy-1-photo")
+    q = lookup_question(doc, "policy_number")
+    truth, back = {doc.doc_id: doc}, {"db-1": doc.doc_id}
+    hit = Row(
+        "db-1", doc.doc_type, "p1", ["p1"], "insurance", "x", date(2026, 1, 1), {}, None, 0.1, []
+    )
+    miss = Row(**{**hit.__dict__, "document_id": "db-2"})
+    res = Result(Query(intent="lookup"), [hit], None, [], quick_off=[miss, miss, hit])
+    row = judge(q, res, truth, back)
+    assert (row.quick_off_top1, row.quick_off_top3) == (False, True)
+    nothing = judge(q, Result(Query(intent="lookup"), [hit], None, []), truth, back)
+    assert (nothing.quick_off_top1, nothing.quick_off_top3) == (None, None)
+    rows = [row, row]
+    s = summarise_search(rows)
+    assert s["quick_off_top3"]["all"] == 1.0 and s["quick_off_top1"]["all"] == 0.0

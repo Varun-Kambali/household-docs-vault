@@ -63,9 +63,9 @@ from household_vault.schemas._coerce import field_kind, parse_amount, parse_date
 from household_vault.scoring import IOU_MIN, iou, normalise
 from household_vault.search.answer import Answer, NoAnswer, compose
 from household_vault.search.query import PROMPT_READ, PromptReader, Query, read_prompt, resolve
-from household_vault.search.retrieve import Rows
+from household_vault.search.retrieve import Rows, Searcher
 from household_vault.search.sentence import sentence
-from household_vault.search.vectors import QUERY_TASK, Embedder, Vectors
+from household_vault.search.vectors import QUERY_TASK, Embedder, VectorIndex, Vectors
 from household_vault.vaultroot import INBOX
 
 ORIGINS = ("eval-v1", "extra")
@@ -457,6 +457,7 @@ class Result:
     rows: Rows
     outcome: Answer | NoAnswer | None
     quick: Rows
+    quick_off: Rows | None = None  # the quick search with no vectors (keywords only)
 
 
 @dataclass
@@ -471,6 +472,8 @@ class SearchRow:
     top1: bool | None = None
     top3: bool | None = None
     quick_top3: bool | None = None
+    quick_off_top1: bool | None = None  # keyword-only quick search: Ollama off or vectors stale
+    quick_off_top3: bool | None = None
     answered: bool | None = None
     answer_correct: bool | None = None
     citation_ok: bool | None = None
@@ -638,6 +641,10 @@ def judge(
         row.top3 = any(i in targets for i in ids[:3])
         row.quick_top3 = any(i in targets for i in quick[:3])
         row.declined = declined(res)
+        if res.quick_off is not None:
+            off = [back.get(r.document_id, r.document_id) for r in res.quick_off]
+            row.quick_off_top1 = bool(off) and off[0] in targets
+            row.quick_off_top3 = any(i in targets for i in off[:3])
         if not row.top1:
             row.cause = "reading off" if res.query is None else "retrieval miss"
             if res.query is not None and q.kind == "find" and res.query.intent == "list":
@@ -709,6 +716,7 @@ def run_search(
     back = {v: k for k, v in ids.items()}
     truth = {d.doc_id: d for d in vault_docs}
     rows: list[SearchRow] = []
+    keyword_only = Searcher(state.store, state.searcher.keyword, VectorIndex(state.store, None))
     try:
         for q in asked:
             t0 = time.perf_counter()
@@ -716,7 +724,8 @@ def run_search(
             t1 = time.perf_counter()
             query, found, outcome = _full(state, q.prompt, reader, EVAL_TODAY)
             t2 = time.perf_counter()
-            row = judge(q, Result(query, found, outcome, quick), truth, back)
+            off = keyword_only.quick(q.prompt)
+            row = judge(q, Result(query, found, outcome, quick, off), truth, back)
             row.seconds_quick, row.seconds_full = t1 - t0, t2 - t1
             rows.append(row)
         hits, skipped = _scan(state, entries)
@@ -760,6 +769,8 @@ _METRICS = (
     "top1",
     "top3",
     "quick_top3",
+    "quick_off_top1",
+    "quick_off_top3",
     "answer_correct",
     "citation_ok",
     "list_reading",
