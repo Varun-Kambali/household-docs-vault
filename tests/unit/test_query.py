@@ -940,3 +940,30 @@ def test_a_possessive_the_model_put_in_people_is_not_read_twice(household):
 def test_a_lowercase_or_vocabulary_possessive_is_not_a_name(household):
     assert resolve(reading(), household, TODAY, "Today's PAN card").unread == []
     assert resolve(reading(), household, TODAY, "the Insurance's policy number").unread == []
+
+
+# -- a month inside a place name is not a date -------------------------------------------------
+
+STORED = ["Jan Aushadhi Kendra", "Sleeva Medicity", "Mar Sleeva Medicity"]
+
+
+@pytest.mark.parametrize(
+    "prompt",
+    ["Jan Aushadhi Kendra bills", "bills from Jan Aushadhi Kendra", "Mar Sleeva Medicity bills"],
+)
+def test_a_month_inside_a_stored_place_is_not_a_date(household, prompt):
+    q = resolve(reading(), household, TODAY, prompt, places=STORED)
+    assert q.range is None and q.role is None and q.unread == []
+
+
+def test_a_month_inside_the_models_place_is_not_a_date(household):
+    q = resolve(reading(place="Jan Aushadhi"), household, TODAY, "Jan Aushadhi bills")
+    assert q.range is None
+
+
+def test_a_bare_short_month_needs_a_cue(household):
+    assert resolve(reading(), household, TODAY, "Jan Aushadhi bills").range is None
+    in_jan = resolve(reading(), household, TODAY, "bills in Jan")
+    assert in_jan.range == DateRange(start=date(2027, 1, 1), end=date(2027, 1, 31))
+    before = resolve(reading(), household, TODAY, "policies expiring before Mar")
+    assert before.range is not None

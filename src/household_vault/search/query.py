@@ -427,15 +427,39 @@ def _nearest_role(lowered: str, phrase: str) -> DateRole:
     return best[1] if best else "document"
 
 
-def _scan_date(prompt: str, today: date) -> tuple[DateSlot, DateRange] | None:
+_SHORT_MONTHS = frozenset(
+    {"jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}
+)
+_MONTH_CUES = frozenset(
+    {"in", "before", "by", "until", "till", "this", "next", "from", "after", "since", "during"}
+    | {"of", "on"}
+)
+
+
+def _bare_short_month_without_cue(words: list[str], start: int) -> bool:
+    """A lone three-letter month ("jan") with no cue word before it and no day or year after
+    it: more likely the start of a name than a date."""
+    if words[start] not in _SHORT_MONTHS:
+        return False
+    before = words[start - 1] if start else ""
+    after = words[start + 1] if start + 1 < len(words) else ""
+    return before not in _MONTH_CUES and not after.isdigit()
+
+
+def _scan_date(
+    prompt: str, today: date, skip: set[int] | None = None
+) -> tuple[DateSlot, DateRange] | None:
     """The first date phrase code can read in the prompt (longest span first), with the role
-    its cue words give. A bare "may" is the verb, not the month."""
+    its cue words give. A bare "may" is the verb, not the month. Words in `skip` (inside a
+    place) are never part of a date."""
     words = _words(prompt)
     lowered = prompt.lower().replace("\u2019", "'")
     for size in range(min(_MAX_DATE_WORDS, len(words)), 0, -1):
         for start in range(len(words) - size + 1):
+            if skip and skip & set(range(start, start + size)):
+                continue
             phrase = " ".join(words[start : start + size])
-            if phrase == "may":
+            if phrase == "may" or (size == 1 and _bare_short_month_without_cue(words, start)):
                 continue
             span = parse_date_phrase(phrase, today)
             if span is None or (span.start and span.end and span.start > span.end):
@@ -790,7 +814,7 @@ def resolve(
             backstop_people = seen
         elif seen and set(seen) != {_person(p, household)[0] for p in reading.people}:
             conflicts += 1
-        scanned = _scan_date(prompt, today)
+        scanned = _scan_date(prompt, today, _occupied(prompt_words, reading.place) | stored)
         if scanned is not None and slot is None:
             slot = scanned[0]
         elif (
