@@ -600,13 +600,15 @@ def test_a_keyword_hit_or_a_vector_score_on_the_words_is_evidence(store):
     assert compose(query(field="end_date", **named), far, store, TODAY).reason == "weak_match"
 
 
-def test_evidence_on_any_candidate_is_enough(store):
+def test_evidence_on_a_row_the_answer_does_not_come_from_is_not_enough(store):
     rows = policy_rows(store, date(2027, 3, 31), score=0.0)
     second = policy_rows(store, date(2027, 4, 30), doc_id="d2")
     second = with_evidence(second, word_hit=True)
     named = {"types": [DocType.health_policy], "words": "Star"}
     got = compose(query(field="end_date", **named), [*rows, *second], store, TODAY)
-    assert isinstance(got, Answer)
+    assert got == NoAnswer("weak_match", [rows[0].rel_path, second[0].rel_path])
+    answered = compose(query(field="end_date", **named), [*second, *rows], store, TODAY)
+    assert isinstance(answered, Answer)
 
 
 def test_a_find_with_residual_words_and_no_match_is_declined_with_the_closest_files(store):
@@ -750,3 +752,15 @@ def test_weak_evidence_is_judged_on_the_row_the_answer_comes_from(store):
     # a person filter: the answer comes from Suresh's row, which carries evidence
     assert not answer_module.weak_match(query(field="number", people=["p1"]), [thin, solid])
     assert not answer_module.weak_match(query(field="number"), [solid, thin])
+
+
+def test_the_residual_words_gate_tests_the_row_the_answer_comes_from(store):
+    policy, pan = _kavita_policy_and_suresh_pan(store)
+    fits = dataclasses.replace(policy[0], word_hit=False, vector=0.0, score=0.05)
+    other = dataclasses.replace(pan[0], word_hit=True, vector=0.7)  # a Sony invoice, say
+    asked = query(field="number", people=[policy[0].owner], words="Sony TV")
+    # the answer comes from `fits`, which nothing ties to the words: declined
+    assert answer_module.weak_match(asked, [other, fits])
+    # when the fitting row carries the evidence itself, it answers
+    backed = dataclasses.replace(fits, word_hit=True)
+    assert not answer_module.weak_match(asked, [other, backed])

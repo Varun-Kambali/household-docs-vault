@@ -365,15 +365,16 @@ def _supporting(
 
 def weak_match(query: Query, rows: Sequence[Row]) -> bool:
     """Whether the rows are too thin to answer from. A query with residual words needs a row
-    that matches them (a keyword hit or a vector score of MIN_VECTOR or more). A query with no
+    that matches them (a keyword hit or a vector score of MIN_VECTOR or more); the row tested is
+    the one the answer comes from, not any row. A query with no
     filter behind it also needs a top row with some evidence. A row the filters found is a real
     candidate on its own only when the query has no residual words."""
     if not rows:
         return False
-    if query.words.strip() and not any(r.word_hit or r.vector >= MIN_VECTOR for r in rows):
-        return True
     # the row an answer would come from: the best one that passes the person and type filters
     top = next((r for r in rows if _fits(query, r)), rows[0])
+    if query.words.strip() and not (top.word_hit or top.vector >= MIN_VECTOR):
+        return True
     return not _filtered(query) and top.score < MIN_FUSED and len(top.lines) < MIN_KEYWORD
 
 
