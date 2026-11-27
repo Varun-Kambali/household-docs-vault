@@ -78,18 +78,22 @@ Scale ratio 1.2 from 16. Sentence case for every heading and button. At most thr
 - **Proximity:** 8 inside a group, 24 or 32 between groups.
 - **Shell:** a sidebar of 240 px (source list, as in Finder) and the main area. Under 60rem the sidebar becomes a top bar with the same items.
 - **Main area:** `max-width: 1200px`, centred, padding 24 (16 on phones). The Viewer is the exception: its page canvas uses the full width.
-- **Inbox widths:** `--measure-bar` 30rem (the progress bar), `--question-width` 26rem (the question beside the page image), `--dialog-width` 32rem (a password dialog), `--activity-time-width` 8rem and `--activity-step-width` 7rem (the first two columns of an activity row). The 60rem breakpoint stays a literal, as media queries cannot read tokens.
+- **Inbox widths:** `--measure-bar` 30rem (the progress bar), `--question-width` 26rem (the question beside the page image), `--dialog-width` 32rem (a password dialog), `--activity-time-width` 5rem (the clock time) and `--activity-step-width` 7rem (the first two columns of an activity row; the day is a heading over its rows). The 60rem breakpoint stays a literal, as media queries cannot read tokens.
+- **Other named layout values:** `--inspector-width` 20rem (320 px: the viewer's inspector and the answer's page image), `--finder-type-width` 9rem and `--finder-people-width` 11rem (finder row columns), `--list-date-width` 7rem, `--list-type-width` 9rem and `--list-people-width` 11rem (list row columns), `--page-max-height` 70dvh (the Inbox page image), `--outline-offset` 2px (the gap between a control and its focus ring), `--outline-inset` -2px (a ring drawn inside a row), `--outline-width` 2px and `--outline-width-strong` 3px (the active-row marker and the focused citation box). The measure of the loading skeleton is `--measure-bar`.
 - **Alignment:** text is left-aligned. Only short empty-state messages are centred.
 
 ## Components
 
 - **Radius:** `--radius-control` 6 (buttons, inputs, selected row), `--radius-panel` 10 (panels, dialogs, popovers). Page images have no radius. No pill shapes.
-- **Buttons:** primary (filled `--color-primary`, text `--color-on-primary`) and secondary (`--color-raised` with `--color-control-border`). One primary button per screen at most. Labels are verb plus object ("Open page", "File it").
+- **Buttons:** primary (filled `--color-primary`, text `--color-on-primary`) and secondary (`--color-raised` with `--color-control-border`). One primary button per screen at most. Labels are verb plus object ("Open at page", "File it").
 - **Rows:** lists are rows separated by space or a 1 px `--color-border` line, as in Things. There are no cards per row. A selected row gets `--color-primary` at 12% behind it, and the selection is shown by the row's text weight as well as the colour.
 - **Panels:** one level of panel. A panel never holds another panel.
-- **Status:** shown as an icon plus words, never a coloured badge alone. Doubt: an amber icon and "Not sure:" followed by what was read.
+- **Status:** shown as an icon plus words, never a coloured badge alone. Two doubts, both amber with an icon: "Not sure: <what>" is for a value the app read but doubts (the name on a file), and "Couldn't read: <words>" is for a part of the prompt that code could not turn into a person or a date ("Couldn't read: before Diwali"). A disabled primary button says why in a line beside it ("Choose who this belongs to").
+- **Row actions:** in the activity list and beside a sentence, an action on a row is a quiet text link (`.link-button`), not an outlined button. Three equal buttons on every row read as an admin table.
+- **Hit targets:** on phones (under 60rem) every control, select, date input and row is at least `--hit-target` (44 px) tall, and a radio or checkbox row is one label, so the whole row is the target. Native file inputs take the `.button` look through `::file-selector-button`, which is also `--hit-target` tall on phones.
+- **Phone menu:** under 60rem the Menu button opens the navigation inline, above the page, and carries `aria-expanded`. An overlay menu comes with M4's phone work.
 - **Icons:** one SVG set (Lucide), stroke 1.5 px, 16 or 20 px, always with a text label or an `aria-label`.
-- **Every control has every state:** default, hover, focus-visible (2 px `--color-focus` ring, 2 px offset), active, disabled, loading, error, empty.
+- **Every control has every state:** default, hover, focus-visible (`--outline-width` `--color-focus` ring, `--outline-offset`), active, disabled, loading, error, empty. Rows, selects and date inputs have `:active` and `:disabled` rules too. The citation box adds a second ring (box-shadow) when it has focus, so focus differs from rest.
 - **Layers:** light mode uses borders for panels and one shadow for floating layers only (`0 8px 24px oklch(0.2 0.02 250 / 0.12)`). Dark mode uses no shadows: a higher layer is a lighter surface.
 
 ## Motion

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
 
+import { usePageTitle } from '../common/usePageTitle.ts'
 import { AREAS } from './areas.ts'
 import { navigate, useRoute } from './location.ts'
 import { AreaScreen, DocScreen, InboxScreen, NotFoundScreen, SearchScreen } from './screens.tsx'
@@ -75,6 +76,18 @@ export function App() {
     return () => document.removeEventListener('keydown', onKey)
   }, [])
 
+  // Search and the viewer name themselves (a prompt, a kind of document); the rest are named here.
+  usePageTitle(
+    route.name === 'inbox'
+      ? waiting !== null && waiting > 0
+        ? `Inbox (${waiting})`
+        : 'Inbox'
+      : route.name === 'area'
+        ? (AREAS.find((area) => area.id === route.area)?.label ?? route.area)
+        : route.name === 'notfound'
+          ? 'Page not found'
+          : null,
+  )
   const close = () => setMenuOpen(false)
   const inbox = waiting !== null && waiting > 0 ? `Inbox ${waiting}` : 'Inbox'
 
@@ -128,7 +141,9 @@ export function App() {
         )}
         {route.name === 'inbox' && <InboxScreen onChanged={refresh} />}
         {route.name === 'area' && <AreaScreen area={route.area} list={route.list} />}
-        {route.name === 'doc' && <DocScreen id={route.id} page={route.page} lines={route.lines} />}
+        {route.name === 'doc' && (
+          <DocScreen id={route.id} page={route.page} lines={route.lines} field={route.field} />
+        )}
         {route.name === 'notfound' && <NotFoundScreen />}
       </main>
     </div>

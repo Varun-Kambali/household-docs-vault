@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
 
+import { testCard } from '../test/api.ts'
 import { type Route, hrefFor, parseRoute } from '../app/route.ts'
 import {
   EMPTY_LIST,
@@ -124,5 +125,20 @@ describe('a list the app can read', () => {
     expect(bad({ people: Array.from({ length: 21 }, (_, i) => `p${i}`) })).not.toBeNull()
     expect(bad({ people: ['p'.repeat(65)] })).not.toBeNull()
     expect(bad({ place: 'x'.repeat(300) })).toBeNull()
+  })
+})
+
+describe('what the address may carry', () => {
+  test('a card number in the words or an unread phrase keeps only its last four', () => {
+    const card = testCard()
+    const params = listParams({ ...EMPTY_LIST, words: `bill ${card}`, unread: [`on ${card}`] })
+    expect(params.toString()).not.toContain(card)
+    expect(params.get('words')).toContain(card.slice(-4))
+    expect(params.getAll('unread')[0]).toContain(card.slice(-4))
+  })
+
+  test('a link with too many types or areas is unreadable', () => {
+    expect(listProblem({ ...EMPTY_LIST, types: Array(70).fill('health_policy') })).toBe('types')
+    expect(listProblem({ ...EMPTY_LIST, areas: Array(30).fill('insurance') })).toBe('areas')
   })
 })

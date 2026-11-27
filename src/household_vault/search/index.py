@@ -143,6 +143,7 @@ class KeywordIndex:
         prefix_last: bool = True,
         only: Collection[str] | None = None,
         any_word: bool = False,
+        fields_only: bool = False,
     ) -> list[KeywordHit]:
         """Matches best first. `only` limits them to those document ids (None means all).
 
@@ -160,6 +161,8 @@ class KeywordIndex:
             " from search_text where search_text match ?"
         )
         args: list[object] = [query]
+        if fields_only:
+            sql += " and kind = 'field'"
         if only is not None:
             ids = list(only)
             sql += f" and document_id in ({','.join('?' * len(ids))})"

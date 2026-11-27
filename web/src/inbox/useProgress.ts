@@ -11,6 +11,8 @@ import type { ProgressOut } from '../api/types.ts'
 
 export const POLL_MS = 2000
 export const IDLE_POLL_MS = 10000
+export const RETRY_MS = 2000
+export const RETRY_MAX_MS = 30000
 
 const busy = (p: ProgressOut): boolean => p.waiting > 0 || p.current !== null
 
@@ -29,9 +31,11 @@ export function useProgress(): {
   useEffect(() => {
     const controller = new AbortController()
     let timer: ReturnType<typeof setTimeout> | undefined
+    let failures = 0
     function read(): void {
       api<ProgressOut>('/v1/inbox/progress', { signal: controller.signal })
         .then((next) => {
+          failures = 0
           setProgress(next)
           const seen = JSON.stringify(next)
           const changed = lastSeen.current !== null && lastSeen.current !== seen
@@ -41,8 +45,14 @@ export function useProgress(): {
           if (!document.hidden) timer = setTimeout(read, busy(next) ? POLL_MS : IDLE_POLL_MS)
         })
         .catch((error: unknown) => {
-          // The bar is a courtesy: when it cannot be read it stops, and the lists still work.
-          if (!isAbort(error)) wasBusy.current = false
+          if (isAbort(error)) return
+          // The bar is a courtesy, but a restart of the app must not leave it frozen: try again
+          // after 2, 4, 8 seconds and so on, never waiting more than 30.
+          wasBusy.current = false
+          failures += 1
+          if (!document.hidden) {
+            timer = setTimeout(read, Math.min(RETRY_MS * 2 ** (failures - 1), RETRY_MAX_MS))
+          }
         })
     }
     function onVisibility(): void {

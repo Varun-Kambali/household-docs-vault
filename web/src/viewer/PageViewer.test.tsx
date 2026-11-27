@@ -4,6 +4,8 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import { App } from '../app/App.tsx'
 import { LINES, PEOPLE, document, stubApi, type Call, type Reply } from '../test/api.ts'
 
+const page_document = window.document
+
 function open(path: string): void {
   window.history.replaceState(null, '', path)
 }
@@ -357,3 +359,41 @@ describe('the page viewer', () => {
 function pageBody(): HTMLElement {
   return window.document.body
 }
+
+test('the title is the kind of document', async () => {
+  open('/doc/doc-a?page=1')
+  api()
+  render(<App />)
+  await flush()
+  expect(page_document.title).toBe('Health policy - Household vault')
+})
+
+test('the field the answer came from is marked, and only that one', async () => {
+  open('/doc/doc-a?page=1&lines=4&field=policy_number')
+  api()
+  render(<App />)
+  await flush()
+  const marked = page_document.querySelectorAll('.field[aria-current="true"]')
+  expect(marked).toHaveLength(1)
+  expect(marked[0]).toHaveTextContent('Policy number')
+})
+
+test('with no field in the address nothing is marked', async () => {
+  open('/doc/doc-a?page=1')
+  api()
+  render(<App />)
+  await flush()
+  expect(page_document.querySelectorAll('.field[aria-current]')).toHaveLength(0)
+})
+
+test('the inspector is headed by the kind of document, with the file name as a caption', async () => {
+  open('/doc/doc-a?page=1')
+  api()
+  render(<App />)
+  await flush()
+  const panel = screen.getByRole('complementary', { name: 'About this file' })
+  expect(within(panel).getByRole('heading', { name: 'Health policy' })).toBeInTheDocument()
+  expect(within(panel).getByText(/2026-09-20 Health policy - Care Health\.pdf/)).toHaveClass(
+    'inspector-path',
+  )
+})

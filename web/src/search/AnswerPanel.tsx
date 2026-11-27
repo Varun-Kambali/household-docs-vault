@@ -1,7 +1,7 @@
 // The answer, with the page it came from. The value is the focal point; under it, where it is
 // filed; beside it, the page image with the cited lines outlined. Open at page is the one
 // primary button.
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 
 import type { AnswerOut, RowOut } from '../api/types.ts'
 import { CARD_NOTE, isCard } from '../common/labels.ts'
@@ -20,10 +20,13 @@ export function AnswerPanel({
   answer,
   row,
   onReveal,
+  reading = null,
 }: {
   answer: AnswerOut
   row: RowOut | undefined
   onReveal: (row: RowOut) => void
+  // What the app understood the question to be, to adjust.
+  reading?: ReactNode
 }) {
   const [failed, setFailed] = useState(false)
   const [ratio, setRatio] = useState<number | null>(null)
@@ -44,6 +47,7 @@ export function AnswerPanel({
           )}
         </p>
         <p className="answer-meta">{fieldLabel(answer.field)}</p>
+        {reading}
         {row !== undefined && (
           <p className="answer-file">
             <span className="answer-path">{row.rel_path}</span>
@@ -55,7 +59,7 @@ export function AnswerPanel({
           <button
             type="button"
             className="button button-primary"
-            onClick={() => navigate(openAt(answer.document_id, answer.page, idxs))}
+            onClick={() => navigate(openAt(answer.document_id, answer.page, idxs, answer.field))}
           >
             Open at page
           </button>
@@ -91,7 +95,9 @@ export function AnswerPanel({
                   bbox: line.bbox,
                   text: texts.get(line.idx),
                 }))}
-                onOpen={(idx) => navigate(openAt(answer.document_id, answer.page, [idx]))}
+                onOpen={(idx) =>
+                  navigate(openAt(answer.document_id, answer.page, [idx], answer.field))
+                }
               />
             </div>
           )}

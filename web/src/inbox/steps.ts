@@ -33,6 +33,32 @@ export function formatWhen(iso: string): string {
   return Number.isNaN(at.getTime()) ? iso : WHEN.format(at)
 }
 
+const DAY = new Intl.DateTimeFormat('en-IN', { day: 'numeric', month: 'short' })
+const CLOCK = new Intl.DateTimeFormat('en-IN', { hour: 'numeric', minute: '2-digit' })
+
+// The activity list shows the day once as a heading and the clock time on each row.
+export function formatDay(iso: string): string {
+  const at = new Date(iso)
+  return Number.isNaN(at.getTime()) ? iso : DAY.format(at)
+}
+
+// The local calendar day as YYYY-MM-DD: a key and an HTML id, which cannot hold a space.
+const DAY_KEY = new Intl.DateTimeFormat('en-CA', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+})
+
+export function dayKey(iso: string): string {
+  const at = new Date(iso)
+  return Number.isNaN(at.getTime()) ? iso.replace(/\s+/g, '-') : DAY_KEY.format(at)
+}
+
+export function formatClock(iso: string): string {
+  const at = new Date(iso)
+  return Number.isNaN(at.getTime()) ? iso : CLOCK.format(at)
+}
+
 // "Kavita Rao/Health/2026-09-20 Prescription.pdf" is filed in "Kavita Rao / Health".
 export function whereFiled(path: string | null): string | null {
   if (path === null) return null

@@ -5,7 +5,7 @@
 import type { RowOut } from '../api/types.ts'
 import { formatDate } from '../common/format.ts'
 import { CARD_NOTE, isCard, typeLabel } from '../common/labels.ts'
-import { keyText } from './rowText.ts'
+import { keyParts } from './rowText.ts'
 import { openRow } from './openAt.ts'
 import { orderRows } from './order.ts'
 
@@ -45,7 +45,16 @@ export function ListResults({
                 <span className="list-type">{typeLabel(row.doc_type)}</span>
                 <span className="list-people">{names.join(', ')}</span>
                 <span className="list-fields">
-                  {isCard(row.doc_type) ? CARD_NOTE : keyText(row)}
+                  {isCard(row.doc_type)
+                    ? CARD_NOTE
+                    : keyParts(row, { dropRowDate: true }).map((part) => (
+                        <span
+                          key={part.name}
+                          className={part.identifier ? 'key-part identifier' : 'key-part'}
+                        >
+                          {part.text}
+                        </span>
+                      ))}
                 </span>
                 <span className="list-path" title={row.rel_path}>
                   {row.rel_path}

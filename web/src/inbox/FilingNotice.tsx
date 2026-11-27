@@ -88,7 +88,7 @@ export function FilingNotice({
     return () => document.removeEventListener('keydown', onKey)
   })
 
-  if (count === 0) return null
+  // The slot stays when nothing is pending, so a notice appearing moves nothing under the pointer.
   return (
     <div className="notices">
       {refusal !== null && (

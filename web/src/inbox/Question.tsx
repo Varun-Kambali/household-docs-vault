@@ -98,6 +98,14 @@ export function Question({
       : kind === 'copy' && value === 'discard'
         ? 'Discard it'
         : 'File it'
+  // Why File it is not available yet, in the words of the answer it waits for.
+  const missing =
+    kind === 'field'
+      ? `Type the ${words(question.field ?? 'value').toLowerCase()}`
+      : kind === 'person'
+        ? 'Choose who this belongs to'
+        : 'Choose an answer'
+  const reasonId = `${groupName}-why`
   const several = chosen.size > 0 && kind === 'person'
 
   function submit(): void {
@@ -230,9 +238,19 @@ export function Question({
                 Enter the password
               </button>
             ) : (
-              <button type="submit" className="button button-primary" disabled={!ready || busy}>
+              <button
+                type="submit"
+                className="button button-primary"
+                disabled={!ready || busy}
+                aria-describedby={!ready ? reasonId : undefined}
+              >
                 {label}
               </button>
+            )}
+            {!ready && kind !== 'unlock' && (
+              <span className="hint why-disabled" id={reasonId}>
+                {missing}
+              </span>
             )}
             {several && (
               <button
@@ -253,7 +271,7 @@ export function Question({
         )}
       </form>
       {radios && question.options.length > 1 && (
-        <p className="hint">
+        <p className="hint keys-hint">
           Press 1 to {Math.min(question.options.length, 9)} to choose, Enter to file, S to skip.
         </p>
       )}

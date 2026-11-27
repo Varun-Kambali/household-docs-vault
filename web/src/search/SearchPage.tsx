@@ -6,17 +6,25 @@ import type { ListOut, RowOut } from '../api/types.ts'
 import { navigate } from '../app/location.ts'
 import { hrefFor } from '../app/route.ts'
 import { Region } from '../app/Region.tsx'
+import { maskCards } from '../common/maskCards.ts'
+import { usePageTitle } from '../common/usePageTitle.ts'
 import { usePeople } from '../common/usePeople.ts'
 import { useReveal } from '../common/useReveal.ts'
 import { AnswerPanel } from './AnswerPanel.tsx'
 import { Finder } from './Finder.tsx'
 import { FINDER_ID, optionId } from './finderIds.ts'
 import { ListPanel } from './ListPanel.tsx'
-import { type ListQuery, listKey } from './listQuery.ts'
+import { type ListQuery, fromQuery, listKey } from './listQuery.ts'
 import { NoAnswer } from './NoAnswer.tsx'
 import { openRow } from './openAt.ts'
+import { Sentence } from './Sentence.tsx'
 import { useList } from './useList.ts'
 import { useSearch } from './useSearch.ts'
+
+export const KEYWORD_ONLY = "Searching by keyword only: the local model isn't running."
+
+export const INDEX_STALE =
+  'The search index was made with another model. Searching by keyword until it is rebuilt.'
 
 export const MODEL_OFF =
   "Reading prompts needs the local model, which isn't running. Showing keyword matches."
@@ -34,7 +42,7 @@ export function SearchPage({
   const people = usePeople()
   // A list in the address wins over a prompt beside it: the prompt stays in the box and the
   // address, but is not searched.
-  const { state, runFull, reset } = useSearch(list !== undefined ? '' : q)
+  const { state, runFull, reset, change } = useSearch(list !== undefined ? '' : q)
   const { state: revealed, reveal, clear } = useReveal()
   // The active row belongs to the list it was chosen in; a new list starts with none.
   const [cursor, setCursor] = useState<{ list: unknown; index: number }>({ list: null, index: -1 })
@@ -78,7 +86,20 @@ export function SearchPage({
       : all
   const prompt = q.trim()
   const off = shown?.reading === 'off'
+  // The model-off line already says the matches are by keyword; a second line would only repeat it.
+  const keywordOnly = !off && shown !== null && shown.vectors !== 'on'
   const active = cursor.list === shown ? cursor.index : -1
+  usePageTitle(list !== undefined || prompt === '' ? 'Search' : prompt)
+  const reading =
+    state.full?.sentence != null && state.full.query != null ? (
+      <Sentence
+        sentence={state.full.sentence}
+        query={fromQuery(state.full.query)}
+        unread={state.full.query.unread}
+        updating={state.changing}
+        onChange={change}
+      />
+    ) : null
 
   function open(row: RowOut): void {
     navigate(openRow(row))
@@ -128,6 +149,9 @@ export function SearchPage({
         type="search"
         name="q"
         autoComplete="off"
+        role="combobox"
+        aria-expanded={rows.length > 0}
+        aria-autocomplete="list"
         aria-label="Ask about your documents"
         aria-controls={rows.length > 0 ? FINDER_ID : undefined}
         aria-activedescendant={active >= 0 && active < rows.length ? optionId(active) : undefined}
@@ -135,11 +159,18 @@ export function SearchPage({
         value={q}
         onChange={(event) => {
           if (event.target.value.trim() === '') reset()
-          navigate(hrefFor({ name: 'search', q: event.target.value }), { replace: true })
+          // The old prompt's rows are not the new prompt's: Enter must not open one of them.
+          setCursor({ list: null, index: -1 })
+          navigate(hrefFor({ name: 'search', q: maskCards(event.target.value) }), {
+            replace: true,
+          })
         }}
         onKeyDown={onKeyDown}
       />
       {off && <p className="hint model-off">{MODEL_OFF}</p>}
+      {keywordOnly && (
+        <p className="hint model-off">{shown?.vectors === 'stale' ? INDEX_STALE : KEYWORD_ONLY}</p>
+      )}
       {phase === 'idle' && (
         <p className="hint">Ask in a few words. Name a person, a kind of document or a date.</p>
       )}
@@ -154,6 +185,7 @@ export function SearchPage({
           key={`${answer.document_id}-${answer.field}-${answer.text}`}
           answer={answer}
           row={rowOf(answer.document_id)}
+          reading={reading}
           onReveal={(row) => reveal(row.document_id, row.drive_path)}
         />
       )}
@@ -162,6 +194,7 @@ export function SearchPage({
           reason={none.reason}
           unread={state.full?.query?.unread ?? []}
           hasRows={rows.length > 0}
+          reading={reading}
         />
       )}
       {listing && <ListPanel list={listState} people={people} empty="No documents match this." />}

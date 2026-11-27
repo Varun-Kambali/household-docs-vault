@@ -2,6 +2,7 @@
 logs, stores or echoes a prompt: it lives in the request and is gone.
 """
 
+import re
 from collections.abc import Iterable
 from datetime import date
 
@@ -24,16 +25,59 @@ from household_vault.api.models import (
     SentenceOut,
 )
 from household_vault.app_state import AppState
+from household_vault.checks import luhn_valid
 from household_vault.doctypes import DocType
 from household_vault.reading.ollama import ModelUnavailable
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import field_kind
 from household_vault.search.answer import Answer, NoAnswer, compose
-from household_vault.search.query import Query, read_prompt, resolve
+from household_vault.search.query import Query, asks_status, read_prompt, resolve
 from household_vault.search.retrieve import LineRef, Row
 from household_vault.search.sentence import Sentence, apply_part, render, sentence
 
 BAD_CHANGE = "That change is not one the sentence offers."
+
+
+_CARD_RUN = re.compile(r"(?<![\d])\d(?:[ .\-/]?\d){12,18}(?![\d])")
+
+
+def _between(digits: str, size: int, low: int, high: int) -> bool:
+    return low <= int(digits[:size]) <= high
+
+
+def card_shaped(digits: str) -> bool:
+    """Luhn-valid, with the length and leading digits of a card brand. An IMEI (15 digits, Luhn
+    valid) or a long policy number is not a card, so a search by it stays whole. checks.py has
+    the Luhn check and the published test numbers but no brand ranges, so the ranges are here."""
+    if not luhn_valid(digits):
+        return False
+    n = len(digits)
+    return (
+        (digits[0] == "4" and n in (13, 16, 19))  # Visa
+        or (n == 16 and (_between(digits, 2, 51, 55) or _between(digits, 4, 2221, 2720)))
+        or (n == 15 and digits[:2] in ("34", "37"))  # American Express
+        or (n == 16 and (digits[:2] in ("60", "65", "81", "82") or digits[:3] == "508"))  # RuPay
+        or (
+            16 <= n <= 19
+            and (digits[:4] == "6011" or digits[:2] == "65" or _between(digits, 3, 644, 649))
+        )  # Discover
+        or (  # Diners: 14 digits, and the 16 of the published test number
+            14 <= n <= 19 and (digits[:2] in ("36", "38") or _between(digits, 3, 300, 305))
+        )
+        or (16 <= n <= 19 and _between(digits, 4, 3528, 3589))  # JCB
+    )
+
+
+def mask_card_runs(text: str) -> str:
+    """A prompt is not a place for a card number: a card-shaped run of 13 to 19 digits (spaces,
+    dashes, dots or slashes between digits) keeps only its last four, so neither the reading
+    model nor the embedder sees the rest. Other long numbers, such as an IMEI, stay whole."""
+
+    def hide(hit: re.Match[str]) -> str:
+        digits = re.sub(r"\D", "", hit.group())
+        return f"\u2022\u2022\u2022\u2022 {digits[-4:]}" if card_shaped(digits) else hit.group()
+
+    return _CARD_RUN.sub(hide, text)
 
 
 def drive_path(prefix: str, rel_path: str) -> str:
@@ -111,9 +155,48 @@ def add_search_routes(app: FastAPI, state: AppState) -> None:
     def rows_out(rows: list[Row]) -> list[RowOut]:
         return [row_out(r, prefix) for r in rows]
 
-    @app.post("/v1/search")
-    def search(body: SearchIn) -> SearchOut:
-        prompt = body.prompt
+    def full_out(query: Query, prompt: str) -> SearchOut:
+        said = (
+            sentence_out(sentence(query, state.household, today()))
+            if query.intent != "find"
+            else None
+        )
+        if query.intent == "list":
+            return SearchOut(
+                rows=rows_out(state.searcher.list(query)),
+                query=QueryOut.model_validate(query),
+                sentence=said,
+                reading="on",
+                vectors=vectors(),
+            )
+        rows = state.searcher.lookup(query, prompt)
+        outcome = compose(query, rows, state.store, today())
+        return SearchOut(
+            rows=rows_out(rows),
+            query=QueryOut.model_validate(query),
+            sentence=said,
+            answer=answer_out(outcome) if isinstance(outcome, Answer) else None,
+            no_answer=(
+                NoAnswerOut(reason=outcome.reason, closest=outcome.closest)
+                if isinstance(outcome, NoAnswer)
+                else None
+            ),
+            reading="on",
+            vectors=vectors(),
+        )
+
+    @app.post("/v1/search", response_model=None, responses={200: {"model": SearchOut}})
+    def search(body: SearchIn) -> SearchOut | JSONResponse:
+        prompt = mask_card_runs(body.prompt)
+        if body.query is not None:
+            query: Query = body.query.to_query()
+            if body.change is not None:
+                try:
+                    query = apply_part(query, body.change.slot, body.change.value, today())
+                except ValueError:
+                    return JSONResponse(status_code=422, content={"detail": BAD_CHANGE})
+            query = query.model_copy(update={"status": asks_status(prompt)})
+            return full_out(query, prompt)
         reading = "on" if state.prompt_reader is not None else "off"
         if body.full and state.prompt_reader is not None:
             try:
@@ -123,28 +206,7 @@ def add_search_routes(app: FastAPI, state: AppState) -> None:
             else:
                 places = state.searcher.place_values()
                 query = resolve(parsed, state.household, today(), prompt, places)
-                if query.intent == "list":
-                    return SearchOut(
-                        rows=rows_out(state.searcher.list(query)),
-                        query=QueryOut.model_validate(query),
-                        sentence=sentence_out(sentence(query, state.household, today())),
-                        reading="on",
-                        vectors=vectors(),
-                    )
-                rows = state.searcher.lookup(query, prompt)
-                outcome = compose(query, rows, state.store, today())
-                return SearchOut(
-                    rows=rows_out(rows),
-                    query=QueryOut.model_validate(query),
-                    answer=answer_out(outcome) if isinstance(outcome, Answer) else None,
-                    no_answer=(
-                        NoAnswerOut(reason=outcome.reason, closest=outcome.closest)
-                        if isinstance(outcome, NoAnswer)
-                        else None
-                    ),
-                    reading="on",
-                    vectors=vectors(),
-                )
+                return full_out(query, prompt)
         return SearchOut(
             rows=rows_out(state.searcher.quick(prompt)),
             reading=reading,

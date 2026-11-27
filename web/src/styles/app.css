@@ -112,8 +112,9 @@
   color: var(--color-text-muted);
 }
 
+/* A control as wide as its column draws its ring inside, or the page edge would cut it. */
 .prompt:focus-visible {
-  outline-offset: -3px;
+  outline-offset: var(--outline-inset);
 }
 
 .hint {
@@ -168,7 +169,7 @@
 .region-loading {
   display: grid;
   gap: var(--space-2);
-  max-width: 30rem;
+  max-width: var(--measure-bar);
 }
 
 .skeleton {
@@ -203,7 +204,14 @@
 
 /* Under 60rem the sidebar becomes a top bar with a menu button. */
 
+/* The Floor on a phone: every control is a 44 px target. */
 @media (max-width: 60rem) {
+  .prompt,
+  .sentence-select,
+  .sentence-range input {
+    min-height: var(--hit-target);
+  }
+
   .shell {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:

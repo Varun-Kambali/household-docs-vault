@@ -176,6 +176,118 @@ def test_rows_carry_the_kind_of_each_key_field(search_client):
         assert set(row["field_kinds"]) >= set(row["key_fields"])
 
 
+CROMA_LOOKUP = {
+    **FIND,
+    "intent": "lookup",
+    "types": ["tax_invoice"],
+    "field": "invoice_date",
+    "words": "Croma",
+}
+
+
+def test_a_lookup_returns_its_reading_sentence(search_client, spy_reader):
+    spy_reader.answers["when was the Croma invoice"] = json.dumps(CROMA_LOOKUP)
+    out = post(search_client, "when was the Croma invoice").json()
+    assert [p["slot"] for p in out["sentence"]["parts"]][:2] == ["what", "who"]
+    assert out["sentence"]["text"].startswith("Showing ")
+
+
+def test_changing_a_lookup_part_reruns_it_without_the_model(search_client, spy_reader):
+    spy_reader.answers["when was the Croma invoice"] = json.dumps(CROMA_LOOKUP)
+    first = post(search_client, "when was the Croma invoice").json()
+    calls = spy_reader.calls
+    r = search_client.post(
+        "/v1/search",
+        json={
+            "prompt": "when was the Croma invoice",
+            "full": True,
+            "query": first["query"],
+            "change": {"slot": "who", "value": "p2"},
+        },
+    )
+    assert r.status_code == 200 and spy_reader.calls == calls
+    out = r.json()
+    assert out["query"]["people"] == ["p2"] and out["query"]["intent"] == "lookup"
+    assert out["sentence"] is not None
+    assert out["answer"] is not None or out["no_answer"] is not None
+
+
+def test_a_bad_lookup_change_is_a_422(search_client):
+    r = search_client.post(
+        "/v1/search",
+        json={
+            "prompt": "x",
+            "query": Query(intent="lookup").model_dump(mode="json"),
+            "change": {"slot": "nope", "value": 1},
+        },
+    )
+    assert r.status_code == 422
+
+
+def test_a_card_number_in_a_prompt_is_masked_before_the_models(search_client, spy_reader):
+    from household_vault.checks import TEST_CARD_NUMBERS
+
+    number = sorted(TEST_CARD_NUMBERS)[0]
+    spaced = " ".join(number[i : i + 4] for i in range(0, len(number), 4))
+    post(search_client, f"my card {spaced} bill")
+    seen = " ".join(str(p) for p in spy_reader.prompts)
+    assert number not in seen and spaced not in seen and number[-4:] in seen
+
+
+def test_item_lengths_are_bounded(search_client):
+    q = Query(intent="list").model_dump(mode="json")
+    for patch in ({"people": ["x" * 65]}, {"unread": ["x" * 301]}):
+        r = search_client.post("/v1/search/list", json={"query": {**q, **patch}})
+        assert r.status_code == 422
+    r = search_client.post(
+        "/v1/search/list",
+        json={"query": q, "change": {"slot": "place", "value": "x" * 301}},
+    )
+    assert r.status_code == 422
+
+
+def _with_check_digit(body: str) -> str:
+    from household_vault.checks import luhn_valid
+
+    return next(body + str(d) for d in range(10) if luhn_valid(body + str(d)))
+
+
+def _prompts_seen(client, spy_reader, text: str) -> str:
+    post(client, text)
+    return " ".join(str(p) for p in spy_reader.prompts)
+
+
+def test_an_imei_stays_whole_in_a_prompt(search_client, spy_reader):
+    imei = "490154203237518"  # the published example IMEI: 15 digits, Luhn-valid, not a card
+    assert imei in _prompts_seen(search_client, spy_reader, f"invoice IMEI {imei}")
+
+
+def test_a_long_policy_number_is_not_masked(search_client, spy_reader):
+    policy = _with_check_digit("9" + "2468013579" * 1 + "135")  # Luhn-valid, no card brand
+    assert policy in _prompts_seen(search_client, spy_reader, f"policy {policy}")
+
+
+def test_dotted_and_slashed_card_numbers_are_masked(search_client, spy_reader):
+    from household_vault.checks import TEST_CARD_NUMBERS
+
+    number = "4111111111111111"
+    assert number in TEST_CARD_NUMBERS
+    for sep in (".", "/"):
+        text = sep.join(number[i : i + 4] for i in range(0, 16, 4))
+        spy_reader.prompts.clear()
+        seen = _prompts_seen(search_client, spy_reader, f"card {text} bill")
+        assert text not in seen and number[:12] not in seen and number[-4:] in seen
+
+
+def test_each_brand_range_is_masked(search_client, spy_reader):
+    from household_vault.checks import TEST_CARD_NUMBERS
+
+    for number in sorted(TEST_CARD_NUMBERS):
+        spy_reader.prompts.clear()
+        seen = _prompts_seen(search_client, spy_reader, f"card {number}")
+        assert number not in seen and number[-4:] in seen
+
+
 def test_a_who_change_on_a_held_unknown_person_lists_again(search_client):
     held = Query(intent="list", types=[DocType.health_policy], unread=["person: Meera"])
     r = search_client.post(
@@ -196,3 +308,28 @@ def test_a_crafted_before_date_is_a_422(search_client):
         json={"query": a_list_query(), "change": {"slot": "when", "value": "before:0001-01-01"}},
     )
     assert r.status_code == 422
+
+
+def test_a_sentence_change_keeps_an_expiry_question_a_plain_date(search_client, spy_reader):
+    prompt = "When does Suresh's health policy expire?"
+    spy_reader.answers[prompt] = json.dumps(
+        {**FIND, "intent": "lookup", "types": ["health_policy"], "field": "end_date"}
+    )
+    first = post(search_client, prompt).json()
+    held = first["query"]
+    for who in ("p1", "p2", "p3", "p4"):
+        r = search_client.post(
+            "/v1/search",
+            json={
+                "prompt": prompt,
+                "full": True,
+                "query": held,
+                "change": {"slot": "who", "value": who},
+            },
+        )
+        assert r.status_code == 200, r.text
+        answer = r.json()["answer"]
+        if answer is not None:
+            assert not answer["text"].startswith("Yes, until")
+            return
+    raise AssertionError("no who value answered")

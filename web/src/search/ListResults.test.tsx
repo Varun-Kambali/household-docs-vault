@@ -54,7 +54,10 @@ describe('the rows of a list', () => {
     )
     expect(within(line).getByText('Health policy')).toBeInTheDocument()
     expect(within(line).getByText('Kavita Rao, Ravi Kumar Rao')).toBeInTheDocument()
-    expect(within(line).getByText('Care Health · 19 Sep 2027')).toBeInTheDocument()
+    // the date is the first column's, so the fields do not say it again, and none is glued on
+    expect(within(line).getByText('Care Health')).toBeInTheDocument()
+    expect(within(line).getAllByText('19 Sep 2027')).toHaveLength(1)
+    expect(line.textContent).not.toContain('\u00b7')
     expect(
       within(line).getByText(/Kavita Rao\/Insurance\/2026-09-20 Health policy/),
     ).toBeInTheDocument()
@@ -115,5 +118,21 @@ describe('the rows of a list', () => {
     expect(screen.getByText('•••• 0123')).toBeInTheDocument()
     expect(screen.queryByText(/4111/)).not.toBeInTheDocument()
     expect(screen.getByText(/Secrets\.kdbx/)).toBeInTheDocument()
+  })
+})
+
+describe('a row keeps each field apart', () => {
+  test('the insurer and the number are their own pieces, in the order stored', () => {
+    draw([
+      row({
+        date: '2027-09-19',
+        key_fields: { insurer: 'Care Health', policy_number: 'P/21/2138/5675525' },
+        field_kinds: { insurer: 'text', policy_number: 'identifier' },
+      }),
+    ])
+    const line = items()[0]!
+    expect(within(line).getByText('Care Health').nextElementSibling).toHaveTextContent(
+      'P/21/2138/5675525',
+    )
   })
 })

@@ -142,4 +142,37 @@ describe('Progress', () => {
     await tick(0)
     expect(screen.getByText('Read 5 of 5. 2 need a look.')).toBeInTheDocument()
   })
+
+  test('a failed read tries again after 2, 4, 8 and then at most 30 seconds', async () => {
+    const { calls } = stubApi(() => ({ status: 500, body: { detail: 'down' } }))
+    render(<Host />)
+    await tick(0)
+    expect(calls).toHaveLength(1)
+    await tick(1999)
+    expect(calls).toHaveLength(1)
+    await tick(1)
+    expect(calls).toHaveLength(2)
+    await tick(4000)
+    expect(calls).toHaveLength(3)
+    await tick(8000)
+    expect(calls).toHaveLength(4)
+    await tick(16000)
+    expect(calls).toHaveLength(5)
+    await tick(29999)
+    expect(calls).toHaveLength(5)
+    await tick(1)
+    expect(calls).toHaveLength(6)
+  })
+
+  test('the retries stop being slow once a read works again', async () => {
+    let down = true
+    const { calls } = stubApi(() => (down ? { status: 500, body: {} } : { body: idle() }))
+    render(<Host />)
+    await tick(0)
+    down = false
+    await tick(2000)
+    expect(calls).toHaveLength(2)
+    await tick(10000)
+    expect(calls).toHaveLength(3)
+  })
 })

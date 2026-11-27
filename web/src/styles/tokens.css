@@ -66,8 +66,19 @@
   --measure-bar: 30rem; /* the Inbox progress bar */
   --question-width: 26rem; /* the question beside the page image */
   --dialog-width: 32rem; /* a password dialog */
-  --activity-time-width: 8rem; /* an activity row: when */
+  --activity-time-width: 5rem; /* an activity row: the clock time */
   --activity-step-width: 7rem; /* an activity row: step */
+  --inspector-width: 20rem; /* 320 px: the viewer's inspector and the answer's page image */
+  --finder-type-width: 9rem; /* a finder row: kind of document */
+  --finder-people-width: 11rem; /* a finder row: people */
+  --list-date-width: 7rem; /* a list row: date */
+  --list-type-width: 9rem; /* a list row: kind of document */
+  --list-people-width: 11rem; /* a list row: people */
+  --page-max-height: 70dvh; /* the Inbox page image */
+  --outline-offset: 2px; /* the gap between a control and its focus ring */
+  --outline-inset: -2px; /* a focus ring drawn inside a row */
+  --outline-width: 2px;
+  --outline-width-strong: 3px; /* the marker on the active row */
 
   /* Motion */
   --dur-micro: 150ms;
@@ -96,7 +107,12 @@
   }
 }
 
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
 :root[data-theme='dark'] {
+  color-scheme: dark;
   --color-bg: oklch(0.19 0.01 250);
   --color-sidebar: oklch(0.215 0.011 250);
   --color-raised: oklch(0.245 0.012 250);

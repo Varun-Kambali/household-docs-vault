@@ -37,6 +37,30 @@ describe('parseRoute', () => {
   })
 })
 
+describe('the answered field in the viewer address', () => {
+  test('?field= names the stored field the answer came from', () => {
+    expect(parseRoute('/doc/12', '?page=2&lines=3&field=policy_number')).toEqual({
+      name: 'doc',
+      id: '12',
+      page: 2,
+      lines: '3',
+      field: 'policy_number',
+    })
+    expect(hrefFor({ name: 'doc', id: '12', page: 2, lines: '3', field: 'policy_number' })).toBe(
+      '/doc/12?page=2&lines=3&field=policy_number',
+    )
+  })
+
+  test('a field name that is not a plain word is dropped', () => {
+    expect(parseRoute('/doc/12', '?field=a%20b%3Cscript')).toEqual({
+      name: 'doc',
+      id: '12',
+      page: 0,
+      lines: null,
+    })
+  })
+})
+
 describe('hrefFor', () => {
   test('writes the addresses parseRoute reads', () => {
     expect(hrefFor({ name: 'search', q: 'a b' })).toBe('/?q=a+b')

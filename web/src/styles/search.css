@@ -70,7 +70,9 @@ a.button {
 
 .finder-row {
   display: grid;
-  grid-template-columns: 9rem 11rem minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-columns:
+    var(--finder-type-width) var(--finder-people-width) minmax(0, 1.4fr)
+    minmax(0, 1fr);
   gap: var(--space-4);
   align-items: center;
   min-height: var(--control-height);
@@ -110,7 +112,12 @@ a.button {
 
 .finder-row[data-active='true'] {
   background: color-mix(in oklch, var(--color-primary) 12%, transparent);
-  box-shadow: inset 3px 0 0 var(--color-primary);
+  box-shadow: inset var(--outline-width-strong) 0 0 var(--color-primary);
+  font-weight: var(--weight-strong);
+}
+
+.finder-row:active {
+  background: color-mix(in oklch, var(--color-text) 10%, transparent);
 }
 
 /* The Floor: under 60rem a row wraps to two lines instead of clipping. */
@@ -118,6 +125,15 @@ a.button {
   .finder-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--space-1) var(--space-3);
+    min-height: var(--hit-target);
+  }
+
+  /* People and the second line wrap instead of clipping: they are what tells two files apart. */
+  .finder-row > span {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .finder-fields,
@@ -130,7 +146,7 @@ a.button {
 
 .answer {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--inspector-width));
   gap: var(--space-5);
   margin-block-start: var(--space-5);
   padding-block: var(--space-4);
@@ -223,21 +239,23 @@ a.button {
   padding: 0;
   background: var(--color-cite-fill);
   border: 0;
-  outline: 2px solid var(--color-cite);
-  outline-offset: 2px;
+  outline: var(--outline-width) solid var(--color-cite);
+  outline-offset: var(--outline-offset);
   cursor: pointer;
 }
 
+/* Focus adds a second ring, so it reads as different from rest even where the two blues are close. */
 .outline:focus-visible {
-  outline-width: 3px;
+  outline-width: var(--outline-width-strong);
   outline-color: var(--color-focus);
+  box-shadow: 0 0 0 calc(var(--outline-offset) + var(--outline-width-strong)) var(--color-focus);
 }
 
 /* Viewer */
 
 .viewer {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 20rem;
+  grid-template-columns: minmax(0, 1fr) var(--inspector-width);
   gap: var(--space-5);
   align-items: start;
 }
@@ -260,7 +278,7 @@ a.button {
 .viewer-page[data-size='actual'] {
   /* Until its image loads the frame still has a width, so its height (from the ratio) is real
      and the pages not yet near the screen stay unloaded. */
-  min-width: 20rem;
+  min-width: var(--inspector-width);
   width: max-content;
   max-width: none;
 }
@@ -273,15 +291,24 @@ a.button {
 .inspector {
   position: sticky;
   inset-block-start: var(--space-4);
+  max-height: calc(100dvh - var(--space-5));
+  overflow-y: auto;
   padding: var(--space-4);
   background: var(--color-raised);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-panel);
 }
 
+.inspector-title {
+  margin-block-end: var(--space-1);
+}
+
+/* The file name is a caption: it says which file, and is not the loudest thing in the panel. */
 .inspector-path {
   overflow-wrap: anywhere;
-  font-weight: var(--weight-strong);
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
 }
 
 .size-control {
@@ -289,6 +316,21 @@ a.button {
   margin-block-start: var(--space-3);
   border: 1px solid var(--color-control-border);
   border-radius: var(--radius-control);
+}
+
+.finder-fields,
+.list-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+}
+
+.finder-row > .finder-fields {
+  overflow: hidden;
+}
+
+.key-part {
+  min-width: 0;
 }
 
 .size-option {
@@ -318,8 +360,8 @@ a.button {
 }
 
 .size-option:has(input:focus-visible) {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
+  outline: var(--outline-width) solid var(--color-focus);
+  outline-offset: var(--outline-offset);
 }
 
 .fields {
@@ -332,6 +374,15 @@ a.button {
   color: var(--color-text-muted);
   font-size: var(--text-caption);
   line-height: var(--text-caption-line);
+}
+
+/* The field the answer came from: marked by weight as well as colour, as a selected row is. */
+.field[aria-current='true'] {
+  margin-inline: calc(var(--space-2) * -1);
+  padding: var(--space-1) var(--space-2);
+  background: color-mix(in oklch, var(--color-primary) 12%, transparent);
+  border-radius: var(--radius-control);
+  font-weight: var(--weight-strong);
 }
 
 .field dd {
@@ -347,5 +398,15 @@ a.button {
 
   .inspector {
     position: static;
+    max-height: none;
+    overflow-y: visible;
   }
+
+  .size-option {
+    min-height: var(--hit-target);
+  }
+}
+
+.answer .sentence {
+  margin-block-start: var(--space-3);
 }

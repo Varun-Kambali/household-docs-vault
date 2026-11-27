@@ -1,5 +1,6 @@
-// The files the filer could not settle, one at a time. Left: the first page of the file on the
-// grey canvas. Right: the question and its answers. Other waiting files that ask the very same
+// The files the filer could not settle, one at a time: the question and its answers, and the
+// first page of the file on the grey canvas (beside the question on a wide screen, under it on a
+// phone, so the task comes first in reading and Tab order). Other waiting files that ask the very same
 // question can be answered together. Where it goes after an answer is for the screen to say, so
 // this tells it which files were answered.
 import { Fragment, useEffect, useRef, useState } from 'react'
@@ -161,7 +162,6 @@ export function NeedsALook({
   return (
     <div className="inbox-item" ref={rootRef}>
       <Fragment key={item.id}>
-        <Page item={item} />
         <Question
           item={item}
           others={others.map((o) => ({ id: o.id, name: o.name }))}
@@ -188,6 +188,7 @@ export function NeedsALook({
           onUnlock={() => setUnlocking(true)}
           onSkip={items.length > 1 ? move : null}
         />
+        <Page item={item} />
       </Fragment>
       <UnlockDialog
         open={unlocking}

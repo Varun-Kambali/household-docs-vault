@@ -8,6 +8,7 @@ value there is left out of a filtered list; a place is a contained phrase of one
 place fields.
 """
 
+import re
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, replace
 from datetime import date
@@ -101,6 +102,26 @@ def _filtered(query: Query) -> bool:
     )
 
 
+_DATE_WORD = re.compile(r"\d{1,4}[-/.]\d{1,2}[-/.]\d{1,4}")
+_ID_STRIP = "'\u2019\"?.,!;:()[]"
+
+
+def identifier_tokens(text: str) -> list[str]:
+    """The identifier-shaped words of a prompt: a run of 8 or more digits, or a word of 8 or
+    more characters holding at least 4 digits (an IMEI, a policy number such as
+    "P/21/2138/5675525"), but not a numeric date. Each is kept whole, in order, once."""
+    out: list[str] = []
+    for word in text.split():
+        w = word.strip(_ID_STRIP)
+        if _DATE_WORD.fullmatch(w):
+            continue  # a date typed numerically is a date, not a key
+        digits = sum(c.isdigit() for c in w)
+        shaped = (digits >= 8 and digits == len(w)) or (len(w) >= 8 and digits >= 4)
+        if shaped and w not in out:
+            out.append(w)
+    return out
+
+
 def _ids(hits: Sequence[KeywordHit] | Sequence[VectorHit]) -> list[str]:
     """The documents of a ranking, best first, each once."""
     return list(dict.fromkeys(h.document_id for h in hits))
@@ -128,6 +149,15 @@ class Searcher:
         )
         seen = {h.document_id for h in strict}
         return [*strict, *(h for h in more if h.document_id not in seen)]
+
+    def _identifier_hits(self, text: str, only: set[str] | None = None) -> list[list[KeywordHit]]:
+        """One keyword query per identifier-shaped word of the text, against field rows only, so
+        the other words of the prompt cannot stop an exact key matching. Empty when the text has
+        none. The key is matched whole (its parts as one phrase)."""
+        return [
+            self.keyword.search(tok, limit=POOL, prefix_last=False, only=only, fields_only=True)
+            for tok in identifier_tokens(text)
+        ]
 
     def __init__(self, store: Store, keyword: KeywordIndex, vectors: VectorIndex) -> None:
         self.store = store
@@ -246,7 +276,8 @@ class Searcher:
         hits the keywords match any word of the text."""
         vec = self.vectors.search(text, limit=POOL)
         kw = self._keywords(text, loose=not vec)
-        return self._fuse([_ids(kw), _ids(vec)], [kw], None, limit)
+        ident = self._identifier_hits(text)
+        return self._fuse([_ids(kw), _ids(vec), *map(_ids, ident)], [kw, *ident], None, limit)
 
     def lookup(self, query: Query, prompt: str, limit: int = 20) -> Rows:
         """The filters narrow the candidates; the query's words, place and type words (or the
@@ -268,6 +299,8 @@ class Searcher:
             for p in (query.words, query.place or "")
             if p.strip()
         ] or [self._keywords(prompt, only, prefix_last=False, loose=not vec)]
+        ident = self._identifier_hits(prompt, only)
+        keyword_hits = [*keyword_hits, *ident]
         rankings = [_ids(hits) for hits in keyword_hits] + [_ids(vec)]
         # `vector` keeps the best of two cosines for a document: its chunks against the query's
         # words and type labels, and against the whole prompt. MIN_VECTOR is therefore a floor

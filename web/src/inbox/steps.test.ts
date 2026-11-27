@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 
-import { formatWhen, stepLabel, whereFiled } from './steps.ts'
+import { formatClock, formatDay, formatWhen, stepLabel, whereFiled } from './steps.ts'
 
 describe('steps', () => {
   test('a step is named in words, and one it does not know is still readable', () => {
@@ -12,6 +12,13 @@ describe('steps', () => {
   test('a time reads as day, month and time; text that is not a time is left as it is', () => {
     expect(formatWhen('2026-11-26T08:53:07+05:30')).toMatch(/26 Nov/)
     expect(formatWhen('not a time')).toBe('not a time')
+  })
+
+  test('a day and a clock time are written apart', () => {
+    expect(formatDay('2026-11-26T08:53:07+05:30')).toMatch(/^\d{1,2} Nov$/)
+    expect(formatClock('2026-11-26T08:53:07+05:30')).toMatch(/\d{1,2}:\d{2}/)
+    expect(formatDay('not a time')).toBe('not a time')
+    expect(formatClock('not a time')).toBe('not a time')
   })
 
   test('where a file went is its folders, and nothing for a file with none', () => {

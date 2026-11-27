@@ -89,4 +89,10 @@ describe('CardUpload', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('Type the master password.')
     expect(calls).toHaveLength(0)
   })
+
+  test('the file inputs take the button look from the design system', () => {
+    show()
+    expect(screen.getByLabelText('Front of the card')).toHaveClass('file-input')
+    expect(screen.getByLabelText('Back of the card (optional)')).toHaveClass('file-input')
+  })
 })

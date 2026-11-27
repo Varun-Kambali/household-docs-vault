@@ -46,8 +46,8 @@ export function InboxPage({ onChanged }: { onChanged: () => void }) {
         <button type="button" className="button" onClick={() => setDialog('secrets')}>
           Secrets file
         </button>
+        <FilingNotice pending={pending} version={version} onChanged={changed} onDone={done} />
       </div>
-      <FilingNotice pending={pending} version={version} onChanged={changed} onDone={done} />
       <section aria-labelledby="needs-title" className="inbox-section">
         <h2 id="needs-title" tabIndex={-1}>
           Needs a look
