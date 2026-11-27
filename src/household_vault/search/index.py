@@ -56,8 +56,20 @@ def _value_text(kind: str, value: Any) -> str:
     return str(value)
 
 
-# Words that carry no search meaning of their own. Dropped from an any-word match, unless the
-# prompt holds nothing else.
+def _last_fours(value: Any) -> str:
+    """The last four digits of each identifier of 8 or more digits, as a token of their own, so
+    a prompt masked down to its last four ("•••• 7518") still finds the document. Only the
+    index text carries them; the vector summary does not."""
+    out = []
+    for v in value if isinstance(value, list) else [value]:
+        digits = re.sub(r"\D", "", str(v)) if v is not None else ""
+        if len(digits) >= 8:
+            out.append(digits[-4:])
+    return "".join(f" {d}" for d in out)
+
+
+# Words that carry no search meaning of their own. Any-word matching drops them. If every word
+# of the prompt is one of them, the match has no words and finds nothing.
 _FILLER_TEXT = (
     "a an the of for to in on at by and or is are was were be do does did my our me i we it its "
     "this that what which who whom whose when where how show find get give tell list all any"
@@ -105,6 +117,8 @@ class KeywordIndex:
                 )
                 label = FIELD_LABELS.get(name, name.replace("_", " "))
                 text = f"{label} {_value_text(kind, value)}"
+                if kind == "identifier":
+                    text += _last_fours(value)
                 self.store.conn.execute(insert, (doc_id, None, None, "field", name, text))
 
     def remove(self, doc_id: str) -> None:

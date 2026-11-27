@@ -9,6 +9,7 @@ from household_vault.search.index import KeywordIndex
 from household_vault.search.query import Query
 from household_vault.search.retrieve import Searcher, rrf
 from household_vault.search.vectors import VectorIndex
+from tests.conftest import add_doc
 
 
 def query(**fields) -> Query:
@@ -348,3 +349,12 @@ def test_quick_finds_a_natural_prompt_with_the_vectors_off(search_world):
     assert rows and rows[0].doc_type is DocType.health_policy
     assert "p2" in rows[0].people
     assert searcher.quick("LG refrigerator invoice")[0].doc_type is DocType.tax_invoice
+
+
+def test_an_identifier_is_found_whole_or_by_its_last_four(search_store, searcher):
+    imei = "35" + "".join(str((i * 7 + 3) % 10) for i in range(13))  # synthetic, 15 digits
+    add_doc(search_store, "imei-inv", "tax_invoice", {"serial_number": imei}, ["IMEI: masked"])
+    KeywordIndex(search_store).add("imei-inv")
+    for typed in (imei, f"•••• {imei[-4:]}", imei[-4:]):
+        top3 = [r.document_id for r in searcher.quick(typed, limit=3)]
+        assert "imei-inv" in top3, typed
