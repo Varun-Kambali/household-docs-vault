@@ -247,19 +247,36 @@ def test_the_summary_splits_every_metric_by_origin_and_leaves_the_cold_call_out(
     assert s["cold_first_seconds"] == {"quick": 9.0, "full": 30.0}
 
 
-def test_declined_follows_the_apps_weak_evidence_rule():
-    top = Row("d", DocType.pan, "p1", ["p1"], "identity", "x", date(2026, 1, 1), {}, None, 0.01, [])
-    assert declined(Result(Query(intent="find"), [top], None, []))  # no filter, score under 0.02
-    assert not declined(Result(Query(intent="find", people=["p1"]), [top], None, []))
-    assert declined(Result(Query(intent="find"), [], None, []))
-    words = Query(intent="find", people=["p1"], words="inverter")
-    assert declined(Result(words, [top], None, []))  # residual words, nothing matches them
-    matched = Row(**{**top.__dict__, "word_hit": True})
-    assert not declined(Result(words, [matched], None, []))
-    assert declined(Result(Query(intent="find", unread=["person: Anil"]), [top], None, []))
-    assert not declined(
-        Result(Query(intent="find", people=["p1"], unread=["date: soon"]), [top], None, [])
+def test_declined_is_what_the_app_returns(store):
+    """The eval reads the route's outcome, so it cannot drift from the screen."""
+    from household_vault.search.answer import compose
+    from tests.conftest import add_doc
+
+    add_doc(store, "d1", "pan", {"name": "A", "number": "ABCDE1234F"}, ["PAN"], owner="p1")
+    doc = store.document("d1")
+    top = Row(
+        "d1", doc.doc_type, "p1", ["p1"], doc.area, doc.rel_path, doc.doc_date, {}, None, 0.01, []
     )
+    solid = Row(**{**top.__dict__, "score": 0.05})
+    today = date(2026, 11, 20)
+    cases = [
+        (Query(intent="find"), [top], True),  # no filter, score under 0.02
+        (Query(intent="find", people=["p1"]), [top], False),
+        (Query(intent="find"), [], True),
+        (Query(intent="find", people=["p1"], words="inverter"), [top], True),
+        (Query(intent="find", people=["p1"], words="inverter"), [solid], True),
+        (Query(intent="find", unread=["person: Anil"]), [solid], True),
+        (Query(intent="find", people=["p1"], unread=["date: soon"]), [solid], False),
+        (Query(intent="find", people=["p2"]), [solid], True),  # nobody fits
+        (Query(intent="lookup", field="number", people=["p2"]), [solid], True),
+        (Query(intent="list", unread=["person: Anil"]), [solid], True),
+        (Query(intent="list", people=["p1"]), [solid], False),
+    ]
+    for q, rows, want in cases:
+        outcome = compose(q, rows, store, today)
+        assert declined(Result(q, rows, outcome, [])) is want, q
+        if q.intent != "list":
+            assert (isinstance(outcome, NoAnswer) or not rows) is want
 
 
 def test_a_recorded_prompt_reader_replays_and_a_new_reading_prompt_invalidates(tmp_path):

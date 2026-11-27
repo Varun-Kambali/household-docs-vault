@@ -716,10 +716,29 @@ def test_an_unread_date_alone_does_not_decline_a_lookup(store):
     assert isinstance(compose(asked, rows, store, TODAY), Answer)
 
 
-def test_an_unknown_person_leaves_a_find_and_a_list_alone(store):
+def test_an_unknown_person_declines_a_find_and_leaves_a_list_alone(store):
     rows = _life_policy_rows(store)
-    assert compose(query(intent="find", unread=["person: Anil"]), rows, store, TODAY) is None
+    got = compose(query(intent="find", unread=["person: Anil"]), rows, store, TODAY)
+    assert got == NoAnswer("unknown_person", [r.rel_path for r in rows[:3]])
     assert compose(query(intent="list", unread=["person: Anil"]), rows, store, TODAY) is None
+
+
+def test_a_find_with_no_row_that_fits_declines_with_the_closest_files(store):
+    rows = _life_policy_rows(store)
+    asked = query(intent="find", types=[DocType.pan], people=["p2"])
+    got = compose(asked, rows, store, TODAY)
+    assert got == NoAnswer("no_documents", [r.rel_path for r in rows[:3]])
+    fits = query(intent="find", types=[DocType.life_policy], people=["p2"])
+    assert compose(fits, rows, store, TODAY) is None
+
+
+def test_a_find_with_no_rows_declines(store):
+    assert compose(query(intent="find"), [], store, TODAY) == NoAnswer("no_documents", [])
+
+
+def test_a_find_with_no_people_or_types_keeps_its_rows(store):
+    rows = _life_policy_rows(store)
+    assert compose(query(intent="find"), rows, store, TODAY) is None
 
 
 def test_weak_evidence_is_judged_on_the_row_the_answer_comes_from(store):

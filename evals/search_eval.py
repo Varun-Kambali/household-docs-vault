@@ -61,7 +61,7 @@ from household_vault.reading.source import DocumentSource, document_key
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import field_kind, parse_amount, parse_date
 from household_vault.scoring import IOU_MIN, iou, normalise
-from household_vault.search.answer import Answer, NoAnswer, compose, weak_match
+from household_vault.search.answer import Answer, NoAnswer, compose
 from household_vault.search.query import PROMPT_READ, PromptReader, Query, read_prompt, resolve
 from household_vault.search.retrieve import Rows
 from household_vault.search.sentence import sentence
@@ -589,16 +589,16 @@ def query_differences(got: Query, want: Query) -> list[str]:
 
 
 def declined(res: Result) -> bool:
-    """The app gave no answer: a NoAnswer, a person it could not read, no rows, or thin evidence
-    (the `weak_match` rule `compose` applies)."""
-    if isinstance(res.outcome, NoAnswer):
+    """The app gave no answer: what the route returns, a `NoAnswer` or no rows. A list has no
+    outcome, so a person it could not read counts, as the list sentence shows it."""
+    if isinstance(res.outcome, NoAnswer) or not res.rows:
         return True
     query = res.query
-    if query is not None and any(u.startswith("person:") for u in query.unread):
-        return True
-    if not res.rows:
-        return True
-    return query is not None and weak_match(query, res.rows)
+    return (
+        query is not None
+        and query.intent == "list"
+        and any(u.startswith("person:") for u in query.unread)
+    )
 
 
 def _lookup_cause(q: Question, res: Result, ids: Sequence[str]) -> str | None:

@@ -388,24 +388,28 @@ def compose(
     query: Query, rows: Sequence[Row], store: Store, today: date
 ) -> Answer | NoAnswer | None:
     """The answer to a lookup, read from the top row's stored fields; `None` for a list, or a
-    find or a lookup that names no field and has evidence (they show rows only). A lookup that
-    names a person the household does not hold is declined.
+    find or a lookup that names no field and has evidence (they show rows only).
 
-    Weak evidence (`weak_match`) is declined with the closest files, for a find as well.
+    A find or a lookup is declined, with the closest files, when it names a person the household
+    does not hold (`unknown_person`), when no row is for the person and type asked
+    (`no_documents`, also for no rows) or when the evidence is weak (`weak_match`).
     """
     if query.intent == "list":
         return None
     closest = [r.rel_path for r in rows[:3]]
-    if query.intent == "lookup" and any(u.startswith("person:") for u in query.unread):
+    if any(u.startswith("person:") for u in query.unread):
         # a person the household does not hold: an empty person filter would answer from
         # whoever's document ranks first, which is another member's value
         return NoAnswer("unknown_person", closest)
-    if weak_match(query, rows):
-        return NoAnswer("weak_match", closest)
-    if query.intent != "lookup" or query.field is None:
-        return None
     if not rows:
         return NoAnswer("no_documents", [])
+    if weak_match(query, rows):
+        return NoAnswer("weak_match", closest)
+    if (query.people or query.types) and not any(_fits(query, r) for r in rows):
+        # the rows come from the unfiltered votes; none is for the person and type asked
+        return NoAnswer("no_documents", closest)
+    if query.intent != "lookup" or query.field is None:
+        return None
     # The unfiltered votes may put a document the reading excluded on top; an answer comes from
     # the best row that passes the person and type filters, or there is none.
     top = next((r for r in rows if _fits(query, r)), None)
