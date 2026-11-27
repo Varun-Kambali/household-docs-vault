@@ -41,7 +41,7 @@ export function App() {
   const route = useRoute()
   const [menuOpen, setMenuOpen] = useState(false)
   const [focusTick, setFocusTick] = useState(0)
-  const { count: waiting, error: waitingError, refresh } = useInboxCount()
+  const { count: waiting, refresh } = useInboxCount()
   const main = useRef<HTMLElement>(null)
   const firstRoute = useRef(true)
 
@@ -126,9 +126,7 @@ export function App() {
         {route.name === 'search' && (
           <SearchScreen q={route.q} list={route.list} focusTick={focusTick} />
         )}
-        {route.name === 'inbox' && (
-          <InboxScreen waiting={waiting} error={waitingError} onChanged={refresh} />
-        )}
+        {route.name === 'inbox' && <InboxScreen onChanged={refresh} />}
         {route.name === 'area' && <AreaScreen area={route.area} list={route.list} />}
         {route.name === 'doc' && <DocScreen id={route.id} page={route.page} lines={route.lines} />}
         {route.name === 'notfound' && <NotFoundScreen />}

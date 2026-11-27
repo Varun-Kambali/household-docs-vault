@@ -4,38 +4,11 @@ import { ListPanel } from '../search/ListPanel.tsx'
 import { type ListQuery, areaList, listKey } from '../search/listQuery.ts'
 import { useList } from '../search/useList.ts'
 import { navigate } from './location.ts'
-import { Region } from './Region.tsx'
 import { hrefFor } from './route.ts'
 
 export { SearchPage as SearchScreen } from '../search/SearchPage.tsx'
 
-// onChanged is for the Inbox list to call when an answer changes it (Task 36), so the sidebar
-// number is read again then and not on every move between screens.
-export function InboxScreen({
-  waiting,
-  error,
-}: {
-  waiting: number | null
-  error: string | null
-  onChanged: () => void
-}) {
-  const known = waiting !== null
-  return (
-    <>
-      <h1 tabIndex={-1}>Inbox</h1>
-      <Region
-        state={
-          error !== null ? 'error' : known && waiting > 0 ? 'full' : known ? 'empty' : 'loading'
-        }
-        error={error ?? undefined}
-        what="the Inbox"
-        empty="Nothing waiting. New files are read as they arrive."
-      >
-        <p>{waiting} waiting for an answer.</p>
-      </Region>
-    </>
-  )
-}
+export { InboxPage as InboxScreen } from '../inbox/InboxPage.tsx'
 
 export function AreaScreen({ area, list }: { area: AreaId; list?: ListQuery }) {
   const label = AREAS.find((a) => a.id === area)?.label ?? area

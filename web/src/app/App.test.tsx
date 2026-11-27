@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
 import { App } from './App.tsx'
-import { listOut, listQuery } from '../test/api.ts'
+import { idle, listOut, listQuery, stubApi, waitingItem } from '../test/api.ts'
 import { AREAS } from './areas.ts'
 
 function answerWith(waiting: number | 'down'): void {
@@ -164,13 +164,12 @@ describe('the Inbox count', () => {
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
   })
 
-  test('is read once on start and not again when moving between screens', async () => {
+  test('is read once on start and not again when moving between other screens', async () => {
     answerWith(1)
     open('/')
     const user = userEvent.setup()
     render(<App />)
     await screen.findByRole('link', { name: 'Inbox 1' })
-    await user.click(screen.getByRole('link', { name: /Inbox/ }))
     await user.click(screen.getByRole('link', { name: 'Tax' }))
     await user.click(screen.getByRole('link', { name: 'Search' }))
     const lists = vi.mocked(fetch).mock.calls.filter(([url]) => String(url) === '/v1/needs-a-look')
@@ -187,16 +186,24 @@ describe('the Inbox count', () => {
 })
 
 describe('the Inbox screen', () => {
-  test('waits, then says how many files need an answer', async () => {
-    answerWith(2)
+  test('waits, then shows the question for the file waiting', async () => {
+    stubApi((call) =>
+      call.path === '/v1/needs-a-look'
+        ? { body: [waitingItem()] }
+        : call.path === '/v1/inbox/progress'
+          ? { body: idle() }
+          : call.path.startsWith('/v1/activity')
+            ? { body: [] }
+            : undefined,
+    )
     open('/inbox')
     render(<App />)
-    expect(screen.getByRole('status')).toHaveTextContent('Loading the Inbox')
-    expect(await screen.findByText('2 waiting for an answer.')).toBeInTheDocument()
+    expect(screen.getByText('Loading the Inbox')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /Whose is it\?/ })).toBeInTheDocument()
   })
 
   test('says so when nothing is waiting', async () => {
-    answerWith(0)
+    stubApi((call) => (call.path === '/v1/inbox/progress' ? { body: idle() } : { body: [] }))
     open('/inbox')
     render(<App />)
     expect(
@@ -205,12 +212,14 @@ describe('the Inbox screen', () => {
   })
 
   test('shows the reason when the list cannot be read', async () => {
-    answerWith('down')
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.reject(new TypeError('Failed to fetch'))),
+    )
     open('/inbox')
     render(<App />)
-    expect(await screen.findByRole('alert')).toHaveTextContent(
-      'The vault is not answering. Check that it is running.',
-    )
+    const alerts = await screen.findAllByRole('alert')
+    expect(alerts[0]).toHaveTextContent('The vault is not answering. Check that it is running.')
   })
 })
 
