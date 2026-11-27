@@ -753,6 +753,7 @@ def run_search(
                     "secret_hits": hits[:20],
                     "waiting_originals_skipped": skipped,
                     "vectors_missing": getattr(embedder, "missing_queries", 0),
+                    "seen_in_val": seen_in_val(rows, split),
                 }
             )
     finally:
@@ -841,6 +842,27 @@ def summarise_search(
     out["causes"] = dict(Counter(r.cause for r in rows if r.cause))
     out.update(facts or {})
     return out
+
+
+def _norm_prompt(prompt: str) -> str:
+    return " ".join(prompt.lower().split())
+
+
+def seen_in_val(rows: Sequence[SearchRow], split: str) -> dict[str, Any] | None:
+    """The test questions whose prompt also stands in val, so their readings were tuned on:
+    which they are (found by comparing prompts, not listed by hand) and how they scored. None
+    for val itself. For ADR 0021: the test numbers hold these apart."""
+    if split == "val":
+        return None
+    val = {_norm_prompt(q.prompt) for q in load_questions("val")}
+    seen = [r for r in rows if _norm_prompt(r.prompt) in val]
+    return {
+        "n": len(seen),
+        "ids": [r.id for r in seen],
+        "top1": _mean([r.top1 for r in seen])[0],
+        "answer_correct": _mean([r.answer_correct for r in seen])[0],
+        "declined": _mean([r.declined for r in seen])[0],
+    }
 
 
 def row_dicts(rows: Sequence[SearchRow]) -> list[dict[str, Any]]:

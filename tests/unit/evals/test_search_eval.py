@@ -24,6 +24,7 @@ from evals.search_eval import (
     query_differences,
     run_search,
     same_value,
+    seen_in_val,
     smoke_documents,
     smoke_questions,
     stated_status,
@@ -651,3 +652,20 @@ def test_a_replay_result_names_the_digests_of_its_recordings_manifest(tmp_path):
     models = json.loads(result.read_text())["models"]
     want = {manifest[r]["model"]: manifest[r]["digest"] for r in ("prompt_reader", "embedder")}
     assert models["live"] is False and models["digests"] == want
+
+
+def test_test_questions_that_also_stand_in_val_are_reported_apart():
+    val = load_questions("val")[0]
+    twin = SearchRow("test-x", "find", "extra", "terse", val.prompt.upper() + " ", top1=True)
+    fresh = SearchRow("test-y", "find", "extra", "terse", "a prompt only test has", top1=False)
+    report = seen_in_val([twin, fresh], "test")
+    assert report is not None
+    assert report["ids"] == ["test-x"] and report["n"] == 1 and report["top1"] == 1.0
+    assert seen_in_val([twin], "val") is None
+
+
+def test_five_test_prompts_are_in_val_verbatim():
+    """What the Task 37 review found, now found by code (ADR 0021 notes it)."""
+    rows = [SearchRow(q.id, q.kind, q.origin, q.style, q.prompt) for q in load_questions("test")]
+    report = seen_in_val(rows, "test")
+    assert report is not None and report["n"] == 5
