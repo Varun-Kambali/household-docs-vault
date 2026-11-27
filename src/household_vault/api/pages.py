@@ -81,7 +81,7 @@ def add_page_routes(
             png,
             media_type="image/png",
             headers={
-                "Cache-Control": "private, max-age=300",
+                "Cache-Control": "no-store",
                 "X-Content-Type-Options": "nosniff",
                 "Content-Security-Policy": "sandbox; default-src 'none'",
             },
@@ -113,7 +113,10 @@ def add_page_routes(
         response_model=None,
         responses={200: {"model": PageLinesOut}},
     )
-    def document_lines(doc_id: str, page: PageNo) -> PageLinesOut | JSONResponse:
+    def document_lines(
+        doc_id: str, page: PageNo, response: Response
+    ) -> PageLinesOut | JSONResponse:
+        response.headers["Cache-Control"] = "no-store"
         doc = known_document(doc_id)
         if is_card_photo(state.store, doc.sha256):
             return card_private()
@@ -131,7 +134,8 @@ def add_page_routes(
         response_model=None,
         responses={200: {"model": PageLinesOut}},
     )
-    def item_lines(item_id: int, page: PageNo) -> PageLinesOut | JSONResponse:
+    def item_lines(item_id: int, page: PageNo, response: Response) -> PageLinesOut | JSONResponse:
+        response.headers["Cache-Control"] = "no-store"
         item = known_item(item_id)
         if shares_card_photo(state.store, item):
             return card_private()
