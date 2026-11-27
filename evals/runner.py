@@ -41,6 +41,7 @@ from evals.search_eval import (
     RecordedEmbedder,
     RecordedPromptReader,
     SearchEvalError,
+    _manifest,
     load_smoke_questions,
     row_dicts,
     run_search,
@@ -401,9 +402,15 @@ def _search(args: argparse.Namespace) -> int:
         except SearchEvalError as exc:
             print(f"search: {exc}")
             return 1
+        stamped = {role: _manifest(replay).get(role) for role in ("prompt_reader", "embedder")}
         models = {
             "prompt_reader": settings.query_model,
             "embedder": embedder.name,
+            "digests": {
+                body["model"]: body.get("digest")
+                for body in stamped.values()
+                if isinstance(body, dict) and "model" in body
+            },
             "live": False,
         }
     facts: dict[str, Any] = {}

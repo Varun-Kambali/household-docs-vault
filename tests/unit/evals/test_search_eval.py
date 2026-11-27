@@ -637,3 +637,13 @@ def test_the_keyword_only_quick_search_is_judged_apart(smoke_docs):
     rows = [row, row]
     s = summarise_search(rows)
     assert s["quick_off_top3"]["all"] == 1.0 and s["quick_off_top1"]["all"] == 0.0
+
+
+def test_a_replay_result_names_the_digests_of_its_recordings_manifest(tmp_path):
+    folder = copy_smoke(tmp_path)
+    manifest = json.loads((folder / "manifest.json").read_text())
+    assert main(_replay_args(folder, tmp_path / "out")) == 0
+    (result,) = (tmp_path / "out").glob("*.json")
+    models = json.loads(result.read_text())["models"]
+    want = {manifest[r]["model"]: manifest[r]["digest"] for r in ("prompt_reader", "embedder")}
+    assert models["live"] is False and models["digests"] == want
