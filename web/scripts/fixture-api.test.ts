@@ -140,4 +140,41 @@ describe('the fixture API', () => {
     expect((await post('/v1/secrets/create')).status).toBe(200)
     expect((await post('/v1/cards')).status).toBe(200)
   })
+
+  test('the unsure scenario asks a question the app doubts', async () => {
+    const base = await start()
+    await fetch(`${base}/__scenario/unsure?to=/inbox`, { redirect: 'manual' })
+    const list = (await (await fetch(`${base}/v1/needs-a-look`)).json()) as {
+      reasons: string[]
+    }[]
+    expect(list).toHaveLength(1)
+    expect(list[0]?.reasons).toEqual(['person_unsure'])
+  })
+
+  test('the filed scenario logs a fresh filing for the file on screen, with a document to undo', async () => {
+    const base = await start()
+    await fetch(`${base}/__scenario/filed?to=/inbox`, { redirect: 'manual' })
+    const [item] = (await (await fetch(`${base}/v1/needs-a-look`)).json()) as { id: number }[]
+    const log = (await (await fetch(`${base}/v1/activity?limit=50`)).json()) as {
+      item_id: number
+      step: string
+      document_id: string | null
+      time: string
+      actions: string[]
+    }[]
+    const filed = log.find((entry) => entry.item_id === item?.id && entry.step === 'filed')
+    expect(filed?.document_id).toBe('doc-pdf')
+    expect(filed?.actions).toContain('undo')
+    expect(Date.now() - Date.parse(filed?.time ?? '')).toBeLessThan(60_000)
+  })
+
+  test('the failed scenario logs a file the app could not read, with a retry', async () => {
+    const base = await start()
+    await fetch(`${base}/__scenario/failed?to=/inbox`, { redirect: 'manual' })
+    const log = (await (await fetch(`${base}/v1/activity?limit=50`)).json()) as {
+      step: string
+      actions: string[]
+    }[]
+    expect(log.find((entry) => entry.step === 'error')?.actions).toEqual(['retry'])
+  })
 })

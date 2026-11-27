@@ -16,7 +16,11 @@
 //   "expire" in it reads as a list; with "diwali" too, a list with a part it could not read.
 // - GET /v1/people, /v1/documents/<doc-photo|doc-pdf>, its lines and its page image answer the
 //   recorded ones; Show in folder answers that it is not on the Mac.
-// - /__scenario/<waiting|one|group|empty|down|modeloff>?to=/path picks the scenario, then goes on to the path.
+// - /__scenario/<waiting|one|group|empty|down|modeloff|unsure|filed|failed>?to=/path picks the
+//   scenario, then goes on to the path. unsure asks one question the app doubts; filed logs a
+//   filing of that file as it happens now (so "Filed in ... Undo" shows after File it); failed
+//   logs a file the app could not read, with a retry. These three are built from the recorded
+//   replies here, so they hold no more than those do.
 // - Paths of the app answer with the app page and the CSP the API sends; any other /v1 path is 404.
 
 import { readFile } from 'node:fs/promises'
@@ -44,8 +48,19 @@ const TYPES: Record<string, string> = {
   '.png': 'image/png',
 }
 
-type Scenario = 'waiting' | 'one' | 'group' | 'empty' | 'down' | 'modeloff'
-const SCENARIOS: Scenario[] = ['waiting', 'one', 'group', 'empty', 'down', 'modeloff']
+type Scenario =
+  'waiting' | 'one' | 'group' | 'empty' | 'down' | 'modeloff' | 'unsure' | 'filed' | 'failed'
+const SCENARIOS: Scenario[] = [
+  'waiting',
+  'one',
+  'group',
+  'empty',
+  'down',
+  'modeloff',
+  'unsure',
+  'filed',
+  'failed',
+]
 const DOCS = ['doc-photo', 'doc-pdf']
 
 function send(
@@ -66,9 +81,20 @@ function safeTarget(to: string | null): string {
 
 export async function serve(options: { port?: number; dist?: string } = {}): Promise<Server> {
   const DIST = options.dist ?? BUILT
+  const one = await readFile(path.join(FIXTURES, 'needs-a-look-one.json'), 'utf8')
+  type Waiting = { id: number; reasons: string[]; question: { reason: string } }
+  const unsure = (JSON.parse(one) as Waiting[]).map((item) => ({
+    ...item,
+    reasons: ['person_unsure'],
+    question: { ...item.question, reason: 'person_unsure' },
+  }))
+  const oneId = (JSON.parse(one) as Waiting[])[0]?.id ?? 0
   const lists: Record<string, string> = {
     waiting: await readFile(path.join(FIXTURES, 'needs-a-look.json'), 'utf8'),
-    one: await readFile(path.join(FIXTURES, 'needs-a-look-one.json'), 'utf8'),
+    one,
+    unsure: JSON.stringify(unsure),
+    filed: one,
+    failed: one,
     group: await readFile(path.join(FIXTURES, 'needs-a-look-group.json'), 'utf8'),
     empty: '[]',
   }
@@ -110,7 +136,41 @@ export async function serve(options: { port?: number; dist?: string } = {}): Pro
     }
     if (pathname === '/v1/activity') {
       const older = searchParams.has('before')
-      return send(response, 200, TYPES['.json']!, older ? '[]' : await recorded('activity.json'))
+      if (older) return send(response, 200, TYPES['.json']!, '[]')
+      const log = JSON.parse(await recorded('activity.json')) as object[]
+      const top = Math.max(...log.map((entry) => (entry as { id: number }).id))
+      const now = new Date().toISOString()
+      const extra: object[] =
+        scenario === 'filed'
+          ? [
+              {
+                id: top + 1,
+                time: now,
+                item_id: oneId,
+                step: 'filed',
+                outcome: 'filed',
+                file: 'Kavita Rao/Health/2026-09-20 Prescription.pdf',
+                detail: 'Filed as Prescription',
+                actions: ['open', 'undo'],
+                document_id: 'doc-pdf',
+              },
+            ]
+          : scenario === 'failed'
+            ? [
+                {
+                  id: top + 1,
+                  time: now,
+                  item_id: oneId + 100,
+                  step: 'error',
+                  outcome: 'error',
+                  file: 'Inbox/scan-unreadable.pdf',
+                  detail: 'Held after an error',
+                  actions: ['retry'],
+                  document_id: null,
+                },
+              ]
+            : []
+      return send(response, 200, TYPES['.json']!, JSON.stringify([...extra, ...log]))
     }
     if (pathname === '/v1/inbox/progress')
       return send(response, 200, TYPES['.json']!, await recorded('progress.json'))

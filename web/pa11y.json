@@ -197,7 +197,7 @@
       ]
     },
     {
-      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Fdoc%2Fdoc-pdf%3Fpage%3D1%26lines%3D3%2C4&view=desktop&screen=viewer-pdf",
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Fdoc%2Fdoc-pdf%3Fpage%3D1%26lines%3D3%2C4%26field%3Dpolicy_number&view=desktop&screen=viewer-pdf",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -258,7 +258,7 @@
       ]
     },
     {
-      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Fdoc%2Fdoc-pdf%3Fpage%3D1%26lines%3D3%2C4&view=phone&screen=viewer-pdf",
+      "url": "http://127.0.0.1:4173/__scenario/waiting?to=%2Fdoc%2Fdoc-pdf%3Fpage%3D1%26lines%3D3%2C4%26field%3Dpolicy_number&view=phone&screen=viewer-pdf",
       "viewport": {
         "width": 375,
         "height": 812,
@@ -498,6 +498,80 @@
         "wait for element .activity-row to be visible",
         "click element .inbox-tools .button:nth-child(1)",
         "wait for element dialog[open] input to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/unsure?to=%2Finbox&view=desktop&screen=inbox-unsure",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .doubt to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/filed?to=%2Finbox&view=desktop&screen=inbox-filed",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .question to be visible",
+        "click element .choice",
+        "click element button[type=submit]",
+        "wait for element .notice .link-button to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/failed?to=%2Finbox&view=desktop&screen=inbox-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "wait for element .activity-actions .link-button to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/unsure?to=%2Finbox&view=phone&screen=inbox-unsure",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .doubt to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/filed?to=%2Finbox&view=phone&screen=inbox-filed",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .question to be visible",
+        "click element .choice",
+        "click element button[type=submit]",
+        "wait for element .notice .link-button to be visible"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:4173/__scenario/failed?to=%2Finbox&view=phone&screen=inbox-failed",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "actions": [
+        "wait for element #main h1 to be visible",
+        "wait for element .activity-row to be visible",
+        "wait for element .activity-actions .link-button to be visible"
       ]
     }
   ]
