@@ -742,3 +742,21 @@ def test_the_eval_decides_on_its_own_without_the_app_classifier():
     tree = ast.parse(Path(search_eval.__file__).read_text())
     imported = {a.name for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) for a in n.names}
     assert "asks_status" not in imported
+
+
+def test_search_metrics_report_the_vectors_off_ranking_and_the_smoke_floors_it():
+    import tomllib
+
+    from evals.runner import ROOT, search_metrics
+
+    names = ("top1", "top3", "answer_correct", "citation_accuracy", "list_reading")
+    names += ("list_precision", "list_recall", "declined_when_answerable", "declined_when_none")
+    summary = {n: {"all": 1.0} for n in names}
+    summary["quick_off_top1"] = {"all": 0.4}
+    summary["quick_off_top3"] = {"all": 0.6}
+    summary.update(kinds={}, readings_missing=0, vectors_missing=0, expected_filed_but_not=0)
+    summary["secrets_found"] = 0
+    got = search_metrics(summary)
+    assert got["quick_off_top1"] == 0.4 and got["quick_off_top3"] == 0.6
+    floors = tomllib.loads((ROOT / "evals" / "thresholds.toml").read_text())["search_smoke"]
+    assert "quick_off_top3" in floors["min"]

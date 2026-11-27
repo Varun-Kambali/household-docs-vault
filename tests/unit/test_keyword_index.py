@@ -240,3 +240,16 @@ def test_any_word_respects_only(keyword, store):
     _spread(keyword, store)
     hits = keyword.search("LG", any_word=True, only={"d3"})
     assert {h.document_id for h in hits} == {"d3"}
+
+
+def test_the_last_four_token_adds_no_longer_digit_run(keyword, store):
+    from household_vault.leakscan import scan_text
+
+    add_doc(store, "inv", "tax_invoice", {"serial_number": "490154203237518"}, ["x"])
+    keyword.add("inv")
+    text = next(t for t in index_texts(store) if "serial number" in t)
+    assert text.endswith("; 7518")
+    # the IMEI itself is a 15-digit run; the token must not lengthen it into a 19-digit one
+    assert scan_text(text, allow_test_cards=False) == scan_text(
+        "serial number 490154203237518", allow_test_cards=False
+    )

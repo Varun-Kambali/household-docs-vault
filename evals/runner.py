@@ -214,6 +214,8 @@ def search_metrics(summary: Mapping[str, Any]) -> dict[str, float]:
         "top3": overall("top3"),
         "answer_correct": overall("answer_correct"),
         "citation_accuracy": overall("citation_accuracy"),
+        "quick_off_top1": overall("quick_off_top1"),
+        "quick_off_top3": overall("quick_off_top3"),
         "list_reading": overall("list_reading"),
         "list_precision": overall("list_precision"),
         "list_recall": overall("list_recall"),

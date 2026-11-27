@@ -49,11 +49,12 @@ inbox_left = 0
 
 [search_smoke.min]
 # measured: top1 1, top3 1, answer_correct 1, citation_accuracy 1, list_reading 0.5,
-# list_precision 0.7154, list_recall 0.7667
+# list_precision 0.7154, list_recall 0.7667, quick_off_top1 1, quick_off_top3 1
 top1 = 0.98
 top3 = 0.98
 answer_correct = 0.98
 citation_accuracy = 0.98
+quick_off_top3 = 0.98
 list_reading = 0.48
 list_precision = 0.6954
 list_recall = 0.7467

@@ -65,7 +65,9 @@ def _last_fours(value: Any) -> str:
         digits = re.sub(r"\D", "", str(v)) if v is not None else ""
         if len(digits) >= 8:
             out.append(digits[-4:])
-    return "".join(f" {d}" for d in out)
+    # a ";" between them: the leak scan joins digit runs across spaces, so " 5037" after a
+    # 15-digit number would read as one 19-digit card number
+    return "".join(f" ; {d}" for d in out)
 
 
 # Words that carry no search meaning of their own. Any-word matching drops them. If every word
