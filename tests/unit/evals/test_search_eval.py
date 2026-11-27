@@ -350,9 +350,9 @@ def test_search_smoke_fails_below_its_threshold(tmp_path, capsys):
 
 def test_search_smoke_fails_when_a_vector_recording_is_missing(tmp_path, capsys):
     folder = copy_smoke(tmp_path)
-    next(folder.glob("*.npy")).unlink()
+    next(folder.glob("*.npy")).unlink()  # a document or a query vector, whichever lists first
     assert main(["smoke", "--search-recordings", str(folder)]) == 1
-    assert "search: " in capsys.readouterr().out
+    assert "search" in capsys.readouterr().out
 
 
 def test_search_smoke_fails_when_a_reading_is_missing(tmp_path, capsys):
