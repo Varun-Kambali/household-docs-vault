@@ -326,8 +326,9 @@ def test_the_models_people_and_the_prompt_agreeing_is_not_a_conflict(household):
 
 
 def test_a_name_the_household_does_not_hold_is_not_invented_by_the_backstop(household):
+    # no person is invented from it, but the sentence shows the name was not read
     q = resolve(reading(), household, TODAY, "Anil's policy")
-    assert (q.people, q.unread) == ([], [])
+    assert (q.people, q.unread) == ([], ["person: Anil"])
 
 
 def test_a_date_phrase_in_the_prompt_fills_an_empty_date_slot(household):
@@ -909,3 +910,33 @@ def test_a_question_word_keeps_a_lookup_with_a_date(household, prompt):
         prompt,
     )
     assert q.intent == "lookup"
+
+
+# -- an outsider's name the model dropped ------------------------------------------------------
+
+
+def test_a_possessive_outsider_the_model_dropped_is_unread(household):
+    lookup = reading(intent="lookup", types=[DocType.pan], field="number")
+    q = resolve(lookup, household, TODAY, "Meera's PAN card number")
+    assert q.unread == ["person: Meera"] and q.people == []
+
+
+def test_a_possessive_household_member_is_not_unread(household):
+    lookup = reading(intent="lookup", types=[DocType.pan], field="number")
+    q = resolve(lookup, household, TODAY, "Kavita's PAN card number")
+    assert q.unread == [] and len(q.people) == 1
+
+
+def test_a_possessive_stored_place_is_not_a_person(household):
+    q = resolve(reading(), household, TODAY, "Croma's invoice", places=["Croma"])
+    assert q.unread == []
+
+
+def test_a_possessive_the_model_put_in_people_is_not_read_twice(household):
+    q = resolve(reading(people=["Meera"]), household, TODAY, "Meera's PAN card number")
+    assert q.unread == ["person: Meera"]
+
+
+def test_a_lowercase_or_vocabulary_possessive_is_not_a_name(household):
+    assert resolve(reading(), household, TODAY, "Today's PAN card").unread == []
+    assert resolve(reading(), household, TODAY, "the Insurance's policy number").unread == []

@@ -687,6 +687,84 @@ def _place_of(phrase: str, places: Places, types: Collection[DocType], prompt: s
     return stripped if _stored_place(stripped, places, {*types, *named}, possessive) else None
 
 
+_CAPITAL_POSSESSIVE = re.compile(r"^[A-Z][\w-]*['\u2019]s$")
+_MONTH_WORDS = frozenset(
+    [
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "sept",
+        "oct",
+        "nov",
+        "dec",
+        "today",
+        "tomorrow",
+        "yesterday",
+        "week",
+        "month",
+        "year",
+    ]
+)
+
+
+def _vocabulary_words() -> frozenset[str]:
+    """Every word the closed vocabulary uses: type, area, field, cue and month words."""
+    words: set[str] = set(_MONTH_WORDS) | GENERIC_WORDS | PLURAL_GENERIC_WORDS | LIST_CUE_WORDS
+    words |= AUX_OPENERS | QUESTION_WORDS | NOUN_PHRASE_FILLER | set(ROLE_NOUNS)
+    for group in (*TYPE_WORDS.values(), *FIELD_LABELS.values(), *AREA_LABELS.values()):
+        for phrase in [group] if isinstance(group, str) else group:
+            words.update(phrase.lower().split())
+    words.update(a.value for a in Area)
+    for cue in (*FIND_CUES, *LIST_OPENERS):
+        words.update(cue)
+    return frozenset(words)
+
+
+_VOCABULARY = _vocabulary_words()
+
+
+def _dropped_outsiders(
+    prompt: str,
+    reading: QueryReading,
+    household: Household,
+    stored: set[int],
+    said: Sequence[str],
+) -> list[str]:
+    """Capitalised words written as a possessive ("Meera's") that are no household name, no
+    stored or model place, no vocabulary word and no name the model already put in `people`.
+    The model sometimes leaves an outsider out of its people slot; code must not then answer
+    from another member's document."""
+    tokens = _WORD.findall(prompt)
+    words = _words(prompt)
+    skip = stored | _occupied(words, reading.place)
+    seen = {w for phrase in said for w in _words(phrase)}
+    found: list[str] = []
+    for i, (token, word) in enumerate(zip(tokens, words, strict=True)):
+        if i in skip or word in seen or not _CAPITAL_POSSESSIVE.match(token):
+            continue
+        if word in _VOCABULARY or _scan_people(word, household) or _scan_types(word):
+            continue
+        found.append(f"person: {_POSSESSIVE.sub('', token)}")
+    return found
+
+
 def resolve(
     reading: QueryReading,
     household: Household,
@@ -839,6 +917,12 @@ def resolve(
                 place = rest_place
             elif rest_place:
                 words = f"{words} {rest_place}".strip()
+    if prompt:
+        for phrase in _dropped_outsiders(
+            prompt, reading, household, _place_positions(_words(prompt), places), reading.people
+        ):
+            if phrase not in unread:
+                unread.append(phrase)
     role: DateRole | None = noun_role
     span: DateRange | None = None
     if slot is not None:
