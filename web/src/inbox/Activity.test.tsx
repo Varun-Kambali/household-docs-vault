@@ -47,7 +47,7 @@ describe('Activity', () => {
     expect(onChanged).toHaveBeenCalled()
   })
 
-  test('an asked file is undone through its item, retry goes through the items route', async () => {
+  test('an asked file offers no Undo, retry goes through the items route', async () => {
     const asked = activityEntry({
       id: 20,
       item_id: 8,
@@ -75,10 +75,10 @@ describe('Activity', () => {
     const onShow = vi.fn<(id?: number) => void>()
     render(<Activity version={0} onChanged={vi.fn<(id?: number) => void>()} onShow={onShow} />)
     await user.click(await screen.findByRole('button', { name: 'Retry' }))
-    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    // A file that was never filed has nothing to undo.
+    expect(screen.queryByRole('button', { name: 'Undo' })).not.toBeInTheDocument()
     expect(calls.filter((c) => c.method === 'POST').map((c) => c.path)).toEqual([
       '/v1/items/9/retry',
-      '/v1/needs-a-look/8/undo',
     ])
     // Open on a file that is still waiting shows its pages in the list above.
     await user.click(screen.getByRole('button', { name: 'Open' }))
@@ -201,7 +201,66 @@ describe('Activity', () => {
     await user.click(await screen.findByRole('button', { name: 'Show older' }))
     expect(await screen.findAllByRole('listitem')).toHaveLength(21)
     rerender(<Activity version={1} onChanged={vi.fn<() => void>()} onShow={vi.fn<() => void>()} />)
-    await vi.waitFor(() => expect(screen.getAllByRole('listitem')).toHaveLength(21))
+    // Two entries of the old head dropped out of the new one; they join the older ones.
+    await vi.waitFor(() => expect(screen.getAllByRole('listitem')).toHaveLength(23))
     expect(screen.queryByRole('button', { name: 'Show older' })).not.toBeInTheDocument()
+  })
+
+  test('the row actions are quiet text links, not outlined buttons', async () => {
+    stubApi((call) =>
+      call.path.startsWith('/v1/activity')
+        ? { body: [activityEntry({ actions: ['open', 'undo'] })] }
+        : undefined,
+    )
+    render(<Activity version={0} onChanged={vi.fn<() => void>()} onShow={vi.fn<() => void>()} />)
+    const row = (await screen.findAllByRole('listitem'))[0]!
+    expect(within(row).getByRole('link', { name: 'Open' })).toHaveClass('link-button')
+    expect(within(row).getByRole('button', { name: 'Undo' })).toHaveClass('link-button')
+    expect(row.querySelector('.button')).toBeNull()
+  })
+
+  test('the day shows once as a heading and each row carries only its time', async () => {
+    stubApi((call) =>
+      call.path.startsWith('/v1/activity')
+        ? {
+            body: [
+              activityEntry({ id: 3, time: '2026-11-27T09:10:00+05:30', actions: [] }),
+              activityEntry({ id: 2, time: '2026-11-27T09:09:00+05:30', actions: [] }),
+              activityEntry({ id: 1, time: '2026-11-26T18:00:00+05:30', actions: [] }),
+            ],
+          }
+        : undefined,
+    )
+    render(<Activity version={0} onChanged={vi.fn<() => void>()} onShow={vi.fn<() => void>()} />)
+    await screen.findAllByRole('listitem')
+    expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual([
+      '27 Nov',
+      '26 Nov',
+    ])
+    for (const time of document.querySelectorAll('.activity-time')) {
+      expect(time.textContent).not.toMatch(/Nov/)
+    }
+    expect(document.querySelectorAll('.activity-time')).toHaveLength(3)
+  })
+
+  test('a Needs a look row does not repeat the question shown above', async () => {
+    stubApi((call) =>
+      call.path.startsWith('/v1/activity')
+        ? {
+            body: [
+              activityEntry({
+                step: 'needs_a_look',
+                detail: 'Whose is it?',
+                document_id: null,
+                actions: ['answer'],
+              }),
+            ],
+          }
+        : undefined,
+    )
+    render(<Activity version={0} onChanged={vi.fn<() => void>()} onShow={vi.fn<() => void>()} />)
+    await screen.findAllByRole('listitem')
+    expect(screen.getByText('Needs a look')).toBeInTheDocument()
+    expect(screen.queryByText('Whose is it?')).not.toBeInTheDocument()
   })
 })

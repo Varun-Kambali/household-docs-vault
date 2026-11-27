@@ -115,4 +115,9 @@ describe('FilingNotice', () => {
     const { calls } = show([], [])
     expect(calls).toHaveLength(0)
   })
+
+  test('keeps its slot when nothing is pending, so the page does not move when a notice comes', () => {
+    show([], [])
+    expect(document.querySelector('.notices')).toBeInTheDocument()
+  })
 })

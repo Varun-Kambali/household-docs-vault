@@ -72,6 +72,7 @@ function CardForm({ onClose, onDone }: { onClose: () => void; onDone: () => void
         <label htmlFor={frontId}>Front of the card</label>
         <input
           id={frontId}
+          className="file-input"
           type="file"
           accept="image/jpeg,image/png,image/heic"
           onChange={(event) => setFront(event.target.files?.[0] ?? null)}
@@ -81,6 +82,7 @@ function CardForm({ onClose, onDone }: { onClose: () => void; onDone: () => void
         <label htmlFor={backId}>Back of the card (optional)</label>
         <input
           id={backId}
+          className="file-input"
           type="file"
           accept="image/jpeg,image/png,image/heic"
           onChange={(event) => setBack(event.target.files?.[0] ?? null)}

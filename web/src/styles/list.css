@@ -90,7 +90,9 @@
 
 .list-row {
   display: grid;
-  grid-template-columns: 7rem 9rem 11rem minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-columns:
+    var(--list-date-width) var(--list-type-width) var(--list-people-width) minmax(0, 1.4fr)
+    minmax(0, 1fr);
   gap: var(--space-4);
   align-items: center;
   min-height: var(--control-height);
@@ -127,11 +129,34 @@
   }
 }
 
+.list-row:active {
+  background: color-mix(in oklch, var(--color-text) 10%, transparent);
+}
+
+.sentence-select:disabled,
+.sentence-range input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sentence-select:active,
+.sentence-range input:active {
+  background: color-mix(in oklch, var(--color-text) 6%, var(--color-raised));
+}
+
 /* The Floor: under 60rem a row wraps to lines instead of clipping. */
 @media (max-width: 60rem) {
   .list-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--space-1) var(--space-3);
+    min-height: var(--hit-target);
+  }
+
+  .list-row > span {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .list-people,

@@ -151,4 +151,13 @@ describe('UnlockDialog', () => {
     expect(onClose).toHaveBeenCalled()
     expect(calls).toHaveLength(0)
   })
+
+  test('the dialog says in a sentence what the password is for and that it is not kept', () => {
+    open()
+    expect(
+      screen.getByText(
+        /^Type the password for .+\. The app on this Mac reads it once and does not keep it\.$/,
+      ),
+    ).toBeInTheDocument()
+  })
 })

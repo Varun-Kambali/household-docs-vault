@@ -13,10 +13,6 @@
   outline: none;
 }
 
-.inbox-tools {
-  margin-block-start: 0;
-}
-
 /* Progress: a plain bar with words. It only changes value; it never moves by itself. */
 
 .progress {
@@ -53,13 +49,24 @@
   overflow-wrap: anywhere;
 }
 
-/* One file at a time: the page on the canvas, the question beside it */
+/* One file at a time: the page on the canvas, the question beside it. The question comes first
+   in the document (the task first for a keyboard and a screen reader); the page is placed to its
+   left here, and under it on a phone. */
 
 .inbox-item {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, var(--question-width));
+  grid-template-areas: 'page question';
   gap: var(--space-5);
   align-items: start;
+}
+
+.inbox-item > .question {
+  grid-area: question;
+}
+
+.inbox-item > .inbox-page {
+  grid-area: page;
 }
 
 .inbox-page {
@@ -74,7 +81,7 @@
 .inbox-page img {
   display: block;
   max-width: 100%;
-  max-height: 70dvh;
+  max-height: var(--page-max-height);
   height: auto;
   object-fit: contain;
 }
@@ -171,8 +178,8 @@
 }
 
 .choice:has(input:focus-visible) {
-  outline: 2px solid var(--color-focus);
-  outline-offset: -2px;
+  outline: var(--outline-width) solid var(--color-focus);
+  outline-offset: var(--outline-inset);
 }
 
 .same {
@@ -220,12 +227,27 @@
   margin-block-start: var(--space-3);
 }
 
+.why-disabled {
+  align-self: center;
+  margin-block-start: 0;
+}
+
 /* After an answer: where the file went */
+
+/* The slot beside the two tool buttons: a notice fills it, and nothing below it moves. */
+.inbox-tools {
+  align-items: center;
+  margin-block-start: 0;
+  margin-block-end: var(--space-4);
+}
 
 .notices {
   display: grid;
+  flex: 1 1 var(--measure-bar);
   gap: var(--space-2);
-  margin-block-end: var(--space-4);
+  min-width: 0;
+  min-height: var(--control-height);
+  align-content: center;
 }
 
 .notice {
@@ -247,6 +269,18 @@
 
 .activity {
   border-block-start: 1px solid var(--color-border);
+}
+
+.activity-day + .activity-day {
+  margin-block-start: var(--space-4);
+}
+
+.activity-day > h3 {
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+  font-weight: var(--weight-strong);
 }
 
 .activity-row {
@@ -279,8 +313,41 @@
 .activity-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--space-3);
   justify-content: flex-end;
+}
+
+.activity-actions .link-button {
+  margin-inline-start: 0;
+}
+
+/* The browser's own file button, made to match .button. The chosen name reads as body text. */
+.file-input {
+  max-width: 100%;
+  color: var(--color-text);
+  font: inherit;
+}
+
+.file-input::file-selector-button {
+  height: var(--control-height);
+  margin-inline-end: var(--space-3);
+  padding: 0 var(--space-4);
+  background: var(--color-raised);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: var(--weight-strong);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: background-color var(--dur-micro) ease-out;
+}
+
+.file-input:hover::file-selector-button {
+  background: color-mix(in oklch, var(--color-text) 6%, var(--color-raised));
+}
+
+.file-input:active::file-selector-button {
+  background: color-mix(in oklch, var(--color-text) 10%, var(--color-raised));
 }
 
 /* Dialogs: a focused step for a password */
@@ -324,6 +391,25 @@
 @media (max-width: 60rem) {
   .inbox-item {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'question'
+      'page';
+  }
+
+  .keys-hint {
+    display: none;
+  }
+
+  .activity-day + .activity-day {
+    margin-block-start: var(--space-4);
+  }
+
+  .activity-day > h3 {
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--text-caption);
+    line-height: var(--text-caption-line);
+    font-weight: var(--weight-strong);
   }
 
   .activity-row {

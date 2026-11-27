@@ -74,17 +74,19 @@ function UnlockForm({
 
   return (
     <form onSubmit={(event) => void submit(event)} className="dialog-form">
-      <p>The password for {item.name}. It is sent to the app on this Mac and is not kept.</p>
+      <p>
+        Type the password for {item.name}. The app on this Mac reads it once and does not keep it.
+      </p>
       <PasswordField label="PDF password" value={password} onChange={setPassword} />
-      <div className="check-row">
+      <label className="check-row" htmlFor={saveId}>
         <input
           id={saveId}
           type="checkbox"
           checked={save}
           onChange={(event) => setSave(event.target.checked)}
         />
-        <label htmlFor={saveId}>Save it in Secrets.kdbx</label>
-      </div>
+        <span>Save it in Secrets.kdbx</span>
+      </label>
       {save && <PasswordField label="Master password" value={master} onChange={setMaster} />}
       {problem !== null && (
         <p className="region-error" role="alert">

@@ -370,4 +370,47 @@ describe('NeedsALook', () => {
     await user.click(screen.getByRole('button', { name: 'File it' }))
     expect(await screen.findByRole('alert')).toHaveTextContent('being worked on')
   })
+
+  test('the question comes before the page image, so the task is first', () => {
+    stubApi(() => OK)
+    show([waitingItem()])
+    const question = document.querySelector('.question')!
+    const page = document.querySelector('.inbox-page')!
+    expect(question.compareDocumentPosition(page) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  test('a disabled File it says what enables it, and stops once an answer is chosen', async () => {
+    stubApi(() => OK)
+    const user = userEvent.setup()
+    show([waitingItem()])
+    const file = screen.getByRole('button', { name: 'File it' })
+    expect(file).toBeDisabled()
+    expect(screen.getByText('Choose who this belongs to')).toBeInTheDocument()
+    expect(file).toHaveAccessibleDescription('Choose who this belongs to')
+    await user.click(screen.getByRole('radio', { name: 'Home' }))
+    expect(screen.queryByText('Choose who this belongs to')).not.toBeInTheDocument()
+  })
+
+  test('a missing value says what to type before File it can be pressed', () => {
+    stubApi(() => OK)
+    show([
+      waitingItem({
+        reasons: ['missing_required'],
+        question: {
+          reason: 'missing_required',
+          text: 'What is the policy number?',
+          answer_kind: 'field',
+          options: [],
+          field: 'policy_number',
+        },
+      }),
+    ])
+    expect(screen.getByText('Type the policy number')).toBeInTheDocument()
+  })
+
+  test('the keyboard hint is marked so a phone can hide it', () => {
+    stubApi(() => OK)
+    show([waitingItem()])
+    expect(screen.getByText(/Press 1 to 3 to choose/)).toHaveClass('keys-hint')
+  })
 })
