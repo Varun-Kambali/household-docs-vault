@@ -90,9 +90,15 @@ def test_paths_cannot_leave_the_built_folder(client_with_dist, path):
     assert "root:" not in response.text
 
 
-def test_only_get_and_head_reach_the_app(client_with_dist):
-    assert client_with_dist.post("/inbox").status_code == 405
+def test_only_get_and_head_reach_the_app_and_other_methods_on_a_missing_path_are_404(
+    client_with_dist,
+):
     assert client_with_dist.head("/inbox").status_code == 200
+    for method in ("post", "put", "patch", "delete"):
+        for path in ("/inbox", "/v1/nothing", "/healthz", "/nothing.png"):
+            r = getattr(client_with_dist, method)(path)
+            assert r.status_code == 404, (method, path)
+    assert client_with_dist.get("/healthz").status_code == 200
 
 
 def test_without_a_build_the_api_runs_as_before(state_no_dist):

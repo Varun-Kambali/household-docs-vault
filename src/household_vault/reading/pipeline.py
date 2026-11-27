@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field, JsonValue
 from household_vault.doctypes import DocType
 from household_vault.intake.sniff import FileKind
 from household_vault.reading.cues import CueCheck, cue_check
-from household_vault.reading.engines import Engines
+from household_vault.reading.engines import Engines, upright_bytes
 from household_vault.reading.heic import heic_to_png
 from household_vault.reading.lines import Line, PageText
 from household_vault.reading.ollama import ModelError
@@ -168,14 +168,14 @@ def _masked(
 
 
 def _fill_images(source: DocumentSource, password: str | None) -> list[bytes]:
-    """The first MAX_VISION_PAGES page images: photos as their own bytes (HEIC as PNG), PDF
-    pages as PNG at 200 dpi."""
+    """The first MAX_VISION_PAGES page images: photos as their own bytes (HEIC as PNG; a photo
+    with a rotation tag turned upright), PDF pages as PNG at 200 dpi."""
     if source.kind is FileKind.pdf:
         data = source.data or b""
         count = min(page_count(data, password), MAX_VISION_PAGES)
         return [png_bytes(render_page(data, i, dpi=200, password=password)) for i in range(count)]
     files = source.images if source.images is not None else [source.data or b""]
-    return list(files[:MAX_VISION_PAGES])
+    return [upright_bytes(f) for f in files[:MAX_VISION_PAGES]]
 
 
 def _classify(engines: Engines, text: str, sha256: str, raw: dict[str, str]) -> DocType | None:

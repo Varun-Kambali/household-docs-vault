@@ -19,10 +19,12 @@ from evals.search_eval import (
     _build,
     declined,
     judge,
+    load_questions,
     load_smoke_questions,
     query_differences,
     run_search,
     same_value,
+    seen_in_val,
     smoke_documents,
     smoke_questions,
     stated_status,
@@ -37,6 +39,7 @@ from evals.search_set import (
     _list_drafts,
     _list_questions,
     _where,
+    wants_status,
 )
 from household_vault.doctypes import AREA, Area, DocType
 from household_vault.leakscan import scan_outputs, scan_text
@@ -247,19 +250,36 @@ def test_the_summary_splits_every_metric_by_origin_and_leaves_the_cold_call_out(
     assert s["cold_first_seconds"] == {"quick": 9.0, "full": 30.0}
 
 
-def test_declined_follows_the_apps_weak_evidence_rule():
-    top = Row("d", DocType.pan, "p1", ["p1"], "identity", "x", date(2026, 1, 1), {}, None, 0.01, [])
-    assert declined(Result(Query(intent="find"), [top], None, []))  # no filter, score under 0.02
-    assert not declined(Result(Query(intent="find", people=["p1"]), [top], None, []))
-    assert declined(Result(Query(intent="find"), [], None, []))
-    words = Query(intent="find", people=["p1"], words="inverter")
-    assert declined(Result(words, [top], None, []))  # residual words, nothing matches them
-    matched = Row(**{**top.__dict__, "word_hit": True})
-    assert not declined(Result(words, [matched], None, []))
-    assert declined(Result(Query(intent="find", unread=["person: Anil"]), [top], None, []))
-    assert not declined(
-        Result(Query(intent="find", people=["p1"], unread=["date: soon"]), [top], None, [])
+def test_declined_is_what_the_app_returns(store):
+    """The eval reads the route's outcome, so it cannot drift from the screen."""
+    from household_vault.search.answer import compose
+    from tests.conftest import add_doc
+
+    add_doc(store, "d1", "pan", {"name": "A", "number": "ABCDE1234F"}, ["PAN"], owner="p1")
+    doc = store.document("d1")
+    top = Row(
+        "d1", doc.doc_type, "p1", ["p1"], doc.area, doc.rel_path, doc.doc_date, {}, None, 0.01, []
     )
+    solid = Row(**{**top.__dict__, "score": 0.05})
+    today = date(2026, 11, 20)
+    cases = [
+        (Query(intent="find"), [top], True),  # no filter, score under 0.02
+        (Query(intent="find", people=["p1"]), [top], False),
+        (Query(intent="find"), [], True),
+        (Query(intent="find", people=["p1"], words="inverter"), [top], True),
+        (Query(intent="find", people=["p1"], words="inverter"), [solid], True),
+        (Query(intent="find", unread=["person: Anil"]), [solid], True),
+        (Query(intent="find", people=["p1"], unread=["date: soon"]), [solid], False),
+        (Query(intent="find", people=["p2"]), [solid], True),  # nobody fits
+        (Query(intent="lookup", field="number", people=["p2"]), [solid], True),
+        (Query(intent="list", unread=["person: Anil"]), [solid], True),
+        (Query(intent="list", people=["p1"]), [solid], False),
+    ]
+    for q, rows, want in cases:
+        outcome = compose(q, rows, store, today)
+        assert declined(Result(q, rows, outcome, [])) is want, q
+        if q.intent != "list":
+            assert (isinstance(outcome, NoAnswer) or not rows) is want
 
 
 def test_a_recorded_prompt_reader_replays_and_a_new_reading_prompt_invalidates(tmp_path):
@@ -293,13 +313,16 @@ def test_a_recorded_embedder_replays_float16_vectors_exactly(tmp_path):
     assert replay.name == "fake-embed"
 
 
-def test_the_smoke_questions_are_val_lookups_and_finds_about_smoke_photos_and_ten_lists(smoke_docs):
+def test_the_smoke_questions_are_lookups_finds_nones_and_ten_lists_about_smoke_photos(smoke_docs):
     qs = smoke_questions(smoke_docs)
     ids = {d.doc_id for d in smoke_docs}
     assert sum(q.kind == "list" for q in qs) == 10
-    about = [q for q in qs if q.kind != "list"]
+    about = [q for q in qs if q.kind not in ("list", "none")]
     assert about and all(set(q.targets) <= ids for q in about)
     assert {q.kind for q in about} <= {"lookup", "find"}
+    nones = [q for q in qs if q.kind == "none"]
+    val_nones = {q.id: q for q in load_questions("val") if q.kind == "none"}
+    assert nones and all(val_nones[q.id] == q and not q.targets for q in nones)  # none are new
     assert json.loads((EVAL_V1 / "smoke.json").read_text())["split"] == "val"
 
 
@@ -328,9 +351,9 @@ def test_search_smoke_fails_below_its_threshold(tmp_path, capsys):
 
 def test_search_smoke_fails_when_a_vector_recording_is_missing(tmp_path, capsys):
     folder = copy_smoke(tmp_path)
-    next(folder.glob("*.npy")).unlink()
+    next(folder.glob("*.npy")).unlink()  # a document or a query vector, whichever lists first
     assert main(["smoke", "--search-recordings", str(folder)]) == 1
-    assert "search: " in capsys.readouterr().out
+    assert "search" in capsys.readouterr().out
 
 
 def test_search_smoke_fails_when_a_reading_is_missing(tmp_path, capsys):
@@ -360,7 +383,8 @@ def status_question(doc: SynthDoc, field: str) -> Question:
     from evals.search_set import status_of
 
     q = lookup_question(doc, field)
-    return q.model_copy(update={"status": status_of(doc, field)})
+    asked = "Is it still valid?"  # only a status question wants the status in the answer
+    return q.model_copy(update={"status": status_of(doc, field), "prompt": asked})
 
 
 def judged_answer(q: Question, doc: SynthDoc, value: Any, text: str) -> SearchRow:
@@ -602,3 +626,137 @@ def test_the_api_carries_the_unknown_person_reason():
     from household_vault.api.models import NoAnswerOut
 
     assert NoAnswerOut(reason="unknown_person", closest=[]).reason == "unknown_person"
+
+
+def test_the_keyword_only_quick_search_is_judged_apart(smoke_docs):
+    doc = next(d for d in smoke_docs if d.doc_id == "health_policy-1-photo")
+    q = lookup_question(doc, "policy_number")
+    truth, back = {doc.doc_id: doc}, {"db-1": doc.doc_id}
+    hit = Row(
+        "db-1", doc.doc_type, "p1", ["p1"], "insurance", "x", date(2026, 1, 1), {}, None, 0.1, []
+    )
+    miss = Row(**{**hit.__dict__, "document_id": "db-2"})
+    res = Result(Query(intent="lookup"), [hit], None, [], quick_off=[miss, miss, hit])
+    row = judge(q, res, truth, back)
+    assert (row.quick_off_top1, row.quick_off_top3) == (False, True)
+    nothing = judge(q, Result(Query(intent="lookup"), [hit], None, []), truth, back)
+    assert (nothing.quick_off_top1, nothing.quick_off_top3) == (None, None)
+    rows = [row, row]
+    s = summarise_search(rows)
+    assert s["quick_off_top3"]["all"] == 1.0 and s["quick_off_top1"]["all"] == 0.0
+
+
+def test_a_replay_result_names_the_digests_of_its_recordings_manifest(tmp_path):
+    folder = copy_smoke(tmp_path)
+    manifest = json.loads((folder / "manifest.json").read_text())
+    assert main(_replay_args(folder, tmp_path / "out")) == 0
+    (result,) = (tmp_path / "out").glob("*.json")
+    models = json.loads(result.read_text())["models"]
+    want = {manifest[r]["model"]: manifest[r]["digest"] for r in ("prompt_reader", "embedder")}
+    assert models["live"] is False and models["digests"] == want
+
+
+def test_test_questions_that_also_stand_in_val_are_reported_apart():
+    val = load_questions("val")[0]
+    twin = SearchRow("test-x", "find", "extra", "terse", val.prompt.upper() + " ", top1=True)
+    fresh = SearchRow("test-y", "find", "extra", "terse", "a prompt only test has", top1=False)
+    report = seen_in_val([twin, fresh], "test")
+    assert report is not None
+    assert report["ids"] == ["test-x"] and report["n"] == 1 and report["top1"] == 1.0
+    assert seen_in_val([twin], "val") is None
+
+
+def test_five_test_prompts_are_in_val_verbatim():
+    """What the Task 37 review found, now found by code (ADR 0021 notes it)."""
+    rows = [SearchRow(q.id, q.kind, q.origin, q.style, q.prompt) for q in load_questions("test")]
+    report = seen_in_val(rows, "test")
+    assert report is not None and report["n"] == 5
+
+
+def test_a_date_question_is_right_with_the_plain_date_and_a_status_question_needs_the_wording(
+    smoke_docs,
+):
+    doc = next(d for d in smoke_docs if d.doc_id == "health_policy-1-photo")
+    end = doc.fields["end_date"]
+    base = lookup_question(doc, "end_date")
+    box = base.box or (0.0, 0.0, 1.0, 1.0)
+    truth, back = {doc.doc_id: doc}, {"db-1": doc.doc_id}
+
+    def right(prompt: str, text: str) -> bool:
+        q = base.model_copy(update={"prompt": prompt, "status": {"valid": True}})
+        answer = an_answer("db-1", "end_date", end, text, [LineRef(base.page or 0, 0, box)])
+        res = Result(Query(intent="lookup", field="end_date"), [], answer, [])
+        return bool(judge(q, res, truth, back).answer_correct)
+
+    assert right("When does the policy expire?", "31 Mar 2027")
+    assert right("When does the policy expire?", "Yes, until 31 Mar 2027.")
+    assert right("Is the policy still valid?", "Yes, until 31 Mar 2027.")
+    assert not right("Is the policy still valid?", "31 Mar 2027")
+
+
+# -- the eval decides which questions ask for a status on its own ---------------------------------
+
+
+@pytest.mark.parametrize(
+    "prompt",
+    [
+        "When does the PAN card expire?",
+        "Kavita's car insurance expiry date",
+        "When does the cover on the health policy end?",
+        "Which insurer issued the AC warranty card?",
+    ],
+)
+def test_a_date_question_needs_only_the_date(prompt):
+    assert wants_status(prompt) is False
+
+
+@pytest.mark.parametrize(
+    "prompt",
+    [
+        "Is Kavita's car insurance still valid?",
+        "Is the AC still under warranty?",
+        "the passport still valid",
+        "the AC under warranty",
+        "Is it still valid?",
+        "Is the passport still valod?",
+    ],
+)
+def test_a_status_question_needs_the_status_wording(prompt):
+    assert wants_status(prompt) is True
+
+
+def test_the_eval_decides_on_its_own_without_the_app_classifier():
+    import ast
+    import inspect
+
+    import evals.search_eval as search_eval
+    import evals.search_set as search_set
+
+    assert not hasattr(search_eval, "asks_status")
+    names = {
+        n.id
+        for n in ast.walk(ast.parse(inspect.getsource(search_set.wants_status)))
+        if isinstance(n, ast.Name)
+    }
+    assert "household_vault" not in names and "asks_status" not in names
+    tree = ast.parse(Path(search_eval.__file__).read_text())
+    imported = {a.name for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) for a in n.names}
+    assert "asks_status" not in imported
+
+
+def test_search_metrics_report_the_vectors_off_ranking_and_the_smoke_floors_it():
+    import tomllib
+
+    from evals.runner import ROOT, search_metrics
+
+    names = ("top1", "top3", "answer_correct", "citation_accuracy", "list_reading")
+    names += ("list_precision", "list_recall", "declined_when_answerable", "declined_when_none")
+    summary = {n: {"all": 1.0} for n in names}
+    summary["quick_off_top1"] = {"all": 0.4}
+    summary["quick_off_top3"] = {"all": 0.6}
+    summary.update(kinds={}, readings_missing=0, vectors_missing=0, expected_filed_but_not=0)
+    summary["secrets_found"] = 0
+    got = search_metrics(summary)
+    assert got["quick_off_top1"] == 0.4 and got["quick_off_top3"] == 0.6
+    floors = tomllib.loads((ROOT / "evals" / "thresholds.toml").read_text())["search_smoke"]
+    assert "quick_off_top3" in floors["min"]

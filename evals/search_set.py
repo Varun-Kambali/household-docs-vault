@@ -319,6 +319,47 @@ ASK: dict[str, Ask] = {
     STATUS_VALID: ("Is {s} still valid?", "{sn} still valid"),
     STATUS_WARRANTY: ("Is {s} still under warranty?", "{sn} under warranty"),
 }
+
+
+def _tail(template: str) -> tuple[str, ...]:
+    """The words a template says after its subject: "Is {s} still valid?" gives (still, valid)."""
+    after = re.split(r"\{sn?\}", template.casefold().rstrip("?"))[-1]
+    return tuple(after.split())
+
+
+# What marks a status question, read off the status templates above; a date question's
+# templates ("When does {s} expire?", "{sn} expiry date") never end in these words.
+STATUS_TAILS: tuple[tuple[str, ...], ...] = tuple(
+    dict.fromkeys(
+        _tail(t) for key in (STATUS_VALID, STATUS_WARRANTY) for t in (ASK[key][0], ASK[key][1])
+    )
+)
+
+
+def _near(word: str, want: str) -> bool:
+    """The word as typed, or with the one letter slip the typo style makes (drop, double, swap)."""
+    if word == want:
+        return True
+    if len(want) < 5 or abs(len(word) - len(want)) > 1:
+        return False
+    if len(word) == len(want):
+        return sum(a != b for a, b in zip(word, want, strict=True)) == 1
+    short, long = sorted((word, want), key=len)
+    return any(long[:i] + long[i + 1 :] == short for i in range(len(long)))
+
+
+def wants_status(prompt: str) -> bool:
+    """Whether the question asks if the document still holds (the status wording), judged from
+    the builder's own templates and not from the app. "Is {s} still valid?" and "{s} still valid"
+    do; "When does {s} expire?" asks only for the date."""
+    words = re.sub(r"[?.!]+$", "", prompt.strip()).casefold().split()
+    return any(
+        len(words) > len(tail)
+        and all(_near(w, t) for w, t in zip(words[-len(tail) :], tail, strict=True))
+        for tail in STATUS_TAILS
+    )
+
+
 # Fields a lookup may ask for. Names, addresses, lists and secrets (a card's number and CVV)
 # are never asked.
 ASKABLE: tuple[str, ...] = (

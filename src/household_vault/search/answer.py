@@ -323,14 +323,16 @@ def _where_bought(fields: dict[str, Any]) -> str:
     return text
 
 
-def _text_of(doc: DocumentRow, name: str, kind: FieldKind, today: date) -> str | None:
+def _text_of(
+    doc: DocumentRow, name: str, kind: FieldKind, today: date, status: bool = True
+) -> str | None:
     value = doc.fields[name]
     if kind == "date":
         day = _as_date(value)
         if day is None:
             return None
         expiry = DATE_ROLES[doc.doc_type].get("expiry")
-        if name == expiry and doc.doc_type in STATUS_TYPES:
+        if status and name == expiry and doc.doc_type in STATUS_TYPES:
             return (
                 f"Yes, until {format_date(day)}."
                 if day >= today
@@ -365,15 +367,16 @@ def _supporting(
 
 def weak_match(query: Query, rows: Sequence[Row]) -> bool:
     """Whether the rows are too thin to answer from. A query with residual words needs a row
-    that matches them (a keyword hit or a vector score of MIN_VECTOR or more). A query with no
+    that matches them (a keyword hit or a vector score of MIN_VECTOR or more); the row tested is
+    the one the answer comes from, not any row. A query with no
     filter behind it also needs a top row with some evidence. A row the filters found is a real
     candidate on its own only when the query has no residual words."""
     if not rows:
         return False
-    if query.words.strip() and not any(r.word_hit or r.vector >= MIN_VECTOR for r in rows):
-        return True
     # the row an answer would come from: the best one that passes the person and type filters
     top = next((r for r in rows if _fits(query, r)), rows[0])
+    if query.words.strip() and not (top.word_hit or top.vector >= MIN_VECTOR):
+        return True
     return not _filtered(query) and top.score < MIN_FUSED and len(top.lines) < MIN_KEYWORD
 
 
@@ -388,24 +391,28 @@ def compose(
     query: Query, rows: Sequence[Row], store: Store, today: date
 ) -> Answer | NoAnswer | None:
     """The answer to a lookup, read from the top row's stored fields; `None` for a list, or a
-    find or a lookup that names no field and has evidence (they show rows only). A lookup that
-    names a person the household does not hold is declined.
+    find or a lookup that names no field and has evidence (they show rows only).
 
-    Weak evidence (`weak_match`) is declined with the closest files, for a find as well.
+    A find or a lookup is declined, with the closest files, when it names a person the household
+    does not hold (`unknown_person`), when no row is for the person and type asked
+    (`no_documents`, also for no rows) or when the evidence is weak (`weak_match`).
     """
     if query.intent == "list":
         return None
     closest = [r.rel_path for r in rows[:3]]
-    if query.intent == "lookup" and any(u.startswith("person:") for u in query.unread):
+    if any(u.startswith("person:") for u in query.unread):
         # a person the household does not hold: an empty person filter would answer from
         # whoever's document ranks first, which is another member's value
         return NoAnswer("unknown_person", closest)
-    if weak_match(query, rows):
-        return NoAnswer("weak_match", closest)
-    if query.intent != "lookup" or query.field is None:
-        return None
     if not rows:
         return NoAnswer("no_documents", [])
+    if weak_match(query, rows):
+        return NoAnswer("weak_match", closest)
+    if (query.people or query.types) and not any(_fits(query, r) for r in rows):
+        # the rows come from the unfiltered votes; none is for the person and type asked
+        return NoAnswer("no_documents", closest)
+    if query.intent != "lookup" or query.field is None:
+        return None
     # The unfiltered votes may put a document the reading excluded on top; an answer comes from
     # the best row that passes the person and type filters, or there is none.
     top = next((r for r in rows if _fits(query, r)), None)
@@ -419,7 +426,7 @@ def compose(
     if name is None or doc.fields.get(name) in (None, "", []):
         return NoAnswer("no_field", closest)
     kind = field_kind(schema, name)
-    text = _text_of(doc, name, kind, today)
+    text = _text_of(doc, name, kind, today, query.status is not False)
     if text is None:
         return NoAnswer("no_field", closest)
     refs = _supporting(doc, name, kind, store.lines_of(doc.id))
