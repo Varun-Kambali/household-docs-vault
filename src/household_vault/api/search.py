@@ -25,7 +25,7 @@ from household_vault.api.models import (
     SentenceOut,
 )
 from household_vault.app_state import AppState
-from household_vault.checks import luhn_valid
+from household_vault.checks import CARD_RUN, card_shaped
 from household_vault.doctypes import DocType
 from household_vault.reading.ollama import ModelUnavailable
 from household_vault.schemas import SCHEMAS
@@ -38,36 +38,6 @@ from household_vault.search.sentence import Sentence, apply_part, render, senten
 BAD_CHANGE = "That change is not one the sentence offers."
 
 
-_CARD_RUN = re.compile(r"(?<![\d])\d(?:[ .\-/]?\d){12,18}(?![\d])")
-
-
-def _between(digits: str, size: int, low: int, high: int) -> bool:
-    return low <= int(digits[:size]) <= high
-
-
-def card_shaped(digits: str) -> bool:
-    """Luhn-valid, with the length and leading digits of a card brand. An IMEI (15 digits, Luhn
-    valid) or a long policy number is not a card, so a search by it stays whole. checks.py has
-    the Luhn check and the published test numbers but no brand ranges, so the ranges are here."""
-    if not luhn_valid(digits):
-        return False
-    n = len(digits)
-    return (
-        (digits[0] == "4" and n in (13, 16, 19))  # Visa
-        or (n == 16 and (_between(digits, 2, 51, 55) or _between(digits, 4, 2221, 2720)))
-        or (n == 15 and digits[:2] in ("34", "37"))  # American Express
-        or (n == 16 and (digits[:2] in ("60", "65", "81", "82") or digits[:3] == "508"))  # RuPay
-        or (
-            16 <= n <= 19
-            and (digits[:4] == "6011" or digits[:2] == "65" or _between(digits, 3, 644, 649))
-        )  # Discover
-        or (  # Diners: 14 digits, and the 16 of the published test number
-            14 <= n <= 19 and (digits[:2] in ("36", "38") or _between(digits, 3, 300, 305))
-        )
-        or (16 <= n <= 19 and _between(digits, 4, 3528, 3589))  # JCB
-    )
-
-
 def mask_card_runs(text: str) -> str:
     """A prompt is not a place for a card number: a card-shaped run of 13 to 19 digits (spaces,
     dashes, dots or slashes between digits) keeps only its last four, so neither the reading
@@ -77,7 +47,7 @@ def mask_card_runs(text: str) -> str:
         digits = re.sub(r"\D", "", hit.group())
         return f"\u2022\u2022\u2022\u2022 {digits[-4:]}" if card_shaped(digits) else hit.group()
 
-    return _CARD_RUN.sub(hide, text)
+    return CARD_RUN.sub(hide, text)
 
 
 def drive_path(prefix: str, rel_path: str) -> str:
