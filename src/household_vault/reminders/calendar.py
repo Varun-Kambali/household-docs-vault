@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 CALENDAR_URL = "https://calendar.google.com/calendar/render"
 MAX_TITLE = 60
-_DIGITS = re.compile(r"[0-9]{4,}")
+_DIGITS = re.compile(r"\d{4,}")  # any script, so Devanagari or Kannada digits go too
 _PRIVATE_KINDS = frozenset({"identifier", "aadhaar", "gstin", "amount", "date"})
 
 

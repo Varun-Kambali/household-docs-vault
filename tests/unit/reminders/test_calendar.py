@@ -82,3 +82,11 @@ def test_a_due_without_a_calendar_rule_has_no_link(store):
              if r.rule == "card_payment_due"]  # fmt: skip
     assert found and calendar_link(found[0]) is None
     assert DocType.card_statement in RULES_BY_NAME["card_payment_due"].types
+
+
+def test_calendar_titles_drop_digit_runs_in_any_script(store):
+    add_doc(store, "d", "extended_warranty",
+            {"seller": "Croma Store १२३४", "end_date": "2027-03-14"}, ["x"])  # fmt: skip
+    title = title_of(RULES_BY_NAME["period_end"], doc_of(store, "d"), None)
+    assert not re.search(r"\d{4}", title)
+    assert title == "Cover ends for extended warranty, Croma Store"
