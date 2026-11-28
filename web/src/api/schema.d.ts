@@ -572,7 +572,11 @@ export interface paths {
     }
     /** Get Settings */
     get: operations['get_settings_v1_settings_reminders_get']
-    /** Put Settings */
+    /**
+     * Put Settings
+     * @description Replace the whole leads map: a rule left out goes back to its default, so the
+     *     settings dialog sends every rule.
+     */
     put: operations['put_settings_v1_settings_reminders_put']
     post?: never
     delete?: never
