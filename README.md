@@ -86,9 +86,11 @@ The quick finder (no prompt reading) has the right document in its first three f
 
 Type a short prompt in the box. The quick finder updates as you type, and Enter runs the full search, where a local model reads the prompt and code works out who, what and when. Every prompt stands alone; there is no chat and no history.
 
-- **Ask for one value:** `Is Ravi's passport still valid?` answers "Yes, until ..." with the page beside it and the line outlined.
-- **Find a document:** `Kavita marriage certificate` lists the matching files with type, person, key fields and path.
-- **List documents:** `Which insurance papers expire before June?` shows how the app read the question as a sentence, with each part a menu, so a person, a type or a date can be changed without asking the model again. The sidebar also lists each area (insurance, purchases, identity and so on) in one click.
+These examples work on the synthetic vault that `make vault` fills (three insurance policies, each also as a photo, a scan and a locked PDF).
+
+- **Ask for one value:** `What is Suresh's health policy number?` answers with the number, the page beside it and the line outlined. `When does Kiran's vehicle insurance end?` answers with the date.
+- **Find a document:** `Suresh health policy` lists the matching files with type, person, key fields and path.
+- **List documents:** `Which insurance policies expire before March 2027?` shows how the app read the question as a sentence, with each part a menu, so a person, a type or a date can be changed without asking the model again. The sidebar also lists each area (insurance, purchases, identity and so on) in one click.
 
 An answer is built by code from the document's stored fields and is shown only when a line on the page prints it, and the answer cites its page and lines. When there is no support, or the question names someone outside the household, the app says "No direct answer" and shows the closest files. ID numbers show their last four digits until I choose to show them. Card numbers and passwords are never searched; they stay in the encrypted file.
 

@@ -21,4 +21,4 @@ An answer is only worth trusting when I can see where it came from, so the app h
 - **Render once and keep PNGs on disk.** A second copy of every page, including ID pages, that I would then have to protect and clear.
 
 ## Consequences
-A page costs about 0.3 s to draw the first time at 800 px wide (a live check on the dev vault, not a committed result), and every page load is a request. That is fine on one Mac, and a cache would need the same protection as the files.
+A page takes a moment to draw the first time, and every page load is a request. That is fine on one Mac, and a cache would need the same protection as the files.
