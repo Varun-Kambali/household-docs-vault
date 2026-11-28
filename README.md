@@ -23,7 +23,11 @@ Every feature is in [docs/requirements.md](docs/requirements.md). The design is 
 
 ## Results
 
-Intake and reading (M2), scored on the test split of a synthetic set of 187 documents. Search, reminders and medical notes are later milestones and have no numbers yet.
+Intake and reading (M2) and search (M3), each scored on the test split of a synthetic set. Reminders and medical notes are later milestones and have no numbers yet.
+
+### Intake and reading (M2)
+
+Test split of 187 documents.
 
 Run 2026-11-20 on Apple M5, 16 GB, commit b2a1fde, 187 documents. Models: {"recorded_engines": ["ollama:qwen3-vl:4b"]}.
 
@@ -60,6 +64,36 @@ Definitions of every measure are in `evals/README.md`. The numbers above are cop
 
 The reading numbers are a replay of the test run's recordings through the final code (`evals/results/2026-11-20_reading_test_b2a1fde.json`). The run itself, before the spelling snap, is `..._bcfd85d.json`: fields exactly right on photos 96.7%, person accuracy 92.4%, 0.00 silent misfiles. Both are on synthetic pages. The case study has the story: [docs/case-study.md](docs/case-study.md).
 
+### Search (M3)
+
+Test split of `search-v1`: 210 questions (100 lookups, 50 finds, 40 lists, 20 with no answer) on a vault of 177 synthetic documents. One live run on 2026-11-28, commit 93a99db, Apple M5 with 16 GB, `qwen3:4b` for reading the prompt and `qwen3-embedding:0.6b` for vectors. The numbers are copied from `evals/results/2026-11-28_search_test_93a99db.json`; the recordings are in `evals/recordings/search-v1/test/`. Prompts and thresholds were tuned on the validation split, and this was the only run on the test split.
+
+| Measure | Target | Result |
+|---|---|---|
+| Right document first, lookups and finds (150) | 85% | 98.0% |
+| Right document in the first three | 95% | 100.0% |
+| Lookups answered right (100) | 85% | 90.0% |
+| Answers whose page and line are the true ones (91 answers) | 95% | 100.0% |
+| Lists read into the right query (40) | 80% | 82.5% |
+| Questions with no answer that the app declined (20) | 75% | 85.0% |
+| Answerable questions the app declined (150) | 10% or less | 8.7% |
+| Seconds for a full search, median and 95th percentile | 4 and 5 | 3.24 and 3.84 |
+| Secrets found by the leak scan, search tables included | 0 | 0 |
+
+The quick finder (no prompt reading) has the right document in its first three for 94.7% of lookups and finds, at a median of 0.038 s. With Ollama off it falls back to keywords: 52.7% first and 83.3% in the first three. The case study splits these by where the documents come from and lists the limits.
+
+## Search
+
+Type a short prompt in the box. The quick finder updates as you type, and Enter runs the full search, where a local model reads the prompt and code works out who, what and when. Every prompt stands alone; there is no chat and no history.
+
+These examples work on the synthetic vault that `make vault` fills (three insurance policies, each also as a photo, a scan and a locked PDF).
+
+- **Ask for one value:** `What is Suresh's health policy number?` answers with the number, the page beside it and the line outlined. `When does Kiran's vehicle insurance end?` answers with the date.
+- **Find a document:** `Suresh health policy` lists the matching files with type, person, key fields and path.
+- **List documents:** `Which insurance policies expire before March 2027?` shows how the app read the question as a sentence, with each part a menu, so a person, a type or a date can be changed without asking the model again. The sidebar also lists each area (insurance, purchases, identity and so on) in one click.
+
+An answer is built by code from the document's stored fields and is shown only when a line on the page prints it, and the answer cites its page and lines. When there is no support, or the question names someone outside the household, the app says "No direct answer" and shows the closest files. ID numbers show their last four digits until I choose to show them. Card numbers and passwords are never searched; they stay in the encrypted file.
+
 ## Architecture
 
 See [docs/architecture.md](docs/architecture.md) for the diagram, the data flow for one document and the threat table.
@@ -72,10 +106,12 @@ See [docs/architecture.md](docs/architecture.md) for the diagram, the data flow 
 | Storage | Files in a Drive-synced folder, SQLite on the Mac | [ADR 0002](docs/decisions/0002-files-live-in-google-drive.md), [ADR 0006](docs/decisions/0006-database-on-the-mac.md) |
 | Secrets | KeePass file (KDBX4) | [ADR 0004](docs/decisions/0004-secrets-in-a-keepass-file.md) |
 | Reading | Apple Vision text recognition (`ocrmac`) | [ADR 0008](docs/decisions/0008-reading-engine.md) |
+| Search index | SQLite FTS5 and exact vectors in memory (`qwen3-embedding:0.6b`), fused by reciprocal rank | [ADR 0018](docs/decisions/0018-the-search-index-in-sqlite.md) |
+| Prompt reading | qwen3:4b fills slots; code resolves people, dates and types | [ADR 0019](docs/decisions/0019-the-model-reads-the-prompt-code-does-the-rest.md) |
 | Field filling | qwen3-vl:4b through Ollama, on the page image | [ADR 0009](docs/decisions/0009-extraction-model-and-runtime.md) |
 | Visit transcripts | Parakeet TDT 0.6B v2 (`parakeet-mlx`), medicine names checked | [ADR 0011](docs/decisions/0011-transcription-model.md) |
 | Fine-tune | PyTorch, Transformers, PEFT; merged and converted to GGUF for Ollama | [ADR 0007](docs/decisions/0007-fine-tune-in-pytorch.md), [ADR 0010](docs/decisions/0010-fine-tune-path.md) |
-| Frontend | React, TypeScript, Vite; types generated from the API's own description | Served by the API from one origin, with no fonts or scripts from anywhere else |
+| Frontend | React, TypeScript, Vite; types generated from the API's own description | Served by the API from one origin, with no fonts or scripts from anywhere else; the page is drawn by the server ([ADR 0022](docs/decisions/0022-the-apps-own-page-viewer.md)) |
 
 ## Quickstart
 
@@ -87,7 +123,7 @@ make test
 make eval-smoke
 ```
 
-The app is work in progress: the screens come in a later milestone, so for now it is an API and a worker.
+`make setup` installs the Python and the web packages. To try the app on the synthetic vault, see Usage: `make vault` then `make run`. The app is work in progress: reminders, the phone app and medical notes come in later milestones.
 
 ## Usage
 
@@ -121,7 +157,9 @@ make eval-smoke   # 22 val documents from committed recordings, no model, runs i
 make eval         # the test split on real models (needs Ollama and the two models in .env.example; about 2 hours on an M5)
 ```
 
-`make eval-smoke` fails if any number drops below `evals/thresholds.toml`. `make eval` writes a results file and `summary.md` into `evals/results/`.
+`make eval-smoke` fails if any number drops below `evals/thresholds.toml`, and the same smoke run replays recorded prompt readings and vectors for search. `make eval` writes a results file and `summary.md` into `evals/results/`.
+
+Search is scored on `evals/datasets/search-v1` ([ADR 0021](docs/decisions/0021-the-search-v1-eval-set.md)): 210 questions a split about a vault of the split's `eval-v1` photos and two more synthetic sets. `make eval-search` runs the test split on real models and needs Ollama with `qwen3:4b` and `qwen3-embedding:0.6b`; it was run once, and its results are committed.
 
 ## Testing
 
@@ -161,6 +199,11 @@ docs/                  requirements, architecture, case study, decisions
 - [0015](docs/decisions/0015-document-type-from-text-and-title-cues.md) The document type comes from the page's text, and title cues only check the model.
 - [0016](docs/decisions/0016-synthetic-eval-set-v1.md) A synthetic eval set of 50 document types, scored once on a held-out split.
 - [0017](docs/decisions/0017-values-read-as-printed-and-the-spelling-snap.md) Values are read as printed and converted by code, and spelling slips are fixed from the page's own text.
+- [0018](docs/decisions/0018-the-search-index-in-sqlite.md) The search index lives in SQLite, with exact vectors held in memory.
+- [0019](docs/decisions/0019-the-model-reads-the-prompt-code-does-the-rest.md) The model reads the prompt, and code works out the rest.
+- [0020](docs/decisions/0020-answers-from-fields-with-a-located-line.md) An answer comes from stored fields and a located line, or the app says there is none.
+- [0021](docs/decisions/0021-the-search-v1-eval-set.md) The search-v1 eval set, tuned on validation and scored once on test.
+- [0022](docs/decisions/0022-the-apps-own-page-viewer.md) The app draws the page itself: server-rendered PNGs and the line outline.
 
 ## Limitations and next steps
 
@@ -170,7 +213,9 @@ docs/                  requirements, architecture, case study, decisions
 - Filing a photo takes a median of 51 seconds and up to 112 on my Mac. It runs in the background.
 - A card photo dropped in Drive's `Inbox` stays there until its question is answered, and Drive keeps deleted files in its trash for 30 days. More secrets limits are in [ADR 0014](docs/decisions/0014-secrets-in-the-filing-pipeline.md).
 - English only, a single user, and the app needs the Mac to be awake for phone access.
-- Next: search (M3). The screens, search, reminders, medical notes and the fine-tune are not built yet.
+- Search (M3) limits: a bare outsider's name with no possessive is not caught; place, area and date range are soft filters, so a shop the vault does not hold can be answered from another shop's invoice; a card number typed into the box is masked only once it is complete; list prompts that are only a place name can be read as a find. Details in the [case study](docs/case-study.md) and [ADR 0020](docs/decisions/0020-answers-from-fields-with-a-located-line.md).
+- Search scores are on synthetic documents and template-made questions.
+- Next: everyday views and the phone app (M4). Reminders, medical notes and the fine-tune are not built yet.
 
 ## What I learned
 

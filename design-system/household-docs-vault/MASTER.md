@@ -52,7 +52,7 @@ One brand hue (blue, hue 255) used for the primary action, focus, selection and 
 
 | Token | OKLCH | Hex | Why fixed |
 |---|---|---|---|
-| `--color-cite` | `oklch(0.52 0.15 255)` | `#1F68BC` | The citation box is drawn on the page image, which stays light in dark mode. 5.25:1 on white paper; the dark-mode blue would be 2.18:1. |
+| `--color-cite` | `oklch(0.52 0.15 255)` | `#1F68BC` | The citation box is drawn on the page image, which stays light in dark mode. 5.56:1 on white paper and 5.25:1 on paper at lightness 0.98; the dark-mode blue would be 2.48:1 on white. |
 | `--color-cite-fill` | `oklch(0.52 0.15 255 / 0.14)` | | Fill inside the citation box, so the printed text stays readable. |
 
 ## Type
@@ -101,7 +101,7 @@ Scale ratio 1.2 from 16. Sentence case for every heading and button. At most thr
 - 150 ms for colour changes on hover and press. 200 ms for a panel or inspector opening, with `transform` and `opacity` only. Never `transition: all`.
 - No scroll reveals, no animation library, no looping or pulsing motion.
 - `prefers-reduced-motion: reduce` removes movement and keeps the colour changes.
-- Waiting for the full reading (about 3.5 s) shows the quick results at once and a text line ("Reading your question"). Nothing pulses.
+- Waiting for the full reading (a median of 3.24 s, `evals/results/2026-11-28_search_test_93a99db.json`) shows the quick results at once and a text line ("Reading your question"). Nothing pulses.
 
 ## Anti-patterns (do not use)
 

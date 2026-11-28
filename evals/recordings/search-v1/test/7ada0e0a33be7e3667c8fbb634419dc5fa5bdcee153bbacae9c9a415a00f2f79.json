@@ -1,0 +1,1 @@
+{"system_sha256": "9eb6bf2a3afa6f278fa9b16a8155c71d82633855cceb9f99246ef94fbf30d0ae", "model": "ollama:qwen3:4b", "raw": "{\n  \"intent\": \"lookup\",\n  \"people\": [],\n  \"types\": [\"discharge_summary\"],\n  \"areas\": [],\n  \"field\": \"department\",\n  \"date\": null,\n  \"place\": null,\n  \"words\": \"Hill Park Medical\"\n}"}

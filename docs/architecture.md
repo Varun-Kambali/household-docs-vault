@@ -19,17 +19,27 @@ flowchart LR
   F --> K
   F --> REC[(Records in _system)]
   F --> DB[(App database on the Mac)]
+  F --> IDX[(Search index: FTS5 and vectors)]
   F --> D
   G{{Card gate: is_card_photo}} -.-> F
   G -.-> API
-  API[API on localhost] --> DB
+  API[API on localhost, serves the web app] --> DB
   API --> Q
   API --> K
+  WEB[Web app: search, viewer, lists, Inbox] --> API
+  API --> PR[Prompt reading: qwen3:4b fills slots]
+  PR --> RES[Resolve: people, dates, types by code]
+  RES --> RET[Retrieve: filters, keywords, vectors, identifiers, RRF]
+  RET --> IDX
+  RET --> CMP[Compose: answer from stored fields and a located line]
+  CMP --> API
+  API --> PG[Page PNGs and line boxes]
   EV[Evals and CI smoke run] -. replay recordings .-> R
+  EV -. replay recordings .-> PR
   EV -. real worker and filer .-> F
 ```
 
-Not built yet, and drawn in the plan only: the index, reminders, the person PDFs, the web app, tracing and the transcriber (M3 to M5).
+Not built yet, and drawn in the plan only: reminders, the person PDFs, tracing and the transcriber (M4 and M5).
 
 ## Components
 
@@ -42,17 +52,36 @@ Built in M2:
 - **Decide.** A pure function from a reading, the household and what is already filed to a decision: owner, linked people, folder, date, description, or one question. Owner rules, required fields and copy keys are per type ([ADR 0013](decisions/0013-who-owns-a-document-and-when-to-ask.md)).
 - **Filer.** Copies the file to its folder, confirms the copy's SHA-256, writes the record JSON and the database rows, then clears `Inbox`. Every move writes its intent first, so a stop at any point is finished or rolled back by `recover` from the database and the files. Undo moves a file back and removes its record. Discard only deletes when another copy verifies by hash ([ADR 0012](decisions/0012-record-json-and-database.md)).
 - **Secrets store and gate.** `Secrets.kdbx` is written only by the app. The master password unlocks it for 10 minutes in memory. Card photos that arrive while it is locked wait and are filed when it opens. One gate, `is_card_photo`, is asked by every route that serves, moves or files raw bytes ([ADR 0014](decisions/0014-secrets-in-the-filing-pipeline.md)).
-- **API.** Python and FastAPI with Pydantic models at every boundary. It listens on localhost only and refuses cross-site posts and a body that grows past its limit. It lists activity and Inbox progress, the `Needs a look` questions and answers (one at a time or many), unlock, Undo, retry, document files and the card upload. The screens that call it come in M3.
+- **API.** Python and FastAPI with Pydantic models at every boundary. It listens on localhost only and refuses cross-site posts and a body that grows past its limit. It lists activity and Inbox progress, the `Needs a look` questions and answers (one at a time or many), unlock, Undo, retry, document files and the card upload, and in M3 search, lists, page images and line boxes. It also serves the built web app from the same origin.
 - **Evals and the CI smoke run.** A reading eval and a filing eval score the reader and the real worker on `eval-v1` ([ADR 0016](decisions/0016-synthetic-eval-set-v1.md)). Recordings of model answers let the filing eval, and a 22-document smoke run in CI, replay a run with no model.
 
-Planned, from M3:
+Built in M3:
 
-- **Transcriber.** On the Mac only. Parakeet TDT 0.6B v2, through `parakeet-mlx`, turns a visit recording into a timestamped transcript. Each medicine name in the draft checkup is matched against that visit's prescription and a list of known medicine names, and a name that matches neither waits for my confirmation ([ADR 0011](decisions/0011-transcription-model.md)).
-- **Index.** SQLite full-text search for keywords and a vector index in the same database for meaning.
+- **Search index.** SQLite FTS5 over each document's stored line text and fields, and an exact vector index (`qwen3-embedding:0.6b`, 1,024 dimensions) held in memory. Both are updated in the filer's own transactions and by embed jobs in the worker ([ADR 0018](decisions/0018-the-search-index-in-sqlite.md)).
+- **Prompt reading.** `qwen3:4b` sees only the prompt and a fixed vocabulary and fills slots (intent, people, types, field, date phrase, place) as the words the prompt used ([ADR 0019](decisions/0019-the-model-reads-the-prompt-code-does-the-rest.md)).
+- **Resolve.** Code turns the slots into a query: people from the household, dates from a date parser that knows the year end and the financial year, types from the type words, and the list cue with a question guard. Anything it cannot read is reported, never guessed.
+- **Retrieve.** Filters on the stored fields, the keyword ranking, the vector ranking and, for an identifier-shaped word, a field-rows ranking, fused by reciprocal rank fusion into one row per document.
+- **Compose.** Code writes the answer from the best row that fits the person and type, shows it only with a located line on the page, and otherwise says there is no direct answer and lists the closest files ([ADR 0020](decisions/0020-answers-from-fields-with-a-located-line.md)). Lists are returned with a sentence that says how the prompt was read, and each part can be changed without another model call.
+- **Pages.** The server renders each page to a PNG and returns its line boxes, so the viewer needs no PDF viewer under the content security policy, and a card is drawn only from its masked copy ([ADR 0022](decisions/0022-the-apps-own-page-viewer.md)).
+- **Web app.** React, TypeScript and Vite, built once and served by the API from one origin with `default-src 'self'`: no fonts, scripts or images from anywhere else. Screens: search with the answer beside the page, a document viewer with the outlined line, lists and areas, and the Inbox with its questions, password and secrets dialogs. Types are generated from the API's own description. Keyboard first on the Mac; the phone layout is checked and the installable phone app is M4.
+- **Search eval.** `search-v1` and its runner score search on a synthetic vault of a split, with recordings of readings and vectors so CI replays a run with no model ([ADR 0021](decisions/0021-the-search-v1-eval-set.md)).
+
+Planned, from M4:
+
+- **Transcriber (M5).** On the Mac only. Parakeet TDT 0.6B v2, through `parakeet-mlx`, turns a visit recording into a timestamped transcript. Each medicine name in the draft checkup is matched against that visit's prescription and a list of known medicine names, and a name that matches neither waits for my confirmation ([ADR 0011](decisions/0011-transcription-model.md)).
 - **Reminders.** Built from extracted dates with lead times per kind of date.
 - **PDF writer.** HTML templates rendered to PDF for checkups, medical histories, What we have pages and the emergency sheet (the emergency sheet exists as a command already).
-- **Web app.** React, TypeScript and Vite, installable on the phone, keyboard-first on the Mac, with a page viewer that draws line outlines.
+- **Phone app.** The same screens installable on the phone, reached over Tailscale.
 - **Tracing.** Local tracing of each pipeline run and search, with IDs masked and secrets never recorded.
+
+## Data flow for one search
+
+1. I type in the box. The quick finder runs on every keystroke with no model call: keywords and vectors, fused, as rows with type, person, key fields and path.
+2. On Enter the full search runs. `qwen3:4b` reads the prompt into slots, code resolves them, and the app either looks up one value, finds a document or lists documents.
+3. Retrieval filters on the stored fields and fuses the keyword and vector rankings.
+4. Compose writes the answer from the best row that fits the person and type, and finds the line on the page that prints it.
+5. The screen shows the answer beside the page, with the line outlined and its path. A list shows its sentence, with each part a menu. When nothing supports an answer, it says so and shows the closest files.
+6. The prompt is never stored or logged; only its length reaches a log.
 
 ## Data flow for one document
 
@@ -88,6 +117,8 @@ Planned, from M3:
 | Lost or stolen Mac | Setup checks that FileVault disk encryption is on; the KeePass file needs the master password |
 | My Google account is broken into | Plain documents are readable (an accepted trade-off, ADR 0002); `Secrets.kdbx` is not. The README recommends 2-step verification on the Google account |
 | A misread document filed in the wrong place | Rules send doubtful files to `Needs a look` (ADR 0013); Undo; the misfiling rate is a tracked eval metric (0 silent misfiles per 100 on the test split) |
+| A search answers from someone else's document | An unknown person declines; an answer needs a located line and a row that fits the person and type; the soft place filter is a known gap (ADR 0020) |
+| A card number typed into the search box | Masked to its last four once complete, in the address and before any model sees it; the digits before it is complete are a known window (ADR 0020) |
 | Real data reaches the public repo or a cloud model | The repo holds code and synthetic data only; the cloud comparison runs only on the synthetic set and refuses the real vault path |
 | Accidental loss | Originals are never changed; Undo; nothing is deleted outside Drive's own trash without a confirm |
 
@@ -112,3 +143,8 @@ The reasoning behind the main choices is in `docs/decisions/`:
 - 0015 The document type comes from the page's text, and title cues only check the model
 - 0016 A synthetic eval set of 50 document types, scored once on a held-out split
 - 0017 Values are read as printed and converted by code, and spelling slips are fixed from the page's own text
+- 0018 The search index lives in SQLite, with exact vectors held in memory
+- 0019 The model reads the prompt, and code works out the rest
+- 0020 An answer comes from stored fields and a located line, or the app says there is none
+- 0021 The search-v1 eval set, tuned on validation and scored once on test
+- 0022 The app draws the page itself: server-rendered PNGs and the line outline
