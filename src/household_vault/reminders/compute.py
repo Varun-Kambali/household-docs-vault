@@ -10,6 +10,7 @@ from typing import Any
 
 from household_vault.db import DocumentRow, Store
 from household_vault.periods import card_expiry_end, part_end
+from household_vault.reminders.calendar import title_of
 from household_vault.reminders.rules import (
     RULES,
     RULES_BY_NAME,
@@ -115,11 +116,6 @@ def _dues(rule: Rule, doc: DocumentRow) -> list[tuple[date, str | None]]:
     return [] if day is None else [(day, None)]
 
 
-def _title(rule: Rule, doc: DocumentRow, part: str | None) -> str:
-    label = doc.doc_type.value.replace("_", " ")
-    return f"{rule.verb} {label}" + (f" ({part})" if part else "")
-
-
 def _people(store: Store, doc_id: str) -> tuple[str, ...]:
     return tuple(person for person, _role in store.people_of(doc_id))
 
@@ -167,7 +163,7 @@ def reminders(store: Store, today: date, settings: ReminderSettings) -> list[Rem
                         found.append(
                             Reminder(
                                 key, rule.name, doc.id, _people(store, doc.id),
-                                _title(rule, doc, part), due, fire, part, rule.calendar,
+                                title_of(rule, doc, part), due, fire, part, rule.calendar,
                                 False,
                             )
                         )  # fmt: skip
