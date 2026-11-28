@@ -1,6 +1,6 @@
 # Requirements
 
-Status: draft for v1; M2 is ticked. Tick a box when the feature works end to end from a fresh clone.
+Status: draft for v1; M2 and M3 are ticked. Tick a box when the feature works end to end from a fresh clone.
 
 ## Problem
 
@@ -34,18 +34,18 @@ One user: me, keeping papers for my family. Family members appear as people in t
 
 ### M3 Search
 
-- [ ] A search box is the home screen, and results update as I type. Every prompt stands alone; there is no thread.
-- [ ] Answer beside the page: the answer on one side, the page on the other with the supporting lines outlined, the file path and page, Open at page and Show in folder.
-- [ ] Quick finder: matching files as rows with type, person, key fields and path, with arrow keys, Enter to open and Cmd+Enter to show in the folder.
-- [ ] Results of a list prompt sit in date order with path.
-- [ ] Show in folder reveals the file in Finder on the Mac and copies the Drive path on the phone. Open at page uses the app's own viewer on both.
-- [ ] Adjustable sentence for lists: the app shows how it read the prompt ("Showing insurance and warranties for everyone that expire before 31 Mar 2027"), each part is a dropdown, and changing one updates the list without another model call.
-- [ ] A local model turns the prompt into a structured query under a fixed JSON schema.
-- [ ] Retrieval combines filters on extracted fields, keyword search over page text and vector search over page text.
-- [ ] When the evidence is weak the app says "No direct answer" and shows the closest files.
-- [ ] Secrets are never searched by content; a card's record can be found, and its secrets need the master password.
-- [ ] ID numbers are shown masked (last 4 digits) until tapped.
-- [ ] Search scores are committed.
+- [x] A search box is the home screen, and results update as I type. Every prompt stands alone; there is no thread.
+- [x] Answer beside the page: the answer on one side, the page on the other with the supporting lines outlined, the file path and page, Open at page and Show in folder.
+- [x] Quick finder: matching files as rows with type, person, key fields and path, with arrow keys, Enter to open and Cmd+Enter to show in the folder.
+- [x] Results of a list prompt sit in date order with path.
+- [x] Show in folder reveals the file in Finder on the Mac and copies the Drive path on the phone. Open at page uses the app's own viewer on both. (Built in M3: the Mac reveal, and the Drive-path answer for any request that does not come from the Mac. The phone itself is M4.)
+- [x] Adjustable sentence for lists: the app shows how it read the prompt ("Showing insurance and warranties for everyone that expire before 31 Mar 2027"), each part is a dropdown, and changing one updates the list without another model call.
+- [x] A local model turns the prompt into a structured query under a fixed JSON schema.
+- [x] Retrieval combines filters on extracted fields, keyword search over page text and vector search over page text.
+- [x] When the evidence is weak the app says "No direct answer" and shows the closest files.
+- [x] Secrets are never searched by content; a card's record can be found, and its secrets need the master password.
+- [x] ID numbers are shown masked (last 4 digits) until tapped.
+- [x] Search scores are committed: `evals/results/2026-11-28_search_test_93a99db.json`, from one run on the test split (ADR 0021).
 
 ### M4 Everyday views and phone
 
@@ -115,31 +115,31 @@ The project fails, even if it works, if:
 
 ## Success metrics
 
-Targets are scored on the held-out synthetic set, and each milestone's "done when" checks against them. The M1 baselines come from the spike set (`docs/spikes/`), which is smaller. The M2 column is the `test` split of `eval-v1` (ADR 0016), run once: where the live run and the re-measure by replay differ (ADR 0017), the replay is shown first and the live run in brackets. The files are `evals/results/2026-11-20_reading_test_b2a1fde.json` (replay) and `..._bcfd85d.json` (live), with the filing eval in the two `filing_test` files beside them. Targets that belong to a later milestone are left as they were.
+Targets are scored on the held-out synthetic set, and each milestone's "done when" checks against them. The M1 baselines come from the spike set (`docs/spikes/`), which is smaller. The M2 column is the `test` split of `eval-v1` (ADR 0016), run once: where the live run and the re-measure by replay differ (ADR 0017), the replay is shown first and the live run in brackets. The files are `evals/results/2026-11-20_reading_test_b2a1fde.json` (replay) and `..._bcfd85d.json` (live), with the filing eval in the two `filing_test` files beside them. The M3 column is the `test` split of `search-v1` (ADR 0021), run once on commit 93a99db: `evals/results/2026-11-28_search_test_93a99db.json`. Targets that belong to a later milestone are left as they were.
 
-| Metric | Target | M1 baseline | M2, test split |
-|---|---|---|---|
-| Secrets found in the files the app writes (database, records, logs, the activity CSV, results, prompts, filed copies) | 0 | not measured | 0 |
-| Silent misfiles in the held-out set | At most 1 per 100 documents | not measured | 0.00 per 100 |
-| Document type accuracy | 97% or more; a document the app is less sure of goes to `Needs a look` | not measured | 100.0% |
-| Person accuracy | 95% or more | not measured | 100.0% (live run 92.4%) |
-| Field exact match and F1, per field and type | Exact match 92% or more overall on photos, and 85% or more for each core type | 94.2% on photos with the chosen model (ADR 0009) | 99.7% on photos (live 96.7%); lowest core type lab report 95.8% (live: four core types at 75% to 78%); F1 96.6% (live 93.3%) |
-| Search top-1 and top-3 hit rate | 85% or more top-1, 95% or more top-3 | not measured | M3 |
-| Citation accuracy | 95% or more of answers cite the page that holds the value | not measured | M3 |
-| Line-box accuracy for citations | 95% or more of the true lines found on photo pages | 96.1% mean (ADR 0008) | 98.5% (live 98.7%) |
-| Share of files sent to `Needs a look` | 15% or less, scored on documents that need no question by design, with the raw share beside it | not measured | 0.0% on those documents (live 6.8%); 13.9% of all documents (live 19.8%) |
-| Duplicate detection | 95% or more of duplicates caught, and no two different documents merged | not measured | 100.0% of 16 copies caught, 0 wrong merges |
-| List-query reading accuracy | 80% or more | not measured | M3 |
-| Answers right, of lookups | 85% or more | not measured | M3 |
-| Answerable questions declined, of lookups and finds | 10% or less | not measured | M3 |
-| Questions with no answer declined | 75% or more | not measured | M3 |
-| Seconds for a full search on the Mac with qwen3:4b | Median 4 or less, 95th percentile 5 or less | not measured | M3 |
-| Medical checkup field accuracy | 90% or more | not measured | M5 |
-| Disagreement flags caught | 90% or more | not measured | M5 |
-| Medicines saved wrong without my OK | 0 | 16 of 22 medicines right in the raw transcript (ADR 0011) | M5 |
-| Transcript word error rate | 6% or less | 4.18% (ADR 0011) | M5 |
-| Seconds a document on the Mac, filing in the background | Median 60 or less, and no document over 2 minutes | 35.0 median, 46.8 at most on photos (ADR 0009) | 50.6 median, 112.0 at most (live run; 12 of 187 documents took over 60 s) |
-| Cost per 1,000 documents | No API spend for the app; M6 reports the cloud model's cost beside the local ones | no API calls in M1 | no API calls |
+| Metric | Target | M1 baseline | M2, test split | M3, test split |
+|---|---|---|---|---|
+| Secrets found in the files the app writes (database, records, logs, the activity CSV, results, prompts, filed copies) | 0 | not measured | 0 | 0 (search tables included) |
+| Silent misfiles in the held-out set | At most 1 per 100 documents | not measured | 0.00 per 100 | not re-run |
+| Document type accuracy | 97% or more; a document the app is less sure of goes to `Needs a look` | not measured | 100.0% | not re-run |
+| Person accuracy | 95% or more | not measured | 100.0% (live run 92.4%) | not re-run |
+| Field exact match and F1, per field and type | Exact match 92% or more overall on photos, and 85% or more for each core type | 94.2% on photos with the chosen model (ADR 0009) | 99.7% on photos (live 96.7%); lowest core type lab report 95.8% (live: four core types at 75% to 78%); F1 96.6% (live 93.3%) | not re-run |
+| Search top-1 and top-3 hit rate | 85% or more top-1, 95% or more top-3 | not measured | not measured | 98.0% top-1, 100.0% top-3 (150 lookups and finds) |
+| Citation accuracy | 95% or more of answers cite the page that holds the value | not measured | not measured | 100.0% of 91 answers |
+| Line-box accuracy for citations | 95% or more of the true lines found on photo pages | 96.1% mean (ADR 0008) | 98.5% (live 98.7%) | not re-run |
+| Share of files sent to `Needs a look` | 15% or less, scored on documents that need no question by design, with the raw share beside it | not measured | 0.0% on those documents (live 6.8%); 13.9% of all documents (live 19.8%) | not re-run |
+| Duplicate detection | 95% or more of duplicates caught, and no two different documents merged | not measured | 100.0% of 16 copies caught, 0 wrong merges | not re-run |
+| List-query reading accuracy | 80% or more | not measured | not measured | 82.5% of 40 lists |
+| Answers right, of lookups | 85% or more | not measured | not measured | 90.0% of 100 lookups |
+| Answerable questions declined, of lookups and finds | 10% or less | not measured | not measured | 8.7% of 150 |
+| Questions with no answer declined | 75% or more | not measured | not measured | 85.0% of 20 |
+| Seconds for a full search on the Mac with qwen3:4b | Median 4 or less, 95th percentile 5 or less | not measured | not measured | Median 3.24, 95th percentile 3.84 (209 searches) |
+| Medical checkup field accuracy | 90% or more | not measured | M5 | M5 |
+| Disagreement flags caught | 90% or more | not measured | M5 | M5 |
+| Medicines saved wrong without my OK | 0 | 16 of 22 medicines right in the raw transcript (ADR 0011) | M5 | M5 |
+| Transcript word error rate | 6% or less | 4.18% (ADR 0011) | M5 | M5 |
+| Seconds a document on the Mac, filing in the background | Median 60 or less, and no document over 2 minutes | 35.0 median, 46.8 at most on photos (ADR 0009) | 50.6 median, 112.0 at most (live run; 12 of 187 documents took over 60 s) | not re-run |
+| Cost per 1,000 documents | No API spend for the app; M6 reports the cloud model's cost beside the local ones | no API calls in M1 | no API calls | no API calls |
 
 The seconds row was restated on 2026-11-20. The target had been 60 seconds for each document. Twelve of the 187 test documents took 61 to 112 seconds, all long medical papers (lab reports, prescriptions, discharge summaries) with long lists to write out. Filing runs in the background and nobody waits on it (ADR 0009), so I changed the target to a median and a ceiling instead of recording twelve misses.
 
