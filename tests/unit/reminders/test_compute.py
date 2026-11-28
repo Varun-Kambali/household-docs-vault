@@ -25,7 +25,7 @@ def test_a_policy_ending_on_14_mar_2027_fires_60_30_and_7_days_before(store):
     assert first.key == "d1:policy_renewal::2027-03-14"
     assert first.person_ids == ("p1",) and first.calendar and not first.custom
     assert first.part is None and first.document_id == "d1"
-    assert "health policy" in first.title.lower()
+    assert first.title == "Renew health insurance policy, Star"
 
 
 def test_month_leads_clamp_to_the_month_end(store):
