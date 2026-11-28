@@ -86,6 +86,24 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/v1/documents/{doc_id}/notes': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Notes Get */
+    get: operations['notes_get_v1_documents__doc_id__notes_get']
+    /** Notes Put */
+    put: operations['notes_put_v1_documents__doc_id__notes_put']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/v1/documents/{doc_id}/pages/{page}.png': {
     parameters: {
       query?: never
@@ -745,6 +763,20 @@ export interface components {
        */
       reason: 'no_documents' | 'unknown_person' | 'weak_match' | 'no_field' | 'not_on_page'
     }
+    /** NotesIn */
+    NotesIn: {
+      /** Login */
+      login: string
+      /** Paper */
+      paper: string
+    }
+    /** NotesOut */
+    NotesOut: {
+      /** Login */
+      login: string
+      /** Paper */
+      paper: string
+    }
     /** OptionOut */
     OptionOut: {
       /** Label */
@@ -1137,6 +1169,72 @@ export interface operations {
         }
         content: {
           'application/json': unknown
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  notes_get_v1_documents__doc_id__notes_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        doc_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['NotesOut']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  notes_put_v1_documents__doc_id__notes_put: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        doc_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['NotesIn']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['NotesOut']
         }
       }
       /** @description Validation Error */
