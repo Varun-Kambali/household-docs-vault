@@ -26,6 +26,9 @@ from household_vault.search.vocab import DATE_ROLES
 log = logging.getLogger(__name__)
 
 PAST_DAYS = 30
+HORIZON_KEY = "reminder_horizon_days"
+LEADS_KEY = "reminder_leads"
+MIN_HORIZON, MAX_HORIZON, DEFAULT_HORIZON = 7, 365, 60
 _LEAD = re.compile(r"([0-9]{1,3})([dm])")
 
 
@@ -46,7 +49,7 @@ class Reminder:
 @dataclass(frozen=True)
 class ReminderSettings:
     leads: dict[str, tuple[Lead, ...]] = field(default_factory=dict)
-    horizon_days: int = 60
+    horizon_days: int = DEFAULT_HORIZON
 
     def leads_for(self, rule: str) -> tuple[Lead, ...]:
         return self.leads.get(rule, RULES_BY_NAME[rule].leads)
@@ -58,27 +61,36 @@ def _parse_leads(raw: object) -> tuple[Lead, ...] | None:
     leads: list[Lead] = []
     for item in raw:
         m = _LEAD.fullmatch(item) if isinstance(item, str) else None
-        if m is None or int(m[1]) == 0:
+        if m is None:
             return None
         leads.append((Days if m[2] == "d" else Months)(int(m[1])))
     return tuple(leads)
+
+
+def _horizon(store: Store) -> int:
+    raw = store.setting(HORIZON_KEY)
+    if raw is not None and raw.isascii() and raw.isdigit():
+        days = int(raw)
+        if MIN_HORIZON <= days <= MAX_HORIZON:
+            return days
+    return DEFAULT_HORIZON
 
 
 def load_settings(store: Store) -> ReminderSettings:
     """The `reminder_leads` setting, a JSON object of rule name to lead strings like
     "60d" or "9m". A rule that is missing or unreadable keeps its default."""
     try:
-        data: Any = json.loads(store.setting("reminder_leads") or "{}")
+        data: Any = json.loads(store.setting(LEADS_KEY) or "{}")
     except ValueError:
         log.warning("reminder_leads is not JSON; using the defaults")
-        return ReminderSettings()
+        return ReminderSettings(horizon_days=_horizon(store))
     leads: dict[str, tuple[Lead, ...]] = {}
     if isinstance(data, dict):
         for name, raw in data.items():
             parsed = _parse_leads(raw)
             if name in RULES_BY_NAME and parsed is not None:
                 leads[name] = parsed
-    return ReminderSettings(leads)
+    return ReminderSettings(leads, _horizon(store))
 
 
 def _as_date(value: object) -> date | None:
@@ -118,6 +130,10 @@ def _dues(rule: Rule, doc: DocumentRow) -> list[tuple[date, str | None]]:
 
 def _people(store: Store, doc_id: str) -> tuple[str, ...]:
     return tuple(person for person, _role in store.people_of(doc_id))
+
+
+def custom_key(document_id: str, due: date, custom_id: int) -> str:
+    return f"{document_id}:custom::{due.isoformat()}:c{custom_id}"
 
 
 def reminders(store: Store, today: date, settings: ReminderSettings) -> list[Reminder]:
@@ -168,11 +184,11 @@ def reminders(store: Store, today: date, settings: ReminderSettings) -> list[Rem
                             )
                         )  # fmt: skip
     for c in store.custom_reminders():
-        key = f"{c.document_id}:custom::{c.due.isoformat()}:c{c.id}"
+        key = custom_key(c.document_id, c.due, c.id)
         if c.due >= oldest and c.due <= horizon and not hidden(key):
             found.append(
                 Reminder(key, "custom", c.document_id, _people(store, c.document_id), c.title,
-                         c.due, c.due, None, False, True)
+                         c.due, c.due, None, True, True)
             )  # fmt: skip
     found.sort(key=lambda r: (r.fire, r.due, r.key))
     return found

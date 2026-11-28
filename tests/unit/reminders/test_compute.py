@@ -157,7 +157,7 @@ def test_custom_reminders_are_included(store):
     assert len(found) == 1
     r = found[0]
     assert r.custom and r.rule == "custom" and r.title == "Check the bill"
-    assert r.fire == r.due == date(2027, 3, 14) and not r.calendar
+    assert r.fire == r.due == date(2027, 3, 14) and r.calendar
     assert r.key == f"d1:custom::2027-03-14:c{cid}"
     store.set_reminder_state(r.key, "done", None)
     assert reminders(store, date(2027, 3, 1), ReminderSettings()) == []
