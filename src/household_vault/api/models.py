@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import unicodedata
 from datetime import date, datetime
 from typing import Annotated, Any, Literal
 
@@ -23,6 +24,37 @@ from household_vault.search.vocab import DateRole
 
 class Strict(BaseModel):
     model_config = ConfigDict(extra="forbid")
+
+
+NOTE_MAX = 200
+
+
+def _plain_text(value: object) -> object:
+    """Plain text only: control and format characters (a bidi override, a NUL, an escape) are
+    dropped, tabs and line breaks become one space, and the ends are trimmed."""
+    if not isinstance(value, str):
+        return value
+    kept = [
+        " " if c in "\n\r\t" else c
+        for c in value
+        if unicodedata.category(c) not in ("Cc", "Cf") or c in "\n\r\t"
+    ]
+    return " ".join("".join(kept).split())
+
+
+class NotesIn(Strict):
+    paper: Annotated[str, Field(max_length=NOTE_MAX)]
+    login: Annotated[str, Field(max_length=NOTE_MAX)]
+
+    @field_validator("paper", "login", mode="before")
+    @classmethod
+    def _plain(cls, value: object) -> object:
+        return _plain_text(value)
+
+
+class NotesOut(BaseModel):
+    paper: str
+    login: str
 
 
 class Health(BaseModel):

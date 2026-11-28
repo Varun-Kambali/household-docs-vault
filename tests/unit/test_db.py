@@ -168,7 +168,7 @@ def test_defer_and_finish_need_a_running_job(store, now):
 def test_migrate_writes_the_version_with_the_tables(tmp_path):
     conn = connect(tmp_path / "v.db", tmp_path / "vault")
     migrate(conn)
-    assert conn.execute("select value from meta where key = 'schema_version'").fetchone()[0] == "2"
+    assert conn.execute("select value from meta where key = 'schema_version'").fetchone()[0] == "3"
 
 
 def test_a_crash_inside_migrate_leaves_nothing_behind(tmp_path, monkeypatch):

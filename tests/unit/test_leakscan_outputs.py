@@ -88,10 +88,10 @@ def test_images_are_listed_as_not_scanned(vault):
 
 
 def test_the_scan_reads_the_database_bytes_and_every_text_column(vault, settings, store):
-    store.conn.execute("create table notes (id integer primary key, body text)")
-    store.conn.execute("insert into notes (body) values (?)", (f"see {_other_card()}",))
+    store.conn.execute("create table scratch (id integer primary key, body text)")
+    store.conn.execute("insert into scratch (body) values (?)", (f"see {_other_card()}",))
     hits = scan_outputs(vault, settings.db_path, settings.log_dir)
-    assert any("notes" in h and _other_card()[:-4] not in h for h in hits)
+    assert any("scratch" in h and _other_card()[:-4] not in h for h in hits)
 
 
 def test_the_scan_finds_a_known_secret_with_spaces_removed(vault, settings):
@@ -234,8 +234,8 @@ def test_values_that_sit_side_by_side_in_the_database_file_do_not_join_into_a_nu
     first = "x1234567890123"
     second = _luhn_check_digit("1234567890123") + "z"
     assert not luhn_valid("1234567890123")
-    store.conn.execute("create table notes (id integer primary key, a text, b text)")
-    store.conn.execute("insert into notes (a, b) values (?, ?)", (first, second))
+    store.conn.execute("create table scratch (id integer primary key, a text, b text)")
+    store.conn.execute("insert into scratch (a, b) values (?, ?)", (first, second))
     raw = "".join(
         p.read_bytes().decode("latin-1")
         for p in (settings.db_path, settings.db_path.with_name("vault.db-wal"))
@@ -246,11 +246,11 @@ def test_values_that_sit_side_by_side_in_the_database_file_do_not_join_into_a_nu
 
 
 def test_a_known_card_number_in_a_deleted_row_is_still_found_in_the_file(vault, settings, store):
-    store.conn.execute("create table notes (id integer primary key, body text)")
-    store.conn.execute("insert into notes (body) values (?)", (f"n {VISA}",))
-    store.conn.execute("insert into notes (body) values (?)", ("n 4111 1111 1111 1111",))
-    store.conn.execute("insert into notes (body) values (?)", ("n 4111-1111-1111-1111",))
-    store.conn.execute("delete from notes")
+    store.conn.execute("create table scratch (id integer primary key, body text)")
+    store.conn.execute("insert into scratch (body) values (?)", (f"n {VISA}",))
+    store.conn.execute("insert into scratch (body) values (?)", ("n 4111 1111 1111 1111",))
+    store.conn.execute("insert into scratch (body) values (?)", ("n 4111-1111-1111-1111",))
+    store.conn.execute("delete from scratch")
     hits = scan_outputs(vault, settings.db_path, settings.log_dir, known_secrets=[VISA])
     files = {h.split(":")[0] for h in hits if "known secret" in h}
     assert files & {"vault.db", "vault.db-wal"}
@@ -258,8 +258,8 @@ def test_a_known_card_number_in_a_deleted_row_is_still_found_in_the_file(vault, 
 
 
 def test_a_known_password_in_the_wal_is_found_without_its_value(vault, settings, store):
-    store.conn.execute("create table notes (id integer primary key, body text)")
-    store.conn.execute("insert into notes (body) values (?)", ("pw=correct-horse-battery",))
+    store.conn.execute("create table scratch (id integer primary key, body text)")
+    store.conn.execute("insert into scratch (body) values (?)", ("pw=correct-horse-battery",))
     hits = scan_outputs(
         vault, settings.db_path, settings.log_dir, known_secrets=["correct-horse-battery"]
     )
@@ -392,14 +392,14 @@ def test_database_log_and_record_hits_ignore_waiting_originals(vault, settings, 
     data = _card_pdf()
     waiting = {"Inbox/card.pdf": _sha(data)}
     (settings.log_dir / "vault.log").write_text(f"oops {VISA}")
-    store.conn.execute("create table notes (id integer primary key, body text)")
-    store.conn.execute("insert into notes (body) values (?)", (f"n {VISA}",))
+    store.conn.execute("create table scratch (id integer primary key, body text)")
+    store.conn.execute("insert into scratch (body) values (?)", (f"n {VISA}",))
     vault.mkdirs("Home/Records")
     vault.write_atomic("Home/Records/r.json", f'{{"number": "{VISA}"}}'.encode())
     hits = scan_outputs(vault, settings.db_path, settings.log_dir, waiting_originals=waiting)
     where = {h.split(":")[0] for h in hits}
     assert {"vault.log", "vault.db", "Home/Records/r.json"} <= where
-    assert any(h.startswith("vault.db:notes.body") for h in hits)
+    assert any(h.startswith("vault.db:scratch.body") for h in hits)
 
 
 def test_only_the_waiting_items_own_path_is_skipped_not_an_identical_leftover(vault, settings):

@@ -118,3 +118,15 @@ def test_any_long_run_counts_one_group_longer_than_nineteen_digits() -> None:
     (hit,) = find_numbers(f"ref {glued} end", allow_test_cards=False, any_long_run=True)
     assert hit.digits == glued and hit.kind == "card"
     assert find_numbers(glued, allow_test_cards=False) == []  # Luhn-only mode is unchanged
+
+
+def test_card_shaped_needs_luhn_length_and_a_brand() -> None:
+    assert checks.card_shaped("4111111111111111")
+    assert not checks.card_shaped("490154203237518")  # an IMEI: Luhn-valid, no brand
+    assert not checks.card_shaped("4111111111111112")  # fails Luhn
+
+
+def test_contains_card_number_finds_a_spaced_or_dotted_run() -> None:
+    assert checks.contains_card_number("card 4111 1111 1111 1111 bill")
+    assert checks.contains_card_number("4111.1111.1111.1111")
+    assert not checks.contains_card_number("IMEI 490154203237518 and Wi-Fi 12345678")

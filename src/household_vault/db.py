@@ -24,7 +24,7 @@ from household_vault.reading.lines import PageText
 from household_vault.reasons import Reason
 from household_vault.safety import is_within
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 ItemState = Literal[
     "queued",
@@ -149,6 +149,29 @@ create table vectors (
 );
 """
 
+_SCHEMA_3 = """
+create table notes (
+    document_id text primary key references documents (id) on delete cascade,
+    paper text not null default '',
+    login text not null default '',
+    updated_at text not null
+);
+create table reminder_state (
+    key text primary key,
+    state text not null check (state in ('done', 'snoozed')),
+    until text,
+    at text not null
+);
+create table custom_reminders (
+    id integer primary key,
+    document_id text not null references documents (id) on delete cascade,
+    due text not null,
+    title text not null,
+    created_at text not null
+);
+create table settings (key text primary key, value text not null);
+"""
+
 log = logging.getLogger(__name__)
 
 
@@ -168,12 +191,12 @@ def connect(path: Path, vault_root: Path) -> sqlite3.Connection:
 
 
 def migrate(conn: sqlite3.Connection) -> int:
-    """Create the tables on a new database, upgrade a version-1 database, return the version."""
+    """Create the tables on a new database, upgrade an older one, return the version."""
     has_meta = conn.execute("select 1 from sqlite_master where name = 'meta'").fetchone()
     if has_meta is None:
         version_row = f"insert into meta values ('schema_version', '{SCHEMA_VERSION}');"
         try:
-            conn.executescript("begin;" + _SCHEMA + _SCHEMA_2 + version_row + "commit;")
+            conn.executescript("begin;" + _SCHEMA + _SCHEMA_2 + _SCHEMA_3 + version_row + "commit;")
         except BaseException:
             if conn.in_transaction:
                 conn.execute("rollback")
@@ -184,6 +207,9 @@ def migrate(conn: sqlite3.Connection) -> int:
     if version == 1:
         _upgrade_1_to_2(conn)
         version = 2
+    if version == 2:
+        _upgrade_2_to_3(conn)
+        version = 3
     if version != SCHEMA_VERSION:
         raise ConfigError(f"the database has schema {version}; this app writes {SCHEMA_VERSION}")
     return version
@@ -200,6 +226,16 @@ def _upgrade_1_to_2(conn: sqlite3.Connection) -> None:
                 conn.execute(statement)
         KeywordIndex(store).rebuild()
         conn.execute("update meta set value = '2' where key = 'schema_version'")
+
+
+def _upgrade_2_to_3(conn: sqlite3.Connection) -> None:
+    """Add the notes, reminder state, custom reminder and settings tables, all or nothing."""
+    store = Store(conn)
+    with store.transaction():
+        for statement in _SCHEMA_3.split(";\n"):
+            if statement.strip():
+                conn.execute(statement)
+        conn.execute("update meta set value = '3' where key = 'schema_version'")
 
 
 class StateChanged(Exception):
@@ -252,6 +288,34 @@ class StoredLine:
     idx: int
     text: str
     bbox: tuple[float, float, float, float]
+
+
+@dataclass(frozen=True)
+class Notes:
+    """Where the paper original is kept and a login hint: plain text, never a secret."""
+
+    paper: str = ""
+    login: str = ""
+    updated_at: datetime | None = None
+
+
+ReminderMark = Literal["done", "snoozed"]
+
+
+@dataclass(frozen=True)
+class ReminderState:
+    state: ReminderMark
+    until: date | None
+    at: datetime
+
+
+@dataclass(frozen=True)
+class CustomReminder:
+    id: int
+    document_id: str
+    due: date
+    title: str
+    created_at: datetime
 
 
 @dataclass(frozen=True)
@@ -665,6 +729,96 @@ class Store:
         # The foreign key removes the document's vector rows with it.
         self.conn.execute("delete from documents where id = ?", (doc_id,))
         self.vectors_epoch += 1
+
+    # -- notes, reminders and settings ---------------------------------------------------------
+
+    @_locked
+    def notes_of(self, doc_id: str) -> Notes:
+        r = self.conn.execute(
+            "select paper, login, updated_at from notes where document_id = ?", (doc_id,)
+        ).fetchone()
+        if r is None:
+            return Notes()
+        return Notes(r["paper"], r["login"], datetime.fromisoformat(r["updated_at"]))
+
+    @_locked
+    def set_notes(self, doc_id: str, paper: str, login: str) -> Notes:
+        now = self._clock()
+        self.conn.execute(
+            "insert into notes (document_id, paper, login, updated_at) values (?, ?, ?, ?)"
+            " on conflict (document_id) do update set paper = excluded.paper,"
+            " login = excluded.login, updated_at = excluded.updated_at",
+            (doc_id, paper, login, now.isoformat()),
+        )
+        return Notes(paper, login, now)
+
+    @_locked
+    def reminder_states(self) -> dict[str, ReminderState]:
+        rows = self.conn.execute("select key, state, until, at from reminder_state").fetchall()
+        return {
+            r["key"]: ReminderState(
+                cast(ReminderMark, r["state"]),
+                None if r["until"] is None else date.fromisoformat(r["until"]),
+                datetime.fromisoformat(r["at"]),
+            )
+            for r in rows
+        }
+
+    @_locked
+    def set_reminder_state(self, key: str, state: ReminderMark, until: date | None) -> None:
+        self.conn.execute(
+            "insert into reminder_state (key, state, until, at) values (?, ?, ?, ?)"
+            " on conflict (key) do update set state = excluded.state, until = excluded.until,"
+            " at = excluded.at",
+            (key, state, None if until is None else until.isoformat(), self._clock().isoformat()),
+        )
+
+    @_locked
+    def clear_reminder_state(self, key: str) -> None:
+        self.conn.execute("delete from reminder_state where key = ?", (key,))
+
+    @_locked
+    def add_custom_reminder(self, doc_id: str, due: date, title: str) -> int:
+        cur = self.conn.execute(
+            "insert into custom_reminders (document_id, due, title, created_at)"
+            " values (?, ?, ?, ?)",
+            (doc_id, due.isoformat(), title, self._clock().isoformat()),
+        )
+        assert cur.lastrowid is not None
+        return cur.lastrowid
+
+    @_locked
+    def custom_reminders(self) -> list[CustomReminder]:
+        rows = self.conn.execute(
+            "select id, document_id, due, title, created_at from custom_reminders order by due, id"
+        ).fetchall()
+        return [
+            CustomReminder(
+                r["id"],
+                r["document_id"],
+                date.fromisoformat(r["due"]),
+                r["title"],
+                datetime.fromisoformat(r["created_at"]),
+            )
+            for r in rows
+        ]
+
+    @_locked
+    def remove_custom_reminder(self, reminder_id: int) -> None:
+        self.conn.execute("delete from custom_reminders where id = ?", (reminder_id,))
+
+    @_locked
+    def setting(self, key: str) -> str | None:
+        r = self.conn.execute("select value from settings where key = ?", (key,)).fetchone()
+        return None if r is None else r["value"]
+
+    @_locked
+    def set_setting(self, key: str, value: str) -> None:
+        self.conn.execute(
+            "insert into settings (key, value) values (?, ?)"
+            " on conflict (key) do update set value = excluded.value",
+            (key, value),
+        )
 
     # -- household -----------------------------------------------------------------------------
 
