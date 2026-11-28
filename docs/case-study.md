@@ -1,6 +1,6 @@
 # Case study: Household docs vault
 
-Updated at the close of M2 (intake and reading). Every number comes from a results file in `evals/results/`; numbers for later milestones are still [brackets].
+Updated at the close of M3 (search). Every number comes from a results file in `evals/results/`; numbers for later milestones are still [brackets].
 
 ## Why: the problem
 I keep my family's papers: insurance policies, warranty cards and bills, IDs, home and vehicle papers, work papers, cards and medical records. They arrive on paper from shops and as invoices from online orders, and they end up scattered. There is no single place to put them and nothing that sorts them, so finding one means digging.
@@ -51,6 +51,22 @@ M2 built the app from the Inbox to a filed document, and measured it on a synthe
 - **A synthetic set split by base document**, tuned on one split and scored once on the other. [ADR 0016](decisions/0016-synthetic-eval-set-v1.md).
 - **Read as printed, convert in code, snap spelling from the OCR text.** [ADR 0017](decisions/0017-values-read-as-printed-and-the-spelling-snap.md).
 
+M3 built search and the screens, and measured them on a second synthetic set of 210 questions a split. The decisions from it:
+
+- **The index lives in SQLite and the vectors are scanned exactly.** Keyword search over each document's stored lines and fields, `qwen3-embedding:0.6b` vectors held in memory, and reciprocal rank fusion, plus a ranking of its own for identifier-shaped words so an IMEI or a policy number is found by its digits. [ADR 0018](decisions/0018-the-search-index-in-sqlite.md).
+- **The model reads the prompt, and code works out the rest.** `qwen3:4b` copies the prompt's words into slots; code decides who the people are, what the dates mean and which types are meant, from closed vocabularies. It is the same lesson as the spelling snap: the model points at words, and code converts them. I picked the 4 billion model over the 8 billion one because it was faster and smaller and, once code repaired the people slot, not less accurate. [ADR 0019](decisions/0019-the-model-reads-the-prompt-code-does-the-rest.md).
+- **An answer is composed by code and shown only with a located line.** If no line on the page prints the value, or the question names someone outside the household, the app says there is no direct answer and shows the closest files. [ADR 0020](decisions/0020-answers-from-fields-with-a-located-line.md).
+- **A search eval set, tuned on validation and scored once on test.** [ADR 0021](decisions/0021-the-search-v1-eval-set.md).
+- **The app draws the page itself,** as a PNG from the server, so the viewer needs no PDF viewer and a card is drawn only from its masked copy. [ADR 0022](decisions/0022-the-apps-own-page-viewer.md).
+
+The web app is React and TypeScript, served by the API from one origin with no outside fonts, scripts or images. I designed it from a written brief (calm, precise, private; looks like Preview and Finder, not a dashboard), and the reasons for each colour, type and spacing choice are in [docs/design-rationale.md](design-rationale.md). Two things changed in the build because I used the screens: the sidebar lists the twelve areas as one-click lists, so browsing needs no typing and no model, and the answer now says in words how the app read the question, so a misread shows.
+
+How the search work went wrong first, and what I changed:
+- The first search eval counted a find about an unknown person as declined, while the screen showed other members' files with no notice. The end-of-milestone review caught it, so the app now declines such a find and the eval reads only what the route returns.
+- With the vectors off, keyword search found nothing for any prompt of two or more words, because it needed all the words in one line. I added an any-word fallback, ranked by BM25, that joins only when the vectors give no hits.
+- My first fix for card numbers in a prompt also hid real IMEIs. Now only card-shaped runs are masked, and identifier fields are also indexed by their last four digits.
+- The reading step took a month word out of a shop name ("Jan Aushadhi" read as January). The date backstop now skips words that belong to a stored place.
+
 The tuning story, all on the validation split: the first run got 86.5% of photo fields exactly right against a target of 92%. 38 of the 72 misses were the model converting dates and amounts the app already knows how to parse, so I changed the prompt to copy them as printed and let code convert them (96.7%), then added a line to the type guide for lab reports mistaken for scan reports (97.6%). The rest were one-letter spelling slips in names that Apple Vision had read correctly, so after the test run I added a step that takes the OCR spelling when the model's value is a near match (99.4% on validation). That step was measured on the test split once, by replaying the recordings of the test run, with no model call.
 
 ## Results
@@ -74,7 +90,30 @@ Filing, with the real worker and recorded readings: placement equals the decisio
 
 What these numbers do not show. The test run itself was made before the spelling snap. The live numbers are lower on the same documents: fields exactly right on photos 96.7%, person accuracy 92.4%, silent misfiles still 0, and 19.8% of all documents asked about (`evals/results/2026-11-20_reading_test_bcfd85d.json`). Every person miss in the live run was a name the model misspelt, and the app asked about each one; none was filed wrong. The table above is the replay with the snap (`..._b2a1fde.json`), and it is a replay, so a field made of a long digit run (an acknowledgement number) scores wrong in it even where the live read was right. The seconds are the live run's: median 50.6 over all documents, 12 of 187 took over a minute (long medical lists), and the slowest took 112 seconds. Every number is on synthetic pages.
 
-The targets are in [docs/requirements.md](requirements.md), with the M2 value beside each. Before v1.0.0 I will run the app on [20 to 30] of my own documents and publish counts only, never a value or a file name.
+### Search (M3)
+
+Test split of `search-v1`: 210 questions (100 lookups, 50 finds, 40 lists, 20 with no answer) on a vault of 177 synthetic documents. One live run on 2026-11-28, commit 93a99db, Apple M5 with 16 GB, `qwen3:4b` and `qwen3-embedding:0.6b`. The file is `evals/results/2026-11-28_search_test_93a99db.json`, and the recordings behind it are in `evals/recordings/search-v1/test/`. The reading prompt, the vocabulary and every threshold were tuned on the validation split, and this was the only run on the test split.
+
+| Measure | Result |
+|---|---|
+| Right document first, lookups and finds (150) | 98.0% |
+| Right document in the first three | 100.0% |
+| Quick finder, right document in the first three | 94.7% |
+| Lookups answered right (100) | 90.0% |
+| Answers whose page and line are the true ones (91 answers) | 100.0% |
+| Lists read into the right people, types, date field, range and place (40) | 82.5% |
+| List rows, precision and recall | 81.4% and 87.5% |
+| Questions with no answer that the app declined (20) | 85.0% |
+| Answerable questions the app declined (150) | 8.7% |
+| Seconds for a full search, median and 95th percentile | 3.24 and 3.84 |
+| Seconds for the quick finder, median | 0.038 |
+| Secrets found by the leak scan, search tables included | 0 |
+
+Split by where the documents come from: the 31 lookups about `eval-v1` documents, which also depend on the M2 reading, are answered right 83.9% of the time, and the 69 about the extra documents 92.8%. The 14 list questions on the extra documents are read right 92.9% of the time and the 26 on `eval-v1` 76.9%. Five test prompts are also in validation (`seen_in_val`); all five were answered right, and every target still clears without them. Every search target in [requirements](requirements.md) passes.
+
+What these numbers do not show. They are on synthetic documents and template-made questions, so they say how the app behaves on this kind of paper and prompt, not on mine. The first search after loading the model took 8.5 s, which a median hides. With Ollama off, the quick finder still works by keywords, but with the right document first for only 52.7% of lookups and finds and in the first three for 83.3%.
+
+The targets are in [docs/requirements.md](requirements.md), with the M2 and M3 values beside each. Before v1.0.0 I will run the app on [20 to 30] of my own documents and publish counts only, never a value or a file name.
 
 ## Limits, and what better inputs would change
 The scores are on synthetic documents, and real Indian layouts differ, so the real-document check at the end is what shows whether they hold. The 9 most-used types have hand-drawn templates; the other 41 share a generic form layout, and the test split holds one base document of each of those, so a single odd document moves a type's score a lot. The photos are the clean pages put through a perspective transform and blur in code, not taken with a phone. The type cues and guide were written with these forms in view, so 100% type accuracy says little about a real cover page.
@@ -82,6 +121,15 @@ The scores are on synthetic documents, and real Indian layouts differ, so the re
 The spelling snap works only when Apple Vision has the right spelling; where it does not, the app asks. The test re-measure was a replay, which masks long digit runs, so one field type scores lower there than it did live.
 
 On secrets: a card photo dropped in Drive's `Inbox` stays there, as Drive holds it, until its question is answered, and I do not count that as a leak. A lone card back is filed without its CVV reaching KeePass. The local type call can see a card back's CVV. A paper once misread as a card front can only be filed as a card or discarded. Masking by card shape misses a number split across two lines or damaged by OCR, and it masks card-shaped policy numbers. Drive keeps deleted files in its trash for 30 days. The full list is in [ADR 0014](decisions/0014-secrets-in-the-filing-pipeline.md).
+
+Search limits (M3), all measured or found in the review of the milestone:
+- **Bare prompts can be read as a find instead of a list.** While tuning, the misses were mostly a lone place name after the word "documents" and a typo in the cue word ("poliies"). Seven of the 40 test lists missed on a wrong slot. The target is 80%, down from 90% (see [requirements](requirements.md)).
+- **A bare outsider's name is not caught.** "Meera's PAN card" declines, because the possessive marks a person, but "Meera PAN card" does not, and may answer from a member's PAN. A rule that caught it made the app decline too many answerable questions.
+- **The soft place filter.** Place, area and date range rank and shape a list but do not stop a lookup from answering. A shop the vault does not hold can be answered from another shop's invoice. I left it so a typo in a place does not decline an answerable question, and it goes to the next version of search.
+- **The typing window for card numbers.** A card number typed into the box is masked once it is complete, but the digits before that reach the address bar and the quick search. Nothing is stored or logged.
+- **Single-page development data.** The synthetic vault I used to check the screens has one page per document, so the viewer's lazy page loading for a long PDF is covered by a unit test and not by a live check.
+- **The Inbox activity list is not yet one row per file,** and clicking a marked field in the viewer does not yet move the page to its line. Both wait for M4.
+- **Synonyms need the vectors.** A word the page does not print ("fridge") is found only by the embedding model, and the keyword fallback misses it.
 
 Documents are read in English only. Files in Drive are not encrypted, so someone who gets into my Google account can read them; only the secrets file is protected. The local models have to fit a 16 GB Mac, which caps how large a model the reader can use. Filing a photo takes a median of 51.1 s on my Mac and up to 112 s, because the vision model is slow on a full page. That is fine in the background but means a batch of papers takes minutes. Visits and medicine names (M5) are still measured on five synthetic recordings that are cleaner than a real clinic. A larger model or more real layouts would help, and the model can be swapped without touching the rest.
 
