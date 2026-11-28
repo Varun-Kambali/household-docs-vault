@@ -173,3 +173,22 @@ def test_reminder_settings_are_bounded(client):
 def test_the_routes_carry_no_card_photo_or_file_path(client):
     body = str(coming(client))
     assert "rel_path" not in body and "/Users" not in body
+
+
+def remind_on(client, due):
+    r = client.post("/v1/reminders", json={"document_id": HEALTH, "due": due})
+    assert r.status_code == 200, r.text
+    return r.json()["key"]
+
+
+def test_the_saved_horizon_is_stored_and_used_by_coming_up(client):
+    near = remind_on(client, "2027-02-08")  # 80 days out
+    far = remind_on(client, "2027-02-28")  # 100 days out
+    keys = [r["key"] for r in coming(client)["reminders"]]
+    assert near not in keys and far not in keys  # the default horizon is 60 days
+    put = client.put("/v1/settings/reminders", json={"leads": {}, "horizon_days": 90})
+    assert put.status_code == 200
+    assert put.json()["horizon_days"] == 90
+    assert client.get("/v1/settings/reminders").json()["horizon_days"] == 90
+    keys = [r["key"] for r in coming(client)["reminders"]]
+    assert near in keys and far not in keys
