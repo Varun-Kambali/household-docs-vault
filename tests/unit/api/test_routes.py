@@ -738,6 +738,7 @@ _ROUTES_WITHOUT_BYTES = {
     ("GET", "/v1/emergency-sheet"), ("POST", "/v1/search"), ("POST", "/v1/search/list"),
     ("GET", "/v1/people"), ("GET", "/v1/documents/{doc_id}/pages/{page}/lines"),
     ("GET", "/v1/items/{item_id}/pages/{page}/lines"), ("POST", "/v1/documents/{doc_id}/reveal"),
+    ("GET", "/v1/documents/{doc_id}/notes"), ("PUT", "/v1/documents/{doc_id}/notes"),
 }  # fmt: skip
 _FRAMEWORK_PATHS = {"/openapi.json", "/docs", "/docs/oauth2-redirect", "/redoc"}
 _FILER_ENTRIES = {
