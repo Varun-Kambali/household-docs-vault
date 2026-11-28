@@ -192,3 +192,29 @@ def test_the_saved_horizon_is_stored_and_used_by_coming_up(client):
     assert client.get("/v1/settings/reminders").json()["horizon_days"] == 90
     keys = [r["key"] for r in coming(client)["reminders"]]
     assert near in keys and far not in keys
+
+
+def test_removing_a_document_drops_its_reminder_state(client, store):
+    key = renewals(coming(client))[0]["key"]
+    assert key.startswith(f"{HEALTH}:")
+    client.post(f"/v1/reminders/{key}/done")
+    other = renewals(coming(client))[0]["key"]
+    client.post(f"/v1/reminders/{other}/done")
+    assert key in store.reminder_states() and other in store.reminder_states()
+    store.remove_document(HEALTH)
+    assert key not in store.reminder_states()
+    assert other in store.reminder_states()
+    assert client.post(f"/v1/reminders/{key}/done").status_code == 404
+
+
+def test_remind_me_on_a_document_removed_mid_request_is_a_404(client, store, monkeypatch):
+    real = store.add_custom_reminder
+
+    def racing(doc_id, due, title):
+        store.remove_document(doc_id)
+        return real(doc_id, due, title)
+
+    monkeypatch.setattr(store, "add_custom_reminder", racing)
+    r = client.post("/v1/reminders", json={"document_id": HEALTH, "due": "2026-12-01"})
+    assert r.status_code == 404
+    assert r.json()["detail"] == "That document is not in the vault."

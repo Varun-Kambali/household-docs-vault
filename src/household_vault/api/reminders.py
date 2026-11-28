@@ -4,6 +4,7 @@ Nothing is sent anywhere: a calendar link is a URL the person opens themselves.
 """
 
 import json
+import sqlite3
 from datetime import date, timedelta
 from typing import Annotated
 
@@ -131,7 +132,10 @@ def add_reminder_routes(app: FastAPI, state: AppState) -> None:
         if not now <= body.due <= now + timedelta(days=MAX_AHEAD_DAYS):
             raise HTTPException(422, BAD_DUE)
         title = title_of(CUSTOM_RULE, doc, None)
-        new_id = store.add_custom_reminder(doc.id, body.due, title)
+        try:
+            new_id = store.add_custom_reminder(doc.id, body.due, title)
+        except sqlite3.IntegrityError:  # the document was removed since the check above
+            raise HTTPException(404, NO_DOCUMENT) from None
         people = tuple(person for person, _role in store.people_of(doc.id))
         return reminder_out(
             Reminder(
@@ -164,6 +168,8 @@ def add_reminder_routes(app: FastAPI, state: AppState) -> None:
 
     @app.put("/v1/settings/reminders", response_model_exclude_none=True)
     def put_settings(body: ReminderSettingsIn) -> ReminderSettingsOut:
+        """Replace the whole leads map: a rule left out goes back to its default, so the
+        settings dialog sends every rule."""
         unknown = sorted(name for name in body.leads if name not in RULES_BY_NAME)
         if unknown:
             raise HTTPException(422, f"There is no reminder rule called {unknown[0]}.")

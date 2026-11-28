@@ -726,8 +726,14 @@ class Store:
 
     @_locked
     def remove_document(self, doc_id: str) -> None:
-        # The foreign key removes the document's vector rows with it.
-        self.conn.execute("delete from documents where id = ?", (doc_id,))
+        # The foreign key removes the document's vector rows with it; reminder states are keyed
+        # by text ("<doc>:..."), so they go here, in the same transaction.
+        with self.transaction():
+            self.conn.execute("delete from documents where id = ?", (doc_id,))
+            self.conn.execute(
+                "delete from reminder_state where substr(key, 1, ?) = ?",
+                (len(doc_id) + 1, f"{doc_id}:"),
+            )
         self.vectors_epoch += 1
 
     # -- notes, reminders and settings ---------------------------------------------------------
