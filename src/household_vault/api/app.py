@@ -41,6 +41,8 @@ from household_vault.api.models import (
     ItemOut,
     MasterPasswordIn,
     NeedsALookOut,
+    NotesIn,
+    NotesOut,
     OptionOut,
     ProgressOut,
     QuestionOut,
@@ -51,6 +53,7 @@ from household_vault.api.pages import add_page_routes
 from household_vault.api.search import add_search_routes, drive_path
 from household_vault.api.web import add_web_routes
 from household_vault.app_state import AppState
+from household_vault.checks import contains_card_number
 from household_vault.db import Item
 from household_vault.emergency import sheet_html
 from household_vault.filing.cardness import is_card_photo, shares_card_photo
@@ -105,6 +108,7 @@ SECRETS_MISSING = (
 CARD_PHOTO_PRIVATE = "Card photos open from the secrets store."
 SOMETHING_WENT_WRONG = "Something went wrong. Nothing was changed."
 NOT_UNDERSTOOD = "The request was not understood."
+CARD_NOTE = "Card numbers go in Secrets.kdbx."
 
 
 def _detail(status: int, message: str, **extra: Any) -> JSONResponse:
@@ -564,6 +568,22 @@ def create_app(
             field_kinds=field_kinds_of(doc),
             page_count=max([ln.page for ln in state.store.lines_of(doc.id)], default=0) + 1,
         )
+
+    @app.get("/v1/documents/{doc_id}/notes")
+    def notes_get(doc_id: str) -> NotesOut:
+        known_document(doc_id)
+        n = state.store.notes_of(doc_id)
+        return NotesOut(paper=n.paper, login=n.login)
+
+    @app.put("/v1/documents/{doc_id}/notes")
+    def notes_put(doc_id: str, body: NotesIn) -> NotesOut:
+        known_document(doc_id)
+        if contains_card_number(body.paper) or contains_card_number(body.login):
+            raise HTTPException(422, CARD_NOTE)
+        n = state.store.set_notes(doc_id, body.paper, body.login)
+        # The text is never logged: only how long it was.
+        log.info("notes saved: %d characters", len(body.paper) + len(body.login))
+        return NotesOut(paper=n.paper, login=n.login)
 
     @app.get("/v1/documents/{doc_id}/file")
     def document_file(doc_id: str) -> Response:

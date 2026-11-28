@@ -15,10 +15,10 @@ def index_texts(store: Store) -> list[str]:
 
 def test_a_version_1_database_migrates_and_its_documents_are_searchable(v1_database):
     store = Store(v1_database)  # holds one Croma invoice, "d1"
-    assert migrate(store.conn) == 2
+    assert migrate(store.conn) == 3
     assert KeywordIndex(store).search("Croma")[0].document_id == "d1"
     assert store.conn.execute("select count(*) from vectors").fetchone()[0] == 0
-    assert migrate(store.conn) == 2
+    assert migrate(store.conn) == 3
 
 
 def test_a_failed_upgrade_leaves_the_version_1_database_as_it_was(v1_database, monkeypatch):
