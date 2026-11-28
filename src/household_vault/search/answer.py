@@ -9,7 +9,7 @@ depend on the Mac's locale.
 import re
 from collections.abc import Sequence
 from dataclasses import dataclass
-from datetime import date, timedelta
+from datetime import date
 from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
 from difflib import SequenceMatcher
 from typing import Any, Literal
@@ -20,9 +20,9 @@ from household_vault.db import DocumentRow, Store, StoredLine
 from household_vault.doctypes import DocType
 from household_vault.fieldkinds import FieldKind
 from household_vault.people import normalise_name
+from household_vault.periods import part_end
 from household_vault.schemas import SCHEMAS
 from household_vault.schemas._coerce import field_kind, parse_amount, parse_date
-from household_vault.search.dates import add_months
 from household_vault.search.query import Query
 from household_vault.search.retrieve import LineRef, Row
 from household_vault.search.vocab import DATE_ROLES, MASKED_FIELDS, field_for
@@ -281,14 +281,6 @@ def _ends(end: date, today: date) -> str:
     return f"yes, until {format_date(end)}" if end >= today else f"ended {format_date(end)}"
 
 
-def _part_end(start: date, years: Decimal) -> date:
-    """The last covered day: the purchase date plus the part's years, less one day, the way
-    the policies print their ends. A fraction counts as whole months; an anniversary on 29 Feb
-    falls on 28 Feb in a year without one."""
-    months = int((years * 12).to_integral_value(ROUND_HALF_UP))
-    return add_months(start, months) - timedelta(days=1)
-
-
 def _warranty_text(doc: DocumentRow, today: date) -> str | None:
     start = _as_date(doc.fields.get("purchase_date"))
     parts = doc.fields.get("warranty_parts")
@@ -301,7 +293,7 @@ def _warranty_text(doc: DocumentRow, today: date) -> str | None:
         years = _as_amount(item.get("years"))
         if years is None:
             continue
-        said.append(f"{item['part']}: {_ends(_part_end(start, years), today)}.")
+        said.append(f"{item['part']}: {_ends(part_end(start, years), today)}.")
     return " ".join(said) or None
 
 
