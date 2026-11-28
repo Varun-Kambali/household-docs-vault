@@ -101,7 +101,7 @@ Scale ratio 1.2 from 16. Sentence case for every heading and button. At most thr
 - 150 ms for colour changes on hover and press. 200 ms for a panel or inspector opening, with `transform` and `opacity` only. Never `transition: all`.
 - No scroll reveals, no animation library, no looping or pulsing motion.
 - `prefers-reduced-motion: reduce` removes movement and keeps the colour changes.
-- Waiting for the full reading (about 3.5 s) shows the quick results at once and a text line ("Reading your question"). Nothing pulses.
+- Waiting for the full reading (a median of 3.24 s, `evals/results/2026-11-28_search_test_93a99db.json`) shows the quick results at once and a text line ("Reading your question"). Nothing pulses.
 
 ## Anti-patterns (do not use)
 
