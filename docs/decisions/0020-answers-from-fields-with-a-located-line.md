@@ -5,7 +5,7 @@ Date: 2026-11-28 · Status: accepted
 The project fails if it shows an answer it cannot point to ([requirements](../requirements.md), anti-goals), and a wrong answer about someone else's document is worse than no answer. A language model that writes the answer sentence can drift from the page, so I wanted the answer to be something I can check on the page in one glance.
 
 ## Decision
-**Code writes the answer.** No model writes a sentence, a date or a number. `compose` takes the best row that passes the query's person and type filters and builds the answer from that document's stored fields: "Policy number P/21/...", "Yes, until 29 Jan 2027" for a validity question, "Compressor: yes, until 13 Mar 2034. Comprehensive: ended 13 Mar 2025" for a warranty. A warranty part's last covered day is the purchase date plus its years, less one day, which is how a policy states its end.
+**Code writes the answer.** No model writes a sentence, a date or a number. `compose` takes the best row that passes the query's person and type filters and builds the answer from that document's stored fields: "Policy number P/21/...", "Yes, until 29 Jan 2027" for a validity question, "Compressor: yes, until 13 Mar 2034" for one part of a warranty. A warranty part's last covered day is the purchase date plus its years, less one day, which is how a policy states its end.
 
 **A located line, or no direct answer.** A value is shown only when a line on the page prints it. `locate` looks for the date, amount, identifier or words in the stored lines of the page, and the answer carries the page and the line boxes it found. A value with no line printing it is declined. When it declines, the app says "No direct answer" with a plain reason and shows the closest files.
 
