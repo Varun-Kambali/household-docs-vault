@@ -50,6 +50,7 @@ from household_vault.api.models import (
     UnlockIn,
 )
 from household_vault.api.pages import add_page_routes
+from household_vault.api.reminders import add_reminder_routes
 from household_vault.api.search import add_search_routes, drive_path
 from household_vault.api.web import add_web_routes
 from household_vault.app_state import AppState
@@ -472,6 +473,7 @@ def create_app(
 
     # Registered on the app itself, so every route shows in `app.routes` for the card-photo check.
     add_search_routes(app, state)
+    add_reminder_routes(app, state)
     add_page_routes(
         app, state, known_document, known_item, lambda: _detail(423, CARD_PHOTO_PRIVATE)
     )
