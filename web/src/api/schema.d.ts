@@ -52,6 +52,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/v1/coming-up': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Coming Up */
+    get: operations['coming_up_v1_coming_up_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/v1/documents/{doc_id}': {
     parameters: {
       query?: never
@@ -376,6 +393,91 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/v1/reminders': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Remind Me */
+    post: operations['remind_me_v1_reminders_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v1/reminders/custom/{reminder_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Remove Custom */
+    delete: operations['remove_custom_v1_reminders_custom__reminder_id__delete']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v1/reminders/{key}/done': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Done */
+    post: operations['done_v1_reminders__key__done_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v1/reminders/{key}/snooze': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Snooze */
+    post: operations['snooze_v1_reminders__key__snooze_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v1/reminders/{key}/state': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Clear State */
+    delete: operations['clear_state_v1_reminders__key__state_delete']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/v1/search': {
     parameters: {
       query?: never
@@ -455,6 +557,28 @@ export interface paths {
     put?: never
     /** Secrets Unlock */
     post: operations['secrets_unlock_v1_secrets_unlock_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v1/settings/reminders': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get Settings */
+    get: operations['get_settings_v1_settings_reminders_get']
+    /**
+     * Put Settings
+     * @description Replace the whole leads map: a rule left out goes back to its default, so the
+     *     settings dialog sends every rule.
+     */
+    put: operations['put_settings_v1_settings_reminders_put']
+    post?: never
     delete?: never
     options?: never
     head?: never
@@ -564,6 +688,13 @@ export interface components {
       /** Label */
       label: string
       value: components['schemas']['JsonValue']
+    }
+    /** ComingUpOut */
+    ComingUpOut: {
+      /** Count Due Now */
+      count_due_now: number
+      /** Reminders */
+      reminders: components['schemas']['ReminderOut'][]
     }
     /**
      * DateRange
@@ -701,6 +832,16 @@ export interface components {
       state: string
     }
     JsonValue: unknown
+    /**
+     * LeadIn
+     * @description One lead time: a number of days before the due date, or of months.
+     */
+    LeadIn: {
+      /** Days */
+      days?: number | null
+      /** Months */
+      months?: number | null
+    }
     /** LineOut */
     LineOut: {
       /** Bbox */
@@ -933,6 +1074,63 @@ export interface components {
       /** Text */
       text: string
     }
+    /** RemindMeIn */
+    RemindMeIn: {
+      /** Document Id */
+      document_id: string
+      /**
+       * Due
+       * Format: date
+       */
+      due: string
+    }
+    /** ReminderOut */
+    ReminderOut: {
+      /** Calendar Link */
+      calendar_link: string | null
+      /** Custom */
+      custom: boolean
+      /** Document Id */
+      document_id: string
+      /**
+       * Due
+       * Format: date
+       */
+      due: string
+      /**
+       * Fire
+       * Format: date
+       */
+      fire: string
+      /** Key */
+      key: string
+      /** Part */
+      part: string | null
+      /** Person Ids */
+      person_ids: string[]
+      /** Rule */
+      rule: string
+      /** Title */
+      title: string
+    }
+    /** ReminderSettingsIn */
+    ReminderSettingsIn: {
+      /** Horizon Days */
+      horizon_days: number
+      /** Leads */
+      leads: {
+        [key: string]: components['schemas']['LeadIn'][]
+      }
+    }
+    /** ReminderSettingsOut */
+    ReminderSettingsOut: {
+      /** Horizon Days */
+      horizon_days: number
+      /** Leads */
+      leads: {
+        [key: string]: components['schemas']['LeadIn'][]
+      }
+    }
     /** RowOut */
     RowOut: {
       /** Area */
@@ -1013,6 +1211,14 @@ export interface components {
       parts: components['schemas']['PartOut'][]
       /** Text */
       text: string
+    }
+    /** SnoozeIn */
+    SnoozeIn: {
+      /**
+       * Until
+       * Format: date
+       */
+      until: string
     }
     /** UnlockIn */
     UnlockIn: {
@@ -1116,6 +1322,37 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['CardOut']
+        }
+      }
+    }
+  }
+  coming_up_v1_coming_up_get: {
+    parameters: {
+      query?: {
+        days?: number | null
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ComingUpOut']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
         }
       }
     }
@@ -1718,6 +1955,159 @@ export interface operations {
       }
     }
   }
+  remind_me_v1_reminders_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RemindMeIn']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReminderOut']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  remove_custom_v1_reminders_custom__reminder_id__delete: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        reminder_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  done_v1_reminders__key__done_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        key: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  snooze_v1_reminders__key__snooze_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        key: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SnoozeIn']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  clear_state_v1_reminders__key__state_delete: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        key: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   search_v1_search_post: {
     parameters: {
       query?: never
@@ -1861,6 +2251,59 @@ export interface operations {
           'application/json': {
             [key: string]: string
           }
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  get_settings_v1_settings_reminders_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReminderSettingsOut']
+        }
+      }
+    }
+  }
+  put_settings_v1_settings_reminders_put: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ReminderSettingsIn']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReminderSettingsOut']
         }
       }
       /** @description Validation Error */

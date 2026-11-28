@@ -13,6 +13,7 @@ from pydantic import (
     JsonValue,
     StringConstraints,
     field_validator,
+    model_validator,
 )
 
 from household_vault.doctypes import Area, DocType
@@ -319,3 +320,59 @@ class LineOut(BaseModel):
 class PageLinesOut(BaseModel):
     page: int
     lines: list[LineOut]
+
+
+# -- reminders ---------------------------------------------------------------------------------
+
+
+class ReminderOut(BaseModel):
+    key: str
+    rule: str
+    document_id: str
+    person_ids: list[str]
+    title: str
+    due: date
+    fire: date
+    part: str | None
+    calendar_link: str | None
+    custom: bool
+
+
+class ComingUpOut(BaseModel):
+    reminders: list[ReminderOut]
+    count_due_now: int
+
+
+class SnoozeIn(Strict):
+    until: date
+
+
+class RemindMeIn(Strict):
+    document_id: Annotated[str, Field(min_length=1, max_length=64)]
+    due: date
+
+
+class LeadIn(Strict):
+    """One lead time: a number of days before the due date, or of months."""
+
+    days: Annotated[int, Field(ge=0, le=400)] | None = None
+    months: Annotated[int, Field(ge=0, le=24)] | None = None
+
+    @model_validator(mode="after")
+    def _one(self) -> LeadIn:
+        if (self.days is None) == (self.months is None):
+            raise ValueError("a lead is days or months, not both and not neither")
+        return self
+
+
+class ReminderSettingsIn(Strict):
+    leads: dict[
+        Annotated[str, Field(max_length=40)],
+        Annotated[list[LeadIn], Field(min_length=1, max_length=6)],
+    ]
+    horizon_days: Annotated[int, Field(ge=7, le=365)]
+
+
+class ReminderSettingsOut(BaseModel):
+    leads: dict[str, list[LeadIn]]
+    horizon_days: int
