@@ -18,7 +18,6 @@ from household_vault.reminders.rules import (
     Months,
     Rule,
     fire_date,
-    lead_key,
 )
 from household_vault.schemas._coerce import parse_amount, parse_date
 from household_vault.search.vocab import DATE_ROLES
@@ -26,7 +25,7 @@ from household_vault.search.vocab import DATE_ROLES
 log = logging.getLogger(__name__)
 
 PAST_DAYS = 30
-_LEAD = re.compile(r"(\d{1,3})([dm])")
+_LEAD = re.compile(r"([0-9]{1,3})([dm])")
 
 
 @dataclass(frozen=True)
@@ -103,7 +102,10 @@ def _dues(rule: Rule, doc: DocumentRow) -> list[tuple[date, str | None]]:
                 years = parse_amount(item.get("years"))
             except (ValueError, InvalidOperation):
                 continue
-            out.append((part_end(start, Decimal(years)), item["part"]))
+            try:
+                out.append((part_end(start, Decimal(years)), item["part"]))
+            except (ValueError, OverflowError):
+                continue
         return out
     if rule.date == "card_expiry":
         end = card_expiry_end(doc.fields.get("expiry"))  # type: ignore[arg-type]
@@ -130,35 +132,48 @@ def reminders(store: Store, today: date, settings: ReminderSettings) -> list[Rem
     oldest = today - timedelta(days=PAST_DAYS)
     found: list[Reminder] = []
 
-    def shown(key: str, due: date, fire: date) -> bool:
-        if fire > horizon or due < oldest:
-            return False
+    def hidden(key: str) -> bool:
         state = states.get(key)
         if state is None:
-            return True
-        return state.state == "snoozed" and state.until is not None and today >= state.until
+            return False
+        if state.state == "snoozed":
+            return state.until is not None and today < state.until
+        return True
+
+    def fire_for(due: date, leads: tuple[Lead, ...]) -> date | None:
+        """The latest lead already reached, else the next one inside the horizon."""
+        fires: list[date] = []
+        for lead in leads:
+            try:
+                fires.append(fire_date(due, lead))
+            except (ValueError, OverflowError):
+                continue
+        reached = [f for f in fires if f <= today]
+        if reached:
+            return max(reached)
+        ahead = [f for f in fires if f <= horizon]
+        return min(ahead) if ahead else None
 
     for rule in RULES:
         leads = settings.leads_for(rule.name)
         for doc_type in sorted(rule.types, key=lambda t: t.value):
             for doc in store.documents_of_type(doc_type):
                 for due, part in _dues(rule, doc):
-                    for lead in leads:
-                        fire = fire_date(due, lead)
-                        key = (
-                            f"{doc.id}:{rule.name}:{part or ''}:{due.isoformat()}:{lead_key(lead)}"
-                        )
-                        if shown(key, due, fire):
-                            found.append(
-                                Reminder(
-                                    key, rule.name, doc.id, _people(store, doc.id),
-                                    _title(rule, doc, part), due, fire, part, rule.calendar,
-                                    False,
-                                )
-                            )  # fmt: skip
+                    key = f"{doc.id}:{rule.name}:{part or ''}:{due.isoformat()}"
+                    if due < oldest or hidden(key):
+                        continue
+                    fire = fire_for(due, leads)
+                    if fire is not None:
+                        found.append(
+                            Reminder(
+                                key, rule.name, doc.id, _people(store, doc.id),
+                                _title(rule, doc, part), due, fire, part, rule.calendar,
+                                False,
+                            )
+                        )  # fmt: skip
     for c in store.custom_reminders():
         key = f"{c.document_id}:custom::{c.due.isoformat()}:c{c.id}"
-        if shown(key, c.due, c.due):
+        if c.due >= oldest and c.due <= horizon and not hidden(key):
             found.append(
                 Reminder(key, "custom", c.document_id, _people(store, c.document_id), c.title,
                          c.due, c.due, None, False, True)

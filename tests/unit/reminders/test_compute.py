@@ -13,12 +13,16 @@ def fires(found, rule=None):
 
 def test_a_policy_ending_on_14_mar_2027_fires_60_30_and_7_days_before(store):
     add_doc(store, "d1", "health_policy", {"insurer": "Star", "end_date": "2027-03-14"}, ["x"])
-    found = reminders(store, date(2027, 3, 1), ReminderSettings())
-    renewals = [r for r in found if r.rule == "policy_renewal"]
-    assert [r.fire for r in renewals] == [date(2027, 1, 13), date(2027, 2, 12), date(2027, 3, 7)]
-    assert {r.due for r in renewals} == {date(2027, 3, 14)}
-    first = renewals[0]
-    assert first.key == "d1:policy_renewal::2027-03-14:d60"
+    pol = lambda today: [  # noqa: E731
+        r for r in reminders(store, today, ReminderSettings()) if r.rule == "policy_renewal"
+    ]
+    assert [r.fire for r in pol(date(2026, 12, 1))] == [date(2027, 1, 13)]
+    assert [r.fire for r in pol(date(2027, 1, 20))] == [date(2027, 1, 13)]
+    assert [r.fire for r in pol(date(2027, 2, 20))] == [date(2027, 2, 12)]
+    assert [r.fire for r in pol(date(2027, 3, 9))] == [date(2027, 3, 7)]
+    first = pol(date(2027, 3, 9))[0]
+    assert first.due == date(2027, 3, 14)
+    assert first.key == "d1:policy_renewal::2027-03-14"
     assert first.person_ids == ("p1",) and first.calendar and not first.custom
     assert first.part is None and first.document_id == "d1"
     assert "health policy" in first.title.lower()
@@ -29,7 +33,7 @@ def test_month_leads_clamp_to_the_month_end(store):
     add_doc(store, "b", "passport", {"expiry_date": "2027-11-30"}, ["x"])
     found = reminders(store, date(2026, 8, 1), ReminderSettings())
     assert [(r.document_id, r.fire) for r in found] == [("a", date(2026, 8, 31))]
-    assert found[0].key == "a:passport_expiry::2027-05-31:m9"
+    assert found[0].key == "a:passport_expiry::2027-05-31"
     later = reminders(store, date(2027, 2, 1), ReminderSettings())
     assert (date(2027, 2, 28), date(2027, 11, 30)) in fires(later)
 
@@ -47,7 +51,7 @@ def test_each_warranty_part_reminds_on_its_own_end(store):
     assert [(r.part, r.due, r.fire) for r in found] == [
         ("Comprehensive", date(2025, 3, 13), date(2025, 2, 11))
     ]
-    assert found[0].key == "w:warranty_end:Comprehensive:2025-03-13:d30"
+    assert found[0].key == "w:warranty_end:Comprehensive:2025-03-13"
     wide = reminders(store, date(2034, 2, 1), ReminderSettings())
     assert [(r.part, r.due) for r in wide] == [("Compressor", date(2034, 3, 13))]
 
@@ -86,7 +90,7 @@ def test_reminders_follow_the_filed_documents(store):
     add_doc(store, "new", "vehicle_policy", {"end_date": "2028-03-14"}, ["x"])
     add_doc(store, "old", "vehicle_policy", {"end_date": "2027-03-14"}, ["x"])
     keys = {r.key for r in reminders(store, today, ReminderSettings())}
-    assert keys == {f"old:policy_renewal::2027-03-14:d{n}" for n in (60, 30, 7)}
+    assert keys == {"old:policy_renewal::2027-03-14"}
     later = reminders(store, date(2028, 3, 1), ReminderSettings())
     assert {r.document_id for r in later if r.due > date(2028, 1, 1)} == {"new"}
 
@@ -97,10 +101,7 @@ def test_changed_leads_from_settings_replace_the_defaults(store):
     settings = load_settings(store)
     assert settings.leads["policy_renewal"] == (Days(14), Months(2))
     found = reminders(store, date(2027, 3, 1), settings)
-    assert [r.fire for r in found if r.rule == "policy_renewal"] == [
-        date(2027, 1, 14),
-        date(2027, 2, 28),
-    ]
+    assert [r.fire for r in found if r.rule == "policy_renewal"] == [date(2027, 2, 28)]
     assert settings.leads_for("passport_expiry") == (Months(9),)
 
 
@@ -123,24 +124,30 @@ def test_the_window_runs_from_30_days_past_to_the_horizon(store):
 
 
 def test_done_and_snoozed_reminders_drop_out_until_their_date(store):
-    add_doc(store, "d1", "health_policy", {"end_date": "2027-03-14"}, ["x"])
+    add_doc(
+        store,
+        "d1",
+        "health_policy",
+        {"end_date": "2027-03-14", "premium_due_date": "2027-03-14"},
+        ["x"],
+    )
     today = date(2027, 3, 1)
-    key60, key30 = "d1:policy_renewal::2027-03-14:d60", "d1:policy_renewal::2027-03-14:d30"
-    store.set_reminder_state(key60, "done", None)
-    store.set_reminder_state(key30, "snoozed", date(2027, 3, 5))
+    done, snoozed = "d1:policy_renewal::2027-03-14", "d1:premium_due::2027-03-14"
+    store.set_reminder_state(done, "done", None)
+    store.set_reminder_state(snoozed, "snoozed", date(2027, 3, 5))
     keys = {r.key for r in reminders(store, today, ReminderSettings())}
-    assert key60 not in keys and key30 not in keys
+    assert done not in keys and snoozed not in keys
     keys = {r.key for r in reminders(store, date(2027, 3, 5), ReminderSettings())}
-    assert key30 in keys and key60 not in keys
+    assert snoozed in keys and done not in keys
 
 
 def test_a_renewal_with_a_new_end_date_is_not_marked_done(store):
     add_doc(store, "d1", "health_policy", {"end_date": "2027-03-14"}, ["x"])
-    store.set_reminder_state("d1:policy_renewal::2027-03-14:d60", "done", None)
+    store.set_reminder_state("d1:policy_renewal::2027-03-14", "done", None)
     store.remove_document("d1")
     add_doc(store, "d1", "health_policy", {"end_date": "2028-03-14"}, ["x"])
     found = reminders(store, date(2028, 3, 1), ReminderSettings())
-    assert {r.due for r in found} == {date(2028, 3, 14)} and len(found) >= 3
+    assert [(r.due, r.fire) for r in found] == [(date(2028, 3, 14), date(2028, 2, 13))]
 
 
 def test_custom_reminders_are_included(store):
@@ -195,3 +202,69 @@ def test_every_rule_can_fire(store):
     found = reminders(store, date(2027, 3, 10), ReminderSettings())
     assert {r.rule for r in found} == set(docs)
     assert DocType.puc_certificate
+
+
+def test_one_bad_document_does_not_hide_the_others(store):
+    add_doc(store, "good", "health_policy", {"end_date": "2027-03-14"}, ["x"])
+    add_doc(
+        store,
+        "w",
+        "warranty_card",
+        {
+            "purchase_date": "2024-03-14",
+            "warranty_parts": [{"part": "Huge", "years": 100000}, {"part": "Ok", "years": 1}],
+        },
+        ["x"],
+    )
+    add_doc(store, "pp", "passport", {"expiry_date": "0001-01-01"}, ["x"])
+    add_doc(store, "pp2", "driving_licence", {"expiry_date": "0001-01-01"}, ["x"])
+    found = reminders(store, date(2025, 3, 1), ReminderSettings(horizon_days=4000))
+    assert {r.document_id for r in found} >= {"w"}
+    assert {r.part for r in found if r.document_id == "w"} == {"Ok"}
+    found = reminders(store, date(2027, 3, 1), ReminderSettings())
+    assert {r.document_id for r in found} == {"good"}
+
+
+def test_a_snooze_without_a_date_counts_as_expired(store):
+    add_doc(store, "d1", "health_policy", {"end_date": "2027-03-14"}, ["x"])
+    store.set_reminder_state("d1:policy_renewal::2027-03-14", "snoozed", None)
+    found = reminders(store, date(2027, 3, 1), ReminderSettings())
+    assert [r.key for r in found if r.rule == "policy_renewal"] == ["d1:policy_renewal::2027-03-14"]
+
+
+def test_a_policy_past_its_first_two_leads_shows_once_with_the_latest_lead(store):
+    add_doc(store, "d1", "health_policy", {"end_date": "2027-03-14"}, ["x"])
+    found = reminders(store, date(2027, 3, 1), ReminderSettings())
+    renewals = [r for r in found if r.rule == "policy_renewal"]
+    assert [(r.key, r.fire) for r in renewals] == [
+        ("d1:policy_renewal::2027-03-14", date(2027, 2, 12))
+    ]
+
+
+def test_before_any_lead_the_next_one_inside_the_horizon_is_used(store):
+    add_doc(store, "d1", "health_policy", {"end_date": "2027-03-14"}, ["x"])
+    found = reminders(store, date(2027, 1, 1), ReminderSettings(horizon_days=20))
+    assert [r.fire for r in found if r.rule == "policy_renewal"] == [date(2027, 1, 13)]
+
+
+def test_done_hides_the_reminder_and_a_later_lead_does_not_bring_it_back(store):
+    add_doc(store, "d1", "health_policy", {"end_date": "2027-03-14"}, ["x"])
+    store.set_reminder_state("d1:policy_renewal::2027-03-14", "done", None)
+    for today in (date(2027, 3, 1), date(2027, 3, 8), date(2027, 3, 14)):
+        assert not [r for r in reminders(store, today, ReminderSettings())
+                    if r.rule == "policy_renewal"]  # fmt: skip
+
+
+def test_a_snoozed_reminder_returns_after_its_date_with_the_lead_then(store):
+    add_doc(store, "d1", "health_policy", {"end_date": "2027-03-14"}, ["x"])
+    store.set_reminder_state("d1:policy_renewal::2027-03-14", "snoozed", date(2027, 3, 8))
+    pol = lambda today: [  # noqa: E731
+        r for r in reminders(store, today, ReminderSettings()) if r.rule == "policy_renewal"
+    ]
+    assert not pol(date(2027, 3, 7))
+    assert [r.fire for r in pol(date(2027, 3, 8))] == [date(2027, 3, 7)]
+
+
+def test_a_non_ascii_digit_lead_is_not_parsed(store):
+    store.set_setting("reminder_leads", json.dumps({"policy_renewal": ["٣d"]}))
+    assert load_settings(store).leads_for("policy_renewal") == (Days(60), Days(30), Days(7))
