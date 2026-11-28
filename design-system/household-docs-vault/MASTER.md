@@ -52,7 +52,7 @@ One brand hue (blue, hue 255) used for the primary action, focus, selection and 
 
 | Token | OKLCH | Hex | Why fixed |
 |---|---|---|---|
-| `--color-cite` | `oklch(0.52 0.15 255)` | `#1F68BC` | The citation box is drawn on the page image, which stays light in dark mode. 5.25:1 on white paper; the dark-mode blue would be 2.18:1. |
+| `--color-cite` | `oklch(0.52 0.15 255)` | `#1F68BC` | The citation box is drawn on the page image, which stays light in dark mode. 5.56:1 on white paper and 5.25:1 on paper at lightness 0.98; the dark-mode blue would be 2.48:1 on white. |
 | `--color-cite-fill` | `oklch(0.52 0.15 255 / 0.14)` | | Fill inside the citation box, so the printed text stays readable. |
 
 ## Type
